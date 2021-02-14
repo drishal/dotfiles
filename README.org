@@ -1,0 +1,3 @@
+#+TITLE: Readme
+* Welcome to my precious dotfiles!
+Here you will find some dotfiles for my favourite WMs: Xmonad, DWM, and qtile
