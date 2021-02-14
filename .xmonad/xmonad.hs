@@ -219,7 +219,7 @@ myKeys =
 
   --Prompts
     , ("M-d",                        shellPrompt promptConfig) --normal run prompt
-    , ("M-r m",                        manPrompt promptConfig) --normal run prompt
+    , ("M-r m",                        manPrompt promptConfig) --man prompt
    --Rofi Stuff
   --, ("M-d", spawn "rofi -show drun -icon-theme Papirus -show-icons")
   , ("M-p", spawn " rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu")
