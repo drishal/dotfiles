@@ -77,6 +77,7 @@ import XMonad.Prompt.Ssh
 import XMonad.Prompt.XMonad
 import XMonad.Prompt.AppLauncher
 import Control.Arrow (first)
+import XMonad.Prompt.Workspace
 import Data.Char
 
     -- Utilities
@@ -88,6 +89,8 @@ import XMonad.Util.SpawnOnce
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
+fontFamily :: String
+fontFamilyLarge :: String
 fontFamily = "xft:Hack Nerd Font:size=10:antialias=true:hinting=true"
 fontFamilyLarge = "xft:Hack Nerd Font:size=16:style=Bold:antialias=true:hinting=true"
 
@@ -130,7 +133,7 @@ myNormalBorderColor  = "#44475a"
 myFocusedBorderColor = "#bd93f9"
 
 --Layouts
-myLayout = smartBorders(avoidStruts (  tiled |||  simplestFloat ))
+myLayout = smartBorders(avoidStruts (  tiled |||  emptyBSP ||| simplestFloat ))
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
@@ -207,6 +210,7 @@ myStartupHook = do
         spawnOnce "xfce4-clipman"
         spawnOnce "redshift -O 4500"
         spawnOnce "volumeicon"
+        --spawnOnce "play  -v0.05  ~/Desktop/95.mp3"
 -------------------------
 --My Keys--
 -------------------------
@@ -218,10 +222,11 @@ myKeys =
   , ("M-S-q", io exitSuccess)
 
   --Prompts
-    , ("M-d",                        shellPrompt promptConfig) --normal run prompt
-    , ("M-r m",                        manPrompt promptConfig) --man prompt
+    , ("M-w 1",                        shellPrompt promptConfig) --normal run prompt
+    , ("M-w 2",                        manPrompt promptConfig) --normal run prompt
+    , ("M-w 3",                        xmonadPrompt promptConfig)       -- xmonadPrompt
    --Rofi Stuff
-  --, ("M-d", spawn "rofi -show drun -icon-theme Papirus -show-icons")
+  , ("M-d", spawn "rofi -show drun -icon-theme Papirus -show-icons")
   , ("M-p", spawn " rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu")
 
   --Some Applications
@@ -358,5 +363,6 @@ main =  do
                         , ppTitle   = xmobarColor "#ff79c6"  "" . shorten 40
                         , ppVisible = wrap "(" ")"
                         , ppUrgent  = xmobarColor "#ff5555" "#f1fa8c"
+                        , ppLayout  = xmobarColor "#8be9fd" ""
                         }
         }  `additionalKeysP` myKeys `additionalMouseBindings` myMouseBindings
