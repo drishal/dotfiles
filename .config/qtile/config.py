@@ -7,7 +7,7 @@ from libqtile.utils import guess_terminal
 from libqtile import hook
 #import psutil
 mod = "mod4"
-terminal = "alacritty"
+terminal = "kitty"
 
 keys = [
     # Switch between windows in current stack pane
@@ -29,7 +29,7 @@ keys = [
         desc="Switch window focus to other pane(s) of stack"),
 
     # Swap panes of split stack
-    #Key([mod, "shift"], "space", lazy.layout.rotate(),
+    # Key([mod, "shift"], "space", lazy.layout.rotate(),
     #    desc="Swap panes of split stack"),
 
     # Toggle between split and unsplit sides of stack.
@@ -39,13 +39,14 @@ keys = [
     Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
         desc="Toggle between split and unsplit sides of stack"),
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    #some programs
+    # some programs
     Key([mod, "shift"], "f", lazy.spawn("firefox"), desc="Firefox"),
     Key([mod], "a", lazy.spawn("emacsclient -c"), desc="Emacs"),
-    #run
-     Key([mod], "d", lazy.spawn("rofi -show drun -icon-theme Papirus -show-icons"), desc="Firefox"),
+    # run
+    Key([mod], "d", lazy.spawn("rofi -show drun -icon-theme Papirus -show-icons"), desc="Firefox"),
     Key([mod], "p", lazy.spawn("rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu"), desc="Emacs"),
-
+    # thunar
+    Key([mod], "e", lazy.spawn("thunar"), desc="file manager"),
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
@@ -65,7 +66,7 @@ for i in groups:
             desc="Switch to group {}".format(i.name)),
 
         # mod1 + shift + letter of group = switch to & move focused window to group
-        Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=True),
+        Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=False),
             desc="Switch to & move focused window to group {}".format(i.name)),
         # Or, use below if you prefer not to switch to that group.
         # # mod1 + shift + letter of group = move focused window to group
@@ -76,7 +77,10 @@ for i in groups:
 layouts = [
     layout.Tile(
         ratio=0.5,
-        margin = 10
+        margin = 10,
+        border_focus = "#bd93f9",
+        border_normal = "#44475a",
+        border_width = 1
     ),
     # layout.Stack(num_stacks=2),
     # Try more layouts by unleashing below layouts.
@@ -93,11 +97,11 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font='Hack Nerd Font',
-    fontsize=12,
+    font='FiraCode Nerd Font',
+    fontsize=11,
     padding=3,
     background="#282a36",
-    foreground= "#f8f8f2",
+    foreground= "#282a36",
 )
 extension_defaults = widget_defaults.copy()
 '''
@@ -112,7 +116,9 @@ screens = [
         top=bar.Bar(
             [
                 widget.CurrentLayout(
-                    foreground="#50fa7b",
+                    foreground = "#282a36",
+                    background="#50fa7b",
+                    #background="",
                 ),
                 widget.GroupBox(
                        fontsize = 9,
@@ -137,7 +143,10 @@ screens = [
                 ),
                 widget.Prompt(),
                 widget.WindowName(
-                     foreground="#ff79c6",
+                     # foreground = "f8f8f8",
+                     background="#6272a4",
+                     foreground="#f8f8f2"
+                     #background="#bd93f9",
                 ),
                 widget.Chord(
                     chords_colors={
@@ -147,39 +156,26 @@ screens = [
                 ),
 
                 widget.CPU(
-                    foreground="#f1fa8c",
-                    format='  {freq_current}GHz {load_percent}%',
+                    #background="#f1fa8c",
+                    background="#ff79c6",
+                    format='   {freq_current}GHz {load_percent}% ',
                 ),
-                 widget.TextBox(
-                       text = '  ',
-                       padding = 3,
-                       fontsize = 16,
-                       ),
+
                 widget.Memory(
-                    foreground="#8be9fd",
-                    format='  {MemUsed}M/{MemTotal}M',
+                    #background="#8be9fd",
+                    background="#8be9fd",
+                    format='   {MemUsed: .0f}M/{MemTotal: .0f}M ',
                 ),
-                 widget.TextBox(
-                       text = '  ',
-                       padding = 3,
-                       fontsize = 16,
-                       ),
+
                 widget.Net(
-                    format='{interface}: {down}  {up}',
-                    foreground="#ff79c6"
+                    format=' {interface}: {down}  {up} ',
+                    background="#ffb86c"
                 ),
-                 widget.TextBox(
-                       text = '  ',
-                       padding = 3,
-                       fontsize = 16,
-                       ),
-                widget.Clock(format='  %Y-%m-%d %a %I:%M %p',
-                             foreground="#bd93f9"),
-                 widget.TextBox(
-                       text = '  ',
-                       padding = 3,
-                       fontsize = 16,
-                       ),
+
+                widget.Clock(format='   %Y-%m-%d %a %I:%M %p ',
+                             background="#bd93f9",
+                             foreground="#282a36"),
+
 
 
                 widget.Systray(),
@@ -249,14 +245,6 @@ floating_layout = layout.Floating(float_rules=[
 
 ])
 '''
-auto_fullscreen = True
-focus_on_window_activation = "smart"
-
-@hook.subscribe.client_new
-def set_floating(window):
-    normal_hints = window.window.get_wm_normal_hints()
-    if normal_hints and normal_hints["max_width"]:
-        window.floating = True
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
@@ -264,7 +252,7 @@ def set_floating(window):
 # this string if your java app doesn't work correctly. We may as well just lie
 # and say that we're a working one by default.
 #
-os.system("bash ~/.config/qtile/autostart.sh")
+#os.system("bash ~/.config/qtile/autostart.sh")
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
