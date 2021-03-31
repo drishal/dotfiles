@@ -1,3 +1,27 @@
+#+TITLE: Xmonad
+#+PROPERTY: header-args :tangle xmonad.hs
+*   Table of contents :toc:
+- [[#imports][IMPORTS]]
+- [[#some-variables][Some variables]]
+  - [[#fonts][Fonts]]
+  - [[#terminal][Terminal]]
+  - [[#whether-focus-follows-the-mouse-pointer][Whether focus follows the mouse pointer.]]
+  - [[#whether-clicking-on-a-window-to-focus-also-passes-the-click-to-the-window][Whether clicking on a window to focus also passes the click to the window]]
+  - [[#width-of-the-window-border-in-pixels][Width of the window border in pixels.]]
+  - [[#modmask][Modmask]]
+  - [[#workspaces][Workspaces]]
+  - [[#border-colors-for-unfocused-and-focused-windows-respectively][Border colors for unfocused and focused windows, respectively.]]
+- [[#layouts][Layouts]]
+- [[#prompts][Prompts]]
+- [[#bordersgaps][Borders/Gaps]]
+- [[#startup-hook][Startup hook]]
+- [[#my-keys-config][My Keys Config]]
+- [[#mouse][Mouse]]
+- [[#the-main-event][the main event]]
+
+* IMPORTS
+Normally, you'd only override those defaults you care about.
+#+begin_src haskell
 import XMonad
 import Data.Monoid
 import System.Exit
@@ -87,29 +111,66 @@ import XMonad.Util.SpawnOnce
 --Others
 import XMonad.Layout.MultiToggle.Instances
 import XMonad.Layout.MultiToggle
+#+end_src
 
+* Some variables
+The preferred terminal program, which is used in a binding below and by certain contrib modules.
+
+** Fonts
+#+begin_src haskell
 fontFamily :: String
 fontFamilyLarge :: String
 fontFamily = "xft:FiraCode Nerd Font:size=10:antialias=true:hinting=true"
 fontFamilyLarge = "xft:FiraCode Nerd Font:size=16:style=Bold:antialias=true:hinting=true"
+#+end_src
+** Terminal
 
+#+begin_src haskell
 myTerminal :: String
 myTerminal = "kitty"
+#+end_src
 
+** Whether focus follows the mouse pointer.
+#+begin_src haskell
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
+#+end_src
 
+** Whether clicking on a window to focus also passes the click to the window
+#+begin_src haskell
 myClickJustFocuses :: Bool
 myClickJustFocuses = False
+#+end_src
 
+** Width of the window border in pixels.
+#+begin_src haskell
 myBorderWidth   = 1
+#+end_src
 
+** Modmask
++ modMask lets you specify which modkey you want to use. The default is mod1Mask ("left alt").Note that I am using mod4mask.  You may also consider using mod3Mask ("right alt"), which does not conflict with emacs keybindings. The"windows key" is usually mod4Mask.
+#+begin_src haskell
 myModMask       = mod4Mask
+#+end_src
 
+** Workspaces
+ - The default number of workspaces (virtual screens) and their names. By default we use numeric strings, but any string may be used as a workspace name. The number of workspaces determined by the length
+ of this list.
+
+#+begin_src haskell
 myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
+#+end_src
 
+** Border colors for unfocused and focused windows, respectively.
+
+#+begin_src haskell
 myNormalBorderColor  = "#44475a"
 myFocusedBorderColor = "#bd93f9"
+
+#+end_src
+
+* Layouts
+#+begin_src haskell
 
 myLayout = mySpacing 8 (smartBorders(avoidStruts (  tiled ||| simplestFloat ))) ||| noBorders Full
   where
@@ -135,6 +196,11 @@ myManageHook = composeAll
     , resource  =? "kdesktop"       --> doIgnore
     , isFullscreen                  --> doFullFloat ] -- this one
 
+#+end_src
+
+* Prompts
+#+begin_src haskell
+
 promptConfig = def
   { font                = fontFamily
   , bgColor             = "#282a36"
@@ -154,10 +220,20 @@ promptConfig = def
   , alwaysHighlight     = True
   , maxComplRows        = Just 5
   }
-
+#+end_src
+* Borders/Gaps
+#+begin_src haskell
 mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
 mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
+#+end_src
 
+* Startup hook
+Perform an arbitrary action each time xmonad starts or is restarted
+with mod-q.  Used by, e.g., XMonad.Layout.PerWorkspace to initialize
+per-workspace layout choices.
+By default, do nothing.
+
+#+begin_src haskell
 myStartupHook = do
         spawnOnce "/usr/lib/notification-daemon-1.0/notification-daemon"
         spawnOnce "xsetroot -cursor_name left_ptr"
@@ -177,6 +253,10 @@ myStartupHook = do
         spawnOnce "redshift -O 4500"
         spawnOnce "volumeicon"
         --spawnOnce "play  -v0.05  ~/Desktop/95.mp3"
+
+#+end_src
+* My Keys Config
+#+begin_src haskell
 
 myKeys :: [(String, X ())]
 myKeys =
@@ -263,6 +343,11 @@ myKeys =
                                      , ("S-", windows . W.shift)]
         ]
 
+#+end_src
+
+* Mouse
+#+begin_src haskell
+
 myMouseBindings =
     [ ((modkey, button1), (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster))
     , ((modkey, button2), (\w -> focus w >> windows W.shiftMaster))
@@ -285,6 +370,10 @@ addSupported props = withDisplay $ \dpy -> do
       supportedList <- fmap (join . maybeToList) $ getWindowProperty32 dpy a r
       changeProperty32 dpy r a aTOM propModeReplace (nub $ newSupportedList ++ supportedList)
 
+#+end_src
+
+* the main event
+#+begin_src haskell
 main =  do
       --xmproc <- spawnPipe "polybar xmonad"
       xmproc <- spawnPipe "xmobar  ~/.xmobarrc"
@@ -329,3 +418,5 @@ main =  do
                         , ppLayout  = xmobarColor "#8be9fd" ""
                         }
         }  `additionalKeysP` myKeys `additionalMouseBindings` myMouseBindings
+
+#+end_src
