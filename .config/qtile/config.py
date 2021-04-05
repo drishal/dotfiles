@@ -5,16 +5,20 @@ from libqtile.config import Click, Drag, Group, Key, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile import hook
-#import psutil
+# from libqtile.config import EzKey as Key
+# from libqtile.widget import Spacer
+# from powerline.bindings.qtile.widget import PowerlineTextBox
+# import psutil
 mod = "mod4"
 terminal = "kitty"
-
 keys = [
     # Switch between windows in current stack pane
     Key([mod], "k", lazy.layout.down(),
         desc="Move focus down in stack pane"),
+
     Key([mod], "j", lazy.layout.up(),
         desc="Move focus up in stack pane"),
+
     # Switch from float to tile
     Key( [mod, "shift"], "space", lazy.window.toggle_floating(), desc='Make window floating.'),
 
@@ -56,7 +60,11 @@ keys = [
     Key([mod], "r", lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"),
 ]
-
+'''
+keys = [
+   Key("M-k", lazy.layout.down(), desc="Move focus down in stack pane"),)
+]
+'''
 groups = [Group(i) for i in "123456789"]
 
 for i in groups:
@@ -99,7 +107,7 @@ layouts = [
 widget_defaults = dict(
     font='FiraCode Nerd Font',
     fontsize=11,
-    padding=3,
+    padding=2,
     background="#282a36",
     foreground= "#282a36",
 )
@@ -143,8 +151,10 @@ screens = [
                 ),
                 widget.Prompt(),
                 widget.WindowName(
+                    padding= 5,
                      # foreground = "f8f8f8",
-                     background="#6272a4",
+                     #background="#6272a4",
+                     background="#44475a",
                      foreground="#f8f8f2"
                      #background="#bd93f9",
                 ),
@@ -154,33 +164,64 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-
+                widget.TextBox(
+                    text = '',
+                    foreground = "#ff79c6",
+                    background = "#44475a",
+                    padding = -6,
+                    fontsize = 40,
+                    ),
                 widget.CPU(
                     #background="#f1fa8c",
                     background="#ff79c6",
                     format='   {freq_current}GHz {load_percent}% ',
                 ),
+                widget.TextBox(
+                    text = '',
+                    background = "#ff79c6",
+                    foreground = "#8be9fd",
+                    padding = -6,
+                    fontsize = 40,
+                    ),
 
                 widget.Memory(
                     #background="#8be9fd",
                     background="#8be9fd",
                     format='   {MemUsed: .0f}M/{MemTotal: .0f}M ',
                 ),
-
+                widget.TextBox(
+                    text = '',
+                    background = "#8be9fd",
+                    foreground = "#ffb86c",
+                    padding = -6,
+                    fontsize = 40,
+                    ),
                 widget.Net(
-                    format=' {interface}: {down}  {up} ',
+                    format=' {interface}: {down}  {up}',
                     background="#ffb86c"
                 ),
-
+                 widget.TextBox(
+                    text = '',
+                    background = "#ffb86c",
+                    foreground = "#bd93f9",
+                    padding = -6,
+                    fontsize = 40,
+                    ),
+                  # widget.TextBox(text="◤", fontsize=45, padding=-1, foreground="#bd9359",background="#bd93f9"),
                 widget.Clock(format='   %Y-%m-%d %a %I:%M %p ',
-                             background="#bd93f9",
-                             foreground="#282a36"),
-
-
-
+                    background="#bd93f9",
+                    foreground="#282a36",
+                             ),
+                 widget.TextBox(
+                    text = '',
+                    foreground = "#282a36",
+                    background = "#bd93f9",
+                    padding = -6,
+                    fontsize = 40,
+                    ),
                 widget.Systray(),
             ],
-            24,
+            22,
         ),
     ),
 ]
@@ -198,7 +239,7 @@ dgroups_key_binder = None
 dgroups_app_rules = []  # type: List
 main = None  # WARNING: this is deprecated and will be removed soon
 follow_mouse_focus = True
-bring_front_click = False
+bring_front_click = True
 cursor_warp = False
 
 
@@ -252,7 +293,20 @@ floating_layout = layout.Floating(float_rules=[
 # this string if your java app doesn't work correctly. We may as well just lie
 # and say that we're a working one by default.
 #
-#os.system("bash ~/.config/qtile/autostart.sh")
+os.system("bash ~/.config/qtile/autostart.sh")
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
+
+'''
+
+                 widget.TextBox(
+                       text = '',
+                       background = "#ffb86c",
+                       fmt = "",
+                       #background = "#ffffff",
+                       foreground = "#bd93f9",
+                       padding = 0,
+                       fontsize = 40,
+                       ),
+'''
