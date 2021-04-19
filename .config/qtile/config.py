@@ -12,21 +12,26 @@ from libqtile import hook
 mod = "mod4"
 terminal = "kitty"
 keys = [
-    # Switch between windows in current stack pane
-    Key([mod], "k", lazy.layout.down(),
-        desc="Move focus down in stack pane"),
-
-    Key([mod], "j", lazy.layout.up(),
-        desc="Move focus up in stack pane"),
-
+    Key([mod], "h", lazy.layout.left()),
+    Key([mod], "l", lazy.layout.right()),
+    Key([mod], "j", lazy.layout.down()),
+    Key([mod], "k", lazy.layout.up()),
+    Key([mod, "shift"], "h", lazy.layout.swap_left()),
+    Key([mod, "shift"], "l", lazy.layout.swap_right()),
+    Key([mod, "shift"], "j", lazy.layout.shuffle_down()),
+    Key([mod, "shift"], "k", lazy.layout.shuffle_up()),
+    Key([mod, "control"], "j", lazy.layout.grow_down()),
+    Key([mod, "control"], "k", lazy.layout.grow_up()),
+    Key([mod, "control"], "h", lazy.layout.grow_left()),
+    Key([mod, "control"], "l", lazy.layout.grow_right()),
+    Key([mod], "i", lazy.layout.cmd_decrease_ratio()),
+    Key([mod], "m", lazy.layout.cmd_increase_ratio()),
+    Key([mod], "n", lazy.layout.normalize()),
+    Key([mod], "o", lazy.layout.maximize()),
+    # Key([mod, "shift"], "space", lazy.layout.flip()),
     # Switch from float to tile
     Key( [mod, "shift"], "space", lazy.window.toggle_floating(), desc='Make window floating.'),
 
-    # Move windows up or down in current stack
-    Key([mod, "control"], "k", lazy.layout.shuffle_down(),
-        desc="Move window down in current stack "),
-    Key([mod, "control"], "j", lazy.layout.shuffle_up(),
-        desc="Move window up in current stack "),
 
     # Switch window focus to other pane(s) of stack
     Key([mod], "space", lazy.layout.next(),
@@ -70,7 +75,7 @@ groups = [Group(i) for i in "123456789"]
 for i in groups:
     keys.extend([
         # mod1 + letter of group = switch to group
-        Key([mod], i.name, lazy.group[i.name].toscreen(),
+        Key([mod], i.name, lazy.group[i.name].toscreen(toggle=False),
             desc="Switch to group {}".format(i.name)),
 
         # mod1 + shift + letter of group = switch to & move focused window to group
@@ -84,6 +89,7 @@ for i in groups:
 
 layouts = [
     layout.Tile(
+        ratio_increment = 0.05,
         ratio=0.5,
         margin = 10,
         border_focus = "#bd93f9",
@@ -92,7 +98,10 @@ layouts = [
     ),
     # layout.Stack(num_stacks=2),
     # Try more layouts by unleashing below layouts.
-    # layout.Bsp(),
+    layout.Bsp(margin = 10,
+        border_focus = "#bd93f9",
+        border_normal = "#44475a",
+        border_width = 1),
     # layout.Columns(),
     # layout.Matrix(),
     # layout.MonadTall(),
@@ -208,7 +217,7 @@ screens = [
                     fontsize = 40,
                     ),
                   # widget.TextBox(text="◤", fontsize=45, padding=-1, foreground="#bd9359",background="#bd93f9"),
-                widget.Clock(format='   %Y-%m-%d %a %I:%M %p ',
+                widget.Clock(format='   %Y-%m-%d %a %I:%M:%S %p ',
                     background="#bd93f9",
                     foreground="#282a36",
                              ),
@@ -239,53 +248,12 @@ dgroups_key_binder = None
 dgroups_app_rules = []  # type: List
 main = None  # WARNING: this is deprecated and will be removed soon
 follow_mouse_focus = True
-bring_front_click = True
+# bring_front_click = True
 cursor_warp = False
 
 
-'''
-floating_layout = layout.Floating(float_rules=[
-    # Run the utility of `xprop` to see the wm class and name of an X client.
-    {'wmclass': 'confirm'},
-    {'wmclass': 'dialog'},
-    {'wmclass': 'download'},
-    {'wmclass': 'error'},
-    {'wmclass': 'file_progress'},
-    {'wmclass': 'notification'},
-    {'wmclass': 'splash'},
-    {'wmclass': 'toolbar'},
-    {'wmclass': 'confirmreset'},  # gitk
-    {'wmclass': 'makebranch'},  # gitk
-    {'wmclass': 'maketag'},  # gitk
-    {'wname': 'branchdialog'},  # gitk
-    {'wname': 'pinentry'},  # GPG key password entry
-    {'wmclass': 'ssh-askpass'},  # ssh-askpass
-])
-'''
-'''
-floating_layout = layout.Floating(float_rules=[
-    {'wmclass': 'confirm'},
-    {'wmclass': 'dialog'},
-    {'wmclass': 'download'},
-    {'wmclass': 'error'},
-    {'wmclass': 'file_progress'},
-    {'wmclass': 'notification'},
-    {'wmclass': 'splash'},
-    {'wmclass': 'toolbar'},
-    {'wmclass': 'confirmreset'},
-    {'wmclass': 'makebranch'},
-    {'wmclass': 'maketag'},
-    {'wmclass': 'Arandr'},
-    {'wmclass': 'feh'},
-    {'wmclass': 'Galculator'},
-    {'wmclass': 'Oblogout'},
-    {'wname': 'branchdialog'},
-    {'wname': 'Open File'},
-    {'wname': 'pinentry'},
-    {'wmclass': 'ssh-askpass'},
+floating_layout = layout.Floating(border_focus = "#bd93f9", border_normal = "#44475a")
 
-])
-'''
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
@@ -296,17 +264,5 @@ floating_layout = layout.Floating(float_rules=[
 os.system("bash ~/.config/qtile/autostart.sh")
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
-wmname = "LG3D"
+# wmname = "LG3D"
 
-'''
-
-                 widget.TextBox(
-                       text = '',
-                       background = "#ffb86c",
-                       fmt = "",
-                       #background = "#ffffff",
-                       foreground = "#bd93f9",
-                       padding = 0,
-                       fontsize = 40,
-                       ),
-'''
