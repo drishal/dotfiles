@@ -1,3 +1,22 @@
+#+TITLE: Qtile config
+#+PROPERTY: header-args:python :tangle config.py
+* Table of contents :toc:
+- [[#imports][Imports]]
+- [[#some-variables][Some variables]]
+- [[#keybinds][Keybinds]]
+  - [[#keyboard][Keyboard]]
+  - [[#mouse][Mouse]]
+- [[#groups][Groups]]
+- [[#layouts][Layouts]]
+- [[#widgets][Widgets]]
+  - [[#defaults][Defaults]]
+  - [[#bar-widgets][Bar widgets]]
+- [[#some-more-variables][Some more variables]]
+- [[#floating-layout-rules][Floating layout rules]]
+- [[#autostarting-programs][Autostarting programs]]
+
+* Imports
+#+begin_src python
 from typing import List  # noqa: F401
 import os
 import subprocess
@@ -6,10 +25,15 @@ from libqtile.config import Click, Drag, Group, Key, Screen, Match
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile import hook
-
+#+end_src
+* Some variables
+#+begin_src python
 mod = "mod4"
 terminal = "kitty"
-
+#+end_src
+* Keybinds
+** Keyboard
+#+begin_src python
 keys = [
     Key([mod], "h", lazy.layout.left()),
     Key([mod], "l", lazy.layout.right()),
@@ -64,7 +88,10 @@ keys = [
     Key([mod], "r", lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"),
 ]
-
+#+end_src
+** Mouse
+- Drag Floating layouts
+#+begin_src python
 mouse = [
     Drag([mod], "Button1", lazy.window.set_position_floating(),
          start=lazy.window.get_position()),
@@ -72,7 +99,9 @@ mouse = [
          start=lazy.window.get_size()),
     Click([mod], "Button2", lazy.window.bring_to_front())
 ]
-
+#+end_src
+* Groups
+#+begin_src python
 groups = [Group(i) for i in "123456789"]
 
 for i in groups:
@@ -89,7 +118,9 @@ for i in groups:
         # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
         #     desc="move focused window to group {}".format(i.name)),
     ])
-
+#+end_src
+* Layouts
+#+begin_src python
 layouts = [
     layout.Tile(
         ratio_increment = 0.05,
@@ -115,7 +146,10 @@ layouts = [
     # layout.VerticalTile(),
     # layout.Zoomy(),
 ]
-
+#+end_src
+* Widgets
+** Defaults
+#+begin_src python
 widget_defaults = dict(
     font='FiraCode Nerd Font',
     fontsize=11,
@@ -124,7 +158,9 @@ widget_defaults = dict(
     foreground= "#282a36",
 )
 extension_defaults = widget_defaults.copy()
-
+#+end_src
+** Bar widgets
+#+begin_src python
 screens = [
     Screen(
         top=bar.Bar(
@@ -236,6 +272,9 @@ screens = [
     ),
 ]
 
+#+end_src
+* Some more variables
+#+begin_src python
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: List
 main = None  # WARNING: this is deprecated and will be removed soon
@@ -245,7 +284,9 @@ cursor_warp = False
 focus_on_window_activation = "focus"
 # respect_minimize_requests = False
 auto_minimize = False
-
+#+end_src
+* Floating layout rules
+#+begin_src python
 floating_layout = layout.Floating(border_focus = "#bd93f9", border_normal = "#44475a", float_rules=[
     *layout.Floating.default_float_rules,
     Match(wm_class='confirmreset'),  # gitk
@@ -255,6 +296,9 @@ floating_layout = layout.Floating(border_focus = "#bd93f9", border_normal = "#44
     Match(title='branchdialog'),  # gitk
     Match(title='pinentry'),  # GPG key password entry
 ] )
-
+#+end_src
+* Autostarting programs
+#+begin_src python
 def autostart():
     os.system("bash ~/.config/qtile/autostart.sh")
+#+end_src
