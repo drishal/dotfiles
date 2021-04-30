@@ -17,6 +17,7 @@
 - [[#startup-hook][Startup hook]]
 - [[#my-keys-config][My Keys Config]]
 - [[#mouse][Mouse]]
+- [[#setting-fullscreen-support][Setting Fullscreen Support]]
 - [[#the-main-event][the main event]]
 
 * IMPORTS
@@ -114,8 +115,6 @@ import XMonad.Layout.MultiToggle
 #+end_src
 
 * Some variables
-The preferred terminal program, which is used in a binding below and by certain contrib modules.
-
 ** Fonts
 #+begin_src haskell
 fontFamily :: String
@@ -124,7 +123,7 @@ fontFamily = "xft:FiraCode Nerd Font:size=10:antialias=true:hinting=true"
 fontFamilyLarge = "xft:FiraCode Nerd Font:size=16:style=Bold:antialias=true:hinting=true"
 #+end_src
 ** Terminal
-
+The preferred terminal program, which is used in a binding below and by certain contrib modules.
 #+begin_src haskell
 myTerminal :: String
 myTerminal = "kitty"
@@ -358,6 +357,10 @@ myMouseBindings =
 -- Adding Fullscreen Support--
 ------------------------------
 
+#+end_src
+
+* Setting Fullscreen Support
+#+begin_src haskell
 setFullscreenSupported :: X ()
 setFullscreenSupported = addSupported ["_NET_WM_STATE", "_NET_WM_STATE_FULLSCREEN"]
 
@@ -369,9 +372,7 @@ addSupported props = withDisplay $ \dpy -> do
     io $ do
       supportedList <- fmap (join . maybeToList) $ getWindowProperty32 dpy a r
       changeProperty32 dpy r a aTOM propModeReplace (nub $ newSupportedList ++ supportedList)
-
 #+end_src
-
 * the main event
 #+begin_src haskell
 main =  do
@@ -400,13 +401,11 @@ main =  do
        -- manageHook = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageDocks,
         --logHook            = myLogHook,
         --logHook            = dynamicLogWithPP $ defaultPP { ppOutput = hPutStrLn h },
-        manageHook = manageDocks <+> (isFullscreen --> doFullFloat),
-
-        --startupHook        = setFullscreenSupported <+> myStartupHook,
-        --logHook = dynamicLogWithPP (myLogHook dbus)
+        -- manageHook = manageDocks <+> (isFullscreen --> doFullFloat),
+        manageHook = manageDocks,
         handleEventHook    = handleEventHook def <+> fullscreenEventHook,
         --handleEventHook = ewmhDesktopsEventHook,
-        --startupHook        =  setFullscreenSupported <+> myStartupHook,
+        -- startupHook        = myStartupHook,
         startupHook=   setFullscreenSupported >> setWMName "LG3D" <+> myStartupHook,
         logHook = dynamicLogWithPP xmobarPP
                          { ppOutput = hPutStrLn xmproc
@@ -418,5 +417,4 @@ main =  do
                         , ppLayout  = xmobarColor "#8be9fd" ""
                         }
         }  `additionalKeysP` myKeys `additionalMouseBindings` myMouseBindings
-
 #+end_src

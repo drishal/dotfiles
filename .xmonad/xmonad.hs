@@ -311,13 +311,11 @@ main =  do
        -- manageHook = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageDocks,
         --logHook            = myLogHook,
         --logHook            = dynamicLogWithPP $ defaultPP { ppOutput = hPutStrLn h },
-        manageHook = manageDocks <+> (isFullscreen --> doFullFloat),
-
-        --startupHook        = setFullscreenSupported <+> myStartupHook,
-        --logHook = dynamicLogWithPP (myLogHook dbus)
+        -- manageHook = manageDocks <+> (isFullscreen --> doFullFloat),
+        manageHook = manageDocks,
         handleEventHook    = handleEventHook def <+> fullscreenEventHook,
         --handleEventHook = ewmhDesktopsEventHook,
-        --startupHook        =  setFullscreenSupported <+> myStartupHook,
+        -- startupHook        = myStartupHook,
         startupHook=   setFullscreenSupported >> setWMName "LG3D" <+> myStartupHook,
         logHook = dynamicLogWithPP xmobarPP
                          { ppOutput = hPutStrLn xmproc
