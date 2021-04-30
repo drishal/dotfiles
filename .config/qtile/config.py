@@ -99,12 +99,18 @@ layouts = [
         border_normal = "#44475a",
         border_width = 1
     ),
-    # layout.Stack(num_stacks=2),
-    # Try more layouts by unleashing below layouts.
-    layout.Bsp(margin = 10,
+    layout.Floating(
         border_focus = "#bd93f9",
         border_normal = "#44475a",
-        border_width = 1),
+        border_width = 1
+    ),
+    layout.Max()
+    # layout.Stack(num_stacks=2),
+    # Try more layouts by unleashing below layouts.
+    # layout.Bsp(margin = 10,
+    #     border_focus = "#bd93f9",
+    #     border_normal = "#44475a",
+    #     border_width = 1),
     # layout.Columns(),
     # layout.Matrix(),
     # layout.MonadTall(),
@@ -118,7 +124,7 @@ layouts = [
 
 widget_defaults = dict(
     font='FiraCode Nerd Font',
-    fontsize=11,
+    fontsize=12,
     padding=2,
     background="#282a36",
     foreground= "#282a36",
@@ -130,43 +136,52 @@ screens = [
         top=bar.Bar(
             [
                 widget.CurrentLayout(
-                    foreground = "#282a36",
-                    background="#50fa7b",
+                    # foreground = "#282a36",
+                    foreground="#50fa7b",
                     #background="",
                 ),
                 widget.GroupBox(
-                       fontsize = 9,
-                       margin_y = 3,
-                       margin_x = 3,
-                       padding_y = 5,
-                       padding_x = 5,
-                       borderwidth = 3,
-                       active = "#f8f8f2",
-                       inactive = "#6272a4",
-                       rounded = False,
-                       highlight_color = "#44475a" ,
-                       highlight_method = "line",
-                       #this_current_screen_border = colors[3],
-                       #this_screen_border = colors [4],
-                       #other_current_screen_border = colors[0],
-                       #other_screen_border = colors[0],
+                    fontsize = 9,
+                    margin_y = 3,
+                    margin_x = 3,
+                    padding_y = 5,
+                    padding_x = 5,
+                    borderwidth = 3,
+                    active = "#f8f8f2",
+                    inactive = "#6272a4",
+                    rounded = False,
+                    highlight_color = "#44475a" ,
+                    highlight_method = "line",
+                    #this_current_screen_border = colors[3],
+                    #this_screen_border = colors [4],
+                    #other_current_screen_border = colors[0],
+                    #other_screen_border = colors[0],
                        foreground = "#f8f8f2",
-                       background = "#282a36",
-                       #padding = 5
+                    background = "#282a36",
+                    #padding = 5
 
                 ),
                 widget.Prompt(
-                     background="#44475a",
-                     foreground="#f8f8f2",
-                     record_history = True
+                    background="#44475a",
+                    foreground="#f8f8f2",
+                    record_history = True
                 ),
                 widget.WindowName(
+                    max_chars = 50,
                     padding= 5,
-                     # foreground = "f8f8f8",
-                     #background="#6272a4",
-                     background="#44475a",
-                     foreground="#f8f8f2"
-                     #background="#bd93f9",
+                    # foreground = "f8f8f8",
+                    # background="#6272a4",
+                     foreground="#ff79c6",
+                    # foreground="#f8f8f2"
+                    # background="#bd93f9",
+                ),
+
+                 widget.Clock(format='   %Y-%m-%d %a %I:%M:%S %p ',
+                             foreground="#bd93f9",
+                             # foreground="#282a36",
+                             ),
+                widget.Spacer(
+                    length = bar.STRETCH,
                 ),
                 widget.Chord(
                     chords_colors={
@@ -174,61 +189,40 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-                widget.TextBox(
-                    text = '',
-                    foreground = "#ff79c6",
-                    background = "#44475a",
-                    padding = -6.1,
-                    fontsize = 40,
-                    ),
+
                 widget.CPU(
                     #background="#f1fa8c",
-                    background="#ff79c6",
+                    foreground="#50fa7b",
                     format='   {freq_current}GHz {load_percent}% ',
                 ),
                 widget.TextBox(
-                    text = '',
-                    background = "#ff79c6",
-                    foreground = "#8be9fd",
-                    padding = -6.1,
-                    fontsize = 40,
-                    ),
+                    text = '',
+                    foreground = "#6272a4",
+                    fontsize = 15
+                ),
 
                 widget.Memory(
                     #background="#8be9fd",
-                    background="#8be9fd",
-                    format='   {MemUsed: .0f}M/{MemTotal: .0f}M ',
+                    foreground="#ffb86c",
+                    format='   {MemUsed: .0f}M /{MemTotal: .0f}M ',
                 ),
                 widget.TextBox(
-                    text = '',
-                    background = "#8be9fd",
-                    foreground = "#ffb86c",
-                    padding = -6.1,
-                    fontsize = 40,
-                    ),
-                widget.Net(
-                    format='{down}  {up}',
-                    background="#ffb86c"
+                    text = '',
+                    foreground = "#6272a4",
+                    fontsize = 15
                 ),
-                 widget.TextBox(
-                    text = '',
-                    background = "#ffb86c",
-                    foreground = "#bd93f9",
-                    padding = -6.1,
-                    fontsize = 40,
-                    ),
-                  # widget.TextBox(text="◤", fontsize=45, padding=-1, foreground="#bd9359",background="#bd93f9"),
-                widget.Clock(format='   %Y-%m-%d %a %I:%M:%S %p ',
-                    background="#bd93f9",
-                    foreground="#282a36",
-                             ),
-                 widget.TextBox(
-                    text = '',
-                    foreground = "#282a36",
-                    background = "#bd93f9",
-                    padding = -6.5,
-                    fontsize = 40,
-                    ),
+                widget.Net(
+                    format=' {down}  {up} ',
+                    foreground="#ff79c6"
+                ),
+                widget.TextBox(
+                    text = ' ', # this one has a small space after the symbol to make it look more consistent with the spaces
+                    foreground = "#6272a4",
+                    fontsize = 15
+                ),
+                # widget.TextBox(text="◤", fontsize=45, padding=-1, foreground="#bd9359",background="#bd93f9"),
+
+
                 widget.Systray(),
             ],
             22,
@@ -256,5 +250,6 @@ floating_layout = layout.Floating(border_focus = "#bd93f9", border_normal = "#44
     Match(title='pinentry'),  # GPG key password entry
 ] )
 
+@hook.subscribe.startup_once
 def autostart():
     os.system("bash ~/.config/qtile/autostart.sh")

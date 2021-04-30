@@ -16,5 +16,5 @@ nitrogen --restore&
 nm-applet&
 mate-power-manager&
 xfce4-clipman&
-#redshift -O 4500 &
-#volumeicon&
+redshift -O 4500 &
+volumeicon&
