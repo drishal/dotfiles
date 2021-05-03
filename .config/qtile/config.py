@@ -21,15 +21,15 @@ keys = [
     Key([mod, "shift"], "k", lazy.layout.shuffle_up()),
     Key([mod, "control"], "j", lazy.layout.grow_down()),
     Key([mod, "control"], "k", lazy.layout.grow_up()),
-    Key([mod, "control"], "h", lazy.layout.grow_left()),
-    Key([mod, "control"], "l", lazy.layout.grow_right()),
-    Key([mod], "i", lazy.layout.cmd_decrease_ratio()),
-    Key([mod], "m", lazy.layout.cmd_increase_ratio()),
-    Key([mod], "n", lazy.layout.normalize()),
+    Key([mod, "control"], "h", lazy.layout.grow_left(), lazy.layout.decrease_ratio()),
+    Key([mod, "control"], "l", lazy.layout.grow_right(),lazy.layout.increase_ratio()),
+    # Key([mod], "i", lazy.layout.decrease_ratio()),
+    # Key([mod], "m", lazy.layout.increase_ratio()),
+    Key([mod], "n", lazy.layout.reset()),
     Key([mod], "o", lazy.layout.maximize()),
     # Key([mod, "shift"], "space", lazy.layout.flip()),
     # Switch from float to tile
-    Key( [mod, "shift"], "space", lazy.window.toggle_floating(), desc='Make window floating.'),
+    Key( [mod, "shift"], "space", lazy.window.toggle_floating(), desc='tile/float a window'),
 
 
     # Switch window focus to other pane(s) of stack
@@ -70,7 +70,7 @@ mouse = [
          start=lazy.window.get_position()),
     Drag([mod,"shift"], "Button1", lazy.window.set_size_floating(),
          start=lazy.window.get_size()),
-    Click([mod], "Button2", lazy.window.bring_to_front())
+    # Click([mod], "Button2", lazy.window.bring_to_front())
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -104,7 +104,7 @@ layouts = [
         border_normal = "#44475a",
         border_width = 1
     ),
-    layout.Max()
+    # layout.Max()
     # layout.Stack(num_stacks=2),
     # Try more layouts by unleashing below layouts.
     # layout.Bsp(margin = 10,
@@ -124,7 +124,7 @@ layouts = [
 
 widget_defaults = dict(
     font='FiraCode Nerd Font',
-    fontsize=12,
+    fontsize=11,
     padding=2,
     background="#282a36",
     foreground= "#282a36",
@@ -138,8 +138,9 @@ screens = [
                 widget.CurrentLayout(
                     # foreground = "#282a36",
                     foreground="#50fa7b",
-                    #background="",
+                    # background="",
                 ),
+
                 widget.GroupBox(
                     fontsize = 9,
                     margin_y = 3,
@@ -149,16 +150,18 @@ screens = [
                     borderwidth = 3,
                     active = "#f8f8f2",
                     inactive = "#6272a4",
-                    rounded = False,
-                    highlight_color = "#44475a" ,
+                    rounded = True,
+                    highlight_color = ["#44475a"] ,
                     highlight_method = "line",
-                    #this_current_screen_border = colors[3],
-                    #this_screen_border = colors [4],
-                    #other_current_screen_border = colors[0],
-                    #other_screen_border = colors[0],
-                       foreground = "#f8f8f2",
+                    this_current_screen_border = "#6272a4",
+                    # this_current_screen_border = colors[3],
+                    # this_screen_border = #bd93f9,
+                    # other_current_screen_border = colors[0],
+                    # other_screen_border = colors[0],
+                    foreground = "#f8f8f2",
                     background = "#282a36",
-                    #padding = 5
+                    disable_drag = True
+                    # padding = 5
 
                 ),
                 widget.Prompt(
@@ -225,31 +228,35 @@ screens = [
 
                 widget.Systray(),
             ],
-            22,
+            21,
         ),
     ),
 ]
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: List
-main = None  # WARNING: this is deprecated and will be removed soon
 follow_mouse_focus = True
-# bring_front_click = True
+bring_front_click = False
 cursor_warp = False
+auto_fullscreen = True
 focus_on_window_activation = "focus"
-# respect_minimize_requests = False
-auto_minimize = False
+reconfigure_screens = True
 
-floating_layout = layout.Floating(border_focus = "#bd93f9", border_normal = "#44475a", float_rules=[
+floating_layout = layout.Floating(border_focus = "#bd93f9", border_normal = "#44475a",
+float_rules=[
     *layout.Floating.default_float_rules,
     Match(wm_class='confirmreset'),  # gitk
     Match(wm_class='makebranch'),  # gitk
     Match(wm_class='maketag'),  # gitk
     Match(wm_class='ssh-askpass'),  # ssh-askpass
+    # Match(title='About Mozilla Firefox'),  # ssh-askpass
     Match(title='branchdialog'),  # gitk
     Match(title='pinentry'),  # GPG key password entry
-] )
+]
 
+)
+
+auto_minimize = False
 @hook.subscribe.startup_once
 def autostart():
     os.system("bash ~/.config/qtile/autostart.sh")
