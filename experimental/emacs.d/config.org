@@ -1,7 +1,13 @@
 ;; The default is 800 kilobytes.  Measured in bytes.
+#+TITLE: init.el
+#+PROPERTY: header-args :tangle init.el
+* emacs startup
+** shift theme variables to ~custom.el~, make sure to create it if it does not exist
 #+begin_src emacs-lisp
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load-file (expand-file-name "custom.el" user-emacs-directory))
 #+end_src
-
+** emacs startup performance
 #+begin_src emacs-lisp
   (setq gc-cons-threshold (* 50 1000 1000))
 
@@ -16,6 +22,7 @@
 #+end_src
 
 * Initialize package sources
+** Package.el
 #+begin_src emacs-lisp
   (require 'package)
 
@@ -27,11 +34,52 @@
   (unless package-archive-contents
     (package-refresh-contents))
 #+end_src
+** straight.el: make sure to later remove package.el
+#+begin_src emacs-lisp
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+ 
+(straight-use-package 'use-package) ; make sure use package is installed 
+(use-package el-patch
+  :straight t)                   ;and now we will have use package here
+#+end_src
+note: Users of Emacs versions >= 27 will want to add:
+#+begin_src emacs-lisp
+(setq package-enable-at-startup nil)
+#+end_src
 * Customizing the appearence
 ** theme
 #+begin_src emacs-lisp
-  (use-package dracula-theme)
-  (load-theme 'dracula t)
+ (use-package dracula-theme)
+(use-package doom-themes
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+	(load-theme 'doom-dracula t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+  (doom-themes-treemacs-config)
+  
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+  ;(load-theme 'dracula t)
 
 #+end_src
 
@@ -102,3 +150,56 @@
   :commands command-log-mode)
 
 #+end_src
+* Org mode: 
+** snippets:
+*** ya-snippet
+#+begin_src emacs-lisp
+(use-package yasnippet) 
+#+end_src
+*** doom snippets
+see  https://github.com/hlissner/doom-snippets
+#+begin_src emacs-lisp
+(use-package doom-snippets
+  :load-path "~/.emacs.d/repos/doom-snippets"
+  :after yasnippet)
+#+end_src
+** org tempo for all the beautiful snippets: 
+#+begin_src emacs-lisp
+; (straight-use-package 'org-tempo)
+ (require 'org-tempo)
+#+end_src
+** Superstar for some pretty symbols 
+   #+begin_src emacs-lisp
+   (straight-use-package 'org-superstar)
+   (require 'org-superstar)
+(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+   #+end_src
+
+* Language and completion support 
+** completion engines:
+*** company mode
+   #+begin_src emacs-lisp
+   (straight-use-package 'company) 
+(add-hook 'after-init-hook 'global-company-mode)
+   #+end_src
+** lsp-mode
+*** General Setup 
+   #+begin_src emacs-lisp
+(straight-use-package 'flycheck)
+   (straight-use-package 'lsp-mode)
+   (straight-use-package 'lsp-ui)
+   #+end_src
+*** python
+    #+begin_src emacs-lisp
+(use-package lsp-python-ms
+  :straight t
+  :ensure t
+  :init (setq lsp-python-ms-auto-install-server t) 
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-python-ms)
+                          (lsp))))  ; or lsp-deferred
+    #+end_src
+** which key
+   #+begin_src emacs-lisp
+   (straight-use-package 'which-key)
+   #+end_src
