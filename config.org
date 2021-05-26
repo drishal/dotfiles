@@ -1,0 +1,465 @@
+#+TITLE: init.el
+#+PROPERTY: header-args :tangle init.el
+
+
+* Table of contents  :toc:
+- [[#emacs-startup][emacs startup]]
+  - [[#shift-theme-variables-to-customel-make-sure-to-create-it-if-it-does-not-exist][shift theme variables to ~custom.el~, make sure to create it if it does not exist]]
+  - [[#emacs-startup-performance][emacs startup performance]]
+- [[#initialize-package-sources][Initialize package sources]]
+  - [[#packageel][Package.el]]
+  - [[#straightel-make-sure-to-later-remove-packageel][straight.el: make sure to later remove package.el]]
+- [[#customizing-the-appearence][Customizing the appearence]]
+  - [[#theme][theme]]
+  - [[#disable-menubar][Disable Menubar]]
+  - [[#disable-toolbar][Disable Toolbar]]
+  - [[#all-the-icon-fonts][All the icon fonts]]
+  - [[#line-numbers][Line Numbers]]
+  - [[#doom-modeline][Doom modeline]]
+  - [[#loading-the-theme][Loading the theme]]
+  - [[#fonts][Fonts]]
+  - [[#evil-mode][Evil mode]]
+  - [[#dashboard][Dashboard]]
+- [[#hook-to-tangle-on-save][Hook to tangle on save]]
+- [[#org-mode][Org mode:]]
+  - [[#snippets][snippets:]]
+  - [[#org-tempo-for-all-the-beautiful-snippets][org tempo for all the beautiful snippets:]]
+  - [[#superstar-for-some-pretty-symbols][Superstar for some pretty symbols]]
+  - [[#org-toc][org-toc]]
+- [[#tools][Tools]]
+  - [[#vterm][vterm]]
+  - [[#elcord][elcord]]
+  - [[#shackle][Shackle]]
+- [[#language-and-completion-support][Language and completion support]]
+  - [[#completion-engines][completion engines:]]
+  - [[#projectile][Projectile]]
+  - [[#orderless][Orderless]]
+  - [[#vertico-and-orderless][vertico and orderless]]
+  - [[#languages-and-lsp-mode][languages and lsp-mode]]
+  - [[#which-key][which key]]
+- [[#prevent-saving-to-x-clipboard-manager][prevent "saving to x clipboard manager]]
+- [[#prevent-warnings-buffer][prevent *warnings* buffer]]
+
+* emacs startup
+** shift theme variables to ~custom.el~, make sure to create it if it does not exist
+   #+begin_src emacs-lisp
+     (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+     (load-file (expand-file-name "custom.el" user-emacs-directory))
+     (setq gc-cons-threshold 10000000000)
+   #+end_src
+** emacs startup performance
+   #+begin_src emacs-lisp
+     ;; The default is 800 kilobytes.  Measured in bytes.
+     ;; (setq gc-cons-threshold (* 50 1000 1000))
+     (setq read-process-output-max (* 1024 1024)) ;; 1mb
+     (defun efs/display-startup-time ()
+       (message "Emacs loaded in %s with %d garbage collections."
+		(format "%.2f seconds"
+			(float-time
+			 (time-subtract after-init-time before-init-time)))
+		gcs-done))
+
+     (add-hook 'emacs-startup-hook #'efs/display-startup-time)
+    #+end_src
+
+* Initialize package sources
+** Package.el
+   #+begin_src emacs-lisp
+     (require 'package)
+
+     (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+			      ("org" . "https://orgmode.org/elpa/")
+			      ("elpa" . "https://elpa.gnu.org/packages/")))
+
+     (package-initialize)
+     (unless package-archive-contents
+       (package-refresh-contents))
+   #+end_src
+** straight.el: make sure to later remove package.el
+   #+begin_src emacs-lisp
+     (defvar bootstrap-version)
+     (let ((bootstrap-file
+	    (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+	   (bootstrap-version 5))
+       (unless (file-exists-p bootstrap-file)
+	 (with-current-buffer
+	     (url-retrieve-synchronously
+	      "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	      'silent 'inhibit-cookies)
+	   (goto-char (point-max))
+	   (eval-print-last-sexp)))
+       (load bootstrap-file nil 'nomessage))
+
+     (straight-use-package 'use-package) ; make sure use package is installed
+     (use-package el-patch
+       :straight t)                   ;and now we will have use package here
+   #+end_src
+   note: Users of Emacs versions >= 27 will want to add:
+   #+begin_src emacs-lisp
+     (setq package-enable-at-startup nil)
+   #+end_src
+* Customizing the appearence
+** theme
+   #+begin_src emacs-lisp
+     ;; (use-package dracula-theme straight t)
+     (use-package doom-themes :straight t
+       :config
+       ;; Global settings (defaults)
+       (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+	     doom-themes-enable-italic t) ; if nil, italics is universally disabled
+       (load-theme 'doom-dracula t)
+
+       ;; Enable flashing mode-line on errors
+       (doom-themes-visual-bell-config)
+
+       ;; Enable custom neotree theme (all-the-icons must be installed!)
+       (doom-themes-neotree-config)
+       ;; or for treemacs users
+       (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+       (doom-themes-treemacs-config)
+
+       ;; Corrects (and improves) org-mode's native fontification.
+       (doom-themes-org-config))
+
+   #+end_src
+** Disable Menubar
+   #+begin_src emacs-lisp
+     (menu-bar-mode -1) 
+   #+end_src
+** Disable Toolbar
+   #+begin_src emacs-lisp
+     (tool-bar-mode -1) 
+   #+end_src
+** All the icon fonts
+   #+begin_src emacs-lisp
+     (use-package all-the-icons :straight t)
+   #+end_src
+** Line Numbers
+   #+begin_src emacs-lisp
+     (global-display-line-numbers-mode 1)
+     (global-visual-line-mode t)
+   #+end_src
+** Doom modeline
+   #+begin_src emacs-lisp
+     (use-package doom-modeline :straight t)
+     (doom-modeline-mode 1)
+   #+end_src
+
+** Loading the theme
+   #+begin_src emacs-lisp
+     (load-theme 'doom-dracula t)
+   #+end_src
+
+** Fonts
+   #+begin_src emacs-lisp
+     (set-face-attribute 'default nil
+			 :font "FiraCode Nerd Font 11"
+			 :weight 'medium)
+     (set-face-attribute 'variable-pitch nil
+			 :font "FiraCode Nerd Font  11"
+			 :weight 'medium)
+     (set-face-attribute 'fixed-pitch nil
+			 :font "FiraCode Nerd Font 11"
+			 :weight 'medium)
+     ;; Makes commented text italics (working in emacsclient but not emacs)
+     (set-face-attribute 'font-lock-comment-face nil
+			 :slant 'italic)
+     ;; Makes keywords italics (working in emacsclient but not emacs)
+     (set-face-attribute 'font-lock-keyword-face nil
+			 :slant 'italic)
+
+     ;; Uncomment the following line if line spacing needs adjusting.
+     (setq-default line-spacing 0.12)
+
+     ;; Needed if using emacsclient. Otherwise, your fonts will be smaller than expected.
+     (add-to-list 'default-frame-alist '(font . "FiraCode Nerd Font 11"))
+     ;; changes certain keywords to symbols, such as lamda!
+     (setq global-prettify-symbols-mode t)
+
+   #+end_src
+** Evil mode
+   #+begin_src emacs-lisp
+     (use-package evil :straight t 
+       :init
+       (setq evil-want-integration t)
+       (setq evil-want-keybinding nil)
+       (setq evil-want-C-u-scroll t)
+       (setq evil-want-C-i-jump nil)
+       :config
+       (evil-mode 1)
+       (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+       (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+
+       ;; Use visual line motions even outside of visual-line-mode buffers
+       (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+       (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+       (evil-set-initial-state 'messages-buffer-mode 'normal)
+       (evil-set-initial-state 'dashboard-mode 'normal))
+
+     (use-package evil-collection
+       :straight t
+       :after evil
+       :config
+       (evil-collection-init))
+
+     (use-package command-log-mode
+       :commands command-log-mode)
+
+   #+end_src
+
+** Dashboard
+   #+begin_src emacs-lisp
+     (use-package dashboard :straight t
+       :init      ;; tweak dashboard config before loading it
+       (setq dashboard-set-heading-icons t)
+       ;; Content is not centered by default. To center, set
+       (setq dashboard-set-file-icons t)
+       (setq dashboard-banner-logo-title "Emacs Is More Than A Text Editor!")
+       (setq dashboard-startup-banner `logo) ;; use standard emacs logo as banner
+       ;;(setq dashboard-startup-banner 'logo)
+       ;;(setq dashboard-startup-banner "~/.emacs.d/emacs-dash3.png")  ;; use custom image as banner
+       (setq dashboard-center-content t)
+        (setq dashboard-set-navigator t)
+       (setq dashboard-items '((recents . 5)
+			       (agenda . 5 )
+			       (bookmarks . 3)
+			       (projects . 3)
+			       (registers . 3)))
+       :config
+       (dashboard-setup-startup-hook)
+       (dashboard-modify-heading-icons '((recents . "file-text")
+					 (bookmarks . "book"))))
+
+					     ; for emacsclient
+     (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+   #+end_src
+* Hook to tangle on save
+  #+begin_src emacs-lisp
+    (defun f2k--tangle-all-org-on-save-h ()
+      "Tangle org files on save."
+      (if (string= (file-name-extension (buffer-file-name)) "org")
+	  (org-babel-tangle)))
+
+    (add-hook 'after-save-hook #'f2k--tangle-all-org-on-save-h)
+
+  #+end_src
+* Org mode: 
+** snippets:
+*** ya-snippet
+    #+begin_src emacs-lisp
+      (use-package yasnippet  :straight t) 
+
+    #+end_src
+*** doom snippets
+    see  https://github.com/hlissner/doom-snippets
+    #+begin_src emacs-lisp
+					      ;    (use-package doom-snippets
+					      ;	:load-path "~/.emacs.d/repos/doom-snippets"
+					      ;	:after yasnippet)
+    #+end_src
+** org tempo for all the beautiful snippets: 
+
+   #+begin_src emacs-lisp
+					     ; (straight-use-package 'org-tempo)
+     (require 'org-tempo)
+   #+end_src
+** Superstar for some pretty symbols 
+   #+begin_src emacs-lisp
+     (straight-use-package 'org-superstar)
+     (require 'org-superstar)
+     (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+   #+end_src
+** org-toc
+   #+begin_src emacs-lisp
+     (use-package toc-org :straight t)
+     (add-hook 'org-mode-hook #'toc-org-enable)
+
+   #+end_src
+* Tools
+** vterm
+   #+begin_src emacs-lisp `
+     (use-package vterm :straight t
+       ;; :config 
+       ;; (set-popup-rule! "^\\*vterm" :size 0.25 :vslot -4 :select t :quit nil :ttl 0)
+       )
+   #+end_src
+** elcord
+   #+begin_src emacs-lisp
+(use-package elcord :straight t)
+   #+end_src
+** Shackle
+   #+begin_src emacs-lisp
+     (use-package shackle
+       :straight t
+       ;; :if (not (bound-and-true-p disable-pkg-shackle))
+       :config
+       (progn
+	 (setq shackle-lighter "")
+	 (setq shackle-select-reused-windows nil) ; default nil
+	 (setq shackle-default-alignment 'below) ; default below
+	 (setq shackle-default-size 0.4) ; default 0.5
+
+	 (setq shackle-rules
+	       ;; CONDITION(:regexp)            :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
+	       '((compilation-mode              :select nil                                               )
+		 ("*undo-tree*"                 :select t                          :size 0.25 :align right)
+		 ("\\*vterm.*\\*"  :regexp t    :select t                          :size 0.4  :align below)
+		 ("*eshell*"                    :select t                          :other t               )
+		 ("*Shell Command Output*"      :select nil                                               )
+		 ("\\*Async Shell.*\\*" :regexp t :ignore t                                                 )
+		 (occur-mode                    :select nil                                   :align t    )
+		 ("*Help*"                      :select t   :inhibit-window-quit t :other t               )
+		 ("*Completions*"                                                  :size 0.3  :align t    )
+		 ("*Messages*"                  :select nil :inhibit-window-quit t :other t               )
+		 ("\\*[Wo]*Man.*\\*"    :regexp t :select t   :inhibit-window-quit t :other t               )
+		 ("\\*poporg.*\\*"      :regexp t :select t                          :other t               )
+		 ("\\`\\*helm.*?\\*\\'"   :regexp t                                    :size 0.3  :align t    )
+		 ("*calendar*"                  :select t                          :size 0.5  :align below)
+		 ("*info*"                      :select t   :inhibit-window-quit t                         :same t)
+		 (magit-status-mode             :select t   :inhibit-window-quit t                         :same t)
+		 (magit-log-mode                :select t   :inhibit-window-quit t                         :same t)
+		 ))
+
+	 (shackle-mode 1)))
+
+
+     (provide 'setup-shackle)
+
+   #+end_src
+   
+* Language and completion support 
+** completion engines:
+*** company mode
+    #+begin_src emacs-lisp
+      (straight-use-package 'company)
+      (add-hook 'after-init-hook 'global-company-mode)
+      (setq company-minimum-prefix-length 1
+	    company-idle-delay 0.0) ;; default is 0.2
+
+    #+end_src
+** Projectile
+   #+begin_src emacs-lisp
+     (use-package projectile :straight t)
+
+   #+end_src
+** Orderless
+   #+begin_src emacs-lisp
+					     ;(use-package orderless
+					     ;  :straight t
+					     ;  :ensure t
+					     ;  :custom (completion-styles '(orderless)))
+
+   #+end_src
+** vertico and orderless
+   #+begin_src emacs-lisp
+     ;; Enable vertico
+     (use-package vertico
+       :straight t
+       :init
+       (vertico-mode)
+
+       ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+       ;; (setq vertico-cycle t)
+       )
+
+     ;; Use the `orderless' completion style.
+     ;; Enable `partial-completion' for files to allow path expansion.
+     ;; You may prefer to use `initials' instead of `partial-completion'.
+     (use-package orderless
+       :straight t
+       :init
+       (setq completion-styles '(orderless)
+	     completion-category-defaults nil
+	     completion-category-overrides '((file (styles . (partial-completion))))))
+
+     ;; Persist history over Emacs restarts. Vertico sorts by history position.
+     (use-package savehist
+       :straight t
+       :init
+       (savehist-mode))
+
+     ;; A few more useful configurations...
+     (use-package emacs
+       :straight t
+       :init
+       ;; Add prompt indicator to `completing-read-multiple'.
+       (defun crm-indicator (args)
+	 (cons (concat "[CRM] " (car args)) (cdr args)))
+       (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+       ;; Grow and shrink minibuffer
+       ;;(setq resize-mini-windows t)
+
+       ;; Do not allow the cursor in the minibuffer prompt
+       (setq minibuffer-prompt-properties
+	     '(read-only t cursor-intangible t face minibuffer-prompt))
+       (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+       ;; Enable recursive minibuffers
+       (setq enable-recursive-minibuffers t))
+
+   #+end_src
+** languages and lsp-mode
+*** General Setup 
+    #+begin_src emacs-lisp
+      (use-package flycheck :straight t)
+      (use-package lsp-mode :straight t)
+      (use-package lsp-ui :straight t)
+      (setq lsp-ui-doc-enable nil)
+      ;; (setq lsp-use-plists t)
+      ;;(setq lsp-idle-delay 0.500)
+    #+end_src
+*** python
+    #+begin_src emacs-lisp
+      (use-package lsp-pyright
+        :straight t
+	:hook (python-mode . (lambda ()
+			       (require 'lsp-pyright)
+			       (lsp))))  ; or lsp-deferred
+
+    #+end_src
+*** Haskell
+**** haskell mode
+     #+begin_src emacs-lisp
+       (use-package haskell-mode :straight t)
+     #+end_src
+*** Fish
+    #+begin_src emacs-lisp
+      (use-package fish-mode :straight t)
+    #+end_src
+*** nix
+    #+begin_src emacs-lisp
+      (use-package nix-mode :straight t
+	:mode "\\.nix\\'")
+    #+end_src
+
+** which key
+   #+begin_src emacs-lisp
+     (use-package which-key
+       :straight t
+       :init
+       (setq which-key-side-window-location 'bottom
+	     which-key-sort-order #'which-key-key-order-alpha
+	     which-key-sort-uppercase-first nil
+	     which-key-add-column-padding 1
+	     which-key-max-display-columns nil
+	     which-key-min-display-lines 6
+	     which-key-side-window-slot -10
+	     which-key-side-window-max-height 0.25
+	     which-key-idle-delay 0.8
+	     which-key-max-description-length 25
+	     which-key-allow-imprecise-window-fit t
+	     which-key-separator " → " ))
+     (which-key-mode)
+   #+end_src
+
+* prevent "saving to x clipboard manager
+  #+begin_src emacs-lisp
+    (setq x-select-enable-clipboard-manager nil)
+  #+end_src
+
+* prevent *warnings* buffer  
+  #+begin_src emacs-lisp
+    (setq-default warning-minimum-level :error)
+  #+end_src
