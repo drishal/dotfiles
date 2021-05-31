@@ -1,7 +1,7 @@
 Config { 
 
    -- appearance
-    font =         "xft:Hack Nerd Font:size=10:antialias=true:autohinting=true:Regular"
+    font =         "xft:FiraCode Nerd Font:size=10:antialias=true:autohinting=true:Regular"
 
     --font =         "xft:cozette:size=11:antialias=true:autohinting=true:Regular"
    , additionalFonts =           ["xft:PowerlineSymbols:size=20"]
@@ -11,12 +11,15 @@ Config {
    --, alpha = 175
    --, border =       BottomB
    , borderColor =  "#646464"
-   --}{ %battery%  %multicpu% | %memory% %dynnetwork% | %date%          
+   -- }{ %battery%  %multicpu% | %memory% %dynnetwork% | %date%
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
    --, template = "<fc=#50fa7b> </fc>%UnsafeStdinReader% } %date% {<fc=#50fa7b> %uname%</fc>  <fc=#6272a4>|</fc>  %multicpu%  <fc=#6272a4>|</fc> %memory% %dynnetwork%   %trayerpad%"
-   , template = "<fc=#50fa7b> </fc>%UnsafeStdinReader% } %date%  {<fc=#50fa7b> %uname%</fc> %dynnetwork%  <fc=#6272a4>|</fc>  %multicpu%  <fc=#6272a4>|</fc> %memory% <fc=#6272a4>|</fc> %trayerpad%"
+   --, template = "<fc=#50fa7b> </fc>%UnsafeStdinReader% } %date%  {<fc=#50fa7b> %uname%</fc> %dynnetwork%  <fc=#6272a4>|</fc>  %multicpu%  <fc=#6272a4>|</fc> %memory% <fc=#6272a4>|</fc> %trayerpad%"
+   --, template = "<fc=#50fa7b> </fc>%UnsafeStdinReader% } %date%  {%dynnetwork% <fc=#6272a4>|</fc> %multicpu% <fc=#6272a4>|</fc> %memory% <fc=#6272a4>|</fc> %trayerpad%"
+    , template = "<fc=#50fa7b> </fc>%UnsafeStdinReader% } %date%  { %battery%<fc=#6272a4></fc>%dynnetwork% <fc=#6272a4></fc> %multicpu% <fc=#6272a4></fc> %memory% <fc=#6272a4></fc> %trayerpad%"
+  -- , template = "<fc=#50fa7b> </fc>%UnsafeStdinReader% }  {%dynnetwork% <fc=#6272a4></fc> %multicpu% <fc=#6272a4></fc> %memory% <fc=#6272a4></fc> %date% %trayerpad%"
    -- general behavior
    , lowerOnStart =     True    -- send to bottom of window stack on start
    , hideOnStart =      False   -- start with window unmapped (hidden)
@@ -47,7 +50,7 @@ Config {
     -- weather monitor
        -- Run Weather "VICG" [ "--template", "<skyCondition> | <fc=#4682B4><tempC></fc>°C | <fc=#4682B4><rh></fc>% | <fc=#4682B4><pressure></fc>hPa"
        --                      ] 100
-     Run DynNetwork     [ "--template" , "<fc=#6272a4>|</fc> <fc=#ffb86c> <tx>kB/s  <rx>kB/s </fc>"
+     Run DynNetwork     [ "--template" , "<fc=#6272a4></fc> <fc=#ffb86c> <tx>kB/s  <rx>kB/s </fc>"
                               , "--Low"      , "1000"       -- units: B/s
                              , "--High"     , "5000"       -- units: B/s
                              --, "--low"      , "#00ff00"
@@ -55,7 +58,7 @@ Config {
                              --, "--high"     , "#ff0000"
                              ] 10
 	--battery monitor
-     ,Run Battery        [ "--template" , "<fc=#50fa7b> Batt: <left>%, <timeleft> </fc>"
+     ,Run Battery        [ "--template" , "<fc=#50fa7b> <left>%, <timeleft> </fc>"
                            , "--Low"      , "10"        -- units: %
                              , "--High"     , "80"        -- units: %
                              ] 10
