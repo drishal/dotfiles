@@ -25,8 +25,8 @@ import qualified XMonad.Actions.TreeSelect as TS
 import XMonad.Actions.WindowGo (runOrRaise)
 import XMonad.Actions.WithAll (sinkAll, killAll)
 import qualified XMonad.Actions.Search as S
-import qualified DBus as D
-import qualified DBus.Client as D
+-- import qualified DBus as D
+-- import qualified DBus.Client as D
 import qualified Codec.Binary.UTF8.String as UTF8
 --import  XMonad.Actions.Navigation2D
 
@@ -49,6 +49,8 @@ import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.SimpleFloat
+import XMonad.Layout.Renamed
+
 --import XMonad.Layout.Fullscreen as FS
     -- Layouts modifiers
 import XMonad.Layout.LayoutModifier
@@ -111,7 +113,7 @@ myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
 myNormalBorderColor  = "#44475a"
 myFocusedBorderColor = "#bd93f9"
 
-myLayout = mySpacing 8 (smartBorders(avoidStruts (  tiled ||| simplestFloat ))) ||| noBorders Full
+myLayout =  renamed [CutWordsLeft 1] ( mySpacing 8  (smartBorders(avoidStruts (  tiled ||| simplestFloat )))) ||| smartBorders Full
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
@@ -159,24 +161,29 @@ mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spaci
 mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
 
 myStartupHook = do
-        spawnOnce "/usr/lib/notification-daemon-1.0/notification-daemon"
-        spawnOnce "xsetroot -cursor_name left_ptr"
-        spawnOnce "/usr/libexec/notification-daemon"
-        spawnOnce "lxpolkit"
-        spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true  --tint 0x282a36 --alpha 0 --height 20 --padding 3 --iconspacing 3"
-        --spawnOnce "polybar xmonad"
-        spawnOnce "picom --experimental-backends"
-        --spawnOnce "picom"
-        spawnOnce "nitrogen --restore"
-        --spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true  --tint 0x292d3e  --alpha 0 --height 20 --padding 1"
-        --spawnOnce "stalonetray"
-        --spawnOnce "pasystray"
-        spawnOnce "nm-applet"
-        spawnOnce "mate-power-manager"
-        spawnOnce "xfce4-clipman"
-        spawnOnce "redshift -O 4500"
-        spawnOnce "volumeicon"
-        --spawnOnce "play  -v0.05  ~/Desktop/95.mp3"
+       -- spawnOnce "/usr/lib/notification-daemon-1.0/notification-daemon"
+	-- spawnOnce "/usr/libexec/notification-daemon"
+	spawnOnce "deadd-notification-center&"
+	spawnOnce "xsetroot -cursor_name left_ptr"
+	-- spawnOnce "lxqt-notificationd&"
+	--  spawnOnce "/usr/libexec/notification-daemon"
+	spawnOnce "lxpolkit"
+	spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true  --tint 0x282a36 --alpha 0 --height 20 --padding 3 --iconspacing 3"
+	--spawnOnce "polybar xmonad"
+	spawnOnce "picom --experimental-backends"
+	--spawnOnce "picom"
+	spawnOnce "nitrogen --restore"
+	--spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true  --tint 0x292d3e  --alpha 0 --height 20 --padding 1"
+	--spawnOnce "stalonetray"
+	--spawnOnce "pasystray"
+	spawnOnce "nm-applet"
+	-- spawnOnce "xiccd"
+	-- spawnOnce "mate-power-manager"
+	spawnOnce "xfce4-power-manager"
+	spawnOnce "xfce4-clipman"
+	spawnOnce "redshift -O 5000"
+	spawnOnce "volumeicon"
+	--spawnOnce "play  -v0.05  ~/Desktop/95.mp3"
 
 myKeys :: [(String, X ())]
 myKeys =
@@ -198,7 +205,7 @@ myKeys =
   , ("M-e", spawn "thunar")
 
   --emacs
-  , ("M-a", spawn "emacsclient -c")
+  , ("M-a", spawn "emacs")
 
   --terminal
   , ("M-<Return>", spawn myTerminal)
@@ -227,20 +234,21 @@ myKeys =
     , ("M-m", windows W.focusMaster  )
 
     -- Swap the focused window and the master window
-    , ("M-C-m", windows W.swapMaster)
+    , ("M-S-m", windows W.swapMaster)
 
     -- Swap the focused window with the next window
-    , ("M-C-j", windows W.swapDown  )
+    , ("M-S-j", windows W.swapDown  )
 
     -- Swap the focused window with the previous window
-    , ("M-C-k", windows W.swapUp    )
+    , ("M-S-k", windows W.swapUp    )
 
     -- Shrink the master area
-    , ("M-S-h", sendMessage Shrink)
+    , ("M-C-h", sendMessage Shrink)
 
     -- Expand the master area
-    , ("M-S-l", sendMessage Expand)
-
+    , ("M-C-l", sendMessage Expand)
+    --reset layout
+    , ("M-C-<Space>",  setLayout $ Layout myLayout)
     --toogle fullscreen
     --, ("M-f", sendMessage $ Toggle FULL )
 
@@ -269,9 +277,6 @@ myMouseBindings =
     , ((modkey .|. shiftMask, button1), (\w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster)) ]
   where
     modkey = mod4Mask
-------------------------------
--- Adding Fullscreen Support--
-------------------------------
 
 setFullscreenSupported :: X ()
 setFullscreenSupported = addSupported ["_NET_WM_STATE", "_NET_WM_STATE_FULLSCREEN"]
