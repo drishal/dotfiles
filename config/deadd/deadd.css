@@ -1,0 +1,9 @@
+image.deadd-noti-center.notification.icon,
+label.deadd-noti-center.notification.appname,
+image.deadd-noti-center.in-center.icon,
+label.deadd-noti-center.in-center.appname {
+    opacity: 0
+}
+.deadd-noti-center {
+    font-family: firaCode Nerd Font;
+}

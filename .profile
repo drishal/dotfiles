@@ -1,17 +1,28 @@
 # aliases
 alias nix-config="sudo vim /etc/nixos/configuration.nix"
-alias nrs="sudo nixos-rebuild switch"
 alias xon="steam-run ~/Desktop/games/Xonotic2/xonotic-linux-sdl.sh"
-alias ls="exa"
-alias ll="exa -l"
-alias lh="exa -lh"
-alias la="exa -la"
-alias lah="exa -lah"
+
+# ls related aliases
+alias ls="exa --icons"
+alias ll="ls -l"
+alias lh="ls -lh"
+alias la="ls -la"
+alias lah="ls -lah"
 alias edd="emacs --daemon"
 alias b="brightnessctl"
 alias bs="brightnessctl s"
+export EXA_ICON_SPACING=2
+# nixos stuff
+alias nrs="sudo nixos-rebuild switch"
+# man pager
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+#resetting the right usb
+alias usb_1="cd /sys/bus/pci/drivers/xhci_hcd/"
+alias usb_2="su root -c  'for file in ????:??:??.? ; do  echo -n "$file" > unbind;  echo -n "$file" > bind; done'"
+# home manager
+alias hms="home-manager switch"
 
 # export the npm profile
 export PATH="$HOME/.npm-packages/bin:$PATH"
 #fetch
-pfetch
+#pfetch

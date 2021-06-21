@@ -56,12 +56,12 @@ Config {
                              --, "--low"      , "#00ff00"
                              --, "--normal"   , "#ffff00"
                              --, "--high"     , "#ff0000"
-                             ] 10
+                             ] 50
 	--battery monitor
      ,Run Battery        [ "--template" , "<fc=#50fa7b> <left>%, <timeleft> </fc>"
                            , "--Low"      , "10"        -- units: %
                              , "--High"     , "80"        -- units: %
-                             ] 10
+                             ] 100
 
 	 -- cpu activity monitor
         , Run MultiCpu       [ "--template" , "<fc=#8be9fd> <total>% </fc>"
@@ -70,7 +70,7 @@ Config {
                              --, "--low"      , "#00ff00"
                              --, "--normal"   , "#ffff00"
                              --, "--high"     , "#ff0000"
-			     ] 10
+			     ] 20
                -- memory usage monitor
         , Run Memory         [ "--template" ,"<fc=#ff79c6>  <used>M/<total>M </fc>"
                              , "--Low"      , "1000"        -- units: M
@@ -79,7 +79,7 @@ Config {
                              --, "--normal"   , "#ffff00"
                              --, "--high"     , "#ff0000"
 
-			     ] 10
+			     ] 50
 
 
 

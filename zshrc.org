@@ -13,13 +13,16 @@
   - [[#disable-the-prompt-on-the-right-side][Disable the prompt on the right side]]
   - [[#vim-mode][vim mode]]
   - [[#themes][Themes]]
+  - [[#prompt][prompt]]
 - [[#setting-some-values-we-will-need-from-grml-zsh-config][Setting some values we will need from Grml zsh config]]
 - [[#completion-stuff-from-grml][completion stuff from grml]]
 - [[#history-completions][History completions]]
 - [[#navigation][Navigation]]
 - [[#grml-zsh-config][Grml Zsh config]]
 - [[#loading-the-profile][loading the ~~/.profile~]]
+- [[#title][title]]
 - [[#loading-the-starship-prompt][loading the starship prompt]]
+- [[#pfetch][pfetch]]
 
 * qt5ct
 #+begin_src shell
@@ -78,13 +81,17 @@ see https://github.com/zsh-users/zsh-completions
 ** vim mode
 see https://github.com/jeffreytse/zsh-vi-mode
 #+begin_src shell
-#  source ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+source ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 #+end_src
 ** Themes
 #+begin_src shell
   # source ~/.zsh-plugins/dracula/dracula.zsh-theme
   # ZSH_THEME="random"
 
+#+end_src
+** prompt
+#+begin_src emacs-lisp 
+#  source ~/.zsh-plugins/termsupport.zsh 
 #+end_src
 
 * Setting some values we will need from Grml zsh config
@@ -271,7 +278,22 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
   source ~/.profile
 #+end_src
 
+* title
+#+begin_src shell 
+   DISABLE_AUTO_TITLE="true"
+  # export TITLE=$USER@$HOST 
+  # export PROMPT_COMMAND="echo -ne \"\033]0;$1 Hello World\007\""
+  # printf "\033]%s\07\n" "$USER@$HOST" 
+#+end_src
+
 * loading the starship prompt
 #+begin_src shell
- eval "$(starship init zsh)"
+  # export PS1="%F{blue}%~%f %(?.%F{green}❯%f.%F{red}❯%f) "
+   eval "$(starship init zsh)"
 #+end_src
+
+* pfetch
+#+begin_src shell
+  pfetch 
+#+end_src
+

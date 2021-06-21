@@ -162,28 +162,28 @@ mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
 
 myStartupHook = do
        -- spawnOnce "/usr/lib/notification-daemon-1.0/notification-daemon"
-	-- spawnOnce "/usr/libexec/notification-daemon"
-	spawnOnce "deadd-notification-center&"
-	spawnOnce "xsetroot -cursor_name left_ptr"
-	-- spawnOnce "lxqt-notificationd&"
-	--  spawnOnce "/usr/libexec/notification-daemon"
-	spawnOnce "lxpolkit"
-	spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true  --tint 0x282a36 --alpha 0 --height 20 --padding 3 --iconspacing 3"
-	--spawnOnce "polybar xmonad"
-	spawnOnce "picom --experimental-backends"
-	--spawnOnce "picom"
-	spawnOnce "nitrogen --restore"
-	--spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true  --tint 0x292d3e  --alpha 0 --height 20 --padding 1"
-	--spawnOnce "stalonetray"
-	--spawnOnce "pasystray"
-	spawnOnce "nm-applet"
-	-- spawnOnce "xiccd"
-	-- spawnOnce "mate-power-manager"
-	spawnOnce "xfce4-power-manager"
-	spawnOnce "xfce4-clipman"
-	spawnOnce "redshift -O 5000"
-	spawnOnce "volumeicon"
-	--spawnOnce "play  -v0.05  ~/Desktop/95.mp3"
+        -- spawnOnce "/usr/libexec/notification-daemon"
+        spawnOnce "deadd-notification-center&"
+        spawnOnce "xsetroot -cursor_name left_ptr"
+        -- spawnOnce "lxqt-notificationd&"
+        --  spawnOnce "/usr/libexec/notification-daemon"
+        spawnOnce "lxpolkit"
+        spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true  --tint 0x282a36 --alpha 0 --height 20 --padding 3 --iconspacing 3"
+        --spawnOnce "polybar xmonad"
+        spawnOnce "picom --experimental-backends"
+        --spawnOnce "picom"
+        spawnOnce "nitrogen --restore"
+        --spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true  --tint 0x292d3e  --alpha 0 --height 20 --padding 1"
+        --spawnOnce "stalonetray"
+        --spawnOnce "pasystray"
+        spawnOnce "nm-applet"
+        -- spawnOnce "xiccd"
+        -- spawnOnce "mate-power-manager"
+        spawnOnce "xfce4-power-manager"
+        spawnOnce "xfce4-clipman"
+        spawnOnce "redshift -O 5000"
+        spawnOnce "volumeicon"
+        --spawnOnce "play  -v0.05  ~/Desktop/95.mp3"
 
 myKeys :: [(String, X ())]
 myKeys =
@@ -203,9 +203,11 @@ myKeys =
   --Some Applications
   , ("M-S-f", spawn "firefox")
   , ("M-e", spawn "thunar")
+  , ("M-v", spawn "pavucontrol")
 
   --emacs
   , ("M-a", spawn "emacs")
+  , ("M-S-<Return>", spawn "emacs")
 
   --terminal
   , ("M-<Return>", spawn myTerminal)
