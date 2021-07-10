@@ -28,6 +28,8 @@ cp -r ~/.config/polybar/ ~/dotfiles/config/
 #rofi
 cp -r ~/.config/rofi/ ~/dotfiles/config/
 
+#picom
+cp -r ~/.config/picom/ ~/dotfiles/config/ 
 
 #updating the git repo
 echo "input commit message"
