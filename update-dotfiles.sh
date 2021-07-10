@@ -31,6 +31,10 @@ cp -r ~/.config/rofi/ ~/dotfiles/config/
 #picom
 cp -r ~/.config/picom/ ~/dotfiles/config/ 
 
+#zsh
+cp -r ~/.zshrc ~/dotfiles/ 
+cp -r ~/zshrc.org ~/dotfiles/ 
+
 #updating the git repo
 echo "input commit message"
 read commit

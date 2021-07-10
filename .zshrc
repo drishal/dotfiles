@@ -17,7 +17,7 @@ fi
 autoload -U colors && colors
 export PATH
 
-# source ~/.zsh-plugins/zsh-completions/zsh-completions.plugin.zsh
+source ~/.zsh-plugins/zsh-completions/zsh-completions.plugin.zsh
 
 source ~/.zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
@@ -27,7 +27,7 @@ source /home/drishal/.zsh-plugins/zsh-history-substring-search/zsh-history-subst
 
 export RPROMPT=""
 
-#  source ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+source ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
 # source ~/.zsh-plugins/dracula/dracula.zsh-theme
 # ZSH_THEME="random"
@@ -195,4 +195,14 @@ bindkey "^[[1;5D" backward-word
 
 source ~/.profile
 
-eval "$(starship init zsh)"
+DISABLE_AUTO_TITLE="true"
+# export TITLE=$USER@$HOST 
+# export PROMPT_COMMAND="echo -ne \"\033]0;$1 Hello World\007\""
+# printf "\033]%s\07\n" "$USER@$HOST"
+
+# export PS1="%F{blue}%~%f %(?.%F{green}❯%f.%F{red}❯%f) "
+ eval "$(starship init zsh)"
+
+pfetch
+
+#  source ~/.zsh-plugins/termsupport.zsh

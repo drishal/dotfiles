@@ -1,6 +1,7 @@
 #+TITLE: zshrc
 #+PROPERTY: header-args :tangle .zshrc
 * table of contents :toc:
+- [[#initial-setup][initial setup]]
 - [[#qt5ct][qt5ct]]
 - [[#some-stuff-configure-by-zsh-newuser-install][Some stuff configure by zsh-newuser-install]]
 - [[#setting-some-paths][Setting some paths]]
@@ -23,6 +24,13 @@
 - [[#title][title]]
 - [[#loading-the-starship-prompt][loading the starship prompt]]
 - [[#pfetch][pfetch]]
+
+* initial setup
+mkdir ~/.zsh-completions
+git clone https://github.com/zsh-users/zsh-completions.git
+ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+git clone https://github.com/zsh-users/zsh-autosuggestions.git
+git clone https://github.com/jeffreytse/zsh-vi-mode.git
 
 * qt5ct
 #+begin_src shell
@@ -55,8 +63,8 @@
 * Plugins
 ** zsh-completions
 see https://github.com/zsh-users/zsh-completions
-#+begin_src shell 
-  # source ~/.zsh-plugins/zsh-completions/zsh-completions.plugin.zsh
+#+begin_src shell  
+  source ~/.zsh-plugins/zsh-completions/zsh-completions.plugin.zsh
 #+end_src
 ** zsh-autosuggestions
 - install from here: https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
