@@ -1,0 +1,24 @@
+# file manager
+super + e
+      thunar
+
+# emacs
+super + a
+      emacsclient -c
+
+# rofi
+super + d
+      rofi -show drun -icon-theme Papirus -show-icons
+
+# terminal
+super + Return
+      kitty
+   
+# browser 
+super + shift + f
+      firefox
+
+# rofi power menu
+super + p
+      rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu
+     

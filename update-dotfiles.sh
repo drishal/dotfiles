@@ -8,7 +8,7 @@ cp ~/.config/qtile/config.py  ~/dotfiles/config/qtile/
 
 # sxhkd
 mkdir -p ~/dotfiles/config/sxhkd
-cp ~/.config/sxhkd/ ~/dotfiles/config/sxhkd
+cp -r ~/.config/sxhkd/ ~/dotfiles/config/sxhkd
 
 # Xmonad
 mkdir -p ~/dotfiles/.xmonad/
@@ -34,4 +34,4 @@ echo "input commit message"
 read commit
 git add .
 git commit -m "$commit"
-git push all
+git push --all
