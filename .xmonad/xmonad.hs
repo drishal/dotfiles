@@ -161,9 +161,9 @@ mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spaci
 mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
 
 myStartupHook = do
-       -- spawnOnce "/usr/lib/notification-daemon-1.0/notification-daemon"
-        -- spawnOnce "/usr/libexec/notification-daemon"
-        spawnOnce "deadd-notification-center&"
+        spawnOnce "/usr/lib/notification-daemon-1.0/notification-daemon"
+        --spawnOnce "/usr/libexec/notification-daemon"
+        -- spawnOnce "deadd-notification-center&"
         spawnOnce "xsetroot -cursor_name left_ptr"
         -- spawnOnce "lxqt-notificationd&"
         --  spawnOnce "/usr/libexec/notification-daemon"
@@ -192,6 +192,10 @@ myKeys =
     ("M-S-r", spawn "xmonad --recompile; xmonad --restart")
   , ("M-S-q", io exitSuccess)
 
+  --Keyboard Layouts
+    , ("M-k c", spawn "setxkbmap us -variant colemak" )
+    , ("M-k q", spawn "setxkbmap us" )
+
   --Prompts
     , ("M-w 1",                        shellPrompt promptConfig) --normal run prompt
     , ("M-w 2",                        manPrompt promptConfig) -- man prompt
@@ -206,7 +210,7 @@ myKeys =
   , ("M-v", spawn "pavucontrol")
 
   --emacs
-  , ("M-a", spawn "emacs")
+  , ("M-a", spawn "emacsclient -c")
   , ("M-S-<Return>", spawn "emacs")
 
   --terminal
@@ -319,7 +323,7 @@ main =  do
         --logHook            = myLogHook,
         --logHook            = dynamicLogWithPP $ defaultPP { ppOutput = hPutStrLn h },
         -- manageHook = manageDocks <+> (isFullscreen --> doFullFloat),
-        manageHook = manageDocks,
+        manageHook =  myManageHook <+> manageDocks,
         handleEventHook    = handleEventHook def <+> fullscreenEventHook,
         --handleEventHook = ewmhDesktopsEventHook,
         -- startupHook        = myStartupHook,

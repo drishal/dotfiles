@@ -1,4 +1,7 @@
-/usr/lib/notification-daemon-1.0/notification-daemon&
+#/usr/lib/notification-daemon-1.0/notification-daemon&
+sxhkd&
+deadd-notification-center&
+xfce4-power-manager&
 #spawnOnce "xsetroot -cursor_name left_
 #/usr/libexec/notification-daemon
 lxpolkit&
@@ -16,5 +19,6 @@ nitrogen --restore&
 nm-applet&
 mate-power-manager&
 xfce4-clipman&
-redshift -O 4500 &
+redshift -O 5000&
 volumeicon&
+# feh --bg-scale ~/Pictures/Darkestour.jpg 

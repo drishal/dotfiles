@@ -2,13 +2,71 @@ from typing import List  # noqa: F401
 import os
 import subprocess
 from libqtile import bar, layout, widget
-from libqtile.config import Click, Drag, Group, Key, Screen, Match
+from libqtile.config import Click, Drag, Group, Key, Screen, Match, KeyChord
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile import hook
 
 mod = "mod4"
 terminal = "kitty"
+
+dracula = [
+   "#282a36",  # 0  Background
+   "#44475a",  # 1  current line/lighter_black
+   "#f8f8f2",  # 2  foreground
+   "#6272a4",  # 3  comment/dark_grey
+   "#8be9fd",  # 4  cyan
+   "#50fa7b",  # 5  green
+   "#ffb86c",  # 6  orange 
+   "#ff79c6",  # 7  pink    
+   "#bd93f9",  # 8  purple
+   "#ff5555",  # 9  red
+   "#f1fa8c",  # 10 yellow 
+]
+
+onedark = [
+   "#282c34", # 0 background
+   "#3f444a", # 1 bg-alt
+   "#bbc2cf", # 2 foreground
+   "#5B6268", # 3 dark grey / comments
+   "#46d9ff", # 4 cyan
+   "#98be65", # 5 green 
+   "#da8548", # 6 orange 
+   "#c678dd", # 7 magenta
+   "#a9a1e1", # 8 violet
+   "#ff6c6b", # 9 red 
+   "#ecbe7b", # 10 yellow 
+      ]
+
+palenight = [
+  "#292D3E", # 0 background
+  "#242837", # 1 bg-alt
+  "#EEFFFF", # 2 foreground
+  "#676E95", # 3 dark grey / comments
+  "#80cbc4", # 4 cyan
+  "#c3e88d", # 5 green 
+  "#f78c6c", # 6 orange 
+  "#c792ea", # 7 magenta
+  "#bb80b3", # 8 violet
+  "#ff5370", # 9 red 
+  "#ffcb6b", # 10 yellow 
+     ]
+
+gruvbox = [
+  "#292D3E", # 0 background
+  "#242837", # 1 bg-alt
+  "#EEFFFF", # 2 foreground
+  "#676E95", # 3 dark grey / comments
+  "#80cbc4", # 4 cyan
+  "#c3e88d", # 5 green 
+  "#f78c6c", # 6 orange 
+  "#c792ea", # 7 magenta
+  "#bb80b3", # 8 violet
+  "#ff5370", # 9 red 
+  "#ffcb6b", # 10 yellow 
+     ]
+
+color = palenight
 
 keys = [
     Key([mod], "h", lazy.layout.left()),
@@ -44,18 +102,25 @@ keys = [
     # Split = all windows displayed
     # Unsplit = 1 window displayed, like Max layout, but still with
     # multiple stack panes
-    Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
-        desc="Toggle between split and unsplit sides of stack"),
-    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    # some programs
-    Key([mod, "shift"], "f", lazy.spawn("firefox"), desc="Firefox"),
-    Key([mod], "a", lazy.spawn("emacsclient -c"), desc="Emacs"),
-    # run
-    Key([mod], "d", lazy.spawn("rofi -show drun -icon-theme Papirus -show-icons"), desc="Firefox"),
-    Key([mod], "p", lazy.spawn("rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu"), desc="Emacs"),
-    # thunar
-    Key([mod], "e", lazy.spawn("thunar"), desc="file manager"),
-    # Toggle between different layouts as defined below
+    # Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
+    #     desc="Toggle between split and unsplit sides of stack"),
+
+    # # terminal
+    # Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    # # some programs
+    # Key([mod, "shift"], "f", lazy.spawn("firefox"), desc="Firefox"),
+    # Key([mod], "a", lazy.spawn("emacsclient -c"), desc="Emacs"),
+    # # pavucontrol
+    # Key([mod], "v", lazy.spawn("pavucontrol"), desc="pavucontrol"),
+    # # run
+    # Key([mod], "d", lazy.spawn("rofi -show drun -icon-theme Papirus -show-icons"), desc="Firefox"),
+    # Key([mod], "p", lazy.spawn("rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu"), desc="Emacs"),
+    # # thunar
+    # Key([mod], "e", lazy.spawn("thunar"), desc="file manager"),
+
+
+    # # Toggle between different layouts as defined below
+
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
 
@@ -63,6 +128,11 @@ keys = [
     Key([mod, "shift"], "q", lazy.shutdown(), desc="Shutdown qtile"),
     Key([mod], "r", lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"),
+
+    KeyChord([mod], "z", [
+      Key([], "x", lazy.spawn("emacsclient -c"))
+  ])
+
 ]
 
 mouse = [
@@ -95,13 +165,13 @@ layouts = [
         ratio_increment = 0.05,
         ratio=0.5,
         margin = 10,
-        border_focus = "#bd93f9",
-        border_normal = "#44475a",
+        border_focus = color[8],
+        border_normal = color[1],
         border_width = 1
     ),
     layout.Floating(
-        border_focus = "#bd93f9",
-        border_normal = "#44475a",
+        border_focus = color[8],
+        border_normal = color[1],
         border_width = 1
     ),
     # layout.Max()
@@ -124,7 +194,7 @@ layouts = [
 
 widget_defaults = dict(
     font='FiraCode Nerd Font',
-    fontsize=11,
+    fontsize=12,
     padding=2,
     background="#282a36",
     foreground= "#282a36",
@@ -136,8 +206,9 @@ screens = [
         top=bar.Bar(
             [
                 widget.CurrentLayout(
-                    # foreground = "#282a36",
-                    foreground="#50fa7b",
+                    # foreground = color[0],
+                    fmt = ' {}',
+                    foreground=color[6],
                     # background="",
                 ),
 
@@ -148,40 +219,40 @@ screens = [
                     padding_y = 5,
                     padding_x = 5,
                     borderwidth = 3,
-                    active = "#f8f8f2",
-                    inactive = "#6272a4",
+                    active = color[2],
+                    inactive = color[3],
                     rounded = True,
-                    highlight_color = ["#44475a"] ,
+                    highlight_color = [color[1]] ,
                     highlight_method = "line",
-                    this_current_screen_border = "#6272a4",
+                    this_current_screen_border = color[3],
                     # this_current_screen_border = colors[3],
                     # this_screen_border = #bd93f9,
                     # other_current_screen_border = colors[0],
                     # other_screen_border = colors[0],
-                    foreground = "#f8f8f2",
-                    background = "#282a36",
+                    foreground = color[2],
+                    background = color[0],
                     disable_drag = True
                     # padding = 5
 
                 ),
                 widget.Prompt(
-                    background="#44475a",
-                    foreground="#f8f8f2",
+                    background=color[1],
+                    foreground=color[2],
                     record_history = True
                 ),
                 widget.WindowName(
                     max_chars = 50,
                     padding= 5,
                     # foreground = "f8f8f8",
-                    # background="#6272a4",
-                     foreground="#ff79c6",
-                    # foreground="#f8f8f2"
-                    # background="#bd93f9",
+                    # background=color[3],
+                     foreground=color[7],
+                    # foreground=color[2]
+                    # background=color[8],
                 ),
 
-                 widget.Clock(format='   %Y-%m-%d %a %I:%M:%S %p ',
-                             foreground="#bd93f9",
-                             # foreground="#282a36",
+                 widget.Clock(format='   %Y-%m-%d %a %H:%M:%S',
+                              foreground=color[8],
+                              # foreground=color[0],
                              ),
                 widget.Spacer(
                     length = bar.STRETCH,
@@ -192,44 +263,63 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
+              widget.Battery(
+                  format='{char} {percent:2.0%} {hour:d}:{min:02d} {watt:.2f} W',
+                  update_interval=10,
+                  foreground=color[5],
+              ),
+                widget.TextBox(
+                    text = '  ', # this one has a small space after the symbol to make it look more consistent with the spaces
+                    foreground = color[3],
+                    fontsize = 15
+                ),
+                # widget.TextBox(text="◤", fontsize=45, padding=-1, foreground="#bd9359",background=color[8]),
 
                 widget.CPU(
-                    #background="#f1fa8c",
-                    foreground="#50fa7b",
+                    #background=color[10],
+                    foreground=color[4],
                     format='   {freq_current}GHz {load_percent}% ',
                 ),
                 widget.TextBox(
                     text = '',
-                    foreground = "#6272a4",
+                    foreground = color[3],
                     fontsize = 15
                 ),
 
                 widget.Memory(
-                    #background="#8be9fd",
-                    foreground="#ffb86c",
+                    #background=color[4],
+                    foreground=color[10],
                     format='   {MemUsed: .0f}M /{MemTotal: .0f}M ',
                 ),
                 widget.TextBox(
                     text = '',
-                    foreground = "#6272a4",
+                    foreground = color[3],
                     fontsize = 15
                 ),
                 widget.Net(
                     format=' {down}  {up} ',
-                    foreground="#ff79c6"
+                    foreground=color[7]
                 ),
                 widget.TextBox(
-                    text = ' ', # this one has a small space after the symbol to make it look more consistent with the spaces
-                    foreground = "#6272a4",
+                    text = '  ', # this one has a small space after the symbol to make it look more consistent with the spaces
+                    foreground = color[3],
                     fontsize = 15
                 ),
-                # widget.TextBox(text="◤", fontsize=45, padding=-1, foreground="#bd9359",background="#bd93f9"),
+
+                # widget.BatteryIcon(),
 
 
-                widget.Systray(),
+                widget.Systray(padding=5,),
+                widget.TextBox(
+                    text = ' ', # this one has a small space after the symbol to make it look more consistent with the spaces
+                    foreground = color[3],
+                    fontsize = 15
+                ),
+
             ],
-            21,
-        ),
+            27,
+            margin=[7, 10, 2, 10], # [N E S W] 
+        ), 
     ),
 ]
 
@@ -241,22 +331,22 @@ cursor_warp = False
 auto_fullscreen = True
 focus_on_window_activation = "focus"
 reconfigure_screens = True
+auto_minimize = False
 
-floating_layout = layout.Floating(border_focus = "#bd93f9", border_normal = "#44475a",
-float_rules=[
-    *layout.Floating.default_float_rules,
-    Match(wm_class='confirmreset'),  # gitk
-    Match(wm_class='makebranch'),  # gitk
-    Match(wm_class='maketag'),  # gitk
-    Match(wm_class='ssh-askpass'),  # ssh-askpass
-    # Match(title='About Mozilla Firefox'),  # ssh-askpass
+floating_layout = layout.Floating(border_focus = color[8], border_normal = color[1],
+                                  float_rules=[
+                                      *layout.Floating.default_float_rules,
+                                      Match(wm_class='confirmreset'),  # gitk
+                                      Match(wm_class='makebranch'),  # gitk
+                                      Match(wm_class='maketag'),  # gitk
+                                      Match(wm_class='ssh-askpass'),  # ssh-askpass
+                                      # Match(title='About Mozilla Firefox'),  # ssh-askpass
     Match(title='branchdialog'),  # gitk
-    Match(title='pinentry'),  # GPG key password entry
-]
+                                      Match(title='pinentry'),  # GPG key password entry
+                                  ]
 
 )
 
-auto_minimize = False
 @hook.subscribe.startup_once
 def autostart():
     os.system("bash ~/.config/qtile/autostart.sh")
