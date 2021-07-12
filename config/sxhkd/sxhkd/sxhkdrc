@@ -22,3 +22,6 @@ super + shift + f
 super + p
       rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu
      
+# pavucontrol
+super + v
+      pavucontrol

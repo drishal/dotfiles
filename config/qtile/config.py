@@ -53,20 +53,34 @@ palenight = [
      ]
 
 gruvbox = [
-  "#292D3E", # 0 background
-  "#242837", # 1 bg-alt
-  "#EEFFFF", # 2 foreground
-  "#676E95", # 3 dark grey / comments
-  "#80cbc4", # 4 cyan
-  "#c3e88d", # 5 green 
-  "#f78c6c", # 6 orange 
-  "#c792ea", # 7 magenta
-  "#bb80b3", # 8 violet
-  "#ff5370", # 9 red 
-  "#ffcb6b", # 10 yellow 
+  "#282828", # 0 background
+  "#0d1011", # 1 bg-alt
+  "#ebdbb2", # 2 foreground
+  "#928374", # 3 dark grey / comments
+  "#689d6a", # 4 cyan
+  "#b8bb26", # 5 green 
+  "#fe8019", # 6 orange 
+  "#cc241d", # 7 magenta
+  "#d3869b", # 8 violet
+  "#fb4934", # 9 red 
+  "#fabd2f", # 10 yellow 
      ]
 
-color = palenight
+nord = [
+   "#2E3440",  # 0  Background
+   "#434C5E",  # 1  current line/lighter_black
+   "#ECEFF4",  # 2  foreground
+   "#434C5E",  # 3  comment/dark_grey
+   "#88C0D0",  # 4  cyan
+   "#A3BE8C",  # 5  green
+   "#D08770",  # 6  orange 
+   "#B48EAD",  # 7  magenta 
+   "#5D80AE",  # 8  violet
+   "#BF616A",  # 9  red
+   "#EBCB8B",  # 10 yellow 
+]
+
+color = dracula
 
 keys = [
     Key([mod], "h", lazy.layout.left()),

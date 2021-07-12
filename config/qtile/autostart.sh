@@ -1,6 +1,7 @@
-#/usr/lib/notification-daemon-1.0/notification-daemon&
+#/usr/lib/notification-daemon-1.0/notification-
+/usr/lib/notification-daemon-1.0/notification-daemon&
 sxhkd&
-deadd-notification-center&
+#deadd-notification-center&
 xfce4-power-manager&
 #spawnOnce "xsetroot -cursor_name left_
 #/usr/libexec/notification-daemon
