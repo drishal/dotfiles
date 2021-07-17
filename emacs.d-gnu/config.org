@@ -782,4 +782,3 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+begin_src emacs-lisp
   (use-package restart-emacs :ensure t)
 #+end_src
-
