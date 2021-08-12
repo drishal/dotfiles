@@ -86,12 +86,12 @@
   # Enable the Desktop Environment/Window managers.
   services.xserver.enable = true;
   # services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.windowManager.qtile.enable = true;
+  #services.xserver.windowManager.qtile.enable = true;
   services.xserver.windowManager.xmonad.enable = true;
   services.xserver.windowManager.xmonad.enableContribAndExtras=true;
   # services.xserver.windowManager.awesome.enable = true;
   # services.xserver.windowManager.xmonad.extraPackages=true;
-  services.xserver.windowManager.dwm.enable = true;
+  # services.xserver.windowManager.dwm.enable = true;
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
   services.xserver.desktopManager.xfce.enable = true;
@@ -158,26 +158,27 @@
     brightnessctl imagemagick exa
     gcc deadd-notification-center tdesktop
     nodePackages.pyright nodePackages.vscode-html-languageserver-bin zoom-us linuxPackages.cpupower
-    powertop home-manager telnet nmap cpufetch
+    powertop  telnet nmap cpufetch
     dmenu dwmblocks cmatrix qutebrowser neovim
     libreoffice nodePackages.create-react-app nodejs yarn nodePackages.react-tools
     ranger theharvester xorg.xmodmap metasploit powershell gimp
     brave thinkfan bpytop bat polybar lolcat ncdu lm_sensors
     rnix-lsp gnome.gnome-sound-recorder tmux ps_mem taffybar
     noto-fonts ntfs3g gparted file appimage-run etcher woeusb 
-    #rust
+    #rust home-manager
     cargo carnix
     # python stuff
     python39
     # python39Packages.numpy python39Packages.pandas
-    ((emacsPackagesNgGen emacsPgtkGcc).emacsWithPackages 
-      (epkgs: [
-        epkgs.vterm]))
+    # ((emacsPackagesNgGen emacsPgtkGcc).emacsWithPackages 
+    #   (epkgs: [
+    #     epkgs.vterm]))
   ];
   # virtualbox
-  virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "drishal" ];
-  virtualisation.virtualbox.host.enableExtensionPack = true;
+  #virtualisation.virtualbox.host.enable = true;
+  #users.extraGroups.vboxusers.members = [ "drishal" ];
+  #virtualisation.virtualbox.host.enableExtensionPack = true;
+
   virtualisation = {
     libvirtd = {
       enable = true;
@@ -206,20 +207,20 @@
   # overlays
 
   nixpkgs.overlays = [
-    (final: prev: {
-      dwm = prev.dwm.overrideAttrs (old: { src = /home/drishal/Desktop/suckless/dwm-6.2 ;});
-    })
-    #(final: prev: {
-    #  dwmblocks = prev.dwmblocks.overrideAttrs (old: { src = /home/drishal/Desktop/suckless/dwmblocks ;});
-    #})
-    (final: prev: {
-      dmenu = prev.dmenu.overrideAttrs (old: { src = /home/drishal/Desktop/suckless/dmenu ;});
-    })
+    # (final: prev: {
+    #   dwm = prev.dwm.overrideAttrs (old: { src = /home/drishal/Desktop/suckless/dwm-6.2 ;});
+    # })
+    # #(final: prev: {
+    # #  dwmblocks = prev.dwmblocks.overrideAttrs (old: { src = /home/drishal/Desktop/suckless/dwmblocks ;});
+    # #})
+    # (final: prev: {
+    #   dmenu = prev.dmenu.overrideAttrs (old: { src = /home/drishal/Desktop/suckless/dmenu ;});
+    # })
     
 
-    (final: prev: {
-      picom = prev.picom.overrideAttrs (old: { src = /home/drishal/Desktop/git-stuff/picom;});
-    })
+    # (final: prev: {
+    #   picom = prev.picom.overrideAttrs (old: { src = /home/drishal/Desktop/git-stuff/picom;});
+    # })
 
     (self: super: {
       discord = super.discord.overrideAttrs (_:{
@@ -230,9 +231,9 @@
     #		   src = /home/drishal/git-stuff/qtile; 
     #		   patches=[/home/drishal/git-stuff/qtile/patches-for-nix/0001-Substitution-vars-for-absolute-paths.patch /home/drishal/git-stuff/qtile/patches-for-nix/0002-Restore-PATH-and-PYTHONPATH.patch /home/drishal/git-stuff/qtile/patches-for-nix/0003-Restart-executable.patch ] ;});})
 
-    (import (builtins.fetchTarball {
-      url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
-    }))
+    # (import (builtins.fetchTarball {
+    #   url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+    # }))
 
   ];
   # Some programs need SUID wrappers, can be configured further or are

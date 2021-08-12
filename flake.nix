@@ -21,8 +21,16 @@
       lib = nixpkgs.lib;
     in {
       homeManagerConfigurations = {
-        hugosum =
-          home-manager.lib.homeManagerConfigurations { inherit system pkgs; };
+        drishal = home-manager.lib.homeManagerConfigurations {
+          inherit system pkgs;
+          username = "drisal";
+          homeDirectory = "/home/drishal";
+          configuration = {
+            imports = [
+              ./NixOS/home.nix
+            ]
+          }
+        };
       };
       nixosConfigurations = {
         nixos = lib.nixosSystem {
@@ -35,7 +43,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.hugosum = import ./home-manager.nix;
+              #home-manager.users.hugosum = import ./home-manager.nix;
             }
             ./hardware-configuration.nix
           ];
