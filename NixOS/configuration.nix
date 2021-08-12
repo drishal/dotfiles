@@ -11,7 +11,7 @@
       # import cachix.nix
       # (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
       <home-manager/nixos>
-      ./cachix.nix 
+      #./cachix.nix 
     ];
 
   # kernel parameters
