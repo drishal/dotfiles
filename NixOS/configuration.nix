@@ -89,14 +89,14 @@
   services.xserver.windowManager.qtile.enable = true;
   services.xserver.windowManager.xmonad.enable = true;
   services.xserver.windowManager.xmonad.enableContribAndExtras=true;
-  services.xserver.windowManager.awesome.enable = true;
+  # services.xserver.windowManager.awesome.enable = true;
   # services.xserver.windowManager.xmonad.extraPackages=true;
   services.xserver.windowManager.dwm.enable = true;
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
   services.xserver.desktopManager.xfce.enable = true;
-  services.xserver.desktopManager.lxqt.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  # services.xserver.desktopManager.lxqt.enable = true;
+  # services.xserver.desktopManager.gnome.enable = true;
   services.gnome.tracker.enable = false;
   # resolve gnome and plasma issues
   #programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.plasma5Packages.ksshaskpass.out}/bin/ksshaskpass";
