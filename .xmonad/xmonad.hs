@@ -31,7 +31,7 @@ import qualified Codec.Binary.UTF8.String as UTF8
 --import  XMonad.Actions.Navigation2D
 
     -- Hooks
-import XMonad.Hooks.DynamicLog (dynamicLogWithPP, wrap, xmobarPP, xmobarColor,defaultPP ,shorten, PP(..))
+import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops  -- for some fullscreen events, also for xcomposite in obs.
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.ManageDocks
@@ -89,6 +89,8 @@ import XMonad.Util.SpawnOnce
 --Others
 import XMonad.Layout.MultiToggle.Instances
 import XMonad.Layout.MultiToggle
+--import Theme
+import Theme.Theme
 
 fontFamily :: String
 fontFamilyLarge :: String
@@ -110,8 +112,8 @@ myModMask       = mod4Mask
 
 myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
 
-myNormalBorderColor  = "#44475a"
-myFocusedBorderColor = "#bd93f9"
+myNormalBorderColor  = base00
+myFocusedBorderColor = base13
 
 myLayout =  renamed [CutWordsLeft 1] ( mySpacing 8  (smartBorders(avoidStruts (  tiled ||| simplestFloat )))) ||| smartBorders Full
   where
@@ -132,7 +134,7 @@ myManageHook = composeAll
     , className =? "Gimp"           --> doFloat
     , className =? "pavucontrol"           --> doFloat
     , className =? "virtualbox"           --> doFloat
-   , className =? "thunar"           --> doFloat
+    -- , className =? "thunar"           --> doFloat
     , resource  =? "desktop_window" --> doIgnore
     , resource  =? "kdesktop"       --> doIgnore
     , isFullscreen                  --> doFullFloat ] -- this one
@@ -206,7 +208,7 @@ myKeys =
 
   --Some Applications
   , ("M-S-f", spawn "firefox")
-  , ("M-e", spawn "thunar")
+  , ("M-e", spawn "nemo")
   , ("M-v", spawn "pavucontrol")
 
   --emacs

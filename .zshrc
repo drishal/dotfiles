@@ -1,3 +1,5 @@
+source ~/.profile
+
 # if [[ "$DESKTOP_SESSION" = *"plasma"* ]]; then
 #     export QT_QPA_PLATFORMTHEME = "kde"
 # fi
@@ -27,7 +29,7 @@ source /home/drishal/.zsh-plugins/zsh-history-substring-search/zsh-history-subst
 
 export RPROMPT=""
 
-source ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+# source ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
 # source ~/.zsh-plugins/dracula/dracula.zsh-theme
 # ZSH_THEME="random"
@@ -193,8 +195,6 @@ bindkey "^[[1;5D" backward-word
 
 # source ~/.zsh-plugins/zshrc
 
-source ~/.profile
-
 DISABLE_AUTO_TITLE="true"
 # export TITLE=$USER@$HOST 
 # export PROMPT_COMMAND="echo -ne \"\033]0;$1 Hello World\007\""
@@ -203,6 +203,7 @@ DISABLE_AUTO_TITLE="true"
 # export PS1="%F{blue}%~%f %(?.%F{green}❯%f.%F{red}❯%f) "
  eval "$(starship init zsh)"
 
-pfetch
+# zsh 
+# pfetch
 
-#  source ~/.zsh-plugins/termsupport.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

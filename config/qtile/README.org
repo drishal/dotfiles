@@ -126,7 +126,7 @@
 
 ** theme 
 #+begin_src python 
- color = dracula 
+  color = dracula
 #+end_src
 * Keybinds
 ** Keyboard

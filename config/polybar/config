@@ -20,14 +20,28 @@
 ;background = #222
 ;background-alt = #444
 ;foreground = #dfdfdf
-foreground-alt = #555
-primary = #ffb52a
-secondary = #e60053
-alert = #bd2c40
+;foreground-alt = #555
+;primary = #ffb52a
+;secondary = #e60053
+;alert = ${xrdb:color1}
+;highlight  = ${xrdb:color1}
+
 background = ${xrdb:background}
 foreground = ${xrdb:foreground}
-highlight  = ${xrdb:color1}
-grey       = ${xrdb:color4}
+
+black       = ${xrdb:color0}
+grey       = ${xrdb:color8}
+
+red       = ${xrdb:color1}
+
+green       = ${xrdb:color2}
+yellow       = ${xrdb:color3}
+blue       = ${xrdb:color4}  ;purple in some cases
+magenta = ${xrdb:color5}     ;pink in some cases
+cyan       = ${xrdb:color6}
+white       = ${xrdb:color7}
+
+
 [bar/example]
 ;monitor = ${env:MONITOR:HDMI-1}
 width = 100%
@@ -41,10 +55,10 @@ background = ${colors.background}
 foreground = ${colors.foreground}
 
 line-size = 3
-line-color = #f00
+line-color = ${colors.grey}
 
 border-size = 4
-border-color = #00000000
+;border-color = ${colors.background} 
 
 padding-left = 0
 padding-right = 2
@@ -52,13 +66,13 @@ padding-right = 2
 module-margin-left = 1
 module-margin-right = 2
 
-font-0 = fixed:pixelsize=10;1
+font-0 = FiraCode Nerd Font:pixelsize=10;1
 font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 font-2 = siji:pixelsize=10;1
 
-modules-left = bspwm i3
+modules-left = ewmh bspwm i3
 modules-center = mpd
-modules-right = filesystem xbacklight alsa pulseaudio xkeyboard memory cpu wlan eth battery temperature date powermenu
+modules-right = filesystem xbacklight pulseaudio xkeyboard memory cpu wlan eth battery temperature date powermenu
 
 tray-position = right
 tray-padding = 2
@@ -78,6 +92,65 @@ tray-padding = 2
 cursor-click = pointer
 cursor-scroll = ns-resize
 
+[module/ewmh]
+icon-0 = code;♚
+icon-1 = office;♛
+icon-2 = graphics;♜
+icon-3 = mail;♝
+icon-4 = web;♞
+icon-default = ♟
+
+; Available tags:
+;   <label-monitor>
+;   <label-state> - gets replaced with <label-(active|urgent|occupied|empty)>
+; Default: <label-state>
+format = <label-state>
+
+; Available tokens:
+;   %name%
+; Default: %name%
+label-monitor = %name%
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon% %name%
+label-active = %icon% %name%
+label-active-foreground = #ffffff
+label-active-background = #3f3f3f
+label-active-underline = #fba922
+label-active-padding = 4
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon% %name%
+label-occupied = %icon%
+label-occupied-underline = #555555
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon% %name%
+label-urgent = %icon%
+label-urgent-foreground = #000000
+label-urgent-background = #bd2c40
+label-urgent-underline = #9b0a20
+label-urgent-padding = 4
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon% %name%
+label-empty = %icon%
+label-empty-foreground = #55
+label-empty-padding = 2
+
+
 [module/xwindow]
 type = internal/xwindow
 label = %title:0:30:...%
@@ -87,7 +160,7 @@ type = internal/xkeyboard
 blacklist-0 = num lock
 
 format-prefix = " "
-format-prefix-foreground = ${colors.foreground-alt}
+format-prefix-foreground = ${colors.foreground}
 format-prefix-underline = ${colors.secondary}
 
 label-layout = %layout%
@@ -180,28 +253,6 @@ icon-next = 
 
 label-song-maxlen = 25
 label-song-ellipsis = true
-
-[module/xbacklight]
-type = internal/xbacklight
-
-format = <label> <bar>
-label = BL
-
-bar-width = 10
-bar-indicator = |
-bar-indicator-foreground = #fff
-bar-indicator-font = 2
-bar-fill = ─
-bar-fill-font = 2
-bar-fill-foreground = #9f78e1
-bar-empty = ─
-bar-empty-font = 2
-bar-empty-foreground = ${colors.foreground-alt}
-
-[module/backlight-acpi]
-inherit = module/xbacklight
-type = internal/backlight
-card = intel_backlight
 
 [module/cpu]
 type = internal/cpu

@@ -195,7 +195,7 @@
  * https://github.com/cog1to/st-ligatures
  * https://st.suckless.org/patches/ligatures/
  */
-#define LIGATURES_PATCH 0
+#define LIGATURES_PATCH 1
 
 /* This patch makes st ignore terminal color attributes by forcing display of the default
  * foreground and background colors only - making for a monochrome look. Idea ref.
@@ -263,7 +263,7 @@
  * This variant depends on SCROLLBACK_PATCH being enabled.
  * https://st.suckless.org/patches/scrollback/
  */
-#define SCROLLBACK_MOUSE_ALTSCREEN_PATCH 0
+#define SCROLLBACK_MOUSE_ALTSCREEN_PATCH 1
 
 /* This is the single drawable buffer patch as outlined in the FAQ to get images
  * in w3m to display. While this patch does not break the alpha patch it images
@@ -370,7 +370,7 @@
  * https://github.com/juliusHuelsmann/st-history-vim
  * https://st.suckless.org/patches/vim_browse/
  */
-#define VIM_BROWSE_PATCH 0
+#define VIM_BROWSE_PATCH 1
 
 /* Briefly inverts window content on terminal bell event.
  * https://st.suckless.org/patches/visualbell/
@@ -414,4 +414,4 @@
  * e.g.: killall -USR1 st
  * Depends on the XRESOURCES_PATCH.
  */
-#define XRESOURCES_RELOAD_PATCH 0
+#define XRESOURCES_RELOAD_PATCH 1

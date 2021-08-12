@@ -10,8 +10,11 @@
   - [[#packageel][Package.el]]
   - [[#straightel-make-sure-to-later-remove-packageel][straight.el: make sure to later remove package.el]]
   - [[#quelpa][quelpa]]
-- [[#customizing-the-appearence][Customizing the appearence]]
+  - [[#setting-up-paths][Setting up paths]]
+- [[#customizing-the-editor-and-appearence][Customizing the Editor and Appearence]]
   - [[#dashboard][Dashboard]]
+  - [[#page-break-lines][Page break lines]]
+  - [[#highlight-current-line][highlight current line]]
   - [[#properly-maximize-windws-emacs][properly maximize windws emacs]]
   - [[#theme][theme]]
   - [[#disable-menubar][Disable Menubar]]
@@ -25,6 +28,9 @@
   - [[#evil-mode][Evil mode]]
   - [[#undo-system][Undo system]]
   - [[#padding][Padding]]
+  - [[#perspective][perspective]]
+  - [[#brackets][brackets]]
+  - [[#tramp][tramp]]
 - [[#hook-to-tangle-on-save][Hook to tangle on save]]
 - [[#org-mode][Org mode:]]
   - [[#org-mode-indent][org mode indent]]
@@ -34,8 +40,10 @@
   - [[#org-toc][org-toc]]
   - [[#company-org-block][company org block]]
   - [[#org-bable-load-all-languages][org-bable load all languages]]
+  - [[#org-roam][org roam]]
 - [[#tools][Tools]]
   - [[#vterm][vterm]]
+  - [[#mu4e][mu4e]]
   - [[#treemacs][treemacs]]
   - [[#elcord][elcord]]
   - [[#shackle][Shackle]]
@@ -61,7 +69,7 @@
 #+begin_src emacs-lisp
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
   (load-file (expand-file-name "custom.el" user-emacs-directory))
-  (setq gc-cons-threshold 10000000000)
+  ;;(setq gc-cons-threshold 10000000)
 #+end_src
 ** emacs startup performance
 #+begin_src emacs-lisp
@@ -117,36 +125,55 @@ note: Users of Emacs versions >= 27 will want to add:
 ** quelpa
 https://github.com/quelpa/quelpa#installation
 #+begin_src emacs-lisp 
-  (use-package quelpa :ensure t)
+  (use-package quelpa :straight t)
 #+end_src
-* Customizing the appearence
+** Setting up paths
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell :straight t)
+  ;; (when (memq window-system '(mac ns x))
+  ;;   (exec-path-from-shell-initialize))
+  ;; (when (daemonp)
+  ;;   (exec-path-from-shell-initialize))
+  ;; (exec-path-from-shell-copy-env "export ORACLE_HOME=/opt/oracle/product/18c/dbhomeXE")
+
+#+end_src
+* Customizing the Editor and Appearence
 ** Dashboard
 #+begin_src emacs-lisp
-    (use-package dashboard :ensure t
-      :init      ;; tweak dashboard config before loading it
-      (setq dashboard-set-heading-icons t)
-      ;; Content is not centered by default. To center, set
-      (setq dashboard-set-file-icons t)
-      (setq dashboard-banner-logo-title "Emacs Is More Than A Text Editor!")
-      (setq dashboard-startup-banner `logo) ;; use standard emacs logo as banner
-      ;;(setq dashboard-startup-banner 'logo)
-      ;;(setq dashboard-startup-banner "~/.emacs.d/emacs-dash3.png")  ;; use custom image as banner
-      (setq dashboard-center-content t)
-      (setq dashboard-set-navigator t)
-      (setq dashboard-items '((recents . 5)
-                              (agenda . 5 )
-                              (bookmarks . 5)
-                              (projects . 3)
-                              ;(registers . 3)
-                              ))
-      :config
-      (dashboard-setup-startup-hook)
-      (dashboard-modify-heading-icons '((recents . "file-text")
-                                        (bookmarks . "book"))))
+  (use-package dashboard :straight t
+    :init      ;; tweak dashboard config before loading it
+    (setq dashboard-set-heading-icons t)
+    ;; Content is not centered by default. To center, set
+    (setq dashboard-set-file-icons t)
+    (setq dashboard-banner-logo-title "Emacs Is More Than A Text Editor!")
+    (setq dashboard-startup-banner `logo) ;; use standard emacs logo as banner
+    ;;(setq dashboard-startup-banner 'logo)
+    ;;(setq dashboard-startup-banner "~/.emacs.d/emacs-dash3.png")  ;; use custom image as banner
+    (setq dashboard-center-content t)
+    (setq dashboard-set-navigator t)
+    (setq dashboard-page-separator  "\n\f\n")
+    (setq dashboard-items '((recents . 5)
+                            (agenda . 5 )
+                            (bookmarks . 5)
+                            (projects . 3)
+                                          ;(registers . 3)
+                            ))
+    :config
+    (dashboard-setup-startup-hook)
+    (dashboard-modify-heading-icons '((recents . "file-text")
+                                      (bookmarks . "book"))))
 
-    ;;`(add-hook 'after-init-hook (lambda () (switch-to-buffer "*dashboard*")))
-                                            ; for emacsclient
-    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+  ;;(add-hook 'after-init-hook (lambda () (switch-to-buffer "*dashboard*")))
+                                          ; for emacsclient
+  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+#+end_src
+** Page break lines
+#+begin_src emacs-lisp
+  (use-package page-break-lines :straight t)
+#+end_src
+** highlight current line
+#+begin_src emacs-lisp
+  (global-hl-line-mode +1)
 #+end_src
 
 ** properly maximize windws emacs 
@@ -155,8 +182,8 @@ https://github.com/quelpa/quelpa#installation
 #+end_src
 ** theme
 #+begin_src emacs-lisp
-  ;; (use-package dracula- ensure t)
-  (use-package doom-themes :ensure t
+  ;; (use-package dracula- straight t)
+  (use-package doom-themes :straight t
     :config
     ;; Global settings (defaults)
     (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -190,7 +217,7 @@ https://github.com/quelpa/quelpa#installation
 #+end_src
 ** All the icon fonts
 #+begin_src emacs-lisp
-  (use-package all-the-icons :ensure t)
+  (use-package all-the-icons :straight t)
 #+end_src
 ** Line Numbers
 #+begin_src emacs-lisp
@@ -199,7 +226,7 @@ https://github.com/quelpa/quelpa#installation
 #+end_src
 ** Doom modeline
 #+begin_src emacs-lisp
-  (use-package doom-modeline :ensure t)
+  (use-package doom-modeline :straight t)
   (doom-modeline-mode 1)
 #+end_src
 
@@ -238,7 +265,7 @@ https://github.com/quelpa/quelpa#installation
 ** Evil mode
 *** Default 
 #+begin_src emacs-lisp
-  (use-package evil :ensure t 
+  (use-package evil :straight t 
     :init
     (setq evil-want-integration t)
     (setq evil-want-keybinding nil)
@@ -257,13 +284,14 @@ https://github.com/quelpa/quelpa#installation
     (evil-set-initial-state 'dashboard-mode 'normal))
 
   (use-package evil-collection
-    :ensure t
+    :straight t
     :after evil
     :config
     (evil-collection-init))
 
   (use-package command-log-mode
     :commands command-log-mode)
+
   ;;helps for repeat searching; also remember to use :noh to do the highlighting  
   (with-eval-after-load 'evil
     (evil-select-search-module 'evil-search-module 'evil-search))
@@ -271,7 +299,7 @@ https://github.com/quelpa/quelpa#installation
 #+end_src
 *** Evil args 
 #+begin_src emacs-lisp
-  (use-package evil-args :ensure t)
+  (use-package evil-args :straight t)
 
   ;; bind evil-args text objects
   (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
@@ -288,18 +316,18 @@ https://github.com/quelpa/quelpa#installation
 #+end_src
 *** Evil intent plus
 #+begin_src emacs-lisp 
-  (use-package evil-indent-plus :ensure t)
+  (use-package evil-indent-plus :straight t)
 #+end_src
 *** Evil Snipe
 #+begin_src emacs-lisp
-  (use-package evil-snipe :ensure t)
+  (use-package evil-snipe :straight t)
   (evil-snipe-mode +1)
   (evil-snipe-override-mode +1)
 #+end_src
 ** Undo system
 #+begin_src emacs-lisp 
   (use-package undo-tree
-    :ensure t
+    :straight t
     :after evil
     :diminish
     :config
@@ -310,6 +338,52 @@ https://github.com/quelpa/quelpa#installation
 ** Padding 
 #+begin_src emacs-lisp
   (push '(internal-border-width . 10) default-frame-alist)
+#+end_src
+
+** perspective
+https://github.com/nex3/perspective-el
+The Perspective package provides multiple named workspaces (or "perspectives") in Emacs, similar to multiple desktops in window managers like Awesome and XMonad, and Spaces on the Mac.
+Each perspective has its own buffer list and its own window layout, along with some other isolated niceties, like the xref ring. This makes it easy to work on many separate projects without getting lost in all the buffers. Switching to a perspective activates its window configuration, and when in a perspective, only its buffers are available (by default).
+Each Emacs frame has a distinct list of perspectives.
+Perspective supports saving its state to a file, so long-lived work sessions may be saved and recovered as needed.
+
+To activate perspective use (persp-mode). This creates a single default main perpsective.
+
+Commands are all prefixed by C-x x by default. To change the prefix key, customize persp-mode-prefix-key. Additionally, creating a key binding for persp-mode-map will also activate the prefix.
+
+Here are the main commands defined in persp-mode-map:
+
+s — persp-switch: Query a perspective to switch to, or create
+` — persp-switch-by-number: Switch to perspective by number, or switch quickly using numbers 1, 2, 3.. 0 as prefix args; note this will probably be most useful with persp-sort set to 'created
+k — persp-remove-buffer: Query a buffer to remove from current perspective
+c — persp-kill : Query a perspective to kill
+r — persp-rename: Rename current perspective
+a — persp-add-buffer: Query an open buffer to add to current perspective
+A — persp-set-buffer: Add buffer to current perspective and remove it from all others
+b - persp-switch-to-buffer: Like switch-to-buffer; includes all buffers from all perspectives; changes perspective if necessary
+i — persp-import: Import a given perspective from another frame.
+n, <right> — persp-next: Switch to next perspective
+p, <left> — persp-prev: Switch to previous perspective
+C-s — persp-state-save: Save all perspectives in all frames to a file
+C-l — persp-state-load: Load all perspectives from a file
+
+#+begin_src emacs-lisp
+  ;; (use-package perspective :straight t
+  ;;   :bind
+  ;;   ("C-x C-b" . persp-list-buffers)   ; or use a nicer switcher, see below
+  ;;   :init
+  ;;   (persp-mode))
+#+end_src
+
+** brackets
+#+begin_src emacs-lisp
+  (show-paren-mode 1)
+  (setq show-paren-style 'parenthesis)
+#+end_src
+
+** tramp
+#+begin_src emacs-lisp
+  (require 'tramp)
 #+end_src
 * Hook to tangle on save
 #+begin_src emacs-lisp
@@ -329,7 +403,7 @@ https://github.com/quelpa/quelpa#installation
 ** snippets:
 *** ya-snippet
 #+begin_src emacs-lisp
-  (use-package yasnippet  :ensure t) 
+  (use-package yasnippet  :straight t) 
   (require 'yasnippet)
   (yas-global-mode 1)
 
@@ -338,7 +412,7 @@ https://github.com/quelpa/quelpa#installation
 see  https://github.com/hlissner/doom-snippets
 #+begin_src emacs-lisp
   ;; (use-package doom-snippets
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :load-path "/home/drishal/.emacs.d/custom-repos/doom-snippets"
   ;;   :after yasnippet)
 #+end_src
@@ -349,19 +423,19 @@ see  https://github.com/hlissner/doom-snippets
 #+end_src
 ** Superstar for some pretty symbols 
 #+begin_src emacs-lisp
-  (use-package org-superstar :ensure t)
+  (use-package org-superstar :straight t)
   (require 'org-superstar)
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 #+end_src
 ** org-toc
 #+begin_src emacs-lisp
-  (use-package toc-org :ensure t)
+  (use-package toc-org :straight t)
   (add-hook 'org-mode-hook #'toc-org-enable)
 
 #+end_src
 ** company org block
 #+begin_src emacs-lisp 
-  (use-package company-org-block :ensure t)
+  (use-package company-org-block :straight t)
   (require 'company-org-block)
 
   (setq company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
@@ -374,28 +448,64 @@ see  https://github.com/hlissner/doom-snippets
 ** org-bable load all languages
 #+begin_src emacs-lisp 
   (require 'ob-comint)
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((C . t)
-       (emacs-lisp . t)
-       (python . t)
-       ))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((C . t)
+     (emacs-lisp . t)
+     (python . t)
+                                          ;(rust . t)
+     ))
 
- (setq org-babel-python-command "python3")
+  (setq org-babel-python-command "python3")
+#+end_src
+** org roam
+#+begin_src
+  (use-package org-roam :straight t)
 #+end_src
 
 * Tools
 ** vterm
 #+begin_src emacs-lisp `
-  (use-package vterm :ensure t 
+  (use-package vterm :straight t 
     ;; :config 
     ;; (set-popup-rule! "^\\*vterm" :size 0.25 :vslot -4 :select t :quit nil :ttl 0)
     )
 #+end_src
+** mu4e
+https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-01.org
+#+begin_src emacs-lisp
+  (use-package mu4e
+    :ensure nil
+    :load-path "/usr/share/emacs/site-lisp/mu4e/"
+    ;; :defer 20 ; Wait until 20 seconds after startup
+    :config
+
+    ;; This is set to 't' to avoid mail syncing issues when using mbsync
+    (setq mu4e-change-filenames-when-moving t)
+
+    ;; Refresh mail using isync every 10 minutes
+    (setq mu4e-update-interval (* 10 60))
+    (setq mu4e-get-mail-command "mbsync -a")
+    (setq mu4e-maildir "~/Mail")
+
+    (setq mu4e-drafts-folder "/[Gmail]/Drafts")
+    (setq mu4e-sent-folder   "/[Gmail]/Sent Mail")
+    (setq mu4e-refile-folder "/[Gmail]/All Mail")
+    (setq mu4e-trash-folder  "/[Gmail]/Trash")
+
+    (setq mu4e-maildir-shortcuts
+          '((:maildir "/Inbox"    :key ?i)
+            (:maildir "/[Gmail]/Sent Mail" :key ?s)
+            (:maildir "/[Gmail]/Trash"     :key ?t)
+            (:maildir "/[Gmail]/Drafts"    :key ?d)
+            (:maildir "/[Gmail]/All Mail"  :key ?a))))
+
+
+#+end_src
 ** treemacs 
 #+begin_src emacs-lisp 
   (use-package treemacs
-    :ensure t
+    :straight t
     :defer t
     :init
     (with-eval-after-load 'winum
@@ -470,34 +580,34 @@ see  https://github.com/hlissner/doom-snippets
 
   (use-package treemacs-evil
     :after (treemacs evil)
-    :ensure t)
+    :straight t)
 
   (use-package treemacs-projectile
     :after (treemacs projectile)
-    :ensure t)
+    :straight t)
 
   (use-package treemacs-icons-dired
     :after (treemacs dired)
-    :ensure t
+    :straight t
     :config (treemacs-icons-dired-mode))
 
   (use-package treemacs-magit
     :after (treemacs magit)
-    :ensure t)
+    :straight t)
 
   (use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
     :after (treemacs persp-mode) ;;or perspective vs. persp-mode
-    :ensure t
+    :straight t
     :config (treemacs-set-scope-type 'Perspectives))
 #+end_src
 ** elcord
 #+begin_src emacs-lisp
-  (use-package elcord :ensure t)
+  (use-package elcord :straight t)
 #+end_src
 ** Shackle
 #+begin_src emacs-lisp
   (use-package shackle
-    :ensure t
+    :straight t
     ;; :if (not (bound-and-true-p disable-pkg-shackle))
     :config
     (progn
@@ -535,7 +645,7 @@ see  https://github.com/hlissner/doom-snippets
 #+end_src
 ** Using EXWM
 #+begin_src emacs-lisp 
-  (use-package exwm :ensure t)
+  (use-package exwm :straight t)
                                           ;(require 'exwm)
                                           ;(require 'exwm-config)
                                           ;(exwm-config-default)
@@ -552,12 +662,13 @@ see  https://github.com/hlissner/doom-snippets
 
 ** elfeed RSS reader 
 #+begin_src emacs-lisp
-  (use-package elfeed :ensure t)
+  (use-package elfeed :straight t)
   (setq elfeed-feeds
         '(
           ("https://archlinux.org/feeds/news/" Arch Linux)
           ("https://weekly.nixos.org/feeds/all.rss.xml" NixOS)
           ("https://www.phoronix.com/rss.php" Phoronix)
+          ("https://suckless.org/atom.xml" suckless)
           )
         )
 #+end_src
@@ -566,10 +677,10 @@ see  https://github.com/hlissner/doom-snippets
 ** completion engines:
 *** company mode
 #+begin_src emacs-lisp
-  (use-package company :ensure t)
+  (use-package company :straight t)
 
   ;; (use-package company-lsp
-  ;;     :ensure t
+  ;;     :straight t
   ;;     :config
   ;;     (push 'company-lsp company-backends))
 
@@ -580,7 +691,7 @@ see  https://github.com/hlissner/doom-snippets
 #+end_src
 ** using tabnine for completion
 #+begin_src emacs-lisp 
-  ;;    (use-package company-tabnine :ensure t)
+  ;;    (use-package company-tabnine :straight t)
   ;;  (require 'company-tabnine)
   ;; (add-to-list 'company-backends #'company-tabnine)
 #+end_src
@@ -588,19 +699,19 @@ see  https://github.com/hlissner/doom-snippets
 ** emoji mode
 #+begin_src emacs-lisp 
   (use-package emojify
-    :ensure t
+    :straight t
     :hook (after-init . global-emojify-mode))
 #+end_src
 ** Parentheses Completion 
 #+begin_src emacs-lisp 
-  (use-package smartparens :ensure t)
+  (use-package smartparens :straight t)
   (require 'smartparens)
   ;; (add-hook 'smartparens-mode)
   (smartparens-global-mode t)
 #+end_src
 ** Projectile
 #+begin_src emacs-lisp
-  (use-package projectile :ensure t)
+  (use-package projectile :straight t)
   (require 'smartparens-config)
 #+end_src
 
@@ -608,7 +719,7 @@ see  https://github.com/hlissner/doom-snippets
 #+begin_src emacs-lisp
   ;; Enable vertico
   (use-package vertico
-    :ensure t
+    :straight t
     :init
     (vertico-mode)
 
@@ -620,7 +731,7 @@ see  https://github.com/hlissner/doom-snippets
   ;; Enable `partial-completion' for files to allow path expansion.
   ;; You may prefer to use `initials' instead of `partial-completion'.
   (use-package orderless
-    :ensure t
+    :straight t
     :init
     (setq completion-styles '(orderless)
           completion-category-defaults nil
@@ -628,13 +739,13 @@ see  https://github.com/hlissner/doom-snippets
 
   ;; Persist history over Emacs restarts. Vertico sorts by history position.
   (use-package savehist
-    :ensure t
+    :straight t
     :init
     (savehist-mode))
 
   ;; A few more useful configurations...
   (use-package emacs
-    :ensure t
+    :straight t
     :init
     ;; Add prompt indicator to `completing-read-multiple'.
     (defun crm-indicator (args)
@@ -652,37 +763,53 @@ see  https://github.com/hlissner/doom-snippets
     ;; Enable recursive minibuffers
     (setq enable-recursive-minibuffers t))
 
+  ;; enable tramp completion
+  (setq completion-styles '(orderless)
+        completion-category-overrides '((file (styles basic partial-completion))))
+
+
 #+end_src
 ** languages and lsp-mode
 https://emacs-lsp.github.io/lsp-mode/
 and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 *** General Setup 
 #+begin_src emacs-lisp
-  (use-package flycheck :ensure t)
-  (use-package lsp-mode :ensure t
+  (use-package flycheck :straight t)
+  (use-package lsp-mode :straight t
     :init
     ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
     (setq lsp-keymap-prefix "C-c l")
     :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-           (XXX-mode . lsp)
+           (rust-mode  . lsp)
+           (html-mode  . lsp)
+           (c-mode  . lsp)
+           (c++-mode  . lsp)
+           (css-mode . lsp)
+           (zig-mode . lsp)
            ;; if you want which-key integration
            (lsp-mode . lsp-enable-which-key-integration))
     :commands lsp)
 
   ;; optionally
-  (use-package lsp-ui :commands lsp-ui-mode :ensure t)
+  (use-package lsp-ui :commands lsp-ui-mode :straight t)
 
-  ;; (setq lsp-ui-doc-enable nil)
-  (use-package lsp-treemacs :ensure t)
+  (setq lsp-ui-doc-enable nil)
+  (use-package lsp-treemacs :straight t)
                                           ; (add-hook 'prog-mode-hook 'lsp)
 
   ;; (setq lsp-use-plists t)
   ;;(setq lsp-idle-delay 0.500)
 #+end_src
+*** Sqlplus
+#+begin_src emacs-lisp
+                                          ; (use-package sqlplus-mode :straight t)
+
+                                          ;   (let ((oracle-home (shell-command-to-string ". ~/.profile; echo -n $ORACLE_HOME"))) (if oracle-home (setenv "ORACLE_HOME" oracle-home)) (setenv "PATH" (concat (getenv "PATH") (format "%s/%s" oracle-home "bin"))) (add-to-list 'exec-path (format "%s/%s" oracle-home "bin")) ) This assumes that you’re using ZSH. Obviously, you should change the .zshrc reference to the 
+#+end_src
 *** python
 #+begin_src emacs-lisp
   (use-package lsp-pyright
-    :ensure t
+    :straight t
     :hook (python-mode . (lambda ()
                            (require 'lsp-pyright)
                            (lsp))))  ; or lsp-deferred
@@ -691,32 +818,26 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 *** Haskell
 **** haskell mode
 #+begin_src emacs-lisp
-  (use-package haskell-mode :ensure t)
+  (use-package haskell-mode :straight t)
 #+end_src
 *** Fish
 #+begin_src emacs-lisp
-  (use-package fish-mode :ensure t)
+  (use-package fish-mode :straight t)
 #+end_src
 *** nix
 #+begin_src emacs-lisp
-  (use-package nix-mode :ensure t
+  (use-package nix-mode :straight t
     :mode "\\.nix\\'")
 #+end_src
 *** java 
 #+begin_src emacs-lisp 
-  (use-package lsp-java :ensure t)
+  (use-package lsp-java :straight t)
   (add-hook 'java-mode-hook #'lsp)
 #+end_src
 *** web stuff
-**** html lsp server
+***** web mode
 #+begin_src emacs-lisp 
-  (add-hook 'html-mode-hook #'lsp)
-  (setq lsp-enable-snippet t)
-#+end_src
-
-**** web mode
-#+begin_src emacs-lisp 
-  (use-package web-mode :ensure t)
+  (use-package web-mode :straight t)
   (require 'web-mode)
   (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
@@ -729,18 +850,22 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 *** C/C++ mode
 #+begin_src emacs-lisp 
-  (add-hook 'c-mode-hook #'lsp) 
-  (add-hook 'c++-mode-hook #'lsp) 
+                                          ;(add-hook 'c-mode-hook #'lsp) 
+                                          ;(add-hook 'c++-mode-hook #'lsp) 
 #+end_src
 *** rust mode
 #+begin_src emacs-lisp 
-  (use-package rust-mode :ensure t)
-  (add-hook 'rust-mode-hook #'lsp) 
+  (use-package rust-mode :straight t)
+#+end_src
+*** zig
+#+begin_src emacs-lisp
+  (use-package zig-mode :straight t) 
+  (setq lsp-zig-zls-executable "~/zls/zls")
 #+end_src
 ** which key
 #+begin_src emacs-lisp
   (use-package which-key
-    :ensure t
+    :straight t
     :init
     (setq which-key-side-window-location 'bottom
           which-key-sort-order #'which-key-key-order-alpha
@@ -775,10 +900,10 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 * emacs fixing some window stuff
 #+begin_src emacs-lisp 
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
- ;; (add-to-list 'default-frame-alist '(fullscreen . fullheight))
+  ;; (add-to-list 'default-frame-alist '(fullscreen . fullheight))
 #+end_src
 
 * restart emacs package
 #+begin_src emacs-lisp
-  (use-package restart-emacs :ensure t)
+  (use-package restart-emacs :straight t)
 #+end_src

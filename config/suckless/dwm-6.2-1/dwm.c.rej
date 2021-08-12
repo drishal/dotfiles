@@ -1,14 +1,13 @@
 --- dwm.c
 +++ dwm.c
-@@ -237,7 +239,11 @@ static int xerrorstart(Display *dpy, XErrorEvent *ee);
- static void zoom(const Arg *arg);
+@@ -810,9 +911,7 @@ drawbar(Monitor *m)
  
- /* variables */
-+static const char autostartblocksh[] = "autostart_blocking.sh";
-+static const char autostartsh[] = "autostart.sh";
- static const char broken[] = "broken";
-+static const char dwmdir[] = "dwm";
-+static const char localshare[] = ".local/share";
- static char stext[256];
- static int screen;
- static int sw, sh;           /* X display screen geometry width, height */
+ 	/* draw status first so it can be overdrawn by tags later */
+ 	if (m == selmon) { /* status is only drawn on selected monitor */
+-		drw_setscheme(drw, scheme[SchemeNorm]);
+-		sw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
+-		drw_text(drw, m->ww - sw, 0, sw, bh, 0, stext, 0);
++		sw = m->ww - drawstatusbar(m, bh, stext);
+ 	}
+ 
+ 	for (c = m->clients; c; c = c->next) {

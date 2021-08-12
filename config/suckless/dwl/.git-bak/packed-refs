@@ -1,0 +1,12 @@
+# pack-refs with: peeled fully-peeled sorted 
+3b05eadeaf5e2de4caf127cfa07642342cccddbc refs/remotes/origin/main
+04079a0946550740ce98eb0ed7451d75131defda refs/remotes/origin/push
+167b8a0795dcac9b2ad8c4d5eaf06ff6ca16acd2 refs/remotes/origin/scissor
+d4ce92a7b5310c53afcfe7e47870d06a3c146c2c refs/remotes/origin/wlroots-next
+d8cf65c74f3b7132302027cfbf940de8548d7d17 refs/remotes/origin/xdg-activation
+137c1cc210bc3b7645d3a841258da98c0ec08d77 refs/tags/v0.1
+^44ef698d6ef48a41b0df7c4c47d8b880efdbdf33
+feb5c3aa20826a2f51e7d37e004d8ac5015994f9 refs/tags/v0.2
+^9f90011ea28a4b0fde87c4478a793f9da8b71ea6
+6e5f0d947ff8a81e96ceaf420470b1ec3d0086bd refs/tags/v0.2.1
+^3a72cd924c45d4bc01f4d8477c14fdf2854f2dd0

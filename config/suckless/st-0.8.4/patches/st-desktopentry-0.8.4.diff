@@ -1,0 +1,48 @@
+From b9ce8f6df1d2318d2aa8ec9668ec227cfe327e5c Mon Sep 17 00:00:00 2001
+From: aleks <aleks.stier@icloud.com>
+Date: Wed, 27 May 2020 01:35:15 +0200
+Subject: [PATCH] Create a desktop-entry for st
+
+Creates a desktop-entry for st. This enables to find st in a graphical
+menu and to display it with a nice icon.
+
+---
+ Makefile   | 3 +++
+ st.desktop | 8 ++++++++
+ 2 files changed, 11 insertions(+)
+ create mode 100644 st.desktop
+
+diff --git a/Makefile b/Makefile
+index fd1321e..6e79a1c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -49,9 +49,12 @@ install: st
+ 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/st.1
+ 	tic -sx st.info
+ 	@echo Please see the README file regarding the terminfo entry of st.
++	mkdir -p $(DESTDIR)$(PREFIX)/share/applications
++	cp -f st.desktop $(DESTDIR)$(PREFIX)/share/applications
+ 
+ uninstall:
+ 	rm -f $(DESTDIR)$(PREFIX)/bin/st
+ 	rm -f $(DESTDIR)$(MANPREFIX)/man1/st.1
++	rm -f $(DESTDIR)$(PREFIX)/share/applications/st.desktop
+ 
+ .PHONY: all options clean dist install uninstall
+diff --git a/st.desktop b/st.desktop
+new file mode 100644
+index 0000000..e4e0714
+--- /dev/null
++++ b/st.desktop
+@@ -0,0 +1,8 @@
++[Desktop Entry]
++Name=st
++Comment=st is a simple terminal implementation for X
++Exec=st
++Icon=utilities-terminal
++Terminal=false
++Type=Application
++Categories=System;TerminalEmulator;
+-- 
+2.31.0
+

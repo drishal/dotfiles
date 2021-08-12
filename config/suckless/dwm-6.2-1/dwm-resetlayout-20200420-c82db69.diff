@@ -1,0 +1,52 @@
+diff --git config.def.h config.def.h
+index 1c0b587..eb823d3 100644
+--- config.def.h
++++ config.def.h
+@@ -70,6 +70,7 @@ static Key keys[] = {
+ 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
+ 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
+ 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
++	{ MODKEY,                       XK_r,      resetlayout,    {0} },
+ 	{ MODKEY,                       XK_Return, zoom,           {0} },
+ 	{ MODKEY,                       XK_Tab,    view,           {0} },
+ 	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
+diff --git dwm.c dwm.c
+index 4465af1..75fe777 100644
+--- dwm.c
++++ dwm.c
+@@ -188,6 +188,7 @@ static void pop(Client *);
+ static void propertynotify(XEvent *e);
+ static void quit(const Arg *arg);
+ static Monitor *recttomon(int x, int y, int w, int h);
++static void resetlayout(const Arg *arg);
+ static void resize(Client *c, int x, int y, int w, int h, int interact);
+ static void resizeclient(Client *c, int x, int y, int w, int h);
+ static void resizemouse(const Arg *arg);
+@@ -1265,6 +1266,16 @@ recttomon(int x, int y, int w, int h)
+ 	return r;
+ }
+ 
++void
++resetlayout(const Arg *arg)
++{
++	Arg default_layout = {.v = &layouts[0]};
++	Arg default_mfact = {.f = mfact + 1};
++
++	setlayout(&default_layout);
++	setmfact(&default_mfact);
++}
++
+ void
+ resize(Client *c, int x, int y, int w, int h, int interact)
+ {
+@@ -1282,6 +1293,10 @@ resizeclient(Client *c, int x, int y, int w, int h)
+ 	c->oldw = c->w; c->w = wc.width = w;
+ 	c->oldh = c->h; c->h = wc.height = h;
+ 	wc.border_width = c->bw;
++
++	if ((nexttiled(c->mon->clients) == c) && !(nexttiled(c->next)))
++		resetlayout(NULL);
++
+ 	XConfigureWindow(dpy, c->win, CWX|CWY|CWWidth|CWHeight|CWBorderWidth, &wc);
+ 	configure(c);
+ 	XSync(dpy, False);

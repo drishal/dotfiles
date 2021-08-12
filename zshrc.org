@@ -1,7 +1,8 @@
 #+TITLE: zshrc
-#+PROPERTY: header-args :tangle .zshrc
+#+PROPERTY: header-args:shell :tangle .zshrc
 * table of contents :toc:
 - [[#initial-setup][initial setup]]
+- [[#loading-the-profile][loading the ~~/.profile~]]
 - [[#qt5ct][qt5ct]]
 - [[#some-stuff-configure-by-zsh-newuser-install][Some stuff configure by zsh-newuser-install]]
 - [[#setting-some-paths][Setting some paths]]
@@ -20,17 +21,23 @@
 - [[#history-completions][History completions]]
 - [[#navigation][Navigation]]
 - [[#grml-zsh-config][Grml Zsh config]]
-- [[#loading-the-profile][loading the ~~/.profile~]]
 - [[#title][title]]
 - [[#loading-the-starship-prompt][loading the starship prompt]]
 - [[#pfetch][pfetch]]
 
 * initial setup
+make sure you execute these commands
+#+begin_src
 mkdir ~/.zsh-completions
 git clone https://github.com/zsh-users/zsh-completions.git
- git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
 git clone https://github.com/zsh-users/zsh-autosuggestions.git
 git clone https://github.com/jeffreytse/zsh-vi-mode.git
+#+end_src
+* loading the ~~/.profile~
+#+begin_src shell
+  source ~/.profile
+#+end_src
 
 * qt5ct
 #+begin_src shell
@@ -89,7 +96,7 @@ see https://github.com/zsh-users/zsh-completions
 ** vim mode
 see https://github.com/jeffreytse/zsh-vi-mode
 #+begin_src shell
-source ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+# source ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 #+end_src
 ** Themes
 #+begin_src shell
@@ -281,11 +288,6 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
   # source ~/.zsh-plugins/zshrc
 #+end_src
 
-* loading the ~~/.profile~
-#+begin_src shell
-  source ~/.profile
-#+end_src
-
 * title
 #+begin_src shell 
    DISABLE_AUTO_TITLE="true"
@@ -302,6 +304,6 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
 
 * pfetch
 #+begin_src shell
-  pfetch 
+  # pfetch 
 #+end_src
 

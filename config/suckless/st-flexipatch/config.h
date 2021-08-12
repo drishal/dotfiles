@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "FiraCode Nerd Font:size=12:antialias=true:autohint=true";
+static char *font = "FiraCode Nerd Font:size=11:antialias=true:autohint=true";
 #if FONT2_PATCH
 /* Spare fonts */
 static char *font2[] = {
@@ -19,7 +19,7 @@ static char *font2[] = {
  *             0 = no border, 100 = border width is same as cell width */
 int borderperc = 20;
 #else
-static int borderpx = 5;
+static int borderpx = 20;
 #endif // RELATIVEBORDER_PATCH
 
 #if OPENURLONCLICK_PATCH
