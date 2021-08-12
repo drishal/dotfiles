@@ -94,7 +94,7 @@
   # services.xserver.windowManager.dwm.enable = true;
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
+  # services.xserver.desktopManager.xfce.enable = true;
   # services.xserver.desktopManager.lxqt.enable = true;
   # services.xserver.desktopManager.gnome.enable = true;
   services.gnome.tracker.enable = false;
@@ -161,11 +161,11 @@
     powertop  telnet nmap cpufetch
     dmenu dwmblocks cmatrix qutebrowser neovim
     libreoffice nodePackages.create-react-app nodejs yarn nodePackages.react-tools
-    ranger theharvester xorg.xmodmap metasploit powershell gimp
+    ranger theharvester xorg.xmodmap  powershell gimp
     brave thinkfan bpytop bat polybar lolcat ncdu lm_sensors
     rnix-lsp gnome.gnome-sound-recorder tmux ps_mem taffybar
     noto-fonts ntfs3g gparted file appimage-run etcher woeusb 
-    #rust home-manager
+    #rust home-manager metasploit
     cargo carnix
     # python stuff
     python39
