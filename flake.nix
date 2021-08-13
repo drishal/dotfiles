@@ -28,8 +28,8 @@
           configuration = {
             imports = [
               ./NixOS/home.nix
-            ]
-          }
+            ];
+          };
         };
       };
       nixosConfigurations = {
@@ -45,7 +45,7 @@
               home-manager.useUserPackages = true;
               #home-manager.users.hugosum = import ./home-manager.nix;
             }
-            ./hardware-configuration.nix
+            #./hardware-configuration.nix
           ];
         };
       };
