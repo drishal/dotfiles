@@ -24,8 +24,9 @@
   userName = "drishal";
   userEmail = "drishalballaney@gmail.com";
   }; 
-  # .profile
-  # home.file."/home/drishal/.profile".source =/home/drishal/dotfiles/.profile;
+
+  #.profile
+  home.file."/home/drishal/.profile".source =/home/drishal/dotfiles/.profile;
 
   # xmonad config 
   # home.file."/home/drishal/.xmonad/xmonad.hs".source =/home/drishal/dotfiles/.xmonad/xmonad.hs;
