@@ -16,14 +16,15 @@ import qualified XMonad.StackSet as W
 
     -- Actions
 import XMonad.Actions.CopyWindow (kill1, killAllOtherCopies)
-import XMonad.Actions.CycleWS (moveTo, shiftTo, WSType(..), nextScreen, prevScreen)
+-- import XMonad.Actions.CycleWS (moveTo, shiftTo, WSType(..), nextScreen, prevScreen)
+import XMonad.Actions.CycleWS
 import XMonad.Actions.GridSelect
 import XMonad.Actions.MouseResize
 import XMonad.Actions.Promote
-import XMonad.Actions.RotSlaves (rotSlavesDown, rotAllDown)
+import XMonad.Actions.RotSlaves 
 import qualified XMonad.Actions.TreeSelect as TS
-import XMonad.Actions.WindowGo (runOrRaise)
-import XMonad.Actions.WithAll (sinkAll, killAll)
+import XMonad.Actions.WindowGo 
+import XMonad.Actions.WithAll
 import qualified XMonad.Actions.Search as S
 -- import qualified DBus as D
 -- import qualified DBus.Client as D
@@ -54,7 +55,7 @@ import XMonad.Layout.Renamed
 --import XMonad.Layout.Fullscreen as FS
     -- Layouts modifiers
 import XMonad.Layout.LayoutModifier
-import XMonad.Layout.LimitWindows (limitWindows, increaseLimit, decreaseLimit)
+import XMonad.Layout.LimitWindows 
 --import XMonad.Layout.Magnifier
 import XMonad.Layout.MultiToggle (mkToggle, single, EOT(EOT), (??))
 import XMonad.Layout.MultiToggle.Instances (StdTransformers(NBFULL, MIRROR, NOBORDERS))
@@ -81,7 +82,7 @@ import XMonad.Prompt.Workspace
 import Data.Char
 
     -- Utilities
-import XMonad.Util.EZConfig (additionalKeysP, additionalMouseBindings)
+import XMonad.Util.EZConfig 
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
 import XMonad.Util.SpawnOnce
@@ -195,8 +196,8 @@ myKeys =
   , ("M-S-q", io exitSuccess)
 
   --Keyboard Layouts
-    , ("M-k c", spawn "setxkbmap us -variant colemak" )
-    , ("M-k q", spawn "setxkbmap us" )
+  -- , ("M-v c", spawn "setxkbmap us -variant colemak" )
+  --  , ("M-v q", spawn "setxkbmap us" )
 
   --Prompts
     , ("M-w 1",                        shellPrompt promptConfig) --normal run prompt
@@ -236,10 +237,10 @@ myKeys =
     , ("M-j", windows W.focusDown)
 
     -- Move focus to the previous window
-    , ("M-k", windows W.focusUp  )
+    , ("M-k", windows W.focusUp)
 
     -- Move focus to the master window
-    , ("M-m", windows W.focusMaster  )
+    , ("M-h", windows W.focusMaster  )
 
     -- Swap the focused window and the master window
     , ("M-S-m", windows W.swapMaster)
