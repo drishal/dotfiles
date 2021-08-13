@@ -38,6 +38,7 @@
 
           modules = [
             ./NixOS/configuration.nix
+            ./enable-flake.nix
 
             home-manager.nixosModules.home-manager
             {
