@@ -2,15 +2,15 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs,lib ,... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+	./hardware-configuration.nix
       # import cachix.nix
       # (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
-      <home-manager/nixos>
+      #<home-manager/nixos>
       #./cachix.nix 
     ];
 
@@ -161,11 +161,11 @@
     powertop  telnet nmap cpufetch
     dmenu dwmblocks cmatrix qutebrowser neovim
     libreoffice nodePackages.create-react-app nodejs yarn nodePackages.react-tools
-    ranger theharvester xorg.xmodmap  powershell gimp
+    ranger xorg.xmodmap  powershell gimp
     brave thinkfan bpytop bat polybar lolcat ncdu lm_sensors
     rnix-lsp gnome.gnome-sound-recorder tmux ps_mem taffybar
     noto-fonts ntfs3g gparted file appimage-run etcher woeusb 
-    #rust home-manager metasploit
+    #rust home-manager metasploit theharvester 
     cargo carnix
     # python stuff
     python39
@@ -202,7 +202,7 @@
     #mouse.accelProfile = "flat";
     #mouse.accelSpeed = "0";
     mouse.middleEmulation = false;
-  };
+  };#
 
   # overlays
 
@@ -222,10 +222,11 @@
     #   picom = prev.picom.overrideAttrs (old: { src = /home/drishal/Desktop/git-stuff/picom;});
     # })
 
-    (self: super: {
-      discord = super.discord.overrideAttrs (_:{
-        src = builtins.fetchTarball https://discord.com/api/download?platform=linux&format=tar.gz; });
-    })
+    # (self: super: {
+    #   discord = super.discord.overrideAttrs (_:{
+    #    builtins.fetchTarball { src="https://discord.com/api/download?platform=linux&format=tar.gz"; sha256 = lib.fakeSha256;};
+    # });
+    #})
     #  (final: prev: {
     #   qtile = prev.qtile.overrideAttrs (old: { 
     #		   src = /home/drishal/git-stuff/qtile; 
@@ -234,7 +235,18 @@
     # (import (builtins.fetchTarball {
     #   url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
     # }))
-
+    #(self: super: { discord = super.discord.overrideAttrs (_: { src = builtins.fetchTarball https://discord.com/api/download?platform=linux&format=tar.gz; sha256 = lib.fakeSha256;});})
+    #(self: super: { discord = super.discord.overrideAttrs (_: builtins.fetchTarball { url = https://discord.com/api/download?platform=linux&format=tar.gz; sha256 = "1ahj4bhdfd58jcqh54qcgafljqxl1747fqqwxhknqlasa83li75n";});})
+(self: super:
+  {
+    discord = super.discord.overrideAttrs (_: {
+      src = builtins.fetchTarball {
+        url = https://discord.com/api/download?platform=linux&format=tar.gz;
+	#sha256 = lib.fakeSha256;
+        sha256 = "1ahj4bhdfd58jcqh54qcgafljqxl1747fqqwxhknqlasa83li75n";
+      };
+    });
+  })
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

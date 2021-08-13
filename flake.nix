@@ -20,10 +20,10 @@
 
       lib = nixpkgs.lib;
     in {
-      homeManagerConfigurations = {
-        drishal = home-manager.lib.homeManagerConfigurations {
+        homeConfigurations."drishal@nixos" = home-manager.lib.homeManagerConfiguration {
           inherit system pkgs;
-          username = "drisal";
+          username="drishal";
+	  # pkgs = nixpkgs.legacyPackages.${system};
           homeDirectory = "/home/drishal";
           configuration = {
             imports = [
@@ -31,24 +31,25 @@
             ];
           };
         };
-      };
       nixosConfigurations = {
         nixos = lib.nixosSystem {
           inherit system;
 
           modules = [
             ./NixOS/configuration.nix
-            ./enable-flake.nix
+            # ./enable-flake.nix
 
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              #home-manager.users.hugosum = import ./home-manager.nix;
-            }
-            #./hardware-configuration.nix
+             #./hardware-configuration.nix
           ];
         };
       };
     };
 }
+
+          # home-manager.nixosModules.home-manager
+           # {
+           #   home-manager.useGlobalPkgs = true;
+           #   home-manager.useUserPackages = true;
+              # home-manager.users.drishal = import ./NixOS/home.nix;
+           # }
+
