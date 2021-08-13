@@ -14,6 +14,7 @@ cp -r ~/.config/sxhkd/ ~/dotfiles/config/sxhkd
 mkdir -p ~/dotfiles/.xmonad/
 cp ~/.xmonad/README.org  ~/dotfiles/.xmonad/
 cp ~/.xmonad/xmonad.hs  ~/dotfiles/.xmonad/
+cp -r ~/.xmonad/lib/ ~/dotfiles/.xmonad/
 cp ~/.xmobarrc  ~/dotfiles/.xmobarrc 
 
 # emacs
