@@ -20,7 +20,8 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 alias usb_1="cd /sys/bus/pci/drivers/xhci_hcd/"
 alias usb_2="su root -c  'for file in ????:??:??.? ; do  echo -n "$file" > unbind;  echo -n "$file" > bind; done'"
 # home manager
-alias hms="home-manager switch"
+# alias hms="home-manager switch"
+alias hms="home-manager switch --flake ~/dotfiles"
 
 # export the npm profile
 export PATH="$HOME/.npm-packages/bin:$PATH"

@@ -26,10 +26,13 @@
   }; 
 
   #.profile
-  home.file."/home/drishal/.profile".source =/home/drishal/dotfiles/.profile;
+  home.file."/home/drishal/.profile".source=../.profile;
 
   # xmonad config 
-  # home.file."/home/drishal/.xmonad/xmonad.hs".source =/home/drishal/dotfiles/.xmonad/xmonad.hs;
+  home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
+
+  # zsh config
+  home.file."/home/drishal/.zshrc".source = ../.zshrc;
 
   # qtile config
   # home.file."/home/drishal/config/qtile/config.py".source =/home/drishal/dotfiles/.config/qtile/config.py;
