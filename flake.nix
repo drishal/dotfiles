@@ -35,11 +35,7 @@
           username="drishal";
 	  # pkgs = nixpkgs.legacyPackages.${system};
           homeDirectory = "/home/drishal";
-	   overlays = [
-              #inputs.emacs-overlay.overlay
-              #inputs.nur.overlay
-            ];
-          configuration = {
+	  configuration = {
             imports = [
               ./NixOS/home.nix
             ];

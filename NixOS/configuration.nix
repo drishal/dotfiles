@@ -232,9 +232,9 @@
     #		   src = /home/drishal/git-stuff/qtile; 
     #		   patches=[/home/drishal/git-stuff/qtile/patches-for-nix/0001-Substitution-vars-for-absolute-paths.patch /home/drishal/git-stuff/qtile/patches-for-nix/0002-Restore-PATH-and-PYTHONPATH.patch /home/drishal/git-stuff/qtile/patches-for-nix/0003-Restart-executable.patch ] ;});})
 
-     (import (builtins.fetchTarball {
-       url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
-     }))
+    # (import (builtins.fetchTarball {
+    #   url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+    # }))
     #(self: super: { discord = super.discord.overrideAttrs (_: { src = builtins.fetchTarball https://discord.com/api/download?platform=linux&format=tar.gz; sha256 = lib.fakeSha256;});})
     #(self: super: { discord = super.discord.overrideAttrs (_: builtins.fetchTarball { url = https://discord.com/api/download?platform=linux&format=tar.gz; sha256 = "1ahj4bhdfd58jcqh54qcgafljqxl1747fqqwxhknqlasa83li75n";});})
 (self: super:
