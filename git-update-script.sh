@@ -3,6 +3,14 @@
   # Simple script to toggle github remote to/from https/ssh.
   #
   # Dylan Araps
+  # make sure to read these before 
+  # https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account and https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+  # instructions:
+  # step 1: 
+  # ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+  # eval "$(ssh-agent -s)" 
+  # ssh-add ~/.ssh/id_ed25519
+  # xclip -selection clipboard < ~/.ssh/id_ed25519.pub
   
   repo_remote="$(git remote get-url "${1:-origin}" || exit 1)"
   

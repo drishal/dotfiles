@@ -47,6 +47,7 @@
   - [[#treemacs][treemacs]]
   - [[#elcord][elcord]]
   - [[#shackle][Shackle]]
+  - [[#popperel-todo][popper.el TODO]]
   - [[#using-exwm][Using EXWM]]
   - [[#erc-server-settings][ERC server settings]]
   - [[#elfeed-rss-reader][elfeed RSS reader]]
@@ -644,6 +645,9 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
   (provide 'setup-shackle)
 
 #+end_src
+** popper.el TODO 
+https://github.com/karthink/popper
+
 ** Using EXWM
 #+begin_src emacs-lisp 
   (use-package exwm :straight t)
