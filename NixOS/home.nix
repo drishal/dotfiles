@@ -26,7 +26,7 @@
   }; 
 
   #.profile
-  home.file."/home/drishal/.profile".source=../.profile;
+  #home.file."/home/drishal/.profile".source=../.profile;
 
   # xmonad config 
   home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;

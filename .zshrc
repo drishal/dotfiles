@@ -1,4 +1,4 @@
-source ~/.profile
+source ~/dotfiles/.profile
 
 # if [[ "$DESKTOP_SESSION" = *"plasma"* ]]; then
 #     export QT_QPA_PLATFORMTHEME = "kde"
