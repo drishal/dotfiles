@@ -2,14 +2,24 @@
   description = "Configuration for my sysmem";
 
   inputs = {
+
     nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs = { nixpkgs.follows = "nixpkgs"; };
     };
+
+    #emacs-overlay.url = "github:nix-community/emacs-overlay";
+
+    #fu.url = "github:numtide/flake-utils";
+    #utils = {
+    #  url = "github:gytis-ivaskevicius/flake-utils-plus/staging";
+    #  inputs.flake-utils.follows = "fu";
+    #};
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -25,10 +35,15 @@
           username="drishal";
 	  # pkgs = nixpkgs.legacyPackages.${system};
           homeDirectory = "/home/drishal";
+	   overlays = [
+              #inputs.emacs-overlay.overlay
+              #inputs.nur.overlay
+            ];
           configuration = {
             imports = [
               ./NixOS/home.nix
             ];
+
           };
         };
       nixosConfigurations = {
@@ -43,6 +58,7 @@
           ];
         };
       };
+
     };
 }
 

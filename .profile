@@ -13,12 +13,16 @@ alias b="brightnessctl"
 alias bs="brightnessctl s"
 export EXA_ICON_SPACING=2
 # nixos stuff
-alias nrs="sudo nixos-rebuild switch"
+#alias nrs="sudo nixos-rebuild switch"
 # man pager
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 #resetting the right usb
 alias usb_1="cd /sys/bus/pci/drivers/xhci_hcd/"
 alias usb_2="su root -c  'for file in ????:??:??.? ; do  echo -n "$file" > unbind;  echo -n "$file" > bind; done'"
+
+#nix aliases
+alias nrs="sudo nixos-rebuild switch --flake ~/dotfiles"
+
 # home manager
 # alias hms="home-manager switch"
 alias hms="home-manager switch --flake ~/dotfiles"
