@@ -674,6 +674,7 @@ https://github.com/karthink/popper
           ("https://weekly.nixos.org/feeds/all.rss.xml" NixOS)
           ("https://www.phoronix.com/rss.php" Phoronix)
           ("https://suckless.org/atom.xml" suckless)
+          ("https://micronews.debian.org/feeds/feed.rss" Debian)
           )
         )
 #+end_src
