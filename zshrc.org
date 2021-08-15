@@ -36,7 +36,7 @@ git clone https://github.com/jeffreytse/zsh-vi-mode.git
 #+end_src
 * loading the ~~/.profile~
 #+begin_src shell
-  source ~/.profile
+  source ~/dotfiles/.profile
 #+end_src
 
 * qt5ct

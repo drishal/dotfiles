@@ -83,12 +83,7 @@ Config {
 
 			     ] 50
 
-
-
-
-
-
-                       , Run Com "/home/drishal/trayer-padding-icon.sh" [] "trayerpad" 20
+       , Run Com "/home/drishal/dotfiles/trayer-padding-icon.sh" [] "trayerpad" 20
         -- time and date indicator 
         --   (%F = d-m-y date, %a = day of week, %T = h:m:s time)
         , Run Date           "<fc=#bd93f9>  %F (%a) %T</fc>" "date" 10

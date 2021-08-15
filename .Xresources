@@ -1,0 +1,5 @@
+#include "/home/drishal/dotfiles/.Xresources.d/dracula.Xresources" 
+!#include ".Xresources.d/gruvbox.Xresources" 
+!#include ".Xresources.d/OneDark.Xresources" 
+!#include ".Xresources.d/palenight.Xresources"
+!#include ".Xresources.d/fonts.Xresources" 

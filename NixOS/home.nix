@@ -26,20 +26,32 @@
   }; 
 
   #Gccemacs
+
   programs.emacs = {
     enable = true;
-    package = pkgs.emacsGcc;
+    # package = pkgs.emacsGcc;
     extraPackages = (epkgs: [ epkgs.vterm ] );
 };
   #.profile
   #home.file."/home/drishal/.profile".source=../.profile;
 
+ # xresources = {
+ #   path = "/home/drishal/dotfiles/.Xresources";
+ # };
+
   # xmonad config 
   home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
+  home.file."/home/drishal/.xmobarrc".source = ../.xmobarrc;
 
   # zsh config
   home.file."/home/drishal/.zshrc".source = ../.zshrc;
 
+  # deadd notifications
+  home.file."/home/drishal/.config/deadd".source = ../config/deadd;
+
+  # setting Xresources
+  
+  home.file."/home/drishal/.Xresources".source = ../.Xresources;
   # qtile config
   # home.file."/home/drishal/config/qtile/config.py".source =/home/drishal/dotfiles/.config/qtile/config.py;
   # home.file."/home/drishal/config/qtile/autostart.sh".source =/home/drishal/dotfiles/.config/qtile/autostart.sh;

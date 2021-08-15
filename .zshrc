@@ -203,7 +203,4 @@ DISABLE_AUTO_TITLE="true"
 # export PS1="%F{blue}%~%f %(?.%F{green}❯%f.%F{red}❯%f) "
  eval "$(starship init zsh)"
 
-# zsh 
 # pfetch
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

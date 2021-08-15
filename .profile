@@ -30,4 +30,4 @@ alias hms="home-manager switch --flake ~/dotfiles"
 # export the npm profile
 export PATH="$HOME/.npm-packages/bin:$PATH"
 #fetch
-#pfetch
+pfetch
