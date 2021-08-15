@@ -50,8 +50,11 @@
   home.file."/home/drishal/.config/deadd".source = ../config/deadd;
 
   # setting Xresources
-  
   home.file."/home/drishal/.Xresources".source = ../.Xresources;
+
+  # kitty
+  home.file."/home/drishal/.config/kitty".source = ../config/kitty;
+
   # qtile config
   # home.file."/home/drishal/config/qtile/config.py".source =/home/drishal/dotfiles/.config/qtile/config.py;
   # home.file."/home/drishal/config/qtile/autostart.sh".source =/home/drishal/dotfiles/.config/qtile/autostart.sh;
