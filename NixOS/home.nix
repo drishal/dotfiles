@@ -55,6 +55,9 @@
   # kitty
   home.file."/home/drishal/.config/kitty".source = ../config/kitty;
 
+  # picom config
+  home.file."/home/drishal/.config/picom".source = ../config/picom;
+  
   # qtile config
   # home.file."/home/drishal/config/qtile/config.py".source =/home/drishal/dotfiles/.config/qtile/config.py;
   # home.file."/home/drishal/config/qtile/autostart.sh".source =/home/drishal/dotfiles/.config/qtile/autostart.sh;
