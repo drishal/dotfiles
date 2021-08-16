@@ -168,6 +168,7 @@ myStartupHook = do
         --spawnOnce "/usr/libexec/notification-daemon"
         spawnOnce "deadd-notification-center&"
         spawnOnce "xsetroot -cursor_name left_ptr"
+        spawnOnce "emacs --daemon"
         -- spawnOnce "lxqt-notificationd&"
         --  spawnOnce "/usr/libexec/notification-daemon"
         spawnOnce "lxpolkit"
@@ -175,7 +176,8 @@ myStartupHook = do
         --spawnOnce "polybar xmonad"
         spawnOnce "picom --experimental-backends"
         --spawnOnce "picom"
-        spawnOnce "nitrogen --restore"
+        -- spawnOnce "nitrogen --restore"
+        spawnOnce "feh --bg-scale ~/dotfiles/wallpapers/summer_1am.jpg" 
         --spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true  --tint 0x292d3e  --alpha 0 --height 20 --padding 1"
         --spawnOnce "stalonetray"
         --spawnOnce "pasystray"
@@ -301,7 +303,7 @@ addSupported props = withDisplay $ \dpy -> do
 
 main =  do
       --xmproc <- spawnPipe "polybar xmonad"
-      xmproc <- spawnPipe "xmobar  ~/.xmobarrc"
+      xmproc <- spawnPipe "xmobar  ~/dotfiles/.xmobarrc"
       --xmproc <- spawnPipe "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true --alpha 0 --tint 0x282a36 --height 20 --padding 4"
     -- Request access to the DBus name
       xmonad $ docks  $ ewmh def {
@@ -339,5 +341,6 @@ main =  do
                         , ppVisible = wrap "(" ")"
                         , ppUrgent  = xmobarColor "#ff5555" "#f1fa8c"
                         , ppLayout  = xmobarColor "#8be9fd" ""
+                        , ppSep = "<fc=#6272a4> \xf444 </fc>"
                         }
         }  `additionalKeysP` myKeys `additionalMouseBindings` myMouseBindings

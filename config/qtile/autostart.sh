@@ -13,7 +13,7 @@ picom --experimental-backends&
 #spawnOnce "picom"
 #dwmblocks&
 #dwmstatus&
-nitrogen --restore&
+#nitrogen --restore&
 #spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true  --tint 0x292d3e  --alpha 0 --height 20 --padding spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true --alpha 0 --tint 0x282a36 --height 20 --padding 4"
 #        --spawnOnce "stalonetray"
 #        --spawnOnce "pasystray"
@@ -22,4 +22,4 @@ mate-power-manager&
 xfce4-clipman&
 redshift -O 5000&
 volumeicon&
-# feh --bg-scale ~/Pictures/Darkestour.jpg 
+feh --bg-scale ~/Pictures/Darkestour.jpg 

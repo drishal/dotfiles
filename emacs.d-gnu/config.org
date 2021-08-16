@@ -1,5 +1,5 @@
 #+TITLE: init.el
-#+PROPERTY: header-args :tangle init.el :dir /home/drishal/.emacs.d
+#+PROPERTY: header-args :tangle ~/.emacs.d/init.el
 
 
 * Table of contents  :toc:
