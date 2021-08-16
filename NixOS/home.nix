@@ -32,6 +32,12 @@
     # package = pkgs.emacsGcc;
     extraPackages = (epkgs: [ epkgs.vterm ] );
 };
+
+  services.emacs = {
+    enable = true;
+    client.enable =true;
+    socketActivation.enable = true;
+  };
   #.profile
   #home.file."/home/drishal/.profile".source=../.profile;
 
