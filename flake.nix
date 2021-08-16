@@ -10,8 +10,9 @@
       inputs = { nixpkgs.follows = "nixpkgs"; };
     };
 
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
-
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+    };
     #fu.url = "github:numtide/flake-utils";
     #utils = {
     #  url = "github:gytis-ivaskevicius/flake-utils-plus/staging";
@@ -36,7 +37,7 @@
         # pkgs = nixpkgs.legacyPackages.${system};
         homeDirectory = "/home/drishal";
         configuration = {
-        nixpkgs.overlays = [ inputs.emacs-overlay.overlay];
+          nixpkgs.overlays = [ inputs.emacs-overlay.overlay];
           imports = [
             ./NixOS/home.nix
           ];
@@ -46,23 +47,23 @@
       nixosConfigurations = {
         nixos = lib.nixosSystem {
           inherit system;
-
           modules = [
-            ./NixOS/configuration.nix
-            # ./enable-flake.nix
+              #{nixpkgs.overlay = [ inputs.emacs-overlay.overlay ];}
+              ./NixOS/configuration.nix
+                # ./enable-flake.nix
 
-            #./hardware-configuration.nix
-          ];
+                #./hardware-configuration.nix
+            ];
+          };
         };
+
       };
+    }
 
-    };
-}
-
-  # home-manager.nixosModules.home-manager
-  # {
-  #   home-manager.useGlobalPkgs = true;
-  #   home-manager.useUserPackages = true;
-  # home-manager.users.drishal = import ./NixOS/home.nix;
-  # }
+      # home-manager.nixosModules.home-manager
+      # {
+      #   home-manager.useGlobalPkgs = true;
+      #   home-manager.useUserPackages = true;
+      # home-manager.users.drishal = import ./NixOS/home.nix;
+      # }
 

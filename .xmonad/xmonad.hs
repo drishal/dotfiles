@@ -164,9 +164,9 @@ mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spaci
 mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
 
 myStartupHook = do
-        spawnOnce "/usr/lib/notification-daemon-1.0/notification-daemon"
+        -- spawnOnce "/usr/lib/notification-daemon-1.0/notification-daemon"
         --spawnOnce "/usr/libexec/notification-daemon"
-        -- spawnOnce "deadd-notification-center&"
+        spawnOnce "deadd-notification-center&"
         spawnOnce "xsetroot -cursor_name left_ptr"
         -- spawnOnce "lxqt-notificationd&"
         --  spawnOnce "/usr/libexec/notification-daemon"

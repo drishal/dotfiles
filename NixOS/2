@@ -238,9 +238,35 @@
     # }))
     #(self: super: { discord = super.discord.overrideAttrs (_: { src = builtins.fetchTarball https://discord.com/api/download?platform=linux&format=tar.gz; sha256 = lib.fakeSha256;});})
     #(self: super: { discord = super.discord.overrideAttrs (_: builtins.fetchTarball { url = https://discord.com/api/download?platform=linux&format=tar.gz; sha256 = "1ahj4bhdfd58jcqh54qcgafljqxl1747fqqwxhknqlasa83li75n";});})
-    (self: super: {
-      qtile = self.callPackage ./packages/qtile {};
-    })
+    (self: super:
+      {
+        #qtile = super.qtile.overrideAttrs(oldAttrs: {
+        qtile = self.callPackage ./packages/qtile # ( oldAttrs:
+          {
+          src = builtins.fetchTarball {
+            url = https://github.com/qtile/qtile/archive/refs/tags/v0.18.0.tar.gz;
+            #sha256 = lib.fakeSha256;
+            #sha256 = "1ahj4bhdfd58jcqh54qcgafljqxl1747fqqwxhknqlasa83li75n";
+            sha256 = "18l65ps6y0z5gnyi0k449xwadf5cqflda238r40d39vwil8bzlab";
+          };
+          version = "0.18.0";
+          patches = [];
+          pythonPath = (with self.python3Packages; [
+            keyring
+            xcffib
+            setuptools
+            setuptools_scm
+            dateutil
+            dbus-python
+            mpd2
+            psutil
+            pyxdg
+            pygobject3
+          ]);
+        }
+        # );
+      ;}
+    )
 
     (self: super:
       {
