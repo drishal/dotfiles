@@ -168,7 +168,7 @@ myStartupHook = do
         --spawnOnce "/usr/libexec/notification-daemon"
         spawnOnce "deadd-notification-center&"
         spawnOnce "xsetroot -cursor_name left_ptr"
-        spawnOnce "emacs --daemon"
+        -- spawnOnce "emacs --daemon"
         -- spawnOnce "lxqt-notificationd&"
         --  spawnOnce "/usr/libexec/notification-daemon"
         spawnOnce "lxpolkit"
