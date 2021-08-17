@@ -21,10 +21,8 @@ alias usb_2="su root -c  'for file in ????:??:??.? ; do  echo -n "$file" > unbin
 
 #nix aliases
 alias nrs="sudo nixos-rebuild switch --flake ~/dotfiles -L"
-
 # home manager
-# alias hms="home-manager switch"
-alias hms="home-manager switch --flake ~/dotfiles"
+alias hms="home-manager switch --flake ~/dotfiles "
 
 # export the npm profile
 export PATH="$HOME/.npm-packages/bin:$PATH"

@@ -10,6 +10,8 @@
       inputs = { nixpkgs.follows = "nixpkgs"; };
     };
 
+    nur.url = "github:nix-community/NUR";
+
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
     };
@@ -20,7 +22,7 @@
     #};
   };
 
-  outputs = { nixpkgs, home-manager, ... }@inputs:
+  outputs = { nixpkgs, home-manager, nur, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -48,22 +50,23 @@
         nixos = lib.nixosSystem {
           inherit system;
           modules = [
-              #{nixpkgs.overlay = [ inputs.emacs-overlay.overlay ];}
-              ./NixOS/configuration.nix
-                # ./enable-flake.nix
+            #{nixpkgs.overlay = [ inputs.emacs-overlay.overlay ];}
+            { nixpkgs.overlays = [ nur.overlay ]; }
+            ./NixOS/configuration.nix
+            # ./enable-flake.nix
 
-                #./hardware-configuration.nix
-            ];
-          };
+            #./hardware-configuration.nix
+          ];
         };
-
       };
-    }
 
-      # home-manager.nixosModules.home-manager
-      # {
-      #   home-manager.useGlobalPkgs = true;
-      #   home-manager.useUserPackages = true;
-      # home-manager.users.drishal = import ./NixOS/home.nix;
-      # }
+    };
+}
+
+  # home-manager.nixosModules.home-manager
+  # {
+  #   home-manager.useGlobalPkgs = true;
+  #   home-manager.useUserPackages = true;
+  # home-manager.users.drishal = import ./NixOS/home.nix;
+  # }
 
