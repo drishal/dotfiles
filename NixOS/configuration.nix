@@ -165,7 +165,7 @@
     brave thinkfan bpytop bat polybar lolcat ncdu lm_sensors
     rnix-lsp gnome.gnome-sound-recorder tmux ps_mem taffybar
     noto-fonts ntfs3g gparted file appimage-run etcher woeusb cachix
-    feh
+    feh cinnamon.nemo
     #emacsPgtkGcc 
     #rust home-manager metasploit theharvester 
     cargo carnix

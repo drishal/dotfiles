@@ -47,7 +47,8 @@
 
   # xmonad config 
   home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
-  home.file."/home/drishal/.xmobarrc".source = ../.xmobarrc;
+  #home.file."/home/drishal/.xmobarrc".source = ../.xmobarrc;
+  #home.file."/home/drishal/.xmonad/lib".source = ../.xmonad/lib;
 
   # zsh config
   home.file."/home/drishal/.zshrc".source = ../.zshrc;
