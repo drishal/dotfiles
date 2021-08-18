@@ -52,7 +52,7 @@
         nixos = lib.nixosSystem {
           inherit system;
           modules = [
-            { nixpkgs.overlays = [ emacs-overlay.overlay ];}
+            # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
             { nixpkgs.overlays = [ nur.overlay ]; }
             ./NixOS/configuration.nix
             # ./enable-flake.nix
