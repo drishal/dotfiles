@@ -94,7 +94,7 @@
   # services.xserver.windowManager.dwm.enable = true;
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
-  # services.xserver.desktopManager.xfce.enable = true;
+  services.xserver.desktopManager.xfce.enable = true;
   # services.xserver.desktopManager.lxqt.enable = true;
   # services.xserver.desktopManager.gnome.enable = true;
   services.gnome.tracker.enable = false;
