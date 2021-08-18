@@ -166,7 +166,7 @@
     rnix-lsp gnome.gnome-sound-recorder tmux ps_mem taffybar
     noto-fonts ntfs3g gparted file appimage-run etcher woeusb cachix
     feh cinnamon.nemo
-    #emacsPgtkGcc 
+    # emacsPgtkGcc 
     #rust home-manager metasploit theharvester 
     cargo carnix
     # python stuff

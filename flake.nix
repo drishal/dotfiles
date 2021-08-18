@@ -7,7 +7,7 @@
 
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs = { nixpkgs.follows = "nixpkgs"; };
+      #inputs = { nixpkgs.follows = "nixpkgs"; };
     };
 
     nur.url = "github:nix-community/NUR";
@@ -22,7 +22,7 @@
     #};
   };
 
-  outputs = { nixpkgs, home-manager, nur, ... }@inputs:
+  outputs = { nixpkgs, home-manager, nur, emacs-overlay, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -52,7 +52,7 @@
         nixos = lib.nixosSystem {
           inherit system;
           modules = [
-            #{nixpkgs.overlay = [ inputs.emacs-overlay.overlay ];}
+            { nixpkgs.overlays = [ emacs-overlay.overlay ];}
             { nixpkgs.overlays = [ nur.overlay ]; }
             ./NixOS/configuration.nix
             # ./enable-flake.nix

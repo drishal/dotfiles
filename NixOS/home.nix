@@ -13,6 +13,7 @@
     theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
   };
 
+  # main programs
   programs = { 
     # neovim
     neovim = {
@@ -29,11 +30,12 @@
     #Gccemacs
     emacs = {
       enable = true;
-      # package = pkgs.emacsGcc;
+      package = pkgs.emacsPgtkGcc;
       extraPackages = (epkgs: [ epkgs.vterm ] );
     };
   }; 
 
+  # services
   services = {
     emacs = {
       enable = true;
@@ -41,44 +43,51 @@
       socketActivation.enable = true;
     };
   };
-    #.profile
-    #home.file."/home/drishal/.profile".source=../.profile;
 
-    # xresources = {
-    #   path = "/home/drishal/dotfiles/.Xresources";
-    # };
+  # cachix
+ # caches.cachix = [
+ #   "emacsPgtkGcc"
+    #"someOtherCachix"
+    #{ name = "someCachixWithSha"; sha256 = "..."; }
+ # ];
+  #.profile
+  #home.file."/home/drishal/.profile".source=../.profile;
 
-    # xmonad config 
-    home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
-    #home.file."/home/drishal/.xmobarrc".source = ../.xmobarrc;
-    #home.file."/home/drishal/.xmonad/lib".source = ../.xmonad/lib;
+  # xresources = {
+  #   path = "/home/drishal/dotfiles/.Xresources";
+  # };
 
-    # zsh config
-    home.file."/home/drishal/.zshrc".source = ../.zshrc;
+  # xmonad config 
+  home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
+  #home.file."/home/drishal/.xmobarrc".source = ../.xmobarrc;
+  #home.file."/home/drishal/.xmonad/lib".source = ../.xmonad/lib;
 
-    # deadd notifications
-    home.file."/home/drishal/.config/deadd".source = ../config/deadd;
+  # zsh config
+  home.file."/home/drishal/.zshrc".source = ../.zshrc;
 
-    # setting Xresources
-    home.file."/home/drishal/.Xresources".source = ../.Xresources;
+  # deadd notifications
+  home.file."/home/drishal/.config/deadd".source = ../config/deadd;
 
-    # kitty
-    home.file."/home/drishal/.config/kitty".source = ../config/kitty;
+  # setting Xresources
+  home.file."/home/drishal/.Xresources".source = ../.Xresources;
 
-    # picom config
-    home.file."/home/drishal/.config/picom".source = ../config/picom;
-    
-    # qtile config
-    # home.file."/home/drishal/config/qtile/config.py".source =/home/drishal/dotfiles/.config/qtile/config.py;
-    # home.file."/home/drishal/config/qtile/autostart.sh".source =/home/drishal/dotfiles/.config/qtile/autostart.sh;
+  # kitty
+  home.file."/home/drishal/.config/kitty".source = ../config/kitty;
 
-    # This value determines the Home Manager release that your
-    # configuration is compatible with. This helps avoid breakage
-    # when a new Home Manager release introduces backwards
-    # incompatible changes.
-    #
-    # You can update Home Manager without changing this value. See
-    # the Home Manager release notes for a list of state version
-    # changes in each release.
-    # home.stateVersion = "21.05";
-  }
+  # picom config
+  home.file."/home/drishal/.config/picom".source = ../config/picom;
+  
+  # qtile config
+  # home.file."/home/drishal/config/qtile/config.py".source =/home/drishal/dotfiles/.config/qtile/config.py;
+  # home.file."/home/drishal/config/qtile/autostart.sh".source =/home/drishal/dotfiles/.config/qtile/autostart.sh;
+
+  # This value determines the Home Manager release that your
+  # configuration is compatible with. This helps avoid breakage
+  # when a new Home Manager release introduces backwards
+  # incompatible changes.
+  #
+  # You can update Home Manager without changing this value. See
+  # the Home Manager release notes for a list of state version
+  # changes in each release.
+  # home.stateVersion = "21.05";
+}
