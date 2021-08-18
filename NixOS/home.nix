@@ -13,69 +13,72 @@
     theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
   };
 
-  # neovim
-  programs.neovim = {
-    enable = true;
-  };
+  programs = { 
+    # neovim
+    neovim = {
+      enable = true;
+    };
 
-  # git 
-  programs.git = {
-  enable = true;
-  userName = "drishal";
-  userEmail = "drishalballaney@gmail.com";
+    # git 
+    git = {
+      enable = true;
+      userName = "drishal";
+      userEmail = "drishalballaney@gmail.com";
+    }; 
+
+    #Gccemacs
+    emacs = {
+      enable = true;
+      # package = pkgs.emacsGcc;
+      extraPackages = (epkgs: [ epkgs.vterm ] );
+    };
   }; 
 
-  #Gccemacs
-
-  programs.emacs = {
-    enable = true;
-    # package = pkgs.emacsGcc;
-    extraPackages = (epkgs: [ epkgs.vterm ] );
-};
-
-  services.emacs = {
-    enable = true;
-    client.enable =true;
-    socketActivation.enable = true;
+  services = {
+    emacs = {
+      enable = true;
+      client.enable =true;
+      socketActivation.enable = true;
+    };
   };
-  #.profile
-  #home.file."/home/drishal/.profile".source=../.profile;
+    #.profile
+    #home.file."/home/drishal/.profile".source=../.profile;
 
- # xresources = {
- #   path = "/home/drishal/dotfiles/.Xresources";
- # };
+    # xresources = {
+    #   path = "/home/drishal/dotfiles/.Xresources";
+    # };
 
-  # xmonad config 
-  home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
-  #home.file."/home/drishal/.xmobarrc".source = ../.xmobarrc;
-  #home.file."/home/drishal/.xmonad/lib".source = ../.xmonad/lib;
+    # xmonad config 
+    home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
+    #home.file."/home/drishal/.xmobarrc".source = ../.xmobarrc;
+    #home.file."/home/drishal/.xmonad/lib".source = ../.xmonad/lib;
 
-  # zsh config
-  home.file."/home/drishal/.zshrc".source = ../.zshrc;
+    # zsh config
+    home.file."/home/drishal/.zshrc".source = ../.zshrc;
 
-  # deadd notifications
-  home.file."/home/drishal/.config/deadd".source = ../config/deadd;
+    # deadd notifications
+    home.file."/home/drishal/.config/deadd".source = ../config/deadd;
 
-  # setting Xresources
-  home.file."/home/drishal/.Xresources".source = ../.Xresources;
+    # setting Xresources
+    home.file."/home/drishal/.Xresources".source = ../.Xresources;
 
-  # kitty
-  home.file."/home/drishal/.config/kitty".source = ../config/kitty;
+    # kitty
+    home.file."/home/drishal/.config/kitty".source = ../config/kitty;
 
-  # picom config
-  home.file."/home/drishal/.config/picom".source = ../config/picom;
-  
-  # qtile config
-  # home.file."/home/drishal/config/qtile/config.py".source =/home/drishal/dotfiles/.config/qtile/config.py;
-  # home.file."/home/drishal/config/qtile/autostart.sh".source =/home/drishal/dotfiles/.config/qtile/autostart.sh;
+    # picom config
+    home.file."/home/drishal/.config/picom".source = ../config/picom;
+    
+    # qtile config
+    # home.file."/home/drishal/config/qtile/config.py".source =/home/drishal/dotfiles/.config/qtile/config.py;
+    # home.file."/home/drishal/config/qtile/autostart.sh".source =/home/drishal/dotfiles/.config/qtile/autostart.sh;
 
-  # This value determines the Home Manager release that your
-  # configuration is compatible with. This helps avoid breakage
-  # when a new Home Manager release introduces backwards
-  # incompatible changes.
-  #
-  # You can update Home Manager without changing this value. See
-  # the Home Manager release notes for a list of state version
-  # changes in each release.
-  # home.stateVersion = "21.05";
-}
+    # This value determines the Home Manager release that your
+    # configuration is compatible with. This helps avoid breakage
+    # when a new Home Manager release introduces backwards
+    # incompatible changes.
+    #
+    # You can update Home Manager without changing this value. See
+    # the Home Manager release notes for a list of state version
+    # changes in each release.
+    # home.stateVersion = "21.05";
+  }
