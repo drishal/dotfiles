@@ -84,19 +84,32 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Enable the Desktop Environment/Window managers.
-  services.xserver.enable = true;
-  # services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.windowManager.qtile.enable = true;
-  services.xserver.windowManager.xmonad.enable = true;
-  services.xserver.windowManager.xmonad.enableContribAndExtras=true;
-  # services.xserver.windowManager.awesome.enable = true;
-  # services.xserver.windowManager.xmonad.extraPackages=true;
-  # services.xserver.windowManager.dwm.enable = true;
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
-  # services.xserver.desktopManager.lxqt.enable = true;
-  # services.xserver.desktopManager.gnome.enable = true;
+  services.xserver = {
+
+    enable = true;
+
+    # window wmanagers
+    windowManager = {
+      qtile.enable = true;
+      xmonad  = {
+        enable = true;
+        enableContribAndExtras = true;
+      };
+      awesome.enable = true;
+      dwm.enable = true;
+    };
+
+    # Desktop Environment
+    desktopManager = {
+      plasma5.enable = true;
+      xfce.enable = true;
+      # lxqt.enable = true;
+      gnome.enable = true;
+    };
+    
+    displayManager.sddm.enable = true;
+
+  }; 
   services.gnome.tracker.enable = false;
   # resolve gnome and plasma issues
   #programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.plasma5Packages.ksshaskpass.out}/bin/ksshaskpass";
@@ -165,7 +178,7 @@
     brave thinkfan bpytop bat polybar lolcat ncdu lm_sensors
     rnix-lsp gnome.gnome-sound-recorder tmux ps_mem taffybar
     noto-fonts ntfs3g gparted file appimage-run etcher woeusb cachix
-    feh cinnamon.nemo libva-utils
+    feh cinnamon.nemo libva-utils speedtest-cli pass surf
     # emacsPgtkGcc 
     #rust home-manager metasploit theharvester 
     cargo carnix
