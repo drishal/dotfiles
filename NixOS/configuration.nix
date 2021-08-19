@@ -85,16 +85,17 @@
 
   # Enable the Desktop Environment/Window managers.
   services.xserver = {
-
     enable = true;
 
     # window wmanagers
     windowManager = {
       qtile.enable = true;
+
       xmonad  = {
         enable = true;
         enableContribAndExtras = true;
       };
+
       awesome.enable = true;
       dwm.enable = true;
     };
@@ -104,12 +105,19 @@
       plasma5.enable = true;
       xfce.enable = true;
       # lxqt.enable = true;
-      gnome.enable = true;
+      # gnome.enable = true;
     };
-    
-    displayManager.sddm.enable = true;
+    # extras
+    # displayManager.sessionPackages = ["river"];
+    # displayManager.gdm.enable = true; 
+    # displayManager.sddm.enable = true;
+    displayManager.lightdm = {
+      enable = true;
+      greeter.enable = true;
+    };
+  };
 
-  }; 
+
   services.gnome.tracker.enable = false;
   # resolve gnome and plasma issues
   #programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.plasma5Packages.ksshaskpass.out}/bin/ksshaskpass";
@@ -147,6 +155,9 @@
   #jaba 
   programs.java = { enable = true ; };
 
+  # river 
+  # options.programs.river = true; 
+
   # nm-applet
   programs.nm-applet.enable=true;
 
@@ -179,6 +190,7 @@
     rnix-lsp gnome.gnome-sound-recorder tmux ps_mem taffybar
     noto-fonts ntfs3g gparted file appimage-run etcher woeusb cachix
     feh cinnamon.nemo libva-utils speedtest-cli pass surf
+    river 
     # emacsPgtkGcc 
     #rust home-manager metasploit theharvester 
     cargo carnix
