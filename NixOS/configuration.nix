@@ -122,7 +122,7 @@
   hardware.acpilight.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
+  # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.drishal = {
@@ -165,7 +165,7 @@
     brave thinkfan bpytop bat polybar lolcat ncdu lm_sensors
     rnix-lsp gnome.gnome-sound-recorder tmux ps_mem taffybar
     noto-fonts ntfs3g gparted file appimage-run etcher woeusb cachix
-    feh cinnamon.nemo
+    feh cinnamon.nemo libva-utils
     # emacsPgtkGcc 
     #rust home-manager metasploit theharvester 
     cargo carnix
@@ -199,10 +199,11 @@
 
   # mouse config 
   services.xserver.libinput = {
-    # enable = true;
+    enable = true;
     # disable mouse acceleration
     #mouse.accelProfile = "flat";
-    #mouse.accelSpeed = "0";
+    # mouse.accelSpeed = "0.5";
+    touchpad.accelSpeed = "0.4";
     mouse.middleEmulation = false;
   };#
 
