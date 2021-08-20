@@ -189,8 +189,8 @@
     brave thinkfan bpytop bat polybar lolcat ncdu lm_sensors
     rnix-lsp gnome.gnome-sound-recorder tmux ps_mem taffybar
     noto-fonts ntfs3g gparted file appimage-run etcher woeusb cachix
-    feh cinnamon.nemo libva-utils speedtest-cli pass surf
-    river 
+    feh cinnamon.nemo libva-utils speedtest-cli pass surf gnumake
+    river clang-tools
     # emacsPgtkGcc 
     #rust home-manager metasploit theharvester 
     cargo carnix

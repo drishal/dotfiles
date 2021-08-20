@@ -65,6 +65,9 @@
   # zsh config
   home.file."/home/drishal/.zshrc".source = ../.zshrc;
 
+  # sleep test
+  # home.file."${pkgs.systemd}/lib/systemd/system-sleep/batdistrack".source = ../batdistrack;
+
   # deadd notifications
   home.file."/home/drishal/.config/deadd".source = ../config/deadd;
 
@@ -76,6 +79,7 @@
 
   # picom config
   home.file."/home/drishal/.config/picom".source = ../config/picom;
+  
   
   # qtile config
   # home.file."/home/drishal/config/qtile/config.py".source =/home/drishal/dotfiles/.config/qtile/config.py;

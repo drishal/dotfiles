@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
-
+#!/run/current-system/sw/bin/env nix-shell
+#!nix-shell -i bash -p bash
 FILE=/tmp/batdistrack
 
 if [ "${1}" == "pre" ]; then
