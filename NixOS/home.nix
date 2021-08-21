@@ -6,15 +6,17 @@
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
-  home.username = "drishal";
-  home.homeDirectory = "/home/drishal";
-  programs.rofi = {
-    enable = true;
-    theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
+  home = {
+    username = "drishal";
+    homeDirectory = "/home/drishal";
   };
-
   # main programs
   programs = { 
+    # rofi
+    rofi = {
+      enable = true;
+      theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
+    };
     # neovim
     neovim = {
       enable = true;
@@ -45,11 +47,11 @@
   };
 
   # cachix
- # caches.cachix = [
- #   "emacsPgtkGcc"
-    #"someOtherCachix"
-    #{ name = "someCachixWithSha"; sha256 = "..."; }
- # ];
+  # caches.cachix = [
+  #   "emacsPgtkGcc"
+  #"someOtherCachix"
+  #{ name = "someCachixWithSha"; sha256 = "..."; }
+  # ];
   #.profile
   #home.file."/home/drishal/.profile".source=../.profile;
 

@@ -190,7 +190,8 @@
     rnix-lsp gnome.gnome-sound-recorder tmux ps_mem taffybar
     noto-fonts ntfs3g gparted file appimage-run etcher woeusb cachix
     feh cinnamon.nemo libva-utils speedtest-cli pass surf gnumake
-    river clang-tools
+    river clang-tools ed materia-theme
+    # autoconf automake inkscape gdk-pixbuf sassc pkgconfig 
     # emacsPgtkGcc 
     #rust home-manager metasploit theharvester 
     cargo carnix
