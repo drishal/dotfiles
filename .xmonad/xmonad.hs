@@ -209,6 +209,9 @@ myKeys =
   , ("M-d", spawn "rofi -show drun -icon-theme Papirus -show-icons")
   , ("M-p", spawn " rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu")
 
+-- deadd
+  , ("M-s", spawn "kill -s USR1 $(pidof deadd-notification-center)")
+
   --Some Applications
   , ("M-S-f", spawn "firefox")
   , ("M-e", spawn "nemo")

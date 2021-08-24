@@ -23,100 +23,100 @@
 * Imports
 this secion is dedicated to the imports of the modules I would be using in the config 
 #+begin_src haskell
-     import XMonad
-     import Data.Monoid
-     import System.Exit
-     import qualified XMonad.StackSet as W
-     import qualified Data.Map        as M
-     import XMonad.Hooks.ManageDocks
-     import XMonad.Layout.NoBorders
-     import Control.Monad
-     import  Data.Maybe
-     import Data.List
-       -- Base
-     import XMonad
-     import System.IO
-     import System.Exit (exitSuccess)
-     import qualified XMonad.StackSet as W
+  import XMonad
+  import Data.Monoid
+  import System.Exit
+  import qualified XMonad.StackSet as W
+  import qualified Data.Map        as M
+  import XMonad.Hooks.ManageDocks
+  import XMonad.Layout.NoBorders
+  import Control.Monad
+  import  Data.Maybe
+  import Data.List
+    -- Base
+  import XMonad
+  import System.IO
+  import System.Exit (exitSuccess)
+  import qualified XMonad.StackSet as W
 
-         -- Actions
-     import XMonad.Actions.CopyWindow (kill1, killAllOtherCopies)
-     -- import XMonad.Actions.CycleWS (moveTo, shiftTo, WSType(..), nextScreen, prevScreen)
-     import XMonad.Actions.CycleWS
-     import XMonad.Actions.GridSelect
-     import XMonad.Actions.MouseResize
-     import XMonad.Actions.Promote
-     import XMonad.Actions.RotSlaves 
-     import qualified XMonad.Actions.TreeSelect as TS
-     import XMonad.Actions.WindowGo 
-     import XMonad.Actions.WithAll
-     import qualified XMonad.Actions.Search as S
-     -- import qualified DBus as D
-     -- import qualified DBus.Client as D
-     import qualified Codec.Binary.UTF8.String as UTF8
-     --import  XMonad.Actions.Navigation2D
+      -- Actions
+  import XMonad.Actions.CopyWindow (kill1, killAllOtherCopies)
+  -- import XMonad.Actions.CycleWS (moveTo, shiftTo, WSType(..), nextScreen, prevScreen)
+  import XMonad.Actions.CycleWS
+  import XMonad.Actions.GridSelect
+  import XMonad.Actions.MouseResize
+  import XMonad.Actions.Promote
+  import XMonad.Actions.RotSlaves 
+  import qualified XMonad.Actions.TreeSelect as TS
+  import XMonad.Actions.WindowGo 
+  import XMonad.Actions.WithAll
+  import qualified XMonad.Actions.Search as S
+  -- import qualified DBus as D
+  -- import qualified DBus.Client as D
+  import qualified Codec.Binary.UTF8.String as UTF8
+  --import  XMonad.Actions.Navigation2D
 
-         -- Hooks
-     import XMonad.Hooks.DynamicLog
-     import XMonad.Hooks.EwmhDesktops  -- for some fullscreen events, also for xcomposite in obs.
-     import XMonad.Hooks.FadeInactive
-     import XMonad.Hooks.ManageDocks
-     import XMonad.Hooks.ManageHelpers
-     import XMonad.Hooks.ServerMode
-     import XMonad.Hooks.SetWMName
-     import XMonad.Hooks.WorkspaceHistory
-     import XMonad.Hooks.Place
-         -- Layouts
-     import XMonad.Layout.GridVariants (Grid(Grid))
-     import XMonad.Layout.SimplestFloat
-     import XMonad.Layout.Spiral
-     import XMonad.Layout.ResizableTile
-     import XMonad.Layout.Tabbed
-     import XMonad.Layout.ThreeColumns
-     import XMonad.Layout.BinarySpacePartition
-     import XMonad.Layout.SimpleFloat
-     import XMonad.Layout.Renamed
+      -- Hooks
+  import XMonad.Hooks.DynamicLog
+  import XMonad.Hooks.EwmhDesktops  -- for some fullscreen events, also for xcomposite in obs.
+  import XMonad.Hooks.FadeInactive
+  import XMonad.Hooks.ManageDocks
+  import XMonad.Hooks.ManageHelpers
+  import XMonad.Hooks.ServerMode
+  import XMonad.Hooks.SetWMName
+  import XMonad.Hooks.WorkspaceHistory
+  import XMonad.Hooks.Place
+      -- Layouts
+  import XMonad.Layout.GridVariants (Grid(Grid))
+  import XMonad.Layout.SimplestFloat
+  import XMonad.Layout.Spiral
+  import XMonad.Layout.ResizableTile
+  import XMonad.Layout.Tabbed
+  import XMonad.Layout.ThreeColumns
+  import XMonad.Layout.BinarySpacePartition
+  import XMonad.Layout.SimpleFloat
+  import XMonad.Layout.Renamed
 
-     --import XMonad.Layout.Fullscreen as FS
-         -- Layouts modifiers
-     import XMonad.Layout.LayoutModifier
-     import XMonad.Layout.LimitWindows 
-     --import XMonad.Layout.Magnifier
-     import XMonad.Layout.MultiToggle (mkToggle, single, EOT(EOT), (??))
-     import XMonad.Layout.MultiToggle.Instances (StdTransformers(NBFULL, MIRROR, NOBORDERS))
-     import XMonad.Layout.NoBorders
-     import XMonad.Layout.Renamed (renamed, Rename(Replace))
-     import XMonad.Layout.ShowWName
-     import XMonad.Layout.Spacing
-     import XMonad.Layout.WindowArranger (windowArrange, WindowArrangerMsg(..))
-     import qualified XMonad.Layout.ToggleLayouts as T (toggleLayouts, ToggleLayout(Toggle))
-     import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
+  --import XMonad.Layout.Fullscreen as FS
+      -- Layouts modifiers
+  import XMonad.Layout.LayoutModifier
+  import XMonad.Layout.LimitWindows 
+  --import XMonad.Layout.Magnifier
+  import XMonad.Layout.MultiToggle (mkToggle, single, EOT(EOT), (??))
+  import XMonad.Layout.MultiToggle.Instances (StdTransformers(NBFULL, MIRROR, NOBORDERS))
+  import XMonad.Layout.NoBorders
+  import XMonad.Layout.Renamed (renamed, Rename(Replace))
+  import XMonad.Layout.ShowWName
+  import XMonad.Layout.Spacing
+  import XMonad.Layout.WindowArranger (windowArrange, WindowArrangerMsg(..))
+  import qualified XMonad.Layout.ToggleLayouts as T (toggleLayouts, ToggleLayout(Toggle))
+  import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
 
-         -- Prompt
-     import XMonad.Prompt
-     import XMonad.Prompt.Input
-     import XMonad.Prompt.FuzzyMatch
-     import XMonad.Prompt.Man
-     import XMonad.Prompt.Pass
-     import XMonad.Prompt.Shell
-     import XMonad.Prompt.Ssh
-     import XMonad.Prompt.XMonad
-     import XMonad.Prompt.AppLauncher
-     import Control.Arrow (first)
-     import XMonad.Prompt.Workspace
-     import Data.Char
+      -- Prompt
+  import XMonad.Prompt
+  import XMonad.Prompt.Input
+  import XMonad.Prompt.FuzzyMatch
+  import XMonad.Prompt.Man
+  import XMonad.Prompt.Pass
+  import XMonad.Prompt.Shell
+  import XMonad.Prompt.Ssh
+  import XMonad.Prompt.XMonad
+  import XMonad.Prompt.AppLauncher
+  import Control.Arrow (first)
+  import XMonad.Prompt.Workspace
+  import Data.Char
 
-         -- Utilities
-     import XMonad.Util.EZConfig 
-     import XMonad.Util.NamedScratchpad
-     import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
-     import XMonad.Util.SpawnOnce
+      -- Utilities
+  import XMonad.Util.EZConfig 
+  import XMonad.Util.NamedScratchpad
+  import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
+  import XMonad.Util.SpawnOnce
 
-     --Others
-     import XMonad.Layout.MultiToggle.Instances
-     import XMonad.Layout.MultiToggle
-     --import Theme
-     import Theme.Theme
+  --Others
+  import XMonad.Layout.MultiToggle.Instances
+  import XMonad.Layout.MultiToggle
+  --import Theme
+  import Theme.Theme
 #+end_src
 
 * Some variables
@@ -294,6 +294,9 @@ this is where my keybindings go
      --Rofi Stuff
     , ("M-d", spawn "rofi -show drun -icon-theme Papirus -show-icons")
     , ("M-p", spawn " rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu")
+
+  -- deadd
+    , ("M-s", spawn "kill -s USR1 $(pidof deadd-notification-center)")
 
     --Some Applications
     , ("M-S-f", spawn "firefox")

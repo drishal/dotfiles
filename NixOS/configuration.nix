@@ -117,7 +117,9 @@
     };
   };
 
-
+  # fprint 
+  # services.fprintd.enable = true;
+  
   services.gnome.tracker.enable = false;
   # resolve gnome and plasma issues
   #programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.plasma5Packages.ksshaskpass.out}/bin/ksshaskpass";
@@ -149,7 +151,7 @@
   users.users.drishal = {
     shell = pkgs.zsh;
     isNormalUser = true;
-    extraGroups = [ "wheel"  "network" "video"]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel"  "network" "video"  "virt-manager"]; # Enable ‘sudo’ for the user.
   };
 
   #jaba 
@@ -190,7 +192,7 @@
     rnix-lsp gnome.gnome-sound-recorder tmux ps_mem taffybar
     noto-fonts ntfs3g gparted file appimage-run etcher woeusb cachix
     feh cinnamon.nemo libva-utils speedtest-cli pass surf gnumake
-    river clang-tools ed materia-theme
+    river clang-tools ed materia-theme  virt-manager 
     # autoconf automake inkscape gdk-pixbuf sassc pkgconfig 
     # emacsPgtkGcc 
     #rust home-manager metasploit theharvester 
@@ -203,10 +205,11 @@
     #     epkgs.vterm]))
   ];
   # virtualbox
-  #virtualisation.virtualbox.host.enable = true;
-  #users.extraGroups.vboxusers.members = [ "drishal" ];
-  #virtualisation.virtualbox.host.enableExtensionPack = true;
-
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "drishal" ];
+  # virtualisation.virtualbox.host.enableExtensionPack = true;
+  # virt manager
+  programs.dconf.enable = true;
   virtualisation = {
     libvirtd = {
       enable = true;

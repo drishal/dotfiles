@@ -1,6 +1,7 @@
 # aliases
 alias nix-config="sudo vim /etc/nixos/configuration.nix"
 alias xon="steam-run ~/Desktop/games/Xonotic2/xonotic-linux-sdl.sh"
+alias stk="steam-run ~/Desktop/games/SuperTuxKart-1.2-linux/run_game.sh"
 
 # ls related aliases
 alias ls="exa --icons"
@@ -20,6 +21,7 @@ alias usb_1="cd /sys/bus/pci/drivers/xhci_hcd/"
 alias usb_2="su root -c  'for file in ????:??:??.? ; do  echo -n "$file" > unbind;  echo -n "$file" > bind; done'"
 
 #nix aliases
+alias nfu="sudo nix flake update ~/dotfiles"
 alias nrs="sudo nixos-rebuild switch --flake ~/dotfiles -L"
 # home manager
 alias hms="home-manager switch --flake ~/dotfiles "

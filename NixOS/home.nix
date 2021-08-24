@@ -30,21 +30,21 @@
     }; 
 
     #Gccemacs
-    emacs = {
-      enable = true;
-      package = pkgs.emacsPgtkGcc;
-      extraPackages = (epkgs: [ epkgs.vterm ] );
-    };
+    # emacs = {
+    #   enable = true;
+    #   package = pkgs.emacsPgtkGcc;
+    #   extraPackages = (epkgs: [ epkgs.vterm ] );
+    # };
   }; 
 
   # services
-  services = {
-    emacs = {
-      enable = true;
-      client.enable =true;
-      socketActivation.enable = true;
-    };
-  };
+  # services = {
+  #   emacs = {
+  #     enable = true;
+  #     client.enable =true;
+  #     socketActivation.enable = true;
+  #   };
+  #};
 
   # cachix
   # caches.cachix = [
