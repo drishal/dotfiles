@@ -33,7 +33,7 @@
 
       lib = nixpkgs.lib;
     in {
-      homeConfigurations."drishal@nixos" = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."drishal" = home-manager.lib.homeManagerConfiguration {
       # also dont forget to use this command once
       # nix run --no-write-lock-file --impure github:nix-community/home-manager -- switch   --flake  . 
         inherit system pkgs;

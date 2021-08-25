@@ -3,6 +3,7 @@
 * table of contents :toc:
 - [[#initial-setup][initial setup]]
 - [[#loading-the-profile][loading the ~~/.profile~]]
+- [[#loading-home-manager-variables][loading home manager variables]]
 - [[#qt5ct][qt5ct]]
 - [[#some-stuff-configure-by-zsh-newuser-install][Some stuff configure by zsh-newuser-install]]
 - [[#setting-some-paths][Setting some paths]]
@@ -28,15 +29,20 @@
 * initial setup
 make sure you execute these commands
 #+begin_src
-mkdir ~/.zsh-completions
+mkdir ~/.zsh-plugins
 git clone https://github.com/zsh-users/zsh-completions.git
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
 git clone https://github.com/zsh-users/zsh-autosuggestions.git
 git clone https://github.com/jeffreytse/zsh-vi-mode.git
+git clone https://github.com/zsh-users/zsh-history-substring-search.git
 #+end_src
 * loading the ~~/.profile~
 #+begin_src shell
   source ~/dotfiles/.profile
+#+end_src
+* loading home manager variables
+#+begin_src shell
+ source $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
 #+end_src
 
 * qt5ct

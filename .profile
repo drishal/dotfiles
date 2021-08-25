@@ -1,7 +1,7 @@
 # aliases
 alias nix-config="sudo vim /etc/nixos/configuration.nix"
-alias xon="steam-run ~/Desktop/games/Xonotic2/xonotic-linux-sdl.sh"
-alias stk="steam-run ~/Desktop/games/SuperTuxKart-1.2-linux/run_game.sh"
+alias xon="~/Desktop/games/Xonotic2/xonotic-linux-sdl.sh"
+alias stk="~/Desktop/games/SuperTuxKart-1.2-linux/run_game.sh"
 
 # ls related aliases
 alias ls="exa --icons"
@@ -28,5 +28,12 @@ alias hms="home-manager switch --flake ~/dotfiles "
 
 # export the npm profile
 export PATH="$HOME/.npm-packages/bin:$PATH"
+
+# for home manager 
+# export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
+
+# locals for home manager 
+. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+
 #fetch
 pfetch

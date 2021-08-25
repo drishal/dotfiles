@@ -1,5 +1,7 @@
 source ~/dotfiles/.profile
 
+source $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
+
 # if [[ "$DESKTOP_SESSION" = *"plasma"* ]]; then
 #     export QT_QPA_PLATFORMTHEME = "kde"
 # fi

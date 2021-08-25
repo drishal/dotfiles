@@ -1,4 +1,4 @@
-pacman -S base base-devel efibootmgr grub linux linux-headers linux-firmware vim nano networkmanager wpa-supplicant iwd --needed
+pacman -S base base-devel efibootmgr grub linux linux-headers linux-firmware vim nano networkmanager iwd --needed
 echo "setting hostnam"
 echo "127.0.0.1 localhost" >> /etc/hosts
 echo "::1       localhost" >> /etc/hosts

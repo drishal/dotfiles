@@ -9,14 +9,17 @@
   home = {
     username = "drishal";
     homeDirectory = "/home/drishal";
+    # language.base = "en_US.UTF-8";
+    # sessionVariables.LOCALES_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
+    # sessionVariables.LOCALES_ARCHIVE = "/usr/lib/locale/locale-archive";
   };
   # main programs
   programs = { 
     # rofi
-    rofi = {
-      enable = true;
-      theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
-    };
+    # rofi = {
+    #   enable = false;
+    #   theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
+    # };
     # neovim
     neovim = {
       enable = true;
@@ -73,6 +76,10 @@
   # deadd notifications
   home.file."/home/drishal/.config/deadd".source = ../config/deadd;
 
+  # rofi
+  home.file."/home/drishal/.config/rofi/config.rasi".source = ../config/rofi/config.rasi;
+  home.file."/home/drishal/.config/rofi/config".source = ../config/rofi/config;
+  
   # setting Xresources
   home.file."/home/drishal/.Xresources".source = ../.Xresources;
 
