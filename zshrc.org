@@ -1,5 +1,5 @@
 #+TITLE: zshrc
-#+PROPERTY: header-args:shell :tangle .zshrc
+#+PROPERTY: header-args:shell :tangle ~/.zshrc
 * table of contents :toc:
 - [[#initial-setup][initial setup]]
 - [[#loading-the-profile][loading the ~~/.profile~]]
@@ -24,6 +24,7 @@
 - [[#grml-zsh-config][Grml Zsh config]]
 - [[#title][title]]
 - [[#loading-the-starship-prompt][loading the starship prompt]]
+- [[#loading-the-spaceship-prompt][loading the spaceship prompt]]
 - [[#pfetch][pfetch]]
 
 * initial setup
@@ -305,7 +306,12 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
 * loading the starship prompt
 #+begin_src shell
   # export PS1="%F{blue}%~%f %(?.%F{green}❯%f.%F{red}❯%f) "
-   eval "$(starship init zsh)"
+   # eval "$(starship init zsh)"
+#+end_src
+
+* loading the spaceship prompt
+#+begin_src shell
+ source ~/.zsh-plugins/spaceship-prompt/spaceship.zsh 
 #+end_src
 
 * pfetch

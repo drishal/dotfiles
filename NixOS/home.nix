@@ -68,7 +68,7 @@
   #home.file."/home/drishal/.xmonad/lib".source = ../.xmonad/lib;
 
   # zsh config
-  home.file."/home/drishal/.zshrc".source = ../.zshrc;
+  # home.file."/home/drishal/.zshrc".source = ../.zshrc;
 
   # sleep test
   # home.file."${pkgs.systemd}/lib/systemd/system-sleep/batdistrack".source = ../batdistrack;
