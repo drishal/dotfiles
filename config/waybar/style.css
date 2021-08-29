@@ -1,0 +1,68 @@
+* {
+    border: none;
+    border-radius: 0;
+    /* `otf-font-awesome` is required to be installed for icons */
+    font-family: "FiraCode Nerd Font",Roboto, Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    min-height: 0;
+    color: #f8f8f2;
+    /* background: #282a36; */
+}
+
+
+#tags button  {
+    background-color: #282a36;
+    padding: 6px;
+    border-radius: 50px;
+}
+window#waybar {
+    background-color: #282a36;
+    color: #f8f8f2;
+    transition-property: background-color;
+    transition-duration: .5s;
+}
+
+#tags button.occupied  {
+    background-color: #44475a;
+
+}
+
+#tags button.focused  {
+    background-color: #6272a4; 
+}
+
+#battery,
+#clock,
+#cpu,
+#memory,
+#network,
+#tray
+{
+    padding-left: 20px;
+    padding-right: 20px;
+    background: #44475a; 
+    border-radius: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#battery {
+    color: #50fa7b; 
+}
+
+#clock {
+    color: #bd93f9;
+}
+
+#cpu {
+    color: #8be9fd
+}
+#memory {
+    color: #ff79c6; 
+}
+#network {
+    color: #ffb86c; 
+}
+/* #tray { */
+/*     margin-left: 10px; */
+/* } */

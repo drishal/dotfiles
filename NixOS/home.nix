@@ -91,6 +91,9 @@
 
   # river
   home.file."/home/drishal/.config/river".source = ../config/river;
+
+  #waybar
+  home.file."/home/drishal/.config/waybar".source = ../config/waybar;
  
   
   # qtile config
