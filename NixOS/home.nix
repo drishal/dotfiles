@@ -88,7 +88,10 @@
 
   # picom config
   home.file."/home/drishal/.config/picom".source = ../config/picom;
-  
+
+  # river
+  home.file."/home/drishal/.config/river".source = ../config/river;
+ 
   
   # qtile config
   # home.file."/home/drishal/config/qtile/config.py".source =/home/drishal/dotfiles/.config/qtile/config.py;

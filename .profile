@@ -3,6 +3,8 @@ alias nix-config="sudo vim /etc/nixos/configuration.nix"
 alias xon="~/Desktop/games/Xonotic2/xonotic-linux-sdl.sh"
 alias stk="~/Desktop/games/SuperTuxKart-1.2-linux/run_game.sh"
 
+# yay = pary
+alias yay="paru"
 # ls related aliases
 alias ls="exa --icons"
 alias ll="ls -l"
