@@ -19,6 +19,7 @@ export EXA_ICON_SPACING=2
 
 # man pager
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
 #resetting the right usb
 alias usb_1="cd /sys/bus/pci/drivers/xhci_hcd/"
 alias usb_2="su root -c  'for file in ????:??:??.? ; do  echo -n "$file" > unbind;  echo -n "$file" > bind; done'"
