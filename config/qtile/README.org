@@ -169,17 +169,17 @@
       #     desc="Toggle between split and unsplit sides of stack"),
 
       # # terminal
-      # Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-      # # some programs
-      # Key([mod, "shift"], "f", lazy.spawn("firefox"), desc="Firefox"),
-      # Key([mod], "a", lazy.spawn("emacsclient -c"), desc="Emacs"),
+      Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+      # some programs
+      Key([mod, "shift"], "f", lazy.spawn("firefox"), desc="Firefox"),
+      Key([mod], "a", lazy.spawn("emacsclient -c"), desc="Emacs"),
       # # pavucontrol
-      # Key([mod], "v", lazy.spawn("pavucontrol"), desc="pavucontrol"),
+      Key([mod], "v", lazy.spawn("pavucontrol"), desc="pavucontrol"),
       # # run
-      # Key([mod], "d", lazy.spawn("rofi -show drun -icon-theme Papirus -show-icons"), desc="Firefox"),
-      # Key([mod], "p", lazy.spawn("rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu"), desc="Emacs"),
+      Key([mod], "d", lazy.spawn("rofi -show drun -icon-theme Papirus -show-icons"), desc="Firefox"),
+      Key([mod], "p", lazy.spawn("rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu"), desc="Emacs"),
       # # thunar
-      # Key([mod], "e", lazy.spawn("thunar"), desc="file manager"),
+      Key([mod], "e", lazy.spawn("thunar"), desc="file manager"),
 
 
       # # Toggle between different layouts as defined below

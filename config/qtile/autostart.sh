@@ -1,6 +1,6 @@
 #/usr/lib/notification-daemon-1.0/notification-
-/usr/lib/notification-daemon-1.0/notification-daemon&
-sxhkd&
+#/usr/lib/notification-daemon-1.0/notification-daemon&
+#sxhkd&
 #deadd-notification-center&
 xfce4-power-manager&
 #spawnOnce "xsetroot -cursor_name left_
@@ -22,4 +22,4 @@ mate-power-manager&
 xfce4-clipman&
 redshift -O 5000&
 volumeicon&
-feh --bg-scale ~/Pictures/Darkestour.jpg 
+feh --bg-scale ~/dotfiles/wallpapers/summer_1am.jpg 

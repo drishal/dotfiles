@@ -21,9 +21,9 @@
     #   theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
     # };
     # neovim
-    neovim = {
-      enable = true;
-    };
+    # neovim = {
+    #   enable = true;
+    # };
 
     # git 
     git = {
