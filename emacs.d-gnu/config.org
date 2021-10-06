@@ -976,6 +976,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
            (zig-mode . lsp)
            ;; if you want which-key integration
            (lsp-mode . lsp-enable-which-key-integration))
+           (sh-mode . lsp)
     :commands lsp)
 
   ;; optionally

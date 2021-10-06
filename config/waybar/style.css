@@ -3,7 +3,7 @@
     border-radius: 0;
     /* `otf-font-awesome` is required to be installed for icons */
     font-family: "FiraCode Nerd Font",Roboto, Helvetica, Arial, sans-serif;
-    font-size: 13px;
+    font-size: 11px;
     min-height: 0;
     color: #f8f8f2;
     /* background: #282a36; */
@@ -13,7 +13,7 @@
 #tags button  {
     background-color: #282a36;
     padding: 6px;
-    border-radius: 50px;
+    border-radius: 20px;
 }
 window#waybar {
     background-color: #282a36;

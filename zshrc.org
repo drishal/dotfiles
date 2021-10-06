@@ -363,7 +363,6 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
 * pfetch
 #+begin_src shell
   # pfetch 
-source /usr/share/doc/find-the-command/ftc.zsh
 #+end_src
 
 * ocmmand 
