@@ -12,8 +12,9 @@
 
 #tags button  {
     background-color: #282a36;
-    padding: 6px;
-    border-radius: 20px;
+    padding: 3px;
+    border-radius: 10px;
+    
 }
 window#waybar {
     background-color: #282a36;

@@ -1,11 +1,13 @@
 --- dwm.c
 +++ dwm.c
-@@ -238,7 +239,7 @@ static void zoom(const Arg *arg);
+@@ -810,9 +911,7 @@ drawbar(Monitor *m)
  
- /* variables */
- static const char broken[] = "broken";
--static char stext[256];
-+static char stext[1024];
- static int screen;
- static int sw, sh;           /* X display screen geometry width, height */
- static int bh, blw = 0;      /* bar geometry */
+ 	/* draw status first so it can be overdrawn by tags later */
+ 	if (m == selmon) { /* status is only drawn on selected monitor */
+-		drw_setscheme(drw, scheme[SchemeNorm]);
+-		sw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
+-		drw_text(drw, m->ww - sw, 0, sw, bh, 0, stext, 0);
++		sw = m->ww - drawstatusbar(m, bh, stext);
+ 	}
+ 
+ 	for (c = m->clients; c; c = c->next) {

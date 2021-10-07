@@ -25,15 +25,15 @@ do
 	# Sets up the status and capacity
 	status=$(cat "$battery/status")
 	case "$status" in
-		"Full") status="⚡" ;;
-		"Discharging") status=" " ;;
+		"Full") status=" ⚡ " ;;
+		"Discharging") status="  " ;;
 		"Charging") status=" " ;;
-		"Not charging") status="🛑" ;;
-		"Unknown") status="♻️ " ;;
+		"Not charging") status=" 🛑 " ;;
+		"Unknown") status=" ♻️ " ;;
 	esac
 	capacity=$(cat "$battery/capacity")
 	# Will make a warn variable if discharging and low
-	[ "$status" = "🔋" ] && [ "$capacity" -le 25 ] && warn="  "
+	[ "$status" = "🔋 " ] && [ "$capacity" -le 25 ] && warn="  "
 	# Prints the info
 	printf "%s%s%d%%\n" "$status" "$warn" "$capacity"; unset warn
 done && return 0
