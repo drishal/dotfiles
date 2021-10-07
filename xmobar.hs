@@ -58,21 +58,21 @@ Config {
                              --, "--normal"   , "#ffff00"
                              --, "--high"     , "#ff0000"
                              ] 50
-		
-	--battery monitor
+                
+        --battery monitor
      ,Run Battery        [ "--template" , "<fc=#50fa7b> <left>%, <timeleft> </fc>"
                            , "--Low"      , "10"        -- units: %
                              , "--High"     , "80"        -- units: %
                              ] 100
 
-	 -- cpu activity monitor
+         -- cpu activity monitor
         , Run MultiCpu       [ "--template" , "<fc=#8be9fd> <total>% </fc>"
                              , "--Low"      , "50"         -- units: %
                              , "--High"     , "85"         -- units: %
                              --, "--low"      , "#00ff00"
                              --, "--normal"   , "#ffff00"
                              --, "--high"     , "#ff0000"
-			     ] 20
+                             ] 20
                -- memory usage monitor
         , Run Memory         [ "--template" ,"<fc=#ff79c6>  <used>M/<total>M </fc>"
                              , "--Low"      , "1000"        -- units: M
@@ -81,7 +81,7 @@ Config {
                              --, "--normal"   , "#ffff00"
                              --, "--high"     , "#ff0000"
 
-			     ] 50
+                             ] 50
 
        , Run Com "/home/drishal/dotfiles/trayer-padding-icon.sh" [] "trayerpad" 20
         -- time and date indicator 

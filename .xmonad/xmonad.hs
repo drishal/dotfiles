@@ -306,7 +306,7 @@ addSupported props = withDisplay $ \dpy -> do
 
 main =  do
       --xmproc <- spawnPipe "polybar xmonad"
-      xmproc <- spawnPipe "xmobar  ~/dotfiles/.xmobarrc"
+      xmproc <- spawnPipe "xmobar  ~/dotfiles/xmobar.hs"
       --xmproc <- spawnPipe "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true --alpha 0 --tint 0x282a36 --height 20 --padding 4"
     -- Request access to the DBus name
       xmonad $ docks  $ ewmh def {
