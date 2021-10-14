@@ -461,6 +461,7 @@ see  https://github.com/hlissner/doom-snippets
                            'company-org-block)))
 #+end_src
 ** org-bable load all languages
+https://orgmode.org/worg/org-contrib/babel/languages/index.html
 #+begin_src emacs-lisp 
   (require 'ob-comint)
   (org-babel-do-load-languages
@@ -468,6 +469,7 @@ see  https://github.com/hlissner/doom-snippets
    '((C . t)
      (emacs-lisp . t)
      (python . t)
+     (shell . t)
                                           ;(rust . t)
      ))
 
