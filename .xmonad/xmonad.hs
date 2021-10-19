@@ -84,7 +84,7 @@ import Data.Char
     -- Utilities
 import XMonad.Util.EZConfig 
 import XMonad.Util.NamedScratchpad
-import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
+import XMonad.Util.Run 
 import XMonad.Util.SpawnOnce
 
 --Others
