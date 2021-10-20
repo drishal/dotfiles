@@ -101,7 +101,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	//resetting commands
 	/* { MODKEY,                       XK_c,      resetnmaster,    {0} }, */
-	{ MODKEY|ShiftMask,             XK_v,      resetlayout,    {0} },
+	{ MODKEY|ShiftMask,             XK_m,      resetlayout,    {0} },
 	//incnmaster
 	{ MODKEY,                       XK_o,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
