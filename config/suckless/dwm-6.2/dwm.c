@@ -1404,16 +1404,26 @@ motionnotify(XEvent *e)
 }
 
 void
+/* resetlayout(const Arg *arg) */
+/* { */
+/* 	Arg default_layout = {.v = &layouts[0]}; */
+/* 	Arg default_mfact = {.f = mfact + 1}; */
+
+/* 	setlayout(&default_layout); */
+/* 	setmfact(&default_mfact); */
+/* } */
+
 resetlayout(const Arg *arg)
 {
-	Arg default_layout = {.v = &layouts[0]};
-	Arg default_mfact = {.f = mfact + 1};
+    Arg default_layout = {.v = &layouts[0]};
+    Arg default_mfact = {.f = mfact + 1};
 
-	setlayout(&default_layout);
-	setmfact(&default_mfact);
+    setlayout(&default_layout);
+    setmfact(&default_mfact);
+
+    selmon->nmaster = 1;
+    arrange(selmon);
 }
-
-void
 
 resetnmaster(const Arg *arg)
 {
