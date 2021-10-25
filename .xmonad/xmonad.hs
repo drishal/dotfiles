@@ -248,7 +248,7 @@ myKeys =
     , ("M-h", windows W.focusMaster  )
 
     -- Swap the focused window and the master window
-    , ("M-S-m", windows W.swapMaster)
+    , ("M-S-h", windows W.swapMaster)
 
     -- Swap the focused window with the next window
     , ("M-S-j", windows W.swapDown  )
@@ -262,7 +262,7 @@ myKeys =
     -- Expand the master area
     , ("M-C-l", sendMessage Expand)
     --reset layout
-    , ("M-C-<Space>",  setLayout $ Layout myLayout)
+    , ("M-S-m",  setLayout $ Layout myLayout)
     --toogle fullscreen
     --, ("M-f", sendMessage $ Toggle FULL )
 

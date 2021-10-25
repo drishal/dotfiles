@@ -979,6 +979,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
            ;; if you want which-key integration
            (lsp-mode . lsp-enable-which-key-integration))
            (sh-mode . lsp)
+           (lua-mode . lsp)
     :commands lsp)
 
   ;; optionally
@@ -1024,6 +1025,19 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+begin_src emacs-lisp 
   (use-package lsp-java :straight t)
   (add-hook 'java-mode-hook #'lsp)
+#+end_src
+*** lua
+#+begin_src emacs-lisp
+   (use-package lua-mode
+    :straight t
+    :mode "\\.lua$"
+    :interpreter "lua"
+    :hook (lua-mode . set-company-backends-for-lua)
+    :config
+    (setq lua-indent-level 4)
+    (setq lua-indent-string-contents t)
+    (setq lua-prefix-key nil)
+    )
 #+end_src
 *** web stuff
 ***** web mode

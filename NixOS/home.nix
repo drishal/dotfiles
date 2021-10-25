@@ -63,7 +63,7 @@
   # };
 
   # xmonad config 
-  home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
+  # home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
   #home.file."/home/drishal/.xmobarrc".source = ../.xmobarrc;
   #home.file."/home/drishal/.xmonad/lib".source = ../.xmonad/lib;
 
@@ -94,7 +94,7 @@
 
   #waybar
   home.file."/home/drishal/.config/waybar".source = ../config/waybar;
- 
+  
   
   # qtile config
   home.file."/home/drishal/.config/qtile/config.py".source =../config/qtile/config.py;
