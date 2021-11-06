@@ -785,10 +785,10 @@
 
     <path name="ultrasound-proximity">
         <ctl name="Mi_Ultrasound Enable" value="On" />
-        <!--<ctl name="Mi_Ultrasound Mode" value="725" />
-        <ctl name="Mi_Ultrasound Log Level" value="4" />
-        <ctl name="Mi_Ultrasound Debug Mode" value="1" />
-        <ctl name="Mi_Ultrasound Custom Setting 1" value="1" />-->
+        <ctl name="Mi_Ultrasound Mode" value="725" />
+        <ctl name="Mi_Ultrasound Log Level" value="0" />
+        <ctl name="Mi_Ultrasound Debug Mode" value="0" />
+        <ctl name="Mi_Ultrasound Custom Setting 1" value="1" />
     </path>
 
     <path name="ultrasound-proximity-output">
@@ -843,7 +843,7 @@
     </path>
 
     <path name="ultrasound-rampdown">
-        <!--ctl name="Mi_Ultrasound RampDown" value="On"/-->
+        <!--ctl name="Mi_Ultrasound RampDown" value="On"-->
     </path>
 
     <path name="ultrasound-screen-on">

@@ -2823,8 +2823,8 @@
     <path name="ultrasound-proximity">
         <ctl name="Ultrasound Enable" value="On" />
         <ctl name="Ultrasound Mode" value="725" />
-        <!--ctl name="Ultrasound Debug Mode" value="1" /-->
-        <!--ctl name="Ultrasound Log Level" value="7" /-->
+        <ctl name="Ultrasound Debug Mode" value="0" />
+        <ctl name="Ultrasound Log Level" value="0" />
     </path>
 
     <path name="ultrasound-proximity-output">
@@ -2832,7 +2832,7 @@
         <ctl name="RX_CDC_DMA_RX_1 Channels" value="One" />
         <ctl name="RX_MACRO RX2 MUX" value="AIF2_PB" />
         <ctl name="RX INT0_2 MUX" value="RX2" />
-        <!--ctl name="RX_CDC_DMA_RX_0_DL_HL Switch" value="1" /-->
+        <ctl name="RX_CDC_DMA_RX_0_DL_HL Switch" value="1" />
     </path>
 
     <path name="ultrasound-proximity-output handset">
@@ -2861,10 +2861,10 @@
     <path name="ultrasound-gesture1">
         <ctl name="Ultrasound Enable" value="On"/>
         <!--  release mode  -->
-        <!--ctl name="Ultrasound Mode" value="584"/-->
+        <ctl name="Ultrasound Mode" value="584"/>
         <!--  debug mode  -->
-        <ctl name="Ultrasound Mode" value="585"/>
-        <ctl name="Ultrasound Log Level" value="7" />
+        <!--ctl name="Ultrasound Mode" value="585"/-->
+        <!--ctl name="Ultrasound Log Level" value="7" /-->
     </path>
 
     <path name="ultrasound-gesture1-output">
