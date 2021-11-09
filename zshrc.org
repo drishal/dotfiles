@@ -2,23 +2,27 @@
 #+PROPERTY: header-args:shell :tangle ~/.zshrc
 * table of contents :toc:
 - [[#initial-setup][initial setup]]
-- [[#loading-the-profile][loading the ~~/.profile~]]
 - [[#loading-home-manager-variables][loading home manager variables]]
 - [[#qt5ct][qt5ct]]
 - [[#some-stuff-configure-by-zsh-newuser-install][Some stuff configure by zsh-newuser-install]]
 - [[#setting-some-paths][Setting some paths]]
   - [[#localbin][~~/.local/bin~]]
+- [[#setting-some-values-we-will-need-from-grml-zsh-config][Setting some values we will need from Grml zsh config]]
+- [[#completion-stuff-from-grml][completion stuff from grml]]
 - [[#plugins][Plugins]]
+  - [[#antigen][Antigen]]
+  - [[#oh-my-zsh][Oh my zsh]]
   - [[#zsh-completions][zsh-completions]]
   - [[#zsh-autosuggestions][zsh-autosuggestions]]
+  - [[#zsh-command-not-found][zsh command not found]]
   - [[#zsh-syntax-highlighting][zsh-syntax-highlighting]]
   - [[#zsh-history-substring-search][zsh-history substring search]]
+  - [[#spaceship-prompt][Spaceship prompt]]
+  - [[#antigen-apply][antigen apply]]
   - [[#disable-the-prompt-on-the-right-side][Disable the prompt on the right side]]
   - [[#vim-mode][vim mode]]
   - [[#themes][Themes]]
   - [[#prompt][prompt]]
-- [[#setting-some-values-we-will-need-from-grml-zsh-config][Setting some values we will need from Grml zsh config]]
-- [[#completion-stuff-from-grml][completion stuff from grml]]
 - [[#history-completions][History completions]]
 - [[#navigation][Navigation]]
 - [[#grml-zsh-config][Grml Zsh config]]
@@ -28,6 +32,7 @@
 - [[#customising-spaceship][customising spaceship]]
 - [[#pfetch][pfetch]]
 - [[#ocmmand][ocmmand]]
+- [[#loading-the-profile][loading the ~~/.profile~]]
 
 * initial setup
 make sure you execute these commands
@@ -39,10 +44,6 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
 git clone https://github.com/zsh-users/zsh-autosuggestions.git
 git clone https://github.com/jeffreytse/zsh-vi-mode.git
 git clone https://github.com/zsh-users/zsh-history-substring-search.git
-#+end_src
-* loading the ~~/.profile~
-#+begin_src shell
-  source ~/dotfiles/.profile
 #+end_src
 * loading home manager variables
 #+begin_src shell
@@ -75,48 +76,6 @@ git clone https://github.com/zsh-users/zsh-history-substring-search.git
   fi
   autoload -U colors && colors
   export PATH
-#+end_src
-
-* Plugins
-** zsh-completions
-see https://github.com/zsh-users/zsh-completions
-#+begin_src shell  
-  source ~/.zsh-plugins/zsh-completions/zsh-completions.plugin.zsh
-#+end_src
-** zsh-autosuggestions
-- install from here: https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
-#+begin_src shell
-  source ~/.zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-#+end_src
-** zsh-syntax-highlighting
-- see: https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md
-#+begin_src shell
-  source ~/.zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-#+end_src
-** zsh-history substring search
-- see: https://github.com/zsh-users/zsh-history-substring-search
-  #+begin_src shell
-    source /home/drishal/.zsh-plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
-  #+end_src
-** Disable the prompt on the right side
-#+begin_src shell
-  export RPROMPT=""
-#+end_src
-** vim mode
-see https://github.com/jeffreytse/zsh-vi-mode
-#+begin_src shell
-# source ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-#+end_src
-** Themes
-#+begin_src shell
-  # source ~/.zsh-plugins/dracula/dracula.zsh-theme
-  # ZSH_THEME="random"
-
-#+end_src
-** prompt
-#+begin_src emacs-lisp 
-#  source ~/.zsh-plugins/termsupport.zsh 
 #+end_src
 
 * Setting some values we will need from Grml zsh config
@@ -279,6 +238,75 @@ see https://github.com/jeffreytse/zsh-vi-mode
   zstyle ':completion:*:man:*'      menu yes select
 #+end_src
 
+* Plugins
+** Antigen
+#+begin_src shell
+  source ~/dotfiles/antigen.zsh 
+#+end_src
+** Oh my zsh
+#+begin_src shell
+  antigen use oh-my-zsh
+#+end_src
+** zsh-completions
+see https://github.com/zsh-users/zsh-completions
+#+begin_src shell  
+  #source ~/.zsh-plugins/zsh-completions/zsh-completions.plugin.zsh
+  antigen bundle zsh-users/zsh-completions
+#+end_src
+** zsh-autosuggestions
+- install from here: https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
+#+begin_src shell
+#  source ~/.zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+  antigen bundle zsh-users/zsh-autosuggestions
+
+#+end_src
+** zsh command not found
+#+begin_src shell
+  antigen bundle command-not-found
+#+end_src
+** zsh-syntax-highlighting
+- see: https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md
+#+begin_src shell
+  # source ~/.zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  antigen bundle zsh-users/zsh-syntax-highlighting
+  #antigen bundle zsh-users/zsh-syntax-highlighting
+#+end_src
+** zsh-history substring search
+- see: https://github.com/zsh-users/zsh-history-substring-search
+  #+begin_src shell
+    antigen bundle zsh-users/zsh-history-substring-search
+    #source /home/drishal/.zsh-plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+  #+end_src
+** Spaceship prompt
+#+begin_src shell
+  #antigen theme spaceship-prompt/spaceship-prompt
+#+end_src
+** antigen apply
+#+begin_src bash
+ # antigen apply
+#+end_src
+
+
+** Disable the prompt on the right side
+#+begin_src shell
+  export RPROMPT=""
+#+end_src
+** vim mode
+see https://github.com/jeffreytse/zsh-vi-mode
+#+begin_src shell
+# source ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+#+end_src
+** Themes
+#+begin_src shell
+  # source ~/.zsh-plugins/dracula/dracula.zsh-theme
+  # ZSH_THEME="random"
+
+#+end_src
+** prompt
+#+begin_src emacs-lisp 
+#  source ~/.zsh-plugins/termsupport.zsh 
+#+end_src
+
 * History completions
 #+begin_src shell
   HISTFILE=${HISTFILE:-${ZDOTDIR:-${HOME}}/.zsh_history}
@@ -309,7 +337,7 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
 * loading the starship prompt
 #+begin_src shell
    #export PS1="%F{blue}%~%f %(?.%F{green}❯%f.%F{red}❯%f) "
- eval "$(starship init zsh)"
+eval "$(starship init zsh)"
 #+end_src
 
 * loading the spaceship prompt
@@ -367,4 +395,11 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
 #+end_src
 
 * ocmmand 
+#+begin_src shell
+  antigen apply
+#+end_src
+* loading the ~~/.profile~
+#+begin_src shell
+  source ~/dotfiles/.profile
+#+end_src
 
