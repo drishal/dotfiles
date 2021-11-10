@@ -41,4 +41,4 @@ export PATH="$HOME/.npm-packages/bin:$PATH"
 . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
 #fetch
-pfetch
+#pfetch

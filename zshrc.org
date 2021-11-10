@@ -11,6 +11,7 @@
 - [[#completion-stuff-from-grml][completion stuff from grml]]
 - [[#plugins][Plugins]]
   - [[#antigen][Antigen]]
+  - [[#zplug][zplug]]
   - [[#oh-my-zsh][Oh my zsh]]
   - [[#zsh-completions][zsh-completions]]
   - [[#zsh-autosuggestions][zsh-autosuggestions]]
@@ -29,10 +30,10 @@
 - [[#title][title]]
 - [[#loading-the-starship-prompt][loading the starship prompt]]
 - [[#loading-the-spaceship-prompt][loading the spaceship prompt]]
-- [[#customising-spaceship][customising spaceship]]
-- [[#pfetch][pfetch]]
-- [[#ocmmand][ocmmand]]
+- [[#-ocmmand][* ocmmand]]
 - [[#loading-the-profile][loading the ~~/.profile~]]
+- [[#zplug-load][Zplug load]]
+- [[#pfetch][pfetch]]
 
 * initial setup
 make sure you execute these commands
@@ -241,41 +242,51 @@ git clone https://github.com/zsh-users/zsh-history-substring-search.git
 * Plugins
 ** Antigen
 #+begin_src shell
-  source ~/dotfiles/antigen.zsh 
+    #source ~/dotfiles/antigen.zsh 
+    DISABLE_AUTO_UPDATE="true"
+#+end_src
+** zplug
+#+begin_src shell
+  source ~/.zplug/init.zsh 
 #+end_src
 ** Oh my zsh
 #+begin_src shell
-  antigen use oh-my-zsh
+  #antigen use oh-my-zsh
+#  zplug "ohmyzsh/ohmyzsh"
 #+end_src
 ** zsh-completions
 see https://github.com/zsh-users/zsh-completions
 #+begin_src shell  
   #source ~/.zsh-plugins/zsh-completions/zsh-completions.plugin.zsh
-  antigen bundle zsh-users/zsh-completions
+  #antigen bundle zsh-users/zsh-completions
+  zplug "zsh-users/zsh-completions"
 #+end_src
 ** zsh-autosuggestions
 - install from here: https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
 #+begin_src shell
-#  source ~/.zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-  antigen bundle zsh-users/zsh-autosuggestions
+  #  source ~/.zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+    #antigen bundle zsh-users/zsh-autosuggestions
+zplug "zsh-users/zsh-autosuggestions"
 
 #+end_src
 ** zsh command not found
 #+begin_src shell
-  antigen bundle command-not-found
+  #antigen bundle command-not-found
+  #e command-not-found
 #+end_src
 ** zsh-syntax-highlighting
 - see: https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md
 #+begin_src shell
   # source ~/.zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-  antigen bundle zsh-users/zsh-syntax-highlighting
   #antigen bundle zsh-users/zsh-syntax-highlighting
+  zplug "zsh-users/zsh-syntax-highlighting"
 #+end_src
 ** zsh-history substring search
 - see: https://github.com/zsh-users/zsh-history-substring-search
   #+begin_src shell
-    antigen bundle zsh-users/zsh-history-substring-search
+    #antigen bundle zsh-users/zsh-history-substring-search
     #source /home/drishal/.zsh-plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+    zplug "zsh-users/zsh-history-substring-search"
   #+end_src
 ** Spaceship prompt
 #+begin_src shell
@@ -322,22 +333,22 @@ see https://github.com/jeffreytse/zsh-vi-mode
 
 * Grml Zsh config
 https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
-#+begin_src shell
-  # source ~/.zsh-plugins/zshrc
-#+end_src
 
 * title
 #+begin_src shell 
-   DISABLE_AUTO_TITLE="true"
-  # export TITLE=$USER@$HOST 
-  # export PROMPT_COMMAND="echo -ne \"\033]0;$1 Hello World\007\""
-  # printf "\033]%s\07\n" "$USER@$HOST" 
+    DISABLE_AUTO_TITLE="false"
+    #DISABLE_AUTO_TITLE="true"
+    # export TITLE=$USER@$HOST 
+    # export PROMPT_COMMAND="echo -ne \"\033]0;$1 Hello World\007\""
+    # printf "\033]%s\07\n" "$USER@$HOST" 
+    zplug trystan2k/zsh-tab-title
 #+end_src
 
 * loading the starship prompt
 #+begin_src shell
-   #export PS1="%F{blue}%~%f %(?.%F{green}❯%f.%F{red}❯%f) "
-eval "$(starship init zsh)"
+     #export PS1="%F{blue}%~%f %(?.%F{green}❯%f.%F{red}❯%f) "
+  #zplug Abid-Ahmad/oh-my-zsh-000-theme, as:theme
+  eval "$(starship init zsh)"
 #+end_src
 
 * loading the spaceship prompt
@@ -345,61 +356,21 @@ eval "$(starship init zsh)"
  #source ~/.zsh-plugins/spaceship-prompt/spaceship.zsh 
 #+end_src
 
-* customising spaceship
+* * ocmmand 
 #+begin_src shell
-      export SPACESHIP_CHAR_SYMBOL="❯"
-      SPACESHIP_PROMPT_ORDER=(
-      time          # Time stamps section
-      user          # Username section
-      dir           # Current directory section
-      host          # Hostname section
-      git           # Git section (git_branch + git_status)
-      hg            # Mercurial section (hg_branch  + hg_status)
-      package       # Package version
-      gradle        # Gradle section
-      maven         # Maven section
-      node          # Node.js section
-      ruby          # Ruby section
-      elixir        # Elixir section
-      xcode         # Xcode section
-      swift         # Swift section
-      golang        # Go section
-      php           # PHP section
-      rust          # Rust section
-      haskell       # Haskell Stack section
-      julia         # Julia section
-      docker        # Docker section
-      aws           # Amazon Web Services section
-      gcloud        # Google Cloud Platform section
-      venv          # virtualenv section
-      conda         # conda virtualenv section
-      pyenv         # Pyenv section
-      dotnet        # .NET section
-      ember         # Ember.js section
-      kubectl       # Kubectl context section
-      terraform     # Terraform workspace section
-      exec_time     # Execution time
-      line_sep      # Line break
-      battery       # Battery level and status
-      vi_mode       # Vi-mode indicator
-      jobs          # Background jobs indicator
-      exit_code     # Exit code section
-      char          # Prompt character
-    )
-
-#+end_src
-
-* pfetch
-#+begin_src shell
-  # pfetch 
-#+end_src
-
-* ocmmand 
-#+begin_src shell
-  antigen apply
+  #antigen apply
 #+end_src
 * loading the ~~/.profile~
 #+begin_src shell
   source ~/dotfiles/.profile
+#+end_src
+* Zplug load
+#+begin_src shell
+zplug load 
+#+end_src
+
+* pfetch
+#+begin_src shell
+  pfetch 
 #+end_src
 
