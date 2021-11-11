@@ -356,7 +356,7 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
     #zplug Abid-Ahmad/oh-my-zsh-000-theme, as:theme
     #PS1="\[\e[34m\]\W\[\e[m\] | "
     #zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
-
+  #PS1='fuck yourself sweets'
   eval "$(starship init zsh)"
   export STARSHIP_CONFIG=~/dotfiles/config/starship.toml
 #+end_src
