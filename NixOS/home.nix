@@ -100,6 +100,10 @@
   home.file."/home/drishal/.config/qtile/config.py".source =../config/qtile/config.py;
   home.file."/home/drishal/.config/qtile/autostart.sh".source =../config/qtile/autostart.sh;
 
+  #starship
+
+  home.file."/home/drishal/.config/starship.toml".source =../config/starship.toml;
+
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards

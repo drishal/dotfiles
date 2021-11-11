@@ -357,13 +357,13 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
   #PS1="\[\e[34m\]\W\[\e[m\] | "
   #zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
 
-  #eval "$(starship init zsh)"
+  eval "$(starship init zsh)"
 #+end_src
 
 * loading the spaceship prompt
 #+begin_src shell
   #source ~/.zsh-plugins/spaceship-prompt/spaceship.zsh 
-zplug "spaceship-prompt/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
+#zplug "spaceship-prompt/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
 #+end_src
 
 * * ocmmand 
