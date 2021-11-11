@@ -87,7 +87,7 @@
   home.file."/home/drishal/.config/kitty".source = ../config/kitty;
 
   # picom config
-  home.file."/home/drishal/.config/picom".source = ../config/picom;
+  home.file."/home/drishal/.config/picom/picom.conf".source = ../config/picom/picom.conf;
 
   # river
   home.file."/home/drishal/.config/river".source = ../config/river;

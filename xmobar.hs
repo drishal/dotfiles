@@ -1,10 +1,10 @@
 Config { 
 
    -- appearance
-    font =         "xft:FiraCode Nerd Font:size=6:antialias=true:autohinting=true:Regular"
+    font =         "xft:FiraCode Nerd Font:size=10:antialias=true:autohinting=true:Regular"
 
     --font =         "xft:cozette:size=11:antialias=true:autohinting=true:Regular"
-   , additionalFonts =           ["xft:PowerlineSymbols:size=20"]
+   , additionalFonts =           ["xft:PowerlineSymbols:size=10"]
    --, bgColor =      "#282a36"
    , bgColor =      "#282a36"
    , fgColor =      "#f8f8f2"

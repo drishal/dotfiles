@@ -34,6 +34,7 @@
 - [[#loading-the-profile][loading the ~~/.profile~]]
 - [[#zplug-load][Zplug load]]
 - [[#pfetch][pfetch]]
+- [[#powerlevel10k][powerlevel10k]]
 
 * initial setup
 make sure you execute these commands
@@ -300,7 +301,7 @@ zplug "zsh-users/zsh-autosuggestions"
 
 ** Disable the prompt on the right side
 #+begin_src shell
-  export RPROMPT=""
+  #export RPROMPT=$DATE
 #+end_src
 ** vim mode
 see https://github.com/jeffreytse/zsh-vi-mode
@@ -315,7 +316,7 @@ see https://github.com/jeffreytse/zsh-vi-mode
 #+end_src
 ** prompt
 #+begin_src emacs-lisp 
-#  source ~/.zsh-plugins/termsupport.zsh 
+  #  source ~/.zsh-plugins/termsupport.zsh 
 #+end_src
 
 * History completions
@@ -346,9 +347,10 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
 
 * loading the starship prompt
 #+begin_src shell
-     #export PS1="%F{blue}%~%f %(?.%F{green}❯%f.%F{red}❯%f) "
-  #zplug Abid-Ahmad/oh-my-zsh-000-theme, as:theme
-  eval "$(starship init zsh)"
+       #export PS1="%F{blue}%~%f %(?.%F{green}❯%f.%F{red}❯%f) "
+    #zplug Abid-Ahmad/oh-my-zsh-000-theme, as:theme
+eval "$(starship init zsh)"
+#PS1="\[\e[34m\]\W\[\e[m\] | "
 #+end_src
 
 * loading the spaceship prompt
@@ -372,5 +374,11 @@ zplug load
 * pfetch
 #+begin_src shell
   pfetch 
+#+end_src
+
+* powerlevel10k
+#+begin_src shell
+  # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+  # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 #+end_src
 
