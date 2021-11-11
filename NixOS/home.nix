@@ -102,7 +102,7 @@
 
   #starship
 
-  home.file."/home/drishal/.config/starship.toml".source =../config/starship.toml;
+  #home.file."/home/drishal/.config/starship.toml".source =../config/starship.toml;
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage

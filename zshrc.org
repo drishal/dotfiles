@@ -352,12 +352,13 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
 
 * loading the starship prompt
 #+begin_src shell
-   #export PS1="%F{blue}%~%f %(?.%F{green}❯%f.%F{red}❯%f) "
-  #zplug Abid-Ahmad/oh-my-zsh-000-theme, as:theme
-  #PS1="\[\e[34m\]\W\[\e[m\] | "
-  #zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
+     #export PS1="%F{blue}%~%f %(?.%F{green}❯%f.%F{red}❯%f) "
+    #zplug Abid-Ahmad/oh-my-zsh-000-theme, as:theme
+    #PS1="\[\e[34m\]\W\[\e[m\] | "
+    #zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
 
   eval "$(starship init zsh)"
+  export STARSHIP_CONFIG=~/dotfiles/config/starship.toml
 #+end_src
 
 * loading the spaceship prompt
