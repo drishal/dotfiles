@@ -66,6 +66,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH)
 
+ # NQ Client
+PRODUCT_PACKAGES += \
+    se_nq_extn_client
+    
 # Inherit from sm8250-common
 $(call inherit-product, device/xiaomi/sm8250-common/kona.mk)
 
