@@ -34,6 +34,9 @@ alias hms="home-manager switch --flake ~/dotfiles "
 # export the npm profile
 export PATH="$HOME/.npm-packages/bin:$PATH"
 
+#ccace
+export USE_CCACHE=1
+export CCACHE_EXEC=/usr/bin/ccache
 # for home manager 
 # export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 

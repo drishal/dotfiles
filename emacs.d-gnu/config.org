@@ -61,6 +61,7 @@
   - [[#which-key][which key]]
 - [[#prevent-saving-to-x-clipboard-manager][prevent "saving to x clipboard manager]]
 - [[#prevent-warnings-buffer][prevent *warnings* buffer]]
+- [[#emacs-typing-latency][emacs typing latency]]
 - [[#disable-backups][Disable backups]]
 - [[#emacs-fixing-some-window-stuff][emacs fixing some window stuff]]
 - [[#restart-emacs-package][restart emacs package]]
@@ -1097,6 +1098,10 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   (setq-default warning-minimum-level :error)
 #+end_src
   
+* emacs typing latency
+#+begin_src emacs-lisp
+ (setq redisplay-dont-pause t) 
+#+end_src
 * Disable backups
 #+begin_src emacs-lisp 
   (setq make-backup-files nil)
