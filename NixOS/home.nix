@@ -77,8 +77,8 @@
   home.file."/home/drishal/.config/deadd".source = ../config/deadd;
 
   # rofi
-  home.file."/home/drishal/.config/rofi/config.rasi".source = ../config/rofi/config.rasi;
-  home.file."/home/drishal/.config/rofi/config".source = ../config/rofi/config;
+  #home.file."/home/drishal/.config/rofi/config.rasi".source = ../config/rofi/config.rasi;
+  #home.file."/home/drishal/.config/rofi/config".source = ../config/rofi/config;
   
   # setting Xresources
   home.file."/home/drishal/.Xresources".source = ../.Xresources;

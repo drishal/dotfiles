@@ -1100,7 +1100,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   
 * emacs typing latency
 #+begin_src emacs-lisp
- (setq redisplay-dont-pause t) 
+  (setq redisplay-dont-pause t) 
 #+end_src
 * Disable backups
 #+begin_src emacs-lisp 
