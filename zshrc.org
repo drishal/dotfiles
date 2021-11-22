@@ -266,9 +266,10 @@ see https://github.com/zsh-users/zsh-completions
 ** zsh-autosuggestions
 - install from here: https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
 #+begin_src shell
-  #  source ~/.zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-    #antigen bundle zsh-users/zsh-autosuggestions
-zplug "zsh-users/zsh-autosuggestions"
+    #  source ~/.zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+      #antigen bundle zsh-users/zsh-autosuggestions
+  zplug "zsh-users/zsh-autosuggestions"
+  export ZSH_AUTOSUGGEST_USE_ASYNC
 
 #+end_src
 ** zsh command not found

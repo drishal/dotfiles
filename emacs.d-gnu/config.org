@@ -1,8 +1,9 @@
 #+TITLE: init.el
 #+PROPERTY: header-args :tangle ~/.emacs.d/init.el
+#+OPTIONS: broken-links:t
+#+SETUPFILE: ~/Desktop/git-stuff/org-html-themes/org/theme-readtheorg-local.setup
 
-
-* Table of contents  :toc:
+* Table of contents :toc:
 - [[#emacs-startup][emacs startup]]
   - [[#shift-theme-variables-to-customel-make-sure-to-create-it-if-it-does-not-exist][shift theme variables to ~custom.el~, make sure to create it if it does not exist]]
   - [[#emacs-startup-performance][emacs startup performance]]
@@ -43,10 +44,13 @@
   - [[#org-roam][org roam]]
 - [[#tools][Tools]]
   - [[#vterm][vterm]]
+  - [[#telega][telega]]
+  - [[#emacs-pdf-tools][emacs pdf tools]]
   - [[#mu4e][mu4e]]
   - [[#treemacs][treemacs]]
   - [[#elcord][elcord]]
   - [[#shackle][Shackle]]
+  - [[#pacman][pacman]]
   - [[#popperel-todo][popper.el TODO]]
   - [[#using-exwm][Using EXWM]]
   - [[#erc-server-settings][ERC server settings]]
@@ -483,11 +487,24 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 
 * Tools
 ** vterm
-#+begin_src emacs-lisp `
+#+begin_src emacs-lisp 
   (use-package vterm :straight t 
     ;; :config 
     ;; (set-popup-rule! "^\\*vterm" :size 0.25 :vslot -4 :select t :quit nil :ttl 0)
     )
+#+end_src
+** telega
+#+begin_src emacs-lisp
+  (use-package visual-fill-column :straight t)
+  (use-package telega :straight t
+    :commands (telega))
+
+#+end_src
+** emacs pdf tools
+#+begin_src emacs-lisp
+   ;(pdf-loader-install)
+  ;(pdf-tools-install)
+  (use-package pdf-tools :straight t)
 #+end_src
 ** mu4e
 https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-01.org
@@ -660,6 +677,10 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
 
   (provide 'setup-shackle)
 
+#+end_src
+** pacman
+#+begin_src emacs-lisp
+  (use-package pacmacs :straight t)
 #+end_src
 ** popper.el TODO 
 https://github.com/karthink/popper

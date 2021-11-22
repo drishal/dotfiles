@@ -245,9 +245,9 @@ By default, do nothing.
 
 #+begin_src haskell
   myStartupHook = do
-          -- spawnOnce "/usr/lib/notification-daemon-1.0/notification-daemon"
+          spawnOnce "/usr/lib/notification-daemon-1.0/notification-daemon"
           --spawnOnce "/usr/libexec/notification-daemon"
-          spawnOnce "deadd-notification-center&"
+          -- spawnOnce "deadd-notification-center&"
           spawnOnce "xsetroot -cursor_name left_ptr"
           spawnOnce "conky -c ~/.config/conky/xmoand/dracula-01.conkyrc"
           -- spawnOnce "emacs --daemon"
@@ -297,7 +297,7 @@ this is where my keybindings go
     , ("M-p", spawn " rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu")
 
   -- deadd
-    , ("M-s", spawn "kill -s USR1 $(pidof deadd-notification-center)")
+  --, ("M-s", spawn "kill -s USR1 $(pidof deadd-notification-center)")
 
     --Some Applications
     , ("M-S-f", spawn "firefox")

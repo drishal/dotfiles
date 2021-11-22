@@ -1,5 +1,4 @@
-#/usr/lib/notification-daemon-1.0/notification-
-#/usr/lib/notification-daemon-1.0/notification-daemon&
+/usr/lib/notification-daemon-1.0/notification-daemon&
 #sxhkd&
 #deadd-notification-center&
 xfce4-power-manager&

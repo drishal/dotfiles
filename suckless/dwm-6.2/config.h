@@ -82,7 +82,7 @@ static const char *powercmd[]  = { "rofi", "-show", "power-menu", "-modi", "powe
 static const char *mysystray[]  = {"stalonetray",NULL};
 static const char *files[]  = {"thunar",NULL};
 static const char *firefox[]  = {"firefox",NULL};
-static const char *deadd[]  = {"bash","/home/drishal/dotfiles/config/suckless/dwm-6.2/deadd.sh",NULL};
+//static const char *deadd[]  = {"bash","/home/drishal/dotfiles/config/suckless/dwm-6.2/deadd.sh",NULL};
 static const char *menu[]  = {"bash","/home/drishal/menu.sh",NULL};
 static const char *emacs[]  = {"emacsclient", "-c",NULL};
 
@@ -95,7 +95,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_r,      spawn,      {.v = dmenucmd} },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_p,      spawn,          {.v = powercmd } },
-	{ MODKEY,                       XK_s,      spawn,          {.v = deadd } },
+	//	{ MODKEY,                       XK_s,      spawn,          {.v = deadd } },
 	{ MODKEY|ShiftMask,             XK_f,      spawn,      {.v = firefox }},
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },

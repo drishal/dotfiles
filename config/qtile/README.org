@@ -1,5 +1,5 @@
 #+TITLE: Qtile config
-#+PROPERTY: header-args:python :tangle config.py
+#+PROPERTY: header-args:python :tangle ~/.config/qtile/config.py
 * Table of contents :toc:
 - [[#imports][Imports]]
 - [[#some-variables][Some variables]]
