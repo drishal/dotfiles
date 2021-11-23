@@ -40,6 +40,9 @@ export CCACHE_EXEC=/usr/bin/ccache
 # for home manager 
 # export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 
+#watch sync
+alias watch-sync="watch -d grep -e Dirty: -e Writeback: /proc/meminfo"
+
 # locals for home manager 
 . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 

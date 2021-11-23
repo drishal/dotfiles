@@ -1,0 +1,65 @@
+#+TITLE: Fish Configuration
+#+PROPERTY: header-args :tangle ~/.config/fish/config.fish
+* TOC  :toc:
+- [[#interactive][interactive]]
+- [[#plugins][plugins]]
+  - [[#bass][Bass]]
+  - [[#async][async]]
+  - [[#init-fundle][init fundle]]
+- [[#sourcing-files][sourcing files]]
+  - [[#etcprofile][/etc/profile]]
+  - [[#dotfilesprofile][~/dotfiles/.profile]]
+- [[#remove-greeting][remove greeting]]
+- [[#starship-prompt][Starship Prompt]]
+- [[#pfetch][pfetch]]
+
+* interactive
+
+#+begin_src fish
+  if status is-interactive
+      # Commands to run in interactive sessions can go here
+  end
+#+end_src
+* plugins 
+Using Fundle
+https://github.com/danhper/fundle
+#+begin_src fish
+  if not functions -q fundle; eval (curl -sfL https://git.io/fundle-install); end
+#+end_src
+** Bass
+for evaluating bash plugins in fish
+https://github.com/edc/bass
+#+begin_src fish
+fundle plugin 'edc/bass'
+#+end_src
+** async
+#+begin_src fish
+fundle plugin "acomagu/fish-async-prompt"
+#+end_src
+** init fundle
+#+begin_src fish
+fundle init
+#+end_src
+* sourcing files
+** /etc/profile
+#+begin_src fish
+bass source /etc/profile
+#+end_src
+** ~/dotfiles/.profile
+#+begin_src fish
+  bass source ~/dotfiles/.profile
+#+end_src
+* remove greeting
+#+begin_src fish
+  set fish_greeting
+#+end_src
+
+* Starship Prompt 
+#+begin_src fish
+  starship init fish | source
+#+end_src
+
+* pfetch
+#+begin_src fish
+pfetch  
+#+end_src
