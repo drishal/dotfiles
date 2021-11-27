@@ -69,7 +69,11 @@ PRODUCT_SOONG_NAMESPACES += \
  # NQ Client
 PRODUCT_PACKAGES += \
     se_nq_extn_client
-    
+
+# Remove unwanted packages
+PRODUCT_PACKAGES += \
+    RemovePackages
+
 # Inherit from sm8250-common
 $(call inherit-product, device/xiaomi/sm8250-common/kona.mk)
 
