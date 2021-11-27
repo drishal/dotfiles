@@ -45,6 +45,7 @@ alias watch-sync="watch -d grep -e Dirty: -e Writeback: /proc/meminfo"
 
 # locals for home manager 
 . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
-
+#ytdlp
+alias youtube-dl="yt-dlp"
 #fetch
 #pfetch

@@ -5,10 +5,13 @@
 - [[#plugins][plugins]]
   - [[#bass][Bass]]
   - [[#async][async]]
+  - [[#dracula-theme][dracula theme]]
+  - [[#spaceship][spaceship]]
   - [[#init-fundle][init fundle]]
 - [[#sourcing-files][sourcing files]]
   - [[#etcprofile][/etc/profile]]
   - [[#dotfilesprofile][~/dotfiles/.profile]]
+  - [[#localbin][~/.local/bin]]
 - [[#remove-greeting][remove greeting]]
 - [[#starship-prompt][Starship Prompt]]
 - [[#pfetch][pfetch]]
@@ -36,6 +39,14 @@ fundle plugin 'edc/bass'
 #+begin_src fish
 fundle plugin "acomagu/fish-async-prompt"
 #+end_src
+** dracula theme
+#+begin_src fish
+#fundle plugin "dracula/fish"
+#+end_src
+** spaceship
+#+begin_src fish
+ # fundle plugin "matchai/spacefish"
+#+end_src
 ** init fundle
 #+begin_src fish
 fundle init
@@ -49,6 +60,10 @@ bass source /etc/profile
 #+begin_src fish
   bass source ~/dotfiles/.profile
 #+end_src
+** ~/.local/bin
+#+begin_src fish
+  fish_add_path ~/.local/bin
+#+end_src
 * remove greeting
 #+begin_src fish
   set fish_greeting
@@ -56,7 +71,7 @@ bass source /etc/profile
 
 * Starship Prompt 
 #+begin_src fish
-  starship init fish | source
+ starship init fish | source
 #+end_src
 
 * pfetch

@@ -430,6 +430,9 @@ C-l — persp-state-load: Load all perspectives from a file
 
 #+end_src
 * Org mode:
+#+begin_src emacs-lisp
+  (use-package org :ensure t)
+#+end_src
 ** org mode indent
 #+begin_src emacs-lisp
   (setq org-startup-indented t)
