@@ -410,7 +410,7 @@ this is the ~main~ variable for xmoand
         xmproc <- spawnPipe "xmobar  ~/dotfiles/xmobar.hs"
         --xmproc <- spawnPipe "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true --alpha 0 --tint 0x282a36 --height 20 --padding 4"
       -- Request access to the DBus name
-        xmonad $ docks  $ ewmh def {
+        xmonad $ docks  $ ewmh $ ewmhFullscreen def {
           terminal           = myTerminal,
           focusFollowsMouse  = myFocusFollowsMouse,
           clickJustFocuses   = myClickJustFocuses,
@@ -433,10 +433,12 @@ this is the ~main~ variable for xmoand
           --logHook            = dynamicLogWithPP $ defaultPP { ppOutput = hPutStrLn h },
           -- manageHook = manageDocks <+> (isFullscreen --> doFullFloat),
           manageHook =  myManageHook <+> manageDocks,
-          handleEventHook    = handleEventHook def <+> fullscreenEventHook,
+          handleEventHook    = handleEventHook def,
+            -- <+> fullscreenEventHook,
           --handleEventHook = ewmhDesktopsEventHook,
           -- startupHook        = myStartupHook,
-          startupHook=   setFullscreenSupported >> setWMName "LG3D" <+> myStartupHook,
+          startupHook=    setWMName "LG3D" <+> myStartupHook,
+--setFullscreenSupported >>
           logHook = dynamicLogWithPP xmobarPP
                            { ppOutput = hPutStrLn xmproc
                           , ppCurrent = xmobarColor "#f1fa8c" "" . wrap "[" "]"
