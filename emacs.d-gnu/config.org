@@ -35,6 +35,7 @@
 - [[#hook-to-tangle-on-save][Hook to tangle on save]]
 - [[#org-mode][Org mode:]]
   - [[#org-mode-indent][org mode indent]]
+  - [[#org-blocks-insert-mode][Org blocks insert mode]]
   - [[#snippets][snippets:]]
   - [[#org-tempo-for-all-the-beautiful-snippets][org tempo for all the beautiful snippets:]]
   - [[#superstar-for-some-pretty-symbols][Superstar for some pretty symbols]]
@@ -437,6 +438,18 @@ C-l — persp-state-load: Load all perspectives from a file
 #+begin_src emacs-lisp
   (setq org-startup-indented t)
 #+end_src
+** Org blocks insert mode
+Switch to org edit mode when pressing `i` insert key
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook
+  (lambda ()
+    (add-hook 'evil-insert-state-entry-hook
+      (lambda ()
+        (when (org-in-src-block-p)
+          (org-edit-special)
+          (evil-insert-state)))
+      0 t)))
+#+end_src
 ** snippets:
 *** yas-snippet
 
@@ -509,7 +522,8 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 ** vterm
 #+begin_src emacs-lisp
   (use-package vterm :ensure t
-    ;; :config
+    :config
+    (setq vterm-shell "/bin/zsh")
     ;; (set-popup-rule! "^\\*vterm" :size 0.25 :vslot -4 :select t :quit nil :ttl 0)
     )
 #+end_src
@@ -1150,7 +1164,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 * emacs typing latency
 #+begin_src emacs-lisp
-  (setq redisplay-dont-pause t)
+  ;;(setq redisplay-dont-pause t)
 #+end_src
 * Disable backups
 #+begin_src emacs-lisp

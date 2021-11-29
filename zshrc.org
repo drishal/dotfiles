@@ -15,6 +15,7 @@
   - [[#oh-my-zsh][Oh my zsh]]
   - [[#zsh-completions][zsh-completions]]
   - [[#zsh-autosuggestions][zsh-autosuggestions]]
+  - [[#zsh-autocomplete][zsh autocomplete]]
   - [[#zsh-command-not-found][zsh command not found]]
   - [[#zsh-syntax-highlighting][zsh-syntax-highlighting]]
   - [[#zsh-history-substring-search][zsh-history substring search]]
@@ -126,7 +127,7 @@ git clone https://github.com/zsh-users/zsh-history-substring-search.git
   # not just at the end
   setopt completeinword
 
-  # Don't send SIGHUP to background processes when the shell exits.
+  # Don't send SIGHUP to background processes when the zsh exits.
   setopt nohup
 
   # make cd push the old directory onto the directory stack.
@@ -244,17 +245,16 @@ git clone https://github.com/zsh-users/zsh-history-substring-search.git
 * Plugins
 ** Antigen
 #+begin_src shell
-    #source ~/dotfiles/antigen.zsh 
-    DISABLE_AUTO_UPDATE="true"
+  #source ~/dotfiles/antigen.zsh 
+  #DISABLE_AUTO_UPDATE="true"
 #+end_src
 ** zplug
 #+begin_src shell
-  source ~/.zplug/init.zsh 
+source ~/.zplug/init.zsh 
 #+end_src
 ** Oh my zsh
 #+begin_src shell
-  #antigen use oh-my-zsh
-#  zplug "ohmyzsh/ohmyzsh"
+zplug "ohmyzsh/ohmyzsh"
 #+end_src
 ** zsh-completions
 see https://github.com/zsh-users/zsh-completions
@@ -269,8 +269,12 @@ see https://github.com/zsh-users/zsh-completions
     #  source ~/.zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
       #antigen bundle zsh-users/zsh-autosuggestions
   zplug "zsh-users/zsh-autosuggestions"
-  export ZSH_AUTOSUGGEST_USE_ASYNC
+  export ZSH_AUTOSUGGEST_USE_ASYNC=true
 
+#+end_src
+** zsh autocomplete
+#+begin_src shell
+  #zplug "marlonrichert/zsh-autocomplete"
 #+end_src
 ** zsh command not found
 #+begin_src shell
@@ -308,20 +312,21 @@ see https://github.com/zsh-users/zsh-completions
 ** vim mode
 see https://github.com/jeffreytse/zsh-vi-mode
 #+begin_src shell
-# source ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+  # source ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+  #zplug "jeffreytse/zsh-vi-mode"
 #+end_src
 ** async
-#+begin_src bash
-  zplug mafredri/zsh-async, from:github
+#+begin_src shell 
+  zplug mafredri/zsh-async
 #+end_src
 ** Themes
 #+begin_src shell
   # source ~/.zsh-plugins/dracula/dracula.zsh-theme
-  # ZSH_THEME="random"
+  #ZSH_THEME="random"
 
 #+end_src
 ** prompt
-#+begin_src emacs-lisp 
+#+begin_src shell 
   #  source ~/.zsh-plugins/termsupport.zsh 
 #+end_src
 
@@ -353,10 +358,10 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
 
 * loading the starship prompt
 #+begin_src shell
-     #export PS1="%F{blue}%~%f %(?.%F{green}❯%f.%F{red}❯%f) "
-    #zplug Abid-Ahmad/oh-my-zsh-000-theme, as:theme
-    #PS1="\[\e[34m\]\W\[\e[m\] | "
-    #zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
+  #export PS1="%F{blue}%~%f %(?.%F{green}❯%f.%F{red}❯%f) "
+  #zplug Abid-Ahmad/oh-my-zsh-000-theme, as:theme
+  #PS1="\[\e[34m\]\W\[\e[m\] | "
+  #zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
   #PS1='fuck yourself sweets'
   eval "$(starship init zsh)"
   export STARSHIP_CONFIG=~/dotfiles/config/starship.toml
@@ -391,4 +396,3 @@ zplug load
   # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
   # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 #+end_src
-

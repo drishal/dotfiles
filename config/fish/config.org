@@ -8,7 +8,7 @@
   - [[#dracula-theme][dracula theme]]
   - [[#spaceship][spaceship]]
   - [[#init-fundle][init fundle]]
-- [[#sourcing-files][sourcing files]]
+- [[#sourcing-paths][sourcing paths]]
   - [[#etcprofile][/etc/profile]]
   - [[#dotfilesprofile][~/dotfiles/.profile]]
   - [[#localbin][~/.local/bin]]
@@ -51,7 +51,7 @@ fundle plugin "acomagu/fish-async-prompt"
 #+begin_src fish
 fundle init
 #+end_src
-* sourcing files
+* sourcing paths
 ** /etc/profile
 #+begin_src fish
 bass source /etc/profile
