@@ -74,6 +74,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     RemovePackages
 
+# Lawnchair Launcher
+$(call inherit-product-if-exists, vendor/lawnchair/lawnchair.mk)
+
 # Inherit from sm8250-common
 $(call inherit-product, device/xiaomi/sm8250-common/kona.mk)
 
