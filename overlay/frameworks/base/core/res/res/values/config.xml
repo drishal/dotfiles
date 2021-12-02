@@ -487,6 +487,7 @@
     <!-- Whether device supports an gaming mode profiles -->
     <bool name="config_gamingmode_performance">true</bool>
 
-
+    <!-- Indicates whether device has a power button fingerprint sensor. -->
+    <bool name="config_is_powerbutton_fps" translatable="false" >true</bool>
     
 </resources>
