@@ -10,7 +10,7 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray        = 1;     /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "FiraCode Nerd Font:size=10" };
+static const char *fonts[]          = { "FiraCode Nerd Font:size=10", "Noto Color Emoji:size=10", "JoyPixels:pixelsize=10:antialias=true:autohint=true"  };
 static const char dmenufont[]       = "FiraCode Nerd Font:size=10";
 
 // dracula
@@ -85,12 +85,14 @@ static const char *firefox[]  = {"firefox",NULL};
 //static const char *deadd[]  = {"bash","/home/drishal/dotfiles/config/suckless/dwm-6.2/deadd.sh",NULL};
 static const char *menu[]  = {"bash","/home/drishal/menu.sh",NULL};
 static const char *emacs[]  = {"emacsclient", "-c",NULL};
+static const char *pavucontrol[]  = {"pavucontrol",NULL};
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_d,      spawn,          {.v = roficmd } },
 	{ MODKEY,                       XK_s,      spawn,           {.v = menu } },
 	{ MODKEY,                       XK_a,      spawn,      {.v = emacs} },
+	{ MODKEY,                       XK_v,      spawn,      {.v = pavucontrol} },
         { MODKEY,                       XK_e,      spawn,      {.v = files} },
 	{ MODKEY,                       XK_r,      spawn,      {.v = dmenucmd} },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },

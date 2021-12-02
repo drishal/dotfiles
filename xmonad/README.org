@@ -172,7 +172,9 @@ this secion is dedicated to the imports of the modules I would be using in the c
 #+begin_src haskell
   myNormalBorderColor  = base00
   myFocusedBorderColor = base13
-
+  --dracula
+  myNormalBorderColor  = base00
+  myFocusedBorderColor = "#bd93f9" 
 #+end_src
 
 * Layouts
@@ -292,6 +294,7 @@ this is where my keybindings go
       , ("M-w 1",                        shellPrompt promptConfig) --normal run prompt
       , ("M-w 2",                        manPrompt promptConfig) -- man prompt
       , ("M-w 3",                        xmonadPrompt promptConfig)       -- xmonadPrompt
+
      --Rofi Stuff
     , ("M-d", spawn "rofi -show drun -icon-theme Papirus -show-icons")
     , ("M-p", spawn " rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu")
@@ -388,6 +391,7 @@ Some mouse actions
 
 * Setting Fullscreen Support
 this is used so that apps like fireox are able to properly fullscreen 
+Note: as of xmonad 0.17, this may no longer be needed
 #+begin_src haskell
   setFullscreenSupported :: X ()
   setFullscreenSupported = addSupported ["_NET_WM_STATE", "_NET_WM_STATE_FULLSCREEN"]
@@ -410,7 +414,7 @@ this is the ~main~ variable for xmoand
         xmproc <- spawnPipe "xmobar  ~/dotfiles/xmobar.hs"
         --xmproc <- spawnPipe "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true --alpha 0 --tint 0x282a36 --height 20 --padding 4"
       -- Request access to the DBus name
-        xmonad $ docks  $ ewmh $ ewmhFullscreen def {
+        xmonad $ docks  $ ewmh $ ewmhFullscreen $ xmobarProp def {
           terminal           = myTerminal,
           focusFollowsMouse  = myFocusFollowsMouse,
           clickJustFocuses   = myClickJustFocuses,
@@ -426,19 +430,10 @@ this is the ~main~ variable for xmoand
 
         -- hooks, layouts
           layoutHook         =  mkToggle (NOBORDERS ?? FULL ?? EOT) $ myLayout ,
-          --layoutHook         =   myLayout ,
-          --manageHook         =  placeHook simpleSmart <+> manageHook def ,
-         -- manageHook = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageDocks,
-          --logHook            = myLogHook,
-          --logHook            = dynamicLogWithPP $ defaultPP { ppOutput = hPutStrLn h },
-          -- manageHook = manageDocks <+> (isFullscreen --> doFullFloat),
-          manageHook =  myManageHook <+> manageDocks,
+          manageHook         =  myManageHook <+> manageDocks,
           handleEventHook    = handleEventHook def,
-            -- <+> fullscreenEventHook,
-          --handleEventHook = ewmhDesktopsEventHook,
-          -- startupHook        = myStartupHook,
-          startupHook=    setWMName "LG3D" <+> myStartupHook,
---setFullscreenSupported >>
+          startupHook        =    setWMName "LG3D" <+> myStartupHook,
+                    --setFullscreenSupported >>
           logHook = dynamicLogWithPP xmobarPP
                            { ppOutput = hPutStrLn xmproc
                           , ppCurrent = xmobarColor "#f1fa8c" "" . wrap "[" "]"
