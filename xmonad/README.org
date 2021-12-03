@@ -18,6 +18,8 @@
 - [[#my-keys-config][My Keys Config]]
 - [[#mouse][Mouse]]
 - [[#setting-fullscreen-support][Setting Fullscreen Support]]
+- [[#xmobar][xmobar]]
+- [[#myconfig][myConfig]]
 - [[#the-main-event][the main event]]
 
 * Imports
@@ -55,6 +57,10 @@ this secion is dedicated to the imports of the modules I would be using in the c
   -- import qualified DBus.Client as D
   import qualified Codec.Binary.UTF8.String as UTF8
   --import  XMonad.Actions.Navigation2D
+
+    --bar functions
+  import XMonad.Hooks.StatusBar
+  import XMonad.Hooks.StatusBar.PP
 
       -- Hooks
   import XMonad.Hooks.DynamicLog
@@ -111,6 +117,7 @@ this secion is dedicated to the imports of the modules I would be using in the c
   import XMonad.Util.NamedScratchpad
   import XMonad.Util.Run 
   import XMonad.Util.SpawnOnce
+  import XMonad.Util.Loggers
 
   --Others
   import XMonad.Layout.MultiToggle.Instances
@@ -173,8 +180,8 @@ this secion is dedicated to the imports of the modules I would be using in the c
   myNormalBorderColor  = base00
   myFocusedBorderColor = base13
   --dracula
-  myNormalBorderColor  = base00
-  myFocusedBorderColor = "#bd93f9" 
+  --myNormalBorderColor  = base00
+  --myFocusedBorderColor = "#bd93f9" 
 #+end_src
 
 * Layouts
@@ -406,43 +413,69 @@ Note: as of xmonad 0.17, this may no longer be needed
         changeProperty32 dpy r a aTOM propModeReplace (nub $ newSupportedList ++ supportedList)
 #+end_src
 
+* xmobar
+#+begin_src haskell
+  myXmobarPP :: PP
+  myXmobarPP = def
+      {
+       ppCurrent = xmobarColor "#f1fa8c" "" . wrap "[" "]"
+      , ppHiddenNoWindows = xmobarColor "#6272a4" ""
+      , ppTitle   = xmobarColor "#ff79c6"  "" . shorten 40
+      , ppVisible = wrap "(" ")"
+      , ppUrgent  = xmobarColor "#ff5555" "#f1fa8c"
+      , ppLayout  = xmobarColor "#8be9fd" ""
+      , ppSep = "<fc=#6272a4> \xf444 </fc>"
+      }
+     where
+          formatFocused   = wrap (white    "") (white    "") . magenta . ppWindow
+          formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . blue    . ppWindow
+
+          -- | Windows should have *some* title, which should not not exceed a
+          -- sane length.
+          ppWindow :: String -> String
+          ppWindow = xmobarRaw . (\w -> if null w then "untitled" else w) . shorten 30
+
+          blue, lowWhite, magenta, red, white, yellow :: String -> String
+          magenta  = xmobarColor "#bd93f9" ""
+          blue     = xmobarColor "#8be9fd" ""
+          white    = xmobarColor "#f8f8f2" ""
+          yellow   = xmobarColor "#f1fa8c" ""
+          red      = xmobarColor "#ff5555" ""
+          lowWhite = xmobarColor "#f8f8f2" ""
+
+  --sbconfig
+  -- sbConfig :: StatusBarConfig
+  -- sbConfig = statusBarProp "LANG=en_US.UTF-8 xmobar ~/dotfiles/xmobar.hs" (clickablePP myXmobarPP)
+#+end_src
+
+* myConfig
+#+begin_src haskell
+  myConfig = def
+     {
+    terminal           = myTerminal,
+    focusFollowsMouse  = myFocusFollowsMouse,
+    clickJustFocuses   = myClickJustFocuses,
+    borderWidth        = myBorderWidth,
+    modMask            = myModMask,
+    workspaces         = myWorkspaces,
+    layoutHook         =  myLayout ,
+    normalBorderColor  = myNormalBorderColor,
+    focusedBorderColor = myFocusedBorderColor,
+   -- hooks, layouts
+     manageHook         =  myManageHook <+> manageDocks,
+     handleEventHook    = handleEventHook def,
+     startupHook        =    setWMName "LG3D" <+> myStartupHook
+      }
+    `additionalKeysP` myKeys `additionalMouseBindings` myMouseBindings
+#+end_src
+
 * the main event
 this is the ~main~ variable for xmoand 
 #+begin_src haskell
-  main =  do
-        --xmproc <- spawnPipe "polybar xmonad"
-        xmproc <- spawnPipe "xmobar  ~/dotfiles/xmobar.hs"
-        --xmproc <- spawnPipe "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true --alpha 0 --tint 0x282a36 --height 20 --padding 4"
-      -- Request access to the DBus name
-        xmonad $ docks  $ ewmh $ ewmhFullscreen $ xmobarProp def {
-          terminal           = myTerminal,
-          focusFollowsMouse  = myFocusFollowsMouse,
-          clickJustFocuses   = myClickJustFocuses,
-          borderWidth        = myBorderWidth,
-          modMask            = myModMask,
-          workspaces         = myWorkspaces,
-          normalBorderColor  = myNormalBorderColor,
-          focusedBorderColor = myFocusedBorderColor,
-
-        -- key bindings
-          --keys               = myKeys,
-          --mouseBindings      = myMouseBindings,
-
-        -- hooks, layouts
-          layoutHook         =  mkToggle (NOBORDERS ?? FULL ?? EOT) $ myLayout ,
-          manageHook         =  myManageHook <+> manageDocks,
-          handleEventHook    = handleEventHook def,
-          startupHook        =    setWMName "LG3D" <+> myStartupHook,
-                    --setFullscreenSupported >>
-          logHook = dynamicLogWithPP xmobarPP
-                           { ppOutput = hPutStrLn xmproc
-                          , ppCurrent = xmobarColor "#f1fa8c" "" . wrap "[" "]"
-                          , ppHiddenNoWindows = xmobarColor "#6272a4" ""
-                          , ppTitle   = xmobarColor "#ff79c6"  "" . shorten 40
-                          , ppVisible = wrap "(" ")"
-                          , ppUrgent  = xmobarColor "#ff5555" "#f1fa8c"
-                          , ppLayout  = xmobarColor "#8be9fd" ""
-                          , ppSep = "<fc=#6272a4> \xf444 </fc>"
-                          }
-          }  `additionalKeysP` myKeys `additionalMouseBindings` myMouseBindings
+  main :: IO ()
+  main = xmonad
+       . ewmhFullscreen
+       . ewmh
+       . withEasySB (statusBarProp "xmobar ~/dotfiles/xmobar.hs" (pure myXmobarPP)) defToggleStrutsKey
+       $ myConfig
 #+end_src

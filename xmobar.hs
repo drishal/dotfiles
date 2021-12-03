@@ -19,7 +19,7 @@ Config {
    --, template = "<fc=#50fa7b> </fc>%UnsafeStdinReader% } %date% {<fc=#50fa7b> %uname%</fc>  <fc=#6272a4>|</fc>  %multicpu%  <fc=#6272a4>|</fc> %memory% %dynnetwork%   %trayerpad%"
    --, template = "<fc=#50fa7b> </fc>%UnsafeStdinReader% } %date%  {<fc=#50fa7b> %uname%</fc> %dynnetwork%  <fc=#6272a4>|</fc>  %multicpu%  <fc=#6272a4>|</fc> %memory% <fc=#6272a4>|</fc> %trayerpad%"
    --, template = "<fc=#50fa7b> </fc>%UnsafeStdinReader% } %date%  {%dynnetwork% <fc=#6272a4>|</fc> %multicpu% <fc=#6272a4>|</fc> %memory% <fc=#6272a4>|</fc> %trayerpad%"
-    , template = "<fc=#50fa7b> </fc>%UnsafeStdinReader% } %date%  { %battery%<fc=#6272a4></fc>%dynnetwork% <fc=#6272a4></fc> %multicpu% <fc=#6272a4></fc> %memory% <fc=#6272a4></fc> %trayerpad%"
+    , template = "<fc=#50fa7b> </fc> %XMonadLog% } %date%  { %battery%<fc=#6272a4></fc>%dynnetwork% <fc=#6272a4></fc> %multicpu% <fc=#6272a4></fc> %memory% <fc=#6272a4></fc> %trayerpad%"
   -- , template = "<fc=#50fa7b> </fc>%UnsafeStdinReader% }  { %dynnetwork% <fc=#6272a4></fc> %multicpu% <fc=#6272a4></fc> %memory% <fc=#6272a4></fc> %date% %trayerpad%"
    -- general behavior
    , lowerOnStart =     True    -- send to bottom of window stack on start
@@ -92,6 +92,7 @@ Config {
       , Run Com "bash /home/drishal/Desktop/suckless/scripts/dwm_battery.sh" [] "batt" 10
       --, Run Com "acpi" [] "batt" 10
 
-        , Run UnsafeStdinReader
+        --, Run UnsafeStdinReader
+        , Run XMonadLog
         ]
    }

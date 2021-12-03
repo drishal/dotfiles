@@ -525,6 +525,7 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
     :config
     (setq vterm-shell "/bin/zsh")
     ;; (set-popup-rule! "^\\*vterm" :size 0.25 :vslot -4 :select t :quit nil :ttl 0)
+    (setq vterm-timer-delay 0)
     )
 #+end_src
 ** auto update with emacs
@@ -772,7 +773,7 @@ https://github.com/karthink/popper
 
   (add-hook 'after-init-hook 'global-company-mode)
   (setq company-minimum-prefix-length 1
-        company-idle-delay 0.0) ;; default is 0.2
+        company-idle-delay nil) ;; default is 0.2
 
 #+end_src
 ** using tabnine for completion
