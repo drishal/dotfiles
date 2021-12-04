@@ -1052,7 +1052,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   (use-package lsp-ui :commands lsp-ui-mode :ensure t)
 
   (setq lsp-ui-doc-enable nil)
-  (use-package lsp-treemacs :ensure t)
+  ;;(use-package lsp-treemacs :ensure t)
                                           ; (add-hook 'prog-mode-hook 'lsp)
 
   ;; (setq lsp-use-plists t)
@@ -1089,8 +1089,8 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+end_src
 *** java
 #+begin_src emacs-lisp
-  (use-package lsp-java :ensure t)
-  (add-hook 'java-mode-hook #'lsp)
+  ;(use-package lsp-java :ensure t)
+  ;(add-hook 'java-mode-hook #'lsp)
 #+end_src
 *** lua
 #+begin_src emacs-lisp
@@ -1182,3 +1182,4 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+begin_src emacs-lisp
   (use-package restart-emacs :ensure t)
 #+end_src
+swdjois 
