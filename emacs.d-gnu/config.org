@@ -97,7 +97,7 @@
 * Initialize package sources
 ** Package.el
 #+begin_src emacs-lisp
- 
+
  ;; Initialize package sources
     (require 'package)
 
@@ -535,7 +535,7 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
     (setq auto-package-update-delete-old-versions t)
     (setq auto-package-update-hide-results t)
     (auto-package-update-maybe))
-  
+
 #+end_src
 ** telega
 #+begin_src emacs-lisp
@@ -1182,3 +1182,4 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+begin_src emacs-lisp
   (use-package restart-emacs :ensure t)
 #+end_src
+this is a small test
