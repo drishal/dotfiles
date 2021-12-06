@@ -8,20 +8,12 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-<<<<<<< HEAD:nad_alioth.mk
-# Inherit some common lineage stuff.
-$(call inherit-product, vendor/nusantara/config/common_full_phone.mk)
-
-# Inherit from alioth device
-$(call inherit-product, device/xiaomi/alioth/device.mk)
-=======
 # Inherit some common elixir stuff.
 $(call inherit-product, vendor/aosp/config/common_full_phone.mk)
 
 # Inherit from alioth device
 $(call inherit-product, device/xiaomi/alioth/device.mk)
 PRODUCT_NAME := aosp_alioth
->>>>>>> 338b2a8... Elixir Bringup:aosp_alioth.mk
 TARGET_USES_BLUR := true
 USE_PIXEL_CHARGING := true
 TARGET_BOOT_ANIMATION_RES := 1080

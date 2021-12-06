@@ -5,9 +5,9 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/nad_alioth.mk
+    $(LOCAL_DIR)/aosp_alioth.mk
 
 COMMON_LUNCH_CHOICES := \
-    nad_alioth-user \
-    nad_alioth-userdebug \
-    nad_alioth-eng
+    aosp_alioth-user \
+    aosp_alioth-userdebug \
+    aosp_alioth-eng
