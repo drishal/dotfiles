@@ -1,7 +1,5 @@
 #+TITLE: init.el
 #+PROPERTY: header-args :tangle ~/.emacs.d/init.el
-#+OPTIONS: broken-links:t
-#+SETUPFILE: ~/Desktop/git-stuff/org-html-themes/org/theme-readtheorg-local.setup
 
 * Table of contents :toc:
 - [[#emacs-startup][emacs startup]]

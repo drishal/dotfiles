@@ -222,7 +222,6 @@ static void resize(Client *c, int x, int y, int w, int h, int interact);
 static void resizebarwin(Monitor *m);
 static void resizeclient(Client *c, int x, int y, int w, int h);
 static void resetlayout(const Arg *arg);
-static void resetnmaster(const Arg *arg);
 static void resizemouse(const Arg *arg);
 static void resizerequest(XEvent *e);
 static void restack(Monitor *m);
@@ -1397,12 +1396,6 @@ resetlayout(const Arg *arg)
 
     selmon->nmaster = 1;
     arrange(selmon);
-}
-
-resetnmaster(const Arg *arg)
-{
-	selmon->nmaster = 1;
-	arrange(selmon);
 }
 
 void

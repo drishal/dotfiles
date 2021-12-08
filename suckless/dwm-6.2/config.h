@@ -10,7 +10,7 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray        = 1;     /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "FiraCode Nerd Font:size=10", "Noto Color Emoji:size=10", "JoyPixels:pixelsize=10:antialias=true:autohint=true"  };
+static const char *fonts[]          = { "FiraCode Nerd Font:size=10", "JoyPixels:pixelsize=10:antialias=true:autohint=true"};
 static const char dmenufont[]       = "FiraCode Nerd Font:size=10";
 
 // dracula
@@ -18,7 +18,7 @@ static const char col_gray1[]       = "#282a36";
 static const char col_gray2[]       = "#282a36";
 static const char col_gray3[]       = "#f8f8f2";
 static const char col_gray4[]       = "#282a36";
-//static const char col_gray5[]       = "#6272a4";
+//static const char col_gray5[]       = "#ffb86c";
 static const char col_gray5[]       = "#bd93f9";
 static const char col_cyan[]        = "#bd93f9";
 

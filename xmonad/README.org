@@ -203,14 +203,11 @@ this secion is dedicated to the imports of the modules I would be using in the c
        delta   = 3/100
 
   myManageHook = composeAll
-      [ className =? "MPlayer"        --> doFloat
-      , className =? "Gimp"           --> doFloat
-      , className =? "pavucontrol"           --> doFloat
-      , className =? "virtualbox"           --> doFloat
-      -- , className =? "thunar"           --> doFloat
-      , resource  =? "desktop_window" --> doIgnore
+      [
+        resource  =? "desktop_window" --> doIgnore
       , resource  =? "kdesktop"       --> doIgnore
-      , isFullscreen                  --> doFullFloat ] -- this one
+      , isFullscreen                  --> doFullFloat
+      ] -- this one
 
 #+end_src
 
@@ -458,12 +455,13 @@ Note: as of xmonad 0.17, this may no longer be needed
     borderWidth        = myBorderWidth,
     modMask            = myModMask,
     workspaces         = myWorkspaces,
-    layoutHook         =  myLayout ,
     normalBorderColor  = myNormalBorderColor,
     focusedBorderColor = myFocusedBorderColor,
    -- hooks, layouts
-     manageHook         =  myManageHook <+> manageDocks,
+     manageHook         =  myManageHook,
+                   -- <+> manageDocks,
      handleEventHook    = handleEventHook def,
+     layoutHook         =  myLayout ,
      startupHook        =    setWMName "LG3D" <+> myStartupHook
       }
     `additionalKeysP` myKeys `additionalMouseBindings` myMouseBindings
