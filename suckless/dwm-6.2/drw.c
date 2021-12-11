@@ -139,7 +139,7 @@ xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern)
 	 * https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=916349
 	 * and lots more all over the internet.
 	 */
-	/*
+/*
 	FcBool iscol;
 	if(FcPatternGetBool(xfont->pattern, FC_COLOR, 0, &iscol) == FcResultMatch && iscol) {
 		XftFontClose(drw->dpy, xfont);
@@ -154,6 +154,7 @@ xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern)
 
 	return font;
 }
+
 
 static void
 xfont_free(Fnt *font)

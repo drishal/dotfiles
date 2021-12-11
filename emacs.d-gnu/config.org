@@ -778,7 +778,7 @@ https://github.com/karthink/popper
 
   (add-hook 'after-init-hook 'global-company-mode)
   (setq company-minimum-prefix-length 1
-        company-idle-delay nil) ;; default is 0.2
+        company-idle-delay 0.0) ;; default is 0.2
 
 #+end_src
 ** using tabnine for completion

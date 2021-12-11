@@ -15,6 +15,7 @@
   - [[#mouse][Mouse]]
 - [[#groups][Groups]]
 - [[#layouts][Layouts]]
+- [[#resetting-the-layout][Resetting the Layout]]
 - [[#widgets][Widgets]]
   - [[#defaults][Defaults]]
   - [[#bar-widgets][Bar widgets]]
@@ -181,6 +182,8 @@
       # # thunar
       Key([mod], "e", lazy.spawn("thunar"), desc="file manager"),
 
+      #Reset Layout
+      #Key([mod, "shift"], "m", resetlayout , desc="Reset Layout"),
 
       # # Toggle between different layouts as defined below
 
@@ -261,6 +264,12 @@
       # layout.VerticalTile(),
       # layout.Zoomy(),
   ]
+#+end_src
+* Resetting the Layout
+#+begin_src python
+  @lazy.function
+  def resetlayout(qtile):
+      qtile.cmd_to_layout_index(None, libqtile.qtile.current_group.layout)
 #+end_src
 * Widgets
 ** Defaults

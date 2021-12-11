@@ -274,7 +274,7 @@ By default, do nothing.
           -- spawnOnce "mate-power-manager"
           spawnOnce "xfce4-power-manager"
           spawnOnce "xfce4-clipman"
-          spawnOnce "redshift -O 5000"
+          -- spawnOnce "redshift -O 5000"
           spawnOnce "volumeicon"
           --spawnOnce "play  -v0.05  ~/Desktop/95.mp3"
 
