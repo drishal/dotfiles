@@ -98,7 +98,7 @@
   
   # qtile config
   #home.file."/home/drishal/.config/qtile/config.py".source =../config/qtile/config.py;
-  home.file."/home/drishal/.config/qtile/autostart.sh".source =../config/qtile/autostart.sh;
+  # home.file."/home/drishal/.config/qtile/autostart.sh".source =../config/qtile/autostart.sh;
 
   #starship
 

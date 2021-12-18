@@ -351,6 +351,7 @@
                     format='{char} {percent:2.0%} {hour:d}:{min:02d} {watt:.2f} W',
                     update_interval=10,
                     foreground=color[5],
+                    background = color[0],
                 ),
                   widget.TextBox(
                       text = '  ', # this one has a small space after the symbol to make it look more consistent with the spaces
@@ -441,5 +442,5 @@
 #+begin_src python
   @hook.subscribe.startup_once
   def autostart():
-      os.system("bash ~/.config/qtile/autostart.sh")
+      os.system("bash ~/dotfiles/config/qtile/autostart.sh")
 #+end_src

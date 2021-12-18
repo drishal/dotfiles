@@ -348,12 +348,14 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
 
 * title
 #+begin_src shell 
-    DISABLE_AUTO_TITLE="false"
-    #DISABLE_AUTO_TITLE="true"
-    # export TITLE=$USER@$HOST 
-    # export PROMPT_COMMAND="echo -ne \"\033]0;$1 Hello World\007\""
-    # printf "\033]%s\07\n" "$USER@$HOST" 
-    zplug trystan2k/zsh-tab-title
+  DISABLE_AUTO_TITLE="false"
+  #DISABLE_AUTO_TITLE="true"
+  # export TITLE=$USER@$HOST 
+  # export PROMPT_COMMAND="echo -ne \"\033]0;$1 Hello World\007\""
+  # printf "\033]%s\07\n" "$USER@$HOST" 
+  zplug trystan2k/zsh-tab-title
+  ZSH_TAB_TITLE_ADDITIONAL_TERMS='alacritty|kitty|foot'
+  #preexec() { print -Pn "\e]0;$1%~\a" }
 #+end_src
 
 * loading the starship prompt

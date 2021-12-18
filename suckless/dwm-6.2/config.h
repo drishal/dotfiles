@@ -22,6 +22,13 @@ static const char col_gray4[]       = "#282a36";
 //static const char col_gray5[]       = "#ffb86c";
 static const char col_gray5[]       = "#bd93f9";
 static const char col_cyan[]        = "#bd93f9";
+void resetnmaster(const Arg *arg);
+void
+resetnmaster(const Arg *arg)
+{
+	selmon->nmaster = 1;
+	arrange(selmon);
+}
 
 //ondark
 /*
@@ -76,7 +83,7 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "kitty", NULL };
+static const char *termcmd[]  = { "alacritty", NULL };
 static const char *roficmd[]  = { "rofi", "-show", "drun","-icon-theme"," Papirus", "-show-icons" ,NULL };
 static const char *nmcmd[]  = { "nmcli-rofi", NULL };
 static const char *powercmd[]  = { "rofi", "-show", "power-menu", "-modi", "power-menu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu", NULL };
@@ -104,11 +111,12 @@ static Key keys[] = {
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	//resetting commands
-	/* { MODKEY,                       XK_c,      resetnmaster,    {0} }, */
+	{ MODKEY|ShiftMask,                       XK_n,      resetnmaster,    {0} },
 	{ MODKEY|ShiftMask,             XK_m,      resetlayout,    {0} },
 	//incnmaster
-	{ MODKEY,                       XK_o,      incnmaster,     {.i = -1 } },
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
+	//{ MODKEY,                       XK_o,      incnmaster,     {.i = -1 } },
+	//{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
+	/* { MODKEY,                       XK_u,      incnmaster,     {.i = 1 } }, */
 	//setmfact
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
@@ -116,7 +124,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,                       XK_j, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,             XK_q,      killclient,     {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_n,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },

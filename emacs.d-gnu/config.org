@@ -8,6 +8,7 @@
 - [[#initialize-package-sources][Initialize package sources]]
   - [[#packageel][Package.el]]
   - [[#straightel-make-sure-to-later-remove-packageel][straight.el: make sure to later remove package.el]]
+  - [[#enable-native-comp-for-packages][enable native comp for packages]]
   - [[#quelpa][quelpa]]
   - [[#setting-up-paths][Setting up paths]]
 - [[#customizing-the-editor-and-appearence][Customizing the Editor and Appearence]]
@@ -75,7 +76,7 @@
 #+begin_src emacs-lisp
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
   (load-file (expand-file-name "custom.el" user-emacs-directory))
-  ;;(setq gc-cons-threshold 10000000)
+  (setq gc-cons-threshold 100000000)
 #+end_src
 ** emacs startup performance
 #+begin_src emacs-lisp
@@ -140,6 +141,10 @@
 note: Users of Emacs versions >= 27 will want to add:
 #+begin_src emacs-lisp
   (setq package-enable-at-startup nil)
+#+end_src
+** enable native comp for packages
+#+begin_src emacs-lisp
+  (setq comp-deferred-compilation t)
 #+end_src
 ** quelpa
 https://github.com/quelpa/quelpa#installation
@@ -1069,13 +1074,23 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
                                           ;   (let ((oracle-home (shell-command-to-string ". ~/.profile; echo -n $ORACLE_HOME"))) (if oracle-home (setenv "ORACLE_HOME" oracle-home)) (setenv "PATH" (concat (getenv "PATH") (format "%s/%s" oracle-home "bin"))) (add-to-list 'exec-path (format "%s/%s" oracle-home "bin")) ) This assumes that you’re using ZSH. Obviously, you should change the .zshrc reference to the
 #+end_src
+*** sql
+#+begin_src emacs-lisp
+  (require 'sql)
+  (defalias 'sql-get-login 'ignore)
+#+end_src
+*** yaml-mode
+#+begin_src emacs-lisp
+  (use-package yaml-mode
+    :ensure t)
+#+end_src
 *** python
 #+begin_src emacs-lisp
   (use-package lsp-pyright
     :ensure t
     :hook (python-mode . (lambda ()
-                           (require 'lsp-pyright)
-                           (lsp))))  ; or lsp-deferred
+                            (require 'lsp-pyright)
+                            (lsp))))  ; or lsp-deferred
 
 #+end_src
 *** Haskell
@@ -1122,6 +1137,26 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+#+end_src
+*** lsp
+#+begin_src emacs-lisp
+  (add-hook 'emacs-lisp-mode-hook
+            (lambda ()
+              ;; Use spaces, not tabs.
+              (setq indent-tabs-mode nil)
+              ;; Keep M-TAB for `completion-at-point'
+              (define-key flyspell-mode-map "\M-\t" nil)
+              ;; Pretty-print eval'd expressions.
+              (define-key emacs-lisp-mode-map
+                          "\C-x\C-e" 'pp-eval-last-sexp)
+              ;; Recompile if .elc exists.
+              (add-hook (make-local-variable 'after-save-hook)
+                        (lambda ()
+                          (byte-force-recompile default-directory)))
+              (define-key emacs-lisp-mode-map
+                          "\r" 'reindent-then-newline-and-indent)))
+  (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+  (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode) ;; Requires Ispell
 #+end_src
 
 *** C/C++ mode

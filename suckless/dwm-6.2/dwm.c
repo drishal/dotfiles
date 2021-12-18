@@ -223,6 +223,7 @@ static void resize(Client *c, int x, int y, int w, int h, int interact);
 static void resizebarwin(Monitor *m);
 static void resizeclient(Client *c, int x, int y, int w, int h);
 static void resetlayout(const Arg *arg);
+/* void resetnmaster(const Arg *arg); */
 static void resizemouse(const Arg *arg);
 static void resizerequest(XEvent *e);
 static void restack(Monitor *m);
@@ -1447,19 +1448,6 @@ removesystrayicon(Client *i)
 		*ii = i->next;
 	free(i);
 }
-void
-resetlayout(const Arg *arg)
-{
-    Arg default_layout = {.v = &layouts[0]};
-    Arg default_mfact = {.f = mfact + 1};
-
-    setlayout(&default_layout);
-    setmfact(&default_mfact);
-
-    selmon->nmaster = 1;
-    arrange(selmon);
-}
-
 
 
 void
@@ -1487,6 +1475,9 @@ resizeclient(Client *c, int x, int y, int w, int h)
 	c->oldw = c->w; c->w = wc.width = w;
 	c->oldh = c->h; c->h = wc.height = h;
 	wc.border_width = c->bw;
+	if ((nexttiled(c->mon->clients) == c) && !(nexttiled(c->next)))
+	  resetlayout(NULL);
+
 	XConfigureWindow(dpy, c->win, CWX|CWY|CWWidth|CWHeight|CWBorderWidth, &wc);
 	configure(c);
 	XSync(dpy, False);
@@ -1597,6 +1588,7 @@ run(void)
 		if (handler[ev.type])
 			handler[ev.type](&ev); /* call handler */
 }
+
 
 void
 runautostart(void)
@@ -2517,6 +2509,29 @@ updatewmhints(Client *c)
 		XFree(wmh);
 	}
 }
+
+void
+resetlayout(const Arg *arg)
+{
+    Arg default_layout = {.v = &layouts[0]};
+    Arg default_mfact = {.f = mfact + 1};
+
+    setlayout(&default_layout);
+    setmfact(&default_mfact);
+
+    selmon->nmaster = 1;
+    arrange(selmon);
+}
+
+/*
+void
+resetnmaster(const Arg *arg)
+{
+	selmon->nmaster = 1;
+	arrange(selmon);
+}
+*/
+
 
 void
 view(const Arg *arg)
