@@ -14,15 +14,21 @@ $(call inherit-product, vendor/aosp/config/common_full_phone.mk)
 # Inherit from alioth device
 $(call inherit-product, device/xiaomi/alioth/device.mk)
 TARGET_USES_BLUR := true
-USE_PIXEL_CHARGING := true
+#USE_PIXEL_CHARGING := true
 TARGET_BOOT_ANIMATION_RES := 1080
-USE_AOSP_CLOCK := true
+#USE_AOSP_CLOCK := true
 PRODUCT_NAME := aosp_alioth
 PRODUCT_DEVICE := alioth
 PRODUCT_MANUFACTURER := Xiaomi
 PRODUCT_BRAND := POCO
 PRODUCT_MODEL := POCO F3
-NAD_BUILD_TYPE := OFFICIAL
+
+Elixir_MAINTAINER := ∂α૨ҡ_ρɦσεɳเא
+IS_PHONE := true
+CUSTOM_BUILD_TYPE := OFFICIAL
+TARGET_SUPPORTS_GOOGLE_RECORDER := false
+TARGET_INCLUDE_STOCK_ACORE := false
+TARGET_INCLUDE_LIVE_WALLPAPERS := false
 
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
