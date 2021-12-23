@@ -16,38 +16,16 @@ Config {
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   --, template = "<fc=#50fa7b> </fc>%UnsafeStdinReader% } %date% {<fc=#50fa7b> %uname%</fc>  <fc=#6272a4>|</fc>  %multicpu%  <fc=#6272a4>|</fc> %memory% %dynnetwork%   %trayerpad%"
-   --, template = "<fc=#50fa7b> </fc>%UnsafeStdinReader% } %date%  {<fc=#50fa7b> %uname%</fc> %dynnetwork%  <fc=#6272a4>|</fc>  %multicpu%  <fc=#6272a4>|</fc> %memory% <fc=#6272a4>|</fc> %trayerpad%"
-   --, template = "<fc=#50fa7b> </fc>%UnsafeStdinReader% } %date%  {%dynnetwork% <fc=#6272a4>|</fc> %multicpu% <fc=#6272a4>|</fc> %memory% <fc=#6272a4>|</fc> %trayerpad%"
     , template = "<fc=#50fa7b> </fc> %XMonadLog% } %date%  { %battery%<fc=#6272a4></fc>%dynnetwork% <fc=#6272a4></fc> %multicpu% <fc=#6272a4></fc> %memory% <fc=#6272a4></fc> %trayerpad%"
-  -- , template = "<fc=#50fa7b> </fc>%UnsafeStdinReader% }  { %dynnetwork% <fc=#6272a4></fc> %multicpu% <fc=#6272a4></fc> %memory% <fc=#6272a4></fc> %date% %trayerpad%"
    -- general behavior
-   , lowerOnStart =     True    -- send to bottom of window stack on start
-   , hideOnStart =      False   -- start with window unmapped (hidden)
-   , allDesktops =      True    -- show on all desktops
-   , overrideRedirect = True    -- set the Override Redirect flag (Xlib)
-   , pickBroadest =     False   -- choose widest display (multi-monitor)
+   -- , allDesktops =      True    -- show on all desktops
+   -- , pickBroadest =     False   -- choose widest display (multi-monitor)
    , persistent =       True    -- enable/disable hiding (True = disabled)
-
-
-   -- plugins
-   --   Numbers can be automatically colored according to their value. xmobar
-   --   decides color based on a three-tier/two-cutoff system, controlled by
-   --   command options:
-   --     --Low sets the low cutoff
-   --     --High sets the high cutoff
-   --
-   --     --low sets the color below --Low cutoff
-   --     --normal sets the color between --Low and --High cutoffs
-   --     --High sets the color above --High cutoff
-   --
-   --   The --template option controls how the plugin is displayed. Text
-   --   color can be set by enclosing in <fc></fc> tags. For more details
-   --   see http://projects.haskell.org/xmobar/#system-monitor-plugins.
+   , hideOnStart =      False   -- start with window unmapped (hidden)
+   , overrideRedirect = True-- set the Override Redirect flag (Xlib)
+   , lowerOnStart =     True    -- send to bottom of window stack on start
    , commands = 
-
-
-        -- network activity monitor (dynamic interface resolution)
+     -- network activity monitor (dynamic interface resolution)
         [
     -- weather monitor
     --    Run Weather "VICG" [ "--template", "<skyCondition> | <fc=#4682B4><tempC></fc>°C | <fc=#4682B4><rh></fc>% | <fc=#4682B4><pressure></fc>hPa"
@@ -67,7 +45,7 @@ Config {
                              ] 100
 
          -- cpu activity monitor
-        , Run MultiCpu       [ "--template" , "<fc=#8be9fd> <total>% </fc>"
+     , Run MultiCpu       [ "--template" , "<fc=#8be9fd> <total>% </fc>"
                              , "--Low"      , "50"         -- units: %
                              , "--High"     , "85"         -- units: %
                              --, "--low"      , "#00ff00"
@@ -84,13 +62,13 @@ Config {
 
                              ] 50
 
-       , Run Com "/home/drishal/dotfiles/trayer-padding-icon.sh" [] "trayerpad" 20
+        , Run Com "/home/drishal/dotfiles/trayer-padding-icon.sh" [] "trayerpad" 20
         -- time and date indicator 
         --   (%F = d-m-y date, %a = day of week, %T = h:m:s time)
         , Run Date           "<fc=#bd93f9>  %F (%a) %T</fc>" "date" 10
       
-      , Run Com "uname" ["-r"] "" 3600
-      , Run Com "bash /home/drishal/Desktop/suckless/scripts/dwm_battery.sh" [] "batt" 10
+        , Run Com "uname" ["-r"] "" 3600
+        , Run Com "bash /home/drishal/Desktop/suckless/scripts/dwm_battery.sh" [] "batt" 10
       --, Run Com "acpi" [] "batt" 10
 
         --, Run UnsafeStdinReader

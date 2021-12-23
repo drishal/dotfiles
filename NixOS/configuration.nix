@@ -29,9 +29,12 @@
   # firmware updator
   services.fwupd.enable = true;
   # cpu governor 
-  powerManagement.enable = true;
-  powerManagement.cpuFreqGovernor="schedutil";
-  # open cl 
+  powerManagement =
+    {
+      enable = true;
+      cpuFreqGovernor="schedutil";
+    };
+    # open cl 
   hardware.opengl.extraPackages = with pkgs; [
     rocm-opencl-icd
     rocm-opencl-runtime

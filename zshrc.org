@@ -32,7 +32,7 @@
 - [[#title][title]]
 - [[#loading-the-starship-prompt][loading the starship prompt]]
 - [[#loading-the-spaceship-prompt][loading the spaceship prompt]]
-- [[#-ocmmand][* ocmmand]]
+-  [[#antigen-apply-1][antigen apply]]
 - [[#loading-the-profile][loading the ~~/.profile~]]
 - [[#zplug-load][Zplug load]]
 - [[#pfetch][pfetch]]
@@ -375,7 +375,7 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
 #zplug "spaceship-prompt/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
 #+end_src
 
-* * ocmmand 
+*  antigen apply 
 #+begin_src shell
   #antigen apply
 #+end_src

@@ -49,3 +49,4 @@ alias watch-sync="watch -d grep -e Dirty: -e Writeback: /proc/meminfo"
 alias youtube-dl="yt-dlp"
 #fetch
 #pfetch
+#pactl load-module module-bluetooth-discover
