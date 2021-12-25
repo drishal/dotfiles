@@ -472,7 +472,9 @@ vendor/etc/sensors/hals.conf
 vendor/etc/sensors/judge_calibrated.json
 vendor/etc/sensors/sensor_diag.cfg
 vendor/etc/sensors/sns_reg_config
-vendor/etc/elliptic_sensor.xml
+
+# Epiliptic Sensor Config
+vendor/etc/elliptic_sensor.xml|47c53c14f00bf9aaf074d9915d2a6659
 
 # Sensors
 vendor/bin/init.qcom.sensors.sh
