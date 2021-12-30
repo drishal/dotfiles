@@ -139,7 +139,7 @@ this secion is dedicated to the imports of the modules I would be using in the c
 + The preferred terminal program, which is used in a binding below and by certain contrib modules.
 #+begin_src haskell
   myTerminal :: String
-  myTerminal = "kitty"
+  myTerminal = "alacritty"
 #+end_src
 
 ** Whether focus follows the mouse pointer.
@@ -188,7 +188,7 @@ this secion is dedicated to the imports of the modules I would be using in the c
 + here I set the default layouts for the layouts. I mainly use tiled, simplestFloat and Full layouts
 #+begin_src haskell
 
-  myLayout =  renamed [CutWordsLeft 1] (  avoidStruts ( smartBorders (  spacingWithEdge 8 (  tiled ||| simplestFloat )))) ||| smartBorders Full
+  myLayout =  renamed [CutWordsLeft 1] (  avoidStruts ( spacingWithEdge 8 ( smartBorders ( tiled ||| simplestFloat )))) ||| smartBorders Full
     where
        -- default tiling algorithm partitions the screen into two panes
        tiled   = Tall nmaster delta ratio

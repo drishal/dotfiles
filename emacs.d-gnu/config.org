@@ -180,7 +180,6 @@ https://github.com/quelpa/quelpa#installation
                             (agenda . 5 )
                             (bookmarks . 5)
                             (projects . 3)
-                                          ;(registers . 3)
                             ))
     :config
     (dashboard-setup-startup-hook)
