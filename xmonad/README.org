@@ -12,6 +12,8 @@
   - [[#workspaces][Workspaces]]
   - [[#borders][Borders]]
 - [[#layouts][Layouts]]
+  - [[#mylayout][MyLayout]]
+  - [[#attempting-to-set-a-fullscreen-layout][Attempting to set a fullscreen layout]]
 - [[#manage-hook][Manage Hook]]
 - [[#prompts][Prompts]]
 - [[#bordersgaps][Borders/Gaps]]
@@ -186,7 +188,8 @@ this secion is dedicated to the imports of the modules I would be using in the c
 #+end_src
 
 * Layouts
-+ here I set the default layouts for the layouts. I mainly use tiled, simplestFloat and Full layouts
+** MyLayout
+Here I set the default layouts for the layouts. I mainly use tiled, simplestFloat and Full layouts
 #+begin_src haskell
 
   --myLayout =  renamed [CutWordsLeft 1] (  avoidStruts ( spacingWithEdge 8 ( smartBorders ( tiled ||| simplestFloat )))) ||| smartBorders Full
@@ -207,7 +210,7 @@ this secion is dedicated to the imports of the modules I would be using in the c
 
 #+end_src
 
-+ Attempting to set a fullscreen layout
+** Attempting to set a fullscreen layout
   #+begin_src haskell
     
   #+end_src
