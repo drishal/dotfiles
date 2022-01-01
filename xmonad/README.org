@@ -28,7 +28,8 @@
 * Imports
 this secion is dedicated to the imports of the modules I would be using in the config 
 #+begin_src haskell
-  import XMonad
+  --import XMonad
+  import XMonad hiding ((|||))
   import Data.Monoid
   import System.Exit
   import qualified XMonad.StackSet as W
@@ -194,7 +195,11 @@ Here I set the default layouts for the layouts. I mainly use tiled, simplestFloa
 
   --myLayout =  renamed [CutWordsLeft 1] (  avoidStruts ( spacingWithEdge 8 ( smartBorders ( tiled ||| simplestFloat )))) ||| smartBorders Full
 
-  myLayout =  renamed [CutWordsLeft 1] $ avoidStruts $ spacingWithEdge 8 $ smartBorders $ tiled ||| simplestFloat 
+  myLayout =  renamed [CutWordsLeft 1]
+              $ avoidStruts
+              $ spacingWithEdge 8
+              $ smartBorders
+              $ tiled ||| simplestFloat 
     where
        -- default tiling algorithm partitions the screen into two panes
        tiled   = Tall nmaster delta ratio
@@ -369,8 +374,7 @@ this is where my keybindings go
       --reset layout
       , ("M-S-m",  setLayout $ Layout myLayout)
       --toogle fullscreen
-      --, ("M-f", sendMessage $ Toggle FULL )
-
+      ,  ("M-f", sendMessage (JumpToLayout "Full"))
       -- Push window back into tiling
       , ("M-S-<Space>", withFocused $ windows . W.sink)
       --reset layout
@@ -450,10 +454,6 @@ Note: as of xmonad 0.17, this may no longer be needed
           yellow   = xmobarColor "#f1fa8c" ""
           red      = xmobarColor "#ff5555" ""
           lowWhite = xmobarColor "#f8f8f2" ""
-
-  --sbconfig
-  -- sbConfig :: StatusBarConfig
-  -- sbConfig = statusBarProp "LANG=en_US.UTF-8 xmobar ~/dotfiles/xmobar.hs" (clickablePP myXmobarPP)
 #+end_src
 
 * myConfig
