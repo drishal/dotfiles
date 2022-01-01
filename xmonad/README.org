@@ -12,6 +12,7 @@
   - [[#workspaces][Workspaces]]
   - [[#borders][Borders]]
 - [[#layouts][Layouts]]
+- [[#manage-hook][Manage Hook]]
 - [[#prompts][Prompts]]
 - [[#bordersgaps][Borders/Gaps]]
 - [[#startup-hook][Startup hook]]
@@ -188,7 +189,9 @@ this secion is dedicated to the imports of the modules I would be using in the c
 + here I set the default layouts for the layouts. I mainly use tiled, simplestFloat and Full layouts
 #+begin_src haskell
 
-  myLayout =  renamed [CutWordsLeft 1] (  avoidStruts ( spacingWithEdge 8 ( smartBorders ( tiled ||| simplestFloat )))) ||| smartBorders Full
+  --myLayout =  renamed [CutWordsLeft 1] (  avoidStruts ( spacingWithEdge 8 ( smartBorders ( tiled ||| simplestFloat )))) ||| smartBorders Full
+
+  myLayout =  renamed [CutWordsLeft 1] $ avoidStruts $ spacingWithEdge 8 $ smartBorders $ tiled ||| simplestFloat 
     where
        -- default tiling algorithm partitions the screen into two panes
        tiled   = Tall nmaster delta ratio
@@ -202,7 +205,15 @@ this secion is dedicated to the imports of the modules I would be using in the c
        -- Percent of screen to increment by when resizing panes
        delta   = 3/100
 
-  myManageHook = composeAll
+#+end_src
+
++ Attempting to set a fullscreen layout
+  #+begin_src haskell
+    
+  #+end_src
+* Manage Hook
+#+begin_src haskell
+myManageHook = composeAll
       [
         resource  =? "desktop_window" --> doIgnore
       , resource  =? "kdesktop"       --> doIgnore
@@ -282,7 +293,6 @@ By default, do nothing.
 * My Keys Config
 this is where my keybindings go
 #+begin_src haskell
-
   myKeys :: [(String, X ())]
   myKeys =
     [
@@ -323,8 +333,6 @@ this is where my keybindings go
     , ("M-q", kill)
       --Rotate through the available layout algorithms
     , ("M-<Space>", sendMessage NextLayout)
-    --  Reset the layouts on the current workspace to default
-     --, ("M-S-<Tab>" , setLayout $ XMonad.layoutHook myLayout)
 
       -- Resize viewed windows to the correct size
       , ("M-n", refresh)
