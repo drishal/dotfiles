@@ -66,7 +66,6 @@
   - [[#which-key][which key]]
 - [[#prevent-saving-to-x-clipboard-manager][prevent "saving to x clipboard manager]]
 - [[#prevent-warnings-buffer][prevent *warnings* buffer]]
-- [[#emacs-typing-latency][emacs typing latency]]
 - [[#disable-backups][Disable backups]]
 - [[#emacs-fixing-some-window-stuff][emacs fixing some window stuff]]
 - [[#restart-emacs-package][restart emacs package]]
@@ -378,31 +377,6 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim,
 
 ** perspective
 https://github.com/nex3/perspective-el
-The Perspective package provides multiple named workspaces (or "perspectives") in Emacs, similar to multiple desktops in window managers like Awesome and XMonad, and Spaces on the Mac.
-Each perspective has its own buffer list and its own window layout, along with some other isolated niceties, like the xref ring. This makes it easy to work on many separate projects without getting lost in all the buffers. Switching to a perspective activates its window configuration, and when in a perspective, only its buffers are available (by default).
-Each Emacs frame has a distinct list of perspectives.
-Perspective supports saving its state to a file, so long-lived work sessions may be saved and recovered as needed.
-
-To activate perspective use (persp-mode). This creates a single default main perpsective.
-
-Commands are all prefixed by C-x x by default. To change the prefix key, customize persp-mode-prefix-key. Additionally, creating a key binding for persp-mode-map will also activate the prefix.
-
-Here are the main commands defined in persp-mode-map:
-
-s — persp-switch: Query a perspective to switch to, or create
-` — persp-switch-by-number: Switch to perspective by number, or switch quickly using numbers 1, 2, 3.. 0 as prefix args; note this will probably be most useful with persp-sort set to 'created
-k — persp-remove-buffer: Query a buffer to remove from current perspective
-c — persp-kill : Query a perspective to kill
-r — persp-rename: Rename current perspective
-a — persp-add-buffer: Query an open buffer to add to current perspective
-A — persp-set-buffer: Add buffer to current perspective and remove it from all others
-b - persp-switch-to-buffer: Like switch-to-buffer; includes all buffers from all perspectives; changes perspective if necessary
-i — persp-import: Import a given perspective from another frame.
-n, <right> — persp-next: Switch to next perspective
-p, <left> — persp-prev: Switch to previous perspective
-C-s — persp-state-save: Save all perspectives in all frames to a file
-C-l — persp-state-load: Load all perspectives from a file
-
 #+begin_src emacs-lisp
   ;; (use-package perspective :ensure t
   ;;   :bind
@@ -1202,10 +1176,6 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   (setq-default warning-minimum-level :error)
 #+end_src
 
-* emacs typing latency
-#+begin_src emacs-lisp
-  ;;(setq redisplay-dont-pause t)
-#+end_src
 * Disable backups
 #+begin_src emacs-lisp
   (setq make-backup-files nil)
