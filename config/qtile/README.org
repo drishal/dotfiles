@@ -287,6 +287,8 @@
 #+begin_src python
    screens = [
       Screen(
+          wallpaper='~/dotfiles/wallpapers/summer_1am.jpg',
+          wallpaper_mode='stretch',
           top=bar.Bar(
               [
                   widget.CurrentLayout(

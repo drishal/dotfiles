@@ -21,4 +21,4 @@ mate-power-manager&
 xfce4-clipman&
 #redshift -O 5000&
 volumeicon&
-feh --bg-scale ~/dotfiles/wallpapers/summer_1am.jpg 
+#feh --bg-scale ~/dotfiles/wallpapers/summer_1am.jpg 
