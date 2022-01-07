@@ -14,7 +14,7 @@
     # sessionVariables.LOCALES_ARCHIVE = "/usr/lib/locale/locale-archive";
   };
   # main programs
-  programs = { 
+  programs = {
     # rofi
     # rofi = {
     #   enable = false;
@@ -25,12 +25,12 @@
     #   enable = true;
     # };
 
-    # git 
+    # git
     git = {
       enable = true;
       userName = "drishal";
       userEmail = "drishalballaney@gmail.com";
-    }; 
+    };
 
     #Gccemacs
     # emacs = {
@@ -38,7 +38,7 @@
     #   package = pkgs.emacsPgtkGcc;
     #   extraPackages = (epkgs: [ epkgs.vterm ] );
     # };
-  }; 
+  };
 
   # services
   # services = {
@@ -62,7 +62,7 @@
   #   path = "/home/drishal/dotfiles/.Xresources";
   # };
 
-  # xmonad config 
+  # xmonad config
   # home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
   #home.file."/home/drishal/.xmobarrc".source = ../.xmobarrc;
   #home.file."/home/drishal/.xmonad/lib".source = ../.xmonad/lib;
@@ -79,7 +79,7 @@
   # rofi
   home.file."/home/drishal/.config/rofi/config.rasi".source = ../config/rofi/config.rasi;
   home.file."/home/drishal/.config/rofi/config".source = ../config/rofi/config;
-  
+
   # setting Xresources
   home.file."/home/drishal/.Xresources".source = ../.Xresources;
 
@@ -94,8 +94,8 @@
 
   #waybar
   home.file."/home/drishal/.config/waybar".source = ../config/waybar;
-  
-  
+
+
   # qtile config
   #home.file."/home/drishal/.config/qtile/config.py".source =../config/qtile/config.py;
   # home.file."/home/drishal/.config/qtile/autostart.sh".source =../config/qtile/autostart.sh;
@@ -103,6 +103,10 @@
   #starship
 
   #home.file."/home/drishal/.config/starship.toml".source =../config/starship.toml;
+
+  programs.zsh = {
+  	enable=true;
+  };
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage

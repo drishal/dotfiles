@@ -11,6 +11,7 @@ PS1='[\u@\h \W]\$ '
 #set -o vi
 pfetch
 eval "$(starship init bash)"
+. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 #echo -e -n "\x1b[\x30 q" # changes to blinking block
 #echo -e -n "\x1b[\x35 q" # changes to blinking bar
 #echo -e -n "\x1b[\x36 q" # changes to steady bar

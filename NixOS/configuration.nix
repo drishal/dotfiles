@@ -11,7 +11,7 @@
       # import cachix.nix
       # (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
       #<home-manager/nixos>
-      #./cachix.nix 
+      #./cachix.nix
     ];
 
   # kernel parameters
@@ -19,7 +19,7 @@
 
   # microde
   hardware.cpu.amd.updateMicrocode = true;
-  
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -28,13 +28,13 @@
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # firmware updator
   services.fwupd.enable = true;
-  # cpu governor 
+  # cpu governor
   powerManagement =
     {
       enable = true;
       cpuFreqGovernor="schedutil";
     };
-    # open cl 
+    # open cl
   hardware.opengl.extraPackages = with pkgs; [
     rocm-opencl-icd
     rocm-opencl-runtime
@@ -81,7 +81,7 @@
   #   keyMap = "us";
   # };
   # zsh
-  programs.zsh.enable = true;
+  # programs.zsh.enable = true;
 
   # kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -112,7 +112,7 @@
     };
     # extras
     # displayManager.sessionPackages = ["river"];
-    # displayManager.gdm.enable = true; 
+    # displayManager.gdm.enable = true;
     # displayManager.sddm.enable = true;
     displayManager.lightdm = {
       enable = true;
@@ -120,14 +120,14 @@
     };
   };
 
-  # fprint 
+  # fprint
   # services.fprintd.enable = true;
-  
+
   services.gnome.tracker.enable = false;
   # resolve gnome and plasma issues
   #programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.plasma5Packages.ksshaskpass.out}/bin/ksshaskpass";
   programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
-  
+
   # Networking
   networking.networkmanager.enable = true;
   networking.wireless.iwd.enable = true;
@@ -144,7 +144,7 @@
   # some pulseaudio settings
   hardware.pulseaudio.extraConfig =  "load-module module-suspend-on-idle";
 
-  # backlight 
+  # backlight
   hardware.acpilight.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -157,11 +157,11 @@
     extraGroups = [ "wheel"  "network" "video"  "virt-manager"]; # Enable ‘sudo’ for the user.
   };
 
-  #jaba 
+  #jaba
   programs.java = { enable = true ; };
 
-  # river 
-  # options.programs.river = true; 
+  # river
+  # options.programs.river = true;
 
   # nm-applet
   programs.nm-applet.enable=true;
@@ -195,15 +195,15 @@
     rnix-lsp gnome.gnome-sound-recorder tmux ps_mem taffybar
     noto-fonts ntfs3g gparted file appimage-run etcher woeusb cachix
     feh cinnamon.nemo libva-utils speedtest-cli pass surf gnumake
-    river clang-tools ed materia-theme  virt-manager 
-    # autoconf automake inkscape gdk-pixbuf sassc pkgconfig 
-    # emacsPgtkGcc 
-    #rust home-manager metasploit theharvester 
+    river clang-tools ed materia-theme  virt-manager
+    # autoconf automake inkscape gdk-pixbuf sassc pkgconfig
+    # emacsPgtkGcc
+    #rust home-manager metasploit theharvester
     cargo carnix
     # python stuff
     python39
     # python39Packages.numpy python39Packages.pandas
-    # ((emacsPackagesNgGen emacsPgtkGcc).emacsWithPackages 
+    # ((emacsPackagesNgGen emacsPgtkGcc).emacsWithPackages
     #   (epkgs: [
     #     epkgs.vterm]))
   ];
@@ -229,7 +229,7 @@
   # emacsWithPackages = (pkgs.emacsPackagesGen pkgs.emacsGcc).emacsWithPackages (epkgs: ([epkgs.vterm]));
   #  services.emacs.enable = true;
 
-  # mouse config 
+  # mouse config
   services.xserver.libinput = {
     enable = true;
     # disable mouse acceleration
@@ -251,7 +251,7 @@
     # (final: prev: {
     #   dmenu = prev.dmenu.overrideAttrs (old: { src = /home/drishal/Desktop/suckless/dmenu ;});
     # })
-    
+
 
     # (final: prev: {
     #   picom = prev.picom.overrideAttrs (old: { src = /home/drishal/Desktop/git-stuff/picom;});
