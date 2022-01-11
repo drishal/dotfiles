@@ -328,6 +328,7 @@ this is where my keybindings go
     , ("M-S-f", spawn "firefox")
     , ("M-e", spawn "nemo")
     , ("M-v", spawn "pavucontrol")
+    , ("M-c", spawn "ferdi")
 
     --emacs
     , ("M-a", spawn "emacsclient -c")
