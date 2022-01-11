@@ -37,7 +37,7 @@
 * Some variables
 #+begin_src python
   mod = "mod4"
-  terminal = "kitty"
+  terminal = "alacritty"
 #+end_src
 * Colors
 ** Dracula
