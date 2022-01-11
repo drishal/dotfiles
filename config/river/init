@@ -168,9 +168,9 @@ riverctl set-repeat 50 300
 riverctl spawn waybar
 riverctl spawn "swaybg -i ~/dotfiles/wallpapers/summer_1am.jpg" 
 riverctl spawn lxpolkit 
-riverctl spawn deadd-notification-center
+riverctl spawn /usr/lib/notification-daemon-1.0/notification-daemon
 riverctl spawn "nm-applet --indicator"
-riverctl spawn "redshift -O 5000"
+#riverctl spawn "redshift -O 5000"
 # riverctl spawn 
 # Set app-ids of views which should float
 riverctl float-filter-add "float"
