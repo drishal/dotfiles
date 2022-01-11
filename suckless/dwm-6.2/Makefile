@@ -10,9 +10,9 @@ all: options dwm
 
 options:
 	@echo dwm build options:
-	@echo "CFLAGS   = ${CFLAGS}"
-	@echo "LDFLAGS  = ${LDFLAGS}"
-	@echo "CC       = ${CC}"
+	@echo "CFLAGS   = ${CFLAGS} -O3 -march=native -flto"
+	@echo "LDFLAGS  = ${LDFLAGS} -O3 -march=native -flto"
+	@echo "CC       = ${CC} -O3 -march=native -flto"
 
 .c.o:
 	${CC} -c ${CFLAGS} $<
