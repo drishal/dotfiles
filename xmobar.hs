@@ -30,7 +30,7 @@ Config {
     -- weather monitor
     --    Run Weather "VICG" [ "--template", "<skyCondition> | <fc=#4682B4><tempC></fc>°C | <fc=#4682B4><rh></fc>% | <fc=#4682B4><pressure></fc>hPa"
     --                         ] 100
-     Run DynNetwork     [ "--template" , "<fc=#6272a4></fc> <fc=#ffb86c> <tx>kB/s  <rx>kB/s </fc>"
+     Run DynNetwork     [ "--template" , "<fc=#6272a4></fc> <fc=#ffb86c> <rx>kB/s  <tx>kB/s </fc>"
                               , "--Low"      , "1000"       -- units: B/s
                              , "--High"     , "5000"       -- units: B/s
                              --, "--low"      , "#00ff00"
