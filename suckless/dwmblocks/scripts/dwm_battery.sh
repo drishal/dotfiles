@@ -64,7 +64,7 @@ for battery in /sys/class/power_supply/BAT?*; do
 		"Discharging") status="🔋 " ;;
 		"Charging") status="🔌 " ;;
 		"Not charging") status="🛑 " ;;
-		"Unknown") status="♻️ " ;;
+		"Unknown") status="♻ " ;;
 		*) exit 1 ;;
 	esac
 	capacity="$(cat "$battery/capacity" 2>&1)"
