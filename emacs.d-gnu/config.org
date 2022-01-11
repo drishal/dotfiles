@@ -1134,8 +1134,8 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 *** C/C++ mode
 #+begin_src emacs-lisp
-                                          ;(add-hook 'c-mode-hook #'lsp)
-                                          ;(add-hook 'c++-mode-hook #'lsp)
+  (setq c-default-style "linux"
+        c-basic-offset 4)
 #+end_src
 *** rust mode
 #+begin_src emacs-lisp
