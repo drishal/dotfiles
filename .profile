@@ -1,6 +1,7 @@
 # aliases
 alias nix-config="sudo vim /etc/nixos/configuration.nix"
 alias xon="~/Desktop/games/Xonotic2/xonotic-linux-sdl.sh"
+alias xon-glx="~/Desktop/games/Xonotic2/xonotic-linux-glx.sh"
 alias stk="~/Desktop/games/SuperTuxKart-1.2-linux/run_game.sh"
 
 # yay = pary
@@ -16,6 +17,8 @@ alias l="ls -lah"
 alias edd="emacs --daemon"
 alias b="brightnessctl"
 alias bs="brightnessctl s"
+alias wayland-screenshot="grimshot copy output"
+alias wayland-screenshot-area="grimshot copy area"
 export EXA_ICON_SPACING=2
 
 # man pager
