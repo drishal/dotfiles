@@ -1,21 +1,16 @@
 * {
+    /*all: initial; Ignore gtk theme*/ 
     border: none;
     border-radius: 0;
     /* `otf-font-awesome` is required to be installed for icons */
-    font-family: "FiraCode Nerd Font",Roboto, Helvetica, Arial, sans-serif;
-    font-size: 11px;
+    font-family: "FiraCode Nerd Font","Roboto", "Helvetica", "Arial", "sans-serif";
+    font-size: 12;
     min-height: 0;
     color: #f8f8f2;
-    /* background: #282a36; */
 }
 
 
-#tags button  {
-    background-color: #282a36;
-    padding: 3px;
-    border-radius: 10px;
-    
-}
+
 window#waybar {
     background-color: #282a36;
     color: #f8f8f2;
@@ -23,6 +18,12 @@ window#waybar {
     transition-duration: .5s;
 }
 
+#tags button  {
+    background-color: #282a36;
+    padding: 3px;
+    border-radius: 10px;
+    min-width: 30px;
+    }
 #tags button.occupied  {
     background-color: #44475a;
 
@@ -64,6 +65,3 @@ window#waybar {
 #network {
     color: #ffb86c; 
 }
-/* #tray { */
-/*     margin-left: 10px; */
-/* } */
