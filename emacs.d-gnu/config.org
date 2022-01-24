@@ -95,47 +95,22 @@
 * Initialize package sources
 ** Package.el
 #+begin_src emacs-lisp
-
- ;; Initialize package sources
-    (require 'package)
-
-  (setq package-archives '(("melpa"  . "https://melpa.org/packages/")
-                         ("org"    . "https://orgmode.org/elpa/")
-                         ("gnu"    . "https://elpa.gnu.org/packages/")
-                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
-
-    (package-initialize)
-    (unless package-archive-contents
-      (package-refresh-contents))
-
-      ;; Initialize use-package on non-Linux platforms
-    (unless (package-installed-p 'use-package)
-      (package-install 'use-package))
-
-    (require 'use-package)
-    (setq use-package-always-ensure t)
-
-
 #+end_src
 ** straight.el: make sure to later remove package.el
 #+begin_src emacs-lisp
-  ;; (defvar bootstrap-version)
-  ;; (let ((bootstrap-file
-  ;;        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-  ;;       (bootstrap-version 5))
-  ;;   (unless (file-exists-p bootstrap-file)
-  ;;     (with-current-buffer
-  ;;         (url-retrieve-synchronously
-  ;;          "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-  ;;          'silent 'inhibit-cookies)
-  ;;       (goto-char (point-max))
-  ;;       (eval-print-last-sexp)))
-  ;;   (load bootstrap-file nil 'nomessage))
-
-  ;; (straight-use-package 'use-package) ; make sure use package is installed
-  ;; (use-package el-patch
-  ;;   :ensure t)                   ;and now we wi
-  ;;ll have use package here
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+	(bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+	  (url-retrieve-synchronously
+	   "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	   'silent 'inhibit-cookies)
+	(goto-char (point-max))
+	(eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+  (straight-use-package 'use-package)
 #+end_src
 note: Users of Emacs versions >= 27 will want to add:
 #+begin_src emacs-lisp
@@ -148,11 +123,11 @@ note: Users of Emacs versions >= 27 will want to add:
 ** quelpa
 https://github.com/quelpa/quelpa#installation
 #+begin_src emacs-lisp
-  (use-package quelpa :ensure t)
+  (use-package quelpa :straight t)
 #+end_src
 ** Setting up paths
 #+begin_src emacs-lisp
-  (use-package exec-path-from-shell :ensure t)
+  (use-package exec-path-from-shell :straight t)
   ;; (when (memq window-system '(mac ns x))
   ;;   (exec-path-from-shell-initialize))
   ;; (when (daemonp)
@@ -163,7 +138,7 @@ https://github.com/quelpa/quelpa#installation
 * Customizing the Editor and Appearence
 ** Dashboard
 #+begin_src emacs-lisp
-  (use-package dashboard :ensure t
+  (use-package dashboard :straight t
     :init      ;; tweak dashboard config before loading it
     (setq dashboard-set-heading-icons t)
     ;; Content is not centered by default. To center, set
@@ -191,7 +166,7 @@ https://github.com/quelpa/quelpa#installation
 #+end_src
 ** Page break lines
 #+begin_src emacs-lisp
-  (use-package page-break-lines :ensure t)
+  (use-package page-break-lines :straight t)
 #+end_src
 ** highlight current line
 #+begin_src emacs-lisp
@@ -204,8 +179,8 @@ https://github.com/quelpa/quelpa#installation
 #+end_src
 ** theme
 #+begin_src emacs-lisp
-  ;; (use-package dracula- ensure t)
-  (use-package doom-themes :ensure t
+  ;; (use-package dracula- straight t)
+  (use-package doom-themes :straight t
     :config
     ;; Global settings (defaults)
     (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -239,7 +214,7 @@ https://github.com/quelpa/quelpa#installation
 #+end_src
 ** All the icon fonts
 #+begin_src emacs-lisp
-  (use-package all-the-icons :ensure t)
+  ;; (use-package all-the-icons :straight t)
 #+end_src
 ** Line Numbers
 #+begin_src emacs-lisp
@@ -248,7 +223,7 @@ https://github.com/quelpa/quelpa#installation
 #+end_src
 ** Doom modeline
 #+begin_src emacs-lisp
-  (use-package doom-modeline :ensure t)
+  (use-package doom-modeline :straight t)
   (doom-modeline-mode 1)
 #+end_src
 
@@ -292,7 +267,7 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim,
   ;; Make ESC quit prompts
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
-  (use-package general :ensure t
+  (use-package general :straight t
     :after evil
     :config
     (general-create-definer efs/leader-keys
@@ -306,7 +281,7 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim,
       "fde" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/Emacs.org")))))
 
   (use-package evil
-    :ensure t
+    :straight t
     :init
     (setq evil-want-integration t)
     (setq evil-want-keybinding nil)
@@ -325,7 +300,7 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim,
     (evil-set-initial-state 'dashboard-mode 'normal))
 
   (use-package evil-collection
-    :ensure t
+    :straight t
     :after evil
     :config
     (evil-collection-init))
@@ -334,7 +309,7 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim,
 #+end_src
 *** Evil args
 #+begin_src emacs-lisp
-  (use-package evil-args :ensure t)
+  (use-package evil-args :straight t)
 
   ;; bind evil-args text objects
   (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
@@ -351,18 +326,18 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim,
 #+end_src
 *** Evil intent plus
 #+begin_src emacs-lisp
-  (use-package evil-indent-plus :ensure t)
+  (use-package evil-indent-plus :straight t)
 #+end_src
 *** Evil Snipe
 #+begin_src emacs-lisp
-  (use-package evil-snipe :ensure t)
+  (use-package evil-snipe :straight t)
   (evil-snipe-mode +1)
   (evil-snipe-override-mode +1)
 #+end_src
 ** Undo system
 #+begin_src emacs-lisp
   (use-package undo-tree
-    :ensure t
+    :straight t
     :after evil
     :diminish
     :config
@@ -378,7 +353,7 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim,
 ** perspective
 https://github.com/nex3/perspective-el
 #+begin_src emacs-lisp
-  ;; (use-package perspective :ensure t
+  ;; (use-package perspective :straight t
   ;;   :bind
   ;;   ("C-x C-b" . persp-list-buffers)   ; or use a nicer switcher, see below
   ;;   :init
@@ -393,7 +368,7 @@ https://github.com/nex3/perspective-el
 
 ** tramp
 #+begin_src emacs-lisp
-                                          ; (use-package tramp :ensure t)
+                                          ; (use-package tramp :straight t)
                                           ; (require 'tramp)
 #+end_src
 * Hook to tangle on save
@@ -408,7 +383,7 @@ https://github.com/nex3/perspective-el
 #+end_src
 * Org mode:
 #+begin_src emacs-lisp
-  (use-package org :ensure t)
+  (use-package org :straight t)
 #+end_src
 ** org mode indent
 #+begin_src emacs-lisp
@@ -417,21 +392,21 @@ https://github.com/nex3/perspective-el
 ** Org blocks insert mode
 Switch to org edit mode when pressing `i` insert key
 #+begin_src emacs-lisp
-(add-hook 'org-mode-hook
-  (lambda ()
-    (add-hook 'evil-insert-state-entry-hook
-      (lambda ()
-        (when (org-in-src-block-p)
-          (org-edit-special)
-          (evil-insert-state)))
-      0 t)))
+  ;; (add-hook 'org-mode-hook
+  ;;   (lambda ()
+  ;;     (add-hook 'evil-insert-state-entry-hook
+  ;;       (lambda ()
+  ;;         (when (org-in-src-block-p)
+  ;;           (org-edit-special)
+  ;;           (evil-insert-state)))
+  ;;       0 t)))
 #+end_src
 ** snippets:
 *** yas-snippet
 
 #+begin_src emacs-lisp
   (use-package yasnippet
-    :ensure t
+    :straight t
     :config
     (setq yas-snippet-dirs '("~/dotfiles/emacs.d-gnu/snippets"))
     )
@@ -443,7 +418,7 @@ Switch to org edit mode when pressing `i` insert key
 see  https://github.com/hlissner/doom-snippets
 #+begin_src emacs-lisp
   ;; (use-package doom-snippets
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :load-path "/home/drishal/.emacs.d/custom-repos/doom-snippets"
   ;;   :after yasnippet)
 #+end_src
@@ -454,20 +429,20 @@ see  https://github.com/hlissner/doom-snippets
 #+end_src
 ** Superstar for some pretty symbols
 #+begin_src emacs-lisp
-  (use-package org-superstar :ensure t)
+  (use-package org-superstar :straight t)
   (require 'org-superstar)
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 #+end_src
 ** org-toc
 #+begin_src emacs-lisp
-  (use-package toc-org :ensure t)
+  (use-package toc-org :straight t)
   (add-hook 'org-mode-hook #'toc-org-enable)
 
 #+end_src
 ** company org block
 #+begin_src emacs-lisp
   (use-package company-org-block
-    :ensure t
+    :straight t
     :custom
     (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
     :hook ((org-mode . (lambda ()
@@ -491,13 +466,13 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 #+end_src
 ** org roam
 #+begin_src
-  (use-package org-roam :ensure t)
+  (use-package org-roam :straight t)
 #+end_src
 
 * Tools
 ** vterm
 #+begin_src emacs-lisp
-  (use-package vterm :ensure t
+  (use-package vterm :straight t
     :config
     (setq vterm-shell "/bin/zsh")
     ;; (set-popup-rule! "^\\*vterm" :size 0.25 :vslot -4 :select t :quit nil :ttl 0)
@@ -506,17 +481,16 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 #+end_src
 ** auto update with emacs
 #+begin_src emacs-lisp
-  (use-package auto-package-update
-    :config
-    (setq auto-package-update-delete-old-versions t)
-    (setq auto-package-update-hide-results t)
-    (auto-package-update-maybe))
-
+  ;; (use-package auto-package-update
+  ;;   :config
+  ;;   (setq auto-package-update-delete-old-versions t)
+  ;;   (setq auto-package-update-hide-results t)
+  ;;   (auto-package-update-maybe))
 #+end_src
 ** telega
 #+begin_src emacs-lisp
-  (use-package visual-fill-column :ensure t)
-  (use-package telega :ensure t
+  (use-package visual-fill-column :straight t)
+  (use-package telega :straight t
     :commands (telega))
 
 #+end_src
@@ -524,7 +498,7 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 #+begin_src emacs-lisp
    ;(pdf-loader-install)
   ;(pdf-tools-install)
-  (use-package pdf-tools :ensure t)
+  (use-package pdf-tools :straight t)
 #+end_src
 ** mu4e
 https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-01.org
@@ -560,7 +534,7 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
 ** treemacs
 #+begin_src emacs-lisp
   (use-package treemacs
-    :ensure t
+    :straight t
     :defer t
     :init
     (with-eval-after-load 'winum
@@ -643,33 +617,33 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
 
   (use-package treemacs-evil
     :after (treemacs evil)
-    :ensure t)
+    :straight t)
 
   (use-package treemacs-projectile
     :after (treemacs projectile)
-    :ensure t)
+    :straight t)
 
   (use-package treemacs-icons-dired
     :hook (dired-mode . treemacs-icons-dired-enable-once)
-    :ensure t)
+    :straight t)
 
   (use-package treemacs-magit
     :after (treemacs magit)
-    :ensure t)
+    :straight t)
 
   (use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
     :after (treemacs persp-mode) ;;or perspective vs. persp-mode
-    :ensure t
+    :straight t
     :config (treemacs-set-scope-type 'Perspectives))
 #+end_src
 ** elcord
 #+begin_src emacs-lisp
-  (use-package elcord :ensure t)
+  (use-package elcord :straight t)
 #+end_src
 ** Shackle
 #+begin_src emacs-lisp
   (use-package shackle
-    :ensure t
+    :straight t
     ;; :if (not (bound-and-true-p disable-pkg-shackle))
     :config
     (progn
@@ -707,14 +681,14 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
 #+end_src
 ** pacman
 #+begin_src emacs-lisp
-  (use-package pacmacs :ensure t)
+  (use-package pacmacs :straight t)
 #+end_src
 ** popper.el TODO
 https://github.com/karthink/popper
 
 ** Using EXWM
 #+begin_src emacs-lisp
-  (use-package exwm :ensure t)
+  ;;(use-package exwm :straight t)
                                           ;(require 'exwm)
                                           ;(require 'exwm-config)
                                           ;(exwm-config-default)
@@ -731,7 +705,7 @@ https://github.com/karthink/popper
 
 ** elfeed RSS reader
 #+begin_src emacs-lisp
-  (use-package elfeed :ensure t)
+  (use-package elfeed :straight t)
   (setq elfeed-feeds
         '(
           ("https://archlinux.org/feeds/news/" Arch Linux)
@@ -747,10 +721,10 @@ https://github.com/karthink/popper
 ** completion engines:
 *** company mode
 #+begin_src emacs-lisp
-  (use-package company :ensure t)
+  (use-package company :straight t)
 
   ;; (use-package company-lsp
-  ;;     :ensure t
+  ;;     :straight t
   ;;     :config
   ;;     (push 'company-lsp company-backends))
 
@@ -761,7 +735,7 @@ https://github.com/karthink/popper
 #+end_src
 ** using tabnine for completion
 #+begin_src emacs-lisp
-  ;;    (use-package company-tabnine :ensure t)
+  ;;    (use-package company-tabnine :straight t)
   ;;  (require 'company-tabnine)
   ;; (add-to-list 'company-backends #'company-tabnine)
 #+end_src
@@ -769,26 +743,26 @@ https://github.com/karthink/popper
 ** emoji mode
 #+begin_src emacs-lisp
   (use-package emojify
-    :ensure t
+    :straight t
     :hook (after-init . global-emojify-mode))
 #+end_src
 ** Parentheses Completion
 #+begin_src emacs-lisp
-  (use-package smartparens :ensure t)
+  (use-package smartparens :straight t)
   (require 'smartparens)
   ;; (add-hook 'smartparens-mode)
   (smartparens-global-mode t)
 #+end_src
 ** Projectile
 #+begin_src emacs-lisp
-  (use-package projectile :ensure t)
+  (use-package projectile :straight t)
   (require 'smartparens-config)
 #+end_src
 
 *** vertico and orderless
 #+begin_src emacs-lisp
   ;; Enable vertico
-  (use-package vertico :ensure t
+  (use-package vertico :straight t
     :init
     (vertico-mode)
 
@@ -804,19 +778,19 @@ https://github.com/karthink/popper
   ;; important for wildcard support. Multiple files can be opened at once
   ;; with `find-file' if you enter a wildcard. You may also give the
   ;; `initials' completion style a try.
-  (use-package orderless :ensure t
+  (use-package orderless :straight t
     :init
     (setq completion-styles '(orderless)
           completion-category-defaults nil
           completion-category-overrides '((file (styles partial-completion)))))
 
   ;; Persist history over Emacs restarts. Vertico sorts by history position.
-  (use-package savehist :ensure t
+  (use-package savehist :straight t
     :init
     (savehist-mode))
 
   ;; A few more useful configurations...
-  (use-package emacs :ensure t
+  (use-package emacs :straight t
     :init
     ;; Add prompt indicator to `completing-read-multiple'.
     ;; Alternatively try `consult-completing-read-multiple'.
@@ -842,7 +816,7 @@ https://github.com/karthink/popper
 *** consult
 #+begin_src emacs-lisp
   ;; Example configuration for Consult
-  (use-package consult :ensure t
+  (use-package consult :straight t
     ;; Replace bindings. Lazily loaded due by `use-package'.
     :bind (;; C-c bindings (mode-specific-map)
            ("C-c h" . consult-history)
@@ -964,7 +938,7 @@ https://github.com/karthink/popper
 #+begin_src emacs-lisp
 
   (use-package helm
-    :ensure t
+    :straight t
                                           ;:config
 
     )
@@ -1013,8 +987,8 @@ https://emacs-lsp.github.io/lsp-mode/
 and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 *** General Setup
 #+begin_src emacs-lisp
-  (use-package flycheck :ensure t)
-  (use-package lsp-mode :ensure t
+  (use-package flycheck :straight t)
+  (use-package lsp-mode :straight t
     :init
     ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
     (setq lsp-keymap-prefix "C-c l")
@@ -1032,10 +1006,10 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
     :commands lsp)
 
   ;; optionally
-  (use-package lsp-ui :commands lsp-ui-mode :ensure t)
+  (use-package lsp-ui :commands lsp-ui-mode :straight t)
 
   (setq lsp-ui-doc-enable nil)
-  ;;(use-package lsp-treemacs :ensure t)
+  ;;(use-package lsp-treemacs :straight t)
                                           ; (add-hook 'prog-mode-hook 'lsp)
 
   ;; (setq lsp-use-plists t)
@@ -1043,7 +1017,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+end_src
 *** Sqlplus
 #+begin_src emacs-lisp
-                                          ; (use-package sqlplus-mode :ensure t)
+                                          ; (use-package sqlplus-mode :straight t)
 
                                           ;   (let ((oracle-home (shell-command-to-string ". ~/.profile; echo -n $ORACLE_HOME"))) (if oracle-home (setenv "ORACLE_HOME" oracle-home)) (setenv "PATH" (concat (getenv "PATH") (format "%s/%s" oracle-home "bin"))) (add-to-list 'exec-path (format "%s/%s" oracle-home "bin")) ) This assumes that you’re using ZSH. Obviously, you should change the .zshrc reference to the
 #+end_src
@@ -1055,12 +1029,12 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 *** yaml-mode
 #+begin_src emacs-lisp
   (use-package yaml-mode
-    :ensure t)
+    :straight t)
 #+end_src
 *** python
 #+begin_src emacs-lisp
   (use-package lsp-pyright
-    :ensure t
+    :straight t
     :hook (python-mode . (lambda ()
                             (require 'lsp-pyright)
                             (lsp))))  ; or lsp-deferred
@@ -1069,26 +1043,26 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 *** Haskell
 **** haskell mode
 #+begin_src emacs-lisp
-  (use-package haskell-mode :ensure t)
+  (use-package haskell-mode :straight t)
 #+end_src
 *** Fish
 #+begin_src emacs-lisp
-  (use-package fish-mode :ensure t)
+  (use-package fish-mode :straight t)
 #+end_src
 *** nix
 #+begin_src emacs-lisp
-  (use-package nix-mode :ensure t
+  (use-package nix-mode :straight t
     :mode "\\.nix\\'")
 #+end_src
 *** java
 #+begin_src emacs-lisp
-  ;(use-package lsp-java :ensure t)
+  ;(use-package lsp-java :straight t)
   ;(add-hook 'java-mode-hook #'lsp)
 #+end_src
 *** lua
 #+begin_src emacs-lisp
    (use-package lua-mode
-    :ensure t
+    :straight t
     :mode "\\.lua$"
     :interpreter "lua"
     :hook (lua-mode . set-company-backends-for-lua)
@@ -1101,7 +1075,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 *** web stuff
 ***** web mode
 #+begin_src emacs-lisp
-  (use-package web-mode :ensure t)
+  (use-package web-mode :straight t)
   (require 'web-mode)
   (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
@@ -1139,17 +1113,17 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+end_src
 *** rust mode
 #+begin_src emacs-lisp
-  (use-package rust-mode :ensure t)
+  (use-package rust-mode :straight t)
 #+end_src
 *** zig
 #+begin_src emacs-lisp
-  (use-package zig-mode :ensure t)
+  (use-package zig-mode :straight t)
   (setq lsp-zig-zls-executable "~/zls/zls")
 #+end_src
 ** which key
 #+begin_src emacs-lisp
   (use-package which-key
-    :ensure t
+    :straight t
     :init
     (setq which-key-side-window-location 'bottom
           which-key-sort-order #'which-key-key-order-alpha
@@ -1189,5 +1163,5 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 * restart emacs package
 #+begin_src emacs-lisp
-  (use-package restart-emacs :ensure t)
+  (use-package restart-emacs :straight t)
 #+end_src
