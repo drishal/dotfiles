@@ -1,0 +1,270 @@
+#+TITLE: River Conifg 
+#+PROPERTY: header-args :tangle ~/.config/river/init :shebang "#!/bin/sh"
+* Table of Contents :toc:
+- [[#keybinds][Keybinds]]
+  - [[#setting-the-mod-key][Setting the Mod key]]
+  - [[#applications][Applications]]
+  - [[#window-management][Window Management]]
+-  [[#set-background-and-border-color][Set background and border color]]
+- [[#set-repeat-rate][Set repeat rate]]
+- [[#auto-starting-apps][auto starting apps]]
+  - [[#set-app-ids-of-views-which-should-float][Set app-ids of views which should float]]
+  - [[#set-app-ids-of-views-which-should-use-client-side-decorations][Set app-ids of views which should use client side decorations]]
+- [[#rivertile-defaults][Rivertile Defaults]]
+
+* Keybinds
+** Setting the Mod key
+#+begin_src bash
+  mod="Mod4"
+#+end_src
+
+** Applications
+#+begin_src bash
+  riverctl map normal $mod Return spawn foot 
+
+  # Mod+Q to close the focused view
+  riverctl map normal $mod Q close
+
+  #  emacsclient
+  riverctl map normal $mod A spawn "emacsclient -c" 
+
+  # Mod d for dmenu
+  riverctl map normal $mod D spawn "wofi --show drun" 
+
+  # Mod e for nemo
+  riverctl map normal $mod E spawn "nemo" 
+
+  # firefox
+  riverctl map normal $mod+Shift F spawn "firefox"
+
+  # pavucontrol
+  riverctl map normal $mod V spawn "pavucontrol" 
+
+  # copy screenshot to clipboard 
+  #riverctl map normal $mod S spawn "grim - | wl-copy" 
+  riverctl map normal $mod S spawn "grimshot copy output" 
+  riverctl map normal $mod+Shift S spawn "grimshot copy area" 
+
+
+  riverctl map normal $mod F5 spawn "brightnessctl s 10-" 
+  riverctl map normal $mod F6 spawn "brightnessctl s 10+" 
+#+end_src
+
+** Window Management
+*** Mod+Q to close the focused view
+
+#+begin_src bash 
+riverctl map normal $mod Q close
+#+end_src 
+
+*** Mod+Q to exit river
+#+begin_src bash 
+riverctl map normal $mod+Shift Q exit
+#+end_src 
+
+*** Mod+J and Mod+K to focus the next/previous view in the layout stack
+#+begin_src bash
+riverctl map normal $mod J focus-view next
+riverctl map normal $mod K focus-view previous
+#+end_src
+*** Mod+Shift+J and Mod+Shift+K to swap the focused view with the next/previous view in the layout stack
+#+begin_src bash
+riverctl map normal $mod+Shift J swap next
+riverctl map normal $mod+Shift K swap previous
+#+end_src
+
+*** Mod+Period and Mod+Comma to focus the next/previous output
+
+#+begin_src bash
+riverctl map normal $mod Period focus-output next
+riverctl map normal $mod Comma focus-output previous
+#+end_src
+
+*** Mod+Shift+{Period,Comma} to send the focused view to the next/previous output
+
+#+begin_src bash
+riverctl map normal $mod+Shift Period send-to-output next
+riverctl map normal $mod+Shift Comma send-to-output previous
+#+end_src
+*** Mod+Return to bump the focused view to the top of the layout stack
+
+#+begin_src bash
+# riverctl map normal $mod Return zoom
+#+end_src
+*** Mod+H and Mod+L to decrease/increase the main ratio of rivertile(1)
+
+#+begin_src bash
+riverctl map normal $mod H send-layout-cmd rivertile "main-ratio -0.05"
+riverctl map normal $mod L send-layout-cmd rivertile "main-ratio +0.05"
+riverctl map normal $mod+Shift M send-layout-cmd rivertile "main-ratio 0.5"
+#+end_src
+*** Mod+Shift+H and Mod+Shift+L to increment/decrement the main count of rivertile(1)
+
+#+begin_src bash
+riverctl map normal $mod+Shift H send-layout-cmd rivertile "main-count +1"
+riverctl map normal $mod+Shift L send-layout-cmd rivertile "main-count -1"
+
+#+end_src
+*** Mod+Alt+{H,J,K,L} to move views
+
+#+begin_src bash
+riverctl map normal $mod+Mod1 H move left 100
+riverctl map normal $mod+Mod1 J move down 100
+riverctl map normal $mod+Mod1 K move up 100
+riverctl map normal $mod+Mod1 L move right 100
+#+end_src
+
+*** Mod+Alt+Control+{H,J,K,L} to snap views to screen edges
+
+#+begin_src bash
+riverctl map normal $mod+Mod1+Control H snap left
+riverctl map normal $mod+Mod1+Control J snap down
+riverctl map normal $mod+Mod1+Control K snap up
+riverctl map normal $mod+Mod1+Control L snap right
+#+end_src
+
+*** Mod+Alt+Shif+{H,J,K,L} to resize views
+
+#+begin_src bash
+riverctl map normal $mod+Mod1+Shift H resize horizontal -100
+riverctl map normal $mod+Mod1+Shift J resize vertical 100
+riverctl map normal $mod+Mod1+Shift K resize vertical -100
+riverctl map normal $mod+Mod1+Shift L resize horizontal 100
+#+end_src
+
+*** Mod + Left Mouse Button to move views
+
+#+begin_src bash
+riverctl map-pointer normal $mod BTN_LEFT move-view
+#+end_src
+
+*** Mod + Right Mouse Button to resize views
+#+begin_src bash
+  riverctl map-pointer normal $mod+Shift BTN_LEFT move-view
+#+end_src
+
+*** Workspaces 
+Mod+0 to focus all tags
+Mod+Shift+0 to tag focused view with all tags
+#+begin_src bash
+  for i in $(seq 1 9)
+  do
+      tags=$((1 << ($i - 1)))
+
+      # Mod+[1-9] to focus tag [0-8]
+      riverctl map normal $mod $i set-focused-tags $tags
+
+      # Mod+Shift+[1-9] to tag focused view with tag [0-8]
+      riverctl map normal $mod+Shift $i set-view-tags $tags
+
+      # Mod+Ctrl+[1-9] to toggle focus of tag [0-8]
+      riverctl map normal $mod+Control $i toggle-focused-tags $tags
+
+      # Mod+Shift+Ctrl+[1-9] to toggle tag [0-8] of focused view
+      riverctl map normal $mod+Shift+Control $i toggle-view-tags $tags
+  done
+
+  riverctl map normal $mod 0 set-focused-tags $all_tags
+  riverctl map normal $mod+Shift 0 set-view-tags $all_tags
+#+end_src
+
+*** Mod+Space to toggle float
+
+#+begin_src bash
+riverctl map normal $mod+Shift Space toggle-float
+#+end_src
+*** Mod+F to toggle fullscreen
+#+begin_src bash
+riverctl map normal $mod F toggle-fullscreen
+#+end_src
+
+*** Mod+{Up,Right,Down,Left} to change layout orientation
+#+begin_src bash
+riverctl map normal $mod Up    send-layout-cmd rivertile "main-location top"
+riverctl map normal $mod Right send-layout-cmd rivertile "main-location right"
+riverctl map normal $mod Down  send-layout-cmd rivertile "main-location bottom"
+riverctl map normal $mod Left  send-layout-cmd rivertile "main-location left"
+#+end_src
+
+*** Declare a passthrough mode. This mode has only a single mapping to return to normal mode. This makes it useful for testing a nested wayland compositor
+
+#+begin_src bash
+riverctl declare-mode passthrough
+#+end_src
+
+*** Mod+F11 to enter passthrough mode
+#+begin_src bash
+riverctl map normal $mod F11 enter-mode passthrough
+#+end_src
+
+*** Mod+F11 to return to normal mode
+#+begin_src bash
+riverctl map passthrough $mod F11 enter-mode normal
+#+end_src
+
+*** Various media key mapping examples for both normal and locked mode which do not have a modifier
+
+#+begin_src bash
+for mode in normal locked
+do
+    # Eject the optical drive
+    riverctl map $mode None XF86Eject spawn 'eject -T'
+
+    # Control pulse audio volume with pamixer (https://github.com/cdemoulins/pamixer)
+    riverctl map $mode None XF86AudioRaiseVolume  spawn 'pamixer -i 5'
+    riverctl map $mode None XF86AudioLowerVolume  spawn 'pamixer -d 5'
+    riverctl map $mode None XF86AudioMute         spawn 'pamixer --toggle-mute'
+
+    # Control MPRIS aware media players with playerctl (https://github.com/altdesktop/playerctl)
+    riverctl map $mode None XF86AudioMedia spawn 'playerctl play-pause'
+    riverctl map $mode None XF86AudioPlay  spawn 'playerctl play-pause'
+    riverctl map $mode None XF86AudioPrev  spawn 'playerctl previous'
+    riverctl map $mode None XF86AudioNext  spawn 'playerctl next'
+
+    # Control screen backlight brighness with light (https://github.com/haikarainen/light)
+    riverctl map $mode None XF86MonBrightnessUp   spawn 'light -A 5'
+    riverctl map $mode None XF86MonBrightnessDown spawn 'light -U 5'
+done
+#+end_src
+
+*  Set background and border color
+#+begin_src bash
+riverctl background-color 0x002b36
+riverctl border-color-focused 0xbd93f9
+riverctl border-color-unfocused 0x282a36
+#+end_src
+
+* Set repeat rate
+#+begin_src bash
+riverctl set-repeat 50 300
+#+end_src
+
+* auto starting apps
+#+begin_src bash
+  riverctl spawn "swaybg -i ~/dotfiles/wallpapers/summer_1am.jpg" 
+  riverctl spawn lxpolkit 
+  riverctl spawn waybar
+  # riverctl spawn /usr/lib/notification-daemon-1.0/notification-daemon
+  riverctl spawn dunst
+  riverctl spawn "nm-applet --indicator"
+  #riverctl spawn "redshift -O 5000"
+#+end_src
+
+** Set app-ids of views which should float
+#+begin_src bash
+riverctl float-filter-add "float"
+riverctl float-filter-add "popup"
+#+end_src
+
+** Set app-ids of views which should use client side decorations
+#+begin_src bash
+riverctl csd-filter-add "gedit"
+#+end_src
+
+* Rivertile Defaults 
+Set and exec into the default layout generator, rivertile. River will send the process group of the init executable SIGTERM on exit.
+
+#+begin_src bash
+riverctl default-layout rivertile
+exec rivertile -main-ratio 0.5
+#+end_src
