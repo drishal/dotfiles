@@ -296,6 +296,7 @@ By default, do nothing.
           spawnOnce "xfce4-clipman"
           -- spawnOnce "redshift -O 5000"
           spawnOnce "volumeicon"
+          spawnOnce "blueman-applet"
           --spawnOnce "play  -v0.05  ~/Desktop/95.mp3"
 
 #+end_src
