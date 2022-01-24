@@ -90,11 +90,11 @@
   home.file."/home/drishal/.config/picom/picom.conf".source = ../config/picom/picom.conf;
 
   # river
-  home.file."/home/drishal/.config/river".source = ../config/river;
+  # home.file."/home/drishal/.config/river".source = ../config/river;
 
   #waybar
   home.file."/home/drishal/.config/waybar".source = ../config/waybar;
-
+  home.file."/home/drishal/.config/waybar/style.css".source = ../config/waybar/style.css;
 
   # qtile config
   #home.file."/home/drishal/.config/qtile/config.py".source =../config/qtile/config.py;
