@@ -3,7 +3,7 @@
     "modules-center": [ "clock"],
     "modules-right": ["battery","network","memory","cpu", "tray"],
     "battery": {
-        "format": "{capacity}% {icon}",
+        "format": "{icon} {capacity}% ",
         "format-icons": ["", "", "", "", "" ]
     },
 
@@ -23,7 +23,7 @@
 
   "memory": {
        "interval": 30,
-       "format": "{used:0.1f}G/{total:0.1f}G  "
+       "format": "  {used:0.1f}G/{total:0.1f}G "
   },
   "network": {
      // "interface": "wlp2s0",
@@ -41,16 +41,15 @@
 
     
     "wlr/taskbar": {
+        "all-outputs": false,
+	"current-only":true,
         "format": "{icon}",
         "icon-size": 9,
         "icon-theme": "Papirus",
         "tooltip-format": "{title}",
         "on-click": "activate",
-        "on-click-middle": "close",
-        //"ignore-list": [
-           // "Alacritty"
-        //]
-   },
+        "on-click-middle": "close"
+         },
    
     "tray": {
         "icon-size": 19,
