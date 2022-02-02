@@ -32,7 +32,7 @@
   riverctl map normal $mod D spawn "wofi --show drun" 
 
   # Mod e for nemo
-  riverctl map normal $mod E spawn "nemo" 
+  riverctl map normal $mod E spawn "dolphin" 
 
   # firefox
   riverctl map normal $mod+Shift F spawn "firefox"
