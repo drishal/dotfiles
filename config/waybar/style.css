@@ -4,7 +4,7 @@
     border-radius: 0;
     /* `otf-font-awesome` is required to be installed for icons */
     font-family: "FiraCode Nerd Font","Roboto", "Helvetica", "Arial", "sans-serif";
-    font-size: 12;
+    font-size: 11px;
     min-height: 0;
     color: #f8f8f2;
 }
@@ -22,7 +22,7 @@ window#waybar {
     background-color: #282a36;
     padding: 3px;
     border-radius: 10px;
-    min-width: 30px;
+    min-width: 20px;
     }
 #tags button.occupied  {
     background-color: #44475a;
@@ -40,12 +40,11 @@ window#waybar {
 #network,
 #tray
 {
-    padding-left: 20px;
-    padding-right: 20px;
-    background: #44475a; 
-    border-radius: 10px;
-    margin-left: 5px;
-    margin-right: 5px;
+  background: #44475a; 
+  padding: 0 10px;
+  margin: 3px 3px 3px 3px;
+  border-radius: 90px;
+  background-clip: padding-box;
 }
 
 #battery {
