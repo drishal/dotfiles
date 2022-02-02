@@ -6,12 +6,11 @@
   - [[#shift-theme-variables-to-customel-make-sure-to-create-it-if-it-does-not-exist][shift theme variables to ~custom.el~, make sure to create it if it does not exist]]
   - [[#emacs-startup-performance][emacs startup performance]]
 - [[#initialize-package-sources][Initialize package sources]]
-  - [[#packageel][Package.el]]
-  - [[#straightel-make-sure-to-later-remove-packageel][straight.el: make sure to later remove package.el]]
   - [[#enable-native-comp-for-packages][enable native comp for packages]]
   - [[#quelpa][quelpa]]
   - [[#setting-up-paths][Setting up paths]]
 - [[#customizing-the-editor-and-appearence][Customizing the Editor and Appearence]]
+  - [[#bookmarks-file][bookmarks file]]
   - [[#dashboard][Dashboard]]
   - [[#page-break-lines][Page break lines]]
   - [[#highlight-current-line][highlight current line]]
@@ -22,15 +21,14 @@
   - [[#disable-scrollbar][disable scrollbar]]
   - [[#all-the-icon-fonts][All the icon fonts]]
   - [[#line-numbers][Line Numbers]]
-  - [[#doom-modeline][Doom modeline]]
-  - [[#loading-the-theme][Loading the theme]]
-  - [[#fonts][Fonts]]
+  - [[#modeline][Modeline]]
   - [[#evil-mode][Evil mode]]
   - [[#undo-system][Undo system]]
   - [[#padding][Padding]]
   - [[#perspective][perspective]]
   - [[#brackets][brackets]]
   - [[#tramp][tramp]]
+  - [[#backup-settings][Backup settings]]
 - [[#hook-to-tangle-on-save][Hook to tangle on save]]
 - [[#org-mode][Org mode:]]
   - [[#org-mode-indent][org mode indent]]
@@ -44,6 +42,7 @@
   - [[#org-roam][org roam]]
 - [[#tools][Tools]]
   - [[#vterm][vterm]]
+  - [[#mentor-torrent-client][Mentor Torrent client]]
   - [[#auto-update-with-emacs][auto update with emacs]]
   - [[#telega][telega]]
   - [[#emacs-pdf-tools][emacs pdf tools]]
@@ -53,7 +52,6 @@
   - [[#shackle][Shackle]]
   - [[#pacman][pacman]]
   - [[#popperel-todo][popper.el TODO]]
-  - [[#using-exwm][Using EXWM]]
   - [[#erc-server-settings][ERC server settings]]
   - [[#elfeed-rss-reader][elfeed RSS reader]]
 - [[#language-and-completion-support][Language and completion support]]
@@ -62,11 +60,11 @@
   - [[#emoji-mode][emoji mode]]
   - [[#parentheses-completion][Parentheses Completion]]
   - [[#projectile][Projectile]]
+  - [[#vertico-and-orderless][vertico and orderless]]
   - [[#languages-and-lsp-mode][languages and lsp-mode]]
   - [[#which-key][which key]]
 - [[#prevent-saving-to-x-clipboard-manager][prevent "saving to x clipboard manager]]
 - [[#prevent-warnings-buffer][prevent *warnings* buffer]]
-- [[#disable-backups][Disable backups]]
 - [[#emacs-fixing-some-window-stuff][emacs fixing some window stuff]]
 - [[#restart-emacs-package][restart emacs package]]
 
@@ -93,10 +91,7 @@
 #+end_src
 
 * Initialize package sources
-** Package.el
-#+begin_src emacs-lisp
-#+end_src
-** straight.el: make sure to later remove package.el
+*** straight.el
 #+begin_src emacs-lisp
   (defvar bootstrap-version)
   (let ((bootstrap-file
@@ -136,6 +131,10 @@ https://github.com/quelpa/quelpa#installation
 
 #+end_src
 * Customizing the Editor and Appearence
+** bookmarks file
+#+begin_src emacs-lisp
+  (setq bookmark-default-file "~/.emacs.d/bookmarks" )
+#+end_src
 ** Dashboard
 #+begin_src emacs-lisp
   (use-package dashboard :straight t
@@ -193,7 +192,7 @@ https://github.com/quelpa/quelpa#installation
     ;; Enable custom neotree theme (all-the-icons must be installed!)
     (doom-themes-neotree-config)
     ;; or for treemacs users
-    (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+    (setq doom-themes-treemacs-theme "doom-dracula") ; use the colorful treemacs theme
     (doom-themes-treemacs-config)
 
     ;; Corrects (and improves) org-mode's native fontification.
@@ -221,18 +220,20 @@ https://github.com/quelpa/quelpa#installation
   (global-display-line-numbers-mode 1)
   (global-visual-line-mode t)
 #+end_src
-** Doom modeline
+** Modeline
+*** Doom Modeline
 #+begin_src emacs-lisp
   (use-package doom-modeline :straight t)
   (doom-modeline-mode 1)
 #+end_src
-
-** Loading the theme
+*** Airline
+https://github.com/AnthonyDiGirolamo/airline-themes
 #+begin_src emacs-lisp
-  ;;(load-theme 'doom-dracula t)
+  ;; (use-package airline-themes :straight t)
+  ;; (load-theme 'airline-base16_dracula t)
 #+end_src
 
-** Fonts
+**** Fonts
 #+begin_src emacs-lisp
   (set-face-attribute 'default nil
                       :font "FiraCode Nerd Font 11"
@@ -371,6 +372,35 @@ https://github.com/nex3/perspective-el
                                           ; (use-package tramp :straight t)
                                           ; (require 'tramp)
 #+end_src
+
+** Backup settings
+*** make emacs-temp if it does not exist
+#+begin_src emacs-lisp
+  (unless (file-exists-p "~/.emacs-temp")
+    (mkdir "~/.emacs-temp"))
+#+end_src
+*** no-littering
+#+begin_src emacs-lisp
+  (use-package no-littering :straight t)
+#+end_src
+
+*** Backup directory
+#+begin_src emacs-lisp
+  (unless (file-exists-p "~/.emacs-temp")
+    (mkdir "~/.emacs-temp/backups"))
+  (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs-temp/backups" ))))
+#+end_src
+
+*** Autosave directory
+#+begin_src emacs-lisp
+  ;; (unless (file-exists-p "~/.emacs-temp/auto-saves")
+  ;;   (mkdir "~/.emacs-temp/auto-saves")
+  ;;   (mkdir "~/.emacs-temp/auto-saves/sessions"))
+
+  ;; (setq auto-save-file-name-transforms
+  ;;       `((".*" ,(no-littering-expand-var-file-name "~/.emacs-temp/auto-saves/") t)))
+#+end_src
+
 * Hook to tangle on save
 #+begin_src emacs-lisp
   (defun f2k--tangle-all-org-on-save-h ()
@@ -478,6 +508,11 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
     ;; (set-popup-rule! "^\\*vterm" :size 0.25 :vslot -4 :select t :quit nil :ttl 0)
     (setq vterm-timer-delay 0)
     )
+#+end_src
+** Mentor Torrent client
+https://github.com/skangas/mentor
+#+begin_src emacs-lisp
+  (use-package mentor :straight t)
 #+end_src
 ** auto update with emacs
 #+begin_src emacs-lisp
@@ -686,14 +721,6 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
 ** popper.el TODO
 https://github.com/karthink/popper
 
-** Using EXWM
-#+begin_src emacs-lisp
-  ;;(use-package exwm :straight t)
-                                          ;(require 'exwm)
-                                          ;(require 'exwm-config)
-                                          ;(exwm-config-default)
-
-#+end_src
 ** ERC server settings
 #+begin_src emacs-lisp
   (require 'erc)
@@ -759,7 +786,7 @@ https://github.com/karthink/popper
   (require 'smartparens-config)
 #+end_src
 
-*** vertico and orderless
+** vertico and orderless
 #+begin_src emacs-lisp
   ;; Enable vertico
   (use-package vertico :straight t
@@ -934,54 +961,6 @@ https://github.com/karthink/popper
 
 #+end_src
 
-*** helm completion
-#+begin_src emacs-lisp
-
-  (use-package helm
-    :straight t
-                                          ;:config
-
-    )
-
-
-  ;; (global-set-key (kbd "M-x") #'helm-M-x)
-  ;; (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
-  ;; (global-set-key (kbd "C-x C-f") #'helm-find-files)
-
-#+end_src
-
-*** ido
-#+begin_src emacs-lisp
-  ;; (setq ido-enable-flex-matching t)
-  ;; (setq ido-everywhere t)
-  ;; (ido-mode 1)
-#+end_src
-
-*** ivy
-#+begin_src emacs-lisp
-  ;; (ivy-mode)
-  ;; (setq ivy-use-virtual-buffers t)
-  ;; (setq enable-recursive-minibuffers t)
-  ;; ;; enable this if you want `swiper' to use it
-  ;; ;; (setq search-default-mode #'char-fold-to-regexp)
-  ;; (global-set-key "\C-s" 'swiper)
-  ;; (global-set-key (kbd "C-c C-r") 'ivy-resume)
-  ;; (global-set-key (kbd "<f6>") 'ivy-resume)
-  ;; (global-set-key (kbd "M-x") 'counsel-M-x)
-  ;; (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  ;; (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-  ;; (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-  ;; (global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
-  ;; (global-set-key (kbd "<f1> l") 'counsel-find-library)
-  ;; (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-  ;; (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-  ;; (global-set-key (kbd "C-c g") 'counsel-git)
-  ;; (global-set-key (kbd "C-c j") 'counsel-git-grep)
-  ;; (global-set-key (kbd "C-c k") 'counsel-ag)
-  ;; (global-set-key (kbd "C-x l") 'counsel-locate)
-  ;; (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-  ;; (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
-#+end_src
 ** languages and lsp-mode
 https://emacs-lsp.github.io/lsp-mode/
 and also https://emacs-lsp.github.io/lsp-mode/page/languages/
@@ -1014,12 +993,6 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
   ;; (setq lsp-use-plists t)
   ;;(setq lsp-idle-delay 0.500)
-#+end_src
-*** Sqlplus
-#+begin_src emacs-lisp
-                                          ; (use-package sqlplus-mode :straight t)
-
-                                          ;   (let ((oracle-home (shell-command-to-string ". ~/.profile; echo -n $ORACLE_HOME"))) (if oracle-home (setenv "ORACLE_HOME" oracle-home)) (setenv "PATH" (concat (getenv "PATH") (format "%s/%s" oracle-home "bin"))) (add-to-list 'exec-path (format "%s/%s" oracle-home "bin")) ) This assumes that you’re using ZSH. Obviously, you should change the .zshrc reference to the
 #+end_src
 *** sql
 #+begin_src emacs-lisp
@@ -1148,11 +1121,6 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 * prevent *warnings* buffer
 #+begin_src emacs-lisp
   (setq-default warning-minimum-level :error)
-#+end_src
-
-* Disable backups
-#+begin_src emacs-lisp
-  (setq make-backup-files nil)
 #+end_src
 
 * emacs fixing some window stuff
