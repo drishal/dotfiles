@@ -36,6 +36,8 @@
 - [[#loading-the-profile][loading the ~~/.profile~]]
 - [[#zplug-load][Zplug load]]
 - [[#pfetch][pfetch]]
+- [[#some-misc-exports][some misc exports]]
+  - [[#terminfo-stull][Terminfo stull]]
 - [[#powerlevel10k][powerlevel10k]]
 
 * initial setup
@@ -392,6 +394,12 @@ zplug load
 * pfetch
 #+begin_src shell
   pfetch 
+#+end_src
+
+* some misc exports
+** Terminfo stull
+#+begin_src shell
+  export TERMINFO_DIRS=/usr/share/terminfo
 #+end_src
 
 * powerlevel10k
