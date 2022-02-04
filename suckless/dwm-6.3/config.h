@@ -17,7 +17,6 @@ static const char dmenufont[]       = "FiraCode Nerd Font:size=10";
 
 // reset
 void resetnmaster(const Arg *arg);
-// void reset(const Arg *arg);
 // dracula
 static const char col_gray1[]       = "#282a36";
 static const char col_gray2[]       = "#282a36";
@@ -56,7 +55,7 @@ static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "[]=",      tile },    /* first entry is default */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
-	// { "[M]",      monocle },
+	{ "[M]",      monocle },
 };
 
 /* key definitions */
@@ -104,11 +103,9 @@ static Key keys[] = {
 	// stack commands
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-
 	// master commands
-	{ MODKEY,                       XK_bracketleft,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_bracketright,      incnmaster,     {.i = -1 } },
-
+	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
+	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	// resize 
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
@@ -116,15 +113,11 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-
-	//{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[1]} },
-
+	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	// resetting layouts
-	/* https://www.reddit.com/r/suckless/comments/s2ch3f/comment/hsep6mg/?utm_source=share&utm_medium=web2x&context=3 */
-	{ MODKEY|ShiftMask,             XK_m,      reset,    {0} },
+	{ MODKEY|ShiftMask,             XK_m,      resetlayout,    {0} },
 	{ MODKEY|ShiftMask,             XK_n,      resetlayout,    {0} },
-
 	// layouts
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
@@ -172,4 +165,5 @@ resetnmaster(const Arg *arg)
 {
 	selmon->nmaster = 1;
 	arrange(selmon);
-};
+}
+

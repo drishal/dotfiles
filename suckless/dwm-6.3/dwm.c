@@ -216,7 +216,6 @@ static void propertynotify(XEvent *e);
 static void quit(const Arg *arg);
 static Monitor *recttomon(int x, int y, int w, int h);
 static void resetlayout(const Arg *arg);
-static void reset(const Arg *arg);
 static void removesystrayicon(Client *i);
 static void resize(Client *c, int x, int y, int w, int h, int interact);
 static void resizebarwin(Monitor *m);
@@ -1453,17 +1452,6 @@ resetlayout(const Arg *arg)
 	setmfact(&default_mfact);
 }
 
-void
-reset(const Arg *arg)
-{
-  selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag] = mfact;
-  selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag] = nmaster;
-  
-  selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt] = (Layout *)&layouts[0];
-  strncpy(selmon->ltsymbol, selmon->lt[selmon->sellt]->symbol, sizeof selmon->ltsymbol);
-  
-  arrange(selmon);
-}
 
 void
 removesystrayicon(Client *i)
