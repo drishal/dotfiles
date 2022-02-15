@@ -32,12 +32,12 @@
       userEmail = "drishalballaney@gmail.com";
     };
 
-    #Gccemacs
-    # emacs = {
-    #   enable = true;
-    #   package = pkgs.emacsPgtkGcc;
-    #   extraPackages = (epkgs: [ epkgs.vterm ] );
-    # };
+    # Gccemacs
+     emacs = {
+       enable = true;
+       package = pkgs.emacsPgtkGcc;
+       extraPackages = (epkgs: [ epkgs.vterm ] );
+     };
   };
 
   home.packages = with pkgs; [];

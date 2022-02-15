@@ -15,7 +15,7 @@
     ];
 
   # kernel parameters
-  boot.kernelParams = ["usbcore.autosuspend=-1 iommu=pt "];
+  boot.kernelParams = ["iommu=pt"];
 
   # microde
   hardware.cpu.amd.updateMicrocode = true;
@@ -164,7 +164,7 @@
   users.users.drishal = {
     shell = pkgs.zsh;
     isNormalUser = true;
-    extraGroups = [ "wheel"  "network" "video"  "virt-manager"]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel"  "network" "video"  "-manager"]; # Enable ‘sudo’ for the user.
   };
 
   #jaba
@@ -181,7 +181,7 @@
   environment.systemPackages = with pkgs; [
     wget vim haskellPackages.xmobar
     alacritty xorg.xkill git
-    man kitty teams
+    man teams
     papirus-icon-theme xorg.xf86videoamdgpu lxappearance
     lxsession libnotify xclip starship
     cmake volumeicon usbutils
@@ -195,7 +195,7 @@
     xorg.xdpyinfo evince qt5ct
     redshift xorg.xbacklight xfce.xfce4-power-manager
     brightnessctl imagemagick exa
-    gcc deadd-notification-center tdesktop
+    gcc deadd-notification-center 
     nodePackages.pyright nodePackages.vscode-html-languageserver-bin zoom-us linuxPackages.cpupower
     powertop  telnet nmap cpufetch
     dmenu dwmblocks cmatrix qutebrowser neovim
@@ -203,9 +203,9 @@
     ranger xorg.xmodmap  powershell gimp
     brave thinkfan bpytop bat polybar lolcat ncdu lm_sensors
     rnix-lsp gnome.gnome-sound-recorder tmux ps_mem taffybar
-    noto-fonts ntfs3g gparted file appimage-run etcher woeusb cachix
+    noto-fonts ntfs3g gparted file appimage-run woeusb cachix
     feh cinnamon.nemo libva-utils speedtest-cli pass surf gnumake
-    river clang-tools ed materia-theme  virt-manager
+    river clang-tools ed materia-theme  
     # autoconf automake inkscape gdk-pixbuf sassc pkgconfig
     # emacsPgtkGcc
     #rust home-manager metasploit theharvester
@@ -278,23 +278,17 @@
           src = builtins.fetchTarball {
             url = https://github.com/yshui/picom/archive/refs/heads/next.zip;
             #sha256 = lib.fakeSha256;
-            sha256 = "0lx30w9ccrivnm05i1m67wvhkiw166i8v0gdj6ql6jganrwnwzwk";
+            sha256 = "0g8k1krxryy9il2347z1gqv6bgg94galzzw0b90prr5q7cnvvgk1";
           };
         });
       })
-
-
-    (self: super: {
-      qtile = self.callPackage ./packages/qtile {};
-    })
 
     (self: super:
       {
         discord = super.discord.overrideAttrs (_: {
           src = builtins.fetchTarball {
             url = https://discord.com/api/download?platform=linux&format=tar.gz;
-            #sha256 = lib.fakeSha256;
-            sha256 = "1ahj4bhdfd58jcqh54qcgafljqxl1747fqqwxhknqlasa83li75n";
+	    sha256= "05s7irhw984slalnf7q5rps9i8izq542lnman9s1x6csd26r157s";
           };
         });
       })
