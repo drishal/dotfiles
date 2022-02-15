@@ -7,6 +7,7 @@
 - [[#some-stuff-configure-by-zsh-newuser-install][Some stuff configure by zsh-newuser-install]]
 - [[#setting-some-paths][Setting some paths]]
   - [[#localbin][~~/.local/bin~]]
+  - [[#ccache-settings][ccache settings]]
 - [[#setting-some-values-we-will-need-from-grml-zsh-config][Setting some values we will need from Grml zsh config]]
 - [[#completion-stuff-from-grml][completion stuff from grml]]
 - [[#plugins][Plugins]]
@@ -55,7 +56,6 @@ git clone https://github.com/zsh-users/zsh-history-substring-search.git
 #+begin_src shell
  source $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
 #+end_src
-
 * qt5ct
 #+begin_src shell
   # if [[ "$DESKTOP_SESSION" = *"plasma"* ]]; then
@@ -82,6 +82,12 @@ git clone https://github.com/zsh-users/zsh-history-substring-search.git
   fi
   autoload -U colors && colors
   export PATH
+#+end_src
+** ccache settings
+#+begin_src shell
+  export USE_CCACHE=1
+  export CCACHE_EXEC=/usr/bin/ccache
+  export CCACHE_DIR=/home/drishal/ccache2
 #+end_src
 
 * Setting some values we will need from Grml zsh config

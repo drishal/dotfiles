@@ -40,6 +40,8 @@
     # };
   };
 
+  home.packages = with pkgs; [];
+
   # services
   # services = {
   #   emacs = {

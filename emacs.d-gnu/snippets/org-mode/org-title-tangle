@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: org title with tangle 
+# key: <t
+# --
+
+#+TITLE: $0 
+#+PROPERTY: header-args 

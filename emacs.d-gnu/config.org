@@ -37,6 +37,7 @@
   - [[#org-tempo-for-all-the-beautiful-snippets][org tempo for all the beautiful snippets:]]
   - [[#superstar-for-some-pretty-symbols][Superstar for some pretty symbols]]
   - [[#org-toc][org-toc]]
+  - [[#fixing-org-blocks][fixing org blocks]]
   - [[#company-org-block][company org block]]
   - [[#org-bable-load-all-languages][org-bable load all languages]]
   - [[#org-roam][org roam]]
@@ -379,26 +380,17 @@ https://github.com/nex3/perspective-el
   (unless (file-exists-p "~/.emacs-temp")
     (mkdir "~/.emacs-temp"))
 #+end_src
-*** no-littering
+*** Autosave/Backups directory
 #+begin_src emacs-lisp
-  (use-package no-littering :straight t)
-#+end_src
+;; (unless (file-exists-p "~/.emacs-temp/auto-saves")
+;;   (mkdir "~/.emacs-temp/auto-saves")
+;;   (mkdir "~/.emacs-temp/auto-saves/sessions")
+;;   (mkdir "~/.emacs-temp/backups"))
 
-*** Backup directory
-#+begin_src emacs-lisp
-  (unless (file-exists-p "~/.emacs-temp")
-    (mkdir "~/.emacs-temp/backups"))
-  (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs-temp/backups" ))))
-#+end_src
-
-*** Autosave directory
-#+begin_src emacs-lisp
-  ;; (unless (file-exists-p "~/.emacs-temp/auto-saves")
-  ;;   (mkdir "~/.emacs-temp/auto-saves")
-  ;;   (mkdir "~/.emacs-temp/auto-saves/sessions"))
-
-  ;; (setq auto-save-file-name-transforms
-  ;;       `((".*" ,(no-littering-expand-var-file-name "~/.emacs-temp/auto-saves/") t)))
+;; (setq auto-save-file-name-transforms
+;;       '(("." "~/.emacs-temp/auto-saves" t))
+;;       )
+(setq auto-save-default nil)
 #+end_src
 
 * Hook to tangle on save
@@ -455,6 +447,7 @@ see  https://github.com/hlissner/doom-snippets
 ** org tempo for all the beautiful snippets:
 
 #+begin_src emacs-lisp
+  ;; (use-package 'org-tempo :straight t)
   (require 'org-tempo)
 #+end_src
 ** Superstar for some pretty symbols
@@ -465,34 +458,36 @@ see  https://github.com/hlissner/doom-snippets
 #+end_src
 ** org-toc
 #+begin_src emacs-lisp
-  (use-package toc-org :straight t)
-  (add-hook 'org-mode-hook #'toc-org-enable)
+(use-package toc-org :straight t)
+(add-hook 'org-mode-hook #'toc-org-enable)
+#+end_src
 
+** fixing org blocks
+#+begin_src emacs-lisp
+(setq org-edit-src-content-indentation 0) 
 #+end_src
 ** company org block
 #+begin_src emacs-lisp
-  (use-package company-org-block
-    :straight t
-    :custom
-    (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
-    :hook ((org-mode . (lambda ()
-                         (setq-local company-backends '(company-org-block))
-                         (company-mode +1)))))
+  ;; (use-package company-org-block
+  ;;   :straight t
+  ;;   :custom
+  ;;   (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
+  ;;   :hook ((org-mode . (lambda ()
+  ;;                        (setq-local company-backends '(company-org-block))
+  ;;                        (company-mode +1)))))
 #+end_src
 ** org-bable load all languages
 https://orgmode.org/worg/org-contrib/babel/languages/index.html
 #+begin_src emacs-lisp
-  (require 'ob-comint)
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((C . t)
-     (emacs-lisp . t)
-     (python . t)
-     (shell . t)
-                                          ;(rust . t)
-     ))
-
-  (setq org-babel-python-command "python3")
+(require 'ob-comint)
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((C . t)
+   (emacs-lisp . t)
+   (python . t)
+   (shell . t)
+   ))
+(setq org-babel-python-command "python3")
 #+end_src
 ** org roam
 #+begin_src
@@ -538,31 +533,31 @@ https://github.com/skangas/mentor
 ** mu4e
 https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-01.org
 #+begin_src emacs-lisp
-  ;; (use-package mu4e
-  ;;   :ensure nil
-  ;;   :load-path "/usr/share/emacs/site-lisp/mu4e/"
-  ;;   ;; :defer 20 ; Wait until 20 seconds after startup
-  ;;   :config
+  (use-package mu4e
+    :ensure nil
+    :load-path "/usr/share/emacs/site-lisp/mu4e/"
+    ;; :defer 20 ; Wait until 20 seconds after startup
+    :config
 
-  ;;   ;; This is set to 't' to avoid mail syncing issues when using mbsync
-  ;;   (setq mu4e-change-filenames-when-moving t)
+    ;; This is set to 't' to avoid mail syncing issues when using mbsync
+    (setq mu4e-change-filenames-when-moving t)
 
-  ;;   ;; Refresh mail using isync every 10 minutes
-  ;;   (setq mu4e-update-interval (* 10 60))
-  ;;   (setq mu4e-get-mail-command "mbsync -a")
-  ;;   (setq mu4e-maildir "~/Mail")
+    ;; Refresh mail using isync every 10 minutes
+    (setq mu4e-update-interval (* 10 60))
+    (setq mu4e-get-mail-command "mbsync -a")
+    (setq mu4e-maildir "~/Mail")
 
-  ;;   (setq mu4e-drafts-folder "/[Gmail]/Drafts")
-  ;;   (setq mu4e-sent-folder   "/[Gmail]/Sent Mail")
-  ;;   (setq mu4e-refile-folder "/[Gmail]/All Mail")
-  ;;   (setq mu4e-trash-folder  "/[Gmail]/Trash")
+    (setq mu4e-drafts-folder "/[Gmail]/Drafts")
+    (setq mu4e-sent-folder   "/[Gmail]/Sent Mail")
+    (setq mu4e-refile-folder "/[Gmail]/All Mail")
+    (setq mu4e-trash-folder  "/[Gmail]/Trash")
 
-  ;;   (setq mu4e-maildir-shortcuts
-  ;;         '((:maildir "/Inbox"    :key ?i)
-  ;;           (:maildir "/[Gmail]/Sent Mail" :key ?s)
-  ;;           (:maildir "/[Gmail]/Trash"     :key ?t)
-  ;;           (:maildir "/[Gmail]/Drafts"    :key ?d)
-  ;;           (:maildir "/[Gmail]/All Mail"  :key ?a))))
+    (setq mu4e-maildir-shortcuts
+          '((:maildir "/Inbox"    :key ?i)
+            (:maildir "/[Gmail]/Sent Mail" :key ?s)
+            (:maildir "/[Gmail]/Trash"     :key ?t)
+            (:maildir "/[Gmail]/Drafts"    :key ?d)
+            (:maildir "/[Gmail]/All Mail"  :key ?a))))
 
 
 #+end_src
@@ -757,7 +752,7 @@ https://github.com/karthink/popper
 
   (add-hook 'after-init-hook 'global-company-mode)
   (setq company-minimum-prefix-length 1
-        company-idle-delay 0.0) ;; default is 0.2
+        company-idle-delay 0.1) ;; default is 0.2
 
 #+end_src
 ** using tabnine for completion
@@ -1045,6 +1040,11 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+begin_src emacs-lisp
   (use-package nix-mode :straight t
     :mode "\\.nix\\'")
+  (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
+                    :major-modes '(nix-mode)
+                    :server-id 'nix))
 #+end_src
 *** java
 #+begin_src emacs-lisp
@@ -1077,6 +1077,11 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 #+end_src
+*** PKGBUILD
+#+begin_src emacs-lisp
+  (use-package pkgbuild-mode :straight t)
+  (require 'pkgbuild-mode)
+#+end_src
 *** lsp
 #+begin_src emacs-lisp
   (add-hook 'emacs-lisp-mode-hook
@@ -1103,9 +1108,69 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   (setq c-default-style "linux"
         c-basic-offset 4)
 #+end_src
-*** rust mode
+**** some C settings
 #+begin_src emacs-lisp
-  (use-package rust-mode :straight t)
+(defun c-lineup-arglist-tabs-only (ignored)
+  "Line up argument lists by tabs, not spaces"
+  (let* ((anchor (c-langelem-pos c-syntactic-element))
+         (column (c-langelem-2nd-pos c-syntactic-element))
+         (offset (- (1+ column) anchor))
+         (steps (floor offset c-basic-offset)))
+    (* (max steps 1)
+       c-basic-offset)))
+
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            ;; Add kernel style
+            (c-add-style
+             "linux-tabs-only"
+             '("linux" (c-offsets-alist
+                        (arglist-cont-nonempty
+                         c-lineup-gcc-asm-reg
+                         c-lineup-arglist-tabs-only))))))
+
+(add-hook 'c-mode-hook
+          (lambda ()
+            (let ((filename (buffer-file-name)))
+              ;; Enable kernel mode for the appropriate files
+              (when (and filename
+                         (string-match (expand-file-name "~/src/linux-trees")
+                                       filename))
+                (setq indent-tabs-mode t)
+                (setq show-trailing-whitespace t)
+                (c-set-style "linux-tabs-only")))))
+
+#+end_src
+*** rust 
+#+begin_src emacs-lisp
+  (use-package rustic
+    :straight t
+    :bind (:map rustic-mode-map
+                ("M-j" . lsp-ui-imenu)
+                ("M-?" . lsp-find-references)
+                ("C-c C-c l" . flycheck-list-errors)
+                ("C-c C-c a" . lsp-execute-code-action)
+                ("C-c C-c r" . lsp-rename)
+                ("C-c C-c q" . lsp-workspace-restart)
+                ("C-c C-c Q" . lsp-workspace-shutdown)
+                ("C-c C-c s" . lsp-rust-analyzer-status))
+    :config
+    ;; uncomment for less flashiness
+    ;; (setq lsp-eldoc-hook nil)
+    ;; (setq lsp-enable-symbol-highlighting nil)
+    ;; (setq lsp-signature-auto-activate nil)
+
+    ;; comment to disable rustfmt on save
+    (setq rustic-format-on-save t)
+    (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
+
+  (defun rk/rustic-mode-hook ()
+    ;; so that run C-c C-c C-r works without having to confirm, but don't try to
+    ;; save rust buffers that are not file visiting. Once
+    ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
+    ;; no longer be necessary.
+    (when buffer-file-name
+      (setq-local buffer-save-without-query t)))
 #+end_src
 *** zig
 #+begin_src emacs-lisp
@@ -1144,7 +1209,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 * emacs fixing some window stuff
 #+begin_src emacs-lisp
-  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+  ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
   ;; (add-to-list 'default-frame-alist '(fullscreen . fullheight))
 #+end_src
 

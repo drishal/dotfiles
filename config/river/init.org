@@ -1,6 +1,9 @@
 #+TITLE: River Conifg 
 #+PROPERTY: header-args :tangle ~/.config/river/init :shebang "#!/bin/sh"
 * Table of Contents :toc:
+- [[#some-exports][some exports]]
+  - [[#swap-ctrl-and-caps][swap ctrl and caps]]
+  - [[#gtk-stuff][gtk stuff]]
 - [[#keybinds][Keybinds]]
   - [[#setting-the-mod-key][Setting the Mod key]]
   - [[#applications][Applications]]
@@ -11,6 +14,16 @@
 - [[#auto-starting-apps][auto starting apps]]
   - [[#set-app-ids-of-views-which-should-float][Set app-ids of views which should float]]
   - [[#rivertile-defaults][Rivertile Defaults]]
+
+* some exports
+** swap ctrl and caps
+#+begin_src bash
+export XKB_DEFAULT_OPTIONS=caps:ctrl
+#+end_src
+** gtk stuff
+#+begin_src bash
+export GTK_USE_PORTAL=0
+#+end_src
 
 * Keybinds
 ** Setting the Mod key
@@ -34,7 +47,7 @@
   # Mod e for nemo
   riverctl map normal $mod E spawn "nemo" 
 
-  # firefox
+  # Browser 
   riverctl map normal $mod+Shift F spawn "firefox"
 
   # pavucontrol
@@ -220,6 +233,12 @@ riverctl map normal $mod F11 enter-mode passthrough
 riverctl map passthrough $mod F11 enter-mode normal
 #+end_src
 
+*** Focus follows mouse
+#+begin_src bash
+riverctl focus-follows-cursor normal
+
+#+end_src
+
 *** Various media key mapping examples for both normal and locked mode which do not have a modifier
 
 #+begin_src bash
@@ -260,7 +279,7 @@ riverctl set-repeat 50 300
 
 * auto starting apps
 #+begin_src bash
-  riverctl spawn "swaybg -i ~/dotfiles/wallpapers/summer_1am.jpg" 
+  riverctl spawn "swaybg -i ~/dotfiles/wallpapers/catppuccin-rainbow-arch.png" 
   riverctl spawn lxpolkit 
   riverctl spawn waybar
   # riverctl spawn /usr/lib/notification-daemon-1.0/notification-daemon

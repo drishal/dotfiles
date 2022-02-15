@@ -7,7 +7,7 @@ static const Block blocks[] = {
 	{"CPU:  ", "bash /home/drishal/dotfiles/suckless/dwmblocks/scripts/cpu.sh",                            1,          0},
 	//{" ", "bash /home/drishal/dotfiles/suckless/dwmblocks/scripts/cpu.sh",                            1,          0},
 	//{"  ", "free -h | awk '/^Mem/ { print $3\"/\"$2 }' | sed s/i//g",	5,		0},
-	{"RAM:  🖥 ", "free -h | awk '/^Mem/ { print $3\"/\"$2 }' | sed s/i//g",	5,		0},
+	{"RAM: 🖥 ", "free -h | awk '/^Mem/ { print $3\"/\"$2 }' | sed s/i//g",	5,		0},
 	//{" ", "date '+%b %d %Y %a %H:%M:%S ]  '",					1,		0},
 	{"🗓 ", "date '+%b %d %Y %a %H:%M:%S ]  '",					1,		0},
 };

@@ -118,6 +118,16 @@
       enable = true;
       greeter.enable = true;
     };
+    displayManager.session = [
+      {
+        manage = "window";
+        name = "river";
+        start = ''
+          systemd-cat -t river -- ${pkgs.river}/bin/river &
+          waitPID=$!
+        '';
+      }
+    ];
   };
 
   # fprint

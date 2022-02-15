@@ -76,25 +76,26 @@ static const char *nmcmd[]  = { "nmcli-rofi", NULL };
 static const char *powercmd[]  = { "rofi", "-show", "power-menu", "-modi", "power-menu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu", NULL };
 static const char *mysystray[]  = {"stalonetray",NULL};
 static const char *files[]  = {"thunar",NULL};
-static const char *firefox[]  = {"firefox",NULL};
+static const char *browser[]  = {"firefox",NULL};
 //static const char *deadd[]  = {"bash","/home/drishal/dotfiles/config/suckless/dwm-6.2/deadd.sh",NULL};
 static const char *menu[]  = {"bash","/home/drishal/menu.sh",NULL};
 static const char *emacs[]  = {"emacsclient", "-c",NULL};
 static const char *pavucontrol[]  = {"pavucontrol",NULL};
+static const char *screenshot[]  = {"spectacle",NULL};
 
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
         // Applications
         { MODKEY,                       XK_d,      spawn,          {.v = roficmd } },
-	{ MODKEY,                       XK_s,      spawn,           {.v = menu } },
+	{ MODKEY,                       XK_s,      spawn,           {.v = screenshot} },
 	{ MODKEY,                       XK_a,      spawn,      {.v = emacs} },
 	{ MODKEY,                       XK_v,      spawn,      {.v = pavucontrol} },
         { MODKEY,                       XK_e,      spawn,      {.v = files} },
 	{ MODKEY,                       XK_r,      spawn,      {.v = dmenucmd} },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_p,      spawn,          {.v = powercmd } },
-	{ MODKEY|ShiftMask,             XK_f,      spawn,      {.v = firefox }},
+	{ MODKEY|ShiftMask,             XK_f,      spawn,      {.v = browser }},
 
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 
@@ -113,6 +114,11 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
+
+	//rotate stack
+	{ MODKEY|ShiftMask,             XK_j,      rotatestack,    {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_k,      rotatestack,    {.i = -1 } },
+
 
 	//{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[1]} },
