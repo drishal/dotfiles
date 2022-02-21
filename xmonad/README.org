@@ -24,110 +24,114 @@
 - [[#xmobar][xmobar]]
 - [[#myconfig][myConfig]]
 - [[#the-main-event][the main event]]
+- [[#xmobar-config][xmobar config]]
+- [[#color-schemes][Color schemes]]
+  - [[#dracula][Dracula]]
+  - [[#onedark][OneDark]]
 
 * Imports
 this secion is dedicated to the imports of the modules I would be using in the config 
 #+begin_src haskell
-  --import XMonad
-  import XMonad hiding ((|||))
-  import Data.Monoid
-  import System.Exit
-  import qualified XMonad.StackSet as W
-  import qualified Data.Map        as M
-  import XMonad.Hooks.ManageDocks
-  import XMonad.Layout.NoBorders
-  import Control.Monad
-  import  Data.Maybe
-  import Data.List
-    -- Base
-  import XMonad
-  import System.IO
-  import System.Exit (exitSuccess)
-  import qualified XMonad.StackSet as W
+--import XMonad
+import XMonad hiding ((|||))
+import Data.Monoid
+import System.Exit
+import qualified XMonad.StackSet as W
+import qualified Data.Map        as M
+import XMonad.Layout.NoBorders
+import Control.Monad
+import  Data.Maybe
+import Data.List
+  -- Base
+import XMonad
+import System.IO
+import System.Exit (exitSuccess)
+import qualified XMonad.StackSet as W
 
-      -- Actions
-  import XMonad.Actions.CopyWindow (kill1, killAllOtherCopies)
-  -- import XMonad.Actions.CycleWS (moveTo, shiftTo, WSType(..), nextScreen, prevScreen)
-  import XMonad.Actions.CycleWS
-  import XMonad.Actions.GridSelect
-  import XMonad.Actions.MouseResize
-  import XMonad.Actions.Promote
-  import XMonad.Actions.RotSlaves 
-  import qualified XMonad.Actions.TreeSelect as TS
-  import XMonad.Actions.WindowGo 
-  import XMonad.Actions.WithAll
-  import qualified XMonad.Actions.Search as S
-  -- import qualified DBus as D
-  -- import qualified DBus.Client as D
-  import qualified Codec.Binary.UTF8.String as UTF8
-  --import  XMonad.Actions.Navigation2D
+    -- Actions
+import XMonad.Actions.CopyWindow (kill1, killAllOtherCopies)
+-- import XMonad.Actions.CycleWS (moveTo, shiftTo, WSType(..), nextScreen, prevScreen)
+import XMonad.Actions.CycleWS
+import XMonad.Actions.GridSelect
+import XMonad.Actions.MouseResize
+import XMonad.Actions.Promote
+import XMonad.Actions.RotSlaves 
+import qualified XMonad.Actions.TreeSelect as TS
+import XMonad.Actions.WindowGo 
+import XMonad.Actions.WithAll
+import qualified XMonad.Actions.Search as S
+-- import qualified DBus as D
+-- import qualified DBus.Client as D
+import qualified Codec.Binary.UTF8.String as UTF8
+--import  XMonad.Actions.Navigation2D
 
-    --bar functions
-  import XMonad.Hooks.StatusBar
-  import XMonad.Hooks.StatusBar.PP
+  --bar functions
+import XMonad.Hooks.StatusBar
+import XMonad.Hooks.StatusBar.PP
 
-      -- Hooks
-  import XMonad.Hooks.DynamicLog
-  import XMonad.Hooks.EwmhDesktops  -- for some fullscreen events, also for xcomposite in obs.
-  import XMonad.Hooks.FadeInactive
-  import XMonad.Hooks.ManageDocks
-  import XMonad.Hooks.ManageHelpers
-  import XMonad.Hooks.ServerMode
-  import XMonad.Hooks.SetWMName
-  import XMonad.Hooks.WorkspaceHistory
-  import XMonad.Hooks.Place
-      -- Layouts
-  import XMonad.Layout.GridVariants (Grid(Grid))
-  import XMonad.Layout.SimplestFloat
-  import XMonad.Layout.Spiral
-  import XMonad.Layout.ResizableTile
-  import XMonad.Layout.Tabbed
-  import XMonad.Layout.ThreeColumns
-  import XMonad.Layout.BinarySpacePartition
-  import XMonad.Layout.SimpleFloat
-  import XMonad.Layout.Renamed
+    -- Hooks
+import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.EwmhDesktops  -- for some fullscreen events, also for xcomposite in obs.
+import XMonad.Hooks.FadeInactive
+import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.ServerMode
+import XMonad.Hooks.SetWMName
+import XMonad.Hooks.WorkspaceHistory
+import XMonad.Hooks.Place
+    -- Layouts
+import XMonad.Layout.GridVariants (Grid(Grid))
+import XMonad.Layout.SimplestFloat
+import XMonad.Layout.Spiral
+import XMonad.Layout.ResizableTile
+import XMonad.Layout.Tabbed
+import XMonad.Layout.ThreeColumns
+import XMonad.Layout.BinarySpacePartition
+import XMonad.Layout.SimpleFloat
+import XMonad.Layout.Renamed
+import XMonad.Layout.Fullscreen
+import XMonad.Layout.ToggleLayouts
 
-  --import XMonad.Layout.Fullscreen as FS
-      -- Layouts modifiers
-  import XMonad.Layout.LayoutModifier
-  import XMonad.Layout.LimitWindows 
-  --import XMonad.Layout.Magnifier
-  import XMonad.Layout.MultiToggle (mkToggle, single, EOT(EOT), (??))
-  import XMonad.Layout.MultiToggle.Instances (StdTransformers(NBFULL, MIRROR, NOBORDERS))
-  import XMonad.Layout.NoBorders
-  import XMonad.Layout.Renamed (renamed, Rename(Replace))
-  import XMonad.Layout.ShowWName
-  import XMonad.Layout.Spacing
-  import XMonad.Layout.WindowArranger (windowArrange, WindowArrangerMsg(..))
-  import qualified XMonad.Layout.ToggleLayouts as T (toggleLayouts, ToggleLayout(Toggle))
-  import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
+--import XMonad.Layout.Fullscreen as FS
+    -- Layouts modifiers
+import XMonad.Layout.LayoutModifier
+import XMonad.Layout.LimitWindows 
+import XMonad.Layout.NoBorders
+import XMonad.Layout.Renamed (renamed, Rename(Replace))
+import XMonad.Layout.ShowWName
+import XMonad.Layout.Spacing
+import XMonad.Layout.WindowArranger (windowArrange, WindowArrangerMsg(..))
 
-      -- Prompt
-  import XMonad.Prompt
-  import XMonad.Prompt.Input
-  import XMonad.Prompt.FuzzyMatch
-  import XMonad.Prompt.Man
-  import XMonad.Prompt.Pass
-  import XMonad.Prompt.Shell
-  import XMonad.Prompt.Ssh
-  import XMonad.Prompt.XMonad
-  import XMonad.Prompt.AppLauncher
-  import Control.Arrow (first)
-  import XMonad.Prompt.Workspace
-  import Data.Char
+    -- Prompt
+import XMonad.Prompt
+import XMonad.Prompt.Input
+import XMonad.Prompt.FuzzyMatch
+import XMonad.Prompt.Man
+import XMonad.Prompt.Pass
+import XMonad.Prompt.Shell
+import XMonad.Prompt.Ssh
+import XMonad.Prompt.XMonad
+import XMonad.Prompt.AppLauncher
+import Control.Arrow (first)
+import XMonad.Prompt.Workspace
+import Data.Char
 
-      -- Utilities
-  import XMonad.Util.EZConfig 
-  import XMonad.Util.NamedScratchpad
-  import XMonad.Util.Run 
-  import XMonad.Util.SpawnOnce
-  import XMonad.Util.Loggers
+    -- Utilities
+import XMonad.Util.EZConfig 
+import XMonad.Util.NamedScratchpad
+import XMonad.Util.Run 
+import XMonad.Util.SpawnOnce
+import XMonad.Util.Loggers
 
-  --Others
-  import XMonad.Layout.MultiToggle.Instances
-  import XMonad.Layout.MultiToggle
-  --import Theme
-  import Theme.Theme
+  -- color schemes
+import Colors.DoomOne
+--import Colors.Dracula
+
+--Others
+--import XMonad.Layout.MultiToggle.Instances
+--import XMonad.Layout.MultiToggle
+--import Theme
+--import Theme.Theme
 #+end_src
 
 * Some variables
@@ -181,11 +185,11 @@ this secion is dedicated to the imports of the modules I would be using in the c
 + Here I set colors for unfocused and focused windows, respectively.
 
 #+begin_src haskell
-  myNormalBorderColor  = base00
-  myFocusedBorderColor = base13
+  myNormalBorderColor  = colbg 
+  myFocusedBorderColor = colviolet 
   --dracula
   --myNormalBorderColor  = base00
-  --myFocusedBorderColor = "#bd93f9" 
+  --myFocusedBorderColor = color05 
 #+end_src
 
 * Layouts
@@ -193,25 +197,24 @@ this secion is dedicated to the imports of the modules I would be using in the c
 Here I set the default layouts for the layouts. I mainly use tiled, simplestFloat and Full layouts
 #+begin_src haskell
 
-  --myLayout =  renamed [CutWordsLeft 1] (  avoidStruts ( spacingWithEdge 8 ( smartBorders ( tiled ||| simplestFloat )))) ||| smartBorders Full
+myLayout =  toggleLayouts (noBorders Full)
+            (renamed [CutWordsLeft 1]
+            $ avoidStruts
+            $ spacingWithEdge 8
+            $ smartBorders
+            $ tiled ||| simplestFloat)
+  where
+     -- default tiling algorithm partitions the screen into two panes
+     tiled   = Tall nmaster delta ratio
 
-  myLayout =  renamed [CutWordsLeft 1]
-              $ avoidStruts
-              $ spacingWithEdge 8
-              $ smartBorders
-              $ tiled ||| simplestFloat 
-    where
-       -- default tiling algorithm partitions the screen into two panes
-       tiled   = Tall nmaster delta ratio
+     -- The default number of windows in the master pane
+     nmaster = 1
 
-       -- The default number of windows in the master pane
-       nmaster = 1
+     -- Default proportion of screen occupied by master pane
+     ratio   = 1/2
 
-       -- Default proportion of screen occupied by master pane
-       ratio   = 1/2
-
-       -- Percent of screen to increment by when resizing panes
-       delta   = 3/100
+     -- Percent of screen to increment by when resizing panes
+     delta   = 3/100
 
 #+end_src
 
@@ -236,11 +239,11 @@ here I set the run prompts for xmoand
 
   promptConfig = def
     { font                = fontFamily
-    , bgColor             = "#282a36"
-    , fgColor             = "#f8f8f2"
-    , bgHLight            = "#bd93f9"
-    , fgHLight            = "#282a36"
-    , borderColor         = "#bd93f9"
+    , bgColor             = colbg 
+    , fgColor             = colfg 
+    , bgHLight            = colviolet 
+    , fgHLight            = colfg 
+    , borderColor         = colviolet 
     , promptBorderWidth   = 0
     , position            = Top
     , height              = 20
@@ -269,133 +272,134 @@ per-workspace layout choices.
 By default, do nothing.
 
 #+begin_src haskell
-  myStartupHook = do
-          -- spawnOnce "/usr/lib/notification-daemon-1.0/notification-daemon"
-          spawnOnce "dunst"
-          --spawnOnce "/usr/libexec/notification-daemon"
-          -- spawnOnce "deadd-notification-center&"
-          spawnOnce "xsetroot -cursor_name left_ptr"
-          spawnOnce "conky -c ~/.config/conky/xmoand/dracula-01.conkyrc"
-          -- spawnOnce "emacs --daemon"
-          -- spawnOnce "lxqt-notificationd&"
-          --  spawnOnce "/usr/libexec/notification-daemon"
-          spawnOnce "lxpolkit"
-          spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true  --tint 0x282a36 --alpha 0 --height 20 --padding 3 --iconspacing 3"
-          --spawnOnce "polybar xmonad"
-          spawnOnce "picom --experimental-backends"
-          --spawnOnce "picom"
-          -- spawnOnce "nitrogen --restore"
-          spawnOnce "feh --bg-scale ~/dotfiles/wallpapers/summer_1am.jpg" 
-          --spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true  --tint 0x292d3e  --alpha 0 --height 20 --padding 1"
-          --spawnOnce "stalonetray"
-          --spawnOnce "pasystray"
-          spawnOnce "nm-applet"
-          -- spawnOnce "xiccd"
-          -- spawnOnce "mate-power-manager"
-          spawnOnce "xfce4-power-manager"
-          spawnOnce "xfce4-clipman"
-          -- spawnOnce "redshift -O 5000"
-          spawnOnce "volumeicon"
-          spawnOnce "blueman-applet"
-          --spawnOnce "play  -v0.05  ~/Desktop/95.mp3"
+myStartupHook = do
+        -- spawnOnce "/usr/lib/notification-daemon-1.0/notification-daemon"
+        spawnOnce "dunst"
+        --spawnOnce "/usr/libexec/notification-daemon"
+        -- spawnOnce "deadd-notification-center&"
+        spawnOnce "xsetroot -cursor_name left_ptr"
+        spawnOnce "conky -c ~/.config/conky/xmoand/dracula-01.conkyrc"
+        spawnOnce "xset r rate  300 50"
+        -- spawnOnce "emacs --daemon"
+        -- spawnOnce "lxqt-notificationd&"
+        --  spawnOnce "/usr/libexec/notification-daemon"
+        spawnOnce "lxpolkit"
+        spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true  --tint 0x282a36 --alpha 0 --height 20 --padding 3 --iconspacing 3"
+        --spawnOnce "polybar xmonad"
+        spawnOnce "picom --experimental-backends"
+        --spawnOnce "picom"
+        -- spawnOnce "nitrogen --restore"
+        spawnOnce "feh --bg-scale ~/dotfiles/wallpapers/summer_1am.jpg" 
+        --spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true  --tint 0x292d3e  --alpha 0 --height 20 --padding 1"
+        --spawnOnce "stalonetray"
+        --spawnOnce "pasystray"
+        spawnOnce "nm-applet"
+        -- spawnOnce "xiccd"
+        -- spawnOnce "mate-power-manager"
+        spawnOnce "xfce4-power-manager"
+        spawnOnce "xfce4-clipman"
+        -- spawnOnce "redshift -O 5000"
+        spawnOnce "volumeicon"
+        spawnOnce "blueman-applet"
+        --spawnOnce "play  -v0.05  ~/Desktop/95.mp3"
 
 #+end_src
 * My Keys Config
 this is where my keybindings go
 #+begin_src haskell
-  myKeys :: [(String, X ())]
-  myKeys =
-    [
-     --xmonad
-      ("M-S-r", spawn "xmonad --recompile; xmonad --restart")
-    , ("M-S-q", io exitSuccess)
+myKeys :: [(String, X ())]
+myKeys =
+  [
+   --xmonad
+    ("M-S-r", spawn "xmonad --recompile; xmonad --restart")
+  , ("M-S-q", io exitSuccess)
 
-    --Keyboard Layouts
-    -- , ("M-v c", spawn "setxkbmap us -variant colemak" )
-    --  , ("M-v q", spawn "setxkbmap us" )
+  --Keyboard Layouts
+  -- , ("M-v c", spawn "setxkbmap us -variant colemak" )
+  --  , ("M-v q", spawn "setxkbmap us" )
 
-    --Prompts
-      , ("M-w 1",                        shellPrompt promptConfig) --normal run prompt
-      , ("M-w 2",                        manPrompt promptConfig) -- man prompt
-      , ("M-w 3",                        xmonadPrompt promptConfig)       -- xmonadPrompt
+  --Prompts
+    , ("M-w 1",                        shellPrompt promptConfig) --normal run prompt
+    , ("M-w 2",                        manPrompt promptConfig) -- man prompt
+    , ("M-w 3",                        xmonadPrompt promptConfig)       -- xmonadPrompt
 
-     --Rofi Stuff
-    , ("M-d", spawn "rofi -show drun -icon-theme Papirus -show-icons")
-    , ("M-p", spawn " rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu")
+   --Rofi Stuff
+  , ("M-d", spawn "rofi -show drun -icon-theme Papirus -show-icons")
+  , ("M-p", spawn " rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu")
 
-  -- deadd
-  --, ("M-s", spawn "kill -s USR1 $(pidof deadd-notification-center)")
+-- deadd
+--, ("M-s", spawn "kill -s USR1 $(pidof deadd-notification-center)")
 
-    --Some Applications
-    , ("M-S-f", spawn "firefox")
-    , ("M-e", spawn "nemo")
-    , ("M-v", spawn "pavucontrol")
-    , ("M-c", spawn "ferdi")
+  --Some Applications
+  , ("M-S-f", spawn "firefox")
+  , ("M-e", spawn "nemo")
+  , ("M-v", spawn "pavucontrol")
+  , ("M-c", spawn "ferdi")
 
-    --emacs
-    , ("M-a", spawn "emacsclient -c")
-    , ("M-S-<Return>", spawn "emacs")
+  --emacs
+  , ("M-a", spawn "emacsclient -c")
+  , ("M-S-<Return>", spawn "emacs")
 
-    --terminal
-    , ("M-<Return>", spawn myTerminal)
+  --terminal
+  , ("M-<Return>", spawn myTerminal)
 
-    --window management
-      --close
-    , ("M-q", kill)
-      --Rotate through the available layout algorithms
-    , ("M-<Space>", sendMessage NextLayout)
+  --window management
+    --close
+  , ("M-q", kill)
+    --Rotate through the available layout algorithms
+  , ("M-<Space>", sendMessage NextLayout)
 
-      -- Resize viewed windows to the correct size
-      , ("M-n", refresh)
+    -- Resize viewed windows to the correct size
+    , ("M-n", refresh)
 
-      -- Move focus to the next window
-      , ("M-<Tab>" , windows W.focusDown)
+    -- Move focus to the next window
+    , ("M-<Tab>" , windows W.focusDown)
 
-      -- Move focus to the next window
-      , ("M-j", windows W.focusDown)
+    -- Move focus to the next window
+    , ("M-j", windows W.focusDown)
 
-      -- Move focus to the previous window
-      , ("M-k", windows W.focusUp)
+    -- Move focus to the previous window
+    , ("M-k", windows W.focusUp)
 
-      -- Move focus to the master window
-      , ("M-h", windows W.focusMaster  )
+    -- Move focus to the master window
+    , ("M-h", windows W.focusMaster  )
 
-      -- Swap the focused window and the master window
-      , ("M-S-h", windows W.swapMaster)
+    -- Swap the focused window and the master window
+    , ("M-S-h", windows W.swapMaster)
 
-      -- Swap the focused window with the next window
-      , ("M-S-j", windows W.swapDown  )
+    -- Swap the focused window with the next window
+    , ("M-S-j", windows W.swapDown  )
 
-      -- Swap the focused window with the previous window
-      , ("M-S-k", windows W.swapUp    )
+    -- Swap the focused window with the previous window
+    , ("M-S-k", windows W.swapUp    )
 
-      -- Shrink the master area
-      , ("M-C-h", sendMessage Shrink)
+    -- Shrink the master area
+    , ("M-C-h", sendMessage Shrink)
 
-      -- Expand the master area
-      , ("M-C-l", sendMessage Expand)
-      --reset layout
-      , ("M-S-m",  setLayout $ Layout myLayout)
-      --toogle fullscreen
-      ,  ("M-f", sendMessage (JumpToLayout "Full"))
-      -- Push window back into tiling
-      , ("M-S-<Space>", withFocused $ windows . W.sink)
-      --reset layout
-      --, ("M-S-<Tab>", setLayout $ XMonad.)
-      -- Increment the number of windows in the master area
-      , ("M-,", sendMessage (IncMasterN 1))
+    -- Expand the master area
+    , ("M-C-l", sendMessage Expand)
+    --reset layout
+    , ("M-S-m",  setLayout $ Layout myLayout)
+    --toogle fullscreen
+    ,  ("M-f", sendMessage (Toggle "Full"))
+    -- Push window back into tiling
+    , ("M-S-<Space>", withFocused $ windows . W.sink)
+    --reset layout
+    --, ("M-S-<Tab>", setLayout $ XMonad.)
+    -- Increment the number of windows in the master area
+    , ("M-,", sendMessage (IncMasterN 1))
 
-      -- Deincrement the number of windows in the master area
-      , ("M-.", sendMessage (IncMasterN (-1)))
+    -- Deincrement the number of windows in the master area
+    , ("M-.", sendMessage (IncMasterN (-1)))
 
-    ]
-    ++
+  ]
+  ++
 
-    [ (otherModMasks ++ "M-" ++ key, action tag)
-          | (tag, key) <- zip(map show [1..9]) (map (\x -> show x) ([1..9]))
-          , (otherModMasks, action) <- [ ("", windows . W.greedyView)
-                                       , ("S-", windows . W.shift)]
-          ]
+  [ (otherModMasks ++ "M-" ++ key, action tag)
+        | (tag, key) <- zip(map show [1..9]) (map (\x -> show x) ([1..9]))
+        , (otherModMasks, action) <- [ ("", windows . W.greedyView)
+                                     , ("S-", windows . W.shift)]
+        ]
 
 #+end_src
 
@@ -433,12 +437,12 @@ Note: as of xmonad 0.17, this may no longer be needed
   myXmobarPP :: PP
   myXmobarPP = def
       {
-       ppCurrent = xmobarColor "#f1fa8c" "" . wrap "[" "]"
-      , ppHiddenNoWindows = xmobarColor "#6272a4" ""
-      , ppTitle   = xmobarColor "#ff79c6"  "" . shorten 40
+       ppCurrent = xmobarColor colyellow "" . wrap "[" "]"
+      , ppHiddenNoWindows = xmobarColor colgrey ""
+      , ppTitle   = xmobarColor colmagenta  "" . shorten 40
       , ppVisible = wrap "(" ")"
-      , ppUrgent  = xmobarColor "#ff5555" "#f1fa8c"
-      , ppLayout  = xmobarColor "#8be9fd" ""
+      , ppUrgent  = xmobarColor colred colyellow 
+      , ppLayout  = xmobarColor colcyan ""
       , ppSep = "<fc=#6272a4> \xf444 </fc>"
       }
      where
@@ -451,43 +455,168 @@ Note: as of xmonad 0.17, this may no longer be needed
           ppWindow = xmobarRaw . (\w -> if null w then "untitled" else w) . shorten 30
 
           blue, lowWhite, magenta, red, white, yellow :: String -> String
-          magenta  = xmobarColor "#bd93f9" ""
-          blue     = xmobarColor "#8be9fd" ""
-          white    = xmobarColor "#f8f8f2" ""
-          yellow   = xmobarColor "#f1fa8c" ""
-          red      = xmobarColor "#ff5555" ""
-          lowWhite = xmobarColor "#f8f8f2" ""
+          magenta  = xmobarColor colgreen ""
+          blue     = xmobarColor colcyan ""
+          white    = xmobarColor colfg ""
+          yellow   = xmobarColor colyellow ""
+          red      = xmobarColor colred ""
+          lowWhite = xmobarColor colfg ""
 #+end_src
 
 * myConfig
 #+begin_src haskell
-  myConfig = def
-     {
-    terminal           = myTerminal,
-    focusFollowsMouse  = myFocusFollowsMouse,
-    clickJustFocuses   = myClickJustFocuses,
-    borderWidth        = myBorderWidth,
-    modMask            = myModMask,
-    workspaces         = myWorkspaces,
-    normalBorderColor  = myNormalBorderColor,
-    focusedBorderColor = myFocusedBorderColor,
-   -- hooks, layouts
-     manageHook         =  myManageHook,
-                   -- <+> manageDocks,
-     handleEventHook    = handleEventHook def,
-     layoutHook         =  myLayout ,
-     startupHook        =    setWMName "LG3D" <+> myStartupHook
-      }
-    `additionalKeysP` myKeys `additionalMouseBindings` myMouseBindings
+myConfig = def
+   {
+  terminal           = myTerminal,
+  focusFollowsMouse  = myFocusFollowsMouse,
+  clickJustFocuses   = myClickJustFocuses,
+  borderWidth        = myBorderWidth,
+  modMask            = myModMask,
+  workspaces         = myWorkspaces,
+  normalBorderColor  = myNormalBorderColor,
+  focusedBorderColor = myFocusedBorderColor,
+ -- hooks, layouts
+   manageHook         =  myManageHook,
+   handleEventHook    = handleEventHook def,
+   layoutHook         = myLayout ,
+   startupHook        =    setWMName "LG3D" <+> myStartupHook
+    }
+  `additionalKeysP` myKeys `additionalMouseBindings` myMouseBindings
 #+end_src
 
 * the main event
 this is the ~main~ variable for xmoand 
 #+begin_src haskell
-  main :: IO ()
-  main = xmonad
-       . ewmhFullscreen
-       . ewmh
-       . withEasySB (statusBarProp "/home/drishal/.local/bin/xmobar ~/dotfiles/xmobar.hs" (pure myXmobarPP)) defToggleStrutsKey
-       $ myConfig
+main :: IO ()
+main = xmonad
+     . ewmhFullscreen
+     . ewmh
+     -- . withEasySB (statusBarProp "/home/drishal/.local/bin/xmobar ~/dotfiles/xmobar/xmobar-dracula.hs" (pure myXmobarPP)) defToggleStrutsKey
+     . withEasySB (statusBarProp "stack exec /home/drishal/.local/bin/xmobar ~/.xmonad/xmobar.hs" (pure myXmobarPP)) defToggleStrutsKey
+     $ myConfig
+#+end_src
+
+* xmobar config
+I am going to integerate the xmobar config right into this config itself, which is going to be tangled to ~ ~/.xmonad/xmobar.hs~ ~
+An example of a Haskell-based xmobar. Compile it with ~ghc --make -- xmobar.hs~ with the xmobar library installed or simply call:
+~xmobar /path/to/xmobar.hs~ and xmobar will compile and launch it for you 
+for stack, compile it with: ~stack exec xmobar xmobar.hs~
+credits: https://github.com/jaor/xmobar/blob/master/examples/xmobar.hs
+Note: an example of user defined plugin
+#+begin_src haskell :tangle no
+data HelloWorld = HelloWorld
+    deriving (Read, Show)
+
+ instance Exec HelloWorld where
+     alias HelloWorld = "hw"
+     run   HelloWorld = return "<fc=red>Hello World!!</fc>"
+#+end_src
+
+#+begin_src haskell :tangle ~/.xmonad/xmobar.hs
+import Xmobar
+--import Colors.DoomOne
+import Colors.Dracula
+
+config = defaultConfig {
+   -- appearance
+    font =         "xft:FiraCode Nerd Font:size=10:antialias=true:autohinting=true:Regular"
+   --font =         "xft:cozette:size=11:antialias=true:autohinting=true:Regular"
+   , additionalFonts =           ["xft:PowerlineSymbols:size=10"]
+   , bgColor =     colbg 
+   , fgColor =     colfg 
+   , position =   Top
+   --, alpha = 175
+   --, border =       BottomB
+   , borderColor = colviolet 
+   -- layout
+   , sepChar =  "%"   --delineator between plugin names and straight text
+   , alignSep = "}{"  --separator between left-right alignment
+   -- , template = "<fc=#50fa7b>  </fc> %XMonadLog% } %date%  { %battery%<fc=#6272a4></fc>%dynnetwork% <fc=#6272a4></fc> %multicpu% <fc=#6272a4></fc> %memory% <fc=#6272a4></fc> %trayerpad%"
+   , template = "<fc=#50fa7b> \58911 </fc> %XMonadLog% } %date%  { %battery%<fc=" ++ colgrey ++ ">\62532</fc>%dynnetwork% <fc=" ++ colgrey++">\62532</fc> %multicpu% <fc="++colgrey++">\62532</fc> %memory% <fc="++colgrey++">\62532</fc> %trayerpad%"
+   -- general behavior
+   , allDesktops =      True    -- show on all desktops
+   , persistent =       True    -- enable/disable hiding (True = disabled)
+   , hideOnStart =      False   -- start with window unmapped (hidden)
+   , overrideRedirect = True-- set the Override Redirect flag (Xlib)
+   , lowerOnStart =     True    -- send to bottom of window stack on start
+   , commands = [
+     Run $ DynNetwork     [ "--template" , "<fc=#6272a4></fc> <fc=#ffb86c> <rx>kB/s \61813\61814 <tx>kB/s </fc>"
+                              , "--Low"      , "1000"       -- units: B/s
+                             , "--High"     , "5000"       -- units: B/s
+                             ] 50
+                
+        --battery monitor
+     ,Run $ Battery        [ "--template" , "<fc=#50fa7b>\62840 <left>%, <timeleft> </fc>"
+                           , "--Low"      , "10"        -- units: %
+                             , "--High"     , "80"        -- units: %
+                             ] 100
+
+         -- cpu activity monitor
+     , Run $ MultiCpu       [ "--template" , "<fc=#8be9fd>\62171 <total>% </fc>"
+                             , "--Low"      , "50"         -- units: %
+                             , "--High"     , "85"         -- units: %
+                            ] 20
+               -- memory usage monitor
+        , Run $ Memory         [ "--template" ,"<fc=#ff79c6>\61704  <used>M/<total>M </fc>"
+                             , "--Low"      , "1000"        -- units: M
+                             , "--High"     , "6000"        -- units: M
+
+                             ] 50
+
+        , Run $ Com "/home/drishal/dotfiles/trayer-padding-icon.sh" [] "trayerpad" 20
+        , Run $ Date           "<fc=#bd93f9>\61555  %F (%a) %T</fc>" "date" 10
+    ]
+}
+
+main :: IO ()
+main = xmobar config
+#+end_src
+
+* Color schemes
+** Dracula
+#+begin_src haskell :tangle ~/.xmonad/lib/Colors/Dracula.hs 
+module Colors.Dracula where
+
+import XMonad
+
+colorScheme = "dracula"
+
+colbg      = "#282a36"  -- 0 background
+colbg2     = "#44475a"  -- 1 bg-alt
+colfg      = "#f8f8f2"  -- 2 foregrou
+colgrey    = "#6272a4"  -- 3 dark grey/comments
+colcyan    = "#8be9fd"  -- 4 cyan
+colgreen   = "#50fa7b"  -- 5 green
+colorange  = "#ffb86c"  -- 6 orange
+colmagenta = "#ff79c6"  -- 7 magenta
+colviolet  = "#bd93f9"  -- 8 violet
+colred     = "#ff5555"  -- 9 red
+colyellow  = "#f1fa8c"  -- 10 yellow
+
+colTrayer :: String
+colTrayer = "--tint 0x282a36"
+#+end_src
+** OneDark
+#+begin_src haskell  :tangle ~/.xmonad/lib/Colors/DoomOne.hs 
+module Colors.DoomOne where
+
+import XMonad
+
+colorScheme = "doom-one"
+  
+colbg      = "#282c34"  -- 0 background
+colbg2     = "#3f444a"  -- 1 bg-alt
+colfg      = "#bbc2cf"  -- 2 foregrou
+colgrey    = "#5B6268"  -- 3 dark grey/comments
+colcyan    = "#46d9ff"  -- 4 cyan
+colgreen   = "#98be65"  -- 5 green
+colorange  = "#da8548"  -- 6 orange
+colmagenta = "#c678dd"  -- 7 magenta
+colviolet  = "#a9a1e1"  -- 8 violet
+colred     = "#ff6c6b"  -- 9 red
+colyellow  = "#ecbe7b"  -- 10 yellow
+
+
+colorTrayer :: String
+colorTrayer = "--tint 0x282c34"
 #+end_src
