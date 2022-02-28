@@ -21,7 +21,7 @@
 - [[#my-keys-config][My Keys Config]]
 - [[#mouse][Mouse]]
 - [[#setting-fullscreen-support][Setting Fullscreen Support]]
-- [[#xmobar][xmobar]]
+- [[#xmobarpp-settings][xmobarPP settings]]
 - [[#myconfig][myConfig]]
 - [[#the-main-event][the main event]]
 - [[#xmobar-config][xmobar config]]
@@ -242,7 +242,7 @@ here I set the run prompts for xmoand
     , bgColor             = colbg 
     , fgColor             = colfg 
     , bgHLight            = colviolet 
-    , fgHLight            = colfg 
+    , fgHLight            = colbg 
     , borderColor         = colviolet 
     , promptBorderWidth   = 0
     , position            = Top
@@ -278,7 +278,7 @@ myStartupHook = do
         --spawnOnce "/usr/libexec/notification-daemon"
         -- spawnOnce "deadd-notification-center&"
         spawnOnce "xsetroot -cursor_name left_ptr"
-        spawnOnce "conky -c ~/.config/conky/xmoand/dracula-01.conkyrc"
+        spawnOnce "conky -c ~/.config/conky/onedark.conkyrc"
         spawnOnce "xset r rate  300 50"
         -- spawnOnce "emacs --daemon"
         -- spawnOnce "lxqt-notificationd&"
@@ -289,7 +289,7 @@ myStartupHook = do
         spawnOnce "picom --experimental-backends"
         --spawnOnce "picom"
         -- spawnOnce "nitrogen --restore"
-        spawnOnce "feh --bg-scale ~/dotfiles/wallpapers/summer_1am.jpg" 
+        spawnOnce "feh --bg-scale ~/dotfiles/wallpapers/darkest_hour.jpg" 
         --spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true  --tint 0x292d3e  --alpha 0 --height 20 --padding 1"
         --spawnOnce "stalonetray"
         --spawnOnce "pasystray"
@@ -335,6 +335,7 @@ myKeys =
   , ("M-e", spawn "nemo")
   , ("M-v", spawn "pavucontrol")
   , ("M-c", spawn "ferdi")
+  , ("M-s", spawn "spectacle")
 
   --emacs
   , ("M-a", spawn "emacsclient -c")
@@ -432,7 +433,8 @@ Note: as of xmonad 0.17, this may no longer be needed
         changeProperty32 dpy r a aTOM propModeReplace (nub $ newSupportedList ++ supportedList)
 #+end_src
 
-* xmobar
+* xmobarPP settings
+(not to be confused with this part)
 #+begin_src haskell
   myXmobarPP :: PP
   myXmobarPP = def
@@ -492,7 +494,7 @@ main = xmonad
      . ewmhFullscreen
      . ewmh
      -- . withEasySB (statusBarProp "/home/drishal/.local/bin/xmobar ~/dotfiles/xmobar/xmobar-dracula.hs" (pure myXmobarPP)) defToggleStrutsKey
-     . withEasySB (statusBarProp "stack exec /home/drishal/.local/bin/xmobar ~/.xmonad/xmobar.hs" (pure myXmobarPP)) defToggleStrutsKey
+     . withEasySB (statusBarProp "/home/drishal/.local/bin/xmobar ~/dotfiles/xmobar/xmobar-onedark.hs" (pure myXmobarPP)) defToggleStrutsKey
      $ myConfig
 #+end_src
 
