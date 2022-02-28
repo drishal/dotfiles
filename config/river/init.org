@@ -279,14 +279,14 @@ riverctl set-repeat 50 300
 
 * auto starting apps
 #+begin_src bash
-  riverctl spawn "swaybg -i ~/dotfiles/wallpapers/catppuccin-rainbow-arch.png" 
-  riverctl spawn lxpolkit 
-  riverctl spawn waybar
-  # riverctl spawn /usr/lib/notification-daemon-1.0/notification-daemon
-  riverctl spawn dunst
-  riverctl spawn "nm-applet --indicator"
-  riverctl spawn "blueman-applet"
-  #riverctl spawn "redshift -O 5000"
+riverctl spawn "swaybg -i ~/dotfiles/wallpapers/darkest_hour.jpg" 
+riverctl spawn lxpolkit 
+riverctl spawn waybar
+# riverctl spawn /usr/lib/notification-daemon-1.0/notification-daemon
+riverctl spawn dunst
+riverctl spawn "nm-applet --indicator"
+riverctl spawn "blueman-applet"
+#riverctl spawn "redshift -O 5000"
 #+end_src
 
 ** Set app-ids of views which should float
