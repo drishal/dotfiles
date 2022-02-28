@@ -1,7 +1,7 @@
 # aliases
 alias nix-config="sudo vim /etc/nixos/configuration.nix"
-alias xon="~/Desktop/games/Xonotic2/xonotic-linux-sdl.sh"
-alias xon-glx="~/Desktop/games/Xonotic2/xonotic-linux-glx.sh"
+alias xon="~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
+alias xon-glx="~/Desktop/games/Xonotic/xonotic-linux-glx.sh"
 alias stk="~/Desktop/games/SuperTuxKart-1.2-linux/run_game.sh"
 
 # yay = pary
@@ -19,6 +19,7 @@ alias b="brightnessctl"
 alias bs="brightnessctl s"
 alias wayland-screenshot="grimshot copy output"
 alias wayland-screenshot-area="grimshot copy area"
+alias v="nvim"
 export EXA_ICON_SPACING=2
 
 # man pager
@@ -50,6 +51,13 @@ alias watch-sync="watch -d grep -e Dirty: -e Writeback: /proc/meminfo"
 . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 #ytdlp
 alias youtube-dl="yt-dlp"
+alias yt-dlp-mp3="yt-dlp -x --audio-format=mp3"
+
+# Bedrock alias
+alias bed-ubuntu="strat -r tut-ubuntu bash"
+alias bed-arch="strat -r arch zsh"
 #fetch
+# repo sync alias
+alias repo-sync="repo sync -c --force-sync --optimized-fetch --no-tags --no-clone-bundle --prune -j$(nproc --all);"
 #pfetch
 #pactl load-module module-bluetooth-discover
