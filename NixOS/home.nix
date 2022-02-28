@@ -26,18 +26,18 @@
     # };
 
     # git
-    git = {
-      enable = true;
-      userName = "drishal";
-      userEmail = "drishalballaney@gmail.com";
-    };
+    # git = {
+    #   enable = true;
+    #   userName = "drishal";
+    #   userEmail = "drishalballaney@gmail.com";
+    # };
 
     # Gccemacs
-     emacs = {
-       enable = true;
-       package = pkgs.emacsPgtkGcc;
-       extraPackages = (epkgs: [ epkgs.vterm ] );
-     };
+     # emacs = {
+     #   enable = true;
+     #   package = pkgs.emacsPgtkGcc;
+     #   extraPackages = (epkgs: [ epkgs.vterm ] );
+     # };
   };
 
   home.packages = with pkgs; [];
@@ -97,6 +97,9 @@
   #waybar
   home.file."/home/drishal/.config/waybar".source = ../config/waybar;
   home.file."/home/drishal/.config/waybar/style.css".source = ../config/waybar/style.css;
+
+  # alacritty
+  home.file."/home/drishal/.config/alacritty/alacritty.yml".source = ../config/alacritty/alacritty.yml;
 
   # qtile config
   #home.file."/home/drishal/.config/qtile/config.py".source =../config/qtile/config.py;
