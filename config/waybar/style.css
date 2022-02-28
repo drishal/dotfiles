@@ -1,3 +1,33 @@
+/*colors*/
+/* Dracula */
+/*
+@define-color colbg       #282a36;
+@define-color colbg2      #44475a;
+@define-color colfg       #f8f8f2;
+@define-color colgrey     #6272a4;
+@define-color colcyan     #8be9fd;
+@define-color colgreen    #50fa7b;
+@define-color colorange   #ffb86c;
+@define-color colmagenta  #ff79c6;
+@define-color colviolet   #bd93f9;
+@define-color colred      #ff5555;
+@define-color colyellow   #f1fa8c;
+*/
+/*Onedark*/
+@define-color colbg        #282c34; 
+@define-color colbg2       #3f444a;
+@define-color colfg        #bbc2cf;
+@define-color colgrey      #5B6268;
+@define-color colcyan      #46d9ff;
+@define-color colgreen     #98be65;
+@define-color colorange    #da8548;
+@define-color colmagenta   #c678dd;
+@define-color colviolet    #a9a1e1;
+@define-color colred       #ff6c6b;
+@define-color colyellow    #ecbe7b;
+
+
+
 * {
     /*all: initial; Ignore gtk theme*/ 
     border: none;
@@ -6,31 +36,31 @@
     font-family: "FiraCode Nerd Font","Roboto", "Helvetica", "Arial", "sans-serif";
     font-size: 11px;
     min-height: 0;
-    color: #f8f8f2;
+    color: @colfg;
 }
 
 
 
 window#waybar {
-    background-color: #282a36;
-    color: #f8f8f2;
+    background-color: @colbg;
+    color: @colfg;
     transition-property: background-color;
     transition-duration: .5s;
 }
 
 #tags button  {
-    background-color: #282a36;
+    background-color: @colbg;
     padding: 3px;
     border-radius: 10px;
     min-width: 20px;
     }
 #tags button.occupied  {
-    background-color: #44475a;
+    background-color: @colbg2;
 
 }
 
 #tags button.focused  {
-    background-color: #6272a4; 
+    background-color: @colgrey; 
 }
 
 #battery,
@@ -40,7 +70,7 @@ window#waybar {
 #network,
 #tray
 {
-  background: #44475a; 
+  background: @colbg2; 
   padding: 0 10px;
   margin: 3px 3px 3px 3px;
   border-radius: 90px;
@@ -48,19 +78,19 @@ window#waybar {
 }
 
 #battery {
-    color: #50fa7b; 
+    color: @colgreen; 
 }
 
 #clock {
-    color: #bd93f9;
+    color: @colviolet;
 }
 
 #cpu {
-    color: #8be9fd
+    color: @colcyan
 }
 #memory {
-    color: #ff79c6; 
+    color: @colmagenta; 
 }
 #network {
-    color: #ffb86c; 
+    color: @colorange; 
 }
