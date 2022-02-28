@@ -247,22 +247,6 @@
           border_normal = color[1],
           border_width = 1
       ),
-      # layout.Max()
-      # layout.Stack(num_stacks=2),
-      # Try more layouts by unleashing below layouts.
-      # layout.Bsp(margin = 10,
-      #     border_focus = "#bd93f9",
-      #     border_normal = "#44475a",
-      #     border_width = 1),
-      # layout.Columns(),
-      # layout.Matrix(),
-      # layout.MonadTall(),
-      # layout.MonadWide(),
-      # layout.RatioTile(),
-      # layout.Tile(),
-      # layout.TreeTab(),
-      # layout.VerticalTile(),
-      # layout.Zoomy(),
   ]
 #+end_src
 * Resetting the Layout
