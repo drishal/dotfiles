@@ -11,18 +11,31 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray        = 1;     /* 0 means no systray */
 static const int showbar            = 1;     /* 0 means no bar */
 static const int topbar             = 1;     /* 0 means bottom bar */
-static const char *fonts[]          = { "FiraCode Nerd Font:size=10", "JoyPixels:size=9:antialias=true:autohint=true"};
+//static const char *fonts[]          = { "FiraCode Nerd Font:size=10", "JoyPixels:size=9:antialias=true:autohint=true"};
+static const char *fonts[]          = { "FiraCode Nerd Font:size=10", "Noto Color Emoji:size=9:antialias=true:autohint=true"};
+//static const char *fonts[]          = { "FantasqueSansMono Nerd Font:size=11", "JoyPixels:size=9:antialias=true:autohint=true"};
 static const char dmenufont[]       = "FiraCode Nerd Font:size=10";
 
 // reset
 void resetnmaster(const Arg *arg);
 // dracula
+/*
 static const char col_gray1[]       = "#282a36";
 static const char col_gray2[]       = "#282a36";
 static const char col_gray3[]       = "#f8f8f2";
 static const char col_gray4[]       = "#282a36";
 static const char col_gray5[]       = "#bd93f9";
 static const char col_cyan[]        = "#bd93f9";
+*/
+
+//onedark
+static const char col_gray1[]       = "#282c34"; 
+static const char col_gray2[]       = "#282c34"; 
+static const char col_gray3[]       = "#bbc2cf"; 
+static const char col_gray4[]       = "#282c34"; 
+static const char col_gray5[]       = "#46d9ff"; 
+static const char col_cyan[]        = "#46d9ff"; 
+
 
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
@@ -53,7 +66,7 @@ static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "[]=",      tile },    /* first entry is default */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
-	// { "[M]",      monocle },
+	{ "[M]",      monocle },
 };
 
 /* key definitions */
@@ -94,7 +107,7 @@ static Key keys[] = {
         { MODKEY,                       XK_e,      spawn,      {.v = files} },
 	{ MODKEY,                       XK_r,      spawn,      {.v = dmenucmd} },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_p,      spawn,          {.v = powercmd } },
+	// { MODKEY,                       XK_p,      spawn,          {.v = powercmd } },
 	{ MODKEY|ShiftMask,             XK_f,      spawn,      {.v = browser }},
 
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
@@ -113,7 +126,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_i,      setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_o,      setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_p,      setlayout,      {.v = &layouts[2]} },
 
 	//rotate stack
 	{ MODKEY|ShiftMask,             XK_j,      rotatestack,    {.i = +1 } },
