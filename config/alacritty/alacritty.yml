@@ -10,7 +10,7 @@
 # to the user's home directory starting with `~/`.
 import:
 #  - /path/to/alacritty.yml
-   - ~/.config/alacritty/dracula.yml 
+   - ~/dotfiles/config/alacritty/doom_one.yml 
 # Any items in the `env` entry below will be added as
 # environment variables. Some entries may override variables
 # set by alacritty itself.
@@ -117,6 +117,9 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     family: FiraCode Nerd Font
+    # family: NotoMono Nerd Font
+    # family: FantasqueSansMono Nerd Font
+    # family: JetBrainsMono Nerd Font
 
     # The `style` can be specified to pick a specific face.
     style: Regular
