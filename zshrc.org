@@ -54,7 +54,7 @@ git clone https://github.com/zsh-users/zsh-history-substring-search.git
 #+end_src
 * loading home manager variables
 #+begin_src shell
- source $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
+ . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
 #+end_src
 * qt5ct
 #+begin_src shell
