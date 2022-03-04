@@ -6,6 +6,7 @@ alias stk="~/Desktop/games/SuperTuxKart-1.2-linux/run_game.sh"
 
 # yay = pary
 alias yay="paru"
+alias p="paru"
 # ls related aliases
 alias ls="exa --icons"
 # alias ls="ls --color"
