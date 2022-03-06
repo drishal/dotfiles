@@ -33,7 +33,7 @@ export GTK_USE_PORTAL=0
 
 ** Applications
 #+begin_src bash
-  riverctl map normal $mod Return spawn foot 
+  riverctl map normal $mod Return spawn kitty 
 
   # Mod+Q to close the focused view
   riverctl map normal $mod Q close

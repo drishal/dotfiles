@@ -1,1 +1,4 @@
-https://youtube.com/playlist?list=PL8xPXYlMCOJJ1mpW8HjzJjPvnGlArYHs7
+xmonad - palenight
+qtile  - gruvbox
+dwm    - onedark
+river  - dracula

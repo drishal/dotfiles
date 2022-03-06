@@ -27,7 +27,6 @@
   - [[#evil-mode][Evil mode]]
   - [[#undo-system][Undo system]]
   - [[#padding][Padding]]
-  - [[#perspective][perspective]]
   - [[#brackets][brackets]]
   - [[#tramp][tramp]]
   - [[#backup-settings][Backup settings]]
@@ -45,7 +44,10 @@
   - [[#org-roam][org roam]]
 - [[#tools][Tools]]
   - [[#vterm][vterm]]
+  - [[#bongo][Bongo]]
+  - [[#minimap][Minimap]]
   - [[#mentor-torrent-client][Mentor Torrent client]]
+  - [[#selectrical-mode][selectrical mode]]
   - [[#auto-update-with-emacs][auto update with emacs]]
   - [[#telega][telega]]
   - [[#emacs-pdf-tools][emacs pdf tools]]
@@ -59,7 +61,6 @@
   - [[#elfeed-rss-reader][elfeed RSS reader]]
 - [[#language-and-completion-support][Language and completion support]]
   - [[#completion-engines][completion engines:]]
-  - [[#using-tabnine-for-completion][using tabnine for completion]]
   - [[#emoji-mode][emoji mode]]
   - [[#parentheses-completion][Parentheses Completion]]
   - [[#projectile][Projectile]]
@@ -76,7 +77,7 @@
 #+begin_src emacs-lisp
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
   (load-file (expand-file-name "custom.el" user-emacs-directory))
-  (setq gc-cons-threshold 100000000)
+  (setq gc-cons-threshold 1000000000)
 #+end_src
 ** emacs startup performance
 #+begin_src emacs-lisp
@@ -95,6 +96,7 @@
 
 * Initialize package sources
 *** straight.el
+https://github.com/raxod502/straight.el#getting-started
 #+begin_src emacs-lisp
   (defvar bootstrap-version)
   (let ((bootstrap-file
@@ -151,9 +153,13 @@ https://github.com/quelpa/quelpa#installation
 #+end_src
 ** smooth scrolling
 #+begin_src emacs-lisp
-(use-package smooth-scrolling
-  :straight t)
-(smooth-scrolling-mode 1)
+ ;; (use-package smooth-scroll
+ ;;   :straight t)
+ (pixel-scroll-precision-mode 1)
+ (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+ (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+ (setq scroll-step 1) 
+;;(pixel-scroll-precision-mode 1)
 #+end_src
 ** Dashboard
 #+begin_src emacs-lisp
@@ -263,7 +269,7 @@ https://github.com/AnthonyDiGirolamo/airline-themes
  (set-face-attribute 'variable-pitch nil
                      :font "FiraCode Nerd Font 11"
                      ;; :font "FantasqueSansMono Nerd Font 11"
-                     :font "JetBrainsMono Nerd Font 11"
+                     ;; :font "JetBrainsMono Nerd Font 11"
                      :weight 'medium)
  (set-face-attribute 'fixed-pitch nil
                      :font "FiraCode Nerd Font 11"
@@ -379,16 +385,6 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim,
   (push '(internal-border-width . 10) default-frame-alist)
 #+end_src
 
-** perspective
-https://github.com/nex3/perspective-el
-#+begin_src emacs-lisp
-  ;; (use-package perspective :straight t
-  ;;   :bind
-  ;;   ("C-x C-b" . persp-list-buffers)   ; or use a nicer switcher, see below
-  ;;   :init
-  ;;   (persp-mode))
-#+end_src
-
 ** brackets
 #+begin_src emacs-lisp
   (show-paren-mode 1)
@@ -408,16 +404,35 @@ https://github.com/nex3/perspective-el
     (mkdir "~/.emacs-temp"))
 #+end_src
 *** Autosave/Backups directory
+ https://emacs.stackexchange.com/questions/33/put-all-backups-into-one-backup-folder
 #+begin_src emacs-lisp
- ;; (unless (file-exists-p "~/.emacs-temp/auto-saves")
- ;;   (mkdir "~/.emacs-temp/auto-saves")
- ;;   (mkdir "~/.emacs-temp/auto-saves/sessions")
- ;;   (mkdir "~/.emacs-temp/backups"))
+;; (unless (file-exists-p "~/.emacs-temp/auto-saves")
+;;   (mkdir "~/.emacs-temp/auto-saves")
+;;   (mkdir "~/.emacs-temp/auto-saves/sessions")
+;;   (mkdir "~/.emacs-temp/backups"))
 
- (setq auto-save-file-name-transforms
-       '(("." "~/.emacs-temp/" t))
-       )
-(setq auto-save-default nil)
+;; (setq auto-save-file-name-transforms
+;;       '(("." "~/.emacs-temp" t))
+;;       )
+;; (setq backup-directory-alist '(("." . "~/.emacs-temp")))
+;; Put backup files neatly away                                                 
+(let ((backup-dir "~/.emacs-temp/")
+      (auto-saves-dir "~/.emacs-temp/"))
+  (dolist (dir (list backup-dir auto-saves-dir))
+    (when (not (file-directory-p dir))
+      (make-directory dir t)))
+  (setq backup-directory-alist `(("." . ,backup-dir))
+        auto-save-file-name-transforms `((".*" ,auto-saves-dir t))
+        auto-save-list-file-prefix (concat auto-saves-dir ".saves-")
+        tramp-backup-directory-alist `((".*" . ,backup-dir))
+        tramp-auto-save-directory auto-saves-dir))
+
+(setq backup-by-copying t    ; Don't delink hardlinks                           
+      delete-old-versions t  ; Clean up the backups                             
+      version-control t      ; Use version numbers on backups,                  
+      kept-new-versions 5    ; keep some new versions                           
+      kept-old-versions 2)   ; and some old ones, too                           
+
 #+end_src
 
 * Hook to tangle on save
@@ -531,10 +546,24 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
     (setq vterm-timer-delay 0)
     )
 #+end_src
+** Bongo
+https://github.com/dbrock/bongo
+#+begin_src emacs-lisp 
+(use-package bongo :straight t)
+#+end_src
+** Minimap
+#+begin_src emacs-lisp
+(use-package minimap
+  :straight t)
+#+end_src
 ** Mentor Torrent client
 https://github.com/skangas/mentor
 #+begin_src emacs-lisp
   (use-package mentor :straight t)
+#+end_src
+** selectrical mode
+#+begin_src emacs-lisp
+(use-package selectric-mode :straight t)
 #+end_src
 ** auto update with emacs
 #+begin_src emacs-lisp
@@ -778,14 +807,8 @@ https://github.com/karthink/popper
 
   (add-hook 'after-init-hook 'global-company-mode)
   (setq company-minimum-prefix-length 1
-        company-idle-delay 0.1) ;; default is 0.2
+        company-idle-delay 0.2) ;; default is 0.2
 
-#+end_src
-** using tabnine for completion
-#+begin_src emacs-lisp
-  ;;    (use-package company-tabnine :straight t)
-  ;;  (require 'company-tabnine)
-  ;; (add-to-list 'company-backends #'company-tabnine)
 #+end_src
 
 ** emoji mode

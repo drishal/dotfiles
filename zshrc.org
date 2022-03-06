@@ -31,6 +31,7 @@
 - [[#navigation][Navigation]]
 - [[#grml-zsh-config][Grml Zsh config]]
 - [[#title][title]]
+- [[#kitty-config][kitty config]]
 - [[#loading-the-starship-prompt][loading the starship prompt]]
 - [[#loading-the-spaceship-prompt][loading the spaceship prompt]]
 -  [[#antigen-apply-1][antigen apply]]
@@ -365,6 +366,11 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
   zplug trystan2k/zsh-tab-title
   ZSH_TAB_TITLE_ADDITIONAL_TERMS='alacritty|kitty|foot'
   #preexec() { print -Pn "\e]0;$1%~\a" }
+#+end_src
+
+* kitty config
+#+begin_src shell
+export KITTY_SHELL_INTEGRATION=no-cursor
 #+end_src
 
 * loading the starship prompt

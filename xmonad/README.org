@@ -28,6 +28,7 @@
 - [[#color-schemes][Color schemes]]
   - [[#dracula][Dracula]]
   - [[#onedark][OneDark]]
+  - [[#palenight][Palenight]]
 
 * Imports
 this secion is dedicated to the imports of the modules I would be using in the config 
@@ -126,6 +127,7 @@ import XMonad.Util.Loggers
   -- color schemes
 import Colors.DoomOne
 --import Colors.Dracula
+--import Colors.Palenight
 
 --Others
 --import XMonad.Layout.MultiToggle.Instances
@@ -617,6 +619,30 @@ colmagenta = "#c678dd"  -- 7 magenta
 colviolet  = "#a9a1e1"  -- 8 violet
 colred     = "#ff6c6b"  -- 9 red
 colyellow  = "#ecbe7b"  -- 10 yellow
+
+
+colorTrayer :: String
+colorTrayer = "--tint 0x282c34"
+#+end_src
+** Palenight
+#+begin_src haskell  :tangle ~/.xmonad/lib/Colors/Palenight.hs 
+module Colors.Palenight where
+
+import XMonad
+
+colorScheme = "palenight"
+  
+colbg      = "#292D3E"  -- 0 background
+colbg2     = "#242837"  -- 1 bg-alt
+colfg      = "#EEFFFF"  -- 2 foregrou
+colgrey    = "#676E95"  -- 3 dark grey/comments
+colcyan    = "#80cbc4"  -- 4 cyan
+colgreen   = "#c3e88d"  -- 5 green
+colorange  = "#f78c6c"  -- 6 orange
+colmagenta = "#c792ea"  -- 7 magenta
+colviolet  = "#bb80b3"  -- 8 violet
+colred     = "#ff5370"  -- 9 red
+colyellow  = "#ffcb6b"  -- 10 yellow
 
 
 colorTrayer :: String

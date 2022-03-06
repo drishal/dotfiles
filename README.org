@@ -16,7 +16,7 @@ Don't worry this readme is there just to tackle this very issue
   *Note.* for Emacs, better to use  ~dotfiles/emacs.d-gnu~, I have also got doom.d configured with a lot of stuff, kept as emergency
 * How to set it up on NixOS
 1. Make sure to clone the repo to ~~/dotfiles~ (a lot of stuff is hard coded to this path)
-2. on NixOS, first copy ~./NixOS/configuration.nix~ to ~/etc/nixos/configuration.nix~
+2. on NixOS, for first time installation first copy ~/etc/nixos/configuration.nix~
    #+begin_src bash
    sudo nixos-rebuild switch --flake ~/dotfiles -L
    #+end_src
