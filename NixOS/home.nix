@@ -1,6 +1,10 @@
-{ config, pkgs, ... }:
+{ config,inputs ,pkgs, ... }:
 
 {
+imports=[
+#  ./emacs-override.nix
+];
+
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
@@ -26,24 +30,24 @@
     # };
 
     # git
-    # git = {
-    #   enable = true;
-    #   userName = "drishal";
-    #   userEmail = "drishalballaney@gmail.com";
-    # };
+     git = {
+       enable = true;
+       userName = "drishal";
+       userEmail = "drishalballaney@gmail.com";
+     };
 
-    # Gccemacs
-     # emacs = {
-     #   enable = true;
-     #   package = pkgs.emacsPgtkGcc;
-     #   extraPackages = (epkgs: [ epkgs.vterm ] );
-     # };
+      emacs = {
+        enable = true;
+        # package = pkgs.emacsGit;
+        package = pkgs.emacsPgtkGcc.overrideAttrs (oa: {configureFlags = ["--with-pgtk  --enable-link-time-optimization --with-native-compilation"];});
+        extraPackages = (epkgs: [ epkgs.vterm ] );
+      };
   };
 
 home.packages = with pkgs; [
-  neofetch
+  neofetch libgccjit
   # kitty 
-  #(callPackage ./distrobox.nix {})
+  (callPackage ./distrobox.nix {})
   ];
 
 

@@ -2,12 +2,13 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs,lib ,... }:
+{ config, pkgs,inputs, lib ,... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      # ../../../../etc/nixos/ardware-configuration.nix
       # import cachix.nix
       # (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
       #<home-manager/nixos>
@@ -42,6 +43,9 @@
 
   #Vulkan
   hardware.opengl.driSupport = true;
+
+  #docker
+  virtualisation.docker.enable = true;
   # For 32 bit applications
   hardware.opengl.driSupport32Bit = true;
   # setting the video driver
@@ -63,7 +67,8 @@
   hardware.enableRedistributableFirmware=true;
 
   #optimizing storage in nixos
-  nix.autoOptimiseStore = true;
+  # nix.autoOptimiseStore = true;
+  nix.settings.auto-optimise-store = true;
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
@@ -164,7 +169,7 @@
   users.users.drishal = {
     shell = pkgs.zsh;
     isNormalUser = true;
-    extraGroups = [ "wheel"  "network" "video"  "-manager"]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel"  "network" "video"  "-manager" "docker"]; # Enable ‘sudo’ for the user.
   };
 
   #jaba
@@ -186,7 +191,7 @@
     lxsession libnotify xclip starship
     cmake volumeicon usbutils
     pavucontrol killall htop
-    firefox neofetch steam-run discord
+    firefox neofetch steam-run 
     picom inxi hack-font xarchiver unzip
     nitrogen rofi trayer arc-theme
     xfce.xfce4-clipman-plugin youtube-dl
@@ -197,7 +202,7 @@
     brightnessctl imagemagick exa
     gcc deadd-notification-center 
     nodePackages.pyright nodePackages.vscode-html-languageserver-bin zoom-us linuxPackages.cpupower
-    powertop  telnet nmap cpufetch
+    powertop inetutils nmap cpufetch
     dmenu dwmblocks cmatrix qutebrowser neovim
     libreoffice nodePackages.create-react-app nodejs yarn nodePackages.react-tools
     ranger xorg.xmodmap  powershell gimp
@@ -206,6 +211,7 @@
     noto-fonts ntfs3g gparted file appimage-run woeusb cachix
     feh cinnamon.nemo libva-utils speedtest-cli pass surf gnumake
     river clang-tools ed materia-theme  
+    discord
     # autoconf automake inkscape gdk-pixbuf sassc pkgconfig
     # emacsPgtkGcc
     #rust home-manager metasploit theharvester
@@ -226,7 +232,7 @@
   virtualisation = {
     libvirtd = {
       enable = true;
-      qemuOvmf = true;
+      qemu.ovmf.enable = true;
     };
   };
   # emacsGcc
@@ -283,15 +289,19 @@
         });
       })
 
-    (self: super:
-      {
-        discord = super.discord.overrideAttrs (_: {
-          src = builtins.fetchTarball {
-            url = https://discord.com/api/download?platform=linux&format=tar.gz;
-	    sha256= "05s7irhw984slalnf7q5rps9i8izq542lnman9s1x6csd26r157s";
-          };
-        });
-      })
+#    (self: super:
+#      {
+#        discord = super.discord.overrideAttrs (_: {
+#          src = builtins.fetchTarball {
+#            url = https://discord.com/api/download?platform=linux&format=tar.gz;
+#            # sha256="sha256:0hdgif8jpp5pz2c8lxas88ix7mywghdf9c9fn95n0dwf8g1c1xbb";
+#	    sha256="sha256:05s7irhw984slalnf7q5rps9i8izq542lnman9s1x6csd26r157s";
+#	    # sha256=lib.fakeSha256;
+#          };
+#        });
+#      })      
+
+
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

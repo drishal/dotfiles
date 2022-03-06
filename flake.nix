@@ -10,6 +10,8 @@
       #inputs = { nixpkgs.follows = "nixpkgs"; };
     };
 
+    discord-flake = {url = github:InternetUnexplorer/discord-overlay;};
+
     nur.url = "github:nix-community/NUR";
 
     emacs-overlay = {
@@ -22,7 +24,7 @@
     #};
   };
 
-  outputs = { nixpkgs, home-manager, nur, emacs-overlay, ... }@inputs:
+  outputs = { nixpkgs, home-manager, discord-flake ,nur, emacs-overlay, ... }@inputs:
     let
       system = "x86_64-linux";
 
