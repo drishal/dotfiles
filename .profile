@@ -30,9 +30,10 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 alias usb_1="cd /sys/bus/pci/drivers/xhci_hcd/"
 alias usb_2="su root -c  'for file in ????:??:??.? ; do  echo -n "$file" > unbind;  echo -n "$file" > bind; done'"
 
-#nix aliases
+#nix 
 alias nfu="sudo nix flake update ~/dotfiles"
 alias nrs="sudo nixos-rebuild switch --flake ~/dotfiles -L"
+export NIXPKGS_ALLOW_UNFREE=1
 # home manager
 alias hms="home-manager switch --flake ~/dotfiles "
 
@@ -53,6 +54,9 @@ alias watch-sync="watch -d grep -e Dirty: -e Writeback: /proc/meminfo"
 #ytdlp
 alias youtube-dl="yt-dlp"
 alias yt-dlp-mp3="yt-dlp -x --audio-format=mp3"
+
+#distrobox
+alias fedora-distrobox="distrobox-enter fedora-toolbox-35"
 
 # Bedrock alias
 alias bed-ubuntu="strat -r tut-ubuntu bash"
