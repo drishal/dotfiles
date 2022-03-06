@@ -40,7 +40,12 @@
      # };
   };
 
-  home.packages = with pkgs; [];
+home.packages = with pkgs; [
+  neofetch
+  # kitty 
+  #(callPackage ./distrobox.nix {})
+  ];
+
 
   # services
   # services = {
