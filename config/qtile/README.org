@@ -37,7 +37,7 @@
 * Some variables
 #+begin_src python
   mod = "mod4"
-  terminal = "alacritty"
+  terminal = "kitty"
 #+end_src
 * Colors
 ** Dracula
@@ -127,7 +127,7 @@
 
 ** theme 
 #+begin_src python 
-  color = dracula
+  color = onedark 
 #+end_src
 * Keybinds
 ** Keyboard
@@ -271,7 +271,7 @@
 #+begin_src python
    screens = [
       Screen(
-          wallpaper='~/dotfiles/wallpapers/summer_1am.jpg',
+          wallpaper='~/dotfiles/wallpapers/IMG_1729.jpg',
           wallpaper_mode='stretch',
           top=bar.Bar(
               [
@@ -344,10 +344,8 @@
                       foreground = color[3],
                       fontsize = 15
                   ),
-                  # widget.TextBox(text="◤", fontsize=45, padding=-1, foreground="#bd9359",background=color[8]),
 
                   widget.CPU(
-                      #background=color[10],
                       foreground=color[4],
                       format='   {freq_current}GHz {load_percent}% ',
                   ),
