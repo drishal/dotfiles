@@ -25,6 +25,10 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  #bluetooth
+  hardware.bluetooth.enable = true;
+  services.blueman.enable = true;
+
   # networking.hostName = "nixos"; # Define your hostname.
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # firmware updator
@@ -90,8 +94,7 @@
 
   # kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  # Enable the Desktop Environment/Window managers.
+    # Enable the Desktop Environment/Window managers.
   services.xserver = {
     enable = true;
 
