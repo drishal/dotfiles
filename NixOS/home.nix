@@ -19,11 +19,10 @@ imports=[
   };
   # main programs
   programs = {
-    # rofi
-    # rofi = {
-    #   enable = false;
-    #   theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
-    # };
+     rofi = {
+       enable = false;
+       theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
+     };
     # neovim
     # neovim = {
     #   enable = true;
@@ -39,7 +38,8 @@ imports=[
       emacs = {
         enable = true;
         # package = pkgs.emacsGit;
-        package = pkgs.emacsPgtkGcc.overrideAttrs (oa: {configureFlags = ["--with-pgtk  --enable-link-time-optimization --with-native-compilation"];});
+        # package = pkgs.emacsPgtkGcc.overrideAttrs (oa: {configureFlags = ["--with-pgtk  --enable-link-time-optimization --with-native-compilation"];});
+        package = pkgs.emacsPgtkGcc;
         extraPackages = (epkgs: [ epkgs.vterm ] );
       };
   };
@@ -88,7 +88,7 @@ home.packages = with pkgs; [
   home.file."/home/drishal/.config/deadd".source = ../config/deadd;
 
   # rofi
-  home.file."/home/drishal/.config/rofi/config.rasi".source = ../config/rofi/config.rasi;
+  # home.file."/home/drishal/.config/rofi/config.rasi".source = ../config/rofi/config.rasi;
   home.file."/home/drishal/.config/rofi/config".source = ../config/rofi/config;
 
   # setting Xresources
