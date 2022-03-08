@@ -286,6 +286,7 @@ riverctl spawn waybar
 riverctl spawn dunst
 riverctl spawn "nm-applet --indicator"
 riverctl spawn "blueman-applet"
+riverctl spawn "emacs --daemon"
 #riverctl spawn "redshift -O 5000"
 #+end_src
 

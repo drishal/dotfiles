@@ -496,7 +496,7 @@ main = xmonad
      . ewmhFullscreen
      . ewmh
      -- . withEasySB (statusBarProp "/home/drishal/.local/bin/xmobar ~/dotfiles/xmobar/xmobar-dracula.hs" (pure myXmobarPP)) defToggleStrutsKey
-     . withEasySB (statusBarProp "/home/drishal/.local/bin/xmobar ~/dotfiles/xmobar/xmobar-onedark.hs" (pure myXmobarPP)) defToggleStrutsKey
+     . withEasySB (statusBarProp "xmobar ~/dotfiles/xmobar/xmobar-onedark.hs" (pure myXmobarPP)) defToggleStrutsKey
      $ myConfig
 #+end_src
 

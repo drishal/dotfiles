@@ -5,6 +5,7 @@
 
     nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
 
+    # river = {url = "github:viperML/dotfiles/c341633a95a4f9352b28ddb85eb76f2f2769d404"};
     home-manager = {
       url = "github:nix-community/home-manager";
       #inputs = { nixpkgs.follows = "nixpkgs"; };

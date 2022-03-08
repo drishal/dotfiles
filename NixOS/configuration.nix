@@ -116,27 +116,37 @@
       plasma5.enable = true;
       xfce.enable = true;
       # lxqt.enable = true;
-      # gnome.enable = true;
-    };
-    # extras
-    # displayManager.sessionPackages = ["river"];
-    # displayManager.gdm.enable = true;
-    # displayManager.sddm.enable = true;
-    displayManager.lightdm = {
-      enable = true;
-      greeter.enable = true;
+      gnome.enable = true;
     };
     displayManager.session = [
       {
-        manage = "window";
-        name = "river";
+        manage = "desktop";
+        name = "myriver";
         start = ''
-          systemd-cat -t river -- ${pkgs.river}/bin/river &
-          waitPID=$!
-        '';
+              ${pkgs.river}/bin/river &
+              waitPID=$! '';
       }
     ];
+    # extras
+    # displayManager.sessionPackages = ["river"];
+    # displayManager.gdm.enable = true;
+    displayManager.sddm.enable = true;
+    # displayManager.lightdm = {
+    #   enable = true;
+    #   greeter.enable = true;
+    # };
+    # displayManager.session = [
+    #   {
+    #     manage = "window";
+    #     name = "river";
+    #     start = ''
+    #     exec ${pkgs.river}/bin/river & 
+    #     '';
+    #   }
+    # ];
   };
+          # systemd-cat -t river -- ${pkgs.river}/bin/river &
+          # waitPID=$!
 
   # fprint
   # services.fprintd.enable = true;
@@ -158,9 +168,23 @@
 
   # Enable sound.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    wireplumber.enable = true;
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment this
+    jack.enable = true;
+
+  # use the example session manager (no others are packaged yet so this is enabled by default,
+  # no need to redefine it in your config for now)
+  # media-session.enable = true;
+  };
+  hardware.pulseaudio.enable = false;
   # some pulseaudio settings
-  hardware.pulseaudio.extraConfig =  "load-module module-suspend-on-idle";
+  #hardware.pulseaudio.extraConfig =  "load-module module-suspend-on-idle";
 
   # backlight
   hardware.acpilight.enable = true;
@@ -214,7 +238,8 @@
     noto-fonts ntfs3g gparted file appimage-run woeusb cachix
     feh cinnamon.nemo libva-utils speedtest-cli pass surf gnumake
     river clang-tools ed materia-theme  
-    discord
+    discord waybar swaybg pkg-config
+    kitty sway-contrib.grimshot wofi
     # autoconf automake inkscape gdk-pixbuf sassc pkgconfig
     # emacsPgtkGcc
     #rust home-manager metasploit theharvester
@@ -258,6 +283,8 @@
     mouse.middleEmulation = false;
   };#
 
+
+
   # overlays
 
   nixpkgs.overlays = [
@@ -271,7 +298,22 @@
     #   dmenu = prev.dmenu.overrideAttrs (old: { src = /home/drishal/Desktop/suckless/dmenu ;});
     # })
 
-
+    (final: prev: {
+      dwm = prev.dwm.overrideAttrs (old: { src = ../suckless/dwm-6.3 ;});
+      dwmblocks = prev.dwmblocks.override (old: {
+        # src = ../suckless/dwmblocks
+        conf =../suckless/dwmblocks/blocks.def.h;});
+    })
+    (final: prev: {
+      haskellPackages = prev.haskellPackages.override (old: {
+        overrides = self: super: {
+          xmonad = prev.haskellPackages.xmonad_0_17_0;
+          xmonad-contrib = prev.haskellPackages.xmonad-contrib_0_17_0;
+          xmonad-extras = prev.haskellPackages.xmonad-extras_0_17_0;
+        };
+      });
+    })
+    
     # (final: prev: {
     #   picom = prev.picom.overrideAttrs (old: { src = /home/drishal/Desktop/git-stuff/picom;});
     # })
@@ -291,6 +333,15 @@
           };
         });
       })
+
+    # (self: super:
+    #   {
+    #     river = super.river.overrideAttrs (_: {
+
+    #     });
+    #   })
+
+
 
 #    (self: super:
 #      {
