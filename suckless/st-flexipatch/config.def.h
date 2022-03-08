@@ -5,7 +5,9 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "FiraCode Nerd Font:size=11:antialias=true:autohint=true";
+// static char *font = "FiraCode Nerd Font:size=11:antialias=true:autohint=true";
+// static char *font = "FiraCode Nerd Font:size=11:antialias=true:autohint=true";
+static char *font = "FantasqueSansMono Nerd Font:size=11:antialias=true:autohint=true";
 #if FONT2_PATCH
 /* Spare fonts */
 static char *font2[] = {

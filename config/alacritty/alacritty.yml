@@ -118,7 +118,8 @@ font:
     #   - (Linux/BSD) monospace
     family: FiraCode Nerd Font
     # family: NotoMono Nerd Font
-    # family: FantasqueSansMono Nerd Font
+    # family: FantasqueSansMono Nerd Font 
+    # family: Open Sans
     # family: JetBrainsMono Nerd Font
 
     # The `style` can be specified to pick a specific face.
