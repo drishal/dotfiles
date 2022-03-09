@@ -8,7 +8,8 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./overlays/river.nix
+      # ./packages/river/default.nix
+      # ./overlays/river.nix
       # ../../../../etc/nixos/ardware-configuration.nix
       # import cachix.nix
       # (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
@@ -108,6 +109,7 @@
         enableContribAndExtras = true;
       };
 
+
       awesome.enable = true;
       dwm.enable = true;
     };
@@ -119,17 +121,15 @@
       # lxqt.enable = true;
       gnome.enable = true;
     };
-    displayManager.session = [
-      {
-        manage = "desktop";
-        name = "myriver";
-        start = ''
-              ${pkgs.river}/bin/river &
-              waitPID=$! '';
-      }
-    ];
-    # extras
-    # displayManager.sessionPackages = ["river"];
+    # windowManager = {
+    #   session = pkgs.lib.singleton {
+    #     name = "river";
+    #     start = ''
+    #     river &
+    #     waitPID=$!
+    #   '';
+    #   };
+    # };
     # displayManager.gdm.enable = true;
     displayManager.sddm.enable = true;
     # displayManager.lightdm = {
@@ -151,8 +151,10 @@
 
   # fprint
   # services.fprintd.enable = true;
-
+  services.xserver.displayManager.sessionPackages=[pkgs.river];
   services.gnome.tracker.enable = false;
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.sddm.enableGnomeKeyring = true;
   # resolve gnome and plasma issues
   #programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.plasma5Packages.ksshaskpass.out}/bin/ksshaskpass";
   programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
@@ -241,6 +243,7 @@
     river clang-tools ed materia-theme  
     discord waybar swaybg pkg-config
     kitty sway-contrib.grimshot wofi
+    ferdi
     # autoconf automake inkscape gdk-pixbuf sassc pkgconfig
     # emacsPgtkGcc
     #rust home-manager metasploit theharvester
@@ -305,6 +308,28 @@
         # src = ../suckless/dwmblocks
         conf =../suckless/dwmblocks/blocks.def.h;});
     })
+    
+     (final: prev: {
+       inherit (prev) callPackage fetchFromGitHub;
+     
+       river = let
+         riverSession = ''
+       [Desktop Entry]
+       Name=River
+       Comment=Dynamic Wayland compositor
+       Exec=river
+       Type=Application
+     '';
+       in
+         prev.river.overrideAttrs (prevAttrs: rec {
+           postInstall = ''
+         mkdir -p $out/share/wayland-sessions
+         echo "${riverSession}" > $out/share/wayland-sessions/river.desktop
+       '';
+           passthru.providedSessions = ["river"];
+         });
+     })
+    
     (final: prev: {
       haskellPackages = prev.haskellPackages.override (old: {
         overrides = self: super: {
