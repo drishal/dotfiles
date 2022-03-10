@@ -1,6 +1,7 @@
 #+TITLE: zshrc
 #+PROPERTY: header-args:shell :tangle ~/.zshrc
 * table of contents :toc:
+- [[#zinit][zinit]]
 - [[#initial-setup][initial setup]]
 - [[#loading-home-manager-variables][loading home manager variables]]
 - [[#qt5ct][qt5ct]]
@@ -11,7 +12,6 @@
 - [[#setting-some-values-we-will-need-from-grml-zsh-config][Setting some values we will need from Grml zsh config]]
 - [[#completion-stuff-from-grml][completion stuff from grml]]
 - [[#plugins][Plugins]]
-  - [[#antigen][Antigen]]
   - [[#zplug][zplug]]
   - [[#oh-my-zsh][Oh my zsh]]
   - [[#zsh-completions][zsh-completions]]
@@ -32,15 +32,47 @@
 - [[#grml-zsh-config][Grml Zsh config]]
 - [[#title][title]]
 - [[#kitty-config][kitty config]]
-- [[#loading-the-starship-prompt][loading the starship prompt]]
-- [[#loading-the-spaceship-prompt][loading the spaceship prompt]]
--  [[#antigen-apply-1][antigen apply]]
+- [[#loading-the-prompt][loading the prompt]]
+  - [[#starship][Starship]]
+  - [[#custom][custom]]
 - [[#loading-the-profile][loading the ~~/.profile~]]
 - [[#zplug-load][Zplug load]]
 - [[#pfetch][pfetch]]
 - [[#some-misc-exports][some misc exports]]
   - [[#terminfo-stull][Terminfo stull]]
-- [[#powerlevel10k][powerlevel10k]]
+
+* zinit
+to install copy-paste this into the terminal
+#+begin_src
+sh -c "$(curl -fsSL https://git.io/zinit-install)"
+#+end_src
+
+#+begin_src shell
+# zplug load
+### Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
+fi
+
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust
+
+### End of Zinit's installer chunk
+
+#+end_src
 
 * initial setup
 make sure you execute these commands
@@ -53,6 +85,7 @@ git clone https://github.com/zsh-users/zsh-autosuggestions.git
 git clone https://github.com/jeffreytse/zsh-vi-mode.git
 git clone https://github.com/zsh-users/zsh-history-substring-search.git
 #+end_src
+
 * loading home manager variables
 #+begin_src shell
  . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
@@ -252,39 +285,36 @@ git clone https://github.com/zsh-users/zsh-history-substring-search.git
 #+end_src
 
 * Plugins
-** Antigen
-#+begin_src shell
-  #source ~/dotfiles/antigen.zsh 
-  #DISABLE_AUTO_UPDATE="true"
-#+end_src
 ** zplug
 #+begin_src shell
-source ~/.zplug/init.zsh 
+ # source ~/.zplug/init.zsh 
 #+end_src
 ** Oh my zsh
 #+begin_src shell
-zplug "ohmyzsh/ohmyzsh"
+# zplug "ohmyzsh/ohmyzsh"
+# zinit light "ohmyzsh/ohmyzsh"
 #+end_src
 ** zsh-completions
 see https://github.com/zsh-users/zsh-completions
 #+begin_src shell  
   #source ~/.zsh-plugins/zsh-completions/zsh-completions.plugin.zsh
   #antigen bundle zsh-users/zsh-completions
-  zplug "zsh-users/zsh-completions"
+  # zplug "zsh-users/zsh-completions"
+  zinit light "zsh-users/zsh-completions"
 #+end_src
 ** zsh-autosuggestions
 - install from here: https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
 #+begin_src shell
     #  source ~/.zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
       #antigen bundle zsh-users/zsh-autosuggestions
-  zplug "zsh-users/zsh-autosuggestions"
+  zinit light "zsh-users/zsh-autosuggestions"
   export ZSH_AUTOSUGGEST_USE_ASYNC=true
   ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#6272a4'
 
 #+end_src
 ** zsh autocomplete
 #+begin_src shell
-  #zplug "marlonrichert/zsh-autocomplete"
+  # zinit light "marlonrichert/zsh-autocomplete"
 #+end_src
 ** zsh command not found
 #+begin_src shell
@@ -295,19 +325,18 @@ see https://github.com/zsh-users/zsh-completions
 - see: https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md
 #+begin_src shell
   # source ~/.zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-  #antigen bundle zsh-users/zsh-syntax-highlighting
-  zplug "zsh-users/zsh-syntax-highlighting"
+  zinit light "zsh-users/zsh-syntax-highlighting"
 #+end_src
 ** zsh-history substring search
 - see: https://github.com/zsh-users/zsh-history-substring-search
   #+begin_src shell
-    #antigen bundle zsh-users/zsh-history-substring-search
     #source /home/drishal/.zsh-plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
-    zplug "zsh-users/zsh-history-substring-search"
+    zinit light "zsh-users/zsh-history-substring-search"
   #+end_src
 ** Spaceship prompt
 #+begin_src shell
-  #antigen theme spaceship-prompt/spaceship-prompt
+#antigen theme spaceship-prompt/spaceship-prompt
+# zinit light spaceship-prompt/spaceship-prompt
 #+end_src
 ** antigen apply
 #+begin_src bash
@@ -327,7 +356,7 @@ see https://github.com/jeffreytse/zsh-vi-mode
 #+end_src
 ** async
 #+begin_src shell 
-  zplug mafredri/zsh-async
+  zinit light mafredri/zsh-async
 #+end_src
 ** Themes
 #+begin_src shell
@@ -363,7 +392,7 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
   # export TITLE=$USER@$HOST 
   # export PROMPT_COMMAND="echo -ne \"\033]0;$1 Hello World\007\""
   # printf "\033]%s\07\n" "$USER@$HOST" 
-  zplug trystan2k/zsh-tab-title
+  zinit load trystan2k/zsh-tab-title
   ZSH_TAB_TITLE_ADDITIONAL_TERMS='alacritty|kitty|foot'
   #preexec() { print -Pn "\e]0;$1%~\a" }
 #+end_src
@@ -373,49 +402,41 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
 export KITTY_SHELL_INTEGRATION=no-cursor
 #+end_src
 
-* loading the starship prompt
+* loading the prompt
+** Starship
 #+begin_src shell
-  #export PS1="%F{blue}%~%f %(?.%F{green}❯%f.%F{red}❯%f) "
-  #zplug Abid-Ahmad/oh-my-zsh-000-theme, as:theme
-  #PS1="\[\e[34m\]\W\[\e[m\] | "
-  #zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
-  #PS1='fuck yourself sweets'
-  eval "$(starship init zsh)"
-  export STARSHIP_CONFIG=~/dotfiles/config/starship.toml
+eval "$(starship init zsh)"
+export STARSHIP_CONFIG=~/dotfiles/config/starship.toml
+# zinit load agnoster/agnoster-zsh-theme
+#+end_src
+** custom
+https://www.tweaking4all.com/software/macosx-software/customize-zsh-prompt/
+what do different values mean
+| %l | The TTY device you’re using, strips “/dev/” or “/dev/tty” | Note: Lowercase letter “L”                                          |
+| %M | Full hostname                                             |                                                                     |
+| %m | Hostname up until the first dot                           | A number after ‘%m’ will indicated how many dots should be included |
+| %n | Username                                                  | The user that is logged in                                          |
+| %y | Same as “%l” just does not strip “/dev” or “/dev/tty”     |                                                                     |
+	
+#+begin_src shell
+# PROMPT='%F{green}%n@%F{white}%M %B%~ > '
 #+end_src
 
-* loading the spaceship prompt
-#+begin_src shell
-  #source ~/.zsh-plugins/spaceship-prompt/spaceship.zsh 
-#zplug "spaceship-prompt/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
-#+end_src
-
-*  antigen apply 
-#+begin_src shell
-  #antigen apply
-#+end_src
 * loading the ~~/.profile~
 #+begin_src shell
   source ~/dotfiles/.profile
 #+end_src
 * Zplug load
 #+begin_src shell
-zplug load 
+# zplug load 
 #+end_src
-
 * pfetch
 #+begin_src shell
-  pfetch 
+# pfetch 
 #+end_src
 
 * some misc exports
 ** Terminfo stull
 #+begin_src shell
   export TERMINFO_DIRS=/usr/share/terminfo
-#+end_src
-
-* powerlevel10k
-#+begin_src shell
-  # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-  # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 #+end_src
