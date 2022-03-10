@@ -65,5 +65,8 @@ alias bed-arch="strat -r arch zsh"
 #fetch
 # repo sync alias
 alias repo-sync="repo sync -c --force-sync --optimized-fetch --no-tags --no-clone-bundle --prune -j$(nproc --all);"
+
+# batdistrack
+alias sleep-check="journalctl -u systemd-suspend.service | tail"
 #pfetch
 #pactl load-module module-bluetooth-discover

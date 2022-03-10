@@ -6,6 +6,7 @@
   - [[#shift-theme-variables-to-customel-make-sure-to-create-it-if-it-does-not-exist][shift theme variables to ~custom.el~, make sure to create it if it does not exist]]
   - [[#emacs-startup-performance][emacs startup performance]]
 - [[#initialize-package-sources][Initialize package sources]]
+  - [[#packageel][Package.el]]
   - [[#enable-native-comp-for-packages][enable native comp for packages]]
   - [[#quelpa][quelpa]]
   - [[#setting-up-paths][Setting up paths]]
@@ -568,7 +569,7 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 #+begin_src emacs-lisp
   (use-package vterm
     ;;:ensure t
-    :ensure nil
+    :ensure t 
     :config
     ;;(setq vterm-shell "/bin/zsh")
     ;; (set-popup-rule! "^\\*vterm" :size 0.25 :vslot -4 :select t :quit nil :ttl 0)
