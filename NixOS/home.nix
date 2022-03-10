@@ -47,25 +47,30 @@ imports=[
 home.packages = with pkgs; [
   neofetch libgccjit
   # kitty 
-  (callPackage ./distrobox.nix {})
+  distrobox
+  # (callPackage ./distrobox.nix {})
   ];
 
 
   # services
-  # services = {
+  services = {
   #   emacs = {
   #     enable = true;
   #     client.enable =true;
   #     socketActivation.enable = true;
   #   };
-  #};
+    # dunst = {
+    #  enable = true;
+    #  iconTheme = pkgs.papirus-icon-theme; 
+    # };
+  };
 
   # cachix
   # caches.cachix = [
   #   "emacsPgtkGcc"
   #"someOtherCachix"
   #{ name = "someCachixWithSha"; sha256 = "..."; }
-  # ];
+ 
   #.profile
   #home.file."/home/drishal/.profile".source=../.profile;
 
@@ -110,6 +115,8 @@ home.packages = with pkgs; [
   # alacritty
   home.file."/home/drishal/.config/alacritty/alacritty.yml".source = ../config/alacritty/alacritty.yml;
 
+  # dunst
+  home.file."/home/drishal/.config/dunst/dunstrc".source = ../config/dunst/dunstrc;
   # qtile config
   #home.file."/home/drishal/.config/qtile/config.py".source =../config/qtile/config.py;
   # home.file."/home/drishal/.config/qtile/autostart.sh".source =../config/qtile/autostart.sh;

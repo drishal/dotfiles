@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+     #  ./packages/batdistrack/default.nix
       # ./packages/river/default.nix
       # ./overlays/river.nix
       # ../../../../etc/nixos/ardware-configuration.nix
@@ -27,6 +28,10 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  #qt_qpa_platformtheme
+ environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "";
+
+
   #bluetooth
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
@@ -40,6 +45,9 @@
     {
       enable = true;
       cpuFreqGovernor="schedutil";
+      powerDownCommands = ''
+      ${pkgs.batdistrack}/bin/batdistrack
+    ''  ;
     };
     # open cl
   hardware.opengl.extraPackages = with pkgs; [
@@ -117,9 +125,9 @@
     # Desktop Environment
     desktopManager = {
       plasma5.enable = true;
-      xfce.enable = true;
+      # xfce.enable = true;
       # lxqt.enable = true;
-      gnome.enable = true;
+      # gnome.enable = true;
     };
     # windowManager = {
     #   session = pkgs.lib.singleton {
@@ -192,6 +200,10 @@
   # backlight
   hardware.acpilight.enable = true;
 
+  # systemd scripts
+  systemd.packages = with pkgs; [
+    # batdistrack
+  ];
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -216,7 +228,7 @@
   environment.systemPackages = with pkgs; [
     wget vim haskellPackages.xmobar
     alacritty xorg.xkill git
-    man teams
+    man teams batdistrack
     papirus-icon-theme xorg.xf86videoamdgpu lxappearance
     lxsession libnotify xclip starship
     cmake volumeicon usbutils
@@ -224,7 +236,7 @@
     firefox neofetch steam-run 
     picom inxi hack-font xarchiver unzip
     nitrogen rofi trayer arc-theme
-    xfce.xfce4-clipman-plugin youtube-dl
+    youtube-dl
     xfce.xfce4-notifyd mpv smplayer pfetch
     qbittorrent  mesa-demos glxinfo
     xorg.xdpyinfo evince qt5ct
@@ -243,7 +255,11 @@
     river clang-tools ed materia-theme  
     discord waybar swaybg pkg-config
     kitty sway-contrib.grimshot wofi
-    ferdi
+    ferdi dunst networkmanagerapplet tree
+    # batdistrack 
+    # some xfce apps
+    xfce.xfce4-clipman-plugin xfce.thunar xfce.xfce4-taskmanager
+
     # autoconf automake inkscape gdk-pixbuf sassc pkgconfig
     # emacsPgtkGcc
     #rust home-manager metasploit theharvester
@@ -292,16 +308,7 @@
   # overlays
 
   nixpkgs.overlays = [
-    # (final: prev: {
-    #   dwm = prev.dwm.overrideAttrs (old: { src = /home/drishal/Desktop/suckless/dwm-6.2 ;});
-    # })
-    # #(final: prev: {
-    # #  dwmblocks = prev.dwmblocks.overrideAttrs (old: { src = /home/drishal/Desktop/suckless/dwmblocks ;});
-    # #})
-    # (final: prev: {
-    #   dmenu = prev.dmenu.overrideAttrs (old: { src = /home/drishal/Desktop/suckless/dmenu ;});
-    # })
-
+    #suckless overlays
     (final: prev: {
       dwm = prev.dwm.overrideAttrs (old: { src = ../suckless/dwm-6.3 ;});
       dwmblocks = prev.dwmblocks.override (old: {
@@ -309,6 +316,7 @@
         conf =../suckless/dwmblocks/blocks.def.h;});
     })
     
+    # river desktop session
      (final: prev: {
        inherit (prev) callPackage fetchFromGitHub;
      
@@ -329,7 +337,8 @@
            passthru.providedSessions = ["river"];
          });
      })
-    
+
+    # xmonad 
     (final: prev: {
       haskellPackages = prev.haskellPackages.override (old: {
         overrides = self: super: {
@@ -339,7 +348,11 @@
         };
       });
     })
-    
+
+    # batdistrack
+    (self: super: {
+      batdistrack = super.callPackage ./packages/batdistrack/default.nix {};
+    })
     # (final: prev: {
     #   picom = prev.picom.overrideAttrs (old: { src = /home/drishal/Desktop/git-stuff/picom;});
     # })
@@ -349,6 +362,7 @@
     #    builtins.fetchTarball { src="https://discord.com/api/download?platform=linux&format=tar.gz"; sha256 = lib.fakeSha256;};
     # });
     #})
+    # picom
     (self: super:
       {
         picom = super.picom.overrideAttrs (_: {
