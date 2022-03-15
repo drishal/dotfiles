@@ -1,20 +1,12 @@
-/usr/lib/notification-daemon-1.0/notification-daemon&
-#spawnOnce "xsetroot -cursor_name left_
-#/usr/libexec/notification-daemon
+#!/bin/bash
+# /usr/lib/notification-daemon-1.0/notification-daemon&
+xset r rate  300 50
 lxpolkit&
-#polybar xmonad"
 picom --experimental-backends&
-#polybar qtile&
-#picom&
-#spawnOnce "picom"
-#dwmblocks&
-#dwmstatus&
-nitrogen --restore&
-#spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true  --tint 0x292d3e  --alpha 0 --height 20 --padding spawnOnce "trayer --edge top --align right --widthtype request --SetDockType true --SetPartialStrut true --expand true  --transparent true --alpha 0 --tint 0x282a36 --height 20 --padding 4"
-#        --spawnOnce "stalonetray"
-#        --spawnOnce "pasystray"
+# feh --bg-scale ~/dotfiles/wallpapers/darkest_hour.jpg
 nm-applet&
-mate-power-manager&
 xfce4-clipman&
-#redshift -O 4000 &
-#volumeicon&
+xfce4-power-manager&
+emacs --daemon&
+blueman-applet&
+volumeicon&

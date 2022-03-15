@@ -12,21 +12,15 @@
 - [[#setting-some-values-we-will-need-from-grml-zsh-config][Setting some values we will need from Grml zsh config]]
 - [[#completion-stuff-from-grml][completion stuff from grml]]
 - [[#plugins][Plugins]]
-  - [[#zplug][zplug]]
-  - [[#oh-my-zsh][Oh my zsh]]
   - [[#zsh-completions][zsh-completions]]
   - [[#zsh-autosuggestions][zsh-autosuggestions]]
   - [[#zsh-autocomplete][zsh autocomplete]]
   - [[#zsh-command-not-found][zsh command not found]]
   - [[#zsh-syntax-highlighting][zsh-syntax-highlighting]]
   - [[#zsh-history-substring-search][zsh-history substring search]]
-  - [[#spaceship-prompt][Spaceship prompt]]
-  - [[#antigen-apply][antigen apply]]
   - [[#disable-the-prompt-on-the-right-side][Disable the prompt on the right side]]
   - [[#vim-mode][vim mode]]
   - [[#async][async]]
-  - [[#themes][Themes]]
-  - [[#prompt][prompt]]
 - [[#history-completions][History completions]]
 - [[#navigation][Navigation]]
 - [[#grml-zsh-config][Grml Zsh config]]
@@ -35,6 +29,9 @@
 - [[#loading-the-prompt][loading the prompt]]
   - [[#starship][Starship]]
   - [[#custom][custom]]
+  - [[#p10k][p10k]]
+  - [[#clear][clear]]
+  - [[#agkozak][agkozak]]
 - [[#loading-the-profile][loading the ~~/.profile~]]
 - [[#zplug-load][Zplug load]]
 - [[#pfetch][pfetch]]
@@ -285,36 +282,35 @@ git clone https://github.com/zsh-users/zsh-history-substring-search.git
 #+end_src
 
 * Plugins
-** zplug
-#+begin_src shell
- # source ~/.zplug/init.zsh 
-#+end_src
-** Oh my zsh
+*** Oh my zsh
 #+begin_src shell
 # zplug "ohmyzsh/ohmyzsh"
 # zinit light "ohmyzsh/ohmyzsh"
+# B.
 #+end_src
+
 ** zsh-completions
 see https://github.com/zsh-users/zsh-completions
 #+begin_src shell  
   #source ~/.zsh-plugins/zsh-completions/zsh-completions.plugin.zsh
   #antigen bundle zsh-users/zsh-completions
   # zplug "zsh-users/zsh-completions"
-  zinit light "zsh-users/zsh-completions"
+  # zinit light "zsh-users/zsh-completions"
 #+end_src
 ** zsh-autosuggestions
 - install from here: https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
 #+begin_src shell
-    #  source ~/.zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-      #antigen bundle zsh-users/zsh-autosuggestions
-  zinit light "zsh-users/zsh-autosuggestions"
-  export ZSH_AUTOSUGGEST_USE_ASYNC=true
-  ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#6272a4'
+  #  source ~/.zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+    #antigen bundle zsh-users/zsh-autosuggestions
+zinit light "zsh-users/zsh-autosuggestions"
+zinit light zdharma-continuum/fast-syntax-highlighting
+export ZSH_AUTOSUGGEST_USE_ASYNC=true
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#6272a4'
 
 #+end_src
 ** zsh autocomplete
 #+begin_src shell
-  # zinit light "marlonrichert/zsh-autocomplete"
+  #  zinit light "marlonrichert/zsh-autocomplete"
 #+end_src
 ** zsh command not found
 #+begin_src shell
@@ -333,15 +329,6 @@ see https://github.com/zsh-users/zsh-completions
     #source /home/drishal/.zsh-plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
     zinit light "zsh-users/zsh-history-substring-search"
   #+end_src
-** Spaceship prompt
-#+begin_src shell
-#antigen theme spaceship-prompt/spaceship-prompt
-# zinit light spaceship-prompt/spaceship-prompt
-#+end_src
-** antigen apply
-#+begin_src bash
- # antigen apply
-#+end_src
 
 
 ** Disable the prompt on the right side
@@ -358,17 +345,6 @@ see https://github.com/jeffreytse/zsh-vi-mode
 #+begin_src shell 
   zinit light mafredri/zsh-async
 #+end_src
-** Themes
-#+begin_src shell
-  # source ~/.zsh-plugins/dracula/dracula.zsh-theme
-  #ZSH_THEME="random"
-
-#+end_src
-** prompt
-#+begin_src shell 
-  #  source ~/.zsh-plugins/termsupport.zsh 
-#+end_src
-
 * History completions
 #+begin_src shell
   HISTFILE=${HISTFILE:-${ZDOTDIR:-${HOME}}/.zsh_history}
@@ -388,13 +364,8 @@ https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
 * title
 #+begin_src shell 
   DISABLE_AUTO_TITLE="false"
-  #DISABLE_AUTO_TITLE="true"
-  # export TITLE=$USER@$HOST 
-  # export PROMPT_COMMAND="echo -ne \"\033]0;$1 Hello World\007\""
-  # printf "\033]%s\07\n" "$USER@$HOST" 
   zinit load trystan2k/zsh-tab-title
   ZSH_TAB_TITLE_ADDITIONAL_TERMS='alacritty|kitty|foot'
-  #preexec() { print -Pn "\e]0;$1%~\a" }
 #+end_src
 
 * kitty config
@@ -407,7 +378,6 @@ export KITTY_SHELL_INTEGRATION=no-cursor
 #+begin_src shell
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG=~/dotfiles/config/starship.toml
-# zinit load agnoster/agnoster-zsh-theme
 #+end_src
 ** custom
 https://www.tweaking4all.com/software/macosx-software/customize-zsh-prompt/
@@ -419,7 +389,28 @@ what do different values mean
 | %y | Same as “%l” just does not strip “/dev” or “/dev/tty”     |                                                                     |
 	
 #+begin_src shell
-# PROMPT='%F{green}%n@%F{white}%M %B%~ > '
+# PROMPT='%F{green}%n@%F{white}%M %B%3~ > '
+# PROMPT='%F{green}%3~ > '
+#+end_src
+** p10k
+#+begin_src shell
+# zinit ice depth=1; zinit light romkatv/powerlevel10k
+# # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+#+end_src
+** clear
+#+begin_src shell
+#zinit load madhavtummala/clear
+# ZSH_THEME="clear"
+#+end_src
+** agkozak
+https://github.com/agkozak/agkozak-zsh-prompt
+#+begin_src shell
+# zinit load agkozak/agkozak-zsh-prompt
+# AGKOZAK_PROMPT_CHAR=( '%F{magenta}❯%f' '%F{magenta}❯%f' '%F{magenta}❮%f' )
+# AGKOZAK_LEFT_PROMPT_ONLY=1
+# AGKOZAK_COLORS_BRANCH_STATUS=green
+# AGKOZAK_CUSTOM_RPROMPT='%()'
 #+end_src
 
 * loading the ~~/.profile~

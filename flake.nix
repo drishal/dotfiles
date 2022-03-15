@@ -5,10 +5,8 @@
 
     nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
 
-   # river = {url = "github:edrex/nixpkgs/river-wayland-session";};
     home-manager = {
       url = "github:nix-community/home-manager";
-      #inputs = { nixpkgs.follows = "nixpkgs"; };
     };
 
     discord-flake = {url = github:InternetUnexplorer/discord-overlay;};
@@ -18,11 +16,6 @@
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
     };
-    #fu.url = "github:numtide/flake-utils";
-    #utils = {
-    #  url = "github:gytis-ivaskevicius/flake-utils-plus/staging";
-    #  inputs.flake-utils.follows = "fu";
-    #};
   };
 
   outputs = { nixpkgs, home-manager, discord-flake ,nur, emacs-overlay, ... }@inputs:

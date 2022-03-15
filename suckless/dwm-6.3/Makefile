@@ -10,9 +10,9 @@ all: options dwm
 
 options:
 	@echo dwm build options:
-	@echo "CFLAGS   = ${CFLAGS} -O3 -march=native -flto"
-	@echo "LDFLAGS  = ${LDFLAGS} -O3 -march=native -flto"
-	@echo "CC       = ${CC} -O3 -march=native -flto"
+	@echo "CFLAGS   = ${CFLAGS}"
+	@echo "LDFLAGS  = ${LDFLAGS}"
+	@echo "CC       = ${CC}"
 
 .c.o:
 	${CC} -c ${CFLAGS} $<
@@ -27,7 +27,8 @@ dwm: ${OBJ}
 
 clean:
 	rm -f dwm ${OBJ} dwm-${VERSION}.tar.gz
-	rm -rf config.h
+	rm config.h
+
 
 dist: clean
 	mkdir -p dwm-${VERSION}

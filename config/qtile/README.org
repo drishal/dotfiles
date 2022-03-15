@@ -37,7 +37,7 @@
 * Some variables
 #+begin_src python
   mod = "mod4"
-  terminal = "kitty"
+  terminal = "alacritty"
 #+end_src
 * Colors
 ** Dracula
@@ -132,74 +132,75 @@
 * Keybinds
 ** Keyboard
 #+begin_src python
-  keys = [
-      Key([mod], "h", lazy.layout.left()),
-      Key([mod], "l", lazy.layout.right()),
-      Key([mod], "j", lazy.layout.down()),
-      Key([mod], "k", lazy.layout.up()),
-      Key([mod, "shift"], "h", lazy.layout.swap_left()),
-      Key([mod, "shift"], "l", lazy.layout.swap_right()),
-      Key([mod, "shift"], "j", lazy.layout.shuffle_down()),
-      Key([mod, "shift"], "k", lazy.layout.shuffle_up()),
-      Key([mod, "control"], "j", lazy.layout.grow_down()),
-      Key([mod, "control"], "k", lazy.layout.grow_up()),
-      Key([mod, "control"], "h", lazy.layout.grow_left(), lazy.layout.decrease_ratio()),
-      Key([mod, "control"], "l", lazy.layout.grow_right(),lazy.layout.increase_ratio()),
-      # Key([mod], "i", lazy.layout.decrease_ratio()),
-      # Key([mod], "m", lazy.layout.increase_ratio()),
-      Key([mod], "n", lazy.layout.reset()),
-      Key([mod], "o", lazy.layout.maximize()),
-      # Key([mod, "shift"], "space", lazy.layout.flip()),
-      # Switch from float to tile
-      Key( [mod, "shift"], "space", lazy.window.toggle_floating(), desc='tile/float a window'),
+keys = [
+    Key([mod], "h", lazy.layout.left()),
+    Key([mod], "l", lazy.layout.right()),
+    Key([mod], "j", lazy.layout.down()),
+    Key([mod], "k", lazy.layout.up()),
+    Key([mod, "shift"], "h", lazy.layout.swap_left()),
+    Key([mod, "shift"], "l", lazy.layout.swap_right()),
+    Key([mod, "shift"], "j", lazy.layout.shuffle_down()),
+    Key([mod, "shift"], "k", lazy.layout.shuffle_up()),
+    Key([mod, "control"], "j", lazy.layout.grow_down()),
+    Key([mod, "control"], "k", lazy.layout.grow_up()),
+    Key([mod, "control"], "h", lazy.layout.grow_left(), lazy.layout.decrease_ratio()),
+    Key([mod, "control"], "l", lazy.layout.grow_right(),lazy.layout.increase_ratio()),
+    # Key([mod], "i", lazy.layout.decrease_ratio()),
+    Key([mod], "f", lazy.window.toggle_fullscreen()),
+    # Key([mod], "m", lazy.layout.increase_ratio()),
+    Key([mod], "n", lazy.layout.reset()),
+    Key([mod], "o", lazy.layout.maximize()),
+    # Key([mod, "shift"], "space", lazy.layout.flip()),
+    # Switch from float to tile
+    Key( [mod, "shift"], "space", lazy.window.toggle_floating(), desc='tile/float a window'),
 
 
-      # Switch window focus to other pane(s) of stack
-      Key([mod], "space", lazy.layout.next(),
-          desc="Switch window focus to other pane(s) of stack"),
+    # Switch window focus to other pane(s) of stack
+    Key([mod], "space", lazy.layout.next(),
+        desc="Switch window focus to other pane(s) of stack"),
 
-      # Swap panes of split stack
-      # Key([mod, "shift"], "space", lazy.layout.rotate(),
-      #    desc="Swap panes of split stack"),
+    # Swap panes of split stack
+    # Key([mod, "shift"], "space", lazy.layout.rotate(),
+    #    desc="Swap panes of split stack"),
 
-      # Toggle between split and unsplit sides of stack.
-      # Split = all windows displayed
-      # Unsplit = 1 window displayed, like Max layout, but still with
-      # multiple stack panes
-      # Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
-      #     desc="Toggle between split and unsplit sides of stack"),
+    # Toggle between split and unsplit sides of stack.
+    # Split = all windows displayed
+    # Unsplit = 1 window displayed, like Max layout, but still with
+    # multiple stack panes
+    # Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
+    #     desc="Toggle between split and unsplit sides of stack"),
 
-      # # terminal
-      Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-      # some programs
-      Key([mod, "shift"], "f", lazy.spawn("firefox"), desc="Firefox"),
-      Key([mod], "a", lazy.spawn("emacsclient -c"), desc="Emacs"),
-      # # pavucontrol
-      Key([mod], "v", lazy.spawn("pavucontrol"), desc="pavucontrol"),
-      # # run
-      Key([mod], "d", lazy.spawn("rofi -show drun -icon-theme Papirus -show-icons"), desc="Firefox"),
-      Key([mod], "p", lazy.spawn("rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu"), desc="Emacs"),
-      # # thunar
-      Key([mod], "e", lazy.spawn("thunar"), desc="file manager"),
+    # # terminal
+    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    # some programs
+    Key([mod, "shift"], "f", lazy.spawn("firefox"), desc="Firefox"),
+    Key([mod], "a", lazy.spawn("emacsclient -c"), desc="Emacs"),
+    # # pavucontrol
+    Key([mod], "v", lazy.spawn("pavucontrol"), desc="pavucontrol"),
+    # # run
+    Key([mod], "d", lazy.spawn("rofi -show drun -icon-theme Papirus -show-icons"), desc="Firefox"),
+    Key([mod], "p", lazy.spawn("rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu"), desc="Emacs"),
+    # # thunar
+    Key([mod], "e", lazy.spawn("thunar"), desc="file manager"),
 
-      #Reset Layout
-      #Key([mod, "shift"], "m", resetlayout , desc="Reset Layout"),
+    #Reset Layout
+    #Key([mod, "shift"], "m", resetlayout , desc="Reset Layout"),
 
-      # # Toggle between different layouts as defined below
+    # # Toggle between different layouts as defined below
 
-      Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-      Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
+    Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
+    Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
 
-      Key([mod, "shift"], "r", lazy.restart(), desc="Restart qtile"),
-      Key([mod, "shift"], "q", lazy.shutdown(), desc="Shutdown qtile"),
-      Key([mod], "r", lazy.spawncmd(),
-          desc="Spawn a command using a prompt widget"),
+    Key([mod, "shift"], "r", lazy.restart(), desc="Restart qtile"),
+    Key([mod, "shift"], "q", lazy.shutdown(), desc="Shutdown qtile"),
+    Key([mod], "r", lazy.spawncmd(),
+        desc="Spawn a command using a prompt widget"),
 
-      KeyChord([mod], "z", [
-        Key([], "x", lazy.spawn("emacsclient -c"))
-    ])
+    KeyChord([mod], "z", [
+      Key([], "x", lazy.spawn("emacsclient -c"))
+  ])
 
-  ]
+]
 #+end_src
 ** Mouse
 - Drag Floating layouts
@@ -262,8 +263,8 @@
       font='FiraCode Nerd Font',
       fontsize=12,
       padding=2,
-      background="#282a36",
-      foreground= "#282a36",
+      background=color[0],
+      foreground=color[1],
   )
   extension_defaults = widget_defaults.copy()
 #+end_src
@@ -271,7 +272,7 @@
 #+begin_src python
    screens = [
       Screen(
-          wallpaper='~/dotfiles/wallpapers/IMG_1729.jpg',
+          wallpaper='~/dotfiles/wallpapers/darkest_hour.jpg',
           wallpaper_mode='stretch',
           top=bar.Bar(
               [

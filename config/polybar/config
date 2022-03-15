@@ -17,29 +17,23 @@
 ;==========================================================
 
 [colors]
-;background = #222
-;background-alt = #444
-;foreground = #dfdfdf
-;foreground-alt = #555
-;primary = #ffb52a
-;secondary = #e60053
-;alert = ${xrdb:color1}
-;highlight  = ${xrdb:color1}
+; onedark
+background = #282c34
+foreground = #bbc2cf
+background-alt = #3f444a
+foreground-alt = #5B6268
 
-background = ${xrdb:background}
-foreground = ${xrdb:foreground}
+cyan     =   #46d9ff 
+green    =   #98be65 
+orange   =   #da8548
+magenta  =   #c678dd
+violet   =   #a9a1e1
+red      =   #ff6c6b
+yellow   =   #ecbe7b
 
-black       = ${xrdb:color0}
-grey       = ${xrdb:color8}
-
-red       = ${xrdb:color1}
-
-green       = ${xrdb:color2}
-yellow       = ${xrdb:color3}
-blue       = ${xrdb:color4}  ;purple in some cases
-magenta = ${xrdb:color5}     ;pink in some cases
-cyan       = ${xrdb:color6}
-white       = ${xrdb:color7}
+primary = ${colors.magenta} 
+secondary =${colors.red} 
+alert = ${colors.red} 
 
 
 [bar/example]
@@ -55,7 +49,7 @@ background = ${colors.background}
 foreground = ${colors.foreground}
 
 line-size = 3
-line-color = ${colors.grey}
+line-color = ${colors.background-alt}
 
 border-size = 4
 ;border-color = ${colors.background} 

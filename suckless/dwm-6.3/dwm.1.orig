@@ -124,6 +124,9 @@ Zooms/cycles focused window to/from master area (tiled layouts only).
 .B Mod1\-Shift\-c
 Close focused window.
 .TP
+.B Mod1\-Shift\-f
+Toggle fullscreen for focused window.
+.TP
 .B Mod1\-Shift\-space
 Toggle focused window between tiled and floating state.
 .TP
@@ -147,16 +150,6 @@ View all windows with any tag.
 .TP
 .B Mod1\-Control\-[1..n]
 Add/remove all windows with nth tag to/from the view.
-.TP
-.B Mod1\--
-Decrease the gaps around windows.
-.TP
-.B Mod1\-=
-Increase the gaps around windows.
-.TP
-.B Mod1\-Shift-=
-Reset the gaps around windows to
-.BR 0 .
 .TP
 .B Mod1\-Shift\-q
 Quit dwm.

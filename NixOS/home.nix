@@ -19,33 +19,36 @@ imports=[
   };
   # main programs
   programs = {
-     rofi = {
-       enable = false;
-       theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
-     };
     # neovim
     # neovim = {
     #   enable = true;
     # };
 
-    # git
-     git = {
-       enable = true;
-       userName = "drishal";
-       userEmail = "drishalballaney@gmail.com";
-     };
+    #  rofi = {
+    #    enable = false;
+    #    theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
+    #  };
+    # # git
+    #  git = {
+    #    enable = true;
+    #    userName = "drishal";
+    #    userEmail = "drishalballaney@gmail.com";
+    #  };
 
-      emacs = {
-        enable = true;
-        # package = pkgs.emacsGit;
-        # package = pkgs.emacsPgtkGcc.overrideAttrs (oa: {configureFlags = ["--with-pgtk  --enable-link-time-optimization --with-native-compilation"];});
-        package = pkgs.emacsPgtkGcc;
-        extraPackages = (epkgs: [ epkgs.vterm ] );
-      };
+    #   emacs = {
+    #     enable = true;
+    #     # package = pkgs.emacsGit;
+    #     # package = pkgs.emacsPgtkGcc.overrideAttrs (oa: {configureFlags = ["--with-pgtk  --enable-link-time-optimization --with-native-compilation"];});
+    #     package = pkgs.emacsPgtkGcc;
+    #     extraPackages = (epkgs: [ epkgs.vterm ] );
+    #   };
   };
 
 home.packages = with pkgs; [
-  neofetch libgccjit
+  neofetch
+  # libgccjit
+  man
+  man-pages
   # kitty 
   distrobox
   # (callPackage ./distrobox.nix {})

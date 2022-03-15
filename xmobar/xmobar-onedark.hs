@@ -63,7 +63,7 @@ Config {
         , Run Com "bash /home/drishal/Desktop/suckless/scripts/dwm_battery.sh" [] "batt" 10
       --, Run Com "acpi" [] "batt" 10
 
-        --, Run UnsafeStdinReader
+        ,  Run UnsafeStdinReader
         , Run XMonadLog
         ]
    }

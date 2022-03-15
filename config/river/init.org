@@ -202,7 +202,7 @@ Mod+Shift+0 to tag focused view with all tags
 *** Toggle Float
 
 #+begin_src bash
-riverctl map normal $mod+Shift Space toggle-float
+riverctl map normal $mod Space toggle-float
 #+end_src
 *** Mod+F to toggle fullscreen
 #+begin_src bash
