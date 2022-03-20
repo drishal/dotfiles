@@ -90,7 +90,7 @@ import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.SimpleFloat
 import XMonad.Layout.Renamed
 import XMonad.Layout.Fullscreen
--- import XMonad.Layout.ToggleLayouts
+import XMonad.Layout.ToggleLayouts
 
 --import XMonad.Layout.Fullscreen as FS
     -- Layouts modifiers
@@ -129,8 +129,8 @@ import Colors.DoomOne
 --import Colors.Palenight
 
 --Others
-import XMonad.Layout.MultiToggle.Instances
-import XMonad.Layout.MultiToggle
+-- import XMonad.Layout.MultiToggle.Instances
+-- import XMonad.Layout.MultiToggle
 --import Theme
 --import Theme.Theme
 #+end_src
@@ -197,32 +197,31 @@ import XMonad.Layout.MultiToggle
 ** MyLayout
 Here I set the default layouts for the layouts. I mainly use tiled, simplestFloat and Full layouts
 #+begin_src haskell
--- myLayout =  toggleLayouts (noBorders Full)
---             (renamed [CutWordsLeft 1]
---             $ avoidStruts
---             $ spacingWithEdge 8
---             $ smartBorders
---             $ tiled ||| simplestFloat)
-
-myLayout =  mkToggle(NOBORDERS ?? FULL ?? EOT)
-            $ renamed [CutWordsLeft 1]
-            $ smartBorders
+myLayout =  toggleLayouts (noBorders Full)
+            (renamed [CutWordsLeft 1]
             $ avoidStruts
             $ spacingWithEdge 8
-            $ tiled ||| simplestFloat
+            $ smartBorders
+            $ tiled ||| simplestFloat)
+-- myLayout =  mkToggle(NOBORDERS ?? FULL ?? EOT)
+--             $ renamed [CutWordsLeft 1]
+--             $ smartBorders
+--             $ avoidStruts
+--             $ spacingWithEdge 8
+--             $ tiled ||| simplestFloat
 
-  where
-     -- default tiling algorithm partitions the screen into two panes
-     tiled   = Tall nmaster delta ratio
+ where
+    -- default tiling algorithm partitions the screen into two panes
+    tiled   = Tall nmaster delta ratio
 
-     -- The default number of windows in the master pane
-     nmaster = 1
+    -- The default number of windows in the master pane
+    nmaster = 1
 
-     -- Default proportion of screen occupied by master pane
-     ratio   = 1/2
+    -- Default proportion of screen occupied by master pane
+    ratio   = 1/2
 
-     -- Percent of screen to increment by when resizing panes
-     delta   = 3/100
+    -- Percent of screen to increment by when resizing panes
+    delta   = 3/100
 
 #+end_src
 
@@ -386,8 +385,9 @@ myKeys =
     --reset layout
     , ("M-S-m",  setLayout $ Layout myLayout)
     --toogle fullscreen
-    --,  ("M-f", sendMessage (Toggle "Full"))
-    ,  ("M-f", sendMessage (Toggle FULL))
+    -- ,  ("M-f", sendMessage (Toggle "Full"))
+    ,  ("M-f", sendMessage ToggleLayout )
+    -- ,  ("M-f", sendMessage (Toggle FULL))
     -- Push window back into tiling
     , ("M-S-<Space>", withFocused $ windows . W.sink)
     --reset layout
@@ -496,6 +496,7 @@ this is the ~main~ variable for xmoand
 #+begin_src haskell
 main :: IO ()
 main = xmonad
+     . docks
      . ewmhFullscreen
      . ewmh
      -- . withEasySB (statusBarProp "/home/drishal/.local/bin/xmobar ~/dotfiles/xmobar/xmobar-dracula.hs" (pure myXmobarPP)) defToggleStrutsKey
