@@ -62,6 +62,8 @@ alias fedora-distrobox="distrobox-enter fedora-toolbox-35"
 # Bedrock alias
 alias bed-ubuntu="strat -r tut-ubuntu bash"
 alias bed-arch="strat -r arch zsh"
+alias bed-alpine="strat -r alpine bash"
+alias bed-void="strat -r tut-void bash"
 #fetch
 # repo sync alias
 alias repo-sync="repo sync -c --force-sync --optimized-fetch --no-tags --no-clone-bundle --prune -j$(nproc --all);"
