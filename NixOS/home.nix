@@ -20,9 +20,10 @@ imports=[
   # main programs
   programs = {
     # neovim
-    # neovim = {
-    #   enable = true;
-    # };
+     neovim = {
+       enable = true;
+       package = pkgs.neovim-nightly;
+     };
 
     #  rofi = {
     #    enable = false;
@@ -45,12 +46,10 @@ imports=[
   };
 
 home.packages = with pkgs; [
-  neofetch
+  neofetch man
+  distrobox man-pages
+  cachix
   # libgccjit
-  man
-  man-pages
-  # kitty 
-  distrobox
   # (callPackage ./distrobox.nix {})
   ];
 
