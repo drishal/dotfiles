@@ -20,11 +20,25 @@ imports=[
   # main programs
   programs = {
     # neovim
-     neovim = {
-       enable = true;
-       package = pkgs.neovim-nightly;
-     };
-
+    neovim = {
+      enable = true;
+      package = pkgs.neovim-nightly;
+      extraConfig = builtins.readFile ../config/nvim/init-nix.vim;
+      plugins = with pkgs.vimPlugins; [
+        vim-addon-nix
+        vim-plug
+        nvim-lspconfig
+        nvim-treesitter
+        nvim-cmp cmp-buffer cmp-path cmp-treesitter cmp-spell
+        dashboard-nvim 
+        vim-orgmode onedark-nvim neoformat vim-nix cmp-nvim-lsp
+        barbar-nvim nvim-web-devicons vim-airline
+        nvim-autopairs
+    ];
+    extraPackages = with pkgs; [ 
+    rnix-lsp gcc 
+    ripgrep fd nodePackages.pyright];
+    };
     #  rofi = {
     #    enable = false;
     #    theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";

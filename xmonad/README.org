@@ -129,8 +129,10 @@ import Colors.DoomOne
 --import Colors.Palenight
 
 --Others
--- import XMonad.Layout.MultiToggle.Instances
--- import XMonad.Layout.MultiToggle
+-- import XMonad.Layout.MultiToggle.Instances (StdTransformers(NBFULL, MIRROR, NOBORDERS))
+-- import XMonad.Layout.MultiToggle (mkToggle, single, EOT(EOT), (??))
+-- import XMonad.Layout.MultiToggle (mkToggle, single, EOT(EOT), (??))
+-- import XMonad.Layout.MultiToggle.Instances (StdTransformers(NBFULL, MIRROR, NOBORDERS))
 --import Theme
 --import Theme.Theme
 #+end_src
@@ -197,14 +199,17 @@ import Colors.DoomOne
 ** MyLayout
 Here I set the default layouts for the layouts. I mainly use tiled, simplestFloat and Full layouts
 #+begin_src haskell
-myLayout =  toggleLayouts (noBorders Full)
+myLayout =  toggleLayouts (smartBorders Full)
             (renamed [CutWordsLeft 1]
             $ avoidStruts
             $ spacingWithEdge 8
             $ smartBorders
             $ tiled ||| simplestFloat)
--- myLayout =  mkToggle(NOBORDERS ?? FULL ?? EOT)
---             $ renamed [CutWordsLeft 1]
+
+-- myLayout = avoidStruts $ noBorders Full
+  
+-- myLayout = mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
+--             renamed [CutWordsLeft 1]
 --             $ smartBorders
 --             $ avoidStruts
 --             $ spacingWithEdge 8
@@ -223,15 +228,31 @@ myLayout =  toggleLayouts (noBorders Full)
     -- Percent of screen to increment by when resizing panes
     delta   = 3/100
 
+-- tall =     renamed [Replace "tall"]
+--            -- $ avoidStruts
+--            $ smartBorders
+--            $ spacingWithEdge 8
+--            $ ResizableTall 1 (3/100) (1/2) []
+
+-- full = renamed [Replace "Full"]
+--        $ noBorders
+--        $ Full
+
+-- myLayout =  myDefaultLayout
+--              where
+--                myDefaultLayout = tall ||| full
+                                 
+ 
 #+end_src
 
 * Manage Hook
+
 #+begin_src haskell
 myManageHook = composeAll
       [
         resource  =? "desktop_window" --> doIgnore
       , resource  =? "kdesktop"       --> doIgnore
-      , isFullscreen                  --> doFullFloat
+      -- , isFullscreen                  --> doFullFloat
       ] -- this one
 
 #+end_src
@@ -304,6 +325,7 @@ myStartupHook = do
         -- spawnOnce "redshift -O 5000"
         spawnOnce "volumeicon"
         spawnOnce "blueman-applet"
+        -- spawnOnce "/home/drishal/.local/bin/xmobar  ~/dotfiles/xmobar/xmobar-onedark.hs"
         --spawnOnce "play  -v0.05  ~/Desktop/95.mp3"
 
 #+end_src
@@ -385,8 +407,10 @@ myKeys =
     --reset layout
     , ("M-S-m",  setLayout $ Layout myLayout)
     --toogle fullscreen
-    -- ,  ("M-f", sendMessage (Toggle "Full"))
+   -- ,  ("M-f", sendMessage (Toggle "Full"))
     ,  ("M-f", sendMessage ToggleLayout )
+    -- >> sendMessage ToggleStruts
+    -- , ("M-f", sendMessage (Toggle NBFULL) >> sendMessage ToggleStruts) -- Toggles noborder/full
     -- ,  ("M-f", sendMessage (Toggle FULL))
     -- Push window back into tiling
     , ("M-S-<Space>", withFocused $ windows . W.sink)
@@ -495,12 +519,14 @@ myConfig = def
 this is the ~main~ variable for xmoand 
 #+begin_src haskell
 main :: IO ()
-main = xmonad
+main =
+  -- do
+  -- mySB <- statusBarPipe "/home/drishal/.local/bin/xmobar ~/dotfiles/xmobar/xmobar-dracula.hs" (pure myPP)
+     xmonad
      . docks
      . ewmhFullscreen
      . ewmh
-     -- . withEasySB (statusBarProp "/home/drishal/.local/bin/xmobar ~/dotfiles/xmobar/xmobar-dracula.hs" (pure myXmobarPP)) defToggleStrutsKey
-     . withEasySB (statusBarProp "/home/drishal/.local/bin/xmobar  ~/dotfiles/xmobar/xmobar-onedark.hs" (pure myXmobarPP)) defToggleStrutsKey
+     . withSB (statusBarProp "/home/drishal/.local/bin/xmobar ~/dotfiles/xmobar/xmobar-onedark.hs" (pure myXmobarPP)) 
      $ myConfig
 #+end_src
 

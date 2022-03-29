@@ -9,7 +9,8 @@
 
 
     "clock": {
-        "format": "  {: %F (%a) %H:%M:%S}"
+        "format": "  {: %F (%a) %H:%M:%S}",
+	"interval": 1, 
     },
     
     "river/tags": {
@@ -19,6 +20,7 @@
         "interval": 10,
         "format": "   {}% ",
         "max-length": 10,
+	"interval": 10,
    },
 
   "memory": {
@@ -36,7 +38,8 @@
      "tooltip-format-wifi": "  {essid} ({signalStrength}%)  ",
      "tooltip-format-ethernet": " {ifname} ",
      "tooltip-format-disconnected": "Disconnected",
-     "max-length": 50
+     "max-length": 50,
+     "interval": 10,
 },
 
     

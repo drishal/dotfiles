@@ -9,16 +9,19 @@
       url = "github:nix-community/home-manager";
     };
 
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     discord-flake = {url = github:InternetUnexplorer/discord-overlay;};
 
     nur.url = "github:nix-community/NUR";
+
+    cachix.url = "github:cachix/cachix";
 
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
     };
   };
 
-  outputs = { nixpkgs, home-manager, discord-flake ,nur, emacs-overlay, ... }@inputs:
+  outputs = { nixpkgs, home-manager, discord-flake ,nur, emacs-overlay, neovim-nightly-overlay,cachix , ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -37,7 +40,8 @@
         # pkgs = nixpkgs.legacyPackages.${system};
         homeDirectory = "/home/drishal";
         configuration = {
-          nixpkgs.overlays = [ inputs.emacs-overlay.overlay];
+          nixpkgs.overlays = [ inputs.emacs-overlay.overlay  inputs.neovim-nightly-overlay.overlay  ];
+          # nixpkgs.overlays = [ inputs ];
           imports = [
             ./NixOS/home.nix
           ];

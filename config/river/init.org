@@ -202,7 +202,9 @@ Mod+Shift+0 to tag focused view with all tags
 *** Toggle Float
 
 #+begin_src bash
-riverctl map normal $mod Space toggle-float
+riverctl map normal $mod+Shift Space toggle-float
+riverctl map normal $mod o default-layout float
+riverctl map normal $mod i default-layout rivertile
 #+end_src
 *** Mod+F to toggle fullscreen
 #+begin_src bash
@@ -279,6 +281,7 @@ riverctl set-repeat 50 300
 
 * auto starting apps
 #+begin_src bash
+# riverctl spawn "systemctl --user import-environment"
 riverctl spawn "swaybg -i ~/dotfiles/wallpapers/darkest_hour.jpg" 
 riverctl spawn lxpolkit 
 riverctl spawn waybar

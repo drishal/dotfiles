@@ -52,14 +52,14 @@
     font-family: "FiraCode Nerd Font","Roboto", "Helvetica", "Arial", "sans-serif";
     font-size: 11px;
     min-height: 0;
-    color: @colfg;
+    /* color: @colfg; */
 }
 
 
 
 window#waybar {
     background-color: @colbg;
-    color: @colfg;
+    /* color: @colfg; */
     transition-property: background-color;
     transition-duration: .5s;
 }
@@ -69,14 +69,16 @@ window#waybar {
     padding: 3px;
     border-radius: 10px;
     min-width: 20px;
+    color: @colgrey;
     }
 #tags button.occupied  {
     background-color: @colbg2;
-
+    color: @colfg;
 }
 
 #tags button.focused  {
     background-color: @colgrey; 
+    color: @colfg;
 }
 
 #battery,

@@ -23,7 +23,7 @@ Config {
    -- , pickBroadest =     False   -- choose widest display (multi-monitor)
    , persistent =       True    -- enable/disable hiding (True = disabled)
    , hideOnStart =      False   -- start with window unmapped (hidden)
-   -- , overrideRedirect = True-- set the Override Redirect flag (Xlib)
+   , overrideRedirect = True-- set the Override Redirect flag (Xlib)
    , lowerOnStart =     True    -- send to bottom of window stack on start
    , commands = 
      -- network activity monitor (dynamic interface resolution)

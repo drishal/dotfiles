@@ -12,6 +12,7 @@
   - [[#setting-up-paths][Setting up paths]]
 - [[#customizing-the-editor-and-appearence][Customizing the Editor and Appearence]]
   - [[#bookmarks-file][bookmarks file]]
+  - [[#recents][recents]]
   - [[#rainbow-mode-for-colors][rainbow mode for colors]]
   - [[#smooth-scrolling][smooth scrolling]]
   - [[#dashboard][Dashboard]]
@@ -24,13 +25,13 @@
   - [[#disable-scrollbar][disable scrollbar]]
   - [[#all-the-icon-fonts][All the icon fonts]]
   - [[#line-numbers][Line Numbers]]
+  - [[#no-blinking-cursor][no blinking cursor]]
   - [[#modeline][Modeline]]
   - [[#evil-mode][Evil mode]]
   - [[#undo-system][Undo system]]
   - [[#padding][Padding]]
   - [[#brackets][brackets]]
-  - [[#tramp][tramp]]
-  - [[#backup-settings][Backup settings]]
+  - [[#org-bars][org-bars]]
 - [[#hook-to-tangle-on-save][Hook to tangle on save]]
 - [[#org-mode][Org mode:]]
   - [[#org-mode-indent][org mode indent]]
@@ -38,6 +39,7 @@
   - [[#snippets][snippets:]]
   - [[#org-tempo-for-all-the-beautiful-snippets][org tempo for all the beautiful snippets:]]
   - [[#superstar-for-some-pretty-symbols][Superstar for some pretty symbols]]
+  - [[#org-modern][org modern]]
   - [[#org-toc][org-toc]]
   - [[#fixing-org-blocks][fixing org blocks]]
   - [[#company-org-block][company org block]]
@@ -54,6 +56,7 @@
   - [[#emacs-pdf-tools][emacs pdf tools]]
   - [[#mu4e][mu4e]]
   - [[#treemacs][treemacs]]
+  - [[#neotree][neotree]]
   - [[#elcord][elcord]]
   - [[#shackle][Shackle]]
   - [[#pacman][pacman]]
@@ -82,37 +85,37 @@
 #+end_src
 ** emacs startup performance
 #+begin_src emacs-lisp
-    ;; The default is 800 kilobytes.  Measured in bytes.
-    ;; (setq gc-cons-threshold (* 50 1000 1000))
-    (setq read-process-output-max (* 1024 1024)) ;; 1mb
-    (defun efs/display-startup-time ()
-      (message "Emacs loaded in %s with %d garbage collections."
-	       (format "%.2f seconds"
-		       (float-time
-			(time-subtract after-init-time before-init-time)))
-	       gcs-done))
+;; The default is 800 kilobytes.  Measured in bytes.
+;; (setq gc-cons-threshold (* 50 1000 1000))
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
+(defun efs/display-startup-time ()
+  (message "Emacs loaded in %s with %d garbage collections."
+	   (format "%.2f seconds"
+		   (float-time
+		    (time-subtract after-init-time before-init-time)))
+	   gcs-done))
 
-    (add-hook 'emacs-startup-hook #'efs/display-startup-time)
+(add-hook 'emacs-startup-hook #'efs/display-startup-time)
 #+end_src
 
 * Initialize package sources
 *** straight.el
 https://github.com/raxod502/straight.el#getting-started
 #+begin_src emacs-lisp
-  ;; (defvar bootstrap-version)
-  ;; (let ((bootstrap-file
-  ;;        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-  ;;       (bootstrap-version 5))
-  ;;   (unless (file-exists-p bootstrap-file)
-  ;;     (with-current-buffer
-  ;; 	(url-retrieve-synchronously
-  ;; 	 "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-  ;; 	 'silent 'inhibit-cookies)
-  ;;       (goto-char (point-max))
-  ;;       (eval-print-last-sexp)))
-  ;;   (load bootstrap-file nil 'nomessage))
-  ;; (straight-use-package 'use-package)
-			
+;; (defvar bootstrap-version)
+;; (let ((bootstrap-file
+;;        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+;;       (bootstrap-version 5))
+;;   (unless (file-exists-p bootstrap-file)
+;;     (with-current-buffer
+;; 	(url-retrieve-synchronously
+;; 	 "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+;; 	 'silent 'inhibit-cookies)
+;;       (goto-char (point-max))
+;;       (eval-print-last-sexp)))
+;;   (load bootstrap-file nil 'nomessage))
+;; (straight-use-package 'use-package)
+
 #+end_src
 note: Users of Emacs versions >= 27 will want to add:
 #+begin_src emacs-lisp
@@ -154,17 +157,18 @@ https://github.com/quelpa/quelpa#installation
 (use-package exec-path-from-shell :ensure t)
 (when (daemonp)
   (exec-path-from-shell-initialize))
-;; (when (memq window-system '(mac ns x))
-;;   (exec-path-from-shell-initialize))
-;; (when (daemonp)
-;;   (exec-path-from-shell-initialize))
-;; (exec-path-from-shell-copy-env "export ORACLE_HOME=/opt/oracle/product/18c/dbhomeXE")
-
 #+end_src
 * Customizing the Editor and Appearence
 ** bookmarks file
 #+begin_src emacs-lisp
-  (setq bookmark-default-file "~/.emacs.d/bookmarks" )
+(setq bookmark-default-file "~/.emacs.d/bookmarks" )
+#+end_src
+** recents
+#+begin_src emacs-lisp
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(setq recentf-max-saved-items 25)
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
 #+end_src
 ** rainbow mode for colors
 #+begin_src emacs-lisp
@@ -177,8 +181,8 @@ https://github.com/quelpa/quelpa#installation
 #+end_src
 ** smooth scrolling
 #+begin_src emacs-lisp
- ;; (use-package smooth-scroll
- ;;   :ensure t)
+;; (use-package smooth-scroll
+;;   :ensure t)
  (pixel-scroll-precision-mode 1)
  (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
  (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
@@ -187,100 +191,105 @@ https://github.com/quelpa/quelpa#installation
 #+end_src
 ** Dashboard
 #+begin_src emacs-lisp
-  (use-package dashboard :ensure t
-    :init      ;; tweak dashboard config before loading it
-    (setq dashboard-set-heading-icons t)
-    ;; Content is not centered by default. To center, set
-    (setq dashboard-set-file-icons t)
-    (setq dashboard-banner-logo-title "Emacs Is More Than A Text Editor!")
-    (setq dashboard-startup-banner `logo) ;; use standard emacs logo as banner
-    ;;(setq dashboard-startup-banner 'logo)
-    ;;(setq dashboard-startup-banner "~/.emacs.d/emacs-dash3.png")  ;; use custom image as banner
-    (setq dashboard-center-content t)
-    (setq dashboard-set-navigator t)
-    (setq dashboard-page-separator  "\n\f\n")
-    (setq dashboard-items '((recents . 5)
-                            (agenda . 5 )
-                            (bookmarks . 5)
-                            (projects . 3)
-                            ))
-    :config
-    (dashboard-setup-startup-hook)
-    (dashboard-modify-heading-icons '((recents . "file-text")
-                                      (bookmarks . "book"))))
+(use-package dashboard :ensure t
+  :init      ;; tweak dashboard config before loading it
+  (setq dashboard-set-heading-icons t)
+  ;; Content is not centered by default. To center, set
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-banner-logo-title "Emacs Is More Than A Text Editor!")
+  (setq dashboard-startup-banner `logo) ;; use standard emacs logo as banner
+  ;;(setq dashboard-startup-banner 'logo)
+  ;;(setq dashboard-startup-banner "~/.emacs.d/emacs-dash3.png")  ;; use custom image as banner
+  (setq dashboard-center-content t)
+  (setq dashboard-set-navigator t)
+  (setq dashboard-page-separator  "\n\f\n")
+  (setq dashboard-items '((recents . 5)
+                          (agenda . 5 )
+                          (bookmarks . 5)
+                          (projects . 3)
+                          ))
+  :config
+  (dashboard-setup-startup-hook)
+  (dashboard-modify-heading-icons '((recents . "file-text")
+                                    (bookmarks . "book"))))
 
-  ;;(add-hook 'after-init-hook (lambda () (switch-to-buffer "*dashboard*")))
-                                          ; for emacsclient
-  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+;;(add-hook 'after-init-hook (lambda () (switch-to-buffer "*dashboard*")))
+                                        ; for emacsclient
+(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 #+end_src
 ** Page break lines
 #+begin_src emacs-lisp
-  (use-package page-break-lines :ensure t)
+(use-package page-break-lines :ensure t)
 #+end_src
 ** highlight current line
 #+begin_src emacs-lisp
-  (global-hl-line-mode +1)
+(global-hl-line-mode +1)
 #+end_src
 
 ** properly maximize windws emacs
 #+begin_src emacs-lisp
-  (setq frame-resize-pixelwise t)
+(setq frame-resize-pixelwise t)
 #+end_src
 ** theme
 #+begin_src emacs-lisp
-  ;; (use-package dracula- ensure t)
-  (use-package doom-themes :ensure t
-    :config
-    ;; Global settings (defaults)
-    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-          doom-themes-enable-italic t) ; if nil, italics is universally disabled
-    (load-theme 'doom-one t)
+;; (use-package dracula- ensure t)
+(use-package doom-themes :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-one t)
 
-    ;; Enable flashing mode-line on errors
-    (doom-themes-visual-bell-config)
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
 
-    ;; Enable custom neotree theme (all-the-icons must be installed!)
-    (doom-themes-neotree-config)
-    ;; or for treemacs users
-    ;; (setq doom-themes-treemacs-theme "doom-one") ; use the colorful treemacs theme
-    (doom-themes-treemacs-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  ;; (setq doom-themes-treemacs-theme "doom-one") ; use the colorful treemacs theme
+  (doom-themes-treemacs-config)
 
-    ;; Corrects (and improves) org-mode's native fontification.
-    (doom-themes-org-config))
+  ;; Corrects (and improves) org-mode's native fontification.
+  ;; (doom-themes-org-config)
+  )
 
 #+end_src
 ** Disable Menubar
 #+begin_src emacs-lisp
-  (menu-bar-mode -1)
+(menu-bar-mode -1)
 #+end_src
 ** Disable Toolbar
 #+begin_src emacs-lisp
-  (tool-bar-mode -1)
+(tool-bar-mode -1)
 #+end_src
 ** disable scrollbar
 #+begin_src emacs-lisp
-  (scroll-bar-mode -1)
+(scroll-bar-mode -1)
 #+end_src
 ** All the icon fonts
 #+begin_src emacs-lisp
-  ;; (use-package all-the-icons :ensure t)
+(use-package all-the-icons :ensure t)
 #+end_src
 ** Line Numbers
 #+begin_src emacs-lisp
-  (global-display-line-numbers-mode 1)
-  (global-visual-line-mode t)
+(global-display-line-numbers-mode 1)
+(global-visual-line-mode t)
+#+end_src
+** no blinking cursor
+#+begin_src emacs-lisp
+(blink-cursor-mode 0)
 #+end_src
 ** Modeline
 *** Doom Modeline
 #+begin_src emacs-lisp
-  (use-package doom-modeline :ensure t)
-  (doom-modeline-mode 1)
+(use-package doom-modeline :ensure t)
+(doom-modeline-mode 1)
 #+end_src
 *** Airline
 https://github.com/AnthonyDiGirolamo/airline-themes
 #+begin_src emacs-lisp
-  ;; (use-package airline-themes :ensure t)
-  ;; (load-theme 'airline-base16_dracula t)
+;; (use-package airline-themes :ensure t)
+;; (load-theme 'airline-base16_dracula t)
 #+end_src
 
 **** Fonts
@@ -323,123 +332,110 @@ https://github.com/emacs-evil/evil
 Evil is an extensible vi layer for Emacs. It emulates the main features of Vim,
 *** Default
 #+begin_src emacs-lisp
-  ;; Make ESC quit prompts
-  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+;; Make ESC quit prompts
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
-  (use-package general :ensure t
-    :after evil
-    :config
-    (general-create-definer efs/leader-keys
-      :keymaps '(normal insert visual emacs)
-      :prefix "SPC"
-      :global-prefix "C-SPC")
+(use-package general :ensure t
+  :after evil
+  :config
+  (general-create-definer efs/leader-keys
+    :keymaps '(normal insert visual emacs)
+    :prefix "SPC"
+    :global-prefix "C-SPC")
+  
+  (efs/leader-keys
+    "t"  '(:ignore t :which-key "toggles")
+    "tt" '(counsel-load-theme :which-key "choose theme")
+    "fde" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/Emacs.org")))))
 
-    (efs/leader-keys
-      "t"  '(:ignore t :which-key "toggles")
-      "tt" '(counsel-load-theme :which-key "choose theme")
-      "fde" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/Emacs.org")))))
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-i-jump nil)
+  :config
+  (evil-mode 1)
+  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
 
-  (use-package evil
-    :ensure t
-    :init
-    (setq evil-want-integration t)
-    (setq evil-want-keybinding nil)
-    (setq evil-want-C-u-scroll t)
-    (setq evil-want-C-i-jump nil)
-    :config
-    (evil-mode 1)
-    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-    (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+  ;; Use visual line motions even outside of visual-line-mode buffers
+  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 
-    ;; Use visual line motions even outside of visual-line-mode buffers
-    (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-    (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+  (evil-set-initial-state 'messages-buffer-mode 'normal)
+  (evil-set-initial-state 'dashboard-mode 'normal))
 
-    (evil-set-initial-state 'messages-buffer-mode 'normal)
-    (evil-set-initial-state 'dashboard-mode 'normal))
-
-  (use-package evil-collection
-    :ensure t
-    :after evil
-    :config
-    (evil-collection-init))
+(use-package evil-collection
+  :ensure t
+  :after evil
+  :config
+  (evil-collection-init))
 
 
 #+end_src
 *** Evil args
 #+begin_src emacs-lisp
-  (use-package evil-args :ensure t)
+(use-package evil-args :ensure t)
 
-  ;; bind evil-args text objects
-  (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
-  (define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
+;; bind evil-args text objects
+(define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
+(define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
 
-  ;; bind evil-forward/backward-args
-  (define-key evil-normal-state-map "L" 'evil-forward-arg)
-  (define-key evil-normal-state-map "H" 'evil-backward-arg)
-  (define-key evil-motion-state-map "L" 'evil-forward-arg)
-  (define-key evil-motion-state-map "H" 'evil-backward-arg)
+;; bind evil-forward/backward-args
+(define-key evil-normal-state-map "L" 'evil-forward-arg)
+(define-key evil-normal-state-map "H" 'evil-backward-arg)
+(define-key evil-motion-state-map "L" 'evil-forward-arg)
+(define-key evil-motion-state-map "H" 'evil-backward-arg)
 
-  ;; bind evil-jump-out-args
-  (define-key evil-normal-state-map "K" 'evil-jump-out-args)
+;; bind evil-jump-out-args
+(define-key evil-normal-state-map "K" 'evil-jump-out-args)
 #+end_src
 *** Evil intent plus
 #+begin_src emacs-lisp
-  (use-package evil-indent-plus :ensure t)
+(use-package evil-indent-plus :ensure t)
 #+end_src
 *** Evil Snipe
 #+begin_src emacs-lisp
-  (use-package evil-snipe :ensure t)
-  (evil-snipe-mode +1)
-  (evil-snipe-override-mode +1)
+(use-package evil-snipe :ensure t)
+(evil-snipe-mode +1)
+(evil-snipe-override-mode +1)
 #+end_src
 ** Undo system
 #+begin_src emacs-lisp
-  (use-package undo-tree
-    :ensure t
-    :after evil
-    :diminish
-    :config
-    (evil-set-undo-system 'undo-tree)
-    (global-undo-tree-mode 1))
+(use-package undo-tree
+  :ensure t
+  :after evil
+  :diminish
+  :config
+  (evil-set-undo-system 'undo-tree)
+  (global-undo-tree-mode 1))
+
+(setq undo-tree-history-directory-alist '(("." . "~/.emacs-temp/")))
 #+end_src
 
 ** Padding
 #+begin_src emacs-lisp
-  (push '(internal-border-width . 10) default-frame-alist)
+(push '(internal-border-width . 10) default-frame-alist)
 #+end_src
 
 ** brackets
 #+begin_src emacs-lisp
-  (show-paren-mode 1)
-  (setq show-paren-style 'parenthesis)
+(show-paren-mode 1)
+(setq show-paren-style 'parenthesis)
 #+end_src
 
-** tramp
-#+begin_src emacs-lisp
-                                          ; (use-package tramp :ensure t)
-                                          ; (require 'tramp)
-#+end_src
-
-** Backup settings
+*** Backup settings
 *** make emacs-temp if it does not exist
 #+begin_src emacs-lisp
-  (unless (file-exists-p "~/.emacs-temp")
-    (mkdir "~/.emacs-temp"))
+(unless (file-exists-p "~/.emacs-temp")
+  (mkdir "~/.emacs-temp"))
 #+end_src
 *** Autosave/Backups directory
  https://emacs.stackexchange.com/questions/33/put-all-backups-into-one-backup-folder
+ Put backup files neatly away                                                 
 #+begin_src emacs-lisp
-;; (unless (file-exists-p "~/.emacs-temp/auto-saves")
-;;   (mkdir "~/.emacs-temp/auto-saves")
-;;   (mkdir "~/.emacs-temp/auto-saves/sessions")
-;;   (mkdir "~/.emacs-temp/backups"))
-
-;; (setq auto-save-file-name-transforms
-;;       '(("." "~/.emacs-temp" t))
-;;       )
-;; (setq backup-directory-alist '(("." . "~/.emacs-temp")))
-;; Put backup files neatly away                                                 
 (let ((backup-dir "~/.emacs-temp/")
       (auto-saves-dir "~/.emacs-temp/"))
   (dolist (dir (list backup-dir auto-saves-dir))
@@ -449,7 +445,8 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim,
         auto-save-file-name-transforms `((".*" ,auto-saves-dir t))
         auto-save-list-file-prefix (concat auto-saves-dir ".saves-")
         tramp-backup-directory-alist `((".*" . ,backup-dir))
-        tramp-auto-save-directory auto-saves-dir))
+        tramp-auto-save-directory auto-saves-dir
+        ))
 
 (setq backup-by-copying t    ; Don't delink hardlinks                           
       delete-old-versions t  ; Clean up the backups                             
@@ -459,23 +456,30 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim,
 
 #+end_src
 
+** org-bars
+#+begin_src emacs-lisp
+;; (add-to-list 'load-path "~/dotfiles/emacs.d-gnu/packages/")
+;; (require 'org-bars)
+;; (add-hook 'org-mode-hook #'org-bars-mode)
+#+end_src
+
 * Hook to tangle on save
 #+begin_src emacs-lisp
-  (defun f2k--tangle-all-org-on-save-h ()
-    "Tangle org files on save."
-    (if (string= (file-name-extension (buffer-file-name)) "org")
-        (org-babel-tangle)))
+(defun f2k--tangle-all-org-on-save-h ()
+  "Tangle org files on save."
+  (if (string= (file-name-extension (buffer-file-name)) "org")
+      (org-babel-tangle)))
 
-  (add-hook 'after-save-hook #'f2k--tangle-all-org-on-save-h)
+(add-hook 'after-save-hook #'f2k--tangle-all-org-on-save-h)
 
 #+end_src
 * Org mode:
 #+begin_src emacs-lisp
-  (use-package org :ensure t)
-  ;; (straight-use-package
-  ;; '(org :type git :host github :repo ""
-  ;;            :fork (:host github
-  ;;                   :repo "your-name/el-patch"))) 
+(use-package org :ensure t)
+;; (straight-use-package
+;; '(org :type git :host github :repo ""
+;;            :fork (:host github
+;;                   :repo "your-name/el-patch"))) 
 #+end_src
 ** org mode indent
 #+begin_src emacs-lisp
@@ -484,35 +488,35 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim,
 ** Org blocks insert mode
 Switch to org edit mode when pressing `i` insert key
 #+begin_src emacs-lisp
-  ;; (add-hook 'org-mode-hook
-  ;;   (lambda ()
-  ;;     (add-hook 'evil-insert-state-entry-hook
-  ;;       (lambda ()
-  ;;         (when (org-in-src-block-p)
-  ;;           (org-edit-special)
-  ;;           (evil-insert-state)))
-  ;;       0 t)))
+;; (add-hook 'org-mode-hook
+;;   (lambda ()
+;;     (add-hook 'evil-insert-state-entry-hook
+;;       (lambda ()
+;;         (when (org-in-src-block-p)
+;;           (org-edit-special)
+;;           (evil-insert-state)))
+;;       0 t)))
 #+end_src
 ** snippets:
 *** yas-snippet
 
 #+begin_src emacs-lisp
-  (use-package yasnippet
-    :ensure t
-    :config
-    (setq yas-snippet-dirs '("~/dotfiles/emacs.d-gnu/snippets"))
-    )
-  (require 'yasnippet)
-  (yas-global-mode 1)
+(use-package yasnippet
+  :ensure t
+  :config
+  (setq yas-snippet-dirs '("~/dotfiles/emacs.d-gnu/snippets"))
+  )
+(require 'yasnippet)
+(yas-global-mode 1)
 
 #+end_src
 *** doom snippets
 see  https://github.com/hlissner/doom-snippets
 #+begin_src emacs-lisp
-  ;; (use-package doom-snippets
-  ;;   :ensure t
-  ;;   :load-path "/home/drishal/.emacs.d/custom-repos/doom-snippets"
-  ;;   :after yasnippet)
+;; (use-package doom-snippets
+;;   :ensure t
+;;   :load-path "/home/drishal/.emacs.d/custom-repos/doom-snippets"
+;;   :after yasnippet)
 #+end_src
 ** org tempo for all the beautiful snippets:
 
@@ -522,9 +526,17 @@ see  https://github.com/hlissner/doom-snippets
 #+end_src
 ** Superstar for some pretty symbols
 #+begin_src emacs-lisp
-  (use-package org-superstar :ensure t)
-  (require 'org-superstar)
-  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+;; (use-package org-superstar :ensure t)
+;; (require 'org-superstar)
+;; (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+;; (setq inhibit-compacting-font-caches t)
+#+end_src
+** org modern
+https://github.com/minad/org-modern
+#+begin_src emacs-lisp
+(use-package org-modern :ensure t)
+(add-hook 'org-mode-hook #'org-modern-mode)
+(add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
 #+end_src
 ** org-toc
 #+begin_src emacs-lisp
@@ -605,313 +617,324 @@ https://github.com/skangas/mentor
 #+end_src
 ** telega
 #+begin_src emacs-lisp
-  (use-package visual-fill-column :ensure t)
-  (use-package telega :ensure t
-    :commands (telega))
+(use-package visual-fill-column :ensure t)
+(use-package telega :ensure t
+  :commands (telega))
 
 #+end_src
 ** emacs pdf tools
 #+begin_src emacs-lisp
-   ;(pdf-loader-install)
-  ;(pdf-tools-install)
-  (use-package pdf-tools :ensure t)
+(use-package pdf-tools :ensure t)
 #+end_src
 ** mu4e
 https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-01.org
 #+begin_src emacs-lisp
-  (use-package mu4e
-    :ensure nil
-    ;; :defer 20 ; Wait until 20 seconds after startup
-    :config
+(use-package mu4e
+  :ensure nil
+  ;; :defer 20 ; Wait until 20 seconds after startup
+  :config
 
-    ;; This is set to 't' to avoid mail syncing issues when using mbsync
-    (setq mu4e-change-filenames-when-moving t)
+  ;; This is set to 't' to avoid mail syncing issues when using mbsync
+  (setq mu4e-change-filenames-when-moving t)
 
-    ;; Refresh mail using isync every 10 minutes
-    (setq mu4e-update-interval (* 10 60))
-    (setq mu4e-get-mail-command "mbsync -a")
-    (setq mu4e-maildir "~/Mail")
+  ;; Refresh mail using isync every 10 minutes
+  (setq mu4e-update-interval (* 10 60))
+  (setq mu4e-get-mail-command "mbsync -a")
+  (setq mu4e-maildir "~/Mail")
 
-    (setq mu4e-drafts-folder "/[Gmail]/Drafts")
-    (setq mu4e-sent-folder   "/[Gmail]/Sent Mail")
-    (setq mu4e-refile-folder "/[Gmail]/All Mail")
-    (setq mu4e-trash-folder  "/[Gmail]/Trash")
+  (setq mu4e-drafts-folder "/[Gmail]/Drafts")
+  (setq mu4e-sent-folder   "/[Gmail]/Sent Mail")
+  (setq mu4e-refile-folder "/[Gmail]/All Mail")
+  (setq mu4e-trash-folder  "/[Gmail]/Trash")
 
-    (setq mu4e-maildir-shortcuts
-          '((:maildir "/Inbox"    :key ?i)
-            (:maildir "/[Gmail]/Sent Mail" :key ?s)
-            (:maildir "/[Gmail]/Trash"     :key ?t)
-            (:maildir "/[Gmail]/Drafts"    :key ?d)
-            (:maildir "/[Gmail]/All Mail"  :key ?a))))
+  (setq mu4e-maildir-shortcuts
+        '((:maildir "/Inbox"    :key ?i)
+          (:maildir "/[Gmail]/Sent Mail" :key ?s)
+          (:maildir "/[Gmail]/Trash"     :key ?t)
+          (:maildir "/[Gmail]/Drafts"    :key ?d)
+          (:maildir "/[Gmail]/All Mail"  :key ?a))))
 
 
 #+end_src
 ** treemacs
 #+begin_src emacs-lisp
-  (use-package treemacs
-    :ensure t
-    :defer t
-    :init
-    (with-eval-after-load 'winum
-      (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
-    :config
-    (progn
-      (setq treemacs-collapse-dirs                   (if treemacs-python-executable 3 0)
-            treemacs-deferred-git-apply-delay        0.5
-            treemacs-directory-name-transformer      #'identity
-            treemacs-display-in-side-window          t
-            treemacs-eldoc-display                   t
-            treemacs-file-event-delay                5000
-            treemacs-file-extension-regex            treemacs-last-period-regex-value
-            treemacs-file-follow-delay               0.2
-            treemacs-file-name-transformer           #'identity
-            treemacs-follow-after-init               t
-            treemacs-expand-after-init               t
-            treemacs-git-command-pipe                ""
-            treemacs-goto-tag-strategy               'refetch-index
-            treemacs-indentation                     2
-            treemacs-indentation-string              " "
-            treemacs-is-never-other-window           nil
-            treemacs-max-git-entries                 5000
-            treemacs-missing-project-action          'ask
-            treemacs-move-forward-on-expand          nil
-            treemacs-no-png-images                   nil
-            treemacs-no-delete-other-windows         t
-            treemacs-project-follow-cleanup          nil
-            treemacs-persist-file                    (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
-            treemacs-position                        'left
-            treemacs-read-string-input               'from-child-frame
-            treemacs-recenter-distance               0.1
-            treemacs-recenter-after-file-follow      nil
-            treemacs-recenter-after-tag-follow       nil
-            treemacs-recenter-after-project-jump     'always
-            treemacs-recenter-after-project-expand   'on-distance
-            treemacs-litter-directories              '("/node_modules" "/.venv" "/.cask")
-            treemacs-show-cursor                     nil
-            treemacs-show-hidden-files               t
-            treemacs-silent-filewatch                nil
-            treemacs-silent-refresh                  nil
-            treemacs-sorting                         'alphabetic-asc
-            treemacs-select-when-already-in-treemacs 'move-back
-            treemacs-space-between-root-nodes        t
-            treemacs-tag-follow-cleanup              t
-            treemacs-tag-follow-delay                1.5
-            treemacs-text-scale                      nil
-            treemacs-user-mode-line-format           nil
-            treemacs-user-header-line-format         nil
-            treemacs-wide-toggle-width               70
-            treemacs-width                           35
-            treemacs-width-increment                 1
-            treemacs-width-is-initially-locked       t
-            treemacs-workspace-switch-cleanup        nil)
+(use-package treemacs
+  :ensure t
+  :defer t
+  :init
+  (with-eval-after-load 'winum
+    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+  :config
+  (progn
+    (setq treemacs-collapse-dirs                   (if treemacs-python-executable 3 0)
+          treemacs-deferred-git-apply-delay        0.5
+          treemacs-directory-name-transformer      #'identity
+          treemacs-display-in-side-window          t
+          treemacs-eldoc-display                   t
+          treemacs-file-event-delay                5000
+          treemacs-file-extension-regex            treemacs-last-period-regex-value
+          treemacs-file-follow-delay               0.2
+          treemacs-file-name-transformer           #'identity
+          treemacs-follow-after-init               t
+          treemacs-expand-after-init               t
+          treemacs-git-command-pipe                ""
+          treemacs-goto-tag-strategy               'refetch-index
+          treemacs-indentation                     2
+          treemacs-indentation-string              " "
+          treemacs-is-never-other-window           nil
+          treemacs-max-git-entries                 5000
+          treemacs-missing-project-action          'ask
+          treemacs-move-forward-on-expand          nil
+          treemacs-no-png-images                   nil
+          treemacs-no-delete-other-windows         t
+          treemacs-project-follow-cleanup          nil
+          treemacs-persist-file                    (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+          treemacs-position                        'left
+          treemacs-read-string-input               'from-child-frame
+          treemacs-recenter-distance               0.1
+          treemacs-recenter-after-file-follow      nil
+          treemacs-recenter-after-tag-follow       nil
+          treemacs-recenter-after-project-jump     'always
+          treemacs-recenter-after-project-expand   'on-distance
+          treemacs-litter-directories              '("/node_modules" "/.venv" "/.cask")
+          treemacs-show-cursor                     nil
+          treemacs-show-hidden-files               t
+          treemacs-silent-filewatch                nil
+          treemacs-silent-refresh                  nil
+          treemacs-sorting                         'alphabetic-asc
+          treemacs-select-when-already-in-treemacs 'move-back
+          treemacs-space-between-root-nodes        t
+          treemacs-tag-follow-cleanup              t
+          treemacs-tag-follow-delay                1.5
+          treemacs-text-scale                      nil
+          treemacs-user-mode-line-format           nil
+          treemacs-user-header-line-format         nil
+          treemacs-wide-toggle-width               70
+          treemacs-width                           35
+          treemacs-width-increment                 1
+          treemacs-width-is-initially-locked       t
+          treemacs-workspace-switch-cleanup        nil)
 
-      ;; The default width and height of the icons is 22 pixels. If you are
-      ;; using a Hi-DPI display, uncomment this to double the icon size.
-      ;;(treemacs-resize-icons 44)
+    ;; The default width and height of the icons is 22 pixels. If you are
+    ;; using a Hi-DPI display, uncomment this to double the icon size.
+    ;;(treemacs-resize-icons 44)
 
-      (treemacs-follow-mode t)
-      (treemacs-filewatch-mode t)
-      (treemacs-fringe-indicator-mode 'always)
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-fringe-indicator-mode 'always)
 
-      (pcase (cons (not (null (executable-find "git")))
-                   (not (null treemacs-python-executable)))
-        (`(t . t)
-         (treemacs-git-mode 'deferred))
-        (`(t . _)
-         (treemacs-git-mode 'simple)))
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null treemacs-python-executable)))
+      (`(t . t)
+       (treemacs-git-mode 'deferred))
+      (`(t . _)
+       (treemacs-git-mode 'simple)))
 
-      (treemacs-hide-gitignored-files-mode nil))
-    :bind
-    (:map global-map
-          ("M-0"       . treemacs-select-window)
-          ("C-x t 1"   . treemacs-delete-other-windows)
-          ("C-x t t"   . treemacs)
-          ("C-x t B"   . treemacs-bookmark)
-          ("C-x t C-t" . treemacs-find-file)
-          ("C-x t M-t" . treemacs-find-tag)))
+    (treemacs-hide-gitignored-files-mode nil))
+  :bind
+  (:map global-map
+        ("M-0"       . treemacs-select-window)
+        ("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-x t t"   . treemacs)
+        ("C-x t B"   . treemacs-bookmark)
+        ("C-x t C-t" . treemacs-find-file)
+        ("C-x t M-t" . treemacs-find-tag)))
 
-  (use-package treemacs-evil
-    :after (treemacs evil)
-    :ensure t)
+(use-package treemacs-evil
+  :after (treemacs evil)
+  :ensure t)
 
-  (use-package treemacs-projectile
-    :after (treemacs projectile)
-    :ensure t)
+(use-package treemacs-projectile
+  :after (treemacs projectile)
+  :ensure t)
 
-  (use-package treemacs-icons-dired
-    :hook (dired-mode . treemacs-icons-dired-enable-once)
-    :ensure t)
+(use-package treemacs-icons-dired
+  :hook (dired-mode . treemacs-icons-dired-enable-once)
+  :ensure t)
 
-  (use-package treemacs-magit
-    :after (treemacs magit)
-    :ensure t)
+(use-package treemacs-magit
+  :after (treemacs magit)
+  :ensure t)
 
-  (use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
-    :after (treemacs persp-mode) ;;or perspective vs. persp-mode
-    :ensure t
-    :config (treemacs-set-scope-type 'Perspectives))
+(use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
+  :after (treemacs persp-mode) ;;or perspective vs. persp-mode
+  :ensure t
+  :config (treemacs-set-scope-type 'Perspectives))
+#+end_src
+** neotree
+#+begin_src emacs-lisp
+(use-package neotree :ensure t)
 #+end_src
 ** elcord
 #+begin_src emacs-lisp
-  (use-package elcord :ensure t)
+(use-package elcord :ensure t)
 #+end_src
 ** Shackle
 #+begin_src emacs-lisp
-  (use-package shackle
-    :ensure t
-    ;; :if (not (bound-and-true-p disable-pkg-shackle))
-    :config
-    (progn
-      (setq shackle-lighter "")
-      (setq shackle-select-reused-windows nil) ; default nil
-      (setq shackle-default-alignment 'below) ; default below
-      (setq shackle-default-size 0.4) ; default 0.5
+(use-package shackle
+  :ensure t
+  ;; :if (not (bound-and-true-p disable-pkg-shackle))
+  :config
+  (progn
+    (setq shackle-lighter "")
+    (setq shackle-select-reused-windows nil) ; default nil
+    (setq shackle-default-alignment 'below) ; default below
+    (setq shackle-default-size 0.4) ; default 0.5
 
-      (setq shackle-rules
-            ;; CONDITION(:regexp)            :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
-            '((compilation-mode              :select nil                                               )
-              ("*undo-tree*"                 :select t                          :size 0.25 :align right)
-              ("\\*vterm.*\\*"  :regexp t    :select t                          :size 0.4  :align below)
-              ;; ("*eshell*"                    :select t                          :other t               )
-              ;;         ("*Shell Command Output*"      :select nil                                               )
-              ;;         ("\\*Async Shell.*\\*" :regexp t :ignore t                                                 )
-              ;;         (occur-mode                    :select nil                                   :align t    )
-              ;;         ("*Help*"                      :select t   :inhibit-window-quit t :other t               )
-              ;;         ("*Completions*"                                                  :size 0.3  :align t    )
-              ;;         ("*Messages*"                  :select nil :inhibit-window-quit t :other t               )
-              ;;         ("\\*[Wo]*Man.*\\*"    :regexp t :select t   :inhibit-window-quit t :other t               )
-              ;;         ("\\*poporg.*\\*"      :regexp t :select t                          :other t               )
-              ;;         ("\\`\\*helm.*?\\*\\'"   :regexp t                                    :size 0.3  :align t    )
-              ;;         ("*calendar*"                  :select t                          :size 0.5  :align below)
-              ;;         ("*info*"                      :select t   :inhibit-window-quit t                         :same t)
-              ;;         (magit-status-mode             :select t   :inhibit-window-quit t                         :same t)
-              ;;         (magit-log-mode                :select t   :inhibit-window-quit t                         :same t)
-              ))
+    (setq shackle-rules
+          ;; CONDITION(:regexp)            :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
+          '((compilation-mode              :select nil                                               )
+            ("*undo-tree*"                 :select t                          :size 0.25 :align right)
+            ("\\*vterm.*\\*"  :regexp t    :select t                          :size 0.4  :align below)
+            ;; ("*eshell*"                    :select t                          :other t               )
+            ;;         ("*Shell Command Output*"      :select nil                                               )
+            ;;         ("\\*Async Shell.*\\*" :regexp t :ignore t                                                 )
+            ;;         (occur-mode                    :select nil                                   :align t    )
+            ;;         ("*Help*"                      :select t   :inhibit-window-quit t :other t               )
+            ;;         ("*Completions*"                                                  :size 0.3  :align t    )
+            ;;         ("*Messages*"                  :select nil :inhibit-window-quit t :other t               )
+            ;;         ("\\*[Wo]*Man.*\\*"    :regexp t :select t   :inhibit-window-quit t :other t               )
+            ;;         ("\\*poporg.*\\*"      :regexp t :select t                          :other t               )
+            ;;         ("\\`\\*helm.*?\\*\\'"   :regexp t                                    :size 0.3  :align t    )
+            ;;         ("*calendar*"                  :select t                          :size 0.5  :align below)
+            ;;         ("*info*"                      :select t   :inhibit-window-quit t                         :same t)
+            ;;         (magit-status-mode             :select t   :inhibit-window-quit t                         :same t)
+            ;;         (magit-log-mode                :select t   :inhibit-window-quit t                         :same t)
+            ))
 
-      (shackle-mode 1)))
+    (shackle-mode 1)))
 
 
-  (provide 'setup-shackle)
+(provide 'setup-shackle)
 
 #+end_src
 ** pacman
 #+begin_src emacs-lisp
-  (use-package pacmacs :ensure t)
+(use-package pacmacs :ensure t)
 #+end_src
 ** popper.el TODO
 https://github.com/karthink/popper
 
 ** ERC server settings
 #+begin_src emacs-lisp
-  (require 'erc)
-  (setq erc-default-server "irc.libera.chat")
-  (add-hook 'window-configuration-change-hook
-            '(lambda ()
-               (setq erc-fill-column (- (window-width) 2))))
+(require 'erc)
+(setq erc-default-server "irc.libera.chat")
+(add-hook 'window-configuration-change-hook
+          '(lambda ()
+             (setq erc-fill-column (- (window-width) 2))))
 #+end_src
 
 ** elfeed RSS reader
 #+begin_src emacs-lisp
-  (use-package elfeed :ensure t)
-  (setq elfeed-feeds
-        '(
-          ("https://archlinux.org/feeds/news/" Arch Linux)
-          ("https://weekly.nixos.org/feeds/all.rss.xml" NixOS)
-          ("https://www.phoronix.com/rss.php" Phoronix)
-          ("https://suckless.org/atom.xml" suckless)
-          ("https://micronews.debian.org/feeds/feed.rss" Debian)
-          )
+(use-package elfeed :ensure t)
+(setq elfeed-feeds
+      '(
+        ("https://archlinux.org/feeds/news/" Arch Linux)
+        ("https://weekly.nixos.org/feeds/all.rss.xml" NixOS)
+        ("https://www.phoronix.com/rss.php" Phoronix)
+        ("https://suckless.org/atom.xml" suckless)
+        ("https://micronews.debian.org/feeds/feed.rss" Debian)
         )
+      )
 #+end_src
 
 * Language and completion support
 ** completion engines:
 *** company mode
 #+begin_src emacs-lisp
-  (use-package company :ensure t)
+(use-package company :ensure t)
 
-  ;; (use-package company-lsp
-  ;;     :ensure t
-  ;;     :config
-  ;;     (push 'company-lsp company-backends))
+;; (use-package company-lsp
+;;     :ensure t
+;;     :config
+;;     (push 'company-lsp company-backends))
 
-  (add-hook 'after-init-hook 'global-company-mode)
-  (setq company-minimum-prefix-length 1
-        company-idle-delay 0.2) ;; default is 0.2
+(add-hook 'after-init-hook 'global-company-mode)
+(setq company-minimum-prefix-length 1
+      company-idle-delay 0.2) ;; default is 0.2
 
 #+end_src
 
 ** emoji mode
 #+begin_src emacs-lisp
-  (use-package emojify
-    :ensure t
-    :hook (after-init . global-emojify-mode))
+(use-package emojify
+  :ensure t
+  :hook (after-init . global-emojify-mode))
 #+end_src
 ** Parentheses Completion
 #+begin_src emacs-lisp
-  (use-package smartparens :ensure t)
-  (require 'smartparens)
-  ;; (add-hook 'smartparens-mode)
-  (smartparens-global-mode t)
+(use-package smartparens :ensure t)
+(require 'smartparens)
+;; (add-hook 'smartparens-mode)
+(smartparens-global-mode t)
 #+end_src
 ** Projectile
 #+begin_src emacs-lisp
-  (use-package projectile :ensure t)
-  (require 'smartparens-config)
+(use-package projectile :ensure t)
+(require 'smartparens-config)
 #+end_src
 
 ** vertico and orderless
 #+begin_src emacs-lisp
-  ;; Enable vertico
-  (use-package vertico :ensure t
-    :init
-    (vertico-mode)
+;; Enable vertico
+(use-package vertico :ensure t
+  :init
+  (vertico-mode)
 
-    ;; Grow and shrink the Vertico minibuffer
-    ;; (setq vertico-resize t)
+  ;; Different scroll margin
+  ;; (setq vertico-scroll-margin 0)
 
-    ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-    ;; (setq vertico-cycle t)
-    )
+  ;; Show more candidates
+  ;; (setq vertico-count 20)
 
-  ;; Use the `orderless' completion style. Additionally enable
-  ;; `partial-completion' for file path expansion. `partial-completion' is
-  ;; important for wildcard support. Multiple files can be opened at once
-  ;; with `find-file' if you enter a wildcard. You may also give the
-  ;; `initials' completion style a try.
-  (use-package orderless :ensure t
-    :init
-    (setq completion-styles '(orderless)
-          completion-category-defaults nil
-          completion-category-overrides '((file (styles partial-completion)))))
+  ;; Grow and shrink the Vertico minibuffer
+  ;; (setq vertico-resize t)
 
-  ;; Persist history over Emacs restarts. Vertico sorts by history position.
-  (use-package savehist :ensure t
-    :init
-    (savehist-mode))
+  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+  ;; (setq vertico-cycle t)
+  )
 
-  ;; A few more useful configurations...
-  (use-package emacs :ensure t
-    :init
-    ;; Add prompt indicator to `completing-read-multiple'.
-    ;; Alternatively try `consult-completing-read-multiple'.
-    (defun crm-indicator (args)
-      (cons (concat "[CRM] " (car args)) (cdr args)))
-    (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+;; Optionally use the `orderless' completion style. See
+;; `+orderless-dispatch' in the Consult wiki for an advanced Orderless style
+;; dispatcher. Additionally enable `partial-completion' for file path
+;; expansion. `partial-completion' is important for wildcard support.
+;; Multiple files can be opened at once with `find-file' if you enter a
+;; wildcard. You may also give the `initials' completion style a try.
+(use-package orderless :ensure t
+  :init
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
 
-    ;; Do not allow the cursor in the minibuffer prompt
-    (setq minibuffer-prompt-properties
-          '(read-only t cursor-intangible t face minibuffer-prompt))
-    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+(use-package savehist :ensure t
+  :init
+  (savehist-mode))
 
-    ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-    ;; Vertico commands are hidden in normal buffers.
-    ;; (setq read-extended-command-predicate
-    ;;       #'command-completion-default-include-p)
+;; A few more useful configurations...
+(use-package emacs :ensure t
+  :init
+  ;; Add prompt indicator to `completing-read-multiple'.
+  ;; Alternatively try `consult-completing-read-multiple'.
+  (defun crm-indicator (args)
+    (cons (concat "[CRM] " (car args)) (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
-    ;; Enable recursive minibuffers
-    (setq enable-recursive-minibuffers t))
+  ;; Do not allow the cursor in the minibuffer prompt
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
+  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+  ;; Vertico commands are hidden in normal buffers.
+  ;; (setq read-extended-command-predicate
+  ;;       #'command-completion-default-include-p)
+
+  ;; Enable recursive minibuffers
+  (setq enable-recursive-minibuffers t))
 #+end_src
 
 *** consult
@@ -1039,20 +1062,20 @@ https://github.com/minad/consult
 *** Marginalia.el
 https://github.com/minad/marginalia
 #+begin_src emacs-lisp
-  ;; Enable richer annotations using the Marginalia package
-  (use-package marginalia
-    :ensure t
-    ;; Either bind `marginalia-cycle` globally or only in the minibuffer
-    :bind (("M-A" . marginalia-cycle)
-           :map minibuffer-local-map
-           ("M-A" . marginalia-cycle))
+;; Enable richer annotations using the Marginalia package
+(use-package marginalia
+  :ensure t
+  ;; Either bind `marginalia-cycle` globally or only in the minibuffer
+  :bind (("M-A" . marginalia-cycle)
+         :map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+  
+  ;; The :init configuration is always executed (Not lazy!)
+  :init
 
-    ;; The :init configuration is always executed (Not lazy!)
-    :init
-
-    ;; Must be in the :init section of use-package such that the mode gets
-    ;; enabled right away. Note that this forces loading the package.
-    (marginalia-mode))
+  ;; Must be in the :init section of use-package such that the mode gets
+  ;; enabled right away. Note that this forces loading the package.
+  (marginalia-mode))
 #+end_src
 
 ** languages and lsp-mode
@@ -1060,127 +1083,127 @@ https://emacs-lsp.github.io/lsp-mode/
 and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 *** General Setup
 #+begin_src emacs-lisp
-  (use-package flycheck :ensure t)
-  (use-package lsp-mode :ensure t
-    :init
-    ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-    (setq lsp-keymap-prefix "C-c l")
-    :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-           (rust-mode  . lsp)
-           (html-mode  . lsp)
-           (c-mode  . lsp)
-           (c++-mode  . lsp)
-           (css-mode . lsp)
-           (zig-mode . lsp)
-           ;; if you want which-key integration
-           (lsp-mode . lsp-enable-which-key-integration))
-           (sh-mode . lsp)
-           (lua-mode . lsp)
-    :commands lsp)
+(use-package flycheck :ensure t)
+(use-package lsp-mode :ensure t
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (rust-mode  . lsp)
+         (html-mode  . lsp)
+         (c-mode  . lsp)
+         (c++-mode  . lsp)
+         (css-mode . lsp)
+         (zig-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  (sh-mode . lsp)
+         (lua-mode . lsp)
+  :commands lsp)
 
-  ;; optionally
-  (use-package lsp-ui :commands lsp-ui-mode :ensure t)
+;; optionally
+(use-package lsp-ui :commands lsp-ui-mode :ensure t)
 
-  (setq lsp-ui-doc-enable nil)
-  ;;(use-package lsp-treemacs :ensure t)
-                                          ; (add-hook 'prog-mode-hook 'lsp)
+(setq lsp-ui-doc-enable nil)
+;;(use-package lsp-treemacs :ensure t)
+                                        ; (add-hook 'prog-mode-hook 'lsp)
 
-  ;; (setq lsp-use-plists t)
-  ;;(setq lsp-idle-delay 0.500)
+;; (setq lsp-use-plists t)
+;;(setq lsp-idle-delay 0.500)
 #+end_src
 *** sql
 #+begin_src emacs-lisp
-  (require 'sql)
-  (defalias 'sql-get-login 'ignore)
+(require 'sql)
+(defalias 'sql-get-login 'ignore)
 #+end_src
 *** yaml-mode
 #+begin_src emacs-lisp
-  (use-package yaml-mode
-    :ensure t)
+(use-package yaml-mode
+  :ensure t)
 #+end_src
 *** python
 #+begin_src emacs-lisp
-  (use-package lsp-pyright
-    :ensure t
-    :hook (python-mode . (lambda ()
-                            (require 'lsp-pyright)
-                            (lsp))))  ; or lsp-deferred
+(use-package lsp-pyright
+  :ensure t
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)
+                          (lsp))))  ; or lsp-deferred
 
 #+end_src
 *** Haskell
 **** haskell mode
 #+begin_src emacs-lisp
-  (use-package haskell-mode :ensure t)
+(use-package haskell-mode :ensure t)
 #+end_src
 *** Fish
 #+begin_src emacs-lisp
-  (use-package fish-mode :ensure t)
+(use-package fish-mode :ensure t)
 #+end_src
 *** nix
 #+begin_src emacs-lisp
-  (use-package nix-mode :ensure t
-    :mode "\\.nix\\'")
-  (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
-                    :major-modes '(nix-mode)
-                    :server-id 'nix))
+(use-package nix-mode :ensure t
+  :mode "\\.nix\\'")
+(add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
+(lsp-register-client
+ (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
+                  :major-modes '(nix-mode)
+                  :server-id 'nix))
 #+end_src
 *** java
 #+begin_src emacs-lisp
-  ;(use-package lsp-java :ensure t)
-  ;(add-hook 'java-mode-hook #'lsp)
+;(use-package lsp-java :ensure t)
+                                        ;(add-hook 'java-mode-hook #'lsp)
 #+end_src
 *** lua
 #+begin_src emacs-lisp
-   (use-package lua-mode
-    :ensure t
-    :mode "\\.lua$"
-    :interpreter "lua"
-    :hook (lua-mode . set-company-backends-for-lua)
-    :config
-    (setq lua-indent-level 4)
-    (setq lua-indent-string-contents t)
-    (setq lua-prefix-key nil)
-    )
+(use-package lua-mode
+ :ensure t
+ :mode "\\.lua$"
+ :interpreter "lua"
+ :hook (lua-mode . set-company-backends-for-lua)
+ :config
+ (setq lua-indent-level 4)
+ (setq lua-indent-string-contents t)
+ (setq lua-prefix-key nil)
+ )
 #+end_src
 *** web stuff
 ***** web mode
 #+begin_src emacs-lisp
-  (use-package web-mode :ensure t)
-  (require 'web-mode)
-  (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(use-package web-mode :ensure t)
+;; (require 'web-mode)
+;; (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 #+end_src
 *** PKGBUILD
 #+begin_src emacs-lisp
-  (use-package pkgbuild-mode :ensure t)
-  (require 'pkgbuild-mode)
+(use-package pkgbuild-mode :ensure t)
+(require 'pkgbuild-mode)
 #+end_src
 *** lsp
 #+begin_src emacs-lisp
-  (add-hook 'emacs-lisp-mode-hook
-            (lambda ()
-              ;; Use spaces, not tabs.
-              (setq indent-tabs-mode nil)
-              ;; Keep M-TAB for `completion-at-point'
-              (define-key flyspell-mode-map "\M-\t" nil)
-              ;; Pretty-print eval'd expressions.
-              (define-key emacs-lisp-mode-map
-                          "\C-x\C-e" 'pp-eval-last-sexp)
-              ;; Recompile if .elc exists.
-              (add-hook (make-local-variable 'after-save-hook)
-                        (lambda ()
-                          (byte-force-recompile default-directory)))
-              (define-key emacs-lisp-mode-map
-                          "\r" 'reindent-then-newline-and-indent)))
-  (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-  (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode) ;; Requires Ispell
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            ;; Use spaces, not tabs.
+            (setq indent-tabs-mode nil)
+            ;; Keep M-TAB for `completion-at-point'
+            (define-key flyspell-mode-map "\M-\t" nil)
+            ;; Pretty-print eval'd expressions.
+            (define-key emacs-lisp-mode-map
+                        "\C-x\C-e" 'pp-eval-last-sexp)
+            ;; Recompile if .elc exists.
+            (add-hook (make-local-variable 'after-save-hook)
+                      (lambda ()
+                        (byte-force-recompile default-directory)))
+            (define-key emacs-lisp-mode-map
+                        "\r" 'reindent-then-newline-and-indent)))
+(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode) ;; Requires Ispell
 #+end_src
 
 *** C/C++ mode
@@ -1223,34 +1246,34 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+end_src
 *** rust 
 #+begin_src emacs-lisp
-  (use-package rustic
-    :ensure t
-    :bind (:map rustic-mode-map
-                ("M-j" . lsp-ui-imenu)
-                ("M-?" . lsp-find-references)
-                ("C-c C-c l" . flycheck-list-errors)
-                ("C-c C-c a" . lsp-execute-code-action)
-                ("C-c C-c r" . lsp-rename)
-                ("C-c C-c q" . lsp-workspace-restart)
-                ("C-c C-c Q" . lsp-workspace-shutdown)
-                ("C-c C-c s" . lsp-rust-analyzer-status))
-    :config
-    ;; uncomment for less flashiness
-    ;; (setq lsp-eldoc-hook nil)
-    ;; (setq lsp-enable-symbol-highlighting nil)
-    ;; (setq lsp-signature-auto-activate nil)
+(use-package rustic
+  :ensure t
+  :bind (:map rustic-mode-map
+              ("M-j" . lsp-ui-imenu)
+              ("M-?" . lsp-find-references)
+              ("C-c C-c l" . flycheck-list-errors)
+              ("C-c C-c a" . lsp-execute-code-action)
+              ("C-c C-c r" . lsp-rename)
+              ("C-c C-c q" . lsp-workspace-restart)
+              ("C-c C-c Q" . lsp-workspace-shutdown)
+              ("C-c C-c s" . lsp-rust-analyzer-status))
+  :config
+  ;; uncomment for less flashiness
+  ;; (setq lsp-eldoc-hook nil)
+  ;; (setq lsp-enable-symbol-highlighting nil)
+  ;; (setq lsp-signature-auto-activate nil)
 
-    ;; comment to disable rustfmt on save
-    (setq rustic-format-on-save t)
-    (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
+  ;; comment to disable rustfmt on save
+  (setq rustic-format-on-save t)
+  (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
 
-  (defun rk/rustic-mode-hook ()
-    ;; so that run C-c C-c C-r works without having to confirm, but don't try to
-    ;; save rust buffers that are not file visiting. Once
-    ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
-    ;; no longer be necessary.
-    (when buffer-file-name
-      (setq-local buffer-save-without-query t)))
+(defun rk/rustic-mode-hook ()
+  ;; so that run C-c C-c C-r works without having to confirm, but don't try to
+  ;; save rust buffers that are not file visiting. Once
+  ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
+  ;; no longer be necessary.
+  (when buffer-file-name
+    (setq-local buffer-save-without-query t)))
 #+end_src
 *** zig
 #+begin_src emacs-lisp
@@ -1259,41 +1282,41 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+end_src
 ** which key
 #+begin_src emacs-lisp
-  (use-package which-key
-    :ensure t
-    :init
-    (setq which-key-side-window-location 'bottom
-          which-key-sort-order #'which-key-key-order-alpha
-          which-key-sort-uppercase-first nil
-          which-key-add-column-padding 1
-          which-key-max-display-columns nil
-          which-key-min-display-lines 6
-          which-key-side-window-slot -10
-          which-key-side-window-max-height 0.25
-          which-key-idle-delay 0.8
-          which-key-max-description-length 25
-          which-key-allow-imprecise-window-fit t
-          which-key-separator " → " ))
-  (which-key-mode)
+(use-package which-key
+  :ensure t
+  :init
+  (setq which-key-side-window-location 'bottom
+        which-key-sort-order #'which-key-key-order-alpha
+        which-key-sort-uppercase-first nil
+        which-key-add-column-padding 1
+        which-key-max-display-columns nil
+        which-key-min-display-lines 6
+        which-key-side-window-slot -10
+        which-key-side-window-max-height 0.25
+        which-key-idle-delay 0.8
+        which-key-max-description-length 25
+        which-key-allow-imprecise-window-fit t
+        which-key-separator " → " ))
+(which-key-mode)
 #+end_src
 
 * prevent "saving to x clipboard manager
 #+begin_src emacs-lisp
-  (setq x-select-enable-clipboard-manager nil)
+(setq x-select-enable-clipboard-manager nil)
 #+end_src
 
 * prevent *warnings* buffer
 #+begin_src emacs-lisp
-  (setq-default warning-minimum-level :error)
+(setq-default warning-minimum-level :error)
 #+end_src
 
 * emacs fixing some window stuff
 #+begin_src emacs-lisp
-  ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
-  ;; (add-to-list 'default-frame-alist '(fullscreen . fullheight))
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; (add-to-list 'default-frame-alist '(fullscreen . fullheight))
 #+end_src
 
 * restart emacs package
 #+begin_src emacs-lisp
-  (use-package restart-emacs :ensure t)
+(use-package restart-emacs :ensure t)
 #+end_src

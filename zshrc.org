@@ -2,6 +2,7 @@
 #+PROPERTY: header-args:shell :tangle ~/.zshrc
 * table of contents :toc:
 - [[#zinit][zinit]]
+  - [[#added-by-zinits-installer][Added by zinit's installer]]
 - [[#initial-setup][initial setup]]
 - [[#loading-home-manager-variables][loading home manager variables]]
 - [[#qt5ct][qt5ct]]
@@ -33,17 +34,16 @@
   - [[#clear][clear]]
   - [[#agkozak][agkozak]]
 - [[#loading-the-profile][loading the ~~/.profile~]]
-- [[#zplug-load][Zplug load]]
 - [[#pfetch][pfetch]]
 - [[#some-misc-exports][some misc exports]]
   - [[#terminfo-stull][Terminfo stull]]
 
 * zinit
 to install copy-paste this into the terminal
-#+begin_src
+#+begin_src shell :tangle no
 sh -c "$(curl -fsSL https://git.io/zinit-install)"
 #+end_src
-
+** Added by zinit's installer
 #+begin_src shell
 # zplug load
 ### Added by Zinit's installer
@@ -72,8 +72,8 @@ zinit light-mode for \
 #+end_src
 
 * initial setup
-make sure you execute these commands
-#+begin_src
+make sure you execute these commands if you do not plan to use any plugin manager 
+#+begin_src shell :tangle no
 mkdir ~/.zsh-plugins
 cd ~/.zsh-plugins
 git clone https://github.com/zsh-users/zsh-completions.git
@@ -88,14 +88,14 @@ git clone https://github.com/zsh-users/zsh-history-substring-search.git
  . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
 #+end_src
 * qt5ct
-#+begin_src shell
-  # if [[ "$DESKTOP_SESSION" = *"plasma"* ]]; then
-  #     export QT_QPA_PLATFORMTHEME = "kde"
-  # fi
+#+begin_src shell :tangle no
+if [[ "$DESKTOP_SESSION" = *"plasma"* ]]; then
+    export QT_QPA_PLATFORMTHEME = "kde"
+fi
 
-  # if [[ "$DESKTOP_SESSION" != *"plasma"* ]]; then
-  #     export QT_QPA_PLATFORMTHEME="qt5ct"
-  # fi
+if [[ "$DESKTOP_SESSION" != *"plasma"* ]]; then
+    export QT_QPA_PLATFORMTHEME="qt5ct"
+fi
 #+end_src 
 * Some stuff configure by zsh-newuser-install
 #+begin_src shell
@@ -291,26 +291,28 @@ git clone https://github.com/zsh-users/zsh-history-substring-search.git
 
 ** zsh-completions
 see https://github.com/zsh-users/zsh-completions
-#+begin_src shell  
+#+begin_src shell :tangle no 
   #source ~/.zsh-plugins/zsh-completions/zsh-completions.plugin.zsh
-  #antigen bundle zsh-users/zsh-completions
-  # zplug "zsh-users/zsh-completions"
-  # zinit light "zsh-users/zsh-completions"
+  zinit light "zsh-users/zsh-completions"
 #+end_src
 ** zsh-autosuggestions
 - install from here: https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
 #+begin_src shell
   #  source ~/.zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-    #antigen bundle zsh-users/zsh-autosuggestions
-zinit light "zsh-users/zsh-autosuggestions"
-zinit light zdharma-continuum/fast-syntax-highlighting
+# zinit light "zsh-users/zsh-autosuggestions"
+# zinit light zdharma-continuum/fast-syntax-highlighting
 export ZSH_AUTOSUGGEST_USE_ASYNC=true
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#6272a4'
 
+zinit wait lucid for \
+ atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+    zdharma-continuum/fast-syntax-highlighting \
+ atload"!_zsh_autosuggest_start" \
+    zsh-users/zsh-autosuggestions
 #+end_src
 ** zsh autocomplete
-#+begin_src shell
-  #  zinit light "marlonrichert/zsh-autocomplete"
+#+begin_src shell :tangle no
+  zinit light "marlonrichert/zsh-autocomplete"
 #+end_src
 ** zsh command not found
 #+begin_src shell
@@ -340,6 +342,7 @@ see https://github.com/jeffreytse/zsh-vi-mode
 #+begin_src shell
   # source ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
   #zplug "jeffreytse/zsh-vi-mode"
+  #zinit light "jeffreytse/zsh-vi-mode"
 #+end_src
 ** async
 #+begin_src shell 
@@ -400,27 +403,27 @@ what do different values mean
 #+end_src
 ** clear
 #+begin_src shell
-#zinit load madhavtummala/clear
+# zinit light madhavtummala/clear
 # ZSH_THEME="clear"
 #+end_src
 ** agkozak
 https://github.com/agkozak/agkozak-zsh-prompt
-#+begin_src shell
-# zinit load agkozak/agkozak-zsh-prompt
-# AGKOZAK_PROMPT_CHAR=( '%F{magenta}❯%f' '%F{magenta}❯%f' '%F{magenta}❮%f' )
-# AGKOZAK_LEFT_PROMPT_ONLY=1
-# AGKOZAK_COLORS_BRANCH_STATUS=green
-# AGKOZAK_CUSTOM_RPROMPT='%()'
+#+begin_src shell :tangle no
+zinit light agkozak/agkozak-zsh-prompt
+AGKOZAK_PROMPT_CHAR=( '%F{green}❯%f' '%F{green}❯%f' '%F{green}❮%f' )
+AGKOZAK_LEFT_PROMPT_ONLY=1
+AGKOZAK_MULTILINE=0
+AGKOZAK_USER_HOST_DISPLAY=0
+AGKOZAK_COLORS_BRANCH_STATUS=magenta
+AGKOZAK_CUSTOM_RPROMPT='%()'
+AGKOZAK_BLANK_LINES=1
 #+end_src
 
 * loading the ~~/.profile~
 #+begin_src shell
   source ~/dotfiles/.profile
 #+end_src
-* Zplug load
-#+begin_src shell
-# zplug load 
-#+end_src
+
 * pfetch
 #+begin_src shell
 # pfetch 

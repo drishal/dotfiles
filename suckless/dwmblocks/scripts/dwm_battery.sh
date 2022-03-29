@@ -33,3 +33,5 @@ for battery in /sys/class/power_supply/BAT?*; do
 	# Prints the info
 	printf  "^c$green^BAT: %s%s%d%%" "$status" "$warn" "$capacity " ; unset warn
 done && printf "\\n"
+# battery=$(acpi | awk '{print $4 " | "$5" "}' | sed s/,//g | rev | cut -c 5- | rev ) 
+#echo "^c$green^ $battery"

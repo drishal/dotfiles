@@ -8,15 +8,8 @@ disabled=true
 #success_symbol = "[➜](bold green) "     # The "success_symbol" segment is being set to "➜" with the color "bold green"
 # success_symbol = "[❯](bold green) "     # The "success_symbol" segment is being set to "➜" with the color "bold green"
  #success_symbol = "['$'](bold green) "     # The "success_symbol" segment is being set to "➜" with the color "bold green"
-# format = """
-# [┌───────────────────>](bold green)
-# [│](bold green)
-# [└  $directory$rust$package ─>](bold green) """
-# format = """
-# [$user]
-# """
 # # Disable the package module, hiding it from the prompt completely
 #[package]
 #disabled = true
 [git_status]
-disabled=true
+# disabled=true
