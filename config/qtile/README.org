@@ -137,27 +137,32 @@ keys = [
     Key([mod], "l", lazy.layout.right()),
     Key([mod], "j", lazy.layout.down()),
     Key([mod], "k", lazy.layout.up()),
-    Key([mod, "shift"], "h", lazy.layout.swap_left()),
-    Key([mod, "shift"], "l", lazy.layout.swap_right()),
-    Key([mod, "shift"], "j", lazy.layout.shuffle_down()),
-    Key([mod, "shift"], "k", lazy.layout.shuffle_up()),
-    Key([mod, "control"], "j", lazy.layout.grow_down()),
-    Key([mod, "control"], "k", lazy.layout.grow_up()),
-    Key([mod, "control"], "h", lazy.layout.grow_left(), lazy.layout.decrease_ratio()),
-    Key([mod, "control"], "l", lazy.layout.grow_right(),lazy.layout.increase_ratio()),
+    Key([mod, "control"], "h", lazy.layout.swap_left()),
+    Key([mod, "control"], "l", lazy.layout.swap_right()),
+    Key([mod, "control"], "j", lazy.layout.shuffle_down()),
+    Key([mod, "control"], "k", lazy.layout.shuffle_up()),
+    Key([mod, "shift"], "j", lazy.layout.grow_down()),
+    Key([mod, "shift"], "k", lazy.layout.grow_up()),
+    Key([mod, "shift"], "h", lazy.layout.grow_left(), lazy.layout.decrease_ratio()),
+    Key([mod, "shift"], "l", lazy.layout.grow_right(),lazy.layout.increase_ratio()),
     # Key([mod], "i", lazy.layout.decrease_ratio()),
     Key([mod], "f", lazy.window.toggle_fullscreen()),
     # Key([mod], "m", lazy.layout.increase_ratio()),
-    Key([mod], "n", lazy.layout.reset()),
+    Key([mod], "space", lazy.next_layout()),
     Key([mod], "o", lazy.layout.maximize()),
     # Key([mod, "shift"], "space", lazy.layout.flip()),
     # Switch from float to tile
     Key( [mod, "shift"], "space", lazy.window.toggle_floating(), desc='tile/float a window'),
+    
+    # reset 
+    Key([mod, "shift"], "m", lazy.layout.normalize(), lazy.layout.reset()),
+    Key([mod], "n", lazy.layout.reset()),
+
 
 
     # Switch window focus to other pane(s) of stack
-    Key([mod], "space", lazy.layout.next(),
-        desc="Switch window focus to other pane(s) of stack"),
+    # Key([mod], "space", lazy.layout.next(),
+    #     desc="Switch window focus to other pane(s) of stack"),
 
     # Swap panes of split stack
     # Key([mod, "shift"], "space", lazy.layout.rotate(),
