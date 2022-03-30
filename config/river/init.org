@@ -281,7 +281,7 @@ riverctl set-repeat 50 300
 
 * auto starting apps
 #+begin_src bash
-# riverctl spawn "systemctl --user import-environment"
+riverctl spawn "systemctl --user import-environment"
 riverctl spawn "swaybg -i ~/dotfiles/wallpapers/darkest_hour.jpg" 
 riverctl spawn lxpolkit 
 riverctl spawn waybar

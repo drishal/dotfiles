@@ -12,3 +12,4 @@ static const Block blocks[] = {
 //sets delimeter between status commands. NULL character ('\0') means no delimeter.
 static char delim[] = "^c#5B6268^  ";
 static unsigned int delimLen = 100;
+#define CMDLENGTH		10000
