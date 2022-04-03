@@ -31,9 +31,10 @@ imports=[
         nvim-treesitter
         nvim-cmp cmp-buffer cmp-path cmp-treesitter cmp-spell
         dashboard-nvim 
-        vim-orgmode onedark-nvim neoformat vim-nix cmp-nvim-lsp
+        orgmode onedark-nvim neoformat vim-nix cmp-nvim-lsp
         barbar-nvim nvim-web-devicons vim-airline
         nvim-autopairs
+        vim-markdown
     ];
     extraPackages = with pkgs; [ 
     rnix-lsp gcc 
