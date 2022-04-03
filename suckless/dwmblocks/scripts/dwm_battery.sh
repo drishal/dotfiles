@@ -1,6 +1,6 @@
 
 #!/bin/sh
-. /home/drishal/dotfiles/suckless/dwmblocks/scripts/themes/onedark.sh
+. ~/dotfiles/suckless/dwmblocks/scripts/themes/onedark.sh
 case $BLOCK_BUTTON in
 	3) notify-send "🔋 Battery module" "🔋: discharging
 🛑: not charging

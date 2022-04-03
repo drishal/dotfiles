@@ -1,5 +1,5 @@
 # top -bn 1 | awk '/^%Cpu/ { print int($2 + $4 + $6)" %"}'
-. /home/drishal/dotfiles/suckless/dwmblocks/scripts/themes/onedark.sh
+. ~/dotfiles/suckless/dwmblocks/scripts/themes/onedark.sh
 # echo $(^c$magenta^ top -bn 1 | awk '/^%Cpu/ { print int($2 + $4 + $6)" %"}')
 cpu_val=$(grep -o "^[^ ]*" /proc/loadavg)
 
