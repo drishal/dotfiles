@@ -59,8 +59,8 @@ static const char col_cyan[]        = "";
 */
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_grey, col_bg, col_bg },
-	[SchemeSel]  = { col_fg, col_bg2,  col_purple},
+	[SchemeNorm] = { col_fg, col_bg, col_bg },
+	[SchemeSel]  = { col_fg, col_grey,  col_purple},
 	[SchemeTitle]  = { col_purple, col_bg,  col_purple},
 };
 
