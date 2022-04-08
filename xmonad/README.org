@@ -206,15 +206,6 @@ myLayout =  toggleLayouts (smartBorders Full)
             $ smartBorders
             $ tiled ||| simplestFloat)
 
--- myLayout = avoidStruts $ noBorders Full
-  
--- myLayout = mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
---             renamed [CutWordsLeft 1]
---             $ smartBorders
---             $ avoidStruts
---             $ spacingWithEdge 8
---             $ tiled ||| simplestFloat
-
  where
     -- default tiling algorithm partitions the screen into two panes
     tiled   = Tall nmaster delta ratio
@@ -227,6 +218,16 @@ myLayout =  toggleLayouts (smartBorders Full)
 
     -- Percent of screen to increment by when resizing panes
     delta   = 3/100
+
+-- myLayout = avoidStruts $ noBorders Full
+  
+-- myLayout = mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
+--             renamed [CutWordsLeft 1]
+--             $ smartBorders
+--             $ avoidStruts
+--             $ spacingWithEdge 8
+--             $ tiled ||| simplestFloat
+
 
 -- tall =     renamed [Replace "tall"]
 --            -- $ avoidStruts
