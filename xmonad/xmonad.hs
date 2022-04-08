@@ -111,10 +111,10 @@ myTerminal :: String
 myTerminal = "alacritty"
 
 myFocusFollowsMouse :: Bool
-myFocusFollowsMouse = True
+myFocusFollowsMouse = False
 
 myClickJustFocuses :: Bool
-myClickJustFocuses = False
+myClickJustFocuses = True
 
 myBorderWidth   = 1
 
