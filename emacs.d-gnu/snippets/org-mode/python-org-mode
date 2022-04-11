@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: python-org-mode 
+# key: <sp
+# --
+
+#+begin_src python :results output
+$0
+#+end_src
