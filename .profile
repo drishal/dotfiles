@@ -31,6 +31,7 @@ alias usb_1="cd /sys/bus/pci/drivers/xhci_hcd/"
 alias usb_2="su root -c  'for file in ????:??:??.? ; do  echo -n "$file" > unbind;  echo -n "$file" > bind; done'"
 
 #nix 
+# . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
 alias nfu="sudo nix flake update ~/dotfiles"
 alias nrs="sudo nixos-rebuild switch --flake ~/dotfiles -L"
 alias nrsi="sudo nixos-rebuild switch --flake --impure ~/dotfiles -L"
@@ -42,8 +43,8 @@ alias hms="home-manager switch --flake ~/dotfiles "
 export PATH="$HOME/.npm-packages/bin:$PATH"
 
 #ccace
-export USE_CCACHE=1
-export CCACHE_EXEC=/usr/bin/ccache
+# export USE_CCACHE=1
+# export CCACHE_EXEC=/usr/bin/ccache
 # for home manager 
 # export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 
