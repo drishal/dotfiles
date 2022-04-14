@@ -311,11 +311,16 @@
     #suckless overlays
     (final: prev: {
       dwm = prev.dwm.overrideAttrs (old: { src = ../suckless/dwm-6.3 ;});
-      dwmblocks = prev.dwmblocks.override (old: {
+       #dwmblocks = prev.dwmblocks.override (old: {
         # src = ../suckless/dwmblocks
-        conf =../suckless/dwmblocks/blocks.def.h;});
+        # conf =../suckless/dwmblocks/blocks.def.h;});
     })
-    
+
+    # dwmblocks 
+    (self: super: {
+      batdistrack = super.callPackage ./packages/dwmblocks/dwmblocks.nix {};
+    })
+
     # river desktop session
      (final: prev: {
        inherit (prev) callPackage fetchFromGitHub;

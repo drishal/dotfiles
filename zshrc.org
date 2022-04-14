@@ -4,7 +4,6 @@
 - [[#zinit][zinit]]
   - [[#added-by-zinits-installer][Added by zinit's installer]]
 - [[#initial-setup][initial setup]]
-- [[#loading-home-manager-variables][loading home manager variables]]
 - [[#qt5ct][qt5ct]]
 - [[#some-stuff-configure-by-zsh-newuser-install][Some stuff configure by zsh-newuser-install]]
 - [[#setting-some-paths][Setting some paths]]
@@ -16,7 +15,6 @@
   - [[#zsh-completions][zsh-completions]]
   - [[#zsh-autosuggestions][zsh-autosuggestions]]
   - [[#zsh-autocomplete][zsh autocomplete]]
-  - [[#zsh-command-not-found][zsh command not found]]
   - [[#zsh-syntax-highlighting][zsh-syntax-highlighting]]
   - [[#zsh-history-substring-search][zsh-history substring search]]
   - [[#disable-the-prompt-on-the-right-side][Disable the prompt on the right side]]
@@ -83,10 +81,6 @@ git clone https://github.com/jeffreytse/zsh-vi-mode.git
 git clone https://github.com/zsh-users/zsh-history-substring-search.git
 #+end_src
 
-* loading home manager variables
-#+begin_src shell
- . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
-#+end_src
 * qt5ct
 #+begin_src shell :tangle no
 if [[ "$DESKTOP_SESSION" = *"plasma"* ]]; then
@@ -283,10 +277,10 @@ fi
 
 * Plugins
 *** Oh my zsh
-#+begin_src shell
+The oh my zsh framework, tangle set to no as I dont really use it 
+#+begin_src shell :tangle no
 # zplug "ohmyzsh/ohmyzsh"
-# zinit light "ohmyzsh/ohmyzsh"
-# B.
+zinit light "ohmyzsh/ohmyzsh"
 #+end_src
 
 ** zsh-completions
@@ -299,8 +293,6 @@ see https://github.com/zsh-users/zsh-completions
 - install from here: https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
 #+begin_src shell
   #  source ~/.zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-# zinit light "zsh-users/zsh-autosuggestions"
-# zinit light zdharma-continuum/fast-syntax-highlighting
 export ZSH_AUTOSUGGEST_USE_ASYNC=true
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#6272a4'
 
@@ -314,11 +306,7 @@ zinit wait lucid for \
 #+begin_src shell :tangle no
   zinit light "marlonrichert/zsh-autocomplete"
 #+end_src
-** zsh command not found
-#+begin_src shell
-  #antigen bundle command-not-found
-  #e command-not-found
-#+end_src
+
 ** zsh-syntax-highlighting
 - see: https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md
 #+begin_src shell
@@ -339,10 +327,10 @@ zinit wait lucid for \
 #+end_src
 ** vim mode
 see https://github.com/jeffreytse/zsh-vi-mode
-#+begin_src shell
+#+begin_src shell :tangle no
   # source ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
   #zplug "jeffreytse/zsh-vi-mode"
-  #zinit light "jeffreytse/zsh-vi-mode"
+ zinit light "jeffreytse/zsh-vi-mode"
 #+end_src
 ** async
 #+begin_src shell 
@@ -377,8 +365,9 @@ export KITTY_SHELL_INTEGRATION=no-cursor
 #+end_src
 
 * loading the prompt
+you can use any of the prompts here, just make sure to remove ~:tangle no~ from whatever prompt you prefer (and also dont forget to add ~:tangle no~ to the ones which you are not using)
 ** Starship
-#+begin_src shell
+#+begin_src shell 
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG=~/dotfiles/config/starship.toml
 #+end_src
@@ -391,20 +380,20 @@ what do different values mean
 | %n | Username                                                  | The user that is logged in                                          |
 | %y | Same as “%l” just does not strip “/dev” or “/dev/tty”     |                                                                     |
 	
-#+begin_src shell
-# PROMPT='%F{green}%n@%F{white}%M %B%3~ > '
-# PROMPT='%F{green}%3~ > '
+#+begin_src shell :tangle no
+ PROMPT='%F{green}%n@%F{white}%M %B%3~ > '
+ PROMPT='%F{green}%3~ > '
 #+end_src
 ** p10k
-#+begin_src shell
-# zinit ice depth=1; zinit light romkatv/powerlevel10k
-# # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+#+begin_src shell :tangle no
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 #+end_src
 ** clear
-#+begin_src shell
-# zinit light madhavtummala/clear
-# ZSH_THEME="clear"
+#+begin_src shell :tangle no
+zinit light madhavtummala/clear
+ZSH_THEME="clear"
 #+end_src
 ** agkozak
 https://github.com/agkozak/agkozak-zsh-prompt
@@ -425,12 +414,12 @@ AGKOZAK_BLANK_LINES=1
 #+end_src
 
 * pfetch
-#+begin_src shell
-# pfetch 
+#+begin_src shell :tangle no
+ pfetch 
 #+end_src
 
 * some misc exports
 ** Terminfo stull
 #+begin_src shell
-  export TERMINFO_DIRS=/usr/share/terminfo
+ export TERMINFO_DIRS=/usr/share/terminfo
 #+end_src

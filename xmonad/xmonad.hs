@@ -114,7 +114,7 @@ myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
 
 myClickJustFocuses :: Bool
-myClickJustFocuses = False
+myClickJustFocuses = True
 
 myBorderWidth   = 1
 

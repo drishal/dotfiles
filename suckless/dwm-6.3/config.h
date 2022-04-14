@@ -61,7 +61,9 @@ static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_fg, col_bg, col_bg },
 	[SchemeSel]  = { col_fg, col_grey,  col_purple},
+	//[SchemeTitle]  = { col_fg, col_grey,  col_purple},
 	[SchemeTitle]  = { col_purple, col_bg,  col_purple},
+	// [SchemeTitle]  = { col_bg, col_cyan,  col_purple},
 };
 
 /* tagging */
@@ -74,7 +76,7 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	// { "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 };
 
 /* layout(s) */

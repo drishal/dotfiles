@@ -27,6 +27,7 @@
   - [[#line-numbers][Line Numbers]]
   - [[#no-blinking-cursor][no blinking cursor]]
   - [[#modeline][Modeline]]
+  - [[#fonts][Fonts]]
   - [[#evil-mode][Evil mode]]
   - [[#undo-system][Undo system]]
   - [[#padding][Padding]]
@@ -65,6 +66,7 @@
   - [[#elfeed-rss-reader][elfeed RSS reader]]
 - [[#language-and-completion-support][Language and completion support]]
   - [[#completion-engines][completion engines:]]
+  - [[#treesitter][treesitter]]
   - [[#emoji-mode][emoji mode]]
   - [[#parentheses-completion][Parentheses Completion]]
   - [[#projectile][Projectile]]
@@ -73,15 +75,13 @@
   - [[#which-key][which key]]
 - [[#prevent-saving-to-x-clipboard-manager][prevent "saving to x clipboard manager]]
 - [[#prevent-warnings-buffer][prevent *warnings* buffer]]
-- [[#emacs-fixing-some-window-stuff][emacs fixing some window stuff]]
-- [[#restart-emacs-package][restart emacs package]]
 
 * emacs startup
 ** shift theme variables to ~custom.el~, make sure to create it if it does not exist
 #+begin_src emacs-lisp
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
   (load-file (expand-file-name "custom.el" user-emacs-directory))
-  (setq gc-cons-threshold 1000000000)
+  (setq gc-cons-threshold 100000000)
 #+end_src
 ** emacs startup performance
 #+begin_src emacs-lisp
@@ -250,7 +250,7 @@ https://github.com/quelpa/quelpa#installation
   (doom-themes-treemacs-config)
 
   ;; Corrects (and improves) org-mode's native fontification.
-  ;; (doom-themes-org-config)
+  (doom-themes-org-config)
   )
 
 #+end_src
@@ -292,40 +292,17 @@ https://github.com/AnthonyDiGirolamo/airline-themes
 ;; (load-theme 'airline-base16_dracula t)
 #+end_src
 
-**** Fonts
+** Fonts
 #+begin_src emacs-lisp
- (set-face-attribute 'default nil
-                     :font "FiraCode Nerd Font 11"
-                     ;; :font "FantasqueSansMono Nerd Font 11"
-                     ;;:font "JetBrainsMono Nerd Font 11"
-                     :weight 'medium)
- (set-face-attribute 'variable-pitch nil
-                     :font "FiraCode Nerd Font 11"
-                     ;; :font "FantasqueSansMono Nerd Font 11"
-                     ;; :font "JetBrainsMono Nerd Font 11"
-                     :weight 'medium)
- (set-face-attribute 'fixed-pitch nil
-                     :font "FiraCode Nerd Font 11"
-                     ;; :font "FantasqueSansMono Nerd Font 11"
-                     ;;:font "JetBrainsMono Nerd Font 11"
-                     :weight 'medium)
- ;; Makes commented text italics (working in emacsclient but not emacs)
- (set-face-attribute 'font-lock-comment-face nil
-                     :slant 'italic)
- ;; Makes keywords italics (working in emacsclient but not emacs)
- (set-face-attribute 'font-lock-keyword-face nil
-                     :slant 'italic)
-
-;; Uncomment the following line if line spacing needs adjusting.
-(setq-default line-spacing 0.12)
-
-;; Needed if using emacsclient. Otherwise, your fonts will be smaller than expected.
-(add-to-list 'default-frame-alist '(font . "FiraCode Nerd Font 11"))
-;; (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 11"))
-;; (add-to-list 'default-frame-alist '(font . "FantasqueSansMono Nerd Font 12"))
-;; changes certain keywords to symbols, such as lamda!
+(add-to-list 'default-frame-alist '(font . "FiraCode Nerd Font-12" ))
+(set-face-attribute 'default t :font "FiraCode Nerd Font-12")
 (setq global-prettify-symbols-mode t)
 
+;; unicode fonts
+(use-package unicode-fonts
+   :ensure t
+   :config
+    (unicode-fonts-setup))
 #+end_src
 ** Evil mode
 https://github.com/emacs-evil/evil
@@ -854,6 +831,13 @@ https://github.com/karthink/popper
       company-idle-delay 0.2) ;; default is 0.2
 
 #+end_src
+** treesitter
+#+begin_src emacs-lisp
+(use-package tree-sitter :ensure t)
+(use-package tree-sitter-langs :ensure t)
+(global-tree-sitter-mode)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+#+end_src
 
 ** emoji mode
 #+begin_src emacs-lisp
@@ -1308,15 +1292,4 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 * prevent *warnings* buffer
 #+begin_src emacs-lisp
 (setq-default warning-minimum-level :error)
-#+end_src
-
-* emacs fixing some window stuff
-#+begin_src emacs-lisp
-;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
-;; (add-to-list 'default-frame-alist '(fullscreen . fullheight))
-#+end_src
-
-* restart emacs package
-#+begin_src emacs-lisp
-(use-package restart-emacs :ensure t)
 #+end_src

@@ -32,12 +32,13 @@ imports=[
         nvim-cmp cmp-buffer cmp-path cmp-treesitter cmp-spell
         dashboard-nvim 
         orgmode onedark-nvim neoformat vim-nix cmp-nvim-lsp
-        barbar-nvim nvim-web-devicons vim-airline
-        nvim-autopairs
+        barbar-nvim nvim-web-devicons 
+        vim-airline vim-airline-themes
+        nvim-autopairs  neorg
         vim-markdown
     ];
     extraPackages = with pkgs; [ 
-    rnix-lsp gcc 
+    rnix-lsp gcc vimPlugins.packer-nvim
     ripgrep fd nodePackages.pyright];
     };
     #  rofi = {

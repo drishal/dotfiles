@@ -5,8 +5,6 @@
 - [[#plugins][plugins]]
   - [[#bass][Bass]]
   - [[#async][async]]
-  - [[#dracula-theme][dracula theme]]
-  - [[#spaceship][spaceship]]
   - [[#init-fundle][init fundle]]
 - [[#sourcing-paths][sourcing paths]]
   - [[#etcprofile][/etc/profile]]
@@ -37,23 +35,16 @@ fundle plugin 'edc/bass'
 #+end_src
 ** async
 #+begin_src fish
-fundle plugin "acomagu/fish-async-prompt"
+# fundle plugin "acomagu/fish-async-prompt"
 #+end_src
-** dracula theme
-#+begin_src fish
-#fundle plugin "dracula/fish"
-#+end_src
-** spaceship
-#+begin_src fish
- # fundle plugin "matchai/spacefish"
-#+end_src
+
 ** init fundle
 #+begin_src fish
 fundle init
 #+end_src
 * sourcing paths
 ** /etc/profile
-#+begin_src fish
+#+begin_src fish :tangle no
 bass source /etc/profile
 #+end_src
 ** ~/dotfiles/.profile
@@ -75,6 +66,6 @@ bass source /etc/profile
 #+end_src
 
 * pfetch
-#+begin_src fish
+#+begin_src fish :tangle no
 pfetch  
 #+end_src

@@ -156,13 +156,13 @@ import Colors.DoomOne
 ** Whether focus follows the mouse pointer.
 #+begin_src haskell
   myFocusFollowsMouse :: Bool
-  myFocusFollowsMouse = True
+  myFocusFollowsMouse = False
 #+end_src
 
 ** Whether clicking on a window to focus also passes the click to the window
 #+begin_src haskell
   myClickJustFocuses :: Bool
-  myClickJustFocuses = False
+  myClickJustFocuses = True
 #+end_src
 
 ** Width of the window border in pixels.
@@ -253,9 +253,7 @@ myManageHook = composeAll
       [
         resource  =? "desktop_window" --> doIgnore
       , resource  =? "kdesktop"       --> doIgnore
-      -- , isFullscreen                  --> doFullFloat
-      ] -- this one
-
+      ] 
 #+end_src
 
 * Prompts
