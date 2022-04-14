@@ -14,7 +14,7 @@
 #define SIGMINUS		SIGRTMIN
 #endif
 #define LENGTH(X)               (sizeof(X) / sizeof (X[0]))
-// #define CMDLENGTH		10000
+#define CMDLENGTH		10000
 #define MIN( a, b ) ( ( a < b) ? a : b )
 #define STATUSLENGTH (LENGTH(blocks) * CMDLENGTH + 1)
 

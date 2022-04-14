@@ -27,15 +27,15 @@ imports=[
       plugins = with pkgs.vimPlugins; [
         vim-addon-nix
         vim-plug
-        nvim-lspconfig
-        nvim-treesitter
-        nvim-cmp cmp-buffer cmp-path cmp-treesitter cmp-spell
+        nvim-lspconfig nvim-cmp cmp-buffer cmp-path cmp-treesitter cmp-spell
         dashboard-nvim 
         orgmode onedark-nvim neoformat vim-nix cmp-nvim-lsp
         barbar-nvim nvim-web-devicons 
         vim-airline vim-airline-themes
         nvim-autopairs  neorg
         vim-markdown
+        nvim-treesitter cmp-treesitter
+
     ];
     extraPackages = with pkgs; [ 
     rnix-lsp gcc vimPlugins.packer-nvim
@@ -54,8 +54,6 @@ imports=[
 
     #   emacs = {
     #     enable = true;
-    #     # package = pkgs.emacsGit;
-    #     # package = pkgs.emacsPgtkGcc.overrideAttrs (oa: {configureFlags = ["--with-pgtk  --enable-link-time-optimization --with-native-compilation"];});
     #     package = pkgs.emacsPgtkGcc;
     #     extraPackages = (epkgs: [ epkgs.vterm ] );
     #   };
@@ -64,7 +62,7 @@ imports=[
 home.packages = with pkgs; [
   neofetch man
   distrobox man-pages
-  cachix
+  cachix 
   # libgccjit
   # (callPackage ./distrobox.nix {})
   ];

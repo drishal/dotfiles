@@ -233,7 +233,7 @@
     lxsession libnotify xclip starship
     cmake volumeicon usbutils
     pavucontrol killall htop
-    firefox neofetch steam-run 
+    firefox chromium neofetch steam-run 
     picom inxi hack-font xarchiver unzip
     nitrogen rofi trayer arc-theme
     youtube-dl
@@ -245,7 +245,7 @@
     gcc deadd-notification-center 
     nodePackages.pyright nodePackages.vscode-html-languageserver-bin zoom-us linuxPackages.cpupower
     powertop inetutils nmap cpufetch
-    dmenu dwmblocks cmatrix qutebrowser neovim
+    dmenu cmatrix qutebrowser neovim
     libreoffice nodePackages.create-react-app nodejs yarn nodePackages.react-tools
     ranger xorg.xmodmap  powershell gimp
     brave thinkfan bpytop bat polybar lolcat ncdu lm_sensors
@@ -255,7 +255,7 @@
     river clang-tools ed materia-theme  
     discord waybar swaybg pkg-config
     kitty sway-contrib.grimshot wofi
-    ferdi dunst networkmanagerapplet tree
+    dunst networkmanagerapplet tree dwmblocks
     # batdistrack 
     # some xfce apps
     xfce.xfce4-clipman-plugin xfce.thunar xfce.xfce4-taskmanager
@@ -311,16 +311,17 @@
     #suckless overlays
     (final: prev: {
       dwm = prev.dwm.overrideAttrs (old: { src = ../suckless/dwm-6.3 ;});
-       #dwmblocks = prev.dwmblocks.override (old: {
+      dwmblocks = prev.dwmblocks.override (old: {
         # src = ../suckless/dwmblocks
-        # conf =../suckless/dwmblocks/blocks.def.h;});
+        conf =../suckless/dwmblocks/blocks.def.h;});
     })
 
     # dwmblocks 
-    (self: super: {
-      batdistrack = super.callPackage ./packages/dwmblocks/dwmblocks.nix {};
-    })
-
+#    (self: super: {
+#      dwmblocks = super.callPackage ./packages/dwmblocks/dwmblocks.nix {};
+#      conf = ../suckless/dwmblocks/blocks.def.h;
+#    })
+#
     # river desktop session
      (final: prev: {
        inherit (prev) callPackage fetchFromGitHub;
@@ -344,16 +345,16 @@
      })
 
     # xmonad 
-    (final: prev: {
-      haskellPackages = prev.haskellPackages.override (old: {
-        overrides = self: super: {
-          xmonad = prev.haskellPackages.xmonad_0_17_0;
-          xmonad-contrib = prev.haskellPackages.xmonad-contrib_0_17_0;
-          xmonad-extras = prev.haskellPackages.xmonad-extras_0_17_0;
-        };
-      });
-    })
-
+#    (final: prev: {
+#      haskellPackages = prev.haskellPackages.override (old: {
+#        overrides = self: super: {
+#          xmonad = prev.haskellPackages.xmonad_0_17_0;
+#          xmonad-contrib = prev.haskellPackages.xmonad-contrib_0_17_0;
+#          xmonad-extras = prev.haskellPackages.xmonad-extras_0_17_0;
+#        };
+#      });
+#    })
+#
     # batdistrack
     (self: super: {
       batdistrack = super.callPackage ./packages/batdistrack/default.nix {};
