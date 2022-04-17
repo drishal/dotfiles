@@ -23,19 +23,26 @@ imports=[
     neovim = {
       enable = true;
       package = pkgs.neovim-nightly;
-      extraConfig = builtins.readFile ../config/nvim/init-nix.vim;
+      # extraConfig =  builtins.readfile ../config/nvim/init-nix.vim;
+      extraConfig = 
+      ''
+        ${builtins.readFile ../config/nvim/init.vim }
+
+        lua << EOF
+        
+
+        ${builtins.readFile ../config/nvim/init.lua}
+      '';
       plugins = with pkgs.vimPlugins; [
         vim-addon-nix
-        vim-plug
-        nvim-lspconfig nvim-cmp cmp-buffer cmp-path cmp-treesitter cmp-spell
+        nvim-lspconfig nvim-cmp cmp-buffer cmp-path  cmp-spell
         dashboard-nvim 
+       (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars)) cmp-treesitter
         orgmode onedark-nvim neoformat vim-nix cmp-nvim-lsp
         barbar-nvim nvim-web-devicons 
         vim-airline vim-airline-themes
         nvim-autopairs  neorg
         vim-markdown
-        nvim-treesitter cmp-treesitter
-
     ];
     extraPackages = with pkgs; [ 
     rnix-lsp gcc vimPlugins.packer-nvim
