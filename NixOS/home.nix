@@ -94,19 +94,12 @@ home.packages = with pkgs; [
   #"someOtherCachix"
   #{ name = "someCachixWithSha"; sha256 = "..."; }
  
-  #.profile
-  #home.file."/home/drishal/.profile".source=../.profile;
-
-  # xresources = {
-  #   path = "/home/drishal/dotfiles/.Xresources";
-  # };
-
-  # xmonad config
-  # home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
+  #xmonad config
+  #home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
   #home.file."/home/drishal/.xmobarrc".source = ../.xmobarrc;
   #home.file."/home/drishal/.xmonad/lib".source = ../.xmonad/lib;
 
-  # zsh config
+  #zsh config
   # home.file."/home/drishal/.zshrc".source = ../.zshrc;
 
   # sleep test
@@ -140,6 +133,10 @@ home.packages = with pkgs; [
 
   # dunst
   home.file."/home/drishal/.config/dunst/dunstrc".source = ../config/dunst/dunstrc;
+
+  # conky
+  
+  home.file."/home/drishal/.config/conky/onedark.conkyrc".source = ../config/conky/onedark.conkyrc;
   # qtile config
   #home.file."/home/drishal/.config/qtile/config.py".source =../config/qtile/config.py;
   # home.file."/home/drishal/.config/qtile/autostart.sh".source =../config/qtile/autostart.sh;
