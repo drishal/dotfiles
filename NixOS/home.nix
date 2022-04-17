@@ -59,11 +59,11 @@ imports=[
     #    userEmail = "drishalballaney@gmail.com";
     #  };
 
-    #   emacs = {
-    #     enable = true;
-    #     package = pkgs.emacsPgtkGcc;
-    #     extraPackages = (epkgs: [ epkgs.vterm ] );
-    #   };
+#       emacs = {
+#         enable = true;
+#         package = pkgs.emacsPgtkGcc;
+#         extraPackages = (epkgs: [ epkgs.vterm ] );
+#       };
   };
 
 home.packages = with pkgs; [
