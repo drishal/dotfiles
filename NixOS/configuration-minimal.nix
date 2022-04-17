@@ -25,7 +25,7 @@
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
 
-  # networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "nixos"; # Define your hostname.
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # firmware updator
   services.fwupd.enable = true;
@@ -65,7 +65,7 @@
   nix.settings.auto-optimise-store = true;
 
   # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
+  i18n.defaultLocale = "en_US.UTF-8";
   # console = {
   #   font = "Lat2-Terminus16";
   #   keyMap = "us";
@@ -75,28 +75,18 @@
 
   # kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
-    # Enable the Desktop Environment/Window managers.
+
+  # Enable the Desktop Environment/Window managers.
   services.xserver = {
     enable = true;
 
-    # Desktop Environment
     desktopManager = {
       plasma5.enable = true;
-      # gnome.enable = true;
     };
-    # displayManager.gdm.enable = true;
     displayManager.sddm.enable = true;
-    # displayManager.lightdm = {
-    #   enable = true;
-    #   greeter.enable = true;
-    # };
   };
-          # systemd-cat -t river -- ${pkgs.river}/bin/river &
-          # waitPID=$!
-
   # fprint
   # services.fprintd.enable = true;
-  services.xserver.displayManager.sessionPackages=[pkgs.river];
   services.gnome.tracker.enable = false;
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.sddm.enableGnomeKeyring = true;
@@ -141,7 +131,7 @@
     # batdistrack
   ];
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.drishal = {
@@ -165,7 +155,7 @@
     picom inxi  xarchiver unzip
     nitrogen rofi trayer arc-theme
     youtube-dl
-    xfce.xfce4-notifyd mpv smplayer pfetch
+     mpv smplayer pfetch
     qbittorrent  mesa-demos glxinfo
     xorg.xdpyinfo evince qt5ct
     redshift xorg.xbacklight xfce.xfce4-power-manager
@@ -174,7 +164,8 @@
     linuxPackages.cpupower
     powertop inetutils nmap cpufetch
     dmenu dwmblocks cmatrix qutebrowser neovim
-    feh cinnamon.nemo libva-utils speedtest-cli pass surf gnumake
+    feh cinnamon.nemo libva-utils speedtest-cli pass
+    surf gnumake
     python39
   ];
   # virtualbox
