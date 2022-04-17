@@ -73,3 +73,6 @@ alias repo-sync="repo sync -c --force-sync --optimized-fetch --no-tags --no-clon
 alias sleep-check="journalctl -u systemd-suspend.service | tail"
 #pfetch
 #pactl load-module module-bluetooth-discover
+
+#upload files; use as "upload filename"
+alias upload="curl -sL https://git.io/file-transfer | sh && ./transfer wet"  
