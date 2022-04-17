@@ -101,22 +101,23 @@
 * Initialize package sources
 *** straight.el
 https://github.com/raxod502/straight.el#getting-started
-#+begin_src emacs-lisp
-;; (defvar bootstrap-version)
-;; (let ((bootstrap-file
-;;        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-;;       (bootstrap-version 5))
-;;   (unless (file-exists-p bootstrap-file)
-;;     (with-current-buffer
-;; 	(url-retrieve-synchronously
-;; 	 "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-;; 	 'silent 'inhibit-cookies)
-;;       (goto-char (point-max))
-;;       (eval-print-last-sexp)))
-;;   (load bootstrap-file nil 'nomessage))
-;; (straight-use-package 'use-package)
-
+not currently tangling due to issues with default git repos
+#+begin_src emacs-lisp :tangle no
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+	(url-retrieve-synchronously
+	 "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	 'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+(straight-use-package 'use-package)
 #+end_src
+
 note: Users of Emacs versions >= 27 will want to add:
 #+begin_src emacs-lisp
   (setq package-enable-at-startup nil)
@@ -464,15 +465,15 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim,
 #+end_src
 ** Org blocks insert mode
 Switch to org edit mode when pressing `i` insert key
-#+begin_src emacs-lisp
-;; (add-hook 'org-mode-hook
-;;   (lambda ()
-;;     (add-hook 'evil-insert-state-entry-hook
-;;       (lambda ()
-;;         (when (org-in-src-block-p)
-;;           (org-edit-special)
-;;           (evil-insert-state)))
-;;       0 t)))
+#+begin_src emacs-lisp :tangle no
+(add-hook 'org-mode-hook
+  (lambda ()
+    (add-hook 'evil-insert-state-entry-hook
+      (lambda ()
+        (when (org-in-src-block-p)
+          (org-edit-special)
+          (evil-insert-state)))
+      0 t)))
 #+end_src
 ** snippets:
 *** yas-snippet
@@ -485,16 +486,8 @@ Switch to org edit mode when pressing `i` insert key
   )
 (require 'yasnippet)
 (yas-global-mode 1)
+#+end_src
 
-#+end_src
-*** doom snippets
-see  https://github.com/hlissner/doom-snippets
-#+begin_src emacs-lisp
-;; (use-package doom-snippets
-;;   :ensure t
-;;   :load-path "/home/drishal/.emacs.d/custom-repos/doom-snippets"
-;;   :after yasnippet)
-#+end_src
 ** org tempo for all the beautiful snippets:
 
 #+begin_src emacs-lisp
@@ -526,7 +519,7 @@ https://github.com/minad/org-modern
 (setq org-edit-src-content-indentation 0) 
 #+end_src
 ** company org block
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   ;; (use-package company-org-block
   ;;   :ensure t
   ;;   :custom
