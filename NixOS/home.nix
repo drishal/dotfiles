@@ -135,7 +135,6 @@ home.packages = with pkgs; [
   home.file."/home/drishal/.config/dunst/dunstrc".source = ../config/dunst/dunstrc;
 
   # conky
-  
   home.file."/home/drishal/.config/conky/onedark.conkyrc".source = ../config/conky/onedark.conkyrc;
   # qtile config
   #home.file."/home/drishal/.config/qtile/config.py".source =../config/qtile/config.py;
