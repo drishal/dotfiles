@@ -1,7 +1,7 @@
 # aliases
 alias nix-config="sudo vim /etc/nixos/configuration.nix"
-alias xon="~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
-alias xon-glx="~/Desktop/games/Xonotic/xonotic-linux-glx.sh"
+alias xon="steam-run ~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
+alias xon-glx="steam-run ~/Desktop/games/Xonotic/xonotic-linux-glx.sh"
 alias stk="~/Desktop/games/SuperTuxKart-1.2-linux/run_game.sh"
 
 # yay = pary
@@ -59,6 +59,7 @@ alias yt-dlp-mp3="yt-dlp -x --audio-format=mp3"
 
 #distrobox
 alias fedora-distrobox="distrobox-enter fedora-toolbox-35"
+alias arch-distrobox="distrobox-enter Arch"
 
 # Bedrock alias
 alias bed-ubuntu="strat -r tut-ubuntu bash"

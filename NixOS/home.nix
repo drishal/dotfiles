@@ -3,10 +3,16 @@
 {
 imports=[
 #  ./emacs-override.nix
+#  ./cachix.nix 
 ];
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  # cachix
+  # caches.cachix = [
+  #   "emacsPgtkGcc"
+  #   ];
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -27,10 +33,7 @@ imports=[
       extraConfig = 
       ''
         ${builtins.readFile ../config/nvim/init.vim }
-
         lua << EOF
-        
-
         ${builtins.readFile ../config/nvim/init.lua}
       '';
       plugins = with pkgs.vimPlugins; [
@@ -48,28 +51,32 @@ imports=[
     rnix-lsp gcc vimPlugins.packer-nvim
     ripgrep fd nodePackages.pyright];
     };
-    #  rofi = {
-    #    enable = false;
-    #    theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
-    #  };
+      rofi = {
+        enable = true;
+        theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
+      };
     # # git
-    #  git = {
-    #    enable = true;
-    #    userName = "drishal";
-    #    userEmail = "drishalballaney@gmail.com";
-    #  };
+    git = {
+      enable = true;
+      userName = "drishal";
+      userEmail = "drishalballaney@gmail.com";
+    };
 
-#       emacs = {
-#         enable = true;
-#         package = pkgs.emacsPgtkGcc;
-#         extraPackages = (epkgs: [ epkgs.vterm ] );
-#       };
+     # emacs = {
+     #   enable = true;
+     #   package = pkgs.emacsPgtkGcc;
+     #   extraPackages = (epkgs: [ epkgs.vterm ] );
+     # };
   };
 
 home.packages = with pkgs; [
   neofetch man
   distrobox man-pages
   cachix 
+  (pkgs.nerdfonts.override {
+    fonts = ["FiraCode"];
+  })
+
   # libgccjit
   # (callPackage ./distrobox.nix {})
   ];
@@ -88,12 +95,6 @@ home.packages = with pkgs; [
     # };
   };
 
-  # cachix
-  # caches.cachix = [
-  #   "emacsPgtkGcc"
-  #"someOtherCachix"
-  #{ name = "someCachixWithSha"; sha256 = "..."; }
- 
   #xmonad config
   #home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
   #home.file."/home/drishal/.xmobarrc".source = ../.xmobarrc;
@@ -110,7 +111,8 @@ home.packages = with pkgs; [
 
   # rofi
   # home.file."/home/drishal/.config/rofi/config.rasi".source = ../config/rofi/config.rasi;
-  home.file."/home/drishal/.config/rofi/config".source = ../config/rofi/config;
+
+  # home.file."/home/drishal/.config/rofi/config".source = ../config/rofi/config;
 
   # setting Xresources
   home.file."/home/drishal/.Xresources".source = ../.Xresources;

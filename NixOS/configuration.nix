@@ -8,14 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-     #  ./packages/batdistrack/default.nix
-      # ./packages/river/default.nix
-      # ./overlays/river.nix
-      # ../../../../etc/nixos/ardware-configuration.nix
-      # import cachix.nix
-      # (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
-      #<home-manager/nixos>
-      #./cachix.nix
+      ./cachix.nix
     ];
 
   # kernel parameters
@@ -45,9 +38,6 @@
     {
       enable = true;
       cpuFreqGovernor="schedutil";
-      powerDownCommands = ''
-      ${pkgs.batdistrack}/bin/batdistrack
-    ''  ;
     };
     # open cl
   hardware.opengl.extraPackages = with pkgs; [
@@ -103,7 +93,8 @@
   # programs.zsh.enable = true;
 
   # kernel
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
     # Enable the Desktop Environment/Window managers.
   services.xserver = {
     enable = true;
@@ -125,7 +116,7 @@
     # Desktop Environment
     desktopManager = {
       plasma5.enable = true;
-      # xfce.enable = true;
+      xfce.enable = true;
       # lxqt.enable = true;
       # gnome.enable = true;
     };
@@ -177,6 +168,7 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  # services.logind.lidSwitch = "suspend"; 
   # Enable sound.
   sound.enable = true;
   security.rtkit.enable = true;
@@ -201,9 +193,6 @@
   hardware.acpilight.enable = true;
 
   # systemd scripts
-  systemd.packages = with pkgs; [
-    # batdistrack
-  ];
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -228,7 +217,7 @@
   environment.systemPackages = with pkgs; [
     wget vim haskellPackages.xmobar
     alacritty xorg.xkill git
-    man teams batdistrack
+    man teams 
     papirus-icon-theme xorg.xf86videoamdgpu lxappearance
     lxsession libnotify xclip starship
     cmake volumeicon usbutils
@@ -255,11 +244,12 @@
     river clang-tools ed materia-theme  
     discord waybar swaybg pkg-config
     kitty sway-contrib.grimshot wofi
-    dunst networkmanagerapplet tree dwmblocks
+    dunst networkmanagerapplet tree dwmblocks conky
+    ciscoPacketTracer8
     # batdistrack 
     # some xfce apps
     xfce.xfce4-clipman-plugin xfce.thunar xfce.xfce4-taskmanager
-
+    ferdi
     # autoconf automake inkscape gdk-pixbuf sassc pkgconfig
     # emacsPgtkGcc
     #rust home-manager metasploit theharvester
@@ -303,7 +293,7 @@
     mouse.middleEmulation = false;
   };#
 
-
+  services.gvfs.enable = true;
 
   # overlays
 
@@ -356,10 +346,10 @@
 #    })
 #
     # batdistrack
-    (self: super: {
-      batdistrack = super.callPackage ./packages/batdistrack/default.nix {};
-    })
-    # (final: prev: {
+    # (self: super: {
+    #   batdistrack = super.callPackage ./packages/batdistrack/default.nix {};
+    # })
+    # # (final: prev: {
     #   picom = prev.picom.overrideAttrs (old: { src = /home/drishal/Desktop/git-stuff/picom;});
     # })
 
@@ -375,7 +365,8 @@
           src = builtins.fetchTarball {
             url = https://github.com/yshui/picom/archive/refs/heads/next.zip;
             #sha256 = lib.fakeSha256;
-            sha256 = "0g8k1krxryy9il2347z1gqv6bgg94galzzw0b90prr5q7cnvvgk1";
+            # sha256 = "0g8k1krxryy9il2347z1gqv6bgg94galzzw0b90prr5q7cnvvgk1";
+            sha256 = "sha256:0lh3p3lkafkb2f0vqd5d99xr4wi47sgb57x65wa2cika8pz5sikv";
           };
         });
       })

@@ -525,7 +525,8 @@ main =
      . docks
      . ewmhFullscreen
      . ewmh
-     . withSB (statusBarProp "/home/drishal/.local/bin/xmobar ~/dotfiles/xmobar/xmobar-onedark.hs" (pure myXmobarPP)) 
+     -- . withSB (statusBarProp "/home/drishal/.local/bin/xmobar ~/dotfiles/xmobar/xmobar-onedark.hs" (pure myXmobarPP)) 
+     . withSB (statusBarProp "xmobar ~/dotfiles/xmobar/xmobar-onedark.hs" (pure myXmobarPP)) 
      $ myConfig
 #+end_src
 
