@@ -1,15 +1,9 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs,inputs, lib ,... }:
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [ 
       ./hardware-configuration.nix
-      # ./cachix.nix
-      ./cachix/nix-community.nix
     ];
 
   # kernel parameters
@@ -205,7 +199,9 @@
     isNormalUser = true;
     extraGroups = [ "wheel"  "network" "video"  "-manager" "docker"]; # Enable ‘sudo’ for the user.
   };
-
+  security.sudo.extraConfig = ''
+    Defaults 	insults
+    '';
   #jaba
   programs.java = { enable = true ; };
 
@@ -249,6 +245,8 @@
     kitty sway-contrib.grimshot wofi
     dunst networkmanagerapplet tree dwmblocks conky
     ciscoPacketTracer8
+    onefetch
+    ripgrep 
     # batdistrack 
     # some xfce apps
     xfce.xfce4-clipman-plugin xfce.thunar xfce.xfce4-taskmanager
