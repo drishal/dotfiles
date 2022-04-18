@@ -19,11 +19,12 @@
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
     emacs-overlay = {
-      url = "github:nix-community/emacs-overlay";
+      # url = "github:nix-community/emacs-overlay";
+      url = "github:nix-community/emacs-overlay/1d1478b3b1f1ac68924705a77bcdc655925cf408";
     };
   };
 
-  outputs = { nixpkgs, home-manager, discord-flake ,nur, emacs-overlay, neovim-nightly-overlay, cachix , ... }@inputs:
+  outputs = { nixpkgs, home-manager, discord-flake ,nur, emacs-overlay, neovim-nightly-overlay, cachix , declarative-cachix ,... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -55,7 +56,7 @@
           inherit system;
           modules = [
             # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
-            { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay ]; }
+            { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay  ]; }
             ./NixOS/configuration.nix
             # ./enable-flake.nix
 

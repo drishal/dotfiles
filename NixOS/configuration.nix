@@ -8,7 +8,8 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./cachix.nix
+      # ./cachix.nix
+      ./cachix/nix-community.nix
     ];
 
   # kernel parameters
@@ -17,6 +18,7 @@
   # microde
   hardware.cpu.amd.updateMicrocode = true;
 
+  nix.trustedUsers = [ "root" "drishal" ];
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -65,6 +67,7 @@
   nix.package = pkgs.nixUnstable;
   nix.extraOptions = ''
       experimental-features = nix-command flakes
+      extra-sandbox-paths = /nix/var/cache/ccache
    '';
   # non-free stuff
   nixpkgs.config.allowUnfree = true;
@@ -257,10 +260,10 @@
     # python stuff
     python39
     # python39Packages.numpy python39Packages.pandas
-    # ((emacsPackagesNgGen emacsPgtkGcc).emacsWithPackages
-    #   (epkgs: [
-    #     epkgs.vterm]))
-  ];
+  #     ((emacsPackagesFor emacsPgtkGcc).emacsWithPackages
+  #       (epkgs: [
+  #         epkgs.vterm]))
+   ];
   # virtualbox
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "drishal" ];

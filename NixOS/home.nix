@@ -3,17 +3,17 @@
 {
 imports=[
 #  ./emacs-override.nix
-#  ./cachix.nix 
+ #  ./cachix.nix 
+#  ./cachix/emacs.nix
+  ./home-manager-cachix.nix
 ];
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  # cachix
-  # caches.cachix = [
-  #   "emacsPgtkGcc"
-  #   ];
-
+  caches.cachix = [
+      {name="nix-community"; sha256 = "00lpx4znr4dd0cc4w4q8fl97bdp7q19z1d3p50hcfxy26jz5g21g";}
+    ];
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home = {
@@ -62,11 +62,11 @@ imports=[
       userEmail = "drishalballaney@gmail.com";
     };
 
-     # emacs = {
-     #   enable = true;
-     #   package = pkgs.emacsPgtkGcc;
-     #   extraPackages = (epkgs: [ epkgs.vterm ] );
-     # };
+       emacs = {
+         enable = true;
+         package = pkgs.emacsPgtkGcc;
+         extraPackages = (epkgs: [ epkgs.vterm ] );
+       };
   };
 
 home.packages = with pkgs; [
