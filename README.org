@@ -20,9 +20,9 @@ Don't worry this readme is there just to tackle this very issue
    #+begin_src bash
    sudo nixos-rebuild switch --flake ~/dotfiles -L
    #+end_src
-   and to setup home manager:
+   and to setup home manager for the first time:
    #+begin_src bash
-   nix run github:nix-community/home-manager
+      nix run --no-write-lock-file --impure github:nix-community/home-manager -- switch   --flake  .
    #+end_src
    finally
    #+begin_src bash 
