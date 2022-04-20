@@ -159,16 +159,17 @@
   #optimizing storage in nixos
   nix.settings.auto-optimise-store = true;
 
+  # non-free stuff
+  nixpkgs.config.allowUnfree = true;
+  hardware.enableRedistributableFirmware = true;
+
+
   # For 32 bit applications
   hardware.opengl.driSupport32Bit = true;
   # setting the video driver
   services.xserver.videoDrivers = [ "amdgpu" ];
   # enable opengl
   hardware.opengl.enable = true;
-
-  # non-free stuff
-  nixpkgs.config.allowUnfree = true;
-  hardware.enableRedistributableFirmware = true;
 
   ## Packages
   programs.java = { enable = true; };
