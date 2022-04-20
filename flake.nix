@@ -10,7 +10,7 @@
     };
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    discord-flake = {url = github:InternetUnexplorer/discord-overlay;};
+    discord-flake = { url = github:InternetUnexplorer/discord-overlay; };
 
     nur.url = "github:nix-community/NUR";
 
@@ -20,11 +20,11 @@
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      url = "github:nix-community/emacs-overlay/1d1478b3b1f1ac68924705a77bcdc655925cf408";
+      url = "github:nix-community/emacs-overlay/5c7ecd9b6d6101b3263f4b0f8b7fec32756a1bbd";
     };
   };
 
-  outputs = { nixpkgs, home-manager, discord-flake ,nur, emacs-overlay, neovim-nightly-overlay, cachix , declarative-cachix ,... }@inputs:
+  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, neovim-nightly-overlay, cachix, declarative-cachix, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -34,16 +34,17 @@
       };
 
       lib = nixpkgs.lib;
-    in {
+    in
+    {
       homeConfigurations."drishal" = home-manager.lib.homeManagerConfiguration {
-      # also dont forget to use this command once
-      # nix run --no-write-lock-file --impure github:nix-community/home-manager -- switch   --flake  . 
+        # also dont forget to use this command once
+        # nix run --no-write-lock-file --impure github:nix-community/home-manager -- switch   --flake  . 
         inherit system pkgs;
-        username="drishal";
+        username = "drishal";
         # pkgs = nixpkgs.legacyPackages.${system};
         homeDirectory = "/home/drishal";
         configuration = {
-          nixpkgs.overlays = [ inputs.emacs-overlay.overlay  inputs.neovim-nightly-overlay.overlay  ];
+          nixpkgs.overlays = [ inputs.emacs-overlay.overlay inputs.neovim-nightly-overlay.overlay ];
           # nixpkgs.overlays = [ inputs ];
           imports = [
             ./NixOS/home.nix
@@ -56,7 +57,7 @@
           inherit system;
           modules = [
             # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
-            { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay  ]; }
+            { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay ]; }
             ./NixOS/configuration.nix
             # ./enable-flake.nix
 
@@ -68,10 +69,10 @@
     };
 }
 
-  # home-manager.nixosModules.home-manager
-  # {
-  #   home-manager.useGlobalPkgs = true;
-  #   home-manager.useUserPackages = true;
-  # home-manager.users.drishal = import ./NixOS/home.nix;
-  # }
+# home-manager.nixosModules.home-manager
+# {
+#   home-manager.useGlobalPkgs = true;
+#   home-manager.useUserPackages = true;
+# home-manager.users.drishal = import ./NixOS/home.nix;
+# }
 

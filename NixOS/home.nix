@@ -1,19 +1,16 @@
-{ config,inputs ,pkgs, ... }:
+{ config, inputs, pkgs, ... }:
 
 {
-imports=[
-#  ./emacs-override.nix
- #  ./cachix.nix 
-#  ./cachix/emacs.nix
-  ./home-manager-cachix.nix
-];
+  imports = [
+    ./home-manager-cachix.nix
+  ];
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
   caches.cachix = [
-      {name="nix-community"; sha256 = "00lpx4znr4dd0cc4w4q8fl97bdp7q19z1d3p50hcfxy26jz5g21g";}
-    ];
+    { name = "nix-community"; sha256 = "00lpx4znr4dd0cc4w4q8fl97bdp7q19z1d3p50hcfxy26jz5g21g"; }
+  ];
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home = {
@@ -30,31 +27,49 @@ imports=[
       enable = true;
       package = pkgs.neovim-nightly;
       # extraConfig =  builtins.readfile ../config/nvim/init-nix.vim;
-      extraConfig = 
-      ''
-        ${builtins.readFile ../config/nvim/init.vim }
-        lua << EOF
-        ${builtins.readFile ../config/nvim/init.lua}
-      '';
+      extraConfig =
+        ''
+          ${builtins.readFile ../config/nvim/init.vim }
+          lua << EOF
+          ${builtins.readFile ../config/nvim/init.lua}
+        '';
       plugins = with pkgs.vimPlugins; [
         vim-addon-nix
-        nvim-lspconfig nvim-cmp cmp-buffer cmp-path  cmp-spell
-        dashboard-nvim 
-       (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars)) cmp-treesitter
-        orgmode onedark-nvim neoformat vim-nix cmp-nvim-lsp
-        barbar-nvim nvim-web-devicons 
-        vim-airline vim-airline-themes
-        nvim-autopairs  neorg
+        nvim-lspconfig
+        nvim-cmp
+        cmp-buffer
+        cmp-path
+        cmp-spell
+        dashboard-nvim
+        (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
+        cmp-treesitter
+        orgmode
+        onedark-nvim
+        neoformat
+        vim-nix
+        cmp-nvim-lsp
+        barbar-nvim
+        nvim-web-devicons
+        vim-airline
+        vim-airline-themes
+        nvim-autopairs
+        neorg
         vim-markdown
-    ];
-    extraPackages = with pkgs; [ 
-    rnix-lsp gcc vimPlugins.packer-nvim
-    ripgrep fd nodePackages.pyright];
+      ];
+      extraPackages = with pkgs; [
+        rnix-lsp
+        gcc
+        vimPlugins.packer-nvim
+        ripgrep
+        fd
+        nodePackages.pyright
+        
+      ];
     };
-      rofi = {
-        enable = true;
-        theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
-      };
+    rofi = {
+      enable = true;
+      theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
+    };
     # # git
     git = {
       enable = true;
@@ -62,33 +77,39 @@ imports=[
       userEmail = "drishalballaney@gmail.com";
     };
 
-       emacs = {
-         enable = true;
-         package = pkgs.emacsPgtkGcc;
-         extraPackages = (epkgs: [ epkgs.vterm ] );
-       };
+    emacs = {
+      enable = true;
+      package = pkgs.emacsPgtkGcc;
+      extraPackages = (epkgs: [ epkgs.vterm ]);
+    };
+
+    chromium = {
+      enable=true;
+      commandLineArgs=["--ignore-gpu-blocklist" "--enable-gpu-rasterization" "--enable-zero-copy" "--disable-gpu-driver-bug-workarounds" "--oauth2-client-id=77185425430.apps.googleusercontent.com" "--oauth2-client-secret=OTJgUOQcT7lO7GsGZq2G4IlT" ];
+    };
   };
 
-home.packages = with pkgs; [
-  neofetch man
-  distrobox man-pages
-  cachix 
-  (pkgs.nerdfonts.override {
-    fonts = ["FiraCode"];
-  })
-
-  # libgccjit
-  # (callPackage ./distrobox.nix {})
+  home.packages = with pkgs; [
+    neofetch
+    man
+    distrobox
+    man-pages
+    cachix
+    rust-analyzer
+    neovide
+    (pkgs.nerdfonts.override {
+      fonts = [ "FiraCode" ];
+    })
   ];
 
 
   # services
   services = {
-  #   emacs = {
-  #     enable = true;
-  #     client.enable =true;
-  #     socketActivation.enable = true;
-  #   };
+    #   emacs = {
+    #     enable = true;
+    #     client.enable =true;
+    #     socketActivation.enable = true;
+    #   };
     # dunst = {
     #  enable = true;
     #  iconTheme = pkgs.papirus-icon-theme; 
@@ -142,17 +163,6 @@ home.packages = with pkgs; [
   #home.file."/home/drishal/.config/qtile/config.py".source =../config/qtile/config.py;
   # home.file."/home/drishal/.config/qtile/autostart.sh".source =../config/qtile/autostart.sh;
 
-  #starship
 
-  #home.file."/home/drishal/.config/starship.toml".source =../config/starship.toml;
-
-  # This value determines the Home Manager release that your
-  # configuration is compatible with. This helps avoid breakage
-  # when a new Home Manager release introduces backwards
-  # incompatible changes.
-  #
-  # You can update Home Manager without changing this value. See
-  # the Home Manager release notes for a list of state version
-  # changes in each release.
   # home.stateVersion = "21.05";
 }

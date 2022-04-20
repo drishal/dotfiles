@@ -420,6 +420,6 @@ AGKOZAK_BLANK_LINES=1
 
 * some misc exports
 ** Terminfo stull
-#+begin_src shell
+#+begin_src shell :tangle no
  export TERMINFO_DIRS=/usr/share/terminfo
 #+end_src

@@ -74,7 +74,7 @@
   - [[#languages-and-lsp-mode][languages and lsp-mode]]
   - [[#which-key][which key]]
 - [[#prevent-saving-to-x-clipboard-manager][prevent "saving to x clipboard manager]]
-- [[#prevent-warnings-buffer][prevent *warnings* buffer]]
+- [[#prevent-warnings-spam][prevent *warnings* spam]]
 
 * emacs startup
 ** shift theme variables to ~custom.el~, make sure to create it if it does not exist
@@ -598,7 +598,7 @@ https://github.com/skangas/mentor
 #+end_src
 ** mu4e
 https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-01.org
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package mu4e
   :ensure nil
   ;; :defer 20 ; Wait until 20 seconds after startup
@@ -1058,8 +1058,8 @@ https://github.com/minad/marginalia
 ** languages and lsp-mode
 https://emacs-lsp.github.io/lsp-mode/
 and also https://emacs-lsp.github.io/lsp-mode/page/languages/
-*** General Setup
-#+begin_src emacs-lisp
+*** General Setup with lsp
+#+begin_src emacs-lisp 
 (use-package flycheck :ensure t)
 (use-package lsp-mode :ensure t
   :init
@@ -1087,6 +1087,11 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 ;; (setq lsp-use-plists t)
 ;;(setq lsp-idle-delay 0.500)
+#+end_src
+*** Eglot setup
+#+begin_src emacs-lisp :tangle no
+(use-package eglot :ensure t)
+(add-hook 'foo-mode-hook 'eglot-ensure)
 #+end_src
 *** sql
 #+begin_src emacs-lisp
@@ -1125,6 +1130,9 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
  (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
                   :major-modes '(nix-mode)
                   :server-id 'nix))
+
+(use-package nixpkgs-fmt :ensure t)
+;; (add-hook 'nix-mode-hook 'nixpkgs-fmt-on-save-mode)
 #+end_src
 *** java
 #+begin_src emacs-lisp
@@ -1282,7 +1290,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (setq x-select-enable-clipboard-manager nil)
 #+end_src
 
-* prevent *warnings* buffer
+* prevent *warnings* spam
 #+begin_src emacs-lisp
 (setq-default warning-minimum-level :error)
 #+end_src

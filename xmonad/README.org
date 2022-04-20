@@ -546,7 +546,7 @@ data HelloWorld = HelloWorld
      run   HelloWorld = return "<fc=red>Hello World!!</fc>"
 #+end_src
 
-#+begin_src haskell :tangle ~/.xmonad/xmobar.hs
+#+begin_src haskell :tangle no
 import Xmobar
 --import Colors.DoomOne
 import Colors.Dracula
