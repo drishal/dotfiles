@@ -1,6 +1,7 @@
 #+TITLE: Qtile config
 #+PROPERTY: header-args:python :tangle ~/.config/qtile/config.py
 * Table of contents :toc:
+-  [[#setting-up][Setting up]]
 - [[#imports][Imports]]
 - [[#some-variables][Some variables]]
 - [[#colors][Colors]]
@@ -22,6 +23,12 @@
 - [[#some-more-variables][Some more variables]]
 - [[#floating-layout-rules][Floating layout rules]]
 - [[#autostarting-programs][Autostarting programs]]
+
+*  Setting up
+if the qtile dir does not exists, execute this
+#+begin_src bash :tangle no
+mkdir -p ~/.config/qtile
+#+end_src
 
 * Imports
 #+begin_src python

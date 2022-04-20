@@ -1,6 +1,7 @@
 #+TITLE: River Conifg 
 #+PROPERTY: header-args :tangle ~/.config/river/init :shebang "#!/bin/sh"
 * Table of Contents :toc:
+- [[#setting-up][Setting up:]]
 - [[#some-exports][some exports]]
   - [[#swap-ctrl-and-caps][swap ctrl and caps]]
   - [[#gtk-stuff][gtk stuff]]
@@ -14,6 +15,12 @@
 - [[#auto-starting-apps][auto starting apps]]
   - [[#set-app-ids-of-views-which-should-float][Set app-ids of views which should float]]
   - [[#rivertile-defaults][Rivertile Defaults]]
+
+* Setting up: 
+if the river dir does not exists, execute this
+#+begin_src bash :tangle no
+mkdir -p ~/.config/river
+#+end_src
 
 * some exports
 ** swap ctrl and caps
@@ -287,6 +294,7 @@ riverctl spawn lxpolkit
 riverctl spawn waybar
 # riverctl spawn /usr/lib/notification-daemon-1.0/notification-daemon
 riverctl spawn dunst
+# riverctl spawn  "deadd-notification-center"
 riverctl spawn "nm-applet --indicator"
 riverctl spawn "blueman-applet"
 riverctl spawn "emacs --daemon"

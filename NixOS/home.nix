@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./home-manager-cachix.nix
+    ./packages/declarative-cachix/home-manager-cachix.nix
   ];
 
   # Let Home Manager install and manage itself.

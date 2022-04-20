@@ -142,7 +142,7 @@
     xfce.thunar
     xfce.xfce4-taskmanager
     ferdi
-
+    gtk-layer-shell
     # autoconf automake inkscape gdk-pixbuf sassc pkgconfig
     # emacsPgtkGcc
     #rust home-manager metasploit theharvester
