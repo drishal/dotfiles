@@ -7,5 +7,6 @@
     ./packages.nix
     ./users.nix
     ./virtualization.nix
+    ./searx.nix
   ];
 }
