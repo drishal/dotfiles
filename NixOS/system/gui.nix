@@ -44,9 +44,28 @@
     };
   };
 
-  # fprint
-  # services.fprintd.enable = true;
-  services.xserver.displayManager.sessionPackages = [ pkgs.river ];
+  # river 
+  services.xserver.displayManager.sessionPackages = [
+    (pkgs.river.overrideAttrs
+      (prevAttrs: rec {
+        postInstall =
+          let
+            riverSession = ''
+              [Desktop Entry]
+              Name=River
+              Comment=Dynamic Wayland compositor
+              Exec=river
+              Type=Application
+            '';
+          in
+          ''
+            mkdir -p $out/share/wayland-sessions
+            echo "${riverSession}" > $out/share/wayland-sessions/river.desktop
+          '';
+        passthru.providedSessions = [ "river" ];
+      })
+    )
+  ];
   services.xserver.videoDrivers = [ "amdgpu" ];
 
   services.gnome.tracker.enable = false;
@@ -55,5 +74,15 @@
   # resolve gnome and plasma issues
   programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
 
- 
+  #some overlays
+  nixpkgs.overlays = [
+    #suckless overlays
+    (final: prev: {
+      dwm = prev.dwm.overrideAttrs (old: { src = ../../suckless/dwm-6.3; });
+      dwmblocks = prev.dwmblocks.override (old: {
+        # src = ../suckless/dwmblocks
+        conf = ../../suckless/dwmblocks/blocks.def.h;
+      });
+    })
+  ];
 }

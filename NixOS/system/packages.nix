@@ -38,7 +38,6 @@
     firefox
     neofetch
     steam-run
-    picom
     inxi
     hack-font
     xarchiver
@@ -114,7 +113,6 @@
     pass
     surf
     gnumake
-    river
     clang-tools
     ed
     materia-theme
@@ -154,6 +152,33 @@
     #     ((emacsPackagesFor emacsPgtkGcc).emacsWithPackages
     #       (epkgs: [
     #         epkgs.vterm]))
-  ];
 
+    # picom
+    (picom.overrideAttrs (_: {
+      src = pkgs.fetchFromGitHub {
+        repo = "picom";
+        owner = "yshui";
+        rev = "cd50596f0ed81c0aa28cefed62176bd6f050a1c6";
+        sha256 = "0lh3p3lkafkb2f0vqd5d99xr4wi47sgb57x65wa2cika8pz5sikv";
+      };
+    }))
+    # river
+    (river.overrideAttrs (prevAttrs: rec {
+      postInstall =
+        let
+          riverSession = ''
+            [Desktop Entry]
+            Name=River
+            Comment=Dynamic Wayland compositor
+            Exec=river
+            Type=Application
+          '';
+        in
+        ''
+          mkdir -p $out/share/wayland-sessions
+          echo "${riverSession}" > $out/share/wayland-sessions/river.desktop
+        '';
+      passthru.providedSessions = [ "river" ];
+    }))
+  ];
 }
