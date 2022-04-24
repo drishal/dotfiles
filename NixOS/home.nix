@@ -3,6 +3,7 @@
 {
   imports = [
     ./packages/declarative-cachix/home-manager-cachix.nix
+    # ../../.private-stuff/hm-email.nix
   ];
 
   # Let Home Manager install and manage itself.
@@ -63,7 +64,7 @@
         ripgrep
         fd
         nodePackages.pyright
-        
+
       ];
     };
     rofi = {
@@ -80,12 +81,12 @@
     emacs = {
       enable = true;
       package = pkgs.emacsPgtkGcc;
-      extraPackages = (epkgs: [ epkgs.vterm ]);
+      extraPackages = (epkgs: [ epkgs.vterm]);
     };
 
     chromium = {
-      enable=true;
-      commandLineArgs=["--ignore-gpu-blocklist" "--enable-gpu-rasterization" "--enable-zero-copy" "--disable-gpu-driver-bug-workarounds" "--oauth2-client-id=77185425430.apps.googleusercontent.com" "--oauth2-client-secret=OTJgUOQcT7lO7GsGZq2G4IlT" ];
+      enable = true;
+      commandLineArgs = [ "--ignore-gpu-blocklist" "--enable-gpu-rasterization" "--enable-zero-copy" "--disable-gpu-driver-bug-workarounds" "--oauth2-client-id=77185425430.apps.googleusercontent.com" "--oauth2-client-secret=OTJgUOQcT7lO7GsGZq2G4IlT" ];
     };
   };
 
@@ -98,7 +99,7 @@
     rust-analyzer
     neovide
     (pkgs.nerdfonts.override {
-      fonts = [ "FiraCode" ];
+      fonts = [ "FiraCode" "FantasqueSansMono"];
     })
   ];
 
@@ -116,53 +117,53 @@
     # };
   };
 
-  #xmonad config
-  #home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
-  #home.file."/home/drishal/.xmobarrc".source = ../.xmobarrc;
-  #home.file."/home/drishal/.xmonad/lib".source = ../.xmonad/lib;
+    #xmonad config
+    #home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
+    #home.file."/home/drishal/.xmobarrc".source = ../.xmobarrc;
+    #home.file."/home/drishal/.xmonad/lib".source = ../.xmonad/lib;
 
-  #zsh config
-  # home.file."/home/drishal/.zshrc".source = ../.zshrc;
+    #zsh config
+    # home.file."/home/drishal/.zshrc".source = ../.zshrc;
 
-  # sleep test
-  # home.file."${pkgs.systemd}/lib/systemd/system-sleep/batdistrack".source = ../batdistrack;
+    # sleep test
+    # home.file."${pkgs.systemd}/lib/systemd/system-sleep/batdistrack".source = ../batdistrack;
 
-  # deadd notifications
-  home.file."/home/drishal/.config/deadd".source = ../config/deadd;
+    # deadd notifications
+    home.file."/home/drishal/.config/deadd".source = ../config/deadd;
 
-  # rofi
-  # home.file."/home/drishal/.config/rofi/config.rasi".source = ../config/rofi/config.rasi;
+    # rofi
+    # home.file."/home/drishal/.config/rofi/config.rasi".source = ../config/rofi/config.rasi;
 
-  # home.file."/home/drishal/.config/rofi/config".source = ../config/rofi/config;
+    # home.file."/home/drishal/.config/rofi/config".source = ../config/rofi/config;
 
-  # setting Xresources
-  home.file."/home/drishal/.Xresources".source = ../.Xresources;
+    # setting Xresources
+    home.file."/home/drishal/.Xresources".source = ../.Xresources;
 
-  # kitty
-  home.file."/home/drishal/.config/kitty".source = ../config/kitty;
+    # kitty
+    home.file."/home/drishal/.config/kitty".source = ../config/kitty;
 
-  # picom config
-  home.file."/home/drishal/.config/picom/picom.conf".source = ../config/picom/picom.conf;
+    # picom config
+    home.file."/home/drishal/.config/picom/picom.conf".source = ../config/picom/picom.conf;
 
-  # river
-  # home.file."/home/drishal/.config/river".source = ../config/river;
+    # river
+    # home.file."/home/drishal/.config/river".source = ../config/river;
 
-  #waybar
-  home.file."/home/drishal/.config/waybar".source = ../config/waybar;
-  home.file."/home/drishal/.config/waybar/style.css".source = ../config/waybar/style.css;
+    #waybar
+    home.file."/home/drishal/.config/waybar".source = ../config/waybar;
+    home.file."/home/drishal/.config/waybar/style.css".source = ../config/waybar/style.css;
 
-  # alacritty
-  home.file."/home/drishal/.config/alacritty/alacritty.yml".source = ../config/alacritty/alacritty.yml;
+    # alacritty
+    home.file."/home/drishal/.config/alacritty/alacritty.yml".source = ../config/alacritty/alacritty.yml;
 
-  # dunst
-  home.file."/home/drishal/.config/dunst/dunstrc".source = ../config/dunst/dunstrc;
+    # dunst
+    home.file."/home/drishal/.config/dunst/dunstrc".source = ../config/dunst/dunstrc;
 
-  # conky
-  home.file."/home/drishal/.config/conky/onedark.conkyrc".source = ../config/conky/onedark.conkyrc;
-  # qtile config
-  #home.file."/home/drishal/.config/qtile/config.py".source =../config/qtile/config.py;
-  # home.file."/home/drishal/.config/qtile/autostart.sh".source =../config/qtile/autostart.sh;
+    # conky
+    home.file."/home/drishal/.config/conky/onedark.conkyrc".source = ../config/conky/onedark.conkyrc;
+    # qtile config
+    #home.file."/home/drishal/.config/qtile/config.py".source =../config/qtile/config.py;
+    # home.file."/home/drishal/.config/qtile/autostart.sh".source =../config/qtile/autostart.sh;
 
 
-  # home.stateVersion = "21.05";
-}
+    # home.stateVersion = "21.05";
+  }

@@ -20,6 +20,7 @@
   - [[#disable-the-prompt-on-the-right-side][Disable the prompt on the right side]]
   - [[#vim-mode][vim mode]]
   - [[#async][async]]
+  - [[#zsh-nix-shell][zsh-nix-shell]]
 - [[#history-completions][History completions]]
 - [[#navigation][Navigation]]
 - [[#grml-zsh-config][Grml Zsh config]]
@@ -335,6 +336,10 @@ see https://github.com/jeffreytse/zsh-vi-mode
 ** async
 #+begin_src shell 
   zinit light mafredri/zsh-async
+#+end_src
+** zsh-nix-shell
+#+begin_src shell
+zinit light chisui/zsh-nix-shell
 #+end_src
 * History completions
 #+begin_src shell

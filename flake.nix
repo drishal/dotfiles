@@ -1,5 +1,5 @@
 {
-  description = "Configuration for my sysmem";
+  description = "Configuration for my system";
 
   inputs = {
 
@@ -20,11 +20,17 @@
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      url = "github:nix-community/emacs-overlay/5c7ecd9b6d6101b3263f4b0f8b7fec32756a1bbd";
+      url = "github:nix-community/emacs-overlay/6216f7c7e05c5f7d579dc898219207a8509be910";
     };
+
+    private-stuff = {
+     url = "path:/home/drishal/.private-stuff";
+     flake = false;
+   };
+
   };
 
-  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, neovim-nightly-overlay, cachix, declarative-cachix, ... }@inputs:
+  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, neovim-nightly-overlay, cachix, declarative-cachix, private-stuff, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -48,6 +54,8 @@
           # nixpkgs.overlays = [ inputs ];
           imports = [
             ./NixOS/home.nix
+            # ../.private-stuff/hm-email.nix
+            "${private-stuff}/hm-email.nix"
           ];
 
         };

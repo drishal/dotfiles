@@ -2,7 +2,7 @@
 
 # base system configuration
 {
-  boot.kernelPackages = pkgs.linuxPackages_zen; # alternative: linuxPackages_latest
+  boot.kernelPackages = pkgs.linuxPackages_latest; # alternative: linuxPackages_latest
 
   # kernel parameters
   boot.kernelParams = [ "iommu=pt" ];
@@ -71,7 +71,7 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    jack.enable = true;
+    jack.enable = false;
   };
   hardware.pulseaudio.enable = false;
   # backlight

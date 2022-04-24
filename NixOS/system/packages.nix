@@ -1,5 +1,6 @@
 { config, pkgs, inputs, lib, ... }:
 {
+  services.flatpak.enable = true;
   programs = {
 
     # java 
@@ -10,6 +11,9 @@
 
     # dconf
     dconf.enable = true;
+
+    # adb
+    adb.enable =true;
   };
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -69,6 +73,7 @@
     nodePackages.vscode-html-languageserver-bin
     zoom-us
     linuxPackages.cpupower
+    gnome.gnome-tweaks
     powertop
     inetutils
     nmap
@@ -95,6 +100,7 @@
     ncdu
     lm_sensors
     rnix-lsp
+    plasma5Packages.spectacle
     gnome.gnome-sound-recorder
     tmux
     ps_mem
@@ -135,6 +141,11 @@
     clang
     fdk_aac
     keepassxc
+    gnupg
+    axel
+    haruna
+    gnome.gnome-calculator
+    vlc
     # some xfce apps
     xfce.xfce4-clipman-plugin
     xfce.thunar

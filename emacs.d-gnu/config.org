@@ -538,6 +538,7 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
    (emacs-lisp . t)
    (python . t)
    (shell . t)
+   ;; (nix . t)
    ))
 (setq org-babel-python-command "python3")
 #+end_src
@@ -598,7 +599,7 @@ https://github.com/skangas/mentor
 #+end_src
 ** mu4e
 https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-01.org
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp 
 (use-package mu4e
   :ensure nil
   ;; :defer 20 ; Wait until 20 seconds after startup

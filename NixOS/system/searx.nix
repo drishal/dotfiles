@@ -2,7 +2,7 @@
 
 {
   services.searx = {
-    enable=true;
+    enable=false;
     settings = {
       server.port="8888";
       server.bind_address = "127.0.0.1";

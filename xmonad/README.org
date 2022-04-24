@@ -322,7 +322,7 @@ myStartupHook = do
         spawnOnce "xfce4-power-manager"
         spawnOnce "xfce4-clipman"
         -- spawnOnce "redshift -O 5000"
-        spawnOnce "volumeicon"
+        -- spawnOnce "volumeicon"
         spawnOnce "blueman-applet"
         -- spawnOnce "/home/drishal/.local/bin/xmobar  ~/dotfiles/xmobar/xmobar-onedark.hs"
         --spawnOnce "play  -v0.05  ~/Desktop/95.mp3"

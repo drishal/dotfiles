@@ -3,7 +3,7 @@
   users.users.drishal = {
     shell = pkgs.zsh;
     isNormalUser = true;
-    extraGroups = [ "wheel" "network" "video" "-manager" "docker" ];
+    extraGroups = [ "wheel" "network" "video" "-manager" "docker" "adb"];
   };
 
   security.sudo.extraConfig = ''

@@ -21,6 +21,7 @@ alias bs="brightnessctl s"
 alias wayland-screenshot="grimshot copy output"
 alias wayland-screenshot-area="grimshot copy area"
 alias v="nvim"
+alias whoogle="docker run --publish 5000:5000 --detach benbusby/whoogle-search:latest"
 export EXA_ICON_SPACING=2
 
 # man pager
@@ -42,7 +43,6 @@ alias hms="home-manager switch --flake ~/dotfiles "
 # export the npm profile
 export PATH="$HOME/.npm-packages/bin:$PATH"
 
-#ccace
 # export USE_CCACHE=1
 # export CCACHE_EXEC=/usr/bin/ccache
 # for home manager 
