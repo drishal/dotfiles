@@ -154,7 +154,8 @@ https://github.com/quelpa/quelpa#installation
   (use-package quelpa :ensure t)
 #+end_src
 ** Setting up paths
-#+begin_src emacs-lisp
+not tangling this as well currently
+#+begin_src emacs-lisp :tangle no
 (use-package exec-path-from-shell :ensure t)
 (when (daemonp)
   (exec-path-from-shell-initialize))
@@ -181,14 +182,14 @@ https://github.com/quelpa/quelpa#installation
 (my-global-rainbow-mode 1)
 #+end_src
 ** smooth scrolling
-#+begin_src emacs-lisp
-;; (use-package smooth-scroll
-;;   :ensure t)
- (pixel-scroll-precision-mode 1)
- (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
- (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
- (setq scroll-step 1) 
-;;(pixel-scroll-precision-mode 1)
+#+begin_src emacs-lisp :tangle no
+  ;; (use-package smooth-scroll
+  ;;   :ensure t)
+   (pixel-scroll-precision-mode 1)
+   (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+   (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+   (setq scroll-step 1) 
+  ;;(pixel-scroll-precision-mode 1)
 #+end_src
 ** Dashboard
 #+begin_src emacs-lisp
@@ -1090,6 +1091,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 ;;(setq lsp-idle-delay 0.500)
 #+end_src
 *** Eglot setup
+not tangling atm
 #+begin_src emacs-lisp :tangle no
 (use-package eglot :ensure t)
 (add-hook 'foo-mode-hook 'eglot-ensure)
