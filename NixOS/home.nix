@@ -80,7 +80,8 @@
 
     emacs = {
       enable = true;
-      package = pkgs.emacsPgtkGcc;
+      package = pkgs.emacsPgtkNativeComp;
+      # package = pkgs.emacs28NativeComp;
       extraPackages = (epkgs: [ epkgs.vterm]);
     };
 
@@ -98,6 +99,7 @@
     cachix
     rust-analyzer
     neovide
+    ispell
     (pkgs.nerdfonts.override {
       fonts = [ "FiraCode" "FantasqueSansMono"];
     })
@@ -106,12 +108,12 @@
 
   # services
   services = {
-    #   emacs = {
-    #     enable = true;
-    #     client.enable =true;
-    #     socketActivation.enable = true;
-    #   };
-    # dunst = {
+    #    emacs = {
+    #      enable = true;
+    #      client.enable =true;
+    #      socketActivation.enable = true;
+    #    };
+    # # dunst = {
     #  enable = true;
     #  iconTheme = pkgs.papirus-icon-theme; 
     # };
