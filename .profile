@@ -51,8 +51,6 @@ export PATH="$HOME/.npm-packages/bin:$PATH"
 #watch sync
 alias watch-sync="watch -d grep -e Dirty: -e Writeback: /proc/meminfo"
 
-# locals for home manager 
-. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 #ytdlp
 alias youtube-dl="yt-dlp"
 alias yt-dlp-mp3="yt-dlp -x --audio-format=mp3"
@@ -77,3 +75,6 @@ alias sleep-check="journalctl -u systemd-suspend.service | tail"
 
 #upload files; use as "upload filename"
 alias upload="curl -sL https://git.io/file-transfer | sh && ./transfer wet"  
+
+# locals for home manager 
+. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
