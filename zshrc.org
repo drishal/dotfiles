@@ -280,7 +280,6 @@ fi
 *** Oh my zsh
 The oh my zsh framework, tangle set to no as I dont really use it 
 #+begin_src shell :tangle no
-# zplug "ohmyzsh/ohmyzsh"
 zinit light "ohmyzsh/ohmyzsh"
 #+end_src
 
@@ -330,7 +329,6 @@ zinit wait lucid for \
 see https://github.com/jeffreytse/zsh-vi-mode
 #+begin_src shell :tangle no
   # source ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-  #zplug "jeffreytse/zsh-vi-mode"
  zinit light "jeffreytse/zsh-vi-mode"
 #+end_src
 ** async
