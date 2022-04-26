@@ -22,7 +22,7 @@ Don't worry this readme is there just to tackle this very issue
    #+end_src
    and to setup home manager for the first time:
    #+begin_src bash
-      nix run --no-write-lock-file --impure github:nix-community/home-manager -- switch   --flake  .
+   nix run --no-write-lock-file --impure github:nix-community/home-manager -- switch   --flake ~/dotfiles
    #+end_src
    finally
    #+begin_src bash 
