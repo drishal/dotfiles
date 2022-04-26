@@ -187,7 +187,7 @@ https://github.com/quelpa/quelpa#installation
 ;;(pixel-scroll-precision-mode 1)
 #+end_src
 ** Dashboard
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp 
 (use-package dashboard :ensure t
   :init      ;; tweak dashboard config before loading it
   (setq dashboard-set-heading-icons t)
@@ -204,10 +204,12 @@ https://github.com/quelpa/quelpa#installation
                           (projects . 3)
                           ))
   :config
-  (dashboard-setup-startup-hook)
   (dashboard-modify-heading-icons '((recents . "file-text")
                                     (bookmarks . "book"))))
 
+  (dashboard-setup-startup-hook)
+
+(dashboard-refresh-buffer)
 (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 #+end_src
 *** Test 2 for dashboard
@@ -304,10 +306,10 @@ https://github.com/AnthonyDiGirolamo/airline-themes
 (setq global-prettify-symbols-mode t)
 
 ;; unicode fonts
-(use-package unicode-fonts
-   :ensure t
-   :config
-    (unicode-fonts-setup))
+;; (use-package unicode-fonts
+;;    :ensure t
+;;    :config
+;;     (unicode-fonts-setup))
 #+end_src
 ** Evil mode
 https://github.com/emacs-evil/evil
