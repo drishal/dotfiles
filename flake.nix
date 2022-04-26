@@ -20,7 +20,7 @@
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      url = "github:nix-community/emacs-overlay/6216f7c7e05c5f7d579dc898219207a8509be910";
+      url = "github:nix-community/emacs-overlay/5daf2e7e8dc77c029c2436ae32d7aa869acce648";
     };
 
     private-stuff = {
@@ -54,7 +54,6 @@
           # nixpkgs.overlays = [ inputs ];
           imports = [
             ./NixOS/home.nix
-            # ../.private-stuff/hm-email.nix
             "${private-stuff}/hm-email.nix"
           ];
 
