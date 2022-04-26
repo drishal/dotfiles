@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation {
   doBuild = false;
 
   installPhase = ''
-    mkdir -p $out/bin/
-    cp batdistrack $out/bin/batdistrack
+     mkdir -p $out/bin/
+     cp batdistrack $out/bin/batdistrack
   '';
 }

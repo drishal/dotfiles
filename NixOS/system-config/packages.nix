@@ -199,7 +199,7 @@
   nixpkgs.overlays = [
     # batdistrack
      (self: super: {
-       batdistrack = super.callPackage ../packages/batdistrack/default.nix {};
+       batdistrack = super.callPackage ../extra-packages/batdistrack/default.nix {};
      })
   ];
   powerManagement = {

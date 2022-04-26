@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./packages/declarative-cachix/home-manager-cachix.nix
+    ./extra-packages/declarative-cachix/home-manager-cachix.nix
     # ../../.private-stuff/hm-email.nix
   ];
 
