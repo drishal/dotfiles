@@ -22,6 +22,7 @@ alias wayland-screenshot="grimshot copy output"
 alias wayland-screenshot-area="grimshot copy area"
 alias v="nvim"
 alias whoogle="docker run --publish 5000:5000 --detach benbusby/whoogle-search:latest"
+alias energy_now="cat /sys/class/power_supply/BAT0/energy_now"
 export EXA_ICON_SPACING=2
 
 # man pager
