@@ -3,7 +3,7 @@
   imports =
     [
       ./hardware-configuration.nix
-      ./system/imports.nix
+      ./system-config/imports.nix
     ];
 
   system.stateVersion = "21.05";
