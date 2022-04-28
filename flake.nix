@@ -54,7 +54,7 @@
           # nixpkgs.overlays = [ inputs ];
           imports = [
             ./NixOS/home.nix
-            "${private-stuff}/hm-email.nix"
+            "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
           ];
 
         };
