@@ -305,6 +305,7 @@ riverctl spawn "emacs --daemon"
 #+begin_src bash
 riverctl float-filter-add "float"
 riverctl float-filter-add "popup"
+riverctl float-filter-add "zoom"
 #+end_src
 
 ** Rivertile Defaults 
