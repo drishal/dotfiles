@@ -70,6 +70,10 @@
     rofi = {
       enable = true;
       theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
+      font="FiraCode Nerd Font 14";
+      plugins = [
+       pkgs.rofi-emoji 
+      ];
     };
     # # git
     git = {
@@ -100,8 +104,9 @@
     rust-analyzer
     neovide
     ispell
+    rofi-emoji
     (pkgs.nerdfonts.override {
-      fonts = [ "FiraCode" "FantasqueSansMono"];
+      fonts = [ "FiraCode" "FantasqueSansMono" "RobotoMono" "Noto" "Monofur" "Inconsolata" "Iosevka"];
     })
   ];
 
