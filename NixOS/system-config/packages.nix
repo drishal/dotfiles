@@ -25,7 +25,6 @@
     xorg.xkill
     git
     man
-    # teams
     papirus-icon-theme
     xorg.xf86videoamdgpu
     lxappearance
@@ -58,6 +57,7 @@
     pfetch
     qbittorrent
     mesa-demos
+    rofi-emoji
     glxinfo
     xorg.xdpyinfo
     evince
@@ -195,16 +195,16 @@
       passthru.providedSessions = [ "river" ];
     }))
   ];
-  
+
   nixpkgs.overlays = [
     # batdistrack
-     (self: super: {
-       batdistrack = super.callPackage ../extra-packages/batdistrack/default.nix {};
-     })
+    (self: super: {
+      batdistrack = super.callPackage ../extra-packages/batdistrack/default.nix { };
+    })
   ];
   powerManagement = {
     powerDownCommands = ''
-     ${pkgs.batdistrack}/bin/batdistrack
-'';
+      ${pkgs.batdistrack}/bin/batdistrack
+    '';
   };
 }
