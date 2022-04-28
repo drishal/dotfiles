@@ -116,14 +116,15 @@ font:
     # Default:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
-    family: FiraCode Nerd Font
+    # family: FiraCode Nerd Font
+    # family: Monofur Nerd Font
     # family: NotoMono Nerd Font
-    # family: FantasqueSansMono Nerd Font 
+    family: FantasqueSansMono Nerd Font 
     # family: Open Sans
     # family: JetBrainsMono Nerd Font
 
     # The `style` can be specified to pick a specific face.
-    style: Regular
+    # style: Regular
 
   # Bold font face
   #bold:
@@ -159,7 +160,8 @@ font:
     #style: Bold Italic
 
   # Point size
-  size: 6.5 
+  # size: 6.5 
+  size:  8
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter

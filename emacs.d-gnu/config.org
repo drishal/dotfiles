@@ -294,22 +294,17 @@ https://github.com/quelpa/quelpa#installation
 #+end_src
 *** Airline
 https://github.com/AnthonyDiGirolamo/airline-themes
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 ;; (use-package airline-themes :ensure t)
 ;; (load-theme 'airline-base16_dracula t)
 #+end_src
 
 ** Fonts
 #+begin_src emacs-lisp
-(add-to-list 'default-frame-alist '(font . "FiraCode Nerd Font-12" ))
-(set-face-attribute 'default t :font "FiraCode Nerd Font-12")
+;; (add-to-list 'default-frame-alist '(font . "FiraCode Nerd Font-12" ))
+(add-to-list 'default-frame-alist '(font . "FantasqueSansMono Nerd Font-14" ))
+;; (set-face-attribute 'default t :font "FiraCode Nerd Font-12")
 (setq global-prettify-symbols-mode t)
-
-;; unicode fonts
-;; (use-package unicode-fonts
-;;    :ensure t
-;;    :config
-;;     (unicode-fonts-setup))
 #+end_src
 ** Evil mode
 https://github.com/emacs-evil/evil
