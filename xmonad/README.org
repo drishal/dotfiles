@@ -253,6 +253,8 @@ myManageHook = composeAll
       [
         resource  =? "desktop_window" --> doIgnore
       , resource  =? "kdesktop"       --> doIgnore
+      , className =? "zoom" --> doFloat
+
       ] 
 #+end_src
 
@@ -350,13 +352,14 @@ myKeys =
    --Rofi Stuff
   , ("M-d", spawn "rofi -show drun -icon-theme Papirus -show-icons")
   , ("M-p", spawn " rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu")
+  , ("M-r 1", spawn "rofi -show emoji -modi emoji")
 
 -- deadd
   , ("M-n", spawn "kill -s USR1 $(pidof deadd-notification-center)")
 
   --Some Applications
   , ("M-S-f", spawn "firefox")
-  , ("M-e", spawn "nemo")
+  , ("M-e", spawn "thunar")
   , ("M-v", spawn "pavucontrol")
   , ("M-c", spawn "ferdi")
   , ("M-s", spawn "spectacle")
