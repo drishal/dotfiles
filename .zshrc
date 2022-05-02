@@ -115,6 +115,15 @@ ZSH_TAB_TITLE_ADDITIONAL_TERMS='alacritty|kitty|foot'
 
 export KITTY_SHELL_INTEGRATION=no-cursor
 
-eval "$(starship init zsh)"
-export STARSHIP_CONFIG=~/dotfiles/config/starship.toml
+zinit light agkozak/agkozak-zsh-prompt
+AGKOZAK_PROMPT_CHAR=( '%F{green}❯%f' '%F{green}❯%f' '%F{green}❮%f' )
+AGKOZAK_LEFT_PROMPT_ONLY=1
+AGKOZAK_MULTILINE=0
+AGKOZAK_USER_HOST_DISPLAY=0
+AGKOZAK_COLORS_BRANCH_STATUS=magenta
+AGKOZAK_CUSTOM_RPROMPT='%()'
+AGKOZAK_BLANK_LINES=1
+
+# eval "$(starship init zsh)"
+# export STARSHIP_CONFIG=~/dotfiles/config/starship.toml
 
