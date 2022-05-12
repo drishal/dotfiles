@@ -1,6 +1,7 @@
 { config, pkgs, inputs, lib, ... }:
 {
   services.flatpak.enable = true;
+  xdg.portal.enable = true;
   programs = {
 
     # java 
@@ -23,11 +24,15 @@
     haskellPackages.xmobar
     alacritty
     xorg.xkill
+    bookworm
+    distrobox
+    calibre
     git
     man
     papirus-icon-theme
     xorg.xf86videoamdgpu
     lxappearance
+    figlet
     lxsession
     bc
     libnotify
@@ -39,19 +44,20 @@
     pavucontrol
     killall
     htop
+    bpytop
     firefox
     neofetch
     steam-run
     inxi
-    hack-font
+    # hack-font
     xarchiver
     unzip
+    zip
     nitrogen
     rofi
     trayer
     arc-theme
     youtube-dl
-    xfce.xfce4-notifyd
     mpv
     smplayer
     pfetch
@@ -62,17 +68,16 @@
     xorg.xdpyinfo
     evince
     qt5ct
+    ncurses
     redshift
     xorg.xbacklight
-    xfce.xfce4-power-manager
     brightnessctl
     imagemagick
     exa
+    lsd
     chromium-bsu
     gcc
     deadd-notification-center
-    nodePackages.pyright
-    nodePackages.vscode-html-languageserver-bin
     zoom-us
     linuxPackages.cpupower
     gnome.gnome-tweaks
@@ -82,10 +87,10 @@
     cpufetch
     dmenu
     cmatrix
-    qutebrowser
+    # qutebrowser
     neovim
-    libreoffice
-    nodePackages.create-react-app
+    # libreoffice
+    # nodePackages.create-react-app
     nodejs
     yarn
     nodePackages.react-tools
@@ -93,7 +98,7 @@
     xorg.xmodmap
     powershell
     gimp
-    brave
+    # brave
     thinkfan
     bpytop
     bat
@@ -149,19 +154,35 @@
     haruna
     gnome.gnome-calculator
     vlc
-    # some xfce apps
-    xfce.xfce4-clipman-plugin
-    xfce.thunar
-    xfce.xfce4-taskmanager
     ferdi
+    tdesktop
     gtk-layer-shell
-    # autoconf automake inkscape gdk-pixbuf sassc pkgconfig
-    # emacsPgtkGcc
+    mach-nix
+    # build tools
+    flex
+    bison
+    gitRepo
     #rust home-manager metasploit theharvester
     cargo
     carnix
     # python stuff
-    python39
+    python3
+    python3Packages.pip
+    python3Packages.venvShellHook
+    virtualenv
+    # some xfce apps
+    xfce.xfce4-clipman-plugin
+    xfce.thunar
+    xfce.xfce4-taskmanager
+    xfce.xfce4-notifyd
+    xfce.xfce4-whiskermenu-plugin
+    xfce.xfce4-power-manager
+
+    #nodepackages
+    nodePackages.pyright
+    nodePackages.vscode-html-languageserver-bin
+
+
     # python39Packages.numpy python39Packages.pandas
     #     ((emacsPackagesFor emacsPgtkGcc).emacsWithPackages
     #       (epkgs: [

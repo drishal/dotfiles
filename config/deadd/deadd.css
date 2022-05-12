@@ -15,7 +15,8 @@
 
 /* Notification center */
 * {
-    font-family: "FiraCode Nerd Font";
+    /* font-family: "FiraCode Nerd Font"; */
+    font-family: "FantasqueSansMono Nerd Font";
 }
 
 .blurredBG, #main_window, .blurredBG.low, .blurredBG.normal {

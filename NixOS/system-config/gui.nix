@@ -13,9 +13,9 @@
         enableContribAndExtras = true;
       };
 
-
-      awesome.enable = true;
       dwm.enable = true;
+
+      # awesome.enable = true;
     };
 
     # Desktop Environment

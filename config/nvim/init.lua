@@ -82,6 +82,7 @@ require('nvim-treesitter.configs').setup {
   highlight = {
     enable = true,
   },
+  ensure_installed = {"norg"}, 
   indent = {
     enable = true,
   },  
@@ -92,6 +93,3 @@ require('neorg').setup {
         ["core.defaults"] = {}
     }
 }
-
-
-

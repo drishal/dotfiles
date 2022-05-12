@@ -3,6 +3,8 @@
 # base system configuration
 {
   boot.kernelPackages = pkgs.linuxPackages_latest; # alternative: linuxPackages_latest
+  #  pulling kernel from master
+  # boot.kernelPackages =  inputs.nixpkgs-master.legacyPackages.${pkgs.system}.linuxPackages_latest;
   # boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest.override {
   #   argsOverride = rec {
   #     src = pkgs.fetchurl {
@@ -38,8 +40,6 @@
   hardware.bluetooth.package = pkgs.bluezFull;
   services.blueman.enable = true;
 
-  # Define your hostname.
-  networking.hostName = "nixos";
 
   # firmware updator
   services.fwupd.enable = true;
@@ -55,6 +55,10 @@
       extraPackages = with pkgs; [
         rocm-opencl-icd
         rocm-opencl-runtime
+        intel-media-driver # LIBVA_DRIVER_NAME=iHD
+        vaapiIntel
+        vaapiVdpau
+        libvdpau-va-gl
       ];
       driSupport = true;
     };
@@ -66,8 +70,19 @@
   };
 
   # Networking
-  networking.networkmanager.enable = true;
-  networking.wireless.iwd.enable = true;
+  networking = {
+    networkmanager.enable = true;
+    wireless.iwd.enable = true;
+    # hostname
+    hostName = "nixos";
+    # dns
+    nameservers = [
+      "1.1.1.1"
+      "1.0.0.1"
+      "2606:4700:4700::1111"
+      "2606:4700:4700::1001"
+    ];
+  };
   # Configure keymap in X11
   services.xserver.layout = "us";
   # services.xserver.xkbOptions = "eurosign:e";

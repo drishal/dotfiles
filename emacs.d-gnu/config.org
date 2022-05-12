@@ -302,13 +302,14 @@ https://github.com/AnthonyDiGirolamo/airline-themes
 ** Fonts
 #+begin_src emacs-lisp
 ;; (add-to-list 'default-frame-alist '(font . "FiraCode Nerd Font-12" ))
-(add-to-list 'default-frame-alist '(font . "FantasqueSansMono Nerd Font-14" ))
+(add-to-list 'default-frame-alist '(font . "FantasqueSansMono Nerd Font-14:weight=medium" ))
+;; (add-to-list 'default-frame-alist '(font . "Comic Mono-12:weight=medium" ))
 ;; (set-face-attribute 'default t :font "FiraCode Nerd Font-12")
 (setq global-prettify-symbols-mode t)
 #+end_src
 ** Evil mode
 https://github.com/emacs-evil/evil
-Evil is an extensible vi layer for Emacs. It emulates the main features of Vim,
+Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 *** Default
 #+begin_src emacs-lisp
 ;; Make ESC quit prompts
@@ -1048,6 +1049,11 @@ not tangling atm
                           (lsp))))  ; or lsp-deferred
 
 #+end_src
+*** php
+#+begin_src emacs-lisp
+(use-package php-mode
+  :ensure t)
+#+end_src
 *** Haskell
 **** haskell mode
 #+begin_src emacs-lisp
@@ -1061,13 +1067,18 @@ not tangling atm
 #+begin_src emacs-lisp
 (use-package nix-mode :ensure t
   :mode "\\.nix\\'")
+;; (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
+;; (lsp-register-client
+;;  (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
+;;                   :major-modes '(nix-mode)
+;;                   :server-id 'nix))
+
+;; (use-package nixpkgs-fmt :ensure t)
 (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
 (lsp-register-client
  (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
                   :major-modes '(nix-mode)
                   :server-id 'nix))
-
-(use-package nixpkgs-fmt :ensure t)
 #+end_src
 
 *** java
