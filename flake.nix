@@ -5,6 +5,8 @@
 
     nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
 
+    # nixpkgs-master.url = "github:NixOS/nixpkgs/master";
+
     home-manager = {
       url = "github:nix-community/home-manager";
     };
@@ -20,17 +22,21 @@
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      url = "github:nix-community/emacs-overlay/5daf2e7e8dc77c029c2436ae32d7aa869acce648";
+      url = "github:nix-community/emacs-overlay/0646f7ce8d90faadd752ea8037ed4d3c82b7576e";
+    };
+
+    mach-nix = {
+      url = "github:DavHau/mach-nix";
     };
 
     private-stuff = {
-     url = "path:/home/drishal/.private-stuff";
-     flake = false;
-   };
+      url = "path:/home/drishal/.private-stuff";
+      flake = false;
+    };
 
   };
 
-  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, neovim-nightly-overlay, cachix, declarative-cachix, private-stuff, ... }@inputs:
+  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, neovim-nightly-overlay, cachix, declarative-cachix, private-stuff, mach-nix , ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -66,10 +72,8 @@
             # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
             { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay ]; }
             ./NixOS/configuration.nix
-            # ./enable-flake.nix
-
-            #./hardware-configuration.nix
           ];
+          specialArgs = {inherit inputs;};
         };
       };
 
