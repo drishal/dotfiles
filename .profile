@@ -10,6 +10,7 @@ alias p="paru"
 # ls related aliases
 alias ls="exa --icons"
 # alias ls="ls --color"
+# alias ls="ls --color"
 alias ll="ls -l"
 alias lh="ls -lh"
 alias la="ls -la"
@@ -23,6 +24,8 @@ alias wayland-screenshot-area="grimshot copy area"
 alias v="nvim"
 alias whoogle="docker run --publish 5000:5000 --detach benbusby/whoogle-search:latest"
 alias energy_now="cat /sys/class/power_supply/BAT0/energy_now"
+alias set-wall="feh --bg-scale" # set-wall /path/to/file
+
 export EXA_ICON_SPACING=2
 
 # man pager
