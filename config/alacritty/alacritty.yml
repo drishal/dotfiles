@@ -120,6 +120,7 @@ font:
     # family: Monofur Nerd Font
     # family: NotoMono Nerd Font
     family: FantasqueSansMono Nerd Font 
+    # family: Comic Mono 
     # family: Open Sans
     # family: JetBrainsMono Nerd Font
 
@@ -161,7 +162,7 @@ font:
 
   # Point size
   # size: 6.5 
-  size:  8
+  size: 8
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter

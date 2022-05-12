@@ -55,7 +55,8 @@ conky.config = {
 
 	--Textual
 	format_human_readable = true,				-- KiB, MiB rather then number of bytes
-	font = 'FiraCode Nerd Font:bold:size=10',  	-- font for complete conky unless in code defined
+	-- font = 'FiraCode Nerd Font:bold:size=10',  	-- font for complete conky unless in code defined
+	font = 'FantasqueSansMono Nerd Font:bold:size=13',  	-- font for complete conky unless in code defined
 	max_text_width = 0,							-- 0 will make sure line does not get broken if width too smal
 	max_user_text = 16384,						-- max text in conky default 16384
 	override_utf8_locale = true,				-- force UTF8 requires xft
