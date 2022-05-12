@@ -102,6 +102,17 @@ zinit light "zsh-users/zsh-history-substring-search"
 
 zinit light trystan2k/zsh-tab-title
 
+# aliases
+alias ls="exa --icons"
+# alias ls="ls --color"
+# alias ls="ls --color"
+alias ll="ls -l"
+alias lh="ls -lh"
+alias la="ls -la"
+alias lah="ls -lah"
+alias l="ls -lah"
+alias v="nvim"
+
 HISTFILE=${HISTFILE:-${ZDOTDIR:-${HOME}}/.zsh_history}
 HISTSIZE=500  || HISTSIZE=5000
 SAVEHIST=1000 || SAVEHIST=10000
