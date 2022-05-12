@@ -46,7 +46,7 @@ Config {
      , Run MultiCpu       [ "--template" , "<fc=#46d9ff> <total>% </fc>"
                              , "--Low"      , "50"         -- units: %
                              , "--High"     , "85"         -- units: %
-                             ] 20
+                             ] 50
                -- memory usage monitor
         , Run Memory         [ "--template" ,"<fc=#c678dd>  <used>M/<total>M </fc>"
                              , "--Low"      , "1000"        -- units: M
