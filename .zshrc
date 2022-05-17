@@ -88,20 +88,22 @@ setopt unset
 export ZSH_AUTOSUGGEST_USE_ASYNC=true
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#6272a4'
 
-zinit wait lucid for \
- atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-    zdharma-continuum/fast-syntax-highlighting \
- atload"!_zsh_autosuggest_start" \
-    zsh-users/zsh-autosuggestions
+# zinit wait lucid for \
+#  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+#     zdharma-continuum/fast-syntax-highlighting \
+#  atload"!_zsh_autosuggest_start" \
+#     zsh-users/zsh-autosuggestions
+
+zinit light zsh-users/zsh-autosuggestions
 
 zinit light mafredri/zsh-async
 
 zinit light "zsh-users/zsh-syntax-highlighting"
 
-zinit light "zsh-users/zsh-history-substring-search"
-
 zinit light trystan2k/zsh-tab-title
 
+
+export EXA_ICON_SPACING=2
 # aliases
 alias ls="exa --icons"
 # alias ls="ls --color"

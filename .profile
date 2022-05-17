@@ -39,6 +39,7 @@ alias usb_2="su root -c  'for file in ????:??:??.? ; do  echo -n "$file" > unbin
 # . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
 alias nfu="sudo nix flake update ~/dotfiles"
 alias nrs="sudo nixos-rebuild switch --flake ~/dotfiles -L"
+alias nrb="sudo nixos-rebuild boot --flake ~/dotfiles -L"
 alias nrsi="sudo nixos-rebuild switch --flake --impure ~/dotfiles -L"
 export NIXPKGS_ALLOW_UNFREE=1
 # home manager
