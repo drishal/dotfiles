@@ -20,10 +20,23 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     wget
+    # aqemu
+    simplescreenrecorder
+    debootstrap
+    mate.caja
+    pandoc
+    obs-studio
+    ffmpeg
+    php
+    yt-dlp
+    virt-manager
     vim
     haskellPackages.xmobar
+    flameshot
     alacritty
     xorg.xkill
+    lshw
+    # lspci
     bookworm
     distrobox
     calibre
@@ -89,7 +102,7 @@
     cmatrix
     # qutebrowser
     neovim
-    # libreoffice
+    libreoffice
     # nodePackages.create-react-app
     nodejs
     yarn
@@ -154,14 +167,14 @@
     haruna
     gnome.gnome-calculator
     vlc
-    ferdi
+    # ferdi
     tdesktop
     gtk-layer-shell
-    mach-nix
     # build tools
     flex
     bison
     gitRepo
+    docker-compose
     #rust home-manager metasploit theharvester
     cargo
     carnix

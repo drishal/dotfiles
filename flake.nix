@@ -1,6 +1,12 @@
 {
   description = "Configuration for my system";
 
+nixConfig.extra-substituters = [ "https://contamination.cachix.org" "https://nix-community.cachix.org" ];
+nixConfig.extra-trusted-public-keys = [ "contamination.cachix.org-1:KmdW5xVF8ccKEb9tvK6qtEMW+lGa83seGgFyBOkeM/4=" "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+"];
+
+
+
   inputs = {
 
     nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
@@ -22,7 +28,7 @@
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      url = "github:nix-community/emacs-overlay/0646f7ce8d90faadd752ea8037ed4d3c82b7576e";
+      url = "github:nix-community/emacs-overlay/fd5baf065e1af4cbb9d40eba66971d31f61d6bd1";
     };
 
     mach-nix = {

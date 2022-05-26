@@ -9,11 +9,12 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  caches.cachix = [
-    {
-      name = "nix-community"; sha256 = "00lpx4znr4dd0cc4w4q8fl97bdp7q19z1d3p50hcfxy26jz5g21g";
-    }
-  ];
+  # caches.cachix = [
+  #   {
+  #     name = "nix-community";
+  #     sha256 = "00lpx4znr4dd0cc4w4q8fl97bdp7q19z1d3p50hcfxy26jz5g21g";
+  #   }
+  # ];
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home = {
@@ -156,6 +157,12 @@
     enableZshIntegration = true;
     enableBashIntegration = true;
   };
+
+  # foot
+  programs.foot = {
+    enable = true;
+  };
+  
 
   #xmonad config
   #home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;

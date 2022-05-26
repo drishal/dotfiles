@@ -244,7 +244,7 @@ riverctl map passthrough $mod F11 enter-mode normal
 
 *** Focus follows mouse
 #+begin_src bash
-riverctl focus-follows-cursor normal
+riverctl focus-follows-cursor disabled
 
 #+end_src
 

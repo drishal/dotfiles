@@ -167,7 +167,7 @@
   # For 32 bit applications
   hardware.opengl.driSupport32Bit = true;
   # setting the video driver
-  services.xserver.videoDrivers = [ "amdgpu" ];
+  services.xserver.videoDrivers = [ "modesetting" ];
   # enable opengl
   hardware.opengl.enable = true;
 

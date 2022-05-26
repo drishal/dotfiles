@@ -93,6 +93,12 @@
   # services.logind.lidSwitch = "suspend"; 
   # Enable sound.
   sound.enable = true;
+
+  #postgresql
+  services.postgresql = {
+    enable=true;
+  };
+
   security.rtkit.enable = true;
   services.pipewire = {
     wireplumber.enable = false;

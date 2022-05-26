@@ -28,6 +28,7 @@
 - [[#kitty-config][kitty config]]
 - [[#loading-the-prompt][loading the prompt]]
   - [[#starship][Starship]]
+  - [[#custom-2][custom 2:]]
   - [[#custom][custom]]
   - [[#agkozak][agkozak]]
 - [[#loading-the-profile][loading the ~~/.profile~]]
@@ -372,6 +373,20 @@ you can use any of the prompts here, just make sure to remove ~:tangle no~ from 
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG=~/dotfiles/config/starship.toml
 #+end_src
+** custom 2:
+#+begin_src shell :tangle no
+# Autoload zsh add-zsh-hook and vcs_info functions (-U autoload w/o substition, -z use zsh style)
+autoload -Uz add-zsh-hook vcs_info
+# Enable substitution in the prompt.
+# precmd() { print "" }
+setopt prompt_subst
+zstyle ':vcs_info:git:*' formats ' on branch %b '
+# Run vcs_info just before a prompt is displayed (precmd)
+add-zsh-hook precmd vcs_info
+PS1='%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[green]%}%M %{$fg[magenta]%}%~%{$fg[red]%}%{$fg[blue]%}${vcs_info_msg_0_}%{$fg[red]%}]%{$reset_color%} $%b '
+# PS1=' %F{red}${vcs_info_msg_0_}%f '
+#+end_src
+
 ** custom
 https://www.tweaking4all.com/software/macosx-software/customize-zsh-prompt/
 what do different values mean
@@ -385,7 +400,6 @@ what do different values mean
  PROMPT='%F{green}%n@%F{white}%M %B%3~ > '
  PROMPT='%F{green}%3~ > '
 #+end_src
-
 ** agkozak
 https://github.com/agkozak/agkozak-zsh-prompt
 #+begin_src shell :tangle no
@@ -400,7 +414,7 @@ AGKOZAK_BLANK_LINES=1
 #+end_src
 
 * loading the ~~/.profile~
-#+begin_src shell
+#+begin_src shell 
   source ~/dotfiles/.profile
 #+end_src
 

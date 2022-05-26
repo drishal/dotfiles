@@ -4,6 +4,8 @@
   services.xserver = {
     enable = true;
 
+    videoDrivers = [ "amdgpu" ];
+
     # window wmanagers
     windowManager = {
       qtile.enable = true;
@@ -66,7 +68,6 @@
       })
     )
   ];
-  services.xserver.videoDrivers = [ "amdgpu" ];
 
   services.gnome.tracker.enable = false;
   services.gnome.gnome-keyring.enable = true;
