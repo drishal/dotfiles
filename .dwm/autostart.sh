@@ -19,7 +19,7 @@ feh --bg-scale ~/dotfiles/wallpapers/darkest_hour.jpg
 nm-applet&
 # mate-power-manager&
 xfce4-clipman&
-xfce4-power-manager&
+# xfce4-power-manager&
 emacs --daemon&
 
 blueman-applet&

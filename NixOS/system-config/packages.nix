@@ -113,6 +113,7 @@
     gimp
     # brave
     thinkfan
+    tigervnc
     bpytop
     bat
     polybar
@@ -189,7 +190,7 @@
     xfce.xfce4-taskmanager
     xfce.xfce4-notifyd
     xfce.xfce4-whiskermenu-plugin
-    xfce.xfce4-power-manager
+    # xfce.xfce4-power-manager
 
     #nodepackages
     nodePackages.pyright
@@ -202,6 +203,26 @@
     #         epkgs.vterm]))
     # (pkgs.callPackage ../packages/batdistrack/default.nix { })
     # picom
+    #(distrobox.overrideAttrs)
+    (st.overrideAttrs (oldAttrs: rec {
+      patches = [
+        # You can specify local patches
+        # ./path/to/local.diff
+        # Fetch them directly from `st.suckless.org`
+        # (fetchpatch {
+        #   url = "https://st.suckless.org/patches/rightclickpaste/st-rightclickpaste-0.8.2.diff";
+        #   sha256 = "1y4fkwn911avwk3nq2cqmgb2rynbqibgcpx7yriir0lf2x2ww1b6";
+        # })
+        # (fetchpatch {
+        #   url = "http://st.suckless.org/patches/xresources/st-xresources-20200604-9ba7ecf.diff";
+        #   sha256 = "sha256-8HV66XrTJu80H0Mwws5QL7BV6L9omUH6avFJqdDC7as=";
+        # })
+        (fetchpatch {
+          url = "http://st.suckless.org/patches/desktopentry/st-desktopentry-0.8.4.diff";
+          sha256 = "sha256-Hj2YgKHXhRplT8ojGCktygwKPdvaY9l2pteLunz1EGw=";
+        })
+      ];
+    }))
     (picom.overrideAttrs (_: {
       src = pkgs.fetchFromGitHub {
         repo = "picom";

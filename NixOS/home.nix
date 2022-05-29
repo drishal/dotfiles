@@ -2,14 +2,21 @@
 
 {
   imports = [
-    ./extra-packages/declarative-cachix/home-manager-cachix.nix
+    # ./extra-packages/declarative-cachix/home-manager-cachix.nix
     # ../../.private-stuff/hm-email.nix
   ];
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  # caches.cachix = [
+  # nix settings...use only for single user installs 
+  # nix = {
+  #   package = pkgs.nix;
+  #   settings = {
+  #     experimental-features = [ "nix-command" "flakes" ];
+  #   };
+  # };
+  # # caches.cachix = [
   #   {
   #     name = "nix-community";
   #     sha256 = "00lpx4znr4dd0cc4w4q8fl97bdp7q19z1d3p50hcfxy26jz5g21g";
@@ -90,8 +97,8 @@
           editor = "nvim";
           excludesFile = "";
         };
+      };
     };
-    }; 
     emacs = {
       enable = true;
       package = pkgs.emacsPgtkNativeComp;
@@ -162,7 +169,7 @@
   programs.foot = {
     enable = true;
   };
-  
+
 
   #xmonad config
   #home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
@@ -171,7 +178,8 @@
 
   #zsh config
   # home.file."/home/drishal/.zshrc".source = ../.zshrc;
-
+  # xresources path
+  xresources.path="~/dotfiles/.Xresources";
   # sleep test
   # home.file."${pkgs.systemd}/lib/systemd/system-sleep/batdistrack".source = ../batdistrack;
 
@@ -184,7 +192,7 @@
   # home.file."/home/drishal/.config/rofi/config".source = ../config/rofi/config;
 
   # setting Xresources
-  home.file."/home/drishal/.Xresources".source = ../.Xresources;
+  # home.file."/home/drishal/.Xresources".source = ../.Xresources;
 
   # kitty
   home.file."/home/drishal/.config/kitty".source = ../config/kitty;

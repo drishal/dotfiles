@@ -23,7 +23,7 @@
     # Desktop Environment
     desktopManager = {
       plasma5.enable = true;
-      xfce.enable = true;
+      # xfce.enable = true;
       # lxqt.enable = true;
       # gnome.enable = true;
     };
@@ -75,6 +75,8 @@
   # resolve gnome and plasma issues
   programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
 
+  # lidswitch
+  services.logind.lidSwitch = "suspend";
   #some overlays
   nixpkgs.overlays = [
     #suckless overlays

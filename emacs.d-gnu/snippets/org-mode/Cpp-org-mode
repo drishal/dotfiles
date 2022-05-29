@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Cpp-org-mode
+# key: <scpp 
+# --
+#+begin_src C++ :results output
+$0
+#+end_src

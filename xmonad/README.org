@@ -321,7 +321,7 @@ myStartupHook = do
         spawnOnce "nm-applet"
         -- spawnOnce "xiccd"
         -- spawnOnce "mate-power-manager"
-        spawnOnce "xfce4-power-manager"
+        -- spawnOnce "xfce4-power-manager"
         spawnOnce "xfce4-clipman"
         -- spawnOnce "redshift -O 5000"
         -- spawnOnce "volumeicon"
