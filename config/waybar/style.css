@@ -49,8 +49,8 @@
     border: none;
     border-radius: 0;
     /* `otf-font-awesome` is required to be installed for icons */
-    font-family: "FiraCode Nerd Font","Roboto", "Helvetica", "Arial", "sans-serif";
-    font-size: 11px;
+    font-family: "FantasqueSansMono Nerd Font","Roboto", "Helvetica", "Arial", "sans-serif";
+    font-size: 14px;
     min-height: 0;
     /* color: @colfg; */
 }

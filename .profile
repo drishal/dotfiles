@@ -1,6 +1,6 @@
 # aliases
 alias nix-config="sudo vim /etc/nixos/configuration.nix"
-alias xon="steam-run ~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
+alias xon="bash ~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
 alias xon-glx="steam-run ~/Desktop/games/Xonotic/xonotic-linux-glx.sh"
 alias stk="~/Desktop/games/SuperTuxKart-1.2-linux/run_game.sh"
 
@@ -31,6 +31,8 @@ export EXA_ICON_SPACING=2
 # man pager
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
+#Editor: setting to nvim for command line 
+export EDITOR=nvim
 #resetting the right usb
 alias usb_1="cd /sys/bus/pci/drivers/xhci_hcd/"
 alias usb_2="su root -c  'for file in ????:??:??.? ; do  echo -n "$file" > unbind;  echo -n "$file" > bind; done'"

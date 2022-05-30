@@ -79,7 +79,7 @@
     };
 
     rofi = {
-      enable = true;
+      enable = false;
       theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
       # font="FiraCode Nerd Font 14";
       font = "FantasqueSansMono Nerd Font 14";
@@ -100,14 +100,14 @@
       };
     };
     emacs = {
-      enable = true;
+      enable = false;
       package = pkgs.emacsPgtkNativeComp;
       # package = pkgs.emacs28NativeComp;
       extraPackages = (epkgs: [ epkgs.vterm ]);
     };
 
     chromium = {
-      enable = true;
+      enable = false;
       commandLineArgs = [
         "--ignore-gpu-blocklist"
         "--enable-gpu-rasterization"
@@ -134,10 +134,10 @@
     man-pages
     cachix
     rust-analyzer
-    neovide
+    # neovide
     ispell
     rofi-emoji
-    comic-mono
+    # comic-mono
     # (pkgs.nerdfonts.override {
     #   fonts = [ "FiraCode"   "Monofur" ];
     # })
