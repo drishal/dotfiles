@@ -1105,6 +1105,11 @@ not tangling atm
 (use-package pkgbuild-mode :ensure t)
 (require 'pkgbuild-mode)
 #+end_src
+
+*** rust
+#+begin_src emacs-lisp
+(use-package rust-mode :ensure t)
+#+end_src
 *** lsp
 #+begin_src emacs-lisp
 (add-hook 'emacs-lisp-mode-hook

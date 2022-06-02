@@ -25,7 +25,7 @@ alias v="nvim"
 alias whoogle="docker run --publish 5000:5000 --detach benbusby/whoogle-search:latest"
 alias energy_now="cat /sys/class/power_supply/BAT0/energy_now"
 alias set-wall="feh --bg-scale" # set-wall /path/to/file
-alias push-all="bash ~/dotfiles/scripts/push-all.sh"
+alias push-all="~/dotfiles/scripts/push-all.sh"
 
 export EXA_ICON_SPACING=2
 
@@ -58,6 +58,7 @@ export PATH="$HOME/.npm-packages/bin:$PATH"
 
 #watch sync
 alias watch-sync="watch -d grep -e Dirty: -e Writeback: /proc/meminfo"
+alias watch-amd-gpu="sudo watch -n 0.5  cat /sys/kernel/debug/dri/0/amdgpu_pm_info"
 
 #ytdlp
 alias youtube-dl="yt-dlp"

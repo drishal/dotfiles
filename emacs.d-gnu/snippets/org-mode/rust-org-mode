@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: rust-org-mode
+# key: <sr
+# --
+#+begin_src rust :results output
+$0
+#+end_src
