@@ -1,5 +1,7 @@
 # Inserts a blank line between shell prompts
 add_newline = true 
+# format = "\\[$username@$hostname $directory \\] \\$ "
+
 
 [line_break]
 disabled=true
@@ -15,3 +17,15 @@ disabled=true
 #disabled = true
 [git_status]
 # disabled=true
+# [username]
+# format = " [$user]($style) "
+# show_always = true
+
+# [hostname]
+# format = " [$hostname]($style) "
+# ssh_only = false
+
+# # Replace slashes with spaces in directory
+# [directory]
+# format = " [$path]($style) "
+# substitutions = { "/" = " " }

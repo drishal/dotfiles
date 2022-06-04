@@ -28,7 +28,7 @@
 - [[#kitty-config][kitty config]]
 - [[#loading-the-prompt][loading the prompt]]
   - [[#starship][Starship]]
-  - [[#custom-2][custom 2:]]
+  - [[#custom-2][custom 2]]
   - [[#custom][custom]]
   - [[#agkozak][agkozak]]
 - [[#loading-the-profile][loading the ~~/.profile~]]
@@ -295,11 +295,12 @@ see https://github.com/zsh-users/zsh-completions
 export ZSH_AUTOSUGGEST_USE_ASYNC=true
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#6272a4'
 
-zinit wait lucid for \
- atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-    zdharma-continuum/fast-syntax-highlighting \
- atload"!_zsh_autosuggest_start" \
-    zsh-users/zsh-autosuggestions
+# zinit wait lucid for \
+#  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+#     zdharma-continuum/fast-syntax-highlighting \
+#  atload"!_zsh_autosuggest_start" \
+#     zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-autosuggestions
 #+end_src
 ** zsh autocomplete
 #+begin_src shell :tangle no
@@ -373,8 +374,8 @@ you can use any of the prompts here, just make sure to remove ~:tangle no~ from 
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG=~/dotfiles/config/starship.toml
 #+end_src
-** custom 2:
-#+begin_src shell :tangle no
+** custom 2
+#+begin_src shell :tangle no 
 # Autoload zsh add-zsh-hook and vcs_info functions (-U autoload w/o substition, -z use zsh style)
 autoload -Uz add-zsh-hook vcs_info
 # Enable substitution in the prompt.
@@ -383,7 +384,7 @@ setopt prompt_subst
 zstyle ':vcs_info:git:*' formats ' on branch %b '
 # Run vcs_info just before a prompt is displayed (precmd)
 add-zsh-hook precmd vcs_info
-PS1='%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[green]%}%M %{$fg[magenta]%}%~%{$fg[red]%}%{$fg[blue]%}${vcs_info_msg_0_}%{$fg[red]%}]%{$reset_color%} $%b '
+PS1='%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[green]%}%M %{$fg[blue]%}%~%{$fg[red]%}%{$fg[magenta]%}${vcs_info_msg_0_}%{$fg[red]%}]%{$reset_color%} $%b '
 # PS1=' %F{red}${vcs_info_msg_0_}%f '
 #+end_src
 
