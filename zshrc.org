@@ -28,6 +28,7 @@
 - [[#kitty-config][kitty config]]
 - [[#loading-the-prompt][loading the prompt]]
   - [[#starship][Starship]]
+  - [[#p10k][p10k]]
   - [[#custom-2][custom 2]]
   - [[#custom][custom]]
   - [[#agkozak][agkozak]]
@@ -370,9 +371,16 @@ export KITTY_SHELL_INTEGRATION=no-cursor
 * loading the prompt
 you can use any of the prompts here, just make sure to remove ~:tangle no~ from whatever prompt you prefer (and also dont forget to add ~:tangle no~ to the ones which you are not using)
 ** Starship
-#+begin_src shell 
+#+begin_src shell :tangle no
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG=~/dotfiles/config/starship.toml
+#+end_src
+** p10k
+#+begin_src shell
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
 #+end_src
 ** custom 2
 #+begin_src shell :tangle no 
