@@ -209,8 +209,8 @@ https://github.com/quelpa/quelpa#installation
 
   (dashboard-setup-startup-hook)
 
-(dashboard-refresh-buffer)
-(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+;; (dashboard-refresh-buffer)
+(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
 #+end_src
 *** Test 2 for dashboard
 #+begin_src emacs-lisp :tangle no
@@ -438,13 +438,11 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 
 * Hook to tangle on save
 #+begin_src emacs-lisp
-(defun f2k--tangle-all-org-on-save-h ()
+(defun tangle-all-org-on-save-h ()
   "Tangle org files on save."
   (if (string= (file-name-extension (buffer-file-name)) "org")
       (org-babel-tangle)))
-
-(add-hook 'after-save-hook #'f2k--tangle-all-org-on-save-h)
-
+(add-hook 'after-save-hook #'tangle-all-org-on-save-h)
 #+end_src
 * Org mode:
 #+begin_src emacs-lisp
@@ -579,7 +577,7 @@ https://github.com/skangas/mentor
 #+end_src
 ** mu4e
 https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-01.org
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle no
 (use-package mu4e
   :ensure nil
   ;; :defer 20 ; Wait until 20 seconds after startup
