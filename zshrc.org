@@ -1,6 +1,7 @@
 #+TITLE: zshrc
 #+PROPERTY: header-args:shell :tangle ~/.zshrc
 * table of contents :toc:
+- [[#tramp-fix][tramp fix]]
 - [[#zinit][zinit]]
   - [[#added-by-zinits-installer][Added by zinit's installer]]
 - [[#initial-setup][initial setup]]
@@ -37,6 +38,10 @@
 - [[#some-misc-exports][some misc exports]]
   - [[#terminfo-stull][Terminfo stull]]
 
+* tramp fix
+#+begin_src shell
+[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
+#+end_src
 * zinit
 to install copy-paste this into the terminal
 #+begin_src shell :tangle no
@@ -113,7 +118,7 @@ fi
 #+begin_src shell
   export USE_CCACHE=1
   export CCACHE_EXEC=/usr/bin/ccache
-  export CCACHE_DIR=/home/drishal/.ccache2
+  export CCACHE_DIR=/home/drishal/.ccache-1
 #+end_src
 
 * Setting some values we will need from Grml zsh config
@@ -371,7 +376,7 @@ export KITTY_SHELL_INTEGRATION=no-cursor
 * loading the prompt
 you can use any of the prompts here, just make sure to remove ~:tangle no~ from whatever prompt you prefer (and also dont forget to add ~:tangle no~ to the ones which you are not using)
 ** Starship
-#+begin_src shell 
+#+begin_src shell :tangle no
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG=~/dotfiles/config/starship.toml
 #+end_src
@@ -388,6 +393,12 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 autoload -Uz add-zsh-hook vcs_info
 # Enable substitution in the prompt.
 # precmd() { print "" }
+# print a blank line before the prompt except the first line
+precmd() {
+    precmd() {
+        echo
+    }
+}
 setopt prompt_subst
 zstyle ':vcs_info:git:*' formats ' on branch %b '
 # Run vcs_info just before a prompt is displayed (precmd)
@@ -411,7 +422,7 @@ what do different values mean
 #+end_src
 ** agkozak
 https://github.com/agkozak/agkozak-zsh-prompt
-#+begin_src shell :tangle no
+#+begin_src shell 
 zinit light agkozak/agkozak-zsh-prompt
 AGKOZAK_PROMPT_CHAR=( '%F{green}❯%f' '%F{green}❯%f' '%F{green}❮%f' )
 AGKOZAK_LEFT_PROMPT_ONLY=1
