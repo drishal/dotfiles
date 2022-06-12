@@ -62,7 +62,7 @@ alias watch-amd-gpu="sudo watch -n 0.5  cat /sys/kernel/debug/dri/0/amdgpu_pm_in
 
 #ytdlp
 alias youtube-dl="yt-dlp"
-alias yt-dlp-mp3="yt-dlp -x --audio-format=mp3"
+alias yt-dlp-mp3="yt-dlp --no-playlist -x --audio-format=mp3"
 
 #distrobox
 alias fedora-distrobox="distrobox-enter fedora-toolbox-35"
