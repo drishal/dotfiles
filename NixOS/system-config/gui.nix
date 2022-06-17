@@ -83,7 +83,6 @@
     (final: prev: {
       dwm = prev.dwm.overrideAttrs (old: { src = ../../suckless/dwm-6.3; });
       dwmblocks = prev.dwmblocks.override (old: {
-        # src = ../suckless/dwmblocks
         conf = ../../suckless/dwmblocks/blocks.def.h;
       });
     })

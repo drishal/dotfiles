@@ -249,11 +249,24 @@ myLayout =  toggleLayouts (smartBorders Full)
 * Manage Hook
 
 #+begin_src haskell
+myManageHook :: XMonad.Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll
       [
         resource  =? "desktop_window" --> doIgnore
       , resource  =? "kdesktop"       --> doIgnore
       , className =? ".zoom " --> doFloat
+      ,  className =? "confirm"         --> doFloat
+      , className =? "file_progress"   --> doFloat
+      , className =? "dialog"          --> doFloat
+      , className =? "download"        --> doFloat
+      , className =? "error"           --> doFloat
+      , className =? "Gimp"            --> doFloat
+      , className =? "notification"    --> doFloat
+      , className =? "pinentry-gtk-2"  --> doFloat
+      , className =? "splash"          --> doFloat
+      , className =? "toolbar"         --> doFloat
+      , className =? "Yad"             --> doCenterFloat
+      , title =? "Oracle VM VirtualBox Manager"  --> doFloat
       , title =? "Zoom Meeting" --> doFloat
       ] 
 #+end_src

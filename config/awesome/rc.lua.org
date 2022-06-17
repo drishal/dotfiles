@@ -70,7 +70,7 @@ end)
 * Variable definitions
 Themes define colours, icons, font and wallpapers.
 
- #+begin_src lua
+ #+begin_src lua 
  beautiful.init("/home/drishal/dotfiles/config/awesome/theme.lua")
  #+end_src
 

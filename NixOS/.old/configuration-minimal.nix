@@ -1,4 +1,4 @@
-{ config, pkgs,inputs, lib ,... }:
+{ config, pkgs, inputs, lib, ... }:
 
 {
   imports =
@@ -8,7 +8,7 @@
     ];
 
   # kernel parameters
-  boot.kernelParams = ["iommu=pt"];
+  boot.kernelParams = [ "iommu=pt" ];
 
   # microde
   hardware.cpu.amd.updateMicrocode = true;
@@ -18,7 +18,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   #qt_qpa_platformtheme
- environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "";
+  environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "";
 
 
   #bluetooth
@@ -43,7 +43,7 @@
   # For 32 bit applications
   hardware.opengl.driSupport32Bit = true;
   # setting the video driver
-  services.xserver.videoDrivers = [ "amdgpu" ];
+  services.xserver.videoDrivers = [ "" ];
   # enable opengl
   hardware.opengl.enable = true;
   # services.xserver.useGlamor = true;
@@ -54,11 +54,11 @@
   # nixUnstable
   nix.package = pkgs.nixUnstable;
   nix.extraOptions = ''
-      experimental-features = nix-command flakes
-   '';
+    experimental-features = nix-command flakes
+  '';
   # non-free stuff
   nixpkgs.config.allowUnfree = true;
-  hardware.enableRedistributableFirmware=true;
+  hardware.enableRedistributableFirmware = true;
 
   #optimizing storage in nixos
   # nix.autoOptimiseStore = true;
@@ -115,9 +115,9 @@
     pulse.enable = true;
     jack.enable = true;
 
-  # use the example session manager (no others are packaged yet so this is enabled by default,
-  # no need to redefine it in your config for now)
-  # media-session.enable = true;
+    # use the example session manager (no others are packaged yet so this is enabled by default,
+    # no need to redefine it in your config for now)
+    # media-session.enable = true;
   };
   hardware.pulseaudio.enable = false;
   # some pulseaudio settings
@@ -137,35 +137,71 @@
   users.users.drishal = {
     shell = pkgs.zsh;
     isNormalUser = true;
-    extraGroups = [ "wheel"  "network" "video"  "-manager" "docker"]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "network" "video" "-manager" "docker" ]; # Enable ‘sudo’ for the user.
   };
 
   # nm-applet
-  programs.nm-applet.enable=true;
+  programs.nm-applet.enable = true;
 
   environment.systemPackages = with pkgs; [
-    wget vim haskellPackages.xmobar
-    alacritty xorg.xkill git
-    man teams batdistrack
-    papirus-icon-theme xorg.xf86videoamdgpu lxappearance
-    lxsession libnotify xclip starship
-    cmake volumeicon usbutils
-    pavucontrol killall htop
-    firefox neofetch steam-run 
-    picom inxi  xarchiver unzip
-    nitrogen rofi trayer arc-theme
+    wget
+    vim
+    haskellPackages.xmobar
+    alacritty
+    xorg.xkill
+    git
+    man
+    papirus-icon-theme
+    lxappearance
+    lxsession
+    libnotify
+    xclip
+    starship
+    cmake
+    volumeicon
+    usbutils
+    pavucontrol
+    killall
+    htop
+    firefox
+    neofetch
+    picom
+    inxi
+    xarchiver
+    unzip
+    nitrogen
+    rofi
+    trayer
+    arc-theme
     youtube-dl
-     mpv smplayer pfetch
-    qbittorrent  mesa-demos glxinfo
-    xorg.xdpyinfo evince qt5ct
-    redshift xorg.xbacklight xfce.xfce4-power-manager
-    brightnessctl imagemagick exa
-    gcc deadd-notification-center 
+    mpv
+    smplayer
+    pfetch
+    qbittorrent
+    mesa-demos
+    glxinfo
+    xorg.xdpyinfo
+    evince
+    qt5ct
+    redshift
+    xorg.xbacklight
+    xfce.xfce4-power-manager
+    brightnessctl
+    imagemagick
+    exa
+    gcc
     linuxPackages.cpupower
-    powertop inetutils nmap cpufetch
-    dmenu dwmblocks cmatrix qutebrowser neovim
-    feh cinnamon.nemo libva-utils speedtest-cli pass
-    surf gnumake
+    powertop
+    inetutils
+    nmap
+    cpufetch
+    neovim
+    feh
+    cinnamon.nemo
+    libva-utils
+    speedtest-cli
+    pass
+    gnumake
     python39
   ];
   # virtualbox
@@ -186,6 +222,6 @@
     touchpad.accelSpeed = "0.4";
     mouse.middleEmulation = false;
   };
-  system.stateVersion = "21.05"; 
+  system.stateVersion = "21.05";
 
 }

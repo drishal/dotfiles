@@ -376,7 +376,7 @@ export KITTY_SHELL_INTEGRATION=no-cursor
 * loading the prompt
 you can use any of the prompts here, just make sure to remove ~:tangle no~ from whatever prompt you prefer (and also dont forget to add ~:tangle no~ to the ones which you are not using)
 ** Starship
-#+begin_src shell :tangle no
+#+begin_src shell 
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG=~/dotfiles/config/starship.toml
 #+end_src
@@ -422,7 +422,7 @@ what do different values mean
 #+end_src
 ** agkozak
 https://github.com/agkozak/agkozak-zsh-prompt
-#+begin_src shell 
+#+begin_src shell :tangle no
 zinit light agkozak/agkozak-zsh-prompt
 AGKOZAK_PROMPT_CHAR=( '%F{green}❯%f' '%F{green}❯%f' '%F{green}❮%f' )
 AGKOZAK_LEFT_PROMPT_ONLY=1

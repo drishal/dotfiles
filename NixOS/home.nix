@@ -130,13 +130,18 @@
   home.packages = with pkgs; [
     neofetch
     man
+    nixpkgs-fmt
     # distrobox
     man-pages
     cachix
     rust-analyzer
     # neovide
     ispell
+    # firefox
+    # exa
+    # chromium
     rofi-emoji
+    # firefox
     # comic-mono
     # (pkgs.nerdfonts.override {
     #   fonts = [ "FiraCode"   "Monofur" ];
