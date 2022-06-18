@@ -28,7 +28,7 @@ nixConfig.extra-trusted-public-keys = [ "contamination.cachix.org-1:KmdW5xVF8ccK
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      url = "github:nix-community/emacs-overlay/b4e68af357c86148dad55b0a40049c63df7271b4";
+      url = "github:nix-community/emacs-overlay/85c0398418b657c2c91ea8a52fcebca3e04529b5";
     };
 
     mach-nix = {

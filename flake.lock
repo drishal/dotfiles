@@ -54,17 +54,17 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1653713938,
-        "narHash": "sha256-r8fh0Yrrkh6dcgKgXjUo1X985Qmyu4neiJ4DWcwIV5k=",
+        "lastModified": 1655526446,
+        "narHash": "sha256-w5nsSo0oiJMUNxjrhvB1wOP52ksV5nMbN6A7DX8lfP4=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "b4e68af357c86148dad55b0a40049c63df7271b4",
+        "rev": "85c0398418b657c2c91ea8a52fcebca3e04529b5",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "b4e68af357c86148dad55b0a40049c63df7271b4",
+        "rev": "85c0398418b657c2c91ea8a52fcebca3e04529b5",
         "type": "github"
       }
     },
@@ -197,11 +197,11 @@
       },
       "locked": {
         "dir": "contrib",
-        "lastModified": 1655347195,
-        "narHash": "sha256-rHghc7WM1qfE95o/rgQH/ZWDtK3hXTBys0aWYLxDzDA=",
+        "lastModified": 1655530982,
+        "narHash": "sha256-6O6wY22x6navlG+AtugQ4aKN2N1SceAjb0EvMIc6FvM=",
         "owner": "neovim",
         "repo": "neovim",
-        "rev": "0e8186bdd8699fb20ad70e28813c3603f9ff0ece",
+        "rev": "966d55effe5cbfc3d779c89591a1bec4e9ac6639",
         "type": "github"
       },
       "original": {
@@ -218,11 +218,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1655367508,
-        "narHash": "sha256-zlMqGLrCvzsnERck+CjPihDti8xjpI1SyXKCiScDvN0=",
+        "lastModified": 1655540134,
+        "narHash": "sha256-w00GmU8gc/O1x/JyJgx2KoDuiMkQHI4M9aoQrbhPtUs=",
         "owner": "nix-community",
         "repo": "neovim-nightly-overlay",
-        "rev": "244429ca2ba599a9466963081e6cfcca262315cd",
+        "rev": "bac8d9d3fd7694db8b0fb5e059395c924572a1e5",
         "type": "github"
       },
       "original": {
@@ -249,11 +249,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1655390681,
-        "narHash": "sha256-SXGZ7jJWsySMlNEpbxi8nq3QYDbtcAl+QHwsXlWq2g0=",
+        "lastModified": 1655481042,
+        "narHash": "sha256-XHbcywq2vIQ5CeH1OK3TN793jkiNAAZsSctS1PFgseo=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "29769d2a1390d294469bcc6518f17931953545e1",
+        "rev": "103a4c0ae46afa9cf008c30744175315ca38e9f9",
         "type": "github"
       },
       "original": {
@@ -294,11 +294,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1655221618,
-        "narHash": "sha256-ht8HRFthDKzYt+il+sGgkBwrv+Ex2l8jdGVpsrPfFME=",
+        "lastModified": 1655400192,
+        "narHash": "sha256-49OBVVRgb9H/PSmNT9W61+NRdDbuSJVuDDflwXlaUKU=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "6616de389ed55fba6eeba60377fc04732d5a207c",
+        "rev": "3d7435c638baffaa826b85459df0fff47f12317d",
         "type": "github"
       },
       "original": {
@@ -310,11 +310,11 @@
     },
     "nixpkgs_6": {
       "locked": {
-        "lastModified": 1655306633,
-        "narHash": "sha256-nv4FfWWV/dEelByjXJtJkoDPOHIsKfLq50RN3Hqq5Yk=",
+        "lastModified": 1655400192,
+        "narHash": "sha256-49OBVVRgb9H/PSmNT9W61+NRdDbuSJVuDDflwXlaUKU=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "b1957596ff1c7aa8c55c4512b7ad1c9672502e8e",
+        "rev": "3d7435c638baffaa826b85459df0fff47f12317d",
         "type": "github"
       },
       "original": {
@@ -358,11 +358,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1655438881,
-        "narHash": "sha256-bbodx1uMbLihOn4LNidNqKLs66xGH6fkZaUz38xHaXI=",
+        "lastModified": 1655542600,
+        "narHash": "sha256-ekFzFbcjHP9FOhVSR5h/vLDhOrZ6p9yqMUBKpj2XPlI=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "3d02f72e61403bb14e97780e0b1fc160517a8907",
+        "rev": "a27d91d2847f321df51dd9977b1ff0f8a06ed821",
         "type": "github"
       },
       "original": {
@@ -374,8 +374,8 @@
     "private-stuff": {
       "flake": false,
       "locked": {
-        "lastModified": 1653802795,
-        "narHash": "sha256-4DF182M8JtCuxRNMXeVYiXE7yFl6oRXmVXVVAaXsYjE=",
+        "lastModified": 1655541648,
+        "narHash": "sha256-IoYa500mO0f4M8MoE9WlSsiM9T8WN91txNgEQeeuJSs=",
         "path": "/home/drishal/.private-stuff",
         "type": "path"
       },
