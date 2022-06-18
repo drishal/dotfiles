@@ -6,7 +6,7 @@
     package = pkgs.nixUnstable;
     extraOptions = ''
       experimental-features = nix-command flakes
-      extra-sandbox-paths = /nix/var/cache/ccache
+      # extra-sandbox-paths = /nix/var/cache/ccache
     '';
 
     settings.auto-optimise-store = true;
