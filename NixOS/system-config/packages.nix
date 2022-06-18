@@ -29,7 +29,7 @@
     ffmpeg
     php
     yt-dlp
-    virt-manager
+    # virt-manager
     vim
     haskellPackages.xmobar
     flameshot
