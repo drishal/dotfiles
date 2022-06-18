@@ -529,7 +529,7 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 (setq org-babel-python-command "python3")
 #+end_src
 ** org roam
-#+begin_src
+#+begin_src emacs-lisp
   (use-package org-roam :ensure t)
 #+end_src
 
