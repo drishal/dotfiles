@@ -1,6 +1,7 @@
 { config, pkgs, inputs, lib, ... }:
 {
   services.flatpak.enable = true;
+  services.gvfs.enable = true;
   xdg.portal.enable = true;
   programs = {
 
@@ -125,7 +126,7 @@
     gnome.gnome-sound-recorder
     tmux
     ps_mem
-    taffybar
+    # taffybar
     noto-fonts
     ntfs3g
     gparted
@@ -156,7 +157,7 @@
     dwmblocks
     conky
     batdistrack
-    ciscoPacketTracer8
+    # ciscoPacketTracer8
     onefetch
     ripgrep
     nixpkgs-fmt
@@ -186,7 +187,10 @@
     virtualenv
     # some xfce apps
     xfce.xfce4-clipman-plugin
-    xfce.thunar
+    xfce.xfconf
+    xfce.exo
+    # xfce.thunar
+    (xfce.thunar.override { thunarPlugins = with pkgs; [ xfce.thunar-volman xfce.thunar-archive-plugin ]; })
     xfce.xfce4-taskmanager
     xfce.xfce4-notifyd
     xfce.xfce4-whiskermenu-plugin
