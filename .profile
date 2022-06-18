@@ -1,6 +1,6 @@
 # aliases
 alias nix-config="sudo vim /etc/nixos/configuration.nix"
-alias xon="bash ~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
+alias xon="steam-run ~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
 alias xon-glx="steam-run ~/Desktop/games/Xonotic/xonotic-linux-glx.sh"
 alias stk="~/Desktop/games/SuperTuxKart-1.2-linux/run_game.sh"
 

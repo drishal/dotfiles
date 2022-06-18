@@ -79,7 +79,7 @@
     };
 
     rofi = {
-      enable = false;
+      enable = true;
       theme = "${pkgs.rofi}/share/rofi/themes/Arc-Dark.rasi";
       # font="FiraCode Nerd Font 14";
       font = "FantasqueSansMono Nerd Font 14";
@@ -100,7 +100,7 @@
       };
     };
     emacs = {
-      enable = false;
+      enable = true;
       package = pkgs.emacsPgtkNativeComp;
       # package = pkgs.emacs28NativeComp;
       extraPackages = (epkgs: [ epkgs.vterm ]);
