@@ -220,6 +220,14 @@
 
   # conky
   home.file."/home/drishal/.config/conky/onedark.conkyrc".source = ../config/conky/onedark.conkyrc;
+
+  #polybar
+  home.file."/home/drishal/.config/polybar/config.ini".source = ../config/polybar/config.ini;
+
+  # leftwm
+  home.file."/home/drishal/.config/leftwm/config.toml".source = ../config/leftwm/config.toml;
+  home.file."/home/drishal/.config/leftwm/current".source = ../config/leftwm/onedark;
+
   # qtile config
   #home.file."/home/drishal/.config/qtile/config.py".source =../config/qtile/config.py;
   # home.file."/home/drishal/.config/qtile/autostart.sh".source =../config/qtile/autostart.sh;
