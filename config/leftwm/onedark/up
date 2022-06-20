@@ -16,22 +16,25 @@ picom --experimental-backends > /dev/null &
 leftwm command "LoadTheme $SCRIPTPATH/theme.toml"
 
 # Set background
-feh --bg-fill "$SCRIPTPATH"/background.jpg
+# feh --bg-fill "$SCRIPTPATH"/background.jpg
+feh --bg-scale ~/dotfiles/wallpapers/NixOS-1.png
 
 dunst &
 
-index=0
+# index=0
 leftwm-state -q -n -t "$SCRIPTPATH"/sizes.liquid | sed -r '/^\s*$/d' | while read -r width
-do
-  barname="mainbar$index"
-  monitor="$(polybar -m | awk -v i="$(( index + 1 ))" 'NR==i{print}' | sed s/:.*// | tr -d '\n')"
-  monitor=$monitor width=$(( width - 16 )) polybar -c "$SCRIPTPATH"/polybar.config $barname &
-  index=$((index+1))
-done
-
+# do
+#   barname="mainbar$index"
+#   monitor="$(polybar -m | awk -v i="$(( index + 1 ))" 'NR==i{print}' | sed s/:.*// | tr -d '\n')"
+#   monitor=$monitor width=$(( width - 16 )) polybar -c "$SCRIPTPATH"/polybar.config $barname &
+#   index=$((index+1))
+# done
+xset r rate  300 50
 dunst&
 lxpolkit&
 nm-applet&
 xfce4-clipman&
 emacs --daemon&
 blueman-applet&
+emacs --daemon&
+polybar example&

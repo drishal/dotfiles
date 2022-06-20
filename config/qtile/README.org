@@ -285,7 +285,7 @@ keys = [
 #+begin_src python
  screens = [
     Screen(
-        wallpaper='~/dotfiles/wallpapers/archlinux/archlinux-onedark.png',
+        wallpaper='~/dotfiles/wallpapers/NixOS-1.png',
         wallpaper_mode='stretch',
         top=bar.Bar(
             [

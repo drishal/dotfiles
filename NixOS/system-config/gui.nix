@@ -17,6 +17,15 @@
 
       dwm.enable = true;
 
+      leftwm.enable = true;
+      awesome = {
+        enable = true;
+        luaModules = with pkgs.luaPackages; [
+          luarocks # is the package manager for Lua modules
+          luadbi-mysql # Database abstraction layer
+        ];
+
+      };
       # awesome.enable = true;
     };
 

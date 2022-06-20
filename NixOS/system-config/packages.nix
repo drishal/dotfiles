@@ -25,6 +25,7 @@
     simplescreenrecorder
     debootstrap
     mate.caja
+    imagemagick
     pandoc
     obs-studio
     ffmpeg

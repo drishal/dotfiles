@@ -57,7 +57,7 @@ Config {
         , Run Com "/home/drishal/dotfiles/trayer-padding-icon.sh" [] "trayerpad" 20
         -- time and date indicator 
         --   (%F = d-m-y date, %a = day of week, %T = h:m:s time)
-        , Run Date           "<fc=#a9a1e1>  %F (%a) %T</fc>" "date" 10
+        , Run Date           "<fc=#a9a1e1>  %d %b %Y (%a) %T</fc>" "date" 10
       
         , Run Com "uname" ["-r"] "" 3600
         , Run Com "bash /home/drishal/Desktop/suckless/scripts/dwm_battery.sh" [] "batt" 10

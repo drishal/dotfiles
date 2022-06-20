@@ -6,7 +6,7 @@
     libvirtd = {
       enable = true;
       qemu.ovmf.enable = true;
-      qemu.ovmf.package = pkgs.OVMFFull;
+      # qemu.ovmf.package = pkgs.OVMFFull;
     };
 
     #docker
@@ -21,9 +21,9 @@
     # virtualbox.host.enable = true;
 
     #podman
-    podman = {
-      enable = true;
-    };
+    # podman = {
+    #   enable = true;
+    # };
   };
 
   users.extraGroups.vboxusers.members = [ "drishal" ];

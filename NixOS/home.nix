@@ -107,7 +107,8 @@
     };
 
     chromium = {
-      enable = false;
+      enable = true;
+      package = pkgs.ungoogled-chromium;
       commandLineArgs = [
         "--ignore-gpu-blocklist"
         "--enable-gpu-rasterization"
@@ -226,7 +227,7 @@
 
   # leftwm
   home.file."/home/drishal/.config/leftwm/config.toml".source = ../config/leftwm/config.toml;
-  home.file."/home/drishal/.config/leftwm/current".source = ../config/leftwm/onedark;
+  home.file."/home/drishal/.config/leftwm/themes/current".source = ../config/leftwm/onedark;
 
   # qtile config
   #home.file."/home/drishal/.config/qtile/config.py".source =../config/qtile/config.py;
