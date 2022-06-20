@@ -10,10 +10,10 @@
 Don't worry this readme is there just to tackle this very issue
 * What do my dots contain?
 + These dots contain my configurations for:
-  1. Nix Flakes, configuration.nix  (~flake.nix~ and under ~./NixOS/~ )
-  2. Xmoand, dwm and qtile Window Managers (~./.xmonad~, and under ~./config/~)   
+  1. Nix Flakes, configuration.nix  (~flake.nix~ and under ~NixOS~ directory )
+  2. Xmoand, dwm and qtile Window Managers (under ~.xmonad~, ~config~ and ~suckless~ for dwm ofc)   
   3. some other tools like st, alacritty, kitty, Emacs and other stuff
-  *Note.* for Emacs, better to use  ~dotfiles/emacs.d-gnu~, I have also got doom.d configured with a lot of stuff, kept as emergency
+  *Note* for Emacs, better to use  ~dotfiles/emacs.d-gnu~, I have also got doom.d configured with a lot of stuff, kept as emergency
 * How to set it up on NixOS
 1. Make sure to clone the repo to ~~/dotfiles~ (a lot of stuff is hard coded to this path)
 2. on NixOS, for first time installation first copy ~dotfiles/NixOS ~/etc/nixos/configuration.nix~
