@@ -12,7 +12,7 @@ ln -s "$SCRIPTPATH"/down /tmp/leftwm-theme-down
 # Boot picom or compton if it exists
 picom --experimental-backends > /dev/null &
 
-# Set the theme.toml config
+# # Set the theme.toml config
 leftwm command "LoadTheme $SCRIPTPATH/theme.toml"
 
 # Set background
@@ -22,7 +22,7 @@ feh --bg-scale ~/dotfiles/wallpapers/NixOS-1.png
 dunst &
 
 # index=0
-leftwm-state -q -n -t "$SCRIPTPATH"/sizes.liquid | sed -r '/^\s*$/d' | while read -r width
+# leftwm-state -q -n -t "$SCRIPTPATH"/sizes.liquid | sed -r '/^\s*$/d' | while read -r width
 # do
 #   barname="mainbar$index"
 #   monitor="$(polybar -m | awk -v i="$(( index + 1 ))" 'NR==i{print}' | sed s/:.*// | tr -d '\n')"
