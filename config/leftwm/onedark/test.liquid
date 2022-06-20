@@ -1,0 +1,7 @@
+{% for workspace in workspaces %}
+{% for tag in workspace.tags %}
+{% if tag.focused and tag.mine %}
+{{workspace.index}}
+{% endif %}
+{% endfor %}
+{% endfor %}

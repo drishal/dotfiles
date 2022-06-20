@@ -1,34 +1,37 @@
-#!/usr/bin/env bash
-export SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+#!/bin/sh
+export SCRIPTPATH
+SCRIPTPATH="$( cd "$(dirname "$0")" || exit; pwd -P )"
 
-
-#down the last running theme
+# Down the last running theme
 if [ -f "/tmp/leftwm-theme-down" ]; then
     /tmp/leftwm-theme-down
     rm /tmp/leftwm-theme-down
 fi
-ln -s $SCRIPTPATH/down /tmp/leftwm-theme-down
+ln -s "$SCRIPTPATH"/down /tmp/leftwm-theme-down
 
+# Boot picom or compton if it exists
+picom --experimental-backends > /dev/null &
 
-#boot picom or compton if it exists
-if [ -x "$(command -v picom)" ]; then
-  picom --experimental-backends. &> /dev/null &
-elif [ -x "$(command -v compton)" ]; then
-  compton &> /dev/null &
-fi
+# Set the theme.toml config
+leftwm command "LoadTheme $SCRIPTPATH/theme.toml"
 
-#set the theme.toml config
-leftwm-command "LoadTheme $SCRIPTPATH/theme.toml"
+# Set background
+feh --bg-fill "$SCRIPTPATH"/background.jpg
 
-#set background
-if [ -x "$(command -v feh)" ]; then
-    feh --bg-scale ~/dotfiles/wallpapers/NixOS-1.png
-fi
+dunst &
+
+index=0
+leftwm-state -q -n -t "$SCRIPTPATH"/sizes.liquid | sed -r '/^\s*$/d' | while read -r width
+do
+  barname="mainbar$index"
+  monitor="$(polybar -m | awk -v i="$(( index + 1 ))" 'NR==i{print}' | sed s/:.*// | tr -d '\n')"
+  monitor=$monitor width=$(( width - 16 )) polybar -c "$SCRIPTPATH"/polybar.config $barname &
+  index=$((index+1))
+done
 
 dunst&
-xset r rate  300 50
 lxpolkit&
 nm-applet&
 xfce4-clipman&
+emacs --daemon&
 blueman-applet&
-volumeicon&

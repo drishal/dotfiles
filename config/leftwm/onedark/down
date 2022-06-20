@@ -1,0 +1,11 @@
+#!/bin/sh
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
+#set background
+feh --bg-scale "$SCRIPTPATH"/down.jpg
+
+leftwm command "UnloadTheme"
+
+pkill picom
+pkill polybar
+pkill dunst

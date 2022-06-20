@@ -1,0 +1,9 @@
+border_width = 2
+margin = 4
+workspace_margin = 4
+# default_width = 1280
+# default_height = 720
+# always_float = false
+default_border_color = "#282c34"
+floating_border_color = "#c678dd"
+focused_border_color = "#c678dd"

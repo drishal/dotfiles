@@ -1,0 +1,147 @@
+configuration {
+    modi:                "window,drun,run";
+    display-drun:        "Applications";
+    display-window:      "Windows";
+    display-run:         "Run";
+    show-icons:          true;
+    terminal:            "alacritty";
+    threads:             0;
+    matching:            "fuzzy";
+    disable-history:     false;
+}
+
+* {
+    font: "SauceCodePro Nerd Font Medium 14";
+    foreground:                 #f8f8f2;
+    background-color:           #282a36b3;
+    selected-foreground:        #bd93f9;
+    selected-background:        #b2b2b250;
+    separatorcolor:             #ff79c6;
+    bordercolor:                #ff79c6;
+    highlightcolor:             #8be9fd;
+    transparent:                #00000000;
+}
+
+#window {
+    background-color: @background;
+    border:           0;
+    border-radius:    8;
+    border-color:     @background;
+    padding:          0px 0px 0px;
+    width:            35%;
+}
+#mainbox {
+    border:  0;
+    padding: 0;
+}
+#message {
+    border:       0px 0px 0px;
+    border-color: @separatorcolor;
+    padding:      1px;
+}
+#textbox {
+    text-color: @foreground;
+}
+#listview {
+    background-color: @transparent;
+    lines:        8;
+    border:       0px 0px 0px;
+    border-color: @bordercolor;
+    spacing:      0px;
+    scrollbar:    false;
+    padding:      0px 0px 0px 0px;
+    cycle:        true;
+}
+#element {
+    background-color: @transparent;
+    border:        0; 
+    border-radius: 8;
+    padding:       20px;
+    children: [element-icon, element-text];
+}
+#element-text { 
+    highlight:     None #8be9fd; 
+}
+#element-icon {
+    size: 0.9em;
+}
+#element.normal.normal {
+    background-color: @background;
+    text-color:       @foreground;
+}
+#element.normal.urgent {
+    background-color: @background;
+    text-color:       @foreground;
+}
+#element.normal.active {
+    background-color: @background;
+    text-color:       @foreground;
+}
+#element.selected.normal {
+    background-color: @selected-background;
+    text-color:       @selected-foreground;
+}
+#element.selected.urgent {
+    background-color: @selected-background;
+    text-color:       @selected-foreground;
+}
+#element.selected.active {
+    background-color: @selected-background;
+    text-color:       @selected-background;
+}
+#element.alternate.normal {
+    background-color: @background;
+    text-color:       @foreground;
+}
+#element.alternate.urgent {
+    background-color: @background;
+    text-color:       @foreground;
+}
+#element.alternate.active {
+    background-color: @background;
+    text-color:       @foreground;
+}
+#scrollbar {
+    width:        2px;
+    border:       0;
+    handle-width: 8px;
+    padding:      0;
+}
+#sidebar {
+    border:       2px dash 0px 0px;
+    border-color: @separatorcolor;
+}
+#button.selected {
+    background-color: @selected-background;
+    text-color:       @foreground;
+}
+#inputbar {
+    background-color: @transparent;
+    spacing:    0;
+    text-color: @foreground;
+    padding:    25px ;
+    children:   [ entry ];
+}
+#case-indicator {
+    spacing:    0;
+    text-color: @foreground;
+}
+#entry {
+    background-color: @transparent;
+    spacing:    0;
+    text-color: @foreground;
+}
+#prompt {
+    background-color: @transparent;
+    spacing:    0;
+    text-color: @separatorcolor;
+}
+#textbox-prompt-colon {
+    background-color: @transparent;
+    expand:     false;
+    str:        ":";
+    margin:     0px 0.3em 0em 0em;
+    text-color: @separatorcolor;
+}
+
+/* vim:ft=css
