@@ -24,7 +24,6 @@
 - [[#xmobarpp-settings][xmobarPP settings]]
 - [[#myconfig][myConfig]]
 - [[#the-main-event][the main event]]
-- [[#xmobar-config][xmobar config]]
 - [[#color-schemes][Color schemes]]
   - [[#dracula][Dracula]]
   - [[#onedark][OneDark]]
@@ -545,12 +544,6 @@ main =
      $ myConfig
 #+end_src
 
-* TODO xmobar config 
-I am going to integerate the xmobar config right into this config itself, which is going to be tangled to ~ ~/.xmonad/xmobar.hs~ ~
-An example of a Haskell-based xmobar. Compile it with ~ghc --make -- xmobar.hs~ with the xmobar library installed or simply call:
-~xmobar /path/to/xmobar.hs~ and xmobar will compile and launch it for you 
-for stack, compile it with: ~stack exec xmobar xmobar.hs~
-credits: https://github.com/jaor/xmobar/blob/master/examples/xmobar.hs
 * Color schemes
 ** Dracula
 #+begin_src haskell :tangle ~/.xmonad/lib/Colors/Dracula.hs 
