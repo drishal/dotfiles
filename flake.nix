@@ -1,9 +1,11 @@
 {
   description = "Configuration for my system";
 
-nixConfig.extra-substituters = [ "https://contamination.cachix.org" "https://nix-community.cachix.org" ];
-nixConfig.extra-trusted-public-keys = [ "contamination.cachix.org-1:KmdW5xVF8ccKEb9tvK6qtEMW+lGa83seGgFyBOkeM/4=" "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
-"];
+  nixConfig.extra-substituters = [ "https://contamination.cachix.org" "https://nix-community.cachix.org" ];
+  nixConfig.extra-trusted-public-keys = [ "contamination.cachix.org-1:KmdW5xVF8ccKEb9tvK6qtEMW+lGa83seGgFyBOkeM/4=" "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
+  # nixConfig.extra-substituters = [ "https://nix-community.cachix.org" ];
+  # nixConfig.extra-trusted-public-keys = [  "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="];
+
 
 
 
@@ -28,7 +30,7 @@ nixConfig.extra-trusted-public-keys = [ "contamination.cachix.org-1:KmdW5xVF8ccK
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      url = "github:nix-community/emacs-overlay/85c0398418b657c2c91ea8a52fcebca3e04529b5";
+      url = "github:nix-community/emacs-overlay/24a3db32a164c797e66f55270390f3ad69e3c8d3";
     };
 
     mach-nix = {
@@ -42,7 +44,7 @@ nixConfig.extra-trusted-public-keys = [ "contamination.cachix.org-1:KmdW5xVF8ccK
 
   };
 
-  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, neovim-nightly-overlay, cachix, declarative-cachix, private-stuff, mach-nix , ... }@inputs:
+  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, neovim-nightly-overlay, cachix, declarative-cachix, private-stuff, mach-nix, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -65,7 +67,7 @@ nixConfig.extra-trusted-public-keys = [ "contamination.cachix.org-1:KmdW5xVF8ccK
           nixpkgs.overlays = [ inputs.emacs-overlay.overlay inputs.neovim-nightly-overlay.overlay ];
           # nixpkgs.overlays = [ inputs ];
           imports = [
-            ./NixOS/home.nix
+            ./NixOS/home-config/home.nix
             "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
           ];
 
@@ -77,9 +79,9 @@ nixConfig.extra-trusted-public-keys = [ "contamination.cachix.org-1:KmdW5xVF8ccK
           modules = [
             # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
             { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay ]; }
-            ./NixOS/configuration.nix
+            ./NixOS/system-config/configuration.nix
           ];
-          specialArgs = {inherit inputs;};
+          specialArgs = { inherit inputs; };
         };
       };
 

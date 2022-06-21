@@ -160,7 +160,7 @@
     tree
     dwmblocks
     conky
-    batdistrack
+    # batdistrack
     # ciscoPacketTracer8
     onefetch
     ripgrep
@@ -259,15 +259,18 @@
     }))
   ];
 
-  nixpkgs.overlays = [
-    # batdistrack
-    (self: super: {
-      batdistrack = super.callPackage ../extra-packages/batdistrack/default.nix { };
-    })
-  ];
-  powerManagement = {
-    powerDownCommands = ''
-      ${pkgs.batdistrack}/bin/batdistrack
-    '';
-  };
+  # powerManagement = {
+  #   powerDownCommands = ''
+  #     ${pkgs.batdistrack}/bin/batdistrack
+  #   '';
+  # };
+
+  # # nixpkgs.overlays = [
+  #   # batdistrack
+  #   (self: super: {
+  #     batdistrack = super.callPackage ../extra-packages/batdistrack/default.nix { };
+  #   })
+  # ];
+
 }
+
