@@ -23,6 +23,9 @@
     wget
     # aqemu
     simplescreenrecorder
+    # gnome.gnome-documents
+    evince
+    zathura
     debootstrap
     mate.caja
     imagemagick
