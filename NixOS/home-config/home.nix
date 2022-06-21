@@ -1,10 +1,14 @@
 { config, inputs, pkgs, ... }:
-
 {
   imports = [
-    ./home-config/imports.nix
+    ./browsers.nix
+    ./editors.nix
+    ./git.nix
+    ./packages.nix
+    ./rofi.nix
+    ./services.nix
+    ./symlinks.nix
   ];
-
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
@@ -26,6 +30,6 @@
     # sessionVariables.LOCALES_ARCHIVE = "/usr/lib/locale/locale-archive";
   };
 
-
   # home.stateVersion = "21.05";
+
 }
