@@ -1,7 +1,7 @@
 { config, inputs, pkgs, ... }:
 {
   programs = {
-    # # git
+    # git
     git = {
       enable = true;
       userName = "drishal";

@@ -1,14 +1,10 @@
 {
   description = "Configuration for my system";
-
-  nixConfig.extra-substituters = [ "https://contamination.cachix.org" "https://nix-community.cachix.org" ];
+  # nixConfig.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
+  nixConfig.extra-substituters = [ "https://contamination.cachix.org" "https://nix-community.cachix.org"];
   nixConfig.extra-trusted-public-keys = [ "contamination.cachix.org-1:KmdW5xVF8ccKEb9tvK6qtEMW+lGa83seGgFyBOkeM/4=" "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
   # nixConfig.extra-substituters = [ "https://nix-community.cachix.org" ];
   # nixConfig.extra-trusted-public-keys = [  "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="];
-
-
-
-
   inputs = {
 
     nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
@@ -27,6 +23,11 @@
     cachix.url = "github:cachix/cachix";
 
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
+
+    # hyprland = {
+    #   url = "github:vaxerski/Hyprland";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
@@ -80,6 +81,8 @@
             # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
             { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay ]; }
             ./NixOS/system-config/configuration.nix
+            # hyprland.nixosModules.default
+            # { programs.hyprland.enable = true; }
           ];
           specialArgs = { inherit inputs; };
         };

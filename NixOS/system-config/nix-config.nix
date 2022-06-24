@@ -8,7 +8,7 @@
       experimental-features = nix-command flakes
       # extra-sandbox-paths = /nix/var/cache/ccache
     '';
-
+    # settings.trusted-substituters = ["s3://nix-cache"];
     settings.auto-optimise-store = true;
   };
 

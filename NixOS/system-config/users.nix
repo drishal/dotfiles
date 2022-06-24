@@ -13,7 +13,7 @@
   # fprint
   services.fprintd.enable = true;
   security.pam.services = {
-    login.fprintAuth = true;
+    login.fprintAuth = false;
     sudo.fprintAuth = true;
     xscreensaver.fprintAuth = true;
   };

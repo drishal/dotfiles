@@ -53,7 +53,7 @@
   home.file."/home/drishal/.config/leftwm/themes/current".source = ../../config/leftwm/onedark;
 
   # awesomewm
-  home.file."/home/drishal/.config/awesome".source = ../../config/awesome;
+  home.file."/home/drishal/.config/awesome/rc.lua".source = ../../config/awesome/rc.lua;
   # qtile config
   #home.file."/home/drishal/.config/qti../../config.py".source =../config/qtile/config.py;
   # home.file."/home/drishal/.config/qtile/autostart.sh".source =../../config/qtile/autostart.sh;

@@ -114,8 +114,8 @@
 
   security.rtkit.enable = true;
   services.pipewire = {
-    wireplumber.enable = false;
-    media-session.enable = true;
+    wireplumber.enable = true;
+    # media-session.enable = false;
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;

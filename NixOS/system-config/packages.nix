@@ -23,6 +23,9 @@
     wget
     # aqemu
     simplescreenrecorder
+    # protonvpn-gui
+    # cloudflare-warp
+    acpi
     # gnome.gnome-documents
     evince
     zathura
@@ -239,7 +242,18 @@
         sha256 = "0lh3p3lkafkb2f0vqd5d99xr4wi47sgb57x65wa2cika8pz5sikv";
       };
     }))
-    # river
+    # (discord.overrideAttrs (_: {
+    #   extraOptions = [
+    #     "--disable-gpu-memory-buffer-video-frames"
+    #     "--enable-accelerated-mjpeg-decode"
+    #     "--enable-accelerated-video"
+    #     "--enable-gpu-rasterization"
+    #     "--enable-native-gpu-memory-buffers"
+    #     "--enable-zero-copy"
+    #     "--ignore-gpu-blocklist"
+    #   ];
+    # }))
+    # # river
     (river.overrideAttrs (prevAttrs: rec {
       postInstall =
         let
