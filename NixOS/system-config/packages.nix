@@ -23,7 +23,7 @@
     wget
     # aqemu
     simplescreenrecorder
-    # protonvpn-gui
+    protonvpn-gui
     # cloudflare-warp
     acpi
     # gnome.gnome-documents
@@ -97,6 +97,7 @@
     exa
     lsd
     chromium-bsu
+    # chromium
     gcc
     deadd-notification-center
     zoom-us
@@ -253,7 +254,7 @@
     #     "--ignore-gpu-blocklist"
     #   ];
     # }))
-    # # river
+    # river
     (river.overrideAttrs (prevAttrs: rec {
       postInstall =
         let
