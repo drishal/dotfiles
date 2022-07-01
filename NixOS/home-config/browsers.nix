@@ -3,7 +3,7 @@
   programs = {
     chromium = {
       enable = true;
-      # package = pkgs.ungoogled-chromium;
+      package = pkgs.brave;
       commandLineArgs = [
         "--ignore-gpu-blocklist"
         "--enable-gpu-rasterization"
