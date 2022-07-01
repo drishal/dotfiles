@@ -28,9 +28,10 @@
     acpi
     # gnome.gnome-documents
     evince
+    tor-browser-bundle-bin
     zathura
     debootstrap
-    mate.caja
+    # mate.caja
     imagemagick
     pandoc
     obs-studio
@@ -64,9 +65,11 @@
     usbutils
     pavucontrol
     killall
+    # spotify
     htop
     bpytop
     firefox
+    # librewolf
     neofetch
     steam-run
     inxi
