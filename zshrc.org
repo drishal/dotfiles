@@ -116,9 +116,9 @@ fi
 #+end_src
 ** ccache settings
 #+begin_src shell
-  export USE_CCACHE=1
-  export CCACHE_EXEC=/usr/bin/ccache
-  export CCACHE_DIR=/home/drishal/.ccache-1
+export USE_CCACHE=1
+# export CCACHE_EXEC=/usr/bin/ccache
+# export CCACHE_DIR=/home/drishal/.ccache-1
 #+end_src
 
 * Setting some values we will need from Grml zsh config
