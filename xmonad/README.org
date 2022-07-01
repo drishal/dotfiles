@@ -313,7 +313,7 @@ myStartupHook = do
         --spawnOnce "/usr/libexec/notification-daemon"
         -- spawnOnce "deadd-notification-center&"
         spawnOnce "xsetroot -cursor_name left_ptr"
-        -- spawnOnce "conky -c ~/.config/conky/onedark.conkyrc"
+        spawnOnce "conky -c ~/.config/conky/onedark.conkyrc"
         spawnOnce "xset r rate  300 50"
         spawnOnce "emacs --daemon"
         -- spawnOnce "lxqt-notificationd&"
