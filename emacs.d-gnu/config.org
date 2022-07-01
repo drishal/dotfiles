@@ -1022,6 +1022,15 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 ;; (setq lsp-use-plists t)
 ;;(setq lsp-idle-delay 0.500)
 #+end_src
+*** lsp file watchers
+#+begin_src emacs-lisp
+(with-eval-after-load 'lsp-mode
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\catuserbot\\'")
+  ;; or
+  ;; (add-to-list 'lsp-file-watch-ignored-files "[/\\\\]\\.my-files\\'")
+  )
+
+#+end_src
 *** Eglot setup
 not tangling atm
 #+begin_src emacs-lisp :tangle no
