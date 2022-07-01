@@ -45,7 +45,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init("~/dotfiles/config/awesome/themes")
+beautiful.init("~/dotfiles/config/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "alacritty"
@@ -61,8 +61,8 @@ modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
-    awful.layout.suit.floating,
     awful.layout.suit.tile,
+    awful.layout.suit.floating,
     -- awful.layout.suit.tile.left,
     -- awful.layout.suit.tile.bottom,
     -- awful.layout.suit.tile.top,
@@ -210,9 +210,9 @@ awful.screen.connect_for_each_screen(function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            mykeyboardlayout,
-            wibox.widget.systray(),
+            -- mykeyboardlayout,
             mytextclock,
+            wibox.widget.systray(),
             s.mylayoutbox,
         },
     }
@@ -227,7 +227,7 @@ root.buttons(gears.table.join(
 ))
 -- }}}
 
--- {{{ Key bindings
+-- {{{ Keybindings
 globalkeys = gears.table.join(
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
@@ -282,7 +282,9 @@ globalkeys = gears.table.join(
               {description = "quit awesome", group = "awesome"}),
     awful.key({ modkey,           }, "d", function () awful.spawn("rofi -show drun -icon-theme Papirus -show-icons") end,
               {description = "open a terminal", group = "rofi"}),
-    awful.key({ modkey,           }, "a", function () awful.spawn("rofi -show drun -icon-theme Papirus -show-icons") end,
+    awful.key({ modkey,           }, "a", function () awful.spawn("emacsclient -c") end,
+              {description = "open a terminal", group = "awesome"}),
+    awful.key({ modkey, "Shift"         }, "f", function () awful.spawn("firefox") end,
               {description = "open a terminal", group = "emacsclient -c"}),
 
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)          end,
@@ -340,7 +342,7 @@ clientkeys = gears.table.join(
             c:raise()
         end,
         {description = "toggle fullscreen", group = "client"}),
-    awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end,
+    awful.key({ modkey   }, "q",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
@@ -493,7 +495,7 @@ awful.rules.rules = {
       }, properties = { floating = true }},
 
     -- Add titlebars to normal clients and dialogs
-    { rule_any = {type = { "normal", "dialog" }
+    { rule_any = {type = { "dialog" }
       }, properties = { titlebars_enabled = true }
     },
 
@@ -562,6 +564,14 @@ end)
 client.connect_signal("mouse::enter", function(c)
     c:emit_signal("request::activate", "mouse_enter", {raise = false})
 end)
+
+-- spawning apps
+awful.spawn("xset r rate  300 50")
+awful.spawn("lxpolkit")
+awful.spawn("picom --experimental-backends")
+awful.spawn("xfce4-clipman")
+awful.spawn("emacs --daemon")
+awful.spawn("blueman-applet")
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
