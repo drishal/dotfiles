@@ -1,8 +1,8 @@
 {
   description = "Configuration for my system";
   # nixConfig.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
-  nixConfig.substituters = ["https://aseipp-nix-cache.freetls.fastly.net"];
-  nixConfig.extra-substituters = [ "https://contamination.cachix.org" "https://nix-community.cachix.org"];
+  nixConfig.substituters = [ "https://aseipp-nix-cache.freetls.fastly.net" ];
+  nixConfig.extra-substituters = [ "https://contamination.cachix.org" "https://nix-community.cachix.org" ];
   nixConfig.extra-trusted-public-keys = [ "contamination.cachix.org-1:KmdW5xVF8ccKEb9tvK6qtEMW+lGa83seGgFyBOkeM/4=" "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
   # nixConfig.extra-substituters = [ "https://nix-community.cachix.org" ];
   # nixConfig.extra-trusted-public-keys = [  "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="];
@@ -32,7 +32,7 @@
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      url = "github:nix-community/emacs-overlay/24a3db32a164c797e66f55270390f3ad69e3c8d3";
+      url = "github:nix-community/emacs-overlay/2724625945ddeaeffd94ca56e11b75b98b8bba8b";
     };
 
     mach-nix = {
@@ -51,6 +51,7 @@
       system = "x86_64-linux";
 
       pkgs = import nixpkgs {
+      # pkgs = pkgs {
         inherit system;
         config = { allowUnfree = true; };
       };
@@ -59,21 +60,20 @@
     in
     {
       homeConfigurations."drishal" = home-manager.lib.homeManagerConfiguration {
-        # also dont forget to use this command once
-        # nix run --no-write-lock-file --impure github:nix-community/home-manager -- switch   --flake  . 
-        inherit system pkgs;
-        username = "drishal";
         # pkgs = nixpkgs.legacyPackages.${system};
-        homeDirectory = "/home/drishal";
-        configuration = {
-          nixpkgs.overlays = [ inputs.emacs-overlay.overlay inputs.neovim-nightly-overlay.overlay ];
-          # nixpkgs.overlays = [ inputs ];
-          imports = [
-            ./NixOS/home-config/home.nix
-            "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
-          ];
-
-        };
+        inherit pkgs;
+        modules = [
+          ./NixOS/home-config/home.nix
+          {nixpkgs.overlays = [ inputs.emacs-overlay.overlay inputs.neovim-nightly-overlay.overlay ];}
+          "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
+          {
+            home = {
+              username = "drishal";
+              homeDirectory = "/home/drishal";
+              stateVersion = "22.05";
+            };
+          }
+        ];
       };
       nixosConfigurations = {
         nixos = lib.nixosSystem {
