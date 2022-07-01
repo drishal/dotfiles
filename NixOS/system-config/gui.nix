@@ -54,7 +54,8 @@
       mouse.middleEmulation = false;
     };
   };
-
+  # QT_QPA_PLATFORMTHEME
+  environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "";
   # river 
   services.xserver.displayManager.sessionPackages = [
     (pkgs.river.overrideAttrs
