@@ -40,7 +40,7 @@ export GTK_USE_PORTAL=0
 
 ** Applications
 #+begin_src bash
-  riverctl map normal $mod Return spawn kitty 
+  riverctl map normal $mod Return spawn foot 
 
   # Mod+Q to close the focused view
   riverctl map normal $mod Q close
@@ -290,7 +290,7 @@ riverctl set-repeat 50 300
 #+begin_src bash
 riverctl spawn "systemctl --user import-environment"
 # riverctl spawn "swaybg -i ~/dotfiles/wallpapers/darkest_hour.jpg" 
-riverctl spawn "swaybg -i ~/dotfiles/wallpapers/archlinux/archlinux-onedark.png" 
+riverctl spawn "swaybg -i ~/dotfiles/wallpapers/NixOS-1.png" 
 riverctl spawn lxpolkit 
 riverctl spawn waybar
 # riverctl spawn /usr/lib/notification-daemon-1.0/notification-daemon
