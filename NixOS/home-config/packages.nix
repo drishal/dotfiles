@@ -12,9 +12,11 @@
     ispell
     # firefox
     # exa
-    # chromium
+    chromium
     rofi-emoji
-    # firefox
+    # vivaldi-ffmpeg-codecs
+    # vivaldi-widevine
+    # # firefox
     # comic-mono
     # (pkgs.nerdfonts.override {
     #   fonts = [ "FiraCode"   "Monofur" ];
