@@ -24,6 +24,7 @@
     # aqemu
     simplescreenrecorder
     protonvpn-gui
+    protonvpn-cli
     # cloudflare-warp
     acpi
     # gnome.gnome-documents
@@ -36,6 +37,8 @@
     pandoc
     obs-studio
     ffmpeg
+    mullvad
+    mullvad-vpn
     php
     yt-dlp
     # virt-manager
@@ -189,6 +192,9 @@
     gitRepo
     docker-compose
     #rust home-manager metasploit theharvester
+    # rust
+    rustc
+    rustup
     cargo
     carnix
     # python stuff
