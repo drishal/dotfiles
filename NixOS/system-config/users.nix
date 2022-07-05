@@ -3,7 +3,7 @@
   users.users.drishal = {
     shell = pkgs.zsh;
     isNormalUser = true;
-    extraGroups = [ "wheel" "network" "video" "-manager" "docker" "adb" ];
+    extraGroups = [ "wheel" "netdev" "network" "video" "-manager" "docker" "adb" ];
   };
 
   security.sudo.extraConfig = ''
@@ -13,7 +13,7 @@
   # fprint
   services.fprintd.enable = true;
   security.pam.services = {
-    login.fprintAuth = false;
+    login.fprintAuth = true;
     sudo.fprintAuth = true;
     xscreensaver.fprintAuth = true;
   };

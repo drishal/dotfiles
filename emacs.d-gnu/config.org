@@ -1061,6 +1061,10 @@ not tangling atm
 (use-package php-mode
   :ensure t)
 #+end_src
+*** html
+#+begin_src emacs-lisp
+(use-package web-beautify :ensure t)
+#+end_src
 *** Haskell
 **** haskell mode
 #+begin_src emacs-lisp

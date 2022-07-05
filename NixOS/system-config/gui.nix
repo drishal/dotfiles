@@ -41,9 +41,9 @@
     displayManager.sddm.enable = true;
 
     # displayManager.lightdm = {
-    #   enable = true;
-    #   greeter.enable = true;
-    # };
+    #  enable = true;
+    #  greeter.enable = true;
+    #};
 
     libinput = {
       enable = true;
@@ -79,7 +79,7 @@
     )
   ];
 
-  # services.gnome.tracker.enable = false;
+  services.gnome.tracker.enable = false;
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.sddm.enableGnomeKeyring = true;
   # resolve gnome and plasma issues

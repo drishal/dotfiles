@@ -25,6 +25,7 @@
     simplescreenrecorder
     protonvpn-gui
     protonvpn-cli
+    nodejs
     # cloudflare-warp
     acpi
     # gnome.gnome-documents
@@ -119,9 +120,7 @@
     neovim
     libreoffice
     # nodePackages.create-react-app
-    nodejs
     yarn
-    nodePackages.react-tools
     ranger
     xorg.xmodmap
     powershell
@@ -191,12 +190,15 @@
     bison
     gitRepo
     docker-compose
-    #rust home-manager metasploit theharvester
-    # rust
+    # rust stuff
     rustc
     rustup
     cargo
     carnix
+    # node stuff 
+    nodejs
+    nodePackages.react-tools
+    nodePackages.js-beautify
     # python stuff
     python3
     python3Packages.pip

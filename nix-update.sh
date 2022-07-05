@@ -1,1 +1,2 @@
-nix flake update 
+nix flake update
+nixos-rebuild switch --flake ~/dotfiles

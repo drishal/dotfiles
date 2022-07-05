@@ -29,3 +29,5 @@ disabled=true
 # [directory]
 # format = " [$path]($style) "
 # substitutions = { "/" = " " }
+[nodejs]
+disabled=true
