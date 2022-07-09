@@ -25,6 +25,7 @@
         cmp-treesitter
         orgmode
         onedark-nvim
+        catppuccin-nvim
         neoformat
         vim-nix
         cmp-nvim-lsp
