@@ -26,7 +26,7 @@
 
     #qutebrowser
     qutebrowser = {
-      enable=true;
+      enable = true;
     };
   };
 }
