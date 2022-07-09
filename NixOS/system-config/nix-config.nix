@@ -2,14 +2,17 @@
 
 {
   nix = {
-    trustedUsers = [ "root" "drishal" ];
+    # trustedUsers = [ "root" "drishal" ];
     package = pkgs.nixUnstable;
     extraOptions = ''
       experimental-features = nix-command flakes
       # extra-sandbox-paths = /nix/var/cache/ccache
     '';
     # settings.trusted-substituters = ["s3://nix-cache"];
-    settings.auto-optimise-store = true;
+    settings = {
+      auto-optimise-store = true;
+      trusted-users = [ "root" "drishal" ];
+    };
   };
 
   nixpkgs.config.allowUnfree = true;
