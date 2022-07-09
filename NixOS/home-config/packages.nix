@@ -12,7 +12,7 @@
     ispell
     # firefox
     # exa
-    chromium
+    # chromium
     rofi-emoji
     # vivaldi-ffmpeg-codecs
     # vivaldi-widevine
