@@ -26,6 +26,7 @@
     protonvpn-gui
     protonvpn-cli
     nodejs
+    vscode
     # cloudflare-warp
     acpi
     # gnome.gnome-documents
@@ -54,6 +55,7 @@
     distrobox
     calibre
     git
+    github-desktop
     man
     papirus-icon-theme
     xorg.xf86videoamdgpu
@@ -199,6 +201,7 @@
     nodejs
     nodePackages.react-tools
     nodePackages.js-beautify
+    nodePackages.javascript-typescript-langserver
     # python stuff
     python3
     python3Packages.pip
