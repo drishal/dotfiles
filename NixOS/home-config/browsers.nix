@@ -1,6 +1,8 @@
 { config, inputs, pkgs, ... }:
 {
   programs = {
+
+    # chromium 
     chromium = {
       enable = true;
       package = pkgs.brave;
@@ -20,6 +22,11 @@
         { id = "nngceckbapebfimnlniiiahkandclblb"; } # bitwarden 
         { id = "lcbjdhceifofjlpecfpeimnnphbcjgnc"; } # xbrowsersync
       ];
+    };
+
+    #qutebrowser
+    qutebrowser = {
+      enable=true;
     };
   };
 }
