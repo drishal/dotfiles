@@ -238,7 +238,7 @@ https://github.com/quelpa/quelpa#installation
 (setq frame-resize-pixelwise t)
 #+end_src
 ** theme
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp 
 ;; (use-package dracula- ensure t)
 (use-package doom-themes :ensure t
   :config
@@ -260,6 +260,13 @@ https://github.com/quelpa/quelpa#installation
   (doom-themes-org-config)
   )
 
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(use-package catppuccin-theme
+ :config
+ (setq catppuccin-height-title1 1.5))
+(load-theme 'catppuccin t)
 #+end_src
 ** Disable Menubar
 #+begin_src emacs-lisp
@@ -1024,11 +1031,12 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+end_src
 *** lsp file watchers
 #+begin_src emacs-lisp
-(with-eval-after-load 'lsp-mode
-  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\catuserbot\\'")
-  ;; or
-  ;; (add-to-list 'lsp-file-watch-ignored-files "[/\\\\]\\.my-files\\'")
-  )
+;; (with-eval-after-load 'lsp-mode
+;;   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\catuserbot\\'")
+;;   ;; or
+;;   ;; (add-to-list 'lsp-file-watch-ignored-files "[/\\\\]\\.my-files\\'")
+;;   )
+(setq lsp-enable-file-watchers nil)
 
 #+end_src
 *** Eglot setup
@@ -1200,7 +1208,7 @@ not tangling atm
   ;; (setq lsp-signature-auto-activate nil)
 
   ;; comment to disable rustfmt on save
-  (setq rustic-format-on-save t)
+  (setq rustic-format-on-save nil)
   (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
 
 (defun rk/rustic-mode-hook ()
