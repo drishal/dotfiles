@@ -1,6 +1,6 @@
 #+TITLE: Xmonad
 #+PROPERTY: header-args :tangle ~/.xmonad/xmonad.hs
-*   Table of contents :toc:
+* Table of contents :toc:
 - [[#before-tangling][Before Tangling]]
 - [[#imports][Imports]]
 - [[#some-variables][Some variables]]
