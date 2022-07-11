@@ -32,7 +32,7 @@
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      url = "github:nix-community/emacs-overlay/2724625945ddeaeffd94ca56e11b75b98b8bba8b";
+      url = "github:nix-community/emacs-overlay/bf01abcbac11803f79a3fe082a996110d3e855b0";
     };
 
     mach-nix = {
