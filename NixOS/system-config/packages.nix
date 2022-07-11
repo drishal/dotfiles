@@ -4,223 +4,226 @@
   services.gvfs.enable = true;
   xdg.portal.enable = true;
   programs = {
-
-    # java 
-    java = { enable = true; };
-
-    # nm-applet
-    nm-applet.enable = true;
-
-    # dconf
-    dconf.enable = true;
-
     # adb
     adb.enable = true;
+    # dconf
+    dconf.enable = true;
+    # java 
+    java = { enable = true; };
+    # nm-applet
+    nm-applet.enable = true;
   };
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget
     # aqemu
-    simplescreenrecorder
-    protonvpn-gui
-    protonvpn-cli
-    nodejs
-    vscode
-    # cloudflare-warp
-    acpi
-    # gnome.gnome-documents
-    evince
-    tor-browser-bundle-bin
-    zathura
-    debootstrap
-    # mate.caja
-    imagemagick
-    pandoc
-    obs-studio
-    ffmpeg
-    mullvad
-    mullvad-vpn
-    php
-    yt-dlp
-    # virt-manager
-    vim
-    haskellPackages.xmobar
-    flameshot
-    alacritty
-    xorg.xkill
-    lshw
-    # lspci
-    bookworm
-    distrobox
-    calibre
-    git
-    github-desktop
-    man
-    papirus-icon-theme
-    xorg.xf86videoamdgpu
-    lxappearance
-    figlet
-    lxsession
-    bc
-    libnotify
-    xclip
-    starship
-    cmake
-    volumeicon
-    usbutils
-    pavucontrol
-    killall
-    # spotify
-    htop
-    bpytop
-    firefox
-    # librewolf
-    neofetch
-    steam-run
-    inxi
-    # hack-font
-    xarchiver
-    unzip
-    zip
-    nitrogen
-    rofi
-    trayer
-    arc-theme
-    youtube-dl
-    mpv
-    smplayer
-    pfetch
-    qbittorrent
-    mesa-demos
-    rofi-emoji
-    glxinfo
-    xorg.xdpyinfo
-    evince
-    qt5ct
-    ncurses
-    redshift
-    xorg.xbacklight
-    brightnessctl
-    imagemagick
-    exa
-    lsd
-    chromium-bsu
-    # chromium
-    gcc
-    deadd-notification-center
-    zoom-us
-    linuxPackages.cpupower
-    gnome.gnome-tweaks
-    powertop
-    inetutils
-    nmap
-    cpufetch
-    dmenu
-    cmatrix
-    # qutebrowser
-    neovim
-    libreoffice
-    # nodePackages.create-react-app
-    yarn
-    ranger
-    xorg.xmodmap
-    powershell
-    gimp
-    # brave
-    thinkfan
-    tigervnc
-    bpytop
-    bat
-    polybar
-    lolcat
-    ncdu
-    lm_sensors
-    rnix-lsp
-    plasma5Packages.spectacle
-    gnome.gnome-sound-recorder
-    tmux
-    ps_mem
-    # taffybar
-    noto-fonts
-    ntfs3g
-    gparted
-    file
-    appimage-run
-    woeusb
-    cachix
-    feh
-    cinnamon.nemo
-    libva-utils
-    speedtest-cli
-    pass
-    surf
-    gnumake
-    clang-tools
-    ed
-    materia-theme
-    discord
-    waybar
-    swaybg
-    pkg-config
-    kitty
-    sway-contrib.grimshot
-    wofi
-    dunst
-    networkmanagerapplet
-    tree
-    dwmblocks
-    conky
     # batdistrack
-    # ciscoPacketTracer8
-    onefetch
-    ripgrep
-    nixpkgs-fmt
-    clang
-    fdk_aac
-    keepassxc
-    gnupg
-    axel
-    haruna
-    gnome.gnome-calculator
-    vlc
-    # ferdi
-    tdesktop
-    gtk-layer-shell
+    # brave
     # build tools
-    flex
-    bison
-    gitRepo
-    docker-compose
+    # chromium
+    # ciscoPacketTracer8
+    # cloudflare-warp
+    # ferdi
+    # gnome.gnome-documents
+    # hack-font
+    # librewolf
+    # lspci
+    # mate.caja
+    # node stuff 
+    # nodePackages.create-react-app
+    # python stuff
+    # qutebrowser
     # rust stuff
-    rustc
-    rustup
+    # some xfce apps
+    # spotify
+    # taffybar
+    # virt-manager
+    # xfce.thunar
+    # xfce.xfce4-power-manager
+    #nodepackages
+    acpi
+    alacritty
+    appimage-run
+    arc-theme
+    axel
+    bat
+    bc
+    bison
+    bookworm
+    bpytop
+    bpytop
+    brightnessctl
+    cachix
+    calibre
     cargo
     carnix
-    # node stuff 
-    nodejs
-    nodePackages.react-tools
-    nodePackages.js-beautify
+    chromium-bsu
+    cinnamon.nemo
+    clang
+    clang-tools
+    cmake
+    cmatrix
+    conky
+    cpufetch
+    deadd-notification-center
+    debootstrap
+    discord
+    distrobox
+    dmenu
+    docker-compose
+    dunst
+    dwmblocks
+    ed
+    evince
+    evince
+    exa
+    fdk_aac
+    feh
+    ffmpeg
+    figlet
+    file
+    firefox
+    flameshot
+    flex
+    gcc
+    gimp
+    git
+    gitRepo
+    github-desktop
+    glxinfo
+    gnome.gnome-calculator
+    gnome.gnome-sound-recorder
+    gnome.gnome-tweaks
+    gnumake
+    gnupg
+    gparted
+    gtk-layer-shell
+    haruna
+    haskellPackages.xmobar
+    htop
+    imagemagick
+    imagemagick
+    inetutils
+    inxi
+    keepassxc
+    killall
+    kitty
+    libnotify
+    libreoffice
+    libva-utils
+    linuxPackages.cpupower
+    lm_sensors
+    lolcat
+    lsd
+    lshw
+    lxappearance
+    lxsession
+    man
+    materia-theme
+    mesa-demos
+    mpv
+    mullvad
+    mullvad-vpn
+    ncdu
+    ncurses
+    neofetch
+    neovim
+    networkmanagerapplet
+    nitrogen
+    nixpkgs-fmt
+    nmap
+    # Node stuff
     nodePackages.javascript-typescript-langserver
+    nodePackages.js-beautify
+    nodePackages.pyright
+    nodePackages.react-tools
+    nodePackages.vscode-html-languageserver-bin
+    nodejs
+    ##
+    noto-fonts
+    ntfs3g
+    obs-studio
+    onefetch
+    pandoc
+    papirus-icon-theme
+    pass
+    pavucontrol
+    pfetch
+    php
+    pkg-config
+    plasma5Packages.spectacle
+    polybar
+    powershell
+    powertop
+    protonvpn-cli
+    protonvpn-gui
+    ps_mem
     # python stuff
     python3
     python3Packages.pip
     python3Packages.venvShellHook
+    ##
+    qbittorrent
+    qt5ct
+    ranger
+    redshift
+    ripgrep
+    rnix-lsp
+    rofi
+    rofi-emoji
+    rustc
+    rustup
+    simplescreenrecorder
+    smplayer
+    speedtest-cli
+    spot
+    starship
+    steam-run
+    surf
+    sway-contrib.grimshot
+    swaybg
+    tdesktop
+    thinkfan
+    tigervnc
+    tmux
+    tor-browser-bundle-bin
+    trayer
+    tree
+    unzip
+    usbutils
+    vim
     virtualenv
-    # some xfce apps
-    xfce.xfce4-clipman-plugin
-    xfce.xfconf
-    xfce.exo
-    # xfce.thunar
-    (xfce.thunar.override { thunarPlugins = with pkgs; [ xfce.thunar-volman xfce.thunar-archive-plugin ]; })
-    xfce.xfce4-taskmanager
-    xfce.xfce4-notifyd
-    xfce.xfce4-whiskermenu-plugin
-    # xfce.xfce4-power-manager
+    vlc
+    volumeicon
+    vscode
+    waybar
+    wget
+    woeusb
+    wofi
+    xarchiver
 
-    #nodepackages
-    nodePackages.pyright
-    nodePackages.vscode-html-languageserver-bin
+    # Xfce stuff
+    (xfce.thunar.override { thunarPlugins = with pkgs; [ xfce.thunar-volman xfce.thunar-archive-plugin ]; })
+    xclip
+    xfce.exo
+    xfce.xfce4-clipman-plugin
+    xfce.xfce4-notifyd
+    xfce.xfce4-taskmanager
+    xfce.xfce4-whiskermenu-plugin
+    xfce.xfconf
+    ##
+    xorg.xbacklight
+    xorg.xdpyinfo
+    xorg.xf86videoamdgpu
+    xorg.xkill
+    xorg.xmodmap
+
+    yarn
+    youtube-dl
+    yt-dlp
+    zathura
+    zip
+    zoom-us
 
 
     # python39Packages.numpy python39Packages.pandas
