@@ -57,6 +57,7 @@
     calibre
     cargo
     carnix
+    chromium
     chromium-bsu
     cinnamon.nemo
     clang
@@ -122,8 +123,8 @@
     materia-theme
     mesa-demos
     mpv
-    mullvad
-    mullvad-vpn
+    # mullvad
+    # mullvad-vpn
     ncdu
     ncurses
     neofetch
@@ -162,6 +163,7 @@
     python3
     python3Packages.pip
     python3Packages.venvShellHook
+    python3Packages.mysql-connector
     ##
     qbittorrent
     qt5ct
