@@ -46,6 +46,7 @@
   - [[#org-bable-evaulate][org bable evaulate]]
   - [[#org-preserve-line-breaks][org preserve line breaks]]
   - [[#org-roam][org roam]]
+  - [[#org-html-themeify][org-html-themeify]]
 - [[#tools][Tools]]
   - [[#vterm][vterm]]
   - [[#bongo][Bongo]]
@@ -450,7 +451,8 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 ;;(use-package org :straight t)
 ;; (straight-use-package '(org :host nil :type git
 ;;   :repo "git@github.com:emacs-straight/org-mode.git"))
-(straight-use-package '(org :type built-in))
+;; (straight-use-package '(org :type built-in))
+(straight-use-package '(org :host github :repo "emacs-straight/org-mode"))
 #+end_src
 ** org mode indent
 #+begin_src emacs-lisp
@@ -540,6 +542,21 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 ** org roam
 #+begin_src emacs-lisp :tangle no
   (use-package org-roam :straight t)
+#+end_src
+** org-html-themeify
+#+begin_src emacs-lisp
+(use-package org-html-themify
+  :straight
+  (org-html-themify
+   :type git
+   :host github
+   :repo "DogLooksGood/org-html-themify"
+   :files ("*.el" "*.js" "*.css"))
+  :hook (org-mode . org-html-themify-mode)
+  :custom
+  (org-html-themify-themes
+   '((dark . modus-vivendi)
+     (light . modus-operandi))))
 #+end_src
 
 * Tools
@@ -1024,7 +1041,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 ;; optionally
 (use-package lsp-ui :commands lsp-ui-mode :straight t)
 
-(setq lsp-ui-doc-enable nil)
+;; (setq lsp-ui-doc-enable nil)
 ;;(use-package lsp-treemacs :straight t)
                                         ; (add-hook 'prog-mode-hook 'lsp)
 
