@@ -112,6 +112,10 @@
     '';
   };
 
+  services.mysql = {
+    enable=true;
+    package=pkgs.mariadb;
+  };
   security.rtkit.enable = true;
   services.pipewire = {
     wireplumber.enable = true;
