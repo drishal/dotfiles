@@ -50,7 +50,7 @@
     border-radius: 0;
     /* `otf-font-awesome` is required to be installed for icons */
     font-family: "FantasqueSansMono Nerd Font","Roboto", "Helvetica", "Arial", "sans-serif";
-    font-size: 14px;
+    font-size: 13px;
     min-height: 0;
     /* color: @colfg; */
 }
