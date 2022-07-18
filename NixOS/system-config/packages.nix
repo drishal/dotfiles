@@ -62,6 +62,7 @@
     cinnamon.nemo
     clang
     clang-tools
+    cloudflare-warp
     cmake
     cmatrix
     conky
@@ -123,8 +124,8 @@
     materia-theme
     mesa-demos
     mpv
-    # mullvad
-    # mullvad-vpn
+    mullvad
+    mullvad-vpn
     ncdu
     ncurses
     neofetch
@@ -306,5 +307,7 @@
   #   })
   # ];
 
+  # mullvad
+  services.mullvad-vpn.enable = true;
 }
 
