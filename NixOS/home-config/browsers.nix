@@ -28,5 +28,10 @@
     qutebrowser = {
       enable = true;
     };
+
+    # firefox
+    firefox = {
+      enable = true;
+    };
   };
 }

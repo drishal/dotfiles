@@ -71,7 +71,10 @@
 
   # Networking
   networking = {
-    networkmanager.enable = true;
+    networkmanager = {
+      enable = true;
+      wifi.macAddress = "random";
+    };
     wireless.iwd.enable = true;
     # hostname
     hostName = "nixos";
@@ -98,7 +101,7 @@
 
   #postgresql
   services.postgresql = {
-    enable=true;
+    enable = true;
     enableTCPIP = true;
     authentication = pkgs.lib.mkOverride 10 ''
       local all all trust
@@ -112,10 +115,11 @@
     '';
   };
 
-  services.mysql = {
-    enable=true;
-    package=pkgs.mariadb;
-  };
+  # services.mysql = {
+  #   enable=true;
+  #   package=pkgs.mariadb;
+  # };
+
   security.rtkit.enable = true;
   services.pipewire = {
     wireplumber.enable = true;

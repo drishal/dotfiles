@@ -526,6 +526,7 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
    (emacs-lisp . t)
    (python . t)
    (shell . t)
+   (latex . t)
    ;; (nix . t)
    ))
 (setq org-babel-python-command "python3")
@@ -1096,6 +1097,26 @@ not tangling atm
 #+begin_src emacs-lisp
 (use-package web-beautify :straight t)
 (use-package htmlize :straight t)
+(use-package js2-mode :straight t)
+#+end_src
+**** web mode
+#+begin_src emacs-lisp
+(use-package web-mode :straight t)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+#+end_src
+**** Emmet mode
+#+begin_src emacs-lisp
+(use-package emmet-mode :straight t)
+(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+(add-hook 'web-mode 'emmet-mode)
 #+end_src
 *** Haskell
 **** haskell mode

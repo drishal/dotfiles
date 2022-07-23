@@ -41,6 +41,11 @@
     # xfce.thunar
     # xfce.xfce4-power-manager
     #nodepackages
+
+    # Node stuff
+    # python stuff
+    ##
+    ##
     acpi
     alacritty
     appimage-run
@@ -84,7 +89,6 @@
     ffmpeg
     figlet
     file
-    firefox
     flameshot
     flex
     gcc
@@ -93,6 +97,7 @@
     gitRepo
     github-desktop
     glxinfo
+    gnome.cheese
     gnome.gnome-calculator
     gnome.gnome-sound-recorder
     gnome.gnome-tweaks
@@ -134,18 +139,17 @@
     nitrogen
     nixpkgs-fmt
     nmap
-    # Node stuff
     nodePackages.javascript-typescript-langserver
     nodePackages.js-beautify
     nodePackages.pyright
     nodePackages.react-tools
     nodePackages.vscode-html-languageserver-bin
     nodejs
-    ##
     noto-fonts
     ntfs3g
     obs-studio
     onefetch
+    # onlyoffice-bin
     pandoc
     papirus-icon-theme
     pass
@@ -160,12 +164,10 @@
     protonvpn-cli
     protonvpn-gui
     ps_mem
-    # python stuff
     python3
+    python3Packages.mysql-connector
     python3Packages.pip
     python3Packages.venvShellHook
-    python3Packages.mysql-connector
-    ##
     qbittorrent
     qt5ct
     ranger
@@ -186,6 +188,7 @@
     sway-contrib.grimshot
     swaybg
     tdesktop
+    tetex
     thinkfan
     tigervnc
     tmux
@@ -204,6 +207,12 @@
     woeusb
     wofi
     xarchiver
+    yarn
+    youtube-dl
+    yt-dlp
+    zathura
+    zip
+    zoom-us
 
     # Xfce stuff
     (xfce.thunar.override { thunarPlugins = with pkgs; [ xfce.thunar-volman xfce.thunar-archive-plugin ]; })
@@ -214,19 +223,13 @@
     xfce.xfce4-taskmanager
     xfce.xfce4-whiskermenu-plugin
     xfce.xfconf
-    ##
+
+    ## Xorg stuff
     xorg.xbacklight
     xorg.xdpyinfo
     xorg.xf86videoamdgpu
     xorg.xkill
     xorg.xmodmap
-
-    yarn
-    youtube-dl
-    yt-dlp
-    zathura
-    zip
-    zoom-us
 
 
     # python39Packages.numpy python39Packages.pandas
@@ -306,8 +309,8 @@
   #     batdistrack = super.callPackage ../extra-packages/batdistrack/default.nix { };
   #   })
   # ];
-
+  systemd.packages = with pkgs; [ cloudflare-warp ];
   # mullvad
-  services.mullvad-vpn.enable = true;
+  # services.mullvad-vpn.enable = true;
 }
 

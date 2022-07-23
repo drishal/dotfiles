@@ -1,7 +1,7 @@
 {
   description = "Configuration for my system";
-  # nixConfig.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
-  nixConfig.substituters = [ "https://aseipp-nix-cache.freetls.fastly.net" ];
+  nixConfig.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
+  # nixConfig.substituters = [ "https://aseipp-nix-cache.freetls.fastly.net" ];
   nixConfig.extra-substituters = [ "https://contamination.cachix.org" "https://nix-community.cachix.org" ];
   nixConfig.extra-trusted-public-keys = [ "contamination.cachix.org-1:KmdW5xVF8ccKEb9tvK6qtEMW+lGa83seGgFyBOkeM/4=" "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
   # nixConfig.extra-substituters = [ "https://nix-community.cachix.org" ];
@@ -32,7 +32,7 @@
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      url = "github:nix-community/emacs-overlay/bf01abcbac11803f79a3fe082a996110d3e855b0";
+      url = "github:nix-community/emacs-overlay/f22fe28d687085b9c969f84b8784aca67b7340f4";
     };
 
     mach-nix = {
