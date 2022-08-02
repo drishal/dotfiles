@@ -13,8 +13,8 @@
     docker.enable = true;
 
     #waydroid
-    waydroid.enable = true;
-    lxd.enable = true;
+    # waydroid.enable = true;
+    # lxd.enable = true;
 
 
     # virtualbox
