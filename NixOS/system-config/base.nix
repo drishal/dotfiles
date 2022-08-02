@@ -22,7 +22,7 @@
   # });
 
   # kernel parameters
-  boot.kernelParams = [ "iommu=pt" ];
+  boot.kernelParams = [ "iommu=pt" "mitigations=off" ];
 
   # microde
   hardware.cpu.amd.updateMicrocode = true;
@@ -101,7 +101,7 @@
 
   #postgresql
   services.postgresql = {
-    enable = true;
+    enable = false;
     enableTCPIP = true;
     authentication = pkgs.lib.mkOverride 10 ''
       local all all trust
@@ -115,10 +115,10 @@
     '';
   };
 
-  # services.mysql = {
-  #   enable=true;
-  #   package=pkgs.mariadb;
-  # };
+  services.mysql = {
+    enable=true;
+    package=pkgs.mariadb;
+  };
 
   security.rtkit.enable = true;
   services.pipewire = {
