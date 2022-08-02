@@ -21,6 +21,7 @@
         { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # ublock origin
         { id = "nngceckbapebfimnlniiiahkandclblb"; } # bitwarden 
         { id = "lcbjdhceifofjlpecfpeimnnphbcjgnc"; } # xbrowsersync
+        { id = "nbokbjkabcmbfdlbddjidfmibcpneigj"; } #smoothscroll 
       ];
     };
 
