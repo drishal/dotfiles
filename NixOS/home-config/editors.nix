@@ -36,6 +36,7 @@
         nvim-autopairs
         neorg
         vim-markdown
+        rust-tools-nvim
       ];
       extraPackages = with pkgs; [
         rnix-lsp
