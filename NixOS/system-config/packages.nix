@@ -30,7 +30,6 @@
     # lspci
     # mate.caja
     # node stuff 
-    # nodePackages.create-react-app
     # python stuff
     # qutebrowser
     # rust stuff
@@ -40,6 +39,7 @@
     # virt-manager
     # xfce.thunar
     # xfce.xfce4-power-manager
+    # deadd-notification-center
     #nodepackages
 
     # Node stuff
@@ -50,6 +50,7 @@
     alacritty
     appimage-run
     arc-theme
+    scrcpy
     axel
     bat
     bc
@@ -72,11 +73,11 @@
     cmatrix
     conky
     cpufetch
-    deadd-notification-center
     debootstrap
     discord
     distrobox
     dmenu
+    dmidecode
     docker-compose
     dunst
     dwmblocks
@@ -141,6 +142,7 @@
     nmap
     nodePackages.javascript-typescript-langserver
     nodePackages.js-beautify
+    nodePackages.create-react-app
     nodePackages.pyright
     nodePackages.react-tools
     nodePackages.vscode-html-languageserver-bin
@@ -150,6 +152,7 @@
     obs-studio
     onefetch
     # onlyoffice-bin
+    geekbench
     pandoc
     papirus-icon-theme
     pass
@@ -165,8 +168,12 @@
     protonvpn-gui
     ps_mem
     python3
+    # python3Packages.django
     python3Packages.mysql-connector
     python3Packages.pip
+    python3Packages.tkinter
+    # python3Packages.tk
+    python3Packages.pyqt5
     python3Packages.venvShellHook
     qbittorrent
     qt5ct
@@ -262,8 +269,8 @@
       src = pkgs.fetchFromGitHub {
         repo = "picom";
         owner = "yshui";
-        rev = "cd50596f0ed81c0aa28cefed62176bd6f050a1c6";
-        sha256 = "0lh3p3lkafkb2f0vqd5d99xr4wi47sgb57x65wa2cika8pz5sikv";
+        rev = "896acabab11e977a5a07e2a59d9b35bfeb167263";
+        sha256 = "sha256-QaEuewhAbaBW+rYt0eFwV1hD466ydI6ihGWasFICurI=";
       };
     }))
     # (discord.overrideAttrs (_: {
