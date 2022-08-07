@@ -140,7 +140,8 @@
     nitrogen
     nixpkgs-fmt
     nmap
-    nodePackages.javascript-typescript-langserver
+    # nodePackages.javascript-typescript-langserver
+    nodePackages.eslint
     nodePackages.js-beautify
     nodePackages.create-react-app
     nodePackages.pyright

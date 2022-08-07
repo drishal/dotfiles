@@ -8,6 +8,7 @@
     man-pages
     cachix
     rust-analyzer
+    tdlib
     # neovide
     ispell
     # firefox
