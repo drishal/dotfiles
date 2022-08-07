@@ -2,7 +2,7 @@
 static const Block blocks[] = {
 	/*Icon*/	/*Command*/		/*Update Interval*/	/*Update Signal*/	
 	/*{"", "scripts/dwm_weather.sh",					1000,		0},*/	
-	{" ", "bash /home/drishal/dotfiles/suckless/dwmblocks/scripts/dwm_battery.sh ",					1,		0},
+	{"", "bash /home/drishal/dotfiles/suckless/dwmblocks/scripts/dwm_battery.sh ",					1,		0},
 	{"", "bash /home/drishal/dotfiles/suckless/dwmblocks/scripts/sb-internet",                            1,          0},
 	{"", "bash /home/drishal/dotfiles/suckless/dwmblocks/scripts/cpu.sh",                            1,          0},
 	{"", "bash /home/drishal/dotfiles/suckless/dwmblocks/scripts/memory.sh",	5,		0},
