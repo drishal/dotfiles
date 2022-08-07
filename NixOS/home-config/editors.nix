@@ -53,8 +53,7 @@
     emacs = {
       enable = true;
       package = pkgs.emacsPgtkNativeComp;
-      # package = pkgs.emacs28NativeComp;
-      extraPackages = (epkgs: [ epkgs.vterm ]);
+      extraPackages = (epkgs: [ epkgs.vterm epkgs.telega]);
     };
 
   };

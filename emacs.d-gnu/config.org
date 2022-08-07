@@ -594,9 +594,9 @@ https://github.com/skangas/mentor
 ** telega
 #+begin_src emacs-lisp
 (use-package visual-fill-column :straight t)
-(use-package telega :straight t
+(use-package telega :straight nil
   :commands (telega))
-
+;; (setq telega-use-docker t)
 #+end_src
 ** emacs pdf tools
 #+begin_src emacs-lisp
@@ -1033,6 +1033,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
          (c++-mode  . lsp)
          (css-mode . lsp)
          (zig-mode . lsp)
+         (js-mode . lsp)
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
   (sh-mode . lsp)
