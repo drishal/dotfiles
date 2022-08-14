@@ -32,6 +32,7 @@
   - [[#undo-system][Undo system]]
   - [[#padding][Padding]]
   - [[#brackets][brackets]]
+  - [[#magit][magit]]
 - [[#hook-to-tangle-on-save][Hook to tangle on save]]
 - [[#org-mode][Org mode:]]
   - [[#org-mode-indent][org mode indent]]
@@ -437,6 +438,11 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
       kept-new-versions 5    ; keep some new versions                           
       kept-old-versions 2)   ; and some old ones, too                           
 
+#+end_src
+
+** magit
+#+begin_src emacs-lisp
+(use-package magit :straight t)
 #+end_src
 
 * Hook to tangle on save
@@ -1309,7 +1315,7 @@ not tangling atm
 Reference:
 https://emacs.stackexchange.com/questions/7908/how-to-make-yasnippet-and-company-work-nicer
 https://www.emacswiki.org/emacs/CompanyMode#h5o-11
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (defun check-expansion ()
   (save-excursion
     (if (looking-at "\\_>") t
