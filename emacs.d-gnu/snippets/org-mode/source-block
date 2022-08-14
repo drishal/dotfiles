@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: org-mode code blocks
+# key: <s
+# --
+
+#+begin_src
+$0
+#+end_src
