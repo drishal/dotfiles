@@ -4,7 +4,7 @@
   services.xserver = {
     enable = true;
 
-    videoDrivers = [ "amdgpu" ];
+    videoDrivers = [ "modesetting" ];
 
     # window wmanagers
     windowManager = {

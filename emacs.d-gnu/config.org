@@ -73,6 +73,7 @@
   - [[#vertico-and-orderless][vertico and orderless]]
   - [[#languages-and-lsp-mode][languages and lsp-mode]]
   - [[#which-key][which key]]
+  - [[#getting-yasnippet-and-company-to-work-together][Getting yasnippet and company to work together]]
 - [[#prevent-saving-to-x-clipboard-manager][prevent "saving to x clipboard manager]]
 - [[#prevent-warnings-spam][prevent *warnings* spam]]
 
@@ -1016,6 +1017,13 @@ https://github.com/minad/marginalia
   (marginalia-mode))
 #+end_src
 
+*** emacs-direnv
+#+begin_src emacs-lisp
+(use-package direnv :straight t
+ :config
+ (direnv-mode))
+#+end_src
+
 ** languages and lsp-mode
 https://emacs-lsp.github.io/lsp-mode/
 and also https://emacs-lsp.github.io/lsp-mode/page/languages/
@@ -1026,18 +1034,23 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   :init
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
   (setq lsp-keymap-prefix "C-c l")
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+  :config
+  (add-hook 'typescript-mode-hook 'lsp)
+  (add-hook 'js-mode-hook 'lsp)
+  :hook (
          (rust-mode  . lsp)
          (html-mode  . lsp)
+         (web-mode  . lsp)
+         (sgml-mode  . lsp)
+         (js2-mode  . lsp)
+         (typescript-mode  . lsp)
          (c-mode  . lsp)
          (c++-mode  . lsp)
          (css-mode . lsp)
          (zig-mode . lsp)
-         (js-mode . lsp)
-         ;; if you want which-key integration
-         (lsp-mode . lsp-enable-which-key-integration))
-  (sh-mode . lsp)
+         (sh-mode . lsp)
          (lua-mode . lsp)
+         (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
 
 ;; optionally
@@ -1099,6 +1112,9 @@ not tangling atm
 (use-package web-beautify :straight t)
 (use-package htmlize :straight t)
 (use-package js2-mode :straight t)
+(add-hook 'js-mode-hook 'js2-minor-mode)
+(add-hook 'js2-mode-hook 'ac-js2-mode)
+(add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 2)))
 #+end_src
 **** web mode
 #+begin_src emacs-lisp
@@ -1289,6 +1305,84 @@ not tangling atm
         which-key-separator " → " ))
 (which-key-mode)
 #+end_src
+** Getting yasnippet and company to work together
+Reference:
+https://emacs.stackexchange.com/questions/7908/how-to-make-yasnippet-and-company-work-nicer
+https://www.emacswiki.org/emacs/CompanyMode#h5o-11
+#+begin_src emacs-lisp
+(defun check-expansion ()
+  (save-excursion
+    (if (looking-at "\\_>") t
+      (backward-char 1)
+      (if (looking-at "\\.") t
+    (backward-char 1)
+    (if (looking-at "->") t nil)))))
+
+(defun do-yas-expand ()
+  (let ((yas/fallback-behavior 'return-nil))
+    (yas/expand)))
+
+(defun tab-indent-or-complete ()
+  (interactive)
+  (cond
+   ((minibufferp)
+    (minibuffer-complete))
+   (t
+    (indent-for-tab-command)
+    (if (or (not yas/minor-mode)
+        (null (do-yas-expand)))
+    (if (check-expansion)
+        (progn
+          (company-manual-begin)
+          (if (null company-candidates)
+          (progn
+            (company-abort)
+            (indent-for-tab-command)))))))))
+
+(defun tab-complete-or-next-field ()
+  (interactive)
+  (if (or (not yas/minor-mode)
+      (null (do-yas-expand)))
+      (if company-candidates
+      (company-complete-selection)
+    (if (check-expansion)
+      (progn
+        (company-manual-begin)
+        (if (null company-candidates)
+        (progn
+          (company-abort)
+          (yas-next-field))))
+      (yas-next-field)))))
+
+(defun expand-snippet-or-complete-selection ()
+  (interactive)
+  (if (or (not yas/minor-mode)
+      (null (do-yas-expand))
+      (company-abort))
+      (company-complete-selection)))
+
+(defun abort-company-or-yas ()
+  (interactive)
+  (if (null company-candidates)
+      (yas-abort-snippet)
+    (company-abort)))
+
+(global-set-key [tab] 'tab-indent-or-complete)
+(global-set-key (kbd "TAB") 'tab-indent-or-complete)
+(global-set-key [(control return)] 'company-complete-common)
+
+(define-key company-active-map [tab] 'expand-snippet-or-complete-selection)
+(define-key company-active-map (kbd "TAB") 'expand-snippet-or-complete-selection)
+
+(define-key yas-minor-mode-map [tab] nil)
+(define-key yas-minor-mode-map (kbd "TAB") nil)
+
+(define-key yas-keymap [tab] 'tab-complete-or-next-field)
+(define-key yas-keymap (kbd "TAB") 'tab-complete-or-next-field)
+(define-key yas-keymap [(control tab)] 'yas-next-field)
+(define-key yas-keymap (kbd "C-g") 'abort-company-or-yas)
+#+end_src
+
 
 * prevent "saving to x clipboard manager
 #+begin_src emacs-lisp
