@@ -116,6 +116,7 @@
     keepassxc
     killall
     kitty
+    leafpad
     libnotify
     libreoffice
     libva-utils
