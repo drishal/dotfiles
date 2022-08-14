@@ -265,6 +265,7 @@ myManageHook = composeAll
       , title =? "Calculator" --> doFloat
       , isDialog --> doFloat
       , (className =? "Firefox" <&&> resource =? "Dialog") --> doFloat
+      , className =? "zoom" --> doFloat
       ] 
 #+end_src
 
