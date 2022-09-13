@@ -9,14 +9,15 @@ alias yay="paru"
 alias p="paru"
 alias apt="sudo nala"
 # ls related aliases
-alias ls="exa --icons"
+# alias ls="exa --icons"
+alias ls="lsd"
 # alias ls="ls --color"
 # alias ls="ls --color"
 alias ll="ls -l"
 alias lh="ls -lh"
 alias la="ls -la"
 alias lah="ls -lah"
-alias l="ls -lah"
+alias l="ls -laAh"
 alias edd="emacs --daemon"
 alias b="brightnessctl"
 alias bs="brightnessctl s"
@@ -27,6 +28,9 @@ alias whoogle="docker run --publish 5000:5000 --detach benbusby/whoogle-search:l
 alias energy_now="cat /sys/class/power_supply/BAT0/energy_now"
 alias set-wall="feh --bg-scale" # set-wall /path/to/file
 alias push-all="~/dotfiles/scripts/push-all.sh"
+
+#direnv
+export DIRENV_LOG_FORMAT=
 
 export EXA_ICON_SPACING=2
 
@@ -48,6 +52,7 @@ alias nrsi="sudo nixos-rebuild switch --flake --impure ~/dotfiles -L"
 export NIXPKGS_ALLOW_UNFREE=1
 # home manager
 alias hms="home-manager switch --flake ~/dotfiles "
+alias hms-offline="home-manager switch --flake ~/dotfiles --option substitute false"
 
 # export the npm profile
 export PATH="$HOME/.npm-packages/bin:$PATH"
