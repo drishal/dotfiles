@@ -4,7 +4,7 @@
   services.xserver = {
     enable = true;
 
-    videoDrivers = [ "modesetting" ];
+    videoDrivers = [ "amdgpu" ];
 
     # window wmanagers
     windowManager = {
@@ -54,8 +54,11 @@
       mouse.middleEmulation = false;
     };
   };
-  # QT_QPA_PLATFORMTHEME
-  environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "";
+  # QT settings
+  # environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "";
+  qt5.platformTheme="qt5ct";
+  # environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "qt5ct";
+  # environment.variables.QT_STYLE_OVERRIDE= lib.mkForce "";
   # river 
   services.xserver.displayManager.sessionPackages = [
     (pkgs.river.overrideAttrs
@@ -81,12 +84,23 @@
 
   services.gnome.tracker.enable = false;
   services.gnome.gnome-keyring.enable = true;
+  environment.gnome.excludePackages = [
+    pkgs.gnome-photos
+    pkgs.gnome.gnome-software
+    pkgs.gnome.geary
+    pkgs.gnome.gnome-music
+    pkgs.epiphany
+  ];
   security.pam.services.sddm.enableGnomeKeyring = true;
   # resolve gnome and plasma issues
   programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
 
   # lidswitch
-  services.logind.lidSwitch = "suspend";
+  services.logind = {
+    lidSwitch = "suspend";
+    extraConfig = "IdleAction=ignore";
+  };
+  
   #some overlays
   nixpkgs.overlays = [
     #suckless overlays
