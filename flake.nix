@@ -1,8 +1,8 @@
 {
   description = "Configuration for my system";
-  # nixConfig.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
-  nixConfig.substituters = [ "https://aseipp-nix-cache.freetls.fastly.net" ];
-  nixConfig.extra-substituters = [ "https://contamination.cachix.org" "https://nix-community.cachix.org" ];
+  nixConfig.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
+  # nixConfig.substituters = [ "https://aseipp-nix-cache.freetls.fastly.net" ];
+  # nixConfig.extra-substituters = [ "https://contamination.cachix.org" "https://nix-community.cachix.org" ];
   nixConfig.extra-trusted-public-keys = [ "contamination.cachix.org-1:KmdW5xVF8ccKEb9tvK6qtEMW+lGa83seGgFyBOkeM/4=" "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
   # nixConfig.extra-substituters = [ "https://nix-community.cachix.org" ];
   # nixConfig.extra-trusted-public-keys = [  "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="];
@@ -32,11 +32,7 @@
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      url = "github:nix-community/emacs-overlay/c6c28e96e85c5945c76eef5fb9814371d2d8a1b5";
-    };
-
-    mach-nix = {
-      url = "github:DavHau/mach-nix";
+      url = "github:nix-community/emacs-overlay/fdee85a9dc996566a1e2dfd795c292a7b06dfdb3";
     };
 
     private-stuff = {
@@ -46,7 +42,7 @@
 
   };
 
-  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, neovim-nightly-overlay, cachix, declarative-cachix, private-stuff, mach-nix, ... }@inputs:
+  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, cachix, declarative-cachix, private-stuff, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -64,7 +60,7 @@
         inherit pkgs;
         modules = [
           ./NixOS/home-config/home.nix
-          {nixpkgs.overlays = [ inputs.emacs-overlay.overlay inputs.neovim-nightly-overlay.overlay ];}
+          {nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];}
           "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
           {
             home = {
