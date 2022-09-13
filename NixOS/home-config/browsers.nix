@@ -27,7 +27,7 @@
 
     #qutebrowser
     qutebrowser = {
-      enable = true;
+      enable = false;
     };
 
     # firefox
