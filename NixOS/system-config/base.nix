@@ -44,6 +44,12 @@
   # firmware updator
   services.fwupd.enable = true;
 
+  #openssh
+  services.openssh = {
+    enable = true;
+    ports = [22];
+  };
+
   powerManagement =
     {
       enable = true;
@@ -61,6 +67,7 @@
         libvdpau-va-gl
       ];
       driSupport = true;
+      driSupport32Bit = true;
     };
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -79,14 +86,15 @@
     # hostname
     hostName = "nixos";
     # dns
-    # nameservers = [
-    #   # "1.1.1.1"
-    #   # "1.0.0.1"
-    #   # "2606:4700:4700::1111"
-    #   # "2606:4700:4700::1001"
-    #   # "8.8.8.8"
-    #   # "8.8.4.4"
-    # ];
+    nameservers = [
+    # cloudflare
+    "1.1.1.1"
+    "2606:4700:4700::1111"
+
+    #  google
+    # "8.8.8.8"
+    # "2001:4860:4860::8888"
+    ];
   };
   # Configure keymap in X11
   services.xserver.layout = "us";
@@ -115,10 +123,10 @@
     '';
   };
 
-  services.mysql = {
-    enable=true;
-    package=pkgs.mariadb;
-  };
+  # services.mysql = {
+  #   enable=true;
+  #   package=pkgs.mariadb;
+  # };
 
   security.rtkit.enable = true;
   services.pipewire = {
