@@ -306,7 +306,7 @@ https://github.com/AnthonyDiGirolamo/airline-themes
 ** Fonts
 #+begin_src emacs-lisp
 ;; (add-to-list 'default-frame-alist '(font . "FiraCode Nerd Font-12" ))
-(add-to-list 'default-frame-alist '(font . "FantasqueSansMono Nerd Font-14:weight=medium" ))
+(add-to-list 'default-frame-alist '(font . "FantasqueSansMono Nerd Font-15:weight=medium" ))
 ;; (add-to-list 'default-frame-alist '(font . "Comic Mono-12:weight=medium" ))
 ;; (set-face-attribute 'default t :font "FiraCode Nerd Font-12")
 (setq global-prettify-symbols-mode t)
@@ -828,7 +828,7 @@ https://github.com/karthink/popper
 (use-package company :straight t)
 (add-hook 'after-init-hook 'global-company-mode)
 (setq company-minimum-prefix-length 1
-      company-idle-delay 0.2) ;; default is 0.2
+      company-idle-delay 0.1) ;; default is 0.2
 #+end_src
 ** treesitter
 #+begin_src emacs-lisp
@@ -1133,6 +1133,7 @@ not tangling atm
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
 #+end_src
 **** Emmet mode
 #+begin_src emacs-lisp
