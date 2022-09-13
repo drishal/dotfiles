@@ -7,10 +7,13 @@
     # distrobox
     man-pages
     cachix
+    neovide
     rust-analyzer
     tdlib
     # neovide
     ispell
+    sumneko-lua-language-server 
+    # fish
     # firefox
     # exa
     # chromium
@@ -35,6 +38,17 @@
   # foot
   programs.foot = {
     enable = true;
+  };
+
+  #lsd
+  programs.lsd = {
+    enable=true;
+    settings = {
+      icons = {
+        theme = "fancy";
+        separator="  ";
+      };
+    };
   };
 
   # caches.cachix = [
