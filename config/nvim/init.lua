@@ -3,8 +3,8 @@ vim.o.number = true
 local nvim_lsp = require('lspconfig')
 -- require'lspconfig'.rnix.setup{}
 local nvim_lsp = require('lspconfig')
---others
-require('nvim-autopairs').setup{}
+local lspkind = require('lspkind')
+
 --cmp
 -- Setup nvim-cmp.
 --
@@ -12,32 +12,32 @@ require('nvim-autopairs').setup{}
 require('rust-tools').setup({})
 
 local cmp = require'cmp'
-local kind_icons = {
-  Text = "",
-  Method = "",
-  Function = "",
-  Constructor = "",
-  Field = "ﰠ",
-  Variable = "",
-  Class = "",
-  Interface = "",
-  Module = "",
-  Property = "",
-  Unit = "",
-  Value = "",
-  Enum = "",
-  Keyword = "",
-  Snippet = "",
-  Color = "",
-  File = "",
-  Reference = "",
-  Folder = "",
-  EnumMember = "",
-  Constant = "",
-  Struct = "פּ",
-  Event = "",
-  Operator = "",
-  TypeParameter = "",
+local cmp_kinds = {
+  Class		= " ",
+  Color		= " ",
+  Constant	= " ",
+  Constructor	= " ",
+  Enum		= " ",
+  EnumMember	= " ",
+  Event		= "a ",
+  Field		= "ﰠ ",
+  File		= " ",
+  Folder	= " ",
+  Function	= " ",
+  Interface	= " ",
+  Keyword	= " ",
+  Method	= " ",
+  Module	= " ",
+  Operator	= " ",
+  Property	= " ",
+  Reference	= " ",
+  Snippet	= " ",
+  Struct	= "פּ ",
+  Text		= " ",
+  TypeParameter = " ",
+  Unit		= " ",
+  Value		= " ",
+  Variable	= " ",
 }
 
 cmp.setup({
@@ -50,6 +50,27 @@ cmp.setup({
       -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
     end,
   },
+
+  formatting = {
+      -- format = function(_, vim_item)
+      --   vim_item.kind = (cmp_kinds[vim_item.kind] or '') .. vim_item.kind
+      --   return vim_item
+      -- end,
+      format = lspkind.cmp_format({
+	      mode = "symbol_text",
+	      menu = ({
+		      nvim_lsp = "[LSP]",
+		      ultisnips = "[US]",
+		      nvim_lua = "[Lua]",
+		      path = "[Path]",
+		      buffer = "[Buffer]",
+		      emoji = "[Emoji]",
+		      omni = "[Omni]",
+	      }),
+      }),
+
+  },
+
   mapping = {
     ["<Up>"] = cmp.mapping.select_prev_item(),
     ["<Down>"] = cmp.mapping.select_next_item(),
@@ -65,7 +86,37 @@ cmp.setup({
       i = cmp.mapping.abort(),
       c = cmp.mapping.close(),
     },
-    },
+    ["<CR>"] = cmp.mapping.confirm { select = false },
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expandable() then
+        luasnip.expand()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      elseif has_words_before() then
+        cmp.complete()
+      else
+        fallback()
+      end
+    end, {
+      "i",
+      "s",
+    }),
+    ["<S-Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, {
+      "i",
+      "s",
+    }),
+  },
+
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     { name = 'vsnip' }, -- For vsnip users.
@@ -113,19 +164,27 @@ require('lspconfig')['pyright'].setup {
   capabilities = capabilities
 }
 
+require('lspconfig')['clangd'].setup {
+  capabilities = capabilities
+}
+
+require('lspconfig')['eslint'].setup {
+  capabilities = capabilities
+}
+
 -- tree sitter
 require('nvim-treesitter.configs').setup {
   highlight = {
     enable = true,
   },
-  ensure_installed = {"norg"}, 
+  -- ensure_installed = {"norg"}, 
   indent = {
     enable = true,
   },  
 }
 -- neorg
-require('neorg').setup {
-    load = {
-        ["core.defaults"] = {}
-    }
-}
+-- require('neorg').setup {
+--     load = {
+--         ["core.defaults"] = {}
+--     }
+-- }
