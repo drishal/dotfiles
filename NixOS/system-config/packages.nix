@@ -12,6 +12,12 @@
     java = { enable = true; };
     # nm-applet
     nm-applet.enable = true;
+    #steams
+    steam = {
+      enable = true;
+      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+      dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    };
   };
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -36,7 +42,7 @@
     # some xfce apps
     # spotify
     # taffybar
-    # virt-manager
+    virt-manager
     # xfce.thunar
     # xfce.xfce4-power-manager
     # deadd-notification-center
@@ -47,15 +53,18 @@
     ##
     ##
     acpi
+    adwaita-qt 
     alacritty
     appimage-run
     arc-theme
+    arandr
     scrcpy
     axel
     bat
     bc
     bison
     bookworm
+    bottles
     bpytop
     bpytop
     brightnessctl
@@ -102,6 +111,7 @@
     gnome.gnome-calculator
     gnome.gnome-sound-recorder
     gnome.gnome-tweaks
+    gnome.zenity
     gnumake
     gnupg
     gparted
@@ -117,14 +127,17 @@
     killall
     kitty
     leafpad
+    linuxKernel.packages.linux_5_19.v4l2loopback    
     libnotify
     libreoffice
     libva-utils
     linuxPackages.cpupower
     lm_sensors
     lolcat
+    libsForQt5.ark
     lsd
     lshw
+    lutris
     lxappearance
     lxsession
     man
@@ -154,11 +167,12 @@
     obs-studio
     onefetch
     # onlyoffice-bin
-    geekbench
+    # geekbench
     pandoc
     papirus-icon-theme
     pass
     pavucontrol
+    peaclock
     pfetch
     php
     pkg-config
@@ -168,6 +182,7 @@
     powertop
     protonvpn-cli
     protonvpn-gui
+    protonup
     ps_mem
     python3
     # python3Packages.django
@@ -199,6 +214,7 @@
     tdesktop
     tetex
     thinkfan
+    # teamviewer
     tigervnc
     tmux
     tor-browser-bundle-bin
@@ -210,16 +226,17 @@
     virtualenv
     vlc
     volumeicon
-    vscode
+    # vscode
     waybar
     wget
     woeusb
+    wine
+    wine64
     wofi
     xarchiver
     yarn
     youtube-dl
     yt-dlp
-    zathura
     zip
     zoom-us
 
@@ -271,8 +288,8 @@
       src = pkgs.fetchFromGitHub {
         repo = "picom";
         owner = "yshui";
-        rev = "896acabab11e977a5a07e2a59d9b35bfeb167263";
-        sha256 = "sha256-QaEuewhAbaBW+rYt0eFwV1hD466ydI6ihGWasFICurI=";
+        rev = "affe408d76548d0df523f6b197072fea33c3c041";
+        sha256 = "sha256-zQ6vkHCxt/IUFZEqYNO2PWle7YfqWBtI7GmGtzOSau4=";
       };
     }))
     # (discord.overrideAttrs (_: {
@@ -318,7 +335,22 @@
   #     batdistrack = super.callPackage ../extra-packages/batdistrack/default.nix { };
   #   })
   # ];
+  services.teamviewer.enable = true;
   systemd.packages = with pkgs; [ cloudflare-warp ];
+
+  #environment 
+    environment.sessionVariables = rec {
+      XDG_CACHE_HOME  = "\${HOME}/.cache";
+      XDG_CONFIG_HOME = "\${HOME}/.config";
+      XDG_BIN_HOME    = "\${HOME}/.local/bin";
+      XDG_DATA_HOME   = "\${HOME}/.local/share";
+      # Steam needs this to find Proton-GE
+      STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
+      # note: this doesn't replace PATH, it just adds this to it
+      PATH = [ 
+        "\${XDG_BIN_HOME}"
+      ];
+    };
   # mullvad
   # services.mullvad-vpn.enable = true;
 }
