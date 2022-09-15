@@ -1,7 +1,8 @@
 # Inserts a blank line between shell prompts
-add_newline = true 
-# format = "\\[$username@$hostname $directory \\] \\$ "
+add_newline = false 
 
+
+# format = "\\[$username@$hostname $directory \\] \\$ "
 
 [line_break]
 disabled=true

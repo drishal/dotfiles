@@ -1028,6 +1028,7 @@ https://github.com/minad/marginalia
 (use-package direnv :straight t
  :config
  (direnv-mode))
+(setq direnv-always-show-summary nil)
 #+end_src
 
 ** languages and lsp-mode

@@ -22,6 +22,7 @@
   - [[#bar-widgets][Bar widgets]]
 - [[#some-more-variables][Some more variables]]
 - [[#floating-layout-rules][Floating layout rules]]
+  - [[#floating-mpv][Floating mpv]]
 - [[#autostarting-programs][Autostarting programs]]
 
 *  Setting up
@@ -273,9 +274,9 @@ keys = [
 ** Defaults
 #+begin_src python
   widget_defaults = dict(
-      font='FantasqueSansMono Nerd Font',
-      fontsize=14,
-      padding=2,
+      font='FantasqueSansMono Nerd Font Regular',
+      fontsize=14.5,
+      padding=1,
       background=color[0],
       foreground=color[1],
   )
@@ -334,10 +335,6 @@ keys = [
                     # background=color[8],
                 ),
 
-                 widget.Clock(format='   %Y-%m-%d %a %H:%M:%S',
-                              foreground=color[8],
-                              # foreground=color[0],
-                             ),
                 widget.Spacer(
                     length = bar.STRETCH,
                 ),
@@ -389,6 +386,17 @@ keys = [
                     fontsize = 15
                 ),
 
+                 widget.Clock(format='   %Y-%m-%d %a %H:%M:%S',
+                              foreground=color[8],
+                              # foreground=color[0],
+                             ),
+                
+                widget.TextBox(
+                    text = '  ', # this one has a small space after the symbol to make it look more consistent with the spaces
+                    foreground = color[3],
+                    fontsize = 15
+                ),
+
                 # widget.BatteryIcon(),
 
 
@@ -422,19 +430,47 @@ keys = [
 
 * Floating layout rules
 #+begin_src python
-  floating_layout = layout.Floating(border_focus = color[8], border_normal = color[1],
-                                    float_rules=[
-                                        ,*layout.Floating.default_float_rules,
-                                        Match(wm_class='confirmreset'),  # gitk
-                                        Match(wm_class='makebranch'),  # gitk
-                                        Match(wm_class='maketag'),  # gitk
-                                        Match(wm_class='ssh-askpass'),  # ssh-askpass
-                                        # Match(title='About Mozilla Firefox'),  # ssh-askpass
-      Match(title='branchdialog'),  # gitk
-                                        Match(title='pinentry'),  # GPG key password entry
-                                    ]
+floating_layout = layout.Floating(border_focus = color[8], border_normal = color[1],
+                                  float_rules=[
+                                      # *layout.Floating.default_float_rules,
+                                      Match(wm_class='confirmreset'),  # gitk
+                                      Match(wm_class='makebranch'),  # gitk
+                                      Match(wm_class='maketag'),  # gitk
+                                      Match(wm_class='ssh-askpass'),  # ssh-askpass
+                                      Match(title='Confirmation'),      # tastyworks exit box
+                                      Match(title='Qalculate!'),        # qalculate-gtk
+                                      Match(title='About Mozilla Firefox'),
+                                      Match(title='Zoom Meeting'),
+                                      Match(title='branchdialog'),  # gitk
+                                      Match(title='pinentry'),  # GPG key password entry
+                                      Match(wm_type='utility'),
+                                      Match(wm_type='notification'),
+                                      Match(wm_type='toolbar'),
+                                      Match(wm_type='splash'),
+                                      Match(wm_type='dialog'),
+                                      Match(wm_class='file_progress'),
+                                      Match(wm_class='confirm'),
+                                      Match(wm_class='dialog'),
+                                      Match(wm_class='download'),
+                                      Match(wm_class='error'),
+                                      Match(wm_class='notification'),
+                                      Match(wm_class='splash'),
+                                      Match(wm_class='toolbar'),
+                                  ]
 
-  )
+)
+#+end_src
+** Floating mpv
+#+begin_src python
+@hook.subscribe.client_new
+def disable_floating(window):
+    rules = [
+        Match(wm_class="mpv")
+    ]
+
+    if any(window.match(rule) for rule in rules):
+        window.togroup(qtile.current_group.name)
+        window.cmd_disable_floating()
 #+end_src
 * Autostarting programs
 #+begin_src python

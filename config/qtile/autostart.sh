@@ -8,4 +8,3 @@ blueman-applet&
 picom --experimental-backends&
 nm-applet&
 xfce4-clipman&
-volumeicon&
