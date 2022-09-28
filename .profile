@@ -30,6 +30,7 @@ alias whoogle="docker run --publish 5000:5000 --detach benbusby/whoogle-search:l
 alias energy_now="cat /sys/class/power_supply/BAT0/energy_now"
 alias set-wall="feh --bg-scale" # set-wall /path/to/file
 alias push-all="~/dotfiles/scripts/push-all.sh"
+alias galaxy-buds="steam-run ~/Desktop/GalaxyBudsClient.bin"
 
 #direnv
 export DIRENV_LOG_FORMAT=
@@ -38,6 +39,10 @@ export EXA_ICON_SPACING=2
 
 # man pager
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+# node
+# to use this: mkdir ~/.npm-global; npm config set prefix '~/.npm-global'
+export PATH=~/.npm-global/bin:$PATH
 
 #Editor: setting to nvim for command line 
 export EDITOR=nvim
