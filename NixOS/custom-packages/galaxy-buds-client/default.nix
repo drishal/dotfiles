@@ -8,7 +8,7 @@
 
 buildDotnetModule rec {
   pname = "galaxy-buds-client";
-  version = "4.4.1";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "ThePBone";
