@@ -4,7 +4,8 @@
     "modules-right": ["battery","network","memory","cpu", "tray"],
     "battery": {
         "format": "{icon} {capacity}% ",
-        "format-icons": ["", "", "", "", "" ]
+        "format-icons": ["", "", "", "", "" ],
+	"interval": 10,
     },
 
 
