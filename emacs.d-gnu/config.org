@@ -1049,7 +1049,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
          (html-mode  . lsp)
          (web-mode  . lsp)
          (sgml-mode  . lsp)
-         (js2-mode  . lsp)
+         ;; (js2-mode  . lsp)
          (typescript-mode  . lsp)
          (c-mode  . lsp)
          (c++-mode  . lsp)
@@ -1118,10 +1118,11 @@ not tangling atm
 #+begin_src emacs-lisp
 (use-package web-beautify :straight t)
 (use-package htmlize :straight t)
-(use-package js2-mode :straight t)
-(add-hook 'js-mode-hook 'js2-minor-mode)
-(add-hook 'js2-mode-hook 'ac-js2-mode)
-(add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 2)))
+;; (use-package js2-mode :straight t)
+;; (add-hook 'js-mode-hook 'js2-minor-mode)
+;; (add-hook 'js2-mode-hook 'ac-js2-mode)
+;; (add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 2)))
+;; (setq js2-strict-missing-semi-warning nil)
 #+end_src
 **** web mode
 #+begin_src emacs-lisp
@@ -1135,6 +1136,21 @@ not tangling atm
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
+(setq-default indent-tabs-mode nil)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(defun my-web-mode-hook ()
+  "Hooks for Web mode."
+  ;; (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 4)
+  (setq web-mode-enable-auto-pairing t)
+  (setq web-mode-enable-auto-closing t)
+  ;; (setq web-mode-enable-current-element-highlight t)
+  ;; (setq web-mode-enable-current-column-highlight t)
+  (setq web-mode-script-padding 2)
+  )
+(add-hook 'web-mode-hook  'my-web-mode-hook)
+
 #+end_src
 **** Emmet mode
 #+begin_src emacs-lisp
@@ -1172,8 +1188,8 @@ not tangling atm
 
 *** java
 #+begin_src emacs-lisp
-;(use-package lsp-java :straight t)
-                                        ;(add-hook 'java-mode-hook #'lsp)
+(use-package lsp-java :straight t)
+(add-hook 'java-mode-hook #'lsp)
 #+end_src
 *** lua
 #+begin_src emacs-lisp
