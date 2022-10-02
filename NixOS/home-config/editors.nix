@@ -47,6 +47,7 @@
         ripgrep
         fd
         nodePackages.pyright
+        nodePackages.eslint
         ccls
       ];
     };

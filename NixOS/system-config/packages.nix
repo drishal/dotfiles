@@ -2,7 +2,7 @@
 {
   services.flatpak.enable = true;
   services.gvfs.enable = true;
-  xdg.portal.enable = true;
+  # xdg.portal.enable = true;
   programs = {
     # adb
     adb.enable = true;
@@ -14,7 +14,7 @@
     nm-applet.enable = true;
     #steams
     steam = {
-      enable = true;
+      enable = false;
       remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
       dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     };
@@ -22,36 +22,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    # aqemu
-    # batdistrack
-    # brave
-    # build tools
-    # chromium
-    # ciscoPacketTracer8
-    # cloudflare-warp
-    # ferdi
-    # gnome.gnome-documents
-    # hack-font
-    # librewolf
-    # lspci
-    # mate.caja
-    # node stuff 
-    # python stuff
-    # qutebrowser
-    # rust stuff
-    # some xfce apps
-    # spotify
-    # taffybar
-    virt-manager
-    # xfce.thunar
-    # xfce.xfce4-power-manager
-    # deadd-notification-center
-    #nodepackages
-
-    # Node stuff
-    # python stuff
-    ##
-    ##
     acpi
     adwaita-qt 
     alacritty
@@ -64,9 +34,10 @@
     bc
     bison
     bookworm
-    bottles
+    # bottles
     bpytop
     bpytop
+    bun
     brightnessctl
     cachix
     calibre
@@ -102,10 +73,10 @@
     flameshot
     flex
     gcc
+    # google-chrome
     gimp
     git
     gitRepo
-    github-desktop
     glxinfo
     gnome.cheese
     gnome.gnome-calculator
@@ -137,7 +108,7 @@
     libsForQt5.ark
     lsd
     lshw
-    lutris
+    # lutris
     lxappearance
     lxsession
     man
@@ -154,20 +125,11 @@
     nitrogen
     nixpkgs-fmt
     nmap
-    # nodePackages.javascript-typescript-langserver
-    nodePackages.eslint
-    nodePackages.js-beautify
-    nodePackages.create-react-app
-    nodePackages.pyright
-    nodePackages.react-tools
-    nodePackages.vscode-html-languageserver-bin
     nodejs
     noto-fonts
     ntfs3g
     obs-studio
     onefetch
-    # onlyoffice-bin
-    # geekbench
     pandoc
     papirus-icon-theme
     pass
@@ -185,11 +147,9 @@
     protonup
     ps_mem
     python3
-    # python3Packages.django
     python3Packages.mysql-connector
     python3Packages.pip
     python3Packages.tkinter
-    # python3Packages.tk
     python3Packages.pyqt5
     python3Packages.venvShellHook
     qbittorrent
@@ -207,16 +167,18 @@
     speedtest-cli
     spot
     starship
-    steam-run
+    # mono
+    # steam-run
     surf
+    swaylock
     sway-contrib.grimshot
     swaybg
     tdesktop
     tetex
     thinkfan
-    # teamviewer
     tigervnc
     tmux
+    tofi
     tor-browser-bundle-bin
     trayer
     tree
@@ -226,12 +188,11 @@
     virtualenv
     vlc
     volumeicon
-    # vscode
     waybar
     wget
     woeusb
-    wine
-    wine64
+    # wine
+    # wine64
     wofi
     xarchiver
     yarn
@@ -263,6 +224,7 @@
     #       (epkgs: [
     #         epkgs.vterm]))
     # (pkgs.callPackage ../packages/batdistrack/default.nix { })
+    # (pkgs.callPackage ../custom-packages/galaxy-buds-client/default.nix { })
     # picom
     #(distrobox.overrideAttrs)
     (st.overrideAttrs (oldAttrs: rec {
@@ -288,8 +250,8 @@
       src = pkgs.fetchFromGitHub {
         repo = "picom";
         owner = "yshui";
-        rev = "affe408d76548d0df523f6b197072fea33c3c041";
-        sha256 = "sha256-zQ6vkHCxt/IUFZEqYNO2PWle7YfqWBtI7GmGtzOSau4=";
+        rev = "f2970bc697bdf20d398d1be05ff72d50df911e64";
+        sha256 = "sha256-aeAXMKwjQv/kRd7lTeIrcJmqT1vAUkRUOM8VrEJpd8M=";
       };
     }))
     # (discord.overrideAttrs (_: {
@@ -335,8 +297,15 @@
   #     batdistrack = super.callPackage ../extra-packages/batdistrack/default.nix { };
   #   })
   # ];
-  services.teamviewer.enable = true;
+  # services.teamviewer.enable = true;
   systemd.packages = with pkgs; [ cloudflare-warp ];
+
+  #swaylock
+  security.pam.services.swaylock = {
+    text = ''
+      auth include login
+    '';
+  };
 
   #environment 
     environment.sessionVariables = rec {

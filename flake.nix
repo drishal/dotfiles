@@ -32,7 +32,7 @@
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      url = "github:nix-community/emacs-overlay/fdee85a9dc996566a1e2dfd795c292a7b06dfdb3";
+      url = "github:nix-community/emacs-overlay/4bbc5d56111833bad701ac97279625ee17f08352";
     };
 
     private-stuff = {
@@ -42,7 +42,7 @@
 
   };
 
-  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, cachix, declarative-cachix, private-stuff, ... }@inputs:
+  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,  private-stuff, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -76,7 +76,7 @@
           inherit system;
           modules = [
             # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
-            { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay ]; }
+            { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay ]; }
             ./NixOS/system-config/configuration.nix
             # hyprland.nixosModules.default
             # { programs.hyprland.enable = true; }
