@@ -5,6 +5,6 @@ xfce4-power-manager&
 lxpolkit&
 emacs --daemon&
 blueman-applet&
-picom --experimental-backends&
+picom&
 nm-applet&
 xfce4-clipman&
