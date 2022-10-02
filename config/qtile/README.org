@@ -455,7 +455,9 @@ floating_layout = layout.Floating(border_focus = color[8], border_normal = color
                                       Match(wm_class='error'),
                                       Match(wm_class='notification'),
                                       Match(wm_class='splash'),
+                                      Match(title='Discord Updater'),
                                       Match(wm_class='toolbar'),
+                                      Match(wm_class='Steam'),
                                   ]
 
 )
