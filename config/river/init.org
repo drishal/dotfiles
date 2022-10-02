@@ -273,6 +273,11 @@ do
 done
 #+end_src
 
+*** Locking screen with swaylock
+#+begin_src bash
+riverctl map normal $mod L spawn "swaylock" 
+#+end_src
+
 *  Set background and border color
 #+begin_src bash
   riverctl background-color 0x002b36
