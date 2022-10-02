@@ -169,8 +169,22 @@ require('lspconfig')['clangd'].setup {
 }
 
 require('lspconfig')['eslint'].setup {
-  capabilities = capabilities
+  capabilities = capabilities,
+  filetypes = {
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "jsx",
+    "html"
+  },
 }
+
+-- require'lspconfig'.html.setup {
+--   capabilities = capabilities,
+--   cmd = { html_languageserver, "--stdio" },
+-- }
 
 -- tree sitter
 require('nvim-treesitter.configs').setup {
