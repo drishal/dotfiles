@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: C++ init code
+# key: <cpp
+# --
+
+#include <iostream>
+
+int main() {
+  std::cout << "Hello";
+  return 0;
+}
