@@ -54,6 +54,9 @@
 
   # awesomewm
   home.file."/home/drishal/.config/awesome/rc.lua".source = ../../config/awesome/rc.lua;
+
+  # mpv
+  home.file."/home/drishal/.config/mpv/mpv.conf".source = ../../config/mpv/mpv.conf;
   # qtile config
   #home.file."/home/drishal/.config/qti../../config.py".source =../config/qtile/config.py;
   # home.file."/home/drishal/.config/qtile/autostart.sh".source =../../config/qtile/autostart.sh;
