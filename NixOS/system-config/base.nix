@@ -22,7 +22,7 @@
   # });
 
   # kernel parameters
-  boot.kernelParams = [ "iommu=pt" "mitigations=off" "psmouse.synaptics_intertouch=0" "i8042.nomux=1" "i8042.reset"];
+  boot.kernelParams = [ "iommu=pt" "mitigations=off" "psmouse.synaptics_intertouch=0" "i8042.notimeout" "i8042.nopnp"];
 
   # microde
   hardware.cpu.amd.updateMicrocode = true;
