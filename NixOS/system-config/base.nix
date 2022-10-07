@@ -22,7 +22,7 @@
   # });
 
   # kernel parameters
-  boot.kernelParams = [ "iommu=pt" "mitigations=off" ];
+  boot.kernelParams = [ "iommu=pt" "mitigations=off" "psmouse.synaptics_intertouch=0" ];
 
   # microde
   hardware.cpu.amd.updateMicrocode = true;
@@ -88,6 +88,8 @@
     # dns
     nameservers = [
     # cloudflare
+    "45.90.28.182"
+    "45.90.30.182"
     "1.1.1.1"
     "2606:4700:4700::1111"
 
