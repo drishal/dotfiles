@@ -847,7 +847,7 @@ https://github.com/karthink/popper
 ** Parentheses Completion
 #+begin_src emacs-lisp
 (use-package smartparens :straight t)
-(require 'smartparens)
+(require 'smartparens-config)
 ;; (add-hook 'smartparens-mode)
 (smartparens-global-mode t)
 #+end_src
