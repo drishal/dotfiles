@@ -32,6 +32,8 @@ alias set-wall="feh --bg-scale" # set-wall /path/to/file
 alias push-all="~/dotfiles/scripts/push-all.sh"
 alias galaxy-buds="steam-run ~/Desktop/GalaxyBudsClient.bin"
 
+alias wine64="Winearch=win64 WINEPREFIX="/home/drishal/.wine64" wine64"
+
 #direnv
 export DIRENV_LOG_FORMAT=
 
