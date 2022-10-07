@@ -7,6 +7,7 @@ echo "127.0.1.1 arch.localdomain arch" >> /etc/hosts
 
 echo "setting locale"
 echo "LANG=en_US.UTF-8" >> /etc/locale.conf
+echo "LANG=en_US.UTF-8" >> /etc/locale.gen
 
 echo "installing grub"
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
