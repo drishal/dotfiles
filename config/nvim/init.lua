@@ -1,3 +1,9 @@
+-- onedark
+require('onedark').setup {
+    style = 'dark'
+}
+require('onedark').load()
+
 vim.o.number = true
 -- lspconfig
 local nvim_lsp = require('lspconfig')
