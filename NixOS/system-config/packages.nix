@@ -14,7 +14,7 @@
     nm-applet.enable = true;
     #steams
     steam = {
-      enable = false;
+      enable = true;
       remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
       dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     };
@@ -64,6 +64,7 @@
     ed
     evince
     evince
+    easyeffects
     exa
     fdk_aac
     feh
@@ -115,6 +116,7 @@
     materia-theme
     mesa-demos
     mpv
+    mplayer
     mullvad
     mullvad-vpn
     ncdu
@@ -167,8 +169,9 @@
     speedtest-cli
     spot
     starship
+    sass
     # mono
-    # steam-run
+    steam-run
     surf
     swaylock
     sway-contrib.grimshot
@@ -191,8 +194,8 @@
     waybar
     wget
     woeusb
-    # wine
-    # wine64
+    wine
+    wine64
     wofi
     xarchiver
     yarn
