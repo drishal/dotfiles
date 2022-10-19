@@ -4,7 +4,7 @@
 
     # chromium 
     chromium = {
-      enable = true;
+      enable = false;
       package = pkgs.brave;
       # commandLineArgs = [
       #   "--ignore-gpu-blocklist"
@@ -32,7 +32,7 @@
 
     # firefox
     firefox = {
-      enable = true;
+      enable = false;
     };
   };
 }
