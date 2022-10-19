@@ -1,7 +1,7 @@
 # aliases
 alias nix-config="sudo vim /etc/nixos/configuration.nix"
-alias xon="steam-run ~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
-alias xon-glx="steam-run ~/Desktop/games/Xonotic/xonotic-linux-glx.sh"
+alias xon="~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
+alias xon-glx="~/Desktop/games/Xonotic/xonotic-linux-glx.sh"
 alias stk="~/Desktop/games/SuperTuxKart-1.2-linux/run_game.sh"
 alias sudo="sudo "
 # yay = pary
@@ -31,6 +31,9 @@ alias energy_now="cat /sys/class/power_supply/BAT0/energy_now"
 alias set-wall="feh --bg-scale" # set-wall /path/to/file
 alias push-all="~/dotfiles/scripts/push-all.sh"
 alias galaxy-buds="steam-run ~/Desktop/GalaxyBudsClient.bin"
+alias remove-dunst="sudo rm /usr/share/dbus-1/services/org.knopwob.dunst.service"
+
+alias tmux="tmux -f ~/dotfiles/config/tmux/tmux.conf"
 
 alias wine64="Winearch=win64 WINEPREFIX="/home/drishal/.wine64" wine64"
 
