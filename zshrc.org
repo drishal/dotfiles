@@ -38,6 +38,7 @@
 - [[#direnv][direnv]]
 - [[#some-misc-exports][some misc exports]]
   - [[#terminfo-stull][Terminfo stull]]
+  - [[#load-angluar-cli-completions][Load Angluar cli completions]]
 
 * tramp fix
 #+begin_src shell
@@ -458,4 +459,8 @@ eval "$(direnv hook zsh)"
 ** Terminfo stull
 #+begin_src shell :tangle no
  export TERMINFO_DIRS=/usr/share/terminfo
+#+end_src
+** Load Angluar cli completions
+#+begin_src shell
+source <(ng completion script)
 #+end_src
