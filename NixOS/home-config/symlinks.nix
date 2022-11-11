@@ -16,7 +16,7 @@
   home.file."/home/drishal/.config/deadd".source = ../../config/deadd;
 
   # rofi
-  # home.file."/home/drishal/.config/ro../../config.rasi".source = ../config/rofi/config.rasi;
+  home.file."/home/drishal/.config/rofi/config.rasi".source = ../../config/rofi/config.rasi;
 
   # home.file."/home/drishal/.config/ro../../config".source = ../config/rofi/config;
 
@@ -53,7 +53,7 @@
   home.file."/home/drishal/.config/leftwm/themes/current".source = ../../config/leftwm/onedark;
 
   # awesomewm
-  home.file."/home/drishal/.config/awesome/rc.lua".source = ../../config/awesome/rc.lua;
+  # home.file."/home/drishal/.config/awesome/rc.lua".source = ../../config/awesome/rc.lua;
 
   # mpv
   home.file."/home/drishal/.config/mpv/mpv.conf".source = ../../config/mpv/mpv.conf;
