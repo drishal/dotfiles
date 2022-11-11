@@ -32,10 +32,18 @@ alias set-wall="feh --bg-scale" # set-wall /path/to/file
 alias push-all="~/dotfiles/scripts/push-all.sh"
 alias galaxy-buds="steam-run ~/Desktop/GalaxyBudsClient.bin"
 alias remove-dunst="sudo rm /usr/share/dbus-1/services/org.knopwob.dunst.service"
+alias mongodb="sudo systemctl start mongodb.service"
 
 alias tmux="tmux -f ~/dotfiles/config/tmux/tmux.conf"
 
 alias wine64="Winearch=win64 WINEPREFIX="/home/drishal/.wine64" wine64"
+
+#some sysctl commands
+# tt scheduler - https://github.com/hamadmarri/TT-CPU-Scheduler
+alias tt_balancer_normal="sudo sysctl -w kernel.sched_tt_balancer_opt=0"
+alias tt_balancer_candidate="sudo sysctl -w kernel.sched_tt_balancer_opt=1"
+alias tt_balancer_cfs="sudo sysctl -w kernel.sched_tt_balancer_opt=2"
+alias tt_balancer_ps="sudo sysctl -w kernel.sched_tt_balancer_opt=3"
 
 #direnv
 export DIRENV_LOG_FORMAT=
@@ -100,6 +108,11 @@ alias sleep-check="journalctl -u systemd-suspend.service | tail"
 #pfetch
 #pactl load-module module-bluetooth-discover
 
+# adb bin
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
 #upload files; use as "upload filename"
 alias upload="curl -sL https://git.io/file-transfer | sh && ./transfer wet"  
 
