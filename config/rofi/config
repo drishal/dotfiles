@@ -1,1 +1,8 @@
-rofi.theme: /usr/share/rofi/themes/Arc-Dark.rasi
+configuration {
+font: "FantasqueSansMono Nerd Font 14";
+location: 0;
+xoffset: 0;
+yoffset: 0;
+}
+# @theme "/nix/store/n3d2fwljp9qyi0a1dd2vcwwzgb7mggxj-rofi-1.7.5/share/rofi/themes/Arc-Dark.rasi"
+@theme "Arc-Dark"
