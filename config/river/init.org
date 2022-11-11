@@ -40,7 +40,7 @@ export GTK_USE_PORTAL=0
 
 ** Applications
 #+begin_src bash
-  riverctl map normal $mod Return spawn foot 
+  riverctl map normal $mod Return spawn "/usr/bin/foot" 
 
   # Mod+Q to close the focused view
   riverctl map normal $mod Q close
@@ -73,12 +73,12 @@ export GTK_USE_PORTAL=0
 ** some touchpad settings
 *** Pointer Accel
 #+begin_src bash
-    riverctl input 2:7:SynPS/2_Synaptics_TouchPad  pointer-accel 0.6
-    riverctl input 2:10:TPPS/2_Elan_TrackPoint   pointer-accel 0.6
+    riverctl input  pointer-2-7-SynPS/2_Synaptics_TouchPad pointer-accel 0.6
+    riverctl input  pointer-2-10-TPPS/2_Elan_TrackPoint  pointer-accel 0.6
 #+end_src
 *** Enable tap
 #+begin_src bash
-riverctl input 2:7:SynPS/2_Synaptics_TouchPad tap enabled       
+riverctl input pointer-2-7-SynPS/2_Synaptics_TouchPad tap enabled       
 #+end_src
 
 ** Window Management
@@ -275,7 +275,7 @@ done
 
 *** Locking screen with swaylock
 #+begin_src bash
-riverctl map normal $mod L spawn "swaylock" 
+riverctl map normal $mod+Shift  L spawn "swaylock" 
 #+end_src
 
 *  Set background and border color
@@ -295,7 +295,8 @@ riverctl set-repeat 50 300
 #+begin_src bash
 riverctl spawn "systemctl --user import-environment"
 # riverctl spawn "swaybg -i ~/dotfiles/wallpapers/darkest_hour.jpg" 
-riverctl spawn "swaybg -i ~/dotfiles/wallpapers/NixOS-1.png" 
+# riverctl spawn "swaybg -i ~/dotfiles/wallpapers/NixOS-1.png" 
+riverctl spawn "swaybg -i ~/dotfiles/wallpapers/archlinux/archlinux-onedark.png"
 riverctl spawn lxpolkit 
 riverctl spawn waybar
 # riverctl spawn /usr/lib/notification-daemon-1.0/notification-daemon
