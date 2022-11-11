@@ -1,6 +1,6 @@
 {
   description = "Configuration for my system";
-  nixConfig.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
+  # nixConfig.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
   # nixConfig.substituters = [ "https://aseipp-nix-cache.freetls.fastly.net" ];
   nixConfig.extra-substituters = [ "https://contamination.cachix.org" "https://nix-community.cachix.org" ];
   nixConfig.extra-trusted-public-keys = [ "contamination.cachix.org-1:KmdW5xVF8ccKEb9tvK6qtEMW+lGa83seGgFyBOkeM/4=" "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
