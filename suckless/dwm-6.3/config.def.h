@@ -110,7 +110,7 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_bg, "-nf", col_fg, "-sb", col_purple, "-sf", col_bg, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
-static const char *roficmd[]  = { "rofi", "-show", "drun","-icon-theme"," Papirus", "-show-icons" ,NULL };
+static const char *roficmd[]  = { "/usr/bin/rofi", "-show", "drun","-icon-theme"," Papirus", "-show-icons" ,NULL };
 static const char *nmcmd[]  = { "nmcli-rofi", NULL };
 static const char *powercmd[]  = { "rofi", "-show", "power-menu", "-modi", "power-menu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu", NULL };
 static const char *mysystray[]  = {"stalonetray",NULL};
@@ -121,6 +121,7 @@ static const char *menu[]  = {"bash","/home/drishal/menu.sh",NULL};
 static const char *emacs[]  = {"emacsclient", "-c",NULL};
 static const char *pavucontrol[]  = {"pavucontrol",NULL};
 static const char *screenshot[]  = {"spectacle",NULL};
+static const char *lock[]  = {"slock",NULL};
 
 
 static Key keys[] = {
@@ -133,6 +134,7 @@ static Key keys[] = {
         { MODKEY,                       XK_e,      spawn,      {.v = files} },
 	{ MODKEY,                       XK_r,      spawn,      {.v = dmenucmd} },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY|ShiftMask,             XK_l,      spawn,      {.v = lock}},
 	// { MODKEY,                       XK_p,      spawn,          {.v = powercmd } },
 	{ MODKEY|ShiftMask,             XK_f,      spawn,      {.v = browser }},
 
