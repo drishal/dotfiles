@@ -195,7 +195,7 @@ keys = [
     Key([mod], "d", lazy.spawn("rofi -show drun -icon-theme Papirus -show-icons"), desc="Firefox"),
     Key([mod], "p", lazy.spawn("rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu"), desc="Emacs"),
     # # thunar
-    Key([mod], "e", lazy.spawn("thunar"), desc="file manager"),
+    Key([mod], "e", lazy.spawn("nemo"), desc="file manager"),
 
     #Reset Layout
     #Key([mod, "shift"], "m", resetlayout , desc="Reset Layout"),
@@ -408,7 +408,7 @@ keys = [
                 ),
 
             ],
-            27,
+            25,
             # margin=[7, 10, 2, 10], # [N E S W] 
         ), 
     ),
@@ -439,7 +439,7 @@ floating_layout = layout.Floating(border_focus = color[8], border_normal = color
                                       Match(wm_class='ssh-askpass'),  # ssh-askpass
                                       Match(title='Confirmation'),      # tastyworks exit box
                                       Match(title='Qalculate!'),        # qalculate-gtk
-                                      Match(title='About Mozilla Firefox'),
+                                      # Match(title='About Mozilla Firefox'),
                                       Match(title='Zoom Meeting'),
                                       Match(title='branchdialog'),  # gitk
                                       Match(title='pinentry'),  # GPG key password entry
