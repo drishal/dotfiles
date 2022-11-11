@@ -1,7 +1,23 @@
--- If LuaRocks is installed, make sure that packages installed through it are
--- found (e.g. lgi). If LuaRocks is not installed, do nothing.
-pcall(require, "luarocks.loader")
+#+TITLE: Awesome Config 
+#+PROPERTY: header-args :tangle ~/.config/awesome/rc.lua
+* Table of contents :toc:
+- [[#init][Init]]
+  - [[#pcall][pcall]]
+  - [[#basic-declarations][Basic Declarations]]
+  - [[#error-handling][Error Handling]]
+- [[#variable-definitions][Variable Definitions]]
+- [[#menu][Menu]]
+- [[#wibar][Wibar]]
+- [[#keybindings][Keybindings]]
+- [[#rules][Rules]]
 
+* Init
+** pcall
+#+begin_src lua
+pcall(require, "luarocks.loader")
+#+end_src
+** Basic Declarations
+#+begin_src lua
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
@@ -17,17 +33,21 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
+#+end_src
 
--- {{{ Error handling
--- Check if awesome encountered an error during startup and fell back to
--- another config (This code will only ever execute for the fallback config)
+** Error Handling
+#+begin_src lua
 if awesome.startup_errors then
     naughty.notify({ preset = naughty.config.presets.critical,
                      title = "Oops, there were errors during startup!",
                      text = awesome.startup_errors })
 end
 
--- Handle runtime errors after startup
+
+#+end_src
+
+*** Handle runtime errors after startup
+#+begin_src lua
 do
     local in_error = false
     awesome.connect_signal("debug::error", function (err)
@@ -41,9 +61,9 @@ do
         in_error = false
     end)
 end
--- }}}
-
--- {{{ Variable definitions
+#+end_src
+* Variable Definitions
+#+begin_src lua
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init("~/dotfiles/config/awesome/themes/default/theme.lua")
 
@@ -100,12 +120,35 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
+#+end_src
+* Menu
+#+begin_src lua
+myawesomemenu = {
+   { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
+   { "manual", terminal .. " -e man awesome" },
+   { "edit config", editor_cmd .. " " .. awesome.conffile },
+   { "restart", awesome.restart },
+   { "quit", function() awesome.quit() end },
+}
+
+mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+                                    { "open terminal", terminal }
+                                  }
+                        })
+
+mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
+                                     menu = mymainmenu })
+
+-- Menubar configuration
+menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
 
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
+#+end_src
 
--- {{{ Wibar
+* Wibar
+#+begin_src lua
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock()
 
@@ -217,17 +260,9 @@ awful.screen.connect_for_each_screen(function(s)
         },
     }
 end)
--- }}}
-
--- {{{ Mouse bindings
-root.buttons(gears.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
-))
--- }}}
-
--- {{{ Keybindings
+#+end_src
+* Keybindings
+#+begin_src lua
 globalkeys = gears.table.join(
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
@@ -285,8 +320,11 @@ globalkeys = gears.table.join(
     awful.key({ modkey,           }, "a", function () awful.spawn("emacsclient -c") end,
               {description = "open a terminal", group = "awesome"}),
     awful.key({ modkey, "Shift"         }, "f", function () awful.spawn("firefox") end,
-              {description = "open a terminal", group = "emacsclient -c"}),
+              {description = "open a terminal", group = "awesome"}),
+    awful.key({ modkey         }, "e", function () awful.spawn("nemo") end,
+              {description = "open file manager", group = "awesome"}),
 
+    -- Window Management
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)          end,
               {description = "increase master width factor", group = "layout"}),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)          end,
@@ -445,10 +483,11 @@ clientbuttons = gears.table.join(
 
 -- Set keys
 root.keys(globalkeys)
--- }}}
 
--- {{{ Rules
--- Rules to apply to new clients (through the "manage" signal).
+#+end_src
+* Rules
+Rules to apply to new clients (through the "manage" signal).
+#+begin_src lua
 awful.rules.rules = {
     -- All clients will match this rule.
     { rule = { },
@@ -575,4 +614,4 @@ awful.spawn("blueman-applet")
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
--- }}}
+#+end_src
