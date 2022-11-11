@@ -1,4 +1,0 @@
-xmonad - palenight
-qtile  - gruvbox
-dwm    - onedark
-river  - dracula
