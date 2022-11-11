@@ -16,21 +16,21 @@
     man
     man-pages
     neofetch
-    neovide
+    # neovide
     nixpkgs-fmt
-    nodePackages.create-react-app
-    nodePackages.eslint
-    nodePackages.js-beautify
-    nodePackages.pyright
-    nodePackages.react-tools
+    #nodePackages.create-react-app
+    #nodePackages.eslint
+    #nodePackages.js-beautify
+    #nodePackages.pyright
+    #nodePackages.react-tools
     # nodePackages.typescript
     # nodePackages.typescript-language-server
-    nodePackages.javascript-typescript-langserver
-    nodePackages.vscode-html-languageserver-bin
-    rofi-emoji
-    rust-analyzer
-    sumneko-lua-language-server 
-    tdlib
+    #nodePackages.javascript-typescript-langserver
+    # nodePackages.vscode-html-languageserver-bin
+    #rofi-emoji
+    #rust-analyzer
+    #sumneko-lua-language-server 
+    #tdlib
     # (pkgs.nerdfonts.override {
     #   fonts = [ "FiraCode"   "Monofur" ];
     # })
@@ -44,10 +44,6 @@
     enableBashIntegration = true;
   };
 
-  # foot
-  programs.foot = {
-    enable = true;
-  };
 
   #lsd
   programs.lsd = {
@@ -64,7 +60,8 @@
   programs.swaylock={
     # enable=true;
     settings={
-      image="~/dotfiles/wallpapers/NixOS-1.png";
+      # image="~/dotfiles/wallpapers/NixOS-1.png";
+      image="~/dotfiles/wallpapers/archlinux/archlinux-onedark.png";
     };
   };
   # caches.cachix = [
