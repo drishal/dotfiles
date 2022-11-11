@@ -461,6 +461,6 @@ eval "$(direnv hook zsh)"
  export TERMINFO_DIRS=/usr/share/terminfo
 #+end_src
 ** Load Angluar cli completions
-#+begin_src shell
+#+begin_src shell :tangle no
 source <(ng completion script)
 #+end_src
