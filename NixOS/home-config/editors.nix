@@ -53,12 +53,12 @@
     };
 
     micro={
-      enable=true;
+      enable=false;
     };
 
     # Emacs
     emacs = {
-      enable = true;
+      enable = false;
       package = pkgs.emacsPgtkNativeComp;
       extraPackages = (epkgs: [ epkgs.vterm epkgs.telega]);
     };
