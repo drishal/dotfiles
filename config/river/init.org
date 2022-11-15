@@ -40,34 +40,37 @@ export GTK_USE_PORTAL=0
 
 ** Applications
 #+begin_src bash
-  riverctl map normal $mod Return spawn "/usr/bin/foot" 
+riverctl map normal $mod Return spawn "/usr/bin/foot" 
 
-  # Mod+Q to close the focused view
-  riverctl map normal $mod Q close
+# Mod+Q to close the focused view
+riverctl map normal $mod Q close
 
-  #  emacsclient
-  riverctl map normal $mod A spawn "emacsclient -c" 
+#  emacsclient
+riverctl map normal $mod A spawn "emacsclient -c" 
 
-  # Mod d for dmenu
-  riverctl map normal $mod D spawn "wofi --show drun" 
+# wifi4wofi https://github.com/fearlessgeekmedia/wifi4wofi
+riverctl map normal $mod W spawn "wifi4wofi" 
 
-  # Mod e for nemo
-  riverctl map normal $mod E spawn "nemo" 
+# Mod d for dmenu
+riverctl map normal $mod D spawn "wofi --show drun" 
 
-  # Browser 
-  riverctl map normal $mod+Shift F spawn "firefox"
+# Mod e for nemo
+riverctl map normal $mod E spawn "nemo" 
 
-  # pavucontrol
-  riverctl map normal $mod V spawn "pavucontrol" 
+# Browser 
+riverctl map normal $mod+Shift F spawn "MOZ_ENABLE_WAYLAND=1 firefox"
 
-  # copy screenshot to clipboard 
-  #riverctl map normal $mod S spawn "grim - | wl-copy" 
-  riverctl map normal $mod S spawn "grimshot copy output" 
-  riverctl map normal $mod+Shift S spawn "grimshot copy area" 
+# pavucontrol
+riverctl map normal $mod V spawn "pavucontrol" 
+
+# copy screenshot to clipboard 
+#riverctl map normal $mod S spawn "grim - | wl-copy" 
+riverctl map normal $mod S spawn "grimshot copy output" 
+riverctl map normal $mod+Shift S spawn "grimshot copy area" 
 
 
-  riverctl map normal $mod F5 spawn "brightnessctl s 10-" 
-  riverctl map normal $mod F6 spawn "brightnessctl s 10+" 
+riverctl map normal $mod F5 spawn "brightnessctl s 10-" 
+riverctl map normal $mod F6 spawn "brightnessctl s 10+" 
 #+end_src
 
 ** some touchpad settings
