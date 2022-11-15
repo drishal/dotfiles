@@ -71,15 +71,47 @@ window#waybar {
     min-width: 20px;
     color: @colgrey;
     }
+
 #tags button.occupied  {
     background-color: @colbg2;
     color: @colfg;
 }
-
-#tags button.focused  {
+#tags button.focused{
     background-color: @colgrey; 
     color: @colfg;
 }
+
+
+#window {
+    color: @colviolet;
+}
+
+#workspaces button  {
+    background-color: @colbg;
+    padding: 3px;
+    border-radius: 10px;
+    min-width: 20px;
+    color: @colgrey;
+}
+#workspaces button.active{
+    background-color: @colgrey; 
+    color: @colfg;
+}
+#workspaces button.occupied  {
+    background-color: @colbg2;
+    color: @colfg;
+}
+
+#workspaces button.focused  {
+    background-color: @colgrey; 
+    color: @colfg;
+}
+
+#window {
+    color: @colviolet;
+}
+
+
 
 #battery,
 #clock,
