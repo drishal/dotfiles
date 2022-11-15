@@ -33,19 +33,24 @@ mkdir -p ~/.config/qtile
 
 * Imports
 #+begin_src python
-  from typing import List  # noqa: F401
-  import os
-  import subprocess
-  from libqtile import bar, layout, widget
-  from libqtile.config import Click, Drag, Group, Key, Screen, Match, KeyChord
-  from libqtile.lazy import lazy
-  from libqtile.utils import guess_terminal
-  from libqtile import hook
+from typing import List  # noqa: F401
+import os
+import subprocess
+from libqtile import bar, layout, widget
+from libqtile.config import Click, Drag, Group, Key, Screen, Match, KeyChord
+from libqtile.lazy import lazy
+from libqtile.utils import guess_terminal
+from libqtile import qtile,hook
+import libqtile.backend.wayland.inputs
 #+end_src
 * Some variables
 #+begin_src python
-  mod = "mod4"
-  terminal = "alacritty"
+mod = "mod4"
+if qtile.core.name=="wayland":
+    terminal = "/usr/bin/foot"
+else:
+    terminal = "alacritty"
+
 #+end_src
 * Colors
 ** Dracula
@@ -186,7 +191,7 @@ keys = [
     # # terminal
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     # some programs
-    Key([mod, "shift"], "f", lazy.spawn("firefox"), desc="Firefox"),
+    Key([mod, "shift"], "f", lazy.spawn("env MOZ_ENABLE_WAYLAND=1 firefox"), desc="Firefox"),
     Key([mod], "a", lazy.spawn("emacsclient -c"), desc="Emacs"),
     Key([mod], "s", lazy.spawn("spectacle"), desc="Emacs"),
     # # pavucontrol
@@ -286,7 +291,7 @@ keys = [
 #+begin_src python
  screens = [
     Screen(
-        wallpaper='~/dotfiles/wallpapers/NixOS-1.png',
+        wallpaper='~/dotfiles/wallpapers/archlinux/archlinux-onedark.png',
         wallpaper_mode='stretch',
         top=bar.Bar(
             [
@@ -400,7 +405,8 @@ keys = [
                 # widget.BatteryIcon(),
 
 
-                widget.Systray(padding=5,),
+                # widget.Systray(padding=5,),
+                # widget.StatusNotifier(padding=5,),
                 widget.TextBox(
                     text = ' ', # this one has a small space after the symbol to make it look more consistent with the spaces
                     foreground = color[3],
@@ -476,7 +482,10 @@ def disable_floating(window):
 #+end_src
 * Autostarting programs
 #+begin_src python
-  @hook.subscribe.startup_once
-  def autostart():
-      os.system("bash ~/dotfiles/config/qtile/autostart.sh")
+@hook.subscribe.startup_once
+def autostart():
+    if qtile.core.name == "x11":
+        os.system("bash ~/dotfiles/config/qtile/autostart-x11.sh")
+    elif qtile.core.name == "wayland":
+         os.system("bash ~/dotfiles/config/qtile/autostart-wayland.sh")
 #+end_src
