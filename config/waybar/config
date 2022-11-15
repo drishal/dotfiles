@@ -1,5 +1,5 @@
 {
-    "modules-left": ["river/tags", "wlr/taskbar"],
+    "modules-left": ["river/tags", "wlr/workspaces" ,"wlr/taskbar", "river/window" ],
     "modules-center": [ "clock"],
     "modules-right": ["battery","network","memory","cpu", "tray"],
     "battery": {
@@ -17,6 +17,7 @@
     "river/tags": {
         "num-tags": 9
      },
+
     "cpu": {
         "interval": 10,
         "format": "   {}% ",
@@ -45,15 +46,32 @@
 
     
     "wlr/taskbar": {
-        "all-outputs": false,
-	"current-only":true,
-        "format": "{icon}",
-        "icon-size": 9,
-        "icon-theme": "Papirus",
-        "tooltip-format": "{title}",
-        "on-click": "activate",
-        "on-click-middle": "close"
-         },
+     "all-outputs": false,
+     "current-only":true,
+     "format": "{icon}",
+     "icon-size": 9,
+     "icon-theme": "Papirus",
+     "tooltip-format": "{title}",
+     "on-click": "activate",
+     "on-click-middle": "close"
+},
+
+    "wlr/workspaces": {
+    "format-icons": {
+         "1": "1",
+         "2": "2",
+         "3": "3",
+         "4": "4",
+         "5": "5",
+         "6": "6",
+         "7": "7",
+         "8": "8",
+         "9": "9",
+    },
+
+     "format": "{name}",
+},
+
    
     "tray": {
         "icon-size": 19,
