@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: js-org-mode
+# key: <js
+# --
+#+begin_src js :results output
+$0
+#+end_src
