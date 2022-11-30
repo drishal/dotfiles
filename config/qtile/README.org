@@ -41,7 +41,8 @@ from libqtile.config import Click, Drag, Group, Key, Screen, Match, KeyChord
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile import qtile,hook
-import libqtile.backend.wayland.inputs
+from libqtile.widget import statusnotifier
+from libqtile.backend.wayland import inputs
 #+end_src
 * Some variables
 #+begin_src python
@@ -406,7 +407,7 @@ keys = [
 
 
                 # widget.Systray(padding=5,),
-                # widget.StatusNotifier(padding=5,),
+                widget.StatusNotifier(padding=5,),
                 widget.TextBox(
                     text = ' ', # this one has a small space after the symbol to make it look more consistent with the spaces
                     foreground = color[3],
