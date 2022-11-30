@@ -8,7 +8,12 @@
 	"interval": 10,
     },
 
-
+    "custom/dwlbar": {
+        "format": "{}",
+        "max-length": 500,
+        "escape": true,
+        "exec": "~/dotfiles/config/waybar/dwl.sh 1"
+    },
     "clock": {
         "format": "  {: %F (%a) %H:%M:%S}",
 	"interval": 1, 
@@ -17,7 +22,9 @@
     "river/tags": {
         "num-tags": 9
      },
-
+     "river/window":{
+     "max-length": 50
+     },
     "cpu": {
         "interval": 10,
         "format": "   {}% ",
@@ -57,7 +64,9 @@
 },
 
     "wlr/workspaces": {
-    "format-icons": {
+     "all-outputs": true,
+     "active-only": false,
+     "format-icons": {
          "1": "1",
          "2": "2",
          "3": "3",
