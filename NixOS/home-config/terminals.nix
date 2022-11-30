@@ -10,7 +10,7 @@
           term = "xterm-256color";
           font = "FantasqueSansMono Nerd Font:size=8";
           dpi-aware = "yes";
-          pad = "15x4";
+          pad = "15x10";
         };
         cursor = {
           color = "282c34 51afef";
