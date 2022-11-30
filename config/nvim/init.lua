@@ -186,25 +186,37 @@ require('lspconfig')['eslint'].setup {
     "html"
   },
 }
+require('lspconfig')['clangd'].setup {
+  capabilities = capabilities
+}
+
+require('lspconfig')['jdtls'].setup {
+  capabilities = capabilities
+}
+--require'lspconfig'.java_language_server.setup{}
+
+require'lspconfig'.tsserver.setup{
+  capabilities=capabilities
+}
+
 
 -- require'lspconfig'.html.setup {
 --   capabilities = capabilities,
 --   cmd = { html_languageserver, "--stdio" },
 -- }
-
 -- tree sitter
 require('nvim-treesitter.configs').setup {
   highlight = {
     enable = true,
+    -- Required for spellcheck, some LaTex highlights and
+    -- code block highlights that do not have ts grammar
+    additional_vim_regex_highlighting = {'org'},
   },
+  ensure_installed = {'org'}, -- Or run :TSUpdate org
   -- ensure_installed = {"norg"}, 
   indent = {
     enable = true,
   },  
 }
--- neorg
--- require('neorg').setup {
---     load = {
---         ["core.defaults"] = {}
---     }
--- }
+--org mode
+require('orgmode').setup_ts_grammar()
