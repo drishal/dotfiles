@@ -11,23 +11,23 @@
   - [[#enable-native-comp-for-packages][enable native comp for packages]]
   - [[#setting-up-paths][Setting up paths]]
 - [[#customizing-the-editor-and-appearence][Customizing the Editor and Appearence]]
+  - [[#fonts][Fonts]]
   - [[#bookmarks-file][bookmarks file]]
   - [[#recents][recents]]
   - [[#rainbow-mode-for-colors][rainbow mode for colors]]
   - [[#smooth-scrolling][smooth scrolling]]
   - [[#dashboard][Dashboard]]
-  - [[#page-break-lines][Page break lines]]
   - [[#highlight-current-line][highlight current line]]
   - [[#properly-maximize-windws-emacs][properly maximize windws emacs]]
+  - [[#disable-toolbar][Disable Toolbar]]
+  - [[#page-break-lines][Page break lines]]
+  - [[#all-the-icon-fonts][All the icon fonts]]
+  - [[#no-blinking-cursor][no blinking cursor]]
   - [[#theme][theme]]
   - [[#disable-menubar][Disable Menubar]]
-  - [[#disable-toolbar][Disable Toolbar]]
   - [[#disable-scrollbar][disable scrollbar]]
-  - [[#all-the-icon-fonts][All the icon fonts]]
   - [[#line-numbers][Line Numbers]]
-  - [[#no-blinking-cursor][no blinking cursor]]
   - [[#modeline][Modeline]]
-  - [[#fonts][Fonts]]
   - [[#evil-mode][Evil mode]]
   - [[#undo-system][Undo system]]
   - [[#padding][Padding]]
@@ -158,6 +158,14 @@
   (exec-path-from-shell-initialize))
 #+end_src
 * Customizing the Editor and Appearence
+** Fonts
+#+begin_src emacs-lisp
+;; (add-to-list 'default-frame-alist '(font . "FiraCode Nerd Font-14" ))
+(add-to-list 'default-frame-alist '(font . "FantasqueSansMono Nerd Font-15.5:weight=medium" ))
+;; (add-to-list 'default-frame-alist '(font . "Comic Mono-12:weight=medium" ))
+;; (set-face-attribute 'default t :font "FiraCode Nerd Font-12")
+(setq global-prettify-symbols-mode t)
+#+end_src
 ** bookmarks file
 #+begin_src emacs-lisp
 (setq bookmark-default-file "~/.emacs.d/bookmarks" )
@@ -181,11 +189,18 @@
 ** smooth scrolling
 #+begin_src emacs-lisp 
 ;; (use-package smooth-scroll :ensure t)
- (pixel-scroll-precision-mode 1)
- (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
- (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
- (setq scroll-step 1) 
+(pixel-scroll-precision-mode 1)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+(setq scroll-step 1) 
 ;;(pixel-scroll-precision-mode 1)
+;; (use-package smooth-scroll :ensure t)
+;; (smooth-scroll-mode 1)
+;; (global-set-key [(down)]  'scroll-up-1)
+;; (global-set-key [(up)]    'scroll-down-1)
+;; (global-set-key [(left)]  'scroll-right-1)
+;; (global-set-key [(right)] 'scroll-left-1)
+
 #+end_src
 ** Dashboard
 #+begin_src emacs-lisp 
@@ -225,10 +240,6 @@
   (dashboard-setup-startup-hook))
 (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 #+end_src
-** Page break lines
-#+begin_src emacs-lisp
-(use-package page-break-lines :ensure t)
-#+end_src
 ** highlight current line
 #+begin_src emacs-lisp
 (global-hl-line-mode +1)
@@ -237,6 +248,22 @@
 ** properly maximize windws emacs
 #+begin_src emacs-lisp
 (setq frame-resize-pixelwise t)
+#+end_src
+** Disable Toolbar
+#+begin_src emacs-lisp
+(tool-bar-mode -1)
+#+end_src
+** Page break lines
+#+begin_src emacs-lisp
+(use-package page-break-lines :ensure t)
+#+end_src
+** All the icon fonts
+#+begin_src emacs-lisp
+(use-package all-the-icons :ensure t)
+#+end_src
+** no blinking cursor
+#+begin_src emacs-lisp
+(blink-cursor-mode 0)
 #+end_src
 ** theme
 #+begin_src emacs-lisp 
@@ -273,26 +300,14 @@
 #+begin_src emacs-lisp
 (menu-bar-mode -1)
 #+end_src
-** Disable Toolbar
-#+begin_src emacs-lisp
-(tool-bar-mode -1)
-#+end_src
 ** disable scrollbar
 #+begin_src emacs-lisp
 (scroll-bar-mode -1)
-#+end_src
-** All the icon fonts
-#+begin_src emacs-lisp
-(use-package all-the-icons :ensure t)
 #+end_src
 ** Line Numbers
 #+begin_src emacs-lisp
 (global-display-line-numbers-mode 1)
 (global-visual-line-mode t)
-#+end_src
-** no blinking cursor
-#+begin_src emacs-lisp
-(blink-cursor-mode 0)
 #+end_src
 ** Modeline
 *** Doom Modeline
@@ -308,14 +323,6 @@ https://github.com/AnthonyDiGirolamo/airline-themes
 ;; (load-theme 'airline-base16_dracula t)
 #+end_src
 
-** Fonts
-#+begin_src emacs-lisp
-;; (add-to-list 'default-frame-alist '(font . "FiraCode Nerd Font-12" ))
-(add-to-list 'default-frame-alist '(font . "FantasqueSansMono Nerd Font-15.5:weight=medium" ))
-;; (add-to-list 'default-frame-alist '(font . "Comic Mono-12:weight=medium" ))
-;; (set-face-attribute 'default t :font "FiraCode Nerd Font-12")
-(setq global-prettify-symbols-mode t)
-#+end_src
 ** Evil mode
 https://github.com/emacs-evil/evil
 Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
@@ -460,11 +467,12 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 #+end_src
 * Org mode:
 #+begin_src emacs-lisp
-  (use-package org :ensure t)
-  ;; (ensure-use-package '(org :host nil :type git
-  ;;   :repo "git@github.com:emacs-ensure/org-mode.git"))
-  ;; (ensure-use-package '(org :type built-in))
-  ;; (ensure-use-package '(org :host github :repo "emacs-straight/org-mode"))
+(use-package org :ensure t)
+;; (ensure-use-package '(org :host nil :type git
+;;   :repo "git@github.com:emacs-ensure/org-mode.git"))
+;; (ensure-use-package '(org :type built-in))
+;; (ensure-use-package '(org :host github :repo "emacs-straight/org-mode"))
+(setq org-export-html-validation-link nil)
 #+end_src
 ** org mode indent
 #+begin_src emacs-lisp
@@ -861,10 +869,11 @@ https://github.com/karthink/popper
 #+end_src
 ** treesitter
 #+begin_src emacs-lisp
-(use-package tree-sitter :ensure t)
-(use-package tree-sitter-langs :ensure t)
-(global-tree-sitter-mode)
-(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+ (use-package tree-sitter :ensure t)
+ (use-package tree-sitter-langs :ensure t)
+ (global-tree-sitter-mode)
+ (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+;; (require 'treesit)
 #+end_src
 
 ** emoji mode
@@ -1097,7 +1106,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
                                         ; (add-hook 'prog-mode-hook 'lsp)
 
 ;; (setq lsp-use-plists t)
-;;(setq lsp-idle-delay 0.500)
+(setq lsp-idle-delay 0.001)
 (setq lsp-enable-on-type-formatting nil)
 #+end_src
 *** lsp file watchers

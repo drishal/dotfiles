@@ -59,7 +59,7 @@
   home.file."/home/drishal/.config/mpv/mpv.conf".source = ../../config/mpv/mpv.conf;
 
   #nvim
-  home.file."/home/drishal/.config/nvim/init.vim".source = ../../config/nvim/pre-init.vim;
+  # home.file."/home/drishal/.config/nvim/init.vim".source = ../../config/nvim/pre-init.vim;
   # qtile config
   #home.file."/home/drishal/.config/qti../../config.py".source =../config/qtile/config.py;
   # home.file."/home/drishal/.config/qtile/autostart.sh".source =../../config/qtile/autostart.sh;

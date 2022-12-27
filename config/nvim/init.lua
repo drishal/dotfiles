@@ -1,21 +1,69 @@
 -- onedark
 require('onedark').setup {
-    style = 'dark'
+  style = 'dark'
 }
 require('onedark').load()
 
+-- some color settings
+vim.o.termguicolors = true
+vim.g.vim_markdown_folding_disabled = 1
 vim.o.number = true
+vim.o.cursorline = true
+vim.o.clipboard = "unnamedplus"
+
 -- lspconfig
 local nvim_lsp = require('lspconfig')
 -- require'lspconfig'.rnix.setup{}
 local nvim_lsp = require('lspconfig')
 local lspkind = require('lspkind')
 
+-- lualine
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'onedark',
+    component_separators = { left = ' ', right = ' '},
+    section_separators = { left = ' ', right = ' '},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {'filename'},
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
+}
 --cmp
 -- Setup nvim-cmp.
 --
 --rust
 require('rust-tools').setup({})
+
 
 local cmp = require'cmp'
 local cmp_kinds = {
@@ -48,37 +96,34 @@ local cmp_kinds = {
 
 cmp.setup({
   snippet = {
-    -- REQUIRED - you must specify a snippet engine
     expand = function(args)
-      --vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
       require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-      -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-      -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
     end,
   },
 
   formatting = {
-      -- format = function(_, vim_item)
-      --   vim_item.kind = (cmp_kinds[vim_item.kind] or '') .. vim_item.kind
-      --   return vim_item
-      -- end,
-      format = lspkind.cmp_format({
-	      mode = "symbol_text",
-	      menu = ({
-		      nvim_lsp = "[LSP]",
-		      ultisnips = "[US]",
-		      nvim_lua = "[Lua]",
-		      path = "[Path]",
-		      buffer = "[Buffer]",
-		      emoji = "[Emoji]",
-		      omni = "[Omni]",
-	      }),
+    -- format = function(_, vim_item)
+    --   vim_item.kind = (cmp_kinds[vim_item.kind] or '') .. vim_item.kind
+    --   return vim_item
+    -- end,
+    format = lspkind.cmp_format({
+      mode = "symbol_text",
+      menu = ({
+        nvim_lsp = "[LSP]",
+        ultisnips = "[US]",
+        nvim_lua = "[Lua]",
+        path = "[Path]",
+        buffer = "[Buffer]",
+        emoji = "[Emoji]",
+        omni = "[Omni]",
       }),
+    }),
 
   },
 
   mapping = {
     ["<Up>"] = cmp.mapping.select_prev_item(),
+    --["<ESC>"] = { "<cmd> noh <CR>", "no highlight" },
     ["<Down>"] = cmp.mapping.select_next_item(),
     ["<C-p>"] = cmp.mapping.select_prev_item(),
     ["<C-n>"] = cmp.mapping.select_next_item(),
@@ -106,21 +151,21 @@ cmp.setup({
         fallback()
       end
     end, {
-      "i",
-      "s",
-    }),
-    ["<S-Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, {
-      "i",
-      "s",
-    }),
+    "i",
+    "s",
+  }),
+  ["<S-Tab>"] = cmp.mapping(function(fallback)
+    if cmp.visible() then
+      cmp.select_prev_item()
+    elseif luasnip.jumpable(-1) then
+      luasnip.jump(-1)
+    else
+      fallback()
+    end
+  end, {
+  "i",
+  "s",
+}),
   },
 
   sources = cmp.config.sources({
@@ -162,48 +207,24 @@ cmp.setup.cmdline(':', {
 
 -- Setup lspconfig.
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
--- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-require('lspconfig')['rnix'].setup {
-  capabilities = capabilities
-}
-require('lspconfig')['pyright'].setup {
-  capabilities = capabilities
-}
+require("mason").setup()
+local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'sumneko_lua'}
+require("mason-lspconfig").setup({
+  ensure_installed = servers,
+  -- automatic_installation = true
+})
+-- nvim-cmp supports additional completion capabilities
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-require('lspconfig')['clangd'].setup {
-  capabilities = capabilities
-}
+for _, lsp in ipairs(servers) do
+  require('lspconfig')[lsp].setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+  }
+end
+require('fidget').setup()
 
-require('lspconfig')['eslint'].setup {
-  capabilities = capabilities,
-  filetypes = {
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "vue",
-    "jsx",
-    "html"
-  },
-}
-require('lspconfig')['clangd'].setup {
-  capabilities = capabilities
-}
-
-require('lspconfig')['jdtls'].setup {
-  capabilities = capabilities
-}
---require'lspconfig'.java_language_server.setup{}
-
-require'lspconfig'.tsserver.setup{
-  capabilities=capabilities
-}
-
-
--- require'lspconfig'.html.setup {
---   capabilities = capabilities,
---   cmd = { html_languageserver, "--stdio" },
--- }
 -- tree sitter
 require('nvim-treesitter.configs').setup {
   highlight = {
@@ -220,3 +241,4 @@ require('nvim-treesitter.configs').setup {
 }
 --org mode
 require('orgmode').setup_ts_grammar()
+-- vim: ts=2 sts=2 sw=2 et

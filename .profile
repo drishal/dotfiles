@@ -45,6 +45,11 @@ alias tt_balancer_candidate="sudo sysctl -w kernel.sched_tt_balancer_opt=1"
 alias tt_balancer_cfs="sudo sysctl -w kernel.sched_tt_balancer_opt=2"
 alias tt_balancer_ps="sudo sysctl -w kernel.sched_tt_balancer_opt=3"
 
+#powerctl
+alias perf="powerprofilesctl set performance; sudo cpupower frequency-set -g performance"
+alias bal="powerprofilesctl set balanced; sudo cpupower frequency-set -g schedutil"
+alias ps="powerprofilesctl set power-saver"
+alias pnow="cat /sys/firmware/acpi/platform_profile"
 #direnv
 export DIRENV_LOG_FORMAT=
 

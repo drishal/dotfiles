@@ -11,6 +11,8 @@
   - [[#gruvbox][Gruvbox]]
   - [[#nord][Nord]]
   - [[#theme][theme]]
+- [[#wayland-settings][Wayland settings]]
+  - [[#inputs][Inputs]]
 - [[#keybinds][Keybinds]]
   - [[#keyboard][Keyboard]]
   - [[#mouse][Mouse]]
@@ -41,17 +43,23 @@ from libqtile.config import Click, Drag, Group, Key, Screen, Match, KeyChord
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile import qtile,hook
-from libqtile.widget import statusnotifier
+# from libqtile.widget import statusnotifier
 from libqtile.backend.wayland import inputs
+from qtile_extras.widget import StatusNotifier
+from libqtile.backend.wayland import InputConfig
 #+end_src
 * Some variables
 #+begin_src python
 mod = "mod4"
 if qtile.core.name=="wayland":
     terminal = "/usr/bin/foot"
+    tray =  widget.StatusNotifier(icon_theme="Papirus-Dark",padding=4)
+    launcher="wofi --show drun"
 else:
     terminal = "alacritty"
-
+    tray =  widget.Systray(padding=4)
+    launcher="rofi -show drun -icon-theme Papirus -show-icons"
+ # print(typeof(tray))
 #+end_src
 * Colors
 ** Dracula
@@ -143,6 +151,14 @@ else:
 #+begin_src python 
   color = onedark 
 #+end_src
+* Wayland settings
+** Inputs
+#+begin_src python
+wl_input_rules = {
+    "2:7:SynPS/2 Synaptics TouchPad": InputConfig(pointer_accel=0.6, tap=True),
+    "type:keyboard": InputConfig(kb_repeat_rate=50, kb_repeate_delay=300),
+}
+#+end_src
 * Keybinds
 ** Keyboard
 #+begin_src python
@@ -198,7 +214,7 @@ keys = [
     # # pavucontrol
     Key([mod], "v", lazy.spawn("pavucontrol"), desc="pavucontrol"),
     # # run
-    Key([mod], "d", lazy.spawn("rofi -show drun -icon-theme Papirus -show-icons"), desc="Firefox"),
+    Key([mod], "d", lazy.spawn(launcher), desc="app launcher"),
     Key([mod], "p", lazy.spawn("rofi -show powermenu -modi powermenu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu"), desc="Emacs"),
     # # thunar
     Key([mod], "e", lazy.spawn("nemo"), desc="file manager"),
@@ -407,7 +423,11 @@ keys = [
 
 
                 # widget.Systray(padding=5,),
-                widget.StatusNotifier(padding=5,),
+                # widget.StatusNotifier(
+                #     icon_theme="Papirus-Dark",
+                #     padding=4,
+                # ),
+                tray,
                 widget.TextBox(
                     text = ' ', # this one has a small space after the symbol to make it look more consistent with the spaces
                     foreground = color[3],
@@ -424,15 +444,15 @@ keys = [
 #+end_src
 * Some more variables
 #+begin_src python
-  dgroups_key_binder = None
-  dgroups_app_rules = []  # type: List
-  follow_mouse_focus = True
-  bring_front_click = False
-  cursor_warp = False
-  auto_fullscreen = True
-  focus_on_window_activation = "focus"
-  reconfigure_screens = True
-  auto_minimize = False
+dgroups_key_binder = None
+dgroups_app_rules = []  # type: List
+follow_mouse_focus = True
+bring_front_click = False
+cursor_warp = False
+auto_fullscreen = True
+focus_on_window_activation = "focus"
+reconfigure_screens = True
+auto_minimize = False
 #+end_src
 
 * Floating layout rules
@@ -446,6 +466,7 @@ floating_layout = layout.Floating(border_focus = color[8], border_normal = color
                                       Match(wm_class='ssh-askpass'),  # ssh-askpass
                                       Match(title='Confirmation'),      # tastyworks exit box
                                       Match(title='Qalculate!'),        # qalculate-gtk
+                                      Match(wm_class='Galculator'),
                                       # Match(title='About Mozilla Firefox'),
                                       Match(title='Zoom Meeting'),
                                       Match(title='branchdialog'),  # gitk

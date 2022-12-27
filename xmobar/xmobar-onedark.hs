@@ -10,7 +10,7 @@ Config {
    , bgColor =      "#282c34"
    , fgColor =      "#bbc2cf"
    , position =   Top,
-   --, alpha = 175
+   -- , alpha = 175
    --, border =       BottomB
    , borderColor =  "#646464"
    -- }{ %battery%  %multicpu% | %memory% %dynnetwork% | %date%

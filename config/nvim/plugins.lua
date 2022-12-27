@@ -9,9 +9,13 @@ return require('packer').startup(function(use)
 	use 'navarasu/onedark.nvim'
 	use 'glepnir/dashboard-nvim'
 	use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+	use {
+		'nvim-lualine/lualine.nvim',
+		requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+	}
 	-- airline
-	use 'vim-airline/vim-airline'
-	use 'vim-airline/vim-airline-themes'
+	-- use 'vim-airline/vim-airline'
+	-- use 'vim-airline/vim-airline-themes'
 	--lsp plugins
 	use 'neovim/nvim-lspconfig'
 	use 'hrsh7th/cmp-nvim-lsp'
@@ -22,7 +26,10 @@ return require('packer').startup(function(use)
 	use 'simrat39/rust-tools.nvim'
 	use 'hrsh7th/nvim-cmp'
 	use 'mfussenegger/nvim-jdtls'
+	use 'williamboman/mason.nvim'
+	use "williamboman/mason-lspconfig.nvim"
 	use 'joukevandermaas/vim-ember-hbs'
+	use 'j-hui/fidget.nvim'
 	use({"L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*"})
 
 

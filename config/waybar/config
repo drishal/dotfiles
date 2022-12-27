@@ -1,4 +1,5 @@
 {
+    "layer":"top",
     "modules-left": ["river/tags", "wlr/workspaces" ,"wlr/taskbar", "river/window" ],
     "modules-center": [ "clock"],
     "modules-right": ["battery","network","memory","cpu", "tray"],

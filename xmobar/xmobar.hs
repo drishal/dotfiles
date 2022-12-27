@@ -11,7 +11,7 @@ config = defaultConfig {
    , bgColor =      "#282a36"
    , fgColor =      "#f8f8f2"
    , position =   Top,
-   --, alpha = 175
+   , alpha = 100
    --, border =       BottomB
    , borderColor =  "#646464"
    -- layout

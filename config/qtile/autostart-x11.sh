@@ -2,7 +2,7 @@
 # dunst&
 xset r rate  300 50
 lxpolkit&
-# emacs --daemon&
+emacs --daemon&
 blueman-applet&
 picom&
 nm-applet&

@@ -91,13 +91,14 @@ git clone https://github.com/zsh-users/zsh-history-substring-search.git
 
 * qt5ct
 #+begin_src shell :tangle no
-if [[ "$DESKTOP_SESSION" = *"plasma"* ]]; then
-    export QT_QPA_PLATFORMTHEME = "kde"
-fi
+# if [[ "$DESKTOP_SESSION" = *"plasma"* ]]; then
+#     export QT_QPA_PLATFORMTHEME = "kde"
+# fi
 
-if [[ "$DESKTOP_SESSION" != *"plasma"* ]]; then
-    export QT_QPA_PLATFORMTHEME="qt5ct"
-fi
+# if [[ "$DESKTOP_SESSION" != *"plasma"* ]]; then
+#     export QT_QPA_PLATFORMTHEME="qt5ct"
+# fi
+
 #+end_src 
 * Some stuff configure by zsh-newuser-install
 #+begin_src shell
