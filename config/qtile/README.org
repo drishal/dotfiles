@@ -44,16 +44,16 @@ from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile import qtile,hook
 # from libqtile.widget import statusnotifier
-from libqtile.backend.wayland import inputs
+# from libqtile.backend.wayland import inputs
 from qtile_extras.widget import StatusNotifier
-from libqtile.backend.wayland import InputConfig
+from libqtile.backend.wayland import inputs,InputConfig
 #+end_src
 * Some variables
 #+begin_src python
 mod = "mod4"
 if qtile.core.name=="wayland":
     terminal = "/usr/bin/foot"
-    tray =  widget.StatusNotifier(icon_theme="Papirus-Dark",padding=4)
+    tray =  widget.StatusNotifier(icon_theme="Papirus",padding=4)
     launcher="wofi --show drun"
 else:
     terminal = "alacritty"
@@ -155,7 +155,8 @@ else:
 ** Inputs
 #+begin_src python
 wl_input_rules = {
-    "2:7:SynPS/2 Synaptics TouchPad": InputConfig(pointer_accel=0.6, tap=True),
+    # "type:pointer": InputConfig(pointer_accel=0.6, tap=True),
+    "type:pointer": InputConfig(pointer_accel=0.6, tap=True),
     "type:keyboard": InputConfig(kb_repeat_rate=50, kb_repeate_delay=300),
 }
 #+end_src

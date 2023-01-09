@@ -1,6 +1,5 @@
 {
-    "layer":"top",
-    "modules-left": ["river/tags", "wlr/workspaces" ,"wlr/taskbar", "river/window" ],
+    "modules-left": [ "custom/dwlbar" ,"wlr/taskbar" ],
     "modules-center": [ "clock"],
     "modules-right": ["battery","network","memory","cpu", "tray"],
     "battery": {
@@ -20,12 +19,6 @@
 	"interval": 1, 
     },
     
-    "river/tags": {
-        "num-tags": 9
-     },
-     "river/window":{
-     "max-length": 50
-     },
     "cpu": {
         "interval": 10,
         "format": "   {}% ",

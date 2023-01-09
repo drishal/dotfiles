@@ -148,7 +148,8 @@
 #+end_src
 ** enable native comp for packages
 #+begin_src emacs-lisp
-  (setq comp-deferred-compilation t)
+;; (setq comp-deferred-compilation t)
+(setq native-comp-deferred-compilation t)
 #+end_src
 
 ** Setting up paths
@@ -239,6 +240,7 @@
   :config
   (dashboard-setup-startup-hook))
 (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+(dashboard-refresh-buffer)
 #+end_src
 ** highlight current line
 #+begin_src emacs-lisp
@@ -268,6 +270,7 @@
 ** theme
 #+begin_src emacs-lisp 
 ;; (use-package dracula- ensure t)
+;; (use-package modus-themes :ensure t)
 (use-package doom-themes :ensure t
   :config
   ;; Global settings (defaults)
@@ -1249,7 +1252,7 @@ https://github.com/pwalsh/pipenv.el
 #+end_src
 
 *** java
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp 
 (use-package lsp-java :ensure t)
 (add-hook 'java-mode-hook (lambda ()
                             (setq c-basic-offset 4

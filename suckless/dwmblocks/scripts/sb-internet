@@ -5,12 +5,33 @@
 # Show wifi 📶 and percent strength or 📡 if none.
 # Show 🌐 if connected to ethernet or ❎ if none.
 # Show 🔒 if a vpn connection is active
-if grep -xq 'up' /sys/class/net/w*/operstate 2>/dev/null ; then
-	wifiicon="$(awk '/^\s*w/ { print " ", int($3 * 100 / 70) "% " }' /proc/net/wireless)"
-elif grep -xq 'up' /sys/class/net/e*/operstate 2>/dev/null ; then
-	grep -xq '0x1003' /sys/class/net/e*/flags && wifiicon=" eth"
-elif grep -xq 'down' /sys/class/net/e*/operstate 2>/dev/null ; then
-	grep -xq '0x1003' /sys/class/net/e*/flags && wifiicon="睊  disconnected"
-fi
+# if grep -xq 'up' /sys/class/net/w*/operstate 2>/dev/null ; then
+# 	wifiicon="$(awk '/^\s*w/ { print " ", int($3 * 100 / 70) "% " }' /proc/net/wireless)"
+# elif grep -xq 'up' /sys/class/net/e*/operstate 2>/dev/null ; then
+# 	grep -xq '0x1003' /sys/class/net/e*/flags && wifiicon=" eth"
+# elif grep -xq 'down' /sys/class/net/e*/operstate 2>/dev/null ; then
+# 	grep -xq '0x1003' /sys/class/net/e*/flags && wifiicon="睊  disconnected"
+# fi
 
-printf "^c$orange^ %s%s%s\n" "$wifiicon" "$(sed "s/down//;s/up/🌐/" /sys/class/net/e*/operstate 2>/dev/null)" "$(sed "s/.*/🔒/" /sys/class/net/tun*/operstate 2>/dev/null)"
+#printf "^c$orange^ %s%s%s\n" "$wifiicon" "$(sed "s/down//;s/up/🌐/" /sys/class/net/e*/operstate 2>/dev/null)" "$(sed "s/.*/🔒/" /sys/class/net/tun*/operstate 2>/dev/null)"
+
+# Get the name of the first device
+device=$(nmcli -t -f DEVICE | head -n 1 | sed 's/connected to//')
+
+# Check if the device name starts with "e" or "w"
+if [[ $device == e* ]]; then
+  # If the device name starts with "e", output "eth: {name of interface}"
+  # Use cut to remove the ":" and everything after it
+  device=$(echo $device | cut -d ':' -f 1)
+  echo "^c$orange^ eth: $device"
+elif [[ $device == w* ]]; then
+  # If the device name starts with "w", get the current connection and strength
+  connection_info=$(nmcli -t -f NAME,SIGNAL device wifi list | cut -d ':' -f 2 )
+  # Split the connection info into separate variables using cut
+  connection=$(echo $connection_info | cut -d ' ' -f 1)
+  strength=$(echo $connection_info | cut -d ' ' -f 2)
+  if [[ -n $connection ]]; then
+    # If a connection is found, output the device name, connection name, and strength
+    printf "^c$orange^  $device | $strength%%"
+  fi
+fi

@@ -76,23 +76,23 @@ riverctl map normal $mod F6 spawn "brightnessctl s 10+"
 ** some touchpad settings
 *** Pointer Accel
 - v2.0.x
-#+begin_src bash :tangle no
+#+begin_src bash 
     riverctl input  pointer-2-7-SynPS/2_Synaptics_TouchPad pointer-accel 0.6
     riverctl input  pointer-2-10-TPPS/2_Elan_TrackPoint  pointer-accel 0.6
 #+end_src
 - v1.0.x
-  #+begin_src bash
+  #+begin_src bash :tangle no
     riverctl input  "2:7:SynPS/2_Synaptics_TouchPad" pointer-accel 0.6
     riverctl input "2:10:TPPS/2_Elan_TrackPoint pointer-2-10-TPPS/2_Elan_TrackPoint"  pointer-accel 0.6
   #+end_src
 *** Enable tap
 - v2.0.x
-#+begin_src bash :tangle no
+#+begin_src bash 
 riverctl input pointer-2-7-SynPS/2_Synaptics_TouchPad tap enabled       
 #+end_src
 
 - v1.0.x
-#+begin_src bash 
+#+begin_src bash :tangle no
 riverctl input "2:7:SynPS/2_Synaptics_TouchPad" tap enabled       
 #+end_src
 

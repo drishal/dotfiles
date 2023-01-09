@@ -5,7 +5,7 @@ let g:vim_markdown_folding_disabled = 1
 let g:airline_powerline_fonts = 1
 
 " neovide settings
-set guifont=FantasqueSansMono\ Nerd\ Font:h8
+set guifont=FantasqueSansMono\ Nerd\ Font:h10
 let g:neovide_cursor_vfx_mode = "railgun"
 augroup packer_user_config
   autocmd!
@@ -17,4 +17,5 @@ augroup end
 source ~/dotfiles/config/nvim/plugins.lua
 source ~/dotfiles/config/nvim/init.lua
 
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 au BufReadPost *.hbs set syntax=html

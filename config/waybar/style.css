@@ -52,6 +52,7 @@
     font-family: "FantasqueSansMono Nerd Font","Roboto", "Helvetica", "Arial", "sans-serif";
     font-size: 13px;
     min-height: 0;
+    /* opacity: 0.0; */
     /* color: @colfg; */
 }
 
@@ -62,6 +63,10 @@ window#waybar {
     /* color: @colfg; */
     transition-property: background-color;
     transition-duration: .5s;
+}
+
+window#waybar.empty #window {
+	background: transparent;
 }
 
 #tags button  {
@@ -119,6 +124,29 @@ window#waybar {
     color: @colviolet;
 }
 
+ #custom-dwl_layout {
+     color: @colviolet;
+ }
+
+ #custom-dwl_title {
+     color: @colmagenta;
+ }
+
+ #custom-dwl_tag {
+     color: @colgrey
+ }
+
+ #custom-dwl_tag.selected {
+     border-top: 1px solid @colmagenta
+ }
+
+ #custom-dwl_tag.urgent {
+     background-color: @colred
+     }
+
+ #custom-dwl_tag.active {
+     color: @colfg
+ }
 
 
 #battery,
