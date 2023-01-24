@@ -44,6 +44,10 @@ return require('packer').startup(function(use)
 	use "williamboman/mason-lspconfig.nvim"
 	use 'joukevandermaas/vim-ember-hbs'
 	use 'j-hui/fidget.nvim'
+	use {
+		"windwp/nvim-autopairs",
+		config = function() require("nvim-autopairs").setup {} end
+	}
 	use({"L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*"})
 
 
