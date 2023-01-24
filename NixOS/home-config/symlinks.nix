@@ -33,8 +33,8 @@
   # home.file."/home/drishal/.config/river".source = ../../config/river;
 
   #waybar
-  # home.file."/home/drishal/.config/waybar/config".source = ../../config/waybar/waybar-hyprland;
-  home.file."/home/drishal/.config/waybar/config".source = ../../config/waybar/waybar-dwl;
+  home.file."/home/drishal/.config/waybar/config".source = ../../config/waybar/waybar-hyprland;
+  # home.file."/home/drishal/.config/waybar/config".source = ../../config/waybar/waybar-dwl;
   # home.file."/home/drishal/.config/waybar/config".source = ../../config/waybar/waybar-river;
   home.file."/home/drishal/.config/waybar/style.css".source = ../../config/waybar/style.css;
 
