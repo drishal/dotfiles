@@ -5,7 +5,7 @@ let g:vim_markdown_folding_disabled = 1
 let g:airline_powerline_fonts = 1
 
 " neovide settings
-set guifont=FantasqueSansMono\ Nerd\ Font:h10
+set guifont=FantasqueSansMono\ Nerd\ Font:h15
 let g:neovide_cursor_vfx_mode = "railgun"
 augroup packer_user_config
   autocmd!

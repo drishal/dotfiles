@@ -246,7 +246,7 @@ cmp.setup.cmdline(':', {
 -- Setup lspconfig.
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 require("mason").setup()
-local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'sumneko_lua', 'jdtls', 'rnix'}
+local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'sumneko_lua', 'jdtls', 'rnix', 'jsonls'}
 require("mason-lspconfig").setup({
   ensure_installed = servers,
   -- automatic_installation = true
