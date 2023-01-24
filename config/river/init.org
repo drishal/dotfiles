@@ -291,7 +291,7 @@ done
 
 *** Locking screen with swaylock
 #+begin_src bash
-riverctl map normal $mod+Shift  L spawn "swaylock swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 7x5 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000  --fade-in 0.2" 
+riverctl map normal $mod+Shift L spawn "swaylock swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 7x5 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000  --fade-in 0.2" 
 #+end_src
 
 *  Set background and border color
@@ -309,6 +309,7 @@ riverctl set-repeat 50 300
 
 * auto starting apps
 #+begin_src bash
+riverctl spawn "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
 riverctl spawn "systemctl --user import-environment"
 # riverctl spawn "swaybg -i ~/dotfiles/wallpapers/darkest_hour.jpg" 
 # riverctl spawn "swaybg -i ~/dotfiles/wallpapers/NixOS-1.png" 
