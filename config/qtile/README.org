@@ -53,8 +53,12 @@ from libqtile.backend.wayland import inputs,InputConfig
 mod = "mod4"
 if qtile.core.name=="wayland":
     terminal = "/usr/bin/foot"
-    tray =  widget.StatusNotifier(icon_theme="Papirus",padding=4)
+    tray =  StatusNotifier(icon_theme="Papirus-Dark", padding=4, icon_size=20)
     launcher="wofi --show drun"
+    wifi="networkmanager_dmenu"
+    ss="grimshot copy output"
+    ss2="grimshot copy area"
+    lock="swaylock swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 7x5 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000  --fade-in 0.2"
 else:
     terminal = "alacritty"
     tray =  widget.Systray(padding=4)
@@ -156,7 +160,8 @@ else:
 #+begin_src python
 wl_input_rules = {
     # "type:pointer": InputConfig(pointer_accel=0.6, tap=True),
-    "type:pointer": InputConfig(pointer_accel=0.6, tap=True),
+    "2:7:SynPS/2 Synaptics TouchPad": InputConfig(pointer_accel=0.6, tap=True),
+    # "type:keyboard": InputConfig(kb_repeat_rate=50, kb_repeate_delay=300),
     "type:keyboard": InputConfig(kb_repeat_rate=50, kb_repeate_delay=300),
 }
 #+end_src
@@ -164,8 +169,8 @@ wl_input_rules = {
 ** Keyboard
 #+begin_src python
 keys = [
-    Key([mod], "h", lazy.layout.left()),
-    Key([mod], "l", lazy.layout.right()),
+    # Key([mod], "h", lazy.layout.left()),
+    # Key([mod], "l", lazy.layout.right()),
     Key([mod], "j", lazy.layout.down()),
     Key([mod], "k", lazy.layout.up()),
     # Key([mod, "control"], "h", lazy.layout.swap_left()),
@@ -174,8 +179,14 @@ keys = [
     Key([mod, "shift"], "k", lazy.layout.shuffle_up()),
     # Key([mod, "shift"], "j", lazy.layout.grow_down()),
     # Key([mod, "shift"], "k", lazy.layout.grow_up()),
-    Key([mod, "shift"], "h", lazy.layout.grow_left(), lazy.layout.decrease_ratio()),
-    Key([mod, "shift"], "l", lazy.layout.grow_right(),lazy.layout.increase_ratio()),
+    # Key([mod, "shift"], "h", lazy.layout.grow_left(), lazy.layout.decrease_ratio()),
+    # Key([mod, "shift"], "l", lazy.layout.grow_right(),lazy.layout.increase_ratio()),
+
+    Key([mod], "h", lazy.layout.grow_left(), lazy.layout.decrease_ratio()),
+    Key([mod], "l", lazy.layout.grow_right(),lazy.layout.increase_ratio()),
+
+
+
     # Key([mod], "i", lazy.layout.decrease_ratio()),
     Key([mod], "f", lazy.window.toggle_fullscreen()),
     # Key([mod], "m", lazy.layout.increase_ratio()),
@@ -187,7 +198,7 @@ keys = [
     
     # reset 
     Key([mod, "shift"], "m", lazy.layout.normalize(), lazy.layout.reset()),
-    Key([mod], "n", lazy.layout.reset()),
+    Key([mod, "shift"], "n", lazy.layout.reset()),
 
 
 
@@ -210,8 +221,12 @@ keys = [
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     # some programs
     Key([mod, "shift"], "f", lazy.spawn("env MOZ_ENABLE_WAYLAND=1 firefox"), desc="Firefox"),
+    # Key([mod, "shift"], "f", lazy.spawn("brave"), desc="Firefox"),
+    Key([mod], "n", lazy.spawn(wifi), desc="Firefox"),
     Key([mod], "a", lazy.spawn("emacsclient -c"), desc="Emacs"),
-    Key([mod], "s", lazy.spawn("spectacle"), desc="Emacs"),
+    Key([mod], "s", lazy.spawn(ss), desc="screenshot"),
+    Key([mod, "shift"], "s", lazy.spawn(ss2), desc="screenshot"),
+    Key([mod, "shift"], "l", lazy.spawn(lock), desc="Lock Screen"),
     # # pavucontrol
     Key([mod], "v", lazy.spawn("pavucontrol"), desc="pavucontrol"),
     # # run
@@ -230,8 +245,8 @@ keys = [
 
     Key([mod, "shift"], "r", lazy.restart(), desc="Restart qtile"),
     Key([mod, "shift"], "q", lazy.shutdown(), desc="Shutdown qtile"),
-    Key([mod], "r", lazy.spawncmd(),
-        desc="Spawn a command using a prompt widget"),
+    # Key([mod], "r", lazy.spawncmd(),
+    #     desc="Spawn a command using a prompt widget"),
 
     KeyChord([mod], "z", [
       Key([], "x", lazy.spawn("emacsclient -c"))
@@ -275,7 +290,7 @@ keys = [
       layout.Tile(
           ratio_increment = 0.05,
           ratio=0.5,
-          margin = 10,
+          margin = 5,
           border_focus = color[8],
           border_normal = color[1],
           border_width = 1
@@ -343,11 +358,11 @@ keys = [
                     # padding = 5
 
                 ),
-                widget.Prompt(
-                    background=color[1],
-                    foreground=color[2],
-                    record_history = True
-                ),
+                # widget.Prompt(
+                #     background=color[1],
+                #     foreground=color[2],
+                #     record_history = True
+                # ),
                 widget.WindowName(
                     max_chars = 50,
                     padding= 5,
@@ -492,7 +507,7 @@ floating_layout = layout.Floating(border_focus = color[8], border_normal = color
 )
 #+end_src
 ** Floating mpv
-#+begin_src python
+#+begin_src python :tangle no
 @hook.subscribe.client_new
 def disable_floating(window):
     rules = [
