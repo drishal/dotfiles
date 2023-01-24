@@ -62,7 +62,9 @@
       package = pkgs.emacsPgtkNativeComp;
       extraPackages = (epkgs: [ epkgs.vterm epkgs.telega]);
     };
-
+    helix = {
+      enable = true;
+    };
   };
 }
 
