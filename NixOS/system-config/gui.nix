@@ -31,7 +31,7 @@
 
     # Desktop Environment
     desktopManager = {
-      plasma5.enable = true;
+      # plasma5.enable = true;
       # xfce.enable = true;
       # lxqt.enable = true;
       # gnome.enable = true;
