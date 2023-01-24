@@ -1,0 +1,205 @@
+#+TITLE: Hyprland config  
+#+PROPERTY: header-args :tangle ~/.config/hypr/hyprland.conf
+* Table of Contents :toc:
+- [[#monitor-config][Monitor config]]
+- [[#autostart-programs][Autostart programs]]
+- [[#input-settings][Input settings]]
+  - [[#general-settings][General settings]]
+  - [[#device-specific-settings][Device specific settings]]
+- [[#general-settings-1][General Settings]]
+- [[#decoration-settings][Decoration settings]]
+- [[#animations][Animations]]
+- [[#layouts][Layouts]]
+  - [[#dwindle][Dwindle]]
+  - [[#master][Master]]
+- [[#gestures][Gestures]]
+- [[#window-rules][Window Rules]]
+- [[#keybindings][Keybindings]]
+  - [[#mod-key][Mod key]]
+  - [[#binds][Binds]]
+
+* Monitor config
+#+begin_src conf
+monitor=,preferred,auto,1
+#+end_src
+* Autostart programs 
+ See https://wiki.hyprland.org/Configuring/Keywords/ for more
+ exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+ Execute apps at launch
+ #+begin_src conf 
+exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP & waybar & dunst & nm-applet --indicator & blueman-applet & emacs --daemon & swaybg -i ~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
+ #+end_src
+* Input settings
+** General settings
+#+begin_src conf
+input {
+    kb_layout = us
+    kb_variant =
+    kb_model =
+    kb_options =
+    kb_rules =
+    repeat_rate=50
+    repeat_delay=300
+    follow_mouse = 1
+    # sensitivity=0.6
+
+    touchpad {
+        natural_scroll = no
+        # scroll_factor=1.4
+    }
+}
+#+end_src 
+** Device specific settings
+*** Touchpad 
+#+begin_src conf
+device:synps/2-synaptics-touchpad {
+    sensitivity=0.6
+}
+#+end_src
+
+* General Settings
+See https://wiki.hyprland.org/Configuring/Variables/ for more
+#+begin_src conf 
+general {
+    gaps_in = 5
+    gaps_out = 20
+    border_size = 2
+    col.active_border = rgba(bd93f9ff)
+    col.inactive_border = rgba(3f444aff)
+    layout = master
+}
+#+end_src
+
+* Decoration settings
+See https://wiki.hyprland.org/Configuring/Variables/ for more
+#+begin_src conf 
+decoration {
+
+    rounding = 2
+    blur = yes
+    blur_size = 3
+    blur_passes = 1
+    blur_new_optimizations = on
+
+    drop_shadow = yes
+    shadow_range = 4
+    shadow_render_power = 3
+    col.shadow = rgba(1a1a1aee)
+}
+#+end_src
+
+* Animations
+ Some default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
+
+#+begin_src conf
+animations {
+    enabled = yes
+    bezier = myBezier, 0.05, 0.7, 0.1, 1.05
+    animation = windows, 1, 4, myBezier
+    animation = windowsOut, 1, 5, default, popin 80%
+    animation = border, 1, 7, default
+    animation = fade, 1, 5, default
+    animation = workspaces, 1, 5, default
+}
+#+end_src
+
+* Layouts
+** Dwindle
+See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
+#+begin_src conf :tangle no
+dwindle {
+     pseudotile = yes # master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
+     preserve_split = yes # you probably want this
+ }
+#+end_src 
+** Master
+See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
+#+begin_src conf
+master {
+    new_is_master = true
+    # special_scale_factor=0.5
+}
+#+end_src
+* Gestures
+See https://wiki.hyprland.org/Configuring/Variables/ for more
+#+begin_src conf
+gestures {
+    workspace_swipe = on
+}
+#+end_src
+* Window Rules
+See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
+#+begin_src conf
+# Example windowrule v1
+# windowrule = float, ^(kitty)$
+windowrule=float,^(zoom)$
+# Example windowrule v2
+# windowrulev2 = float,class:^(kitty)$,title:^(kitty)$
+#+end_src
+
+* Keybindings
+** Mod key
+#+begin_src conf
+$mainMod = SUPER
+#+end_src
+** Binds
+#+begin_src conf
+bind = $mainMod, RETURN, exec, /usr/bin/foot
+bind = $mainMod, D, exec, wofi --show drun
+bind = $mainMod, V, exec, pavucontrol
+bind = $mainMod, Q, killactive, 
+bind = $mainMod SHIFT, Q, exit, 
+bind = $mainMod SHIFT, F, exec, firefox
+bind = $mainMod SHIFT, L, exec, swaylock swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 7x5 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000  --fade-in 0.2
+bind = $mainMod, E, exec, nemo
+bind = $mainMod, A, exec, emacsclient -c
+bind = $mainMod, SPACE, togglefloating, 
+bind = $mainMod, R, exec, wofi --show drun
+bind = $mainMod, P, pseudo, # dwindle
+bind = $mainMod, J, togglesplit, # dwindle
+bind=  $mainMod, F,fullscreen,
+bind = $mainMod SHIFT, s, exec, grimshot copy area
+bind = $mainMod, s, exec, grimblast copy screen
+# Move focus with mainMod + arrow keys
+# bind = $mainMod, H , movefocus, l
+# bind = $mainMod, L, movefocus, r
+bind = $mainMod, K, movefocus, u
+bind = $mainMod, J, movefocus, d
+bind = $mainMod SHIFT, M, exec, hyprctl keyword general:layout master
+# Move/resize windows with mainMod + LMB/RMB and dragging
+# bindm = $mainMod, mouse:272, movewindow
+# bindm = $mainMod, mouse:273, resizewindow
+bind= $mainMod ,H,resizeactive,-20 0
+bind= $mainMod ,L,resizeactive, 20 0
+bind= $mainMod SHIFT ,J,layoutmsg, swapprev
+bind= $mainMod SHIFT ,K,layoutmsg,swapnext
+bind= $mainMod ,M,layoutmsg,swapwithmaster
+# bind= $mainMod , M ,resizeactive,exact 720 0
+# Switch workspaces with mainMod + [0-9]
+bind = $mainMod, 1, workspace, 1
+bind = $mainMod, 2, workspace, 2
+bind = $mainMod, 3, workspace, 3
+bind = $mainMod, 4, workspace, 4
+bind = $mainMod, 5, workspace, 5
+bind = $mainMod, 6, workspace, 6
+bind = $mainMod, 7, workspace, 7
+bind = $mainMod, 8, workspace, 8
+bind = $mainMod, 9, workspace, 9
+bind = $mainMod, 0, workspace, 10
+
+# Move active window to a workspace with mainMod + SHIFT + [0-9]
+bind = $mainMod SHIFT, 1, movetoworkspace, 1
+bind = $mainMod SHIFT, 2, movetoworkspace, 2
+bind = $mainMod SHIFT, 3, movetoworkspace, 3
+bind = $mainMod SHIFT, 4, movetoworkspace, 4
+bind = $mainMod SHIFT, 5, movetoworkspace, 5
+bind = $mainMod SHIFT, 6, movetoworkspace, 6
+bind = $mainMod SHIFT, 7, movetoworkspace, 7
+bind = $mainMod SHIFT, 8, movetoworkspace, 8
+bind = $mainMod SHIFT, 9, movetoworkspace, 9
+bind = $mainMod SHIFT, 0, movetoworkspace, 10
+
+# Scroll through existing workspaces with mainMod + scroll
+bind = $mainMod, mouse_down, workspace, e+1
+bind = $mainMod, mouse_up, workspace, e-1
+#+end_src
