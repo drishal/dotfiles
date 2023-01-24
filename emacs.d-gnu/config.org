@@ -314,9 +314,7 @@ remove/add tangle no to whatever font you prefer
 *** Other themes:
 **** Catppuccin
 #+begin_src emacs-lisp :tangle no
-(use-package catppuccin-theme
- :config
- (setq catppuccin-height-title1 1.5))
+(add-to-list 'custom-theme-load-path "~/dotfiles/emacs.d-gnu/themes")
 (load-theme 'catppuccin t)
 #+end_src
 **** Modus
