@@ -62,6 +62,7 @@
   - [[#mu4e][mu4e]]
   - [[#treemacs][treemacs]]
   - [[#neotree][neotree]]
+  - [[#dired][dired]]
   - [[#elcord][elcord]]
   - [[#shackle][Shackle]]
   - [[#pacman][pacman]]
@@ -161,9 +162,15 @@ Note: This is not currently tangled
 #+end_src
 * Customizing the Editor and Appearence
 ** Fonts
+remove/add tangle no to whatever font you prefer
+*** Fantasque sans
 #+begin_src emacs-lisp
-;; (add-to-list 'default-frame-alist '(font . "FiraCode Nerd Font-14" ))
 (add-to-list 'default-frame-alist '(font . "FantasqueSansMono Nerd Font-15.5:weight=medium" ))
+(setq global-prettify-symbols-mode t)
+#+end_src
+*** Firacode
+#+begin_src emacs-lisp :tangle no
+;; (add-to-list 'default-frame-alist '(font . "FiraCode Nerd Font-14" ))
 ;; (add-to-list 'default-frame-alist '(font . "Comic Mono-12:weight=medium" ))
 ;; (set-face-attribute 'default t :font "FiraCode Nerd Font-12")
 (setq global-prettify-symbols-mode t)
@@ -190,7 +197,8 @@ Note: This is not currently tangled
 #+end_src
 ** smooth scrolling
 #+begin_src emacs-lisp 
-;; (use-package smooth-scroll :ensure t)
+;; (use-package good-scroll :ensure t)
+;; (good-scroll-mode 1)
 (pixel-scroll-precision-mode 1)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
@@ -206,6 +214,7 @@ Note: This is not currently tangled
 #+end_src
 ** Dashboard
 #+begin_src emacs-lisp 
+;;config
 (use-package dashboard :ensure t
   :init      ;; tweak dashboard config before loading it
   (setq dashboard-set-heading-icons t)
@@ -229,6 +238,14 @@ Note: This is not currently tangled
 
 ;; (dashboard-refresh-buffer)
 (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+
+;;enable recentf mode
+(require 'recentf)
+(recentf-mode 1)
+
+;; add recentf exclusions
+(add-to-list 'recentf-exclude "~/Downloads/")
+(add-to-list 'recentf-exclude "~/Desktop/")
 #+end_src
 *** Test 2 for dashboard
 #+begin_src emacs-lisp :tangle no
@@ -269,6 +286,7 @@ Note: This is not currently tangled
 (blink-cursor-mode 0)
 #+end_src
 ** theme
+*** Doom themes
 #+begin_src emacs-lisp 
 ;; (use-package dracula- ensure t)
 ;; (use-package modus-themes :ensure t)
@@ -293,12 +311,17 @@ Note: This is not currently tangled
   )
 
 #+end_src
-
+*** Other themes:
+**** Catppuccin
 #+begin_src emacs-lisp :tangle no
 (use-package catppuccin-theme
  :config
  (setq catppuccin-height-title1 1.5))
 (load-theme 'catppuccin t)
+#+end_src
+**** Modus
+#+begin_src emacs-lisp :tangle no
+(load-theme 'modus-vivendi t)
 #+end_src
 ** Disable Menubar
 #+begin_src emacs-lisp
@@ -779,6 +802,12 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
 #+begin_src emacs-lisp
 (use-package neotree :ensure t)
 #+end_src
+** dired
+#+begin_src emacs-lisp
+(setq dired-listing-switches "-alh  --group-directories-first")
+;; (setq insert-directory-program "exa")
+;; (setq dired-listing-switches "-alh --group-directories-first --color=always --time-style=long-iso --icons")
+#+end_src
 ** elcord
 #+begin_src emacs-lisp
 (use-package elcord :ensure t)
@@ -1145,12 +1174,31 @@ not tangling atm
 #+end_src
 *** python
 **** pyright
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp 
 (use-package lsp-pyright
   :ensure t
   :hook (python-mode . (lambda ()
                          (require 'lsp-pyright)
                           (lsp))))  ; or lsp-deferred
+
+#+end_src
+**** jedi
+#+begin_src emacs-lisp :tangle no
+(use-package lsp-jedi
+  :ensure t
+  :config
+  (with-eval-after-load "lsp-mode"
+    (add-to-list 'lsp-disabled-clients 'pyls 'pyright)))
+#+end_src
+**** python lsp
+#+begin_src emacs-lisp :tangle no
+(use-package lsp-python-ms
+  :ensure t
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-python-ms)
+                         (lsp)))
+  :init
+  (setq lsp-python-ms-executable (executable-find "python-language-server")))
 
 #+end_src
 **** pipenv.el
@@ -1245,11 +1293,11 @@ https://github.com/pwalsh/pipenv.el
 ;;                   :server-id 'nix))
 
 (use-package nixpkgs-fmt :ensure t)
-(add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
-(lsp-register-client
- (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
-                  :major-modes '(nix-mode)
-                  :server-id 'nix))
+;; (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
+;; (lsp-register-client
+;;  (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
+;;                   :major-modes '(nix-mode)
+;;                   :server-id 'nix))
 #+end_src
 
 *** java
