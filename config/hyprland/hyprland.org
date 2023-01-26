@@ -23,9 +23,8 @@
 monitor=,preferred,auto,1
 #+end_src
 * Autostart programs 
- See https://wiki.hyprland.org/Configuring/Keywords/ for more
- exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
  Execute apps at launch
+ See https://wiki.hyprland.org/Configuring/Keywords/ for more
  #+begin_src conf 
 exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP & waybar & dunst & nm-applet --indicator & blueman-applet & emacs --daemon & swaybg -i ~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
  #+end_src
