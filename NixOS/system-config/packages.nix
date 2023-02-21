@@ -26,24 +26,38 @@
     adwaita-qt 
     alacritty
     appimage-run
-    arc-theme
     arandr
+    arc-theme
+    aria
     scrcpy
     axel
     bat
     bc
     bison
     bookworm
+    (brave.override {
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--enable-gpu-rasterization"
+        "--enable-zero-copy"
+        "--force-dark-mode"
+        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
+        "--disable-features=UseChromeOSDirectVideoDecoder"
+        "--use-vulkan"
+        "--ozone-platform-hint=auto"
+        "--enable-hardware-overlays"
+      ];
+    })
     # bottles
     bpytop
     bpytop
     bun
     brightnessctl
     cachix
-    calibre
+    # calibre
     cargo
-    carnix
-    chromium
+    #carnix
+    # chromium
     chromium-bsu
     cinnamon.nemo
     clang
@@ -65,15 +79,18 @@
     evince
     evince
     easyeffects
+    extundelete
     exa
     fdk_aac
     feh
     ffmpeg
     figlet
+    firefox-bin
     file
     flameshot
     flex
     gcc
+    # geekbench
     # google-chrome
     gimp
     git
@@ -99,7 +116,7 @@
     killall
     kitty
     leafpad
-    linuxKernel.packages.linux_5_19.v4l2loopback    
+    #linuxKernel.packages.linux_5_19.v4l2loopback    
     libnotify
     libreoffice
     libva-utils
@@ -117,8 +134,8 @@
     mesa-demos
     mpv
     mplayer
-    mullvad
-    mullvad-vpn
+    #mullvad
+    #mullvad-vpn
     ncdu
     ncurses
     neofetch
@@ -173,8 +190,9 @@
     # mono
     steam-run
     surf
-    swaylock
+    # swaylock
     sway-contrib.grimshot
+    swaylock-effects
     swaybg
     tdesktop
     tetex
@@ -191,7 +209,7 @@
     virtualenv
     vlc
     volumeicon
-    waybar
+    # waybar-hyprland
     wget
     woeusb
     wine
@@ -228,7 +246,6 @@
     #         epkgs.vterm]))
     # (pkgs.callPackage ../packages/batdistrack/default.nix { })
     # (pkgs.callPackage ../custom-packages/galaxy-buds-client/default.nix { })
-    # picom
     #(distrobox.overrideAttrs)
     (st.overrideAttrs (oldAttrs: rec {
       patches = [
@@ -249,15 +266,16 @@
         })
       ];
     }))
-    (picom.overrideAttrs (_: {
+    picom.overrideAttrs (old: {
       src = pkgs.fetchFromGitHub {
         repo = "picom";
         owner = "yshui";
-        rev = "f2970bc697bdf20d398d1be05ff72d50df911e64";
-        sha256 = "sha256-aeAXMKwjQv/kRd7lTeIrcJmqT1vAUkRUOM8VrEJpd8M=";
+        rev = "cee12875625465292bc11bf09dc8ab117cae75f4";
+        sha256 = "sha256-lVwBwOvzn4ro1jInRuNvn1vQuwUHUp4MYrDaFRmW9pc=";
       };
-    }))
-    # (discord.overrideAttrs (_: {
+      buildInputs = old.buildInputs ++ [ pkgs.pcre ];
+    })
+    # # (discord.overrideAttrs (_: {
     #   extraOptions = [
     #     "--disable-gpu-memory-buffer-video-frames"
     #     "--enable-accelerated-mjpeg-decode"
@@ -303,6 +321,7 @@
   # services.teamviewer.enable = true;
   systemd.packages = with pkgs; [ cloudflare-warp ];
 
+ 
   #swaylock
   security.pam.services.swaylock = {
     text = ''
