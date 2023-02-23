@@ -58,8 +58,8 @@
 
     # Emacs
     emacs = {
-      enable = false;
-      package = pkgs.emacsPgtkNativeComp;
+      enable = true;
+      package = pkgs.emacsPgtk;
       extraPackages = (epkgs: [ epkgs.vterm epkgs.telega]);
     };
     helix = {

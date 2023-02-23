@@ -35,6 +35,7 @@ mkdir ~/.xmonad/
 mkdir ~/.xmonad/lib
 mkdir ~/.xmonad/lib/Colors
 #+end_src
+
 * Imports
 this secion is dedicated to the imports of the modules I would be using in the config 
 #+begin_src haskell

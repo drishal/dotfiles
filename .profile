@@ -1,7 +1,7 @@
 # aliases
 alias nix-config="sudo vim /etc/nixos/configuration.nix"
-alias xon="~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
-alias xon-glx="~/Desktop/games/Xonotic/xonotic-linux-glx.sh"
+alias xon="steam-run ~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
+alias xon-glx="steam-run ~/Desktop/games/Xonotic/xonotic-linux-glx.sh"
 alias stk="~/Desktop/games/SuperTuxKart-1.2-linux/run_game.sh"
 alias sudo="sudo "
 # yay = pary
@@ -47,7 +47,8 @@ alias tt_balancer_cfs="sudo sysctl -w kernel.sched_tt_balancer_opt=2"
 alias tt_balancer_ps="sudo sysctl -w kernel.sched_tt_balancer_opt=3"
 
 #powerctl
-alias perf="powerprofilesctl set performance; sudo cpupower frequency-set -g performance"
+alias perf="powerprofilesctl set performance"
+alias perf2="powerprofilesctl set performance; sudo cpupower frequency-set -g performance"
 alias bal="powerprofilesctl set balanced; sudo cpupower frequency-set -g schedutil"
 alias ps="powerprofilesctl set power-saver"
 alias pnow="cat /sys/firmware/acpi/platform_profile"

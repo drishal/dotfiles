@@ -54,10 +54,12 @@
       mouse.middleEmulation = false;
     };
   };
+
+  programs.hyprland.enable = true;
   # QT settings
   # environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "";
-  qt5.platformTheme="qt5ct";
-  # environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "qt5ct";
+  # qt.platformTheme="qt5ct";
+  environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "qt5ct";
   # environment.variables.QT_STYLE_OVERRIDE= lib.mkForce "";
   # river 
   services.xserver.displayManager.sessionPackages = [
@@ -100,12 +102,21 @@
     lidSwitch = "suspend";
     extraConfig = "IdleAction=ignore";
   };
-  
+
+  # portal
+  services.dbus.enable = true;
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    # kde.enable = false;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    # gtkUsePortal = true;
+  };
   #some overlays
   nixpkgs.overlays = [
     #suckless overlays
     (final: prev: {
-      dwm = prev.dwm.overrideAttrs (old: { src = ../../suckless/dwm-6.3; });
+      dwm = prev.dwm.overrideAttrs (old: { src = ../../suckless/dwm-6.4; });
       dwmblocks = prev.dwmblocks.override (old: {
         conf = ../../suckless/dwmblocks/blocks.def.h;
       });

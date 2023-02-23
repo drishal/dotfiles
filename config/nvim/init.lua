@@ -246,7 +246,7 @@ cmp.setup.cmdline(':', {
 -- Setup lspconfig.
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 require("mason").setup()
-local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'sumneko_lua', 'jdtls', 'rnix', 'jsonls'}
+local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'jdtls', 'rnix', 'jsonls'}
 require("mason-lspconfig").setup({
   ensure_installed = servers,
   -- automatic_installation = true
@@ -269,9 +269,9 @@ require('nvim-treesitter.configs').setup {
     enable = true,
     -- Required for spellcheck, some LaTex highlights and
     -- code block highlights that do not have ts grammar
-    additional_vim_regex_highlighting = {'org'},
+    -- additional_vim_regex_highlighting = {'org'},
   },
-  ensure_installed = {'org'}, -- Or run :TSUpdate org
+  -- ensure_installed = {'org'}, -- Or run :TSUpdate org
   -- ensure_installed = {"norg"}, 
   indent = {
     enable = true,

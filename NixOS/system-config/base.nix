@@ -3,23 +3,6 @@
 # base system configuration
 {
   boot.kernelPackages = pkgs.linuxPackages_latest; # alternative: linuxPackages_latest
-  #  pulling kernel from master
-  # boot.kernelPackages =  inputs.nixpkgs-master.legacyPackages.${pkgs.system}.linuxPackages_latest;
-  # boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest.override {
-  #   argsOverride = rec {
-  #     src = pkgs.fetchurl {
-  #       url = "https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-${version}.tar.xz";
-  #       sha256 = "sha256-bjzVbug6nLWsP94UQsQDZ6tnNolGxMk7vrHGVmSg08U=";
-  #     };
-  #     version = "5.17.4";
-  #     modDirVersion = "5.17.4";
-  #     extraConfig = ''
-  #       X86_AMD_PSTATE y
-  #     '';
-  #     extraMakeFlags = let lsmod = ./kernel/lsmod.txt; in ["LSMOD=${lsmod}" "localmodconfig"];
-
-  #   };
-  # });
 
   # kernel parameters
   boot.kernelParams = [ "iommu=pt" "mitigations=off" "psmouse.synaptics_intertouch=0" "i8042.notimeout" "i8042.nopnp"];
@@ -30,11 +13,15 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
   # Set your time zone.
   time.timeZone = "Asia/Kolkata";
 
-
+  # systemd settings 
+  systemd.extraConfig = ''
+  DefaultTimeoutStopSec=25s
+'';
   #bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.package = pkgs.bluez;
@@ -55,6 +42,7 @@
       enable = true;
       cpuFreqGovernor = "schedutil";
     };
+  services.power-profiles-daemon.enable=true;
 
   hardware.opengl =
     {
@@ -87,15 +75,15 @@
     hostName = "nixos";
     # dns
     nameservers = [
-    # cloudflare
-    "45.90.28.182"
-    "45.90.30.182"
-    "1.1.1.1"
-    "2606:4700:4700::1111"
+      # cloudflare
+      # "45.90.28.182"
+      # "45.90.30.182"
+      "1.1.1.1"
+      "2606:4700:4700::1111"
 
-    #  google
-    # "8.8.8.8"
-    # "2001:4860:4860::8888"
+      #  google
+      # "8.8.8.8"
+      # "2001:4860:4860::8888"
     ];
   };
   # Configure keymap in X11

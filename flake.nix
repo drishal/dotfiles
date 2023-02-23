@@ -26,14 +26,11 @@
 
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
-    # hyprland = {
-    #   url = "github:vaxerski/Hyprland";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    hyprland.url = "github:hyprwm/Hyprland";
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      url = "github:nix-community/emacs-overlay/4bbc5d56111833bad701ac97279625ee17f08352";
+      url = "github:nix-community/emacs-overlay/4bb9abd04a46a7b52ff07af252204ca3ce6d337f";
     };
 
     private-stuff = {
@@ -43,7 +40,7 @@
 
   };
 
-  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,  private-stuff, ... }@inputs:
+  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,hyprland,  private-stuff, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -62,6 +59,8 @@
         modules = [
           ./NixOS/home-config/home.nix
           {nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];}
+          hyprland.homeManagerModules.default
+          # {wayland.windowManager.hyprland.enable = true;}
           "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
           {
             home = {
@@ -77,9 +76,9 @@
           inherit system;
           modules = [
             # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
-            { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay ]; }
+            { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay  ]; }
+            hyprland.nixosModules.default
             ./NixOS/system-config/configuration.nix
-            # hyprland.nixosModules.default
             # { programs.hyprland.enable = true; }
           ];
           specialArgs = { inherit inputs; };

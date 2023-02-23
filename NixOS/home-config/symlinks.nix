@@ -16,7 +16,7 @@
   home.file."/home/drishal/.config/deadd".source = ../../config/deadd;
 
   # rofi
-  home.file."/home/drishal/.config/rofi/config.rasi".source = ../../config/rofi/config.rasi;
+  # home.file."/home/drishal/.config/rofi/config.rasi".source = ../../config/rofi/config.rasi;
 
   # home.file."/home/drishal/.config/ro../../config".source = ../config/rofi/config;
 

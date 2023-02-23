@@ -49,8 +49,7 @@
       ];
     })
     # bottles
-    bpytop
-    bpytop
+    btop
     bun
     brightnessctl
     cachix
@@ -68,7 +67,7 @@
     conky
     cpufetch
     debootstrap
-    discord
+    # discord
     distrobox
     dmenu
     dmidecode
@@ -112,6 +111,7 @@
     imagemagick
     inetutils
     inxi
+    inotify-tools
     keepassxc
     killall
     kitty
@@ -121,6 +121,8 @@
     libreoffice
     libva-utils
     linuxPackages.cpupower
+    linuxPackages.systemtap
+    # linuxKernel.packages.linux.systemtap
     lm_sensors
     lolcat
     libsForQt5.ark
@@ -139,6 +141,7 @@
     ncdu
     ncurses
     neofetch
+    nitch
     neovim
     networkmanagerapplet
     nitrogen
@@ -206,7 +209,9 @@
     unzip
     usbutils
     vim
+    virt-manager
     virtualenv
+    # vscode-fhs
     vlc
     volumeicon
     # waybar-hyprland
@@ -266,26 +271,29 @@
         })
       ];
     }))
-    picom.overrideAttrs (old: {
+    (picom.overrideAttrs (old: {
       src = pkgs.fetchFromGitHub {
         repo = "picom";
         owner = "yshui";
         rev = "cee12875625465292bc11bf09dc8ab117cae75f4";
         sha256 = "sha256-lVwBwOvzn4ro1jInRuNvn1vQuwUHUp4MYrDaFRmW9pc=";
       };
-      buildInputs = old.buildInputs ++ [ pkgs.pcre ];
-    })
-    # # (discord.overrideAttrs (_: {
-    #   extraOptions = [
-    #     "--disable-gpu-memory-buffer-video-frames"
-    #     "--enable-accelerated-mjpeg-decode"
-    #     "--enable-accelerated-video"
-    #     "--enable-gpu-rasterization"
-    #     "--enable-native-gpu-memory-buffers"
-    #     "--enable-zero-copy"
-    #     "--ignore-gpu-blocklist"
-    #   ];
-    # }))
+      buildInputs = old.buildInputs ++ [ pkgs.pcre2 ];
+    }))
+    (discord.overrideAttrs (_: {
+      # extraOptions
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--enable-gpu-rasterization"
+        "--enable-zero-copy"
+        "--force-dark-mode"
+        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
+        "--disable-features=UseChromeOSDirectVideoDecoder"
+        "--use-vulkan"
+        "--ozone-platform-hint=auto"
+        "--enable-hardware-overlays"
+      ];
+    }))
     # river
     (river.overrideAttrs (prevAttrs: rec {
       postInstall =
@@ -298,7 +306,7 @@
             Type=Application
           '';
         in
-        ''
+          ''
           mkdir -p $out/share/wayland-sessions
           echo "${riverSession}" > $out/share/wayland-sessions/river.desktop
         '';
@@ -321,7 +329,7 @@
   # services.teamviewer.enable = true;
   systemd.packages = with pkgs; [ cloudflare-warp ];
 
- 
+  
   #swaylock
   security.pam.services.swaylock = {
     text = ''
@@ -329,19 +337,26 @@
     '';
   };
 
+
+  #fonts
+  fonts.fonts = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk
+  ];
+
   #environment 
-    environment.sessionVariables = rec {
-      XDG_CACHE_HOME  = "\${HOME}/.cache";
-      XDG_CONFIG_HOME = "\${HOME}/.config";
-      XDG_BIN_HOME    = "\${HOME}/.local/bin";
-      XDG_DATA_HOME   = "\${HOME}/.local/share";
-      # Steam needs this to find Proton-GE
-      STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
-      # note: this doesn't replace PATH, it just adds this to it
-      PATH = [ 
-        "\${XDG_BIN_HOME}"
-      ];
-    };
+  environment.sessionVariables = rec {
+    XDG_CACHE_HOME  = "\${HOME}/.cache";
+    XDG_CONFIG_HOME = "\${HOME}/.config";
+    XDG_BIN_HOME    = "\${HOME}/.local/bin";
+    XDG_DATA_HOME   = "\${HOME}/.local/share";
+    # Steam needs this to find Proton-GE
+    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
+    # note: this doesn't replace PATH, it just adds this to it
+    PATH = [ 
+      "\${XDG_BIN_HOME}"
+    ];
+  };
   # mullvad
   # services.mullvad-vpn.enable = true;
 }

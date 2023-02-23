@@ -1,6 +1,7 @@
 #+TITLE: Hyprland config  
 #+PROPERTY: header-args :tangle ~/.config/hypr/hyprland.conf
 * Table of Contents :toc:
+- [[#init][Init]]
 - [[#monitor-config][Monitor config]]
 - [[#autostart-programs][Autostart programs]]
 - [[#input-settings][Input settings]]
@@ -18,6 +19,11 @@
   - [[#mod-key][Mod key]]
   - [[#binds][Binds]]
 
+* Init
+#+begin_src bash
+mkdir -p ~/.config/hypr
+#+end_src
+
 * Monitor config
 #+begin_src conf
 monitor=,preferred,auto,1
@@ -26,7 +32,7 @@ monitor=,preferred,auto,1
  Execute apps at launch
  See https://wiki.hyprland.org/Configuring/Keywords/ for more
  #+begin_src conf 
-exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP & waybar & dunst & nm-applet --indicator & blueman-applet & emacs --daemon & swaybg -i ~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
+exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP & waybar & dunst & nm-applet --indicator & blueman-applet & emacs --daemon & swaybg -i ~/dotfiles/wallpapers/NixOS-1.png
  #+end_src
 * Input settings
 ** General settings
@@ -143,13 +149,13 @@ $mainMod = SUPER
 #+end_src
 ** Binds
 #+begin_src conf
-bind = $mainMod, RETURN, exec, /usr/bin/foot
+bind = $mainMod, RETURN, exec, foot
 bind = $mainMod, D, exec, wofi --show drun
 bind = $mainMod, V, exec, pavucontrol
 bind = $mainMod, Q, killactive, 
 bind = $mainMod SHIFT, Q, exit, 
 bind = $mainMod SHIFT, F, exec, firefox
-bind = $mainMod SHIFT, L, exec, swaylock swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 7x5 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000  --fade-in 0.2
+bind = $mainMod SHIFT, L, exec, swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 7x5 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000  --fade-in 0.2
 bind = $mainMod, E, exec, nemo
 bind = $mainMod, A, exec, emacsclient -c
 bind = $mainMod, SPACE, togglefloating, 
@@ -158,7 +164,7 @@ bind = $mainMod, P, pseudo, # dwindle
 bind = $mainMod, J, togglesplit, # dwindle
 bind=  $mainMod, F,fullscreen,
 bind = $mainMod SHIFT, s, exec, grimshot copy area
-bind = $mainMod, s, exec, grimblast copy screen
+bind = $mainMod, s, exec, grimshot copy screen
 # Move focus with mainMod + arrow keys
 # bind = $mainMod, H , movefocus, l
 # bind = $mainMod, L, movefocus, r

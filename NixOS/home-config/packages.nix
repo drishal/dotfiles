@@ -16,6 +16,7 @@
     man
     man-pages
     neofetch
+    #rnix
     # neovide
     nixpkgs-fmt
     #nodePackages.create-react-app
@@ -56,18 +57,58 @@
     };
   };
 
-  # swaylock
-  # programs.swaylock={
-  #   # enable=true;
-  #   settings={
-  #     # image="~/dotfiles/wallpapers/NixOS-1.png";
-  #     image="~/dotfiles/wallpapers/archlinux/archlinux-onedark.png";
+  programs.waybar = {
+    enable = true;
+    package = pkgs.waybar.overrideAttrs (oldAttrs: {
+      mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
+      postPatch = ''
+        substituteInPlace src/modules/wlr/workspace_manager.cpp --replace "zext_workspace_handle_v1_activate(workspace_handle_);" "const std::string command = \"${config.wayland.windowManager.hyprland.package}/bin/hyprctl dispatch workspace \" + name_; system(command.c_str());"
+      '';
+    });
+  };
+
+  #icon theme
+  # gtk = {
+  #   enable = true;
+  #   font = {
+  #     name = "Sans";
+  #     size = 10;
+  #   };
+  #   theme = {
+  #     # package = pkgs.gnome-icon-theme;
+  #     name = "Adwaita-dark";
+  #   };
+  #   iconTheme = {
+  #     package = pkgs.papirus-icon-theme;
+  #     name = "Papirus-Dark";
+  #   };
+  #   gtk3.extraConfig ={
+  #     gtk-font-name="Sans 10";
+  #     gtk-icon-theme-name="Papirus-Dark";
+  #     gtk-theme-name="Adwaita-dark";
+  #     gtk-cursor-theme-size=0;
+  #     gtk-button-images=0;
+  #     gtk-menu-images=0;
+  #     gtk-enable-event-sounds=1;
+  #     gtk-enable-input-feedback-sounds=1;
+  #     gtk-xft-antialias=1;
+  #     gtk-xft-hinting=1;
+  #     gtk-xft-hintstyle="hintslight";
+  #     gtk-xft-rgba="rgb";
   #   };
   # };
-  # # caches.cachix = [
-  #   {
-  #     name = "nix-community";
-  #     sha256 = "00lpx4znr4dd0cc4w4q8fl97bdp7q19z1d3p50hcfxy26jz5g21g";
-  #   }
-  # ];
-}
+    # swaylock
+    # programs.swaylock={
+    #   # enable=true;
+    #   settings={
+    #     # image="~/dotfiles/wallpapers/NixOS-1.png";
+    #     image="~/dotfiles/wallpapers/archlinux/archlinux-onedark.png";
+    #   };
+    # };
+    # # caches.cachix = [
+    #   {
+    #     name = "nix-community";
+    #     sha256 = "00lpx4znr4dd0cc4w4q8fl97bdp7q19z1d3p50hcfxy26jz5g21g";
+    #   }
+    # ];
+  }

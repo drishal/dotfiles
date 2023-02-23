@@ -1,7 +1,7 @@
 { config, inputs, pkgs, ... }:
 {
   imports = [
-    ./browsers.nix
+    # ./browsers.nix
     ./editors.nix
     ./git.nix
     ./packages.nix
@@ -9,6 +9,7 @@
     ./services.nix
     ./symlinks.nix
     ./terminals.nix
+    ./rofi.nix
   ];
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
