@@ -18,6 +18,8 @@
       remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
       dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     };
+    # systemtap
+    systemtap.enable=true;
   };
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -75,6 +77,7 @@
     dunst
     dwmblocks
     ed
+    etcher
     evince
     evince
     easyeffects
@@ -87,6 +90,7 @@
     firefox-bin
     file
     flameshot
+    foremost
     flex
     gcc
     # geekbench
@@ -121,13 +125,14 @@
     libreoffice
     libva-utils
     linuxPackages.cpupower
-    linuxPackages.systemtap
+    # linuxPackages.systemtap
     # linuxKernel.packages.linux.systemtap
     lm_sensors
     lolcat
     libsForQt5.ark
     lsd
     lshw
+    pciutils
     # lutris
     lxappearance
     lxsession
@@ -148,6 +153,7 @@
     nixpkgs-fmt
     nmap
     nodejs
+    # nodePackages_latest.create-react-app
     noto-fonts
     ntfs3g
     obs-studio
@@ -169,6 +175,8 @@
     protonup
     ps_mem
     python3
+    poppler
+    pdfgrep
     python3Packages.mysql-connector
     python3Packages.pip
     python3Packages.tkinter
@@ -176,6 +184,7 @@
     python3Packages.venvShellHook
     qbittorrent
     qt5ct
+    qpdf
     ranger
     redshift
     ripgrep
@@ -208,9 +217,26 @@
     tree
     unzip
     usbutils
+    uutils-coreutils
     vim
     virt-manager
     virtualenv
+    # (vivaldi.override {
+    #   commandLineArgs = [
+    #     "--ignore-gpu-blocklist"
+    #     "--enable-gpu-rasterization"
+    #     "--enable-zero-copy"
+    #     "--force-dark-mode"
+    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
+    #     "--disable-features=UseChromeOSDirectVideoDecoder"
+    #     "--use-vulkan"
+    #     "--ozone-platform-hint=auto"
+    #     "--enable-hardware-overlays"
+    #   ];
+    # })
+    # vivaldi-widevine
+    # vivaldi-ffmpeg-codecs
+    ventoy-bin-full
     # vscode-fhs
     vlc
     volumeicon
@@ -218,6 +244,8 @@
     wget
     woeusb
     wine
+    win-virtio 
+    wirelesstools
     wine64
     wofi
     xarchiver
@@ -252,6 +280,8 @@
     # (pkgs.callPackage ../packages/batdistrack/default.nix { })
     # (pkgs.callPackage ../custom-packages/galaxy-buds-client/default.nix { })
     #(distrobox.overrideAttrs)
+
+
     (st.overrideAttrs (oldAttrs: rec {
       patches = [
         # You can specify local patches
@@ -337,11 +367,16 @@
     '';
   };
 
-
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-12.2.3"
+  ];
   #fonts
   fonts.fonts = with pkgs; [
     noto-fonts
     noto-fonts-cjk
+  #   (pkgs.nerdfonts.override {
+  #     fonts = [ "FiraCode"   "Monofur" ];
+  #   })
   ];
 
   #environment 

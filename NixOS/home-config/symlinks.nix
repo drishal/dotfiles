@@ -13,7 +13,7 @@
   # home.file."${pkgs.systemd}/lib/systemd/system-sleep/batdistrack".source = ../batdistrack;
 
   # deadd notifications
-  home.file."/home/drishal/.config/deadd".source = ../../config/deadd;
+  # home.file."/home/drishal/.config/deadd".source = ../../config/deadd;
 
   # rofi
   # home.file."/home/drishal/.config/rofi/config.rasi".source = ../../config/rofi/config.rasi;
@@ -24,41 +24,42 @@
   # home.file."/home/drishal/.Xresources".source = ../.Xresources;
 
   # kitty
-  home.file."/home/drishal/.config/kitty".source = ../../config/kitty;
+  # home.file."/home/drishal/.config/kitty".source = ../../config/kitty;
 
   # picom config
-  home.file."/home/drishal/.config/picom/picom.conf".source = ../../config/picom/picom.conf;
+  # home.file."/home/drishal/.config/picom/picom.conf".source = ../../config/picom/picom.conf;
 
   # river
   # home.file."/home/drishal/.config/river".source = ../../config/river;
 
   #waybar
-  home.file."/home/drishal/.config/waybar/config".source = ../../config/waybar/waybar-hyprland;
+  # home.file."/home/drishal/.config/waybar/config".source = ../../config/waybar/waybar-hyprland;
   # home.file."/home/drishal/.config/waybar/config".source = ../../config/waybar/waybar-dwl;
   # home.file."/home/drishal/.config/waybar/config".source = ../../config/waybar/waybar-river;
-  home.file."/home/drishal/.config/waybar/style.css".source = ../../config/waybar/style.css;
+  # home.file."/home/drishal/.config/waybar/style.css".source = ../../config/waybar/style.css;
+
 
   # alacritty
-  home.file."/home/drishal/.config/alacritty/alacritty.yml".source = ../../config/alacritty/alacritty.yml;
+  # home.file."/home/drishal/.config/alacritty/alacritty.yml".source = ../../config/alacritty/alacritty.yml;
 
   # dunst
-  home.file."/home/drishal/.config/dunst/dunstrc".source = ../../config/dunst/dunstrc;
+  # home.file."/home/drishal/.config/dunst/dunstrc".source = ../../config/dunst/dunstrc;
 
   # conky
-  home.file."/home/drishal/.config/conky/onedark.conkyrc".source = ../../config/conky/onedark.conkyrc;
+  # home.file."/home/drishal/.config/conky/onedark.conkyrc".source = ../../config/conky/onedark.conkyrc;
 
   #polybar
-  home.file."/home/drishal/.config/polybar/config.ini".source = ../../config/polybar/config.ini;
+  # home.file."/home/drishal/.config/polybar/config.ini".source = ../../config/polybar/config.ini;
 
   # leftwm
-  home.file."/home/drishal/.config/leftwm/config.toml".source = ../../config/leftwm/config.toml;
-  home.file."/home/drishal/.config/leftwm/themes/current".source = ../../config/leftwm/onedark;
+  # home.file."/home/drishal/.config/leftwm/config.toml".source = ../../config/leftwm/config.toml;
+  # home.file."/home/drishal/.config/leftwm/themes/current".source = ../../config/leftwm/onedark;
 
   # awesomewm
   # home.file."/home/drishal/.config/awesome/rc.lua".source = ../../config/awesome/rc.lua;
 
   # mpv
-  home.file."/home/drishal/.config/mpv/mpv.conf".source = ../../config/mpv/mpv.conf;
+  # home.file."/home/drishal/.config/mpv/mpv.conf".source = ../../config/mpv/mpv.conf;
 
   #nvim
   # home.file."/home/drishal/.config/nvim/init.vim".source = ../../config/nvim/pre-init.vim;

@@ -115,6 +115,9 @@ alias sleep-check="journalctl -u systemd-suspend.service | tail"
 #pfetch
 #pactl load-module module-bluetooth-discover
 
+#setup
+alias home-setup="~/dotfiles/scripts/home-setup.sh"
+
 # adb bin
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then

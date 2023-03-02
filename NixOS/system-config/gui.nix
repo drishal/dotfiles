@@ -103,6 +103,7 @@
     extraConfig = "IdleAction=ignore";
   };
 
+
   # portal
   services.dbus.enable = true;
   xdg.portal = {

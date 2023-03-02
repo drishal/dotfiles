@@ -6,6 +6,8 @@
     libvirtd = {
       enable = true;
       qemu.ovmf.enable = true;
+      # qemuOvmf = true;
+      qemu.swtpm.enable = true;
       # qemu.ovmf.package = pkgs.OVMFFull;
     };
 

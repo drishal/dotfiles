@@ -2,10 +2,10 @@
 
 # base system configuration
 {
-  boot.kernelPackages = pkgs.linuxPackages_latest; # alternative: linuxPackages_latest
+  boot.kernelPackages = pkgs.linuxPackages_latest; # alternative: linuxPackages_latest pkgs.linuxPackages_zen
 
   # kernel parameters
-  boot.kernelParams = [ "iommu=pt" "mitigations=off" "psmouse.synaptics_intertouch=0" "i8042.notimeout" "i8042.nopnp"];
+  boot.kernelParams = [ "iommu=pt" "mitigations=off" "psmouse.synaptics_intertouch=0" ];
 
   # microde
   hardware.cpu.amd.updateMicrocode = true;
@@ -37,12 +37,13 @@
     ports = [22];
   };
 
+  # power-management
   powerManagement =
     {
       enable = true;
       cpuFreqGovernor = "schedutil";
     };
-  services.power-profiles-daemon.enable=true;
+  # services.power-profiles-daemon.enable=true;
 
   hardware.opengl =
     {

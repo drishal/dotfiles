@@ -1,0 +1,4 @@
+probe module("thinkpad_acpi").function("has_lapsensor").return {
+    $present = 1;
+    $state = 1;
+}

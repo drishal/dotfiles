@@ -9,6 +9,7 @@
     ./virtualization.nix
     ./searx.nix
     ./hardware-configuration.nix
+    ./tlp.nix
   ];
 
   system.stateVersion = "21.05";
