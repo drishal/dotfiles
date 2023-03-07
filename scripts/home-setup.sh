@@ -4,14 +4,12 @@
 # mkdir -p ~/.config/deadd/
 ln -sf ~/dotfiles/config/deadd/ ~/.config/
 
-mkdir -p picom
+mkdir -p ~/.config/picom
 ln -sf ~/dotfiles/config/picom/picom.conf ~/.config/picom/picom.conf 
 
 #waybar
 mkdir -p ~/.config/waybar/
-
 ln -sf ~/dotfiles/config/waybar/waybar-hyprland /home/drishal/.config/waybar/config
-
 ln -sf ~/dotfiles/config/waybar/style.css ~/.config/waybar/style.css 
 
 # alacritty
@@ -21,6 +19,9 @@ ln -sf ~/dotfiles/config/alacritty/alacritty.yml ~/.config/alacritty/alacritty.y
 # dunst
 mkdir -p ~/.config/dunst
 ln -sf ~/dotfiles/config/dunst/dunstrc ~/.config/dunst/dunstrc 
+
+# foot
+# ln -sf ~/dotfiles/config/foot/foot.ini ~/.config/foot/foot.ini 
 
 #conky
 mkdir -p ~/.config/conky/
