@@ -2,17 +2,18 @@
 #+PROPERTY: header-args :tangle ~/.config/fish/config.fish
 * TOC  :toc:
 - [[#interactive][interactive]]
-- [[#plugins][plugins]]
-  - [[#bass][Bass]]
-  - [[#async][async]]
-  - [[#init-fundle][init fundle]]
 - [[#sourcing-paths][sourcing paths]]
-  - [[#etcprofile][/etc/profile]]
-  - [[#dotfilesprofile][~/dotfiles/.profile]]
   - [[#localbin][~/.local/bin]]
+- [[#aliases][Aliases]]
+- [[#custom-color-scheme][Custom color scheme]]
 - [[#remove-greeting][remove greeting]]
 - [[#starship-prompt][Starship Prompt]]
+- [[#newline][Newline]]
 - [[#pfetch][pfetch]]
+- [[#exa-icon-spacing][Exa icon spacing]]
+- [[#manpager][manpager]]
+- [[#direnv][direnv]]
+- [[#lutis-skip-init][Lutis skip init]]
 
 * interactive
 
@@ -21,39 +22,125 @@
       # Commands to run in interactive sessions can go here
   end
 #+end_src
-* plugins 
-Using Fundle
-https://github.com/danhper/fundle
-#+begin_src fish
-  if not functions -q fundle; eval (curl -sfL https://git.io/fundle-install); end
-#+end_src
-** Bass
-for evaluating bash plugins in fish
-https://github.com/edc/bass
-#+begin_src fish
-fundle plugin 'edc/bass'
-#+end_src
-** async
-#+begin_src fish
-# fundle plugin "acomagu/fish-async-prompt"
-#+end_src
 
-** init fundle
-#+begin_src fish
-fundle init
-#+end_src
 * sourcing paths
-** /etc/profile
-#+begin_src fish :tangle no
-bass source /etc/profile
-#+end_src
-** ~/dotfiles/.profile
-#+begin_src fish
-  bass source ~/dotfiles/.profile
-#+end_src
 ** ~/.local/bin
 #+begin_src fish
-  fish_add_path ~/.local/bin
+fish_add_path ~/.local/bin
+#+end_src
+
+* Aliases
+#+begin_src fish
+alias nix-config "sudo vim /etc/nixos/configuration.nix"
+alias xon "steam-run ~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
+alias xon-glx "steam-run ~/Desktop/games/Xonotic/xonotic-linux-glx.sh"
+alias stk "~/Desktop/games/SuperTuxKart-1.2-linux/run_game.sh"
+alias sudo "sudo "
+# yay   pary
+alias yay "paru"
+alias p "paru"
+alias apt "sudo nala"
+# ls related aliases
+alias ls "exa --icons --group-directories-first"
+# alias ls "lsd"
+# alias ls "ls --color"
+# alias ls "ls --color"
+alias ll "ls -l"
+alias lh "ls -lh"
+alias la "ls -la"
+alias lah "ls -lah"
+alias l "ls -lah"
+#use with lsd:
+# alias l "ls -laAh"
+alias edd "emacs --daemon"
+alias b "brightnessctl"
+alias bs "brightnessctl s"
+alias wayland-screenshot "grimshot copy output"
+alias wayland-screenshot-area "grimshot copy area"
+alias v "nvim"
+alias h "hx"
+alias whoogle "docker run --publish 5000:5000 --detach benbusby/whoogle-search:latest"
+alias energy_now "cat /sys/class/power_supply/BAT0/energy_now"
+alias set-wall "feh --bg-scale" # set-wall /path/to/file
+alias push-all "~/dotfiles/scripts/push-all.sh"
+alias galaxy-buds "steam-run ~/Downloads/GalaxyBudsClient_Linux_64bit_Portable.bin"
+alias remove-dunst "sudo rm /usr/share/dbus-1/services/org.knopwob.dunst.service"
+alias mongodb "sudo systemctl start mongodb.service"
+
+alias tmux "tmux -f ~/dotfiles/config/tmux/tmux.conf"
+
+alias wine64 "env WINEARCH=win64 WINEPREFIX='/home/drishal/.wine64' wine64"
+
+#some sysctl commands
+# tt scheduler - https://github.com/hamadmarri/TT-CPU-Scheduler
+alias tt_balancer_normal "sudo sysctl -w kernel.sched_tt_balancer_opt=0"
+alias tt_balancer_candidate "sudo sysctl -w kernel.sched_tt_balancer_opt=1"
+alias tt_balancer_cfs "sudo sysctl -w kernel.sched_tt_balancer_opt=2"
+alias tt_balancer_ps "sudo sysctl -w kernel.sched_tt_balancer_opt=3"
+
+#powerctl
+alias perf "powerprofilesctl set performance"
+alias perf2 "powerprofilesctl set performance; sudo cpupower frequency-set -g performance"
+alias bal "powerprofilesctl set balanced; sudo cpupower frequency-set -g schedutil"
+alias ps "powerprofilesctl set power-saver"
+alias pnow "cat /sys/firmware/acpi/platform_profile"
+
+
+#resetting the right usb
+# alias usb_1 "cd /sys/bus/pci/drivers/xhci_hcd/"
+# alias usb_2 "su root -c  'for file in ????:??:??.? ; do  echo -n "$file" > unbind;  echo -n "$file" > bind; done'"
+
+# #nix 
+alias nfu "sudo nix flake update ~/dotfiles"
+alias nrs "sudo nixos-rebuild switch --flake ~/dotfiles -L"
+alias nrb "sudo nixos-rebuild boot --flake ~/dotfiles -L"
+alias nrsi "sudo nixos-rebuild switch --flake --impure ~/dotfiles -L"
+# home manager
+alias hms "home-manager switch --flake ~/dotfiles "
+alias hms-offline "home-manager switch --flake ~/dotfiles --option substitute false"
+
+#watch sync
+alias watch-sync "watch -d grep -e Dirty: -e Writeback: /proc/meminfo"
+alias watch-amd-gpu "sudo watch -n 0.5  cat /sys/kernel/debug/dri/0/amdgpu_pm_info"
+
+#ytdlp
+alias youtube-dl "yt-dlp"
+alias yt-dlp-mp3 "yt-dlp --no-playlist -x --audio-format=mp3"
+
+#distrobox
+alias fedora-distrobox "distrobox-enter fedora-toolbox-35"
+alias arch-distrobox "distrobox-enter Arch"
+
+# Bedrock alias
+alias bed-ubuntu "strat -r tut-ubuntu bash"
+alias bed-arch "strat -r arch zsh"
+alias bed-alpine "strat -r alpine bash"
+alias bed-void "strat -r tut-void bash"
+#fetch
+# repo sync alias
+alias repo-sync "repo sync -c --force-sync --optimized-fetch --no-tags --no-clone-bundle --prune -j$(nproc --all);"
+
+# batdistrack
+alias sleep-check "journalctl -u systemd-suspend.service | tail"
+#pfetch
+#pactl load-module module-bluetooth-discover
+
+#setup
+alias home-setup "~/dotfiles/scripts/home-setup.sh"
+
+#upload files; use as "upload filename"
+alias upload "curl -sL https://git.io/file-transfer | sh && ./transfer wet"  
+
+#+end_src
+
+
+* Custom color scheme
+#+begin_src fish
+set fish_color_normal '#98be65'
+set fish_color_autosuggestion '#6272a4'
+set fish_color_command '#98be65'
+set fish_color_error '#ff6c6b'
+set fish_color_param '#98be65'
 #+end_src
 * remove greeting
 #+begin_src fish
@@ -62,10 +149,46 @@ bass source /etc/profile
 
 * Starship Prompt 
 #+begin_src fish
- starship init fish | source
+starship init fish | source
+set -x STARSHIP_CONFIG ~/dotfiles/config/starship.toml
+#+end_src
+
+* Newline
+#+begin_src fish
+function postexec_test --on-event fish_postexec
+   echo
+end
 #+end_src
 
 * pfetch
 #+begin_src fish :tangle no
 pfetch  
+#+end_src
+
+* Exa icon spacing
+#+begin_src fish
+set -x EXA_ICON_SPACING 2
+#+end_src
+
+* manpager
+#+begin_src fish
+# bat as manpager
+set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+
+### "vim" as manpager
+# set -x MANPAGER '/bin/bash -c "vim -MRn -c \"set buftype=nofile showtabline=0 ft=man ts=8 nomod nolist norelativenumber nonu noma\" -c \"normal L\" -c \"nmap q :qa<CR>\"</dev/tty <(col -b)"'
+
+### "nvim" as manpager
+# set -x MANPAGER "nvim -c 'set ft=man' -"
+#+end_src
+
+
+* direnv
+#+begin_src fish
+direnv hook fish | source
+#+end_src
+
+* Lutis skip init
+#+begin_src fish
+set -x LUTRIS_SKIP_INIT 1
 #+end_src

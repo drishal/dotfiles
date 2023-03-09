@@ -1,7 +1,9 @@
 { config, pkgs, inputs, lib, ... }:
 {
+  programs.fish.enable=true;
+  programs.zsh.enable=true;
   users.users.drishal = {
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
     isNormalUser = true;
     extraGroups = [ "wheel" "netdev" "network" "video" "-manager" "docker" "adb" "libvirtd"];
   };

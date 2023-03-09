@@ -39,7 +39,7 @@ ln -sf ~/dotfiles/config/leftwm/onedark/ /home/drishal/.config/leftwm/themes/cur
 
 #neovim
 mkdir -p ~/.config/nvim/
-ln -sf ~/dotfiles/config/nvim/pre-init.vim ~/.config/nvim/init.vim
+# ln -sf ~/dotfiles/config/nvim/pre-init.vim ~/.config/nvim/init.vim
 
 # mpv
 ln -sf ~/dotfiles/config/mpv/mpv.conf ~/.config/mpv/mpv.conf

@@ -2,7 +2,7 @@
 
 # base system configuration
 {
-  boot.kernelPackages = pkgs.linuxPackages_latest; # alternative: linuxPackages_latest pkgs.linuxPackages_zen
+  boot.kernelPackages = pkgs.linuxPackages_zen; # alternative: linuxPackages_latest pkgs.linuxPackages_zen
 
   # kernel parameters
   boot.kernelParams = [ "iommu=pt" "mitigations=off" "psmouse.synaptics_intertouch=0" ];
@@ -120,6 +120,11 @@
   # };
 
   security.rtkit.enable = true;
+
+  services.fstrim = {
+    enable = true;
+    interval = "weekly";
+  };
   services.pipewire = {
     wireplumber.enable = true;
     # media-session.enable = false;

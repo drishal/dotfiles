@@ -1,40 +1,3 @@
-#direnv
-export DIRENV_LOG_FORMAT=
-
-export EXA_ICON_SPACING=2
-
-# man pager
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-
-# node
-# to use this: mkdir ~/.npm-global; npm config set prefix '~/.npm-global'
-export PATH=~/.npm-global/bin:$PATH
-
-#Editor: setting to nvim for command line 
-export EDITOR=nvim
- export the npm profile
-export PATH="$HOME/.npm-packages/bin:$PATH"
-
-
-export NIXPKGS_ALLOW_UNFREE=1
-# export USE_CCACHE=1
-# export CCACHE_EXEC=/usr/bin/ccache
-# for home manager 
-# export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
-
-#starship config
-# export STARSHIP_CONFIG=~/dotfiles/config/starship.toml
-
-# adb bin
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
-fi
-
-# locals for home manager 
-. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
-
-#aliases 
 # aliases
 alias nix-config="sudo vim /etc/nixos/configuration.nix"
 alias xon="steam-run ~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
@@ -100,6 +63,7 @@ alias nfu="sudo nix flake update ~/dotfiles"
 alias nrs="sudo nixos-rebuild switch --flake ~/dotfiles -L"
 alias nrb="sudo nixos-rebuild boot --flake ~/dotfiles -L"
 alias nrsi="sudo nixos-rebuild switch --flake --impure ~/dotfiles -L"
+export NIXPKGS_ALLOW_UNFREE=1
 # home manager
 alias hms="home-manager switch --flake ~/dotfiles "
 alias hms-offline="home-manager switch --flake ~/dotfiles --option substitute false"
@@ -135,6 +99,4 @@ alias home-setup="~/dotfiles/scripts/home-setup.sh"
 
 #upload files; use as "upload filename"
 alias upload="curl -sL https://git.io/file-transfer | sh && ./transfer wet"  
-
-
 

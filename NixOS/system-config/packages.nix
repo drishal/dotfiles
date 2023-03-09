@@ -77,18 +77,21 @@
     dunst
     dwmblocks
     ed
-    etcher
+    microsoft-edge
+    # etcher
     evince
     evince
     easyeffects
     extundelete
     exa
+    # fastfetch
     fdk_aac
     feh
     ffmpeg
     figlet
     firefox-bin
     file
+    # fish
     flameshot
     foremost
     flex
@@ -133,13 +136,14 @@
     lsd
     lshw
     pciutils
-    # lutris
+    lutris
     lxappearance
     lxsession
     man
     materia-theme
     mesa-demos
     mpv
+    motrix
     mplayer
     #mullvad
     #mullvad-vpn
@@ -172,7 +176,7 @@
     powertop
     protonvpn-cli
     protonvpn-gui
-    protonup
+    protonup-qt
     ps_mem
     python3
     poppler
@@ -180,6 +184,7 @@
     python3Packages.mysql-connector
     python3Packages.pip
     python3Packages.tkinter
+    python3Packages.shodan
     python3Packages.pyqt5
     python3Packages.venvShellHook
     qbittorrent
@@ -193,13 +198,13 @@
     rofi-emoji
     rustc
     rustup
+    rust-analyzer
     simplescreenrecorder
     smplayer
     speedtest-cli
     spot
     starship
     sass
-    # mono
     steam-run
     surf
     # swaylock
@@ -248,6 +253,7 @@
     wirelesstools
     wine64
     wofi
+    wl-clipboard
     xarchiver
     yarn
     youtube-dl

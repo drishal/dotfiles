@@ -122,7 +122,7 @@ See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
 #+begin_src conf
 master {
     new_is_master = true
-    # special_scale_factor=0.5
+    mfact=0.5
 }
 #+end_src
 * Gestures

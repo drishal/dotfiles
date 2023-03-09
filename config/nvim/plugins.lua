@@ -1,14 +1,14 @@
 
 -- This file can be loaded by calling `lua require('plugins')` from your init.vim
 local ensure_packer = function()
-  local fn = vim.fn
-  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-  if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-    vim.cmd [[packadd packer.nvim]]
-    return true
-  end
-  return false
+	local fn = vim.fn
+	local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+	if fn.empty(fn.glob(install_path)) > 0 then
+		fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+		vim.cmd [[packadd packer.nvim]]
+		return true
+	end
+	return false
 end
 
 local packer_bootstrap = ensure_packer()
@@ -30,6 +30,7 @@ return require('packer').startup(function(use)
 	-- use 'vim-airline/vim-airline-themes'
 	--lsp plugins
 	use 'neovim/nvim-lspconfig'
+	use 'nvim-tree/nvim-web-devicons'
 	use 'hrsh7th/cmp-nvim-lsp'
 	use 'hrsh7th/cmp-buffer'
 	use 'hrsh7th/cmp-path'
@@ -39,10 +40,15 @@ return require('packer').startup(function(use)
 	use 'hrsh7th/nvim-cmp'
 	use 'mfussenegger/nvim-jdtls'
 	use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
-        use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable 'make' == 1 }
+	use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable 'make' == 1 }
 	use 'williamboman/mason.nvim'
 	use "williamboman/mason-lspconfig.nvim"
 	use 'joukevandermaas/vim-ember-hbs'
+	-- using packer.nvim
+	use {
+		'nmac427/guess-indent.nvim',
+		config = function() require('guess-indent').setup {} end,
+	}
 	use 'j-hui/fidget.nvim'
 	use {
 		"windwp/nvim-autopairs",
@@ -50,26 +56,45 @@ return require('packer').startup(function(use)
 	}
 	use({"L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*"})
 
+	-- noice.nvim 
+	-- Packer
+	use({
+		"folke/noice.nvim",
+		config = function()
+			require("noice").setup({
+				-- add any options here
+			})
+		end,
+		requires = {
+			-- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+			"MunifTanjim/nui.nvim",
+			-- OPTIONAL:
+			--   `nvim-notify` is only needed, if you want to use the notification view.
+			--   If not available, we use `mini` as the fallback
+			"rcarriga/nvim-notify",
+		}
+	})
+
 
 	use {
 		'nvim-orgmode/orgmode', 
 		config = function()
 			require('orgmode').setup{}
-		end}
+	end}
 
-		use {
-			"nvim-neorg/neorg",
-			config = function()
-				require('neorg').setup {
-					load = {
-						["core.defaults"] = {}
-					}
+	use {
+		"nvim-neorg/neorg",
+		config = function()
+			require('neorg').setup {
+				load = {
+					["core.defaults"] = {}
 				}
-			end,
-			requires = "nvim-lua/plenary.nvim"
-		}
+			}
+		end,
+		requires = "nvim-lua/plenary.nvim"
+	}
 
 	if packer_bootstrap then
 		require('packer').sync()
 	end
-	end)
+end)
