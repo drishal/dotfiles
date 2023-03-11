@@ -60,7 +60,6 @@
           ./NixOS/home-config/home.nix
           {nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];}
           hyprland.homeManagerModules.default
-          # {wayland.windowManager.hyprland.enable = true;}
           "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
           {
             home = {

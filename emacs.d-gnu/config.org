@@ -3,6 +3,7 @@
 
 * Table of contents :toc:
 - [[#emacs-startup][emacs startup]]
+  - [[#just-make-sure-to-run-this-once][Just make sure to run this once]]
   - [[#shift-theme-variables-to-customel-make-sure-to-create-it-if-it-does-not-exist][shift theme variables to ~custom.el~, make sure to create it if it does not exist]]
   - [[#emacs-startup-performance][emacs startup performance]]
 - [[#initialize-package-sources][Initialize package sources]]
@@ -86,6 +87,11 @@
 - [[#prevent-warnings-spam][prevent *warnings* spam]]
 
 * emacs startup
+** Just make sure to run this once
+#+begin_src bash :tangle no
+touch ~/.emacs.d/custom.el
+#+end_src
+
 ** shift theme variables to ~custom.el~, make sure to create it if it does not exist
 #+begin_src emacs-lisp
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))

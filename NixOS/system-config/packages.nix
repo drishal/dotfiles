@@ -71,6 +71,7 @@
     debootstrap
     # discord
     distrobox
+    dmg2img
     dmenu
     dmidecode
     docker-compose
@@ -152,6 +153,7 @@
     neofetch
     nitch
     neovim
+    neovide
     networkmanagerapplet
     nitrogen
     nixpkgs-fmt
@@ -254,6 +256,7 @@
     wine64
     wofi
     wl-clipboard
+    wlr-randr
     xarchiver
     yarn
     youtube-dl
