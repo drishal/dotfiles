@@ -10,21 +10,19 @@
 - [[#setting-some-paths][Setting some paths]]
   - [[#localbin][~~/.local/bin~]]
   - [[#ccache-settings][ccache settings]]
-- [[#setting-some-values-we-will-need-from-grml-zsh-config][Setting some values we will need from Grml zsh config]]
-- [[#completion-stuff-from-grml][completion stuff from grml]]
+- [[#grml-zsh-config][Grml Zsh config]]
+  - [[#setting-some-values-we-will-need-from-grml-zsh-config][Setting some values we will need from Grml zsh config]]
+  - [[#completion-stuff-from-grml][completion stuff from grml]]
 - [[#plugins][Plugins]]
-  - [[#zsh-completions][zsh-completions]]
-  - [[#zsh-autosuggestions][zsh-autosuggestions]]
-  - [[#zsh-autocomplete][zsh autocomplete]]
-  - [[#zsh-syntax-highlighting][zsh-syntax-highlighting]]
+  - [[#zsh-autosuggestions-and-syntax-highlighting][zsh-autosuggestions and syntax highlighting]]
   - [[#zsh-history-substring-search][zsh-history substring search]]
   - [[#disable-the-prompt-on-the-right-side][Disable the prompt on the right side]]
   - [[#vim-mode][vim mode]]
   - [[#async][async]]
   - [[#zsh-nix-shell][zsh-nix-shell]]
+  - [[#zsh-nix-completions][zsh-nix-completions]]
 - [[#history-completions][History completions]]
 - [[#navigation][Navigation]]
-- [[#grml-zsh-config][Grml Zsh config]]
 - [[#title][title]]
 - [[#kitty-config][kitty config]]
 - [[#loading-the-prompt][loading the prompt]]
@@ -102,9 +100,13 @@ git clone https://github.com/zsh-users/zsh-history-substring-search.git
 #+end_src 
 * Some stuff configure by zsh-newuser-install
 #+begin_src shell
-  zstyle :compinstall filename '/home/drishal/.zshrc'
-  autoload -Uz compinit
-  compinit
+zstyle :compinstall filename '/home/drishal/.zshrc'
+autoload -Uz compinit
+if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
+	compinit;
+else
+	compinit -C;
+fi;
 #+end_src
 
 * Setting some paths
@@ -124,7 +126,11 @@ export USE_CCACHE=1
 # export CCACHE_DIR=/home/drishal/.ccache-1
 #+end_src
 
-* Setting some values we will need from Grml zsh config
+* Grml Zsh config
+https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
+
+
+** Setting some values we will need from Grml zsh config
 #+begin_src shell
 
   # set some important options (as early as possible)
@@ -192,7 +198,7 @@ export USE_CCACHE=1
 
 #+end_src
 
-* completion stuff from grml
+** completion stuff from grml
 #+begin_src shell
   # TODO: This could use some additional information
 
@@ -285,43 +291,21 @@ export USE_CCACHE=1
 #+end_src
 
 * Plugins
-*** Oh my zsh
-The oh my zsh framework, tangle set to no as I dont really use it 
-#+begin_src shell :tangle no
-zinit light "ohmyzsh/ohmyzsh"
-#+end_src
-
-** zsh-completions
-see https://github.com/zsh-users/zsh-completions
-#+begin_src shell :tangle no 
-  #source ~/.zsh-plugins/zsh-completions/zsh-completions.plugin.zsh
-  zinit light "zsh-users/zsh-completions"
-#+end_src
-** zsh-autosuggestions
+** zsh-autosuggestions and syntax highlighting
 - install from here: https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
 #+begin_src shell
   #  source ~/.zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 export ZSH_AUTOSUGGEST_USE_ASYNC=true
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#6272a4'
 
-# zinit wait lucid for \
-#  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-#     zdharma-continuum/fast-syntax-highlighting \
-#  atload"!_zsh_autosuggest_start" \
-#     zsh-users/zsh-autosuggestions
-zinit light zsh-users/zsh-autosuggestions
-#+end_src
-** zsh autocomplete
-#+begin_src shell :tangle no
-  zinit light "marlonrichert/zsh-autocomplete"
+zinit wait lucid for \
+ atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+    zdharma-continuum/fast-syntax-highlighting \
+ atload"!_zsh_autosuggest_start" \
+    zsh-users/zsh-autosuggestions
+# zinit light zsh-users/zsh-autosuggestions
 #+end_src
 
-** zsh-syntax-highlighting
-- see: https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md
-#+begin_src shell
-  # source ~/.zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-  zinit light "zsh-users/zsh-syntax-highlighting"
-#+end_src
 ** zsh-history substring search
 - see: https://github.com/zsh-users/zsh-history-substring-search
   #+begin_src shell
@@ -348,6 +332,10 @@ see https://github.com/jeffreytse/zsh-vi-mode
 #+begin_src shell
 zinit light chisui/zsh-nix-shell
 #+end_src
+** zsh-nix-completions
+#+begin_src shell :tangle no
+zinit light nix-community/nix-zsh-completions
+#+end_src
 * History completions
 #+begin_src shell
   HISTFILE=${HISTFILE:-${ZDOTDIR:-${HOME}}/.zsh_history}
@@ -360,9 +348,6 @@ zinit light chisui/zsh-nix-shell
   bindkey "^[[1;5C" forward-word
   bindkey "^[[1;5D" backward-word
 #+end_src
-
-* Grml Zsh config
-https://git.grml.org/?p=grml-etc-core.git;a=blob_plain;f=etc/zsh/zshrc;hb=HEAD
 
 * title
 #+begin_src shell 

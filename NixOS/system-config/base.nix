@@ -2,10 +2,10 @@
 
 # base system configuration
 {
-  boot.kernelPackages = pkgs.linuxPackages_latest; # alternative: linuxPackages_latest pkgs.linuxPackages_zen
+  boot.kernelPackages = pkgs.linuxPackages_lqx; # alternative: linuxPackages_latest pkgs.linuxPackages_zen
 
   # kernel parameters
-  boot.kernelParams = [ "iommu=pt" "mitigations=off" "psmouse.synaptics_intertouch=0" ];
+  boot.kernelParams = [ "mitigations=off"];
 
   # microde
   hardware.cpu.amd.updateMicrocode = true;
@@ -20,7 +20,7 @@
 
   # systemd settings 
   systemd.extraConfig = ''
-  DefaultTimeoutStopSec=25s
+  DefaultTimeoutStopSec=10s
 '';
   #bluetooth
   hardware.bluetooth.enable = true;
@@ -30,6 +30,9 @@
 
   # firmware updator
   services.fwupd.enable = true;
+
+  #man
+  documentation.man.generateCaches = false;
 
   #openssh
   services.openssh = {

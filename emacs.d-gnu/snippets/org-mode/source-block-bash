@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: org mode bash
+# key: <sb
+# --
+
+#+begin_src bash
+$0
+#+end_src

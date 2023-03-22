@@ -8,7 +8,7 @@
 
     # window wmanagers
     windowManager = {
-      qtile.enable = true;
+      # qtile.enable = true;
 
       xmonad = {
         enable = true;
@@ -37,9 +37,10 @@
       # gnome.enable = true;
     };
 
-    # displayManager.gdm.enable = true;
-    displayManager.sddm.enable = true;
 
+    # displayManager.gdm.enable = true;
+    # displayManager.sddm.enable = true;
+    displayManager.lightdm.enable = false;
     # displayManager.lightdm = {
     #  enable = true;
     #  greeter.enable = true;
@@ -55,11 +56,26 @@
     };
   };
 
+ services.greetd = {
+   enable = true;
+   settings = rec {
+     initial_session = {
+       command = "Hyprland";
+       # command = "startplasma-wayland";
+       user = "drishal";
+     };
+     default_session = initial_session;
+   };
+ };
+
+
+
   programs.hyprland.enable = true;
   # QT settings
   # environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "";
   # qt.platformTheme="qt5ct";
   environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "qt5ct";
+  # qt.platformTheme="qt5ct";
   # environment.variables.QT_STYLE_OVERRIDE= lib.mkForce "";
   # river 
   services.xserver.displayManager.sessionPackages = [
@@ -103,16 +119,16 @@
     extraConfig = "IdleAction=ignore";
   };
 
-
+  services.power-profiles-daemon.enable = false;
   # portal
   services.dbus.enable = true;
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-    # kde.enable = false;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    # gtkUsePortal = true;
-  };
+  # xdg.portal = {
+  #   enable = true;
+  #   wlr.enable = true;
+  #   # kde.enable = false;
+  #   extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  #   # gtkUsePortal = true;
+  # };
   #some overlays
   nixpkgs.overlays = [
     #suckless overlays

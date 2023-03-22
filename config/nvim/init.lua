@@ -19,6 +19,16 @@ require('dashboard').setup {
 
 }
 
+--tabnine 
+require('tabnine').setup({
+  disable_auto_comment=true, 
+  accept_keymap="<Tab>",
+  dismiss_keymap = "<C-]>",
+  debounce_ms = 800,
+  suggestion_color = {gui = "#808080", cterm = 244},
+  exclude_filetypes = {"TelescopePrompt"}
+})
+
 -- leader key
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -28,6 +38,19 @@ local nvim_lsp = require('lspconfig')
 local nvim_lsp = require('lspconfig')
 local lspkind = require('lspkind')
 
+nvim_lsp.emmet_ls.setup({
+    -- on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { 'html', 'typescriptreact', 'javascriptreact', 'css', 'sass', 'scss', 'less' },
+    init_options = {
+      html = {
+        options = {
+          -- For possible options, see: https://github.com/emmetio/emmet/blob/master/src/config.ts#L79-L267
+          ["bem.enabled"] = true,
+        },
+      },
+    }
+})
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
 require('telescope').setup {
@@ -97,7 +120,14 @@ require('lualine').setup {
         lualine_y = {},
         lualine_z = {}
     },
-    tabline = {},
+    tabline = {
+        lualine_a = {},
+        lualine_b = {'branch'},
+        lualine_c = {'filename'},
+        lualine_x = {},
+        lualine_y = {},
+        lualine_z = {}
+    },
     winbar = {},
     inactive_winbar = {},
     extensions = {}
@@ -282,6 +312,7 @@ require('nvim-treesitter.configs').setup {
     indent = {
         enable = true,
     },  
+    ensure_installed = {"bash", "nix", "lua", "html", "css", "javascript", "org", "norg", "markdown", "toml", "typescript", "regex" },
 }
 --org mode
 require('orgmode').setup_ts_grammar()

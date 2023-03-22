@@ -26,11 +26,11 @@
 
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland.url = "github:hyprwm/Hyprland/5ce91bb0fd4fe8eb09f1a728e3b84cc1ff4244eb";
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      url = "github:nix-community/emacs-overlay/545383bd7de8e3f100356fea217698379d8f5c31";
+      url = "github:nix-community/emacs-overlay/17c3e9f9fd8ded3ba563aef83ab63c740200b79a";
     };
 
     private-stuff = {

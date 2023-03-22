@@ -27,6 +27,8 @@
 ** ~/.local/bin
 #+begin_src fish
 fish_add_path ~/.local/bin
+fish_add_path ~/.node_modules/bin
+fish_add_path ~/.nimble/bin
 #+end_src
 
 * Aliases
@@ -86,9 +88,11 @@ alias ps "powerprofilesctl set power-saver"
 alias pnow "cat /sys/firmware/acpi/platform_profile"
 
 
+# fixes 
 #resetting the right usb
 # alias usb_1 "cd /sys/bus/pci/drivers/xhci_hcd/"
 # alias usb_2 "su root -c  'for file in ????:??:??.? ; do  echo -n "$file" > unbind;  echo -n "$file" > bind; done'"
+alias touchpad-fix="sudo modprobe -r i8042; sudo modprobe i8042"
 
 # #nix 
 alias nfu "sudo nix flake update ~/dotfiles"
@@ -186,6 +190,7 @@ set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 * direnv
 #+begin_src fish
 direnv hook fish | source
+set -x DIRENV_LOG_FORMAT ""
 #+end_src
 
 * Lutis skip init

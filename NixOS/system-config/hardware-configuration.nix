@@ -9,7 +9,7 @@
     ];
 
   boot.initrd.availableKernelModules = [ "nvme" "ehci_pci" "xhci_pci" "uas" "sd_mod" "rtsx_pci_sdmmc" ];
-  boot.initrd.kernelModules = ["amdgpu" "i8042" ];
+  boot.initrd.kernelModules = ["amdgpu" ];
   boot.kernelModules = [ "kvm-amd"  ];
   boot.extraModulePackages = [ ];
 

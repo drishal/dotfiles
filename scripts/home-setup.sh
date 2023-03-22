@@ -44,3 +44,35 @@ mkdir -p ~/.config/nvim/
 # mpv
 ln -sf ~/dotfiles/config/mpv/mpv.conf ~/.config/mpv/mpv.conf
 
+
+# tangle
+
+#fish config 
+mkdir -p ~/.config/fish/
+emacs --batch --eval "(require 'org)" --eval '(org-babel-tangle-file "~/dotfiles/config/fish/config.org ")'
+
+#hyprland config
+mkdir -p ~/.config/hyprland/
+emacs --batch --eval "(require 'org)" --eval '(org-babel-tangle-file "~/dotfiles/config/hyprland/hyprland.org ")'
+
+# xmonad config
+mkdir -p ~/.xmonad/
+emacs --batch --eval "(require 'org)" --eval '(org-babel-tangle-file "~/dotfiles/xmonad/README.org")'
+
+#qtile config
+mkdir -p ~/.config/qtile/
+emacs --batch --eval "(require 'org)" --eval '(org-babel-tangle-file "~/dotfiles/config/qtile/README.org")'
+
+#river config
+mkdir -p ~/.config/river/
+emacs --batch --eval "(require 'org)" --eval '(org-babel-tangle-file "~/dotfiles/config/river/init.org")'
+
+#zsh config
+emacs --batch --eval "(require 'org)" --eval '(org-babel-tangle-file "~/dotfiles/zshrc.org")'
+
+# emacs conifg
+# mkdir -p ~/.emacs.d
+# emacs --batch --eval "(require 'org)" --eval '(org-babel-tangle-file "~/dotfiles/config/river/init.org")'
+# if [ ! -f ~/.emacs.d/custom.el ]; then touch ~/.emacs.d/custom.el; fi
+# emacs --batch --eval "(require 'org)" --eval '(org-babel-tangle-file "~/dotfiles/emacs.d-gnu/config.org")'
+

@@ -18,6 +18,10 @@
       remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
       dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     };
+
+    #openvpn
+    openvpn3.enable = true;
+
     # systemtap
     systemtap.enable=true;
   };
@@ -61,7 +65,7 @@
     # chromium
     chromium-bsu
     cinnamon.nemo
-    clang
+    # clang
     clang-tools
     cloudflare-warp
     cmake
@@ -115,19 +119,22 @@
     haruna
     haskellPackages.xmobar
     htop
+    hollywood
     imagemagick
     imagemagick
     inetutils
     inxi
     inotify-tools
+    python3Packages.ipython
     keepassxc
     killall
     kitty
     leafpad
     #linuxKernel.packages.linux_5_19.v4l2loopback    
     libnotify
-    libreoffice
+    # libreoffice
     libva-utils
+    libsixel
     linuxPackages.cpupower
     # linuxPackages.systemtap
     # linuxKernel.packages.linux.systemtap
@@ -145,6 +152,7 @@
     mesa-demos
     mpv
     motrix
+    mosh
     mplayer
     #mullvad
     #mullvad-vpn
@@ -156,6 +164,7 @@
     neovide
     networkmanagerapplet
     nitrogen
+    nim
     nixpkgs-fmt
     nmap
     nodejs
@@ -164,6 +173,8 @@
     ntfs3g
     obs-studio
     onefetch
+    # onboard
+    onlyoffice-bin
     pandoc
     papirus-icon-theme
     pass
@@ -257,6 +268,7 @@
     wofi
     wl-clipboard
     wlr-randr
+    wdisplays
     xarchiver
     yarn
     youtube-dl
@@ -388,20 +400,7 @@
   #   })
   ];
 
-  #environment 
-  environment.sessionVariables = rec {
-    XDG_CACHE_HOME  = "\${HOME}/.cache";
-    XDG_CONFIG_HOME = "\${HOME}/.config";
-    XDG_BIN_HOME    = "\${HOME}/.local/bin";
-    XDG_DATA_HOME   = "\${HOME}/.local/share";
-    # Steam needs this to find Proton-GE
-    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
-    # note: this doesn't replace PATH, it just adds this to it
-    PATH = [ 
-      "\${XDG_BIN_HOME}"
-    ];
-  };
-  # mullvad
+  # # mullvad
   # services.mullvad-vpn.enable = true;
 }
 
