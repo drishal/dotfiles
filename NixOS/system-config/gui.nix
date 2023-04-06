@@ -40,7 +40,7 @@
 
     # displayManager.gdm.enable = true;
     # displayManager.sddm.enable = true;
-    displayManager.lightdm.enable = false;
+    # displayManager.lightdm.enable = false;
     # displayManager.lightdm = {
     #  enable = true;
     #  greeter.enable = true;

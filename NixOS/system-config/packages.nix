@@ -23,7 +23,7 @@
     openvpn3.enable = true;
 
     # systemtap
-    systemtap.enable=true;
+    # systemtap.enable=true;
   };
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -54,7 +54,7 @@
         "--enable-hardware-overlays"
       ];
     })
-    # bottles
+    bottles-unwrapped
     btop
     bun
     brightnessctl
@@ -65,6 +65,7 @@
     # chromium
     chromium-bsu
     cinnamon.nemo
+    cinnamon.nemo-with-extensions
     # clang
     clang-tools
     cloudflare-warp
@@ -73,6 +74,9 @@
     conky
     cpufetch
     debootstrap
+    deluge
+    dejavu_fonts
+    dolphin
     # discord
     distrobox
     dmg2img
@@ -126,6 +130,7 @@
     inxi
     inotify-tools
     python3Packages.ipython
+    python3Packages.python-lsp-server
     keepassxc
     killall
     kitty
@@ -135,7 +140,9 @@
     # libreoffice
     libva-utils
     libsixel
+    libfaketime
     linuxPackages.cpupower
+    lxqt.pcmanfm-qt
     # linuxPackages.systemtap
     # linuxKernel.packages.linux.systemtap
     lm_sensors
@@ -143,7 +150,6 @@
     libsForQt5.ark
     lsd
     lshw
-    pciutils
     lutris
     lxappearance
     lxsession
@@ -154,6 +160,7 @@
     motrix
     mosh
     mplayer
+    mongodb-compass
     #mullvad
     #mullvad-vpn
     ncdu
@@ -172,13 +179,17 @@
     noto-fonts
     ntfs3g
     obs-studio
+    openvpn
     onefetch
     # onboard
     onlyoffice-bin
+    p7zip
     pandoc
     papirus-icon-theme
     pass
     pavucontrol
+    pciutils
+    pcmanfm
     peaclock
     pfetch
     php
@@ -233,6 +244,7 @@
     tor-browser-bundle-bin
     trayer
     tree
+    unrar
     unzip
     usbutils
     uutils-coreutils
@@ -292,6 +304,7 @@
     xorg.xf86videoamdgpu
     xorg.xkill
     xorg.xmodmap
+    xorg.xhost
 
 
     # python39Packages.numpy python39Packages.pandas

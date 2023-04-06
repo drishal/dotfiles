@@ -2,10 +2,10 @@
 
 # base system configuration
 {
-  boot.kernelPackages = pkgs.linuxPackages_lqx; # alternative: linuxPackages_latest pkgs.linuxPackages_zen
+  boot.kernelPackages = pkgs.linuxPackages_zen; # alternative: linuxPackages_latest pkgs.linuxPackages_zen
 
   # kernel parameters
-  boot.kernelParams = [ "mitigations=off"];
+  boot.kernelParams = [ "mitigations=off" "clearcpuid=514"];
 
   # microde
   hardware.cpu.amd.updateMicrocode = true;
@@ -69,9 +69,13 @@
   };
 
   # Networking
+  # services.resolved = {
+    # enable=true;
+  # }
   networking = {
     networkmanager = {
       enable = true;
+      # dns = "systemd-resolved";
       wifi.macAddress = "random";
     };
     wireless.iwd.enable = true;
@@ -89,6 +93,7 @@
       # "8.8.8.8"
       # "2001:4860:4860::8888"
     ];
+    # extraHosts = "185.199.108.133 raw.githubusercontent.com";  
   };
   # Configure keymap in X11
   services.xserver.layout = "us";
@@ -121,6 +126,9 @@
   #   enable=true;
   #   package=pkgs.mariadb;
   # };
+
+  # mongodb
+  # services.mongodb.enable = true;
 
   security.rtkit.enable = true;
 

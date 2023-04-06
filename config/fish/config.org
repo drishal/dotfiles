@@ -135,6 +135,13 @@ alias home-setup "~/dotfiles/scripts/home-setup.sh"
 #upload files; use as "upload filename"
 alias upload "curl -sL https://git.io/file-transfer | sh && ./transfer wet"  
 
+#arch portable
+alias arch "OVERFS_MODE=1 /home/drishal/Desktop/iso/arch/runimage.superlite --run-shell"
+
+#waydroid
+alias waydroid-start "waydroid session start; rm ~/.local/share/applications/waydroid*"
+alias waydroid-ui "waydroid show-full-ui"
+
 #+end_src
 
 

@@ -26,7 +26,7 @@
 
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
-    hyprland.url = "github:hyprwm/Hyprland/5ce91bb0fd4fe8eb09f1a728e3b84cc1ff4244eb";
+    hyprland.url = "github:hyprwm/Hyprland/2b4d96e0efe4ce4a13b8cdef0d1ff5981f674542";
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
