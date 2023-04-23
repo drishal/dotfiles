@@ -176,6 +176,9 @@ remove/add tangle no to whatever font you prefer
 *** Fantasque sans
 #+begin_src emacs-lisp
 (add-to-list 'default-frame-alist '(font . "FantasqueSansMono Nerd Font-15.5:weight=medium" ))
+;; (set-face-attribute 'default nil :font "FantasqueSansMono Nerd Font-15.5:weight=medium")
+;; (add-to-list 'default-frame-alist '(font . "FantasqueSansMono Nerd Font-15.5:weight=medium"))
+
 (setq global-prettify-symbols-mode t)
 #+end_src
 *** Firacode
@@ -547,11 +550,11 @@ Switch to org edit mode when pressing `i` insert key
 *** yas-snippet
 
 #+begin_src emacs-lisp
-(use-package yasnippet
-  :ensure t
-  :config
-  (setq yas-snippet-dirs '("~/dotfiles/emacs.d-gnu/snippets"))
-  )
+(use-package yasnippet :ensure t)
+;; (add-to-list 'load-path ("~/dotfiles/emacs.d-gnu/snippets")
+(add-to-list 'load-path
+              "~/dotfiles/emacs.d-gnu/snippets")
+(setq yas-snippet-dirs '("~/dotfiles/emacs.d-gnu/snippets/"))
 (require 'yasnippet)
 (yas-global-mode 1)
 #+end_src
@@ -559,8 +562,8 @@ Switch to org edit mode when pressing `i` insert key
 ** org tempo for all the beautiful snippets:
 
 #+begin_src emacs-lisp
-  ;; (use-package 'org-tempo :ensure t)
-  (require 'org-tempo)
+;; (use-package 'org-tempo :ensure t)
+(require 'org-tempo)
 #+end_src
 ** org modern
 https://github.com/minad/org-modern
@@ -623,6 +626,8 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 #+begin_src emacs-lisp
 (setq org-html-validation-link nil)
 (setq org-html-include-created-date nil)
+(setq org-export-preserve-breaks t)
+
 #+end_src
 ** org-html-themeify
 #+begin_src emacs-lisp :tangle no
