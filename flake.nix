@@ -10,6 +10,7 @@
   inputs = {
 
     nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
+    # nixpkgs-master= { url = "github:nixos/nixpkgs/master"; };
 
     # nixpkgs-master.url = "github:NixOS/nixpkgs/master";
 
@@ -26,11 +27,12 @@
 
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
-    hyprland.url = "github:hyprwm/Hyprland/2b4d96e0efe4ce4a13b8cdef0d1ff5981f674542";
+    hyprland.url = "github:hyprwm/Hyprland/1c50a11688451049185baae3109ddc87a268a75e";
+    # hyprland.url = "github:hyprwm/Hyprland/4a92deec544dc26e809112bd0578d7269fad4095";
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      url = "github:nix-community/emacs-overlay/17c3e9f9fd8ded3ba563aef83ab63c740200b79a";
+      url = "github:nix-community/emacs-overlay/12ba135e863d25ffc3d80f05678ef7deacfd3689";
     };
 
     private-stuff = {
@@ -45,10 +47,15 @@
       system = "x86_64-linux";
 
       pkgs = import nixpkgs {
-      # pkgs = pkgs {
         inherit system;
         config = { allowUnfree = true; };
       };
+
+      # master-pkgs = import nixpkgs-master {
+      #   inherit system;
+      #   config = { allowUnfree = true; };
+      # };
+
 
       lib = nixpkgs.lib;
     in
@@ -76,7 +83,7 @@
           modules = [
             # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
             { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay  ]; }
-            hyprland.nixosModules.default
+            # hyprland.nixosModules.default
             ./NixOS/system-config/configuration.nix
             # { programs.hyprland.enable = true; }
           ];
