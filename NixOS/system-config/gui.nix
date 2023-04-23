@@ -32,14 +32,14 @@
     # Desktop Environment
     desktopManager = {
       # plasma5.enable = true;
-      # xfce.enable = true;
+      xfce.enable = true;
       # lxqt.enable = true;
       # gnome.enable = true;
     };
 
 
     # displayManager.gdm.enable = true;
-    # displayManager.sddm.enable = true;
+    displayManager.sddm.enable = true;
     # displayManager.lightdm.enable = false;
     # displayManager.lightdm = {
     #  enable = true;
@@ -57,10 +57,11 @@
   };
 
  services.greetd = {
-   enable = true;
+   enable = false;
    settings = rec {
      initial_session = {
        command = "Hyprland";
+       # command = "river";
        # command = "startplasma-wayland";
        user = "drishal";
      };
@@ -70,7 +71,10 @@
 
 
 
-  programs.hyprland.enable = true;
+ programs.hyprland = {
+   package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+   enable = true;
+ };
   # QT settings
   # environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "";
   # qt.platformTheme="qt5ct";
