@@ -5,20 +5,19 @@
   users.users.drishal = {
     shell = pkgs.fish;
     isNormalUser = true;
-    extraGroups = [ "wheel" "netdev" "network" "video" "-manager" "docker" "adb" "libvirtd"];
+    extraGroups = [ "wheel" "netdev" "network" "video" "manager" "docker" "adb" "libvirtd" "plugdev"];
   };
-
   security.sudo.extraConfig = ''
     Defaults   insults
   '';
 
   # fprint
-  # services.fprintd.enable = true;
-  # security.pam.services = {
-  #   login.fprintAuth = true;
-  #   sudo.fprintAuth = true;
-  #   xscreensaver.fprintAuth = true;
-  # };
+  services.fprintd.enable = true;
+  security.pam.services = {
+    # login.fprintAuth = true;
+    sudo.fprintAuth = true;
+    # xscreensaver.fprintAuth = true;
+  };
 
   security.polkit = {
     enable=true;
