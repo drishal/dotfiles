@@ -40,7 +40,7 @@ export GTK_USE_PORTAL=0
 
 ** Applications
 #+begin_src bash
-riverctl map normal $mod Return spawn "/usr/bin/foot" 
+riverctl map normal $mod Return spawn "foot" 
 
 # Mod+Q to close the focused view
 riverctl map normal $mod Q close
@@ -217,9 +217,9 @@ Mod+Shift+0 to tag focused view with all tags
 
 *** Focus all tags
 #+begin_src bash
-  all_tags=$(((1 << 32) - 1))
-  riverctl map normal Super 0 set-focused-tags $all_tags
-  riverctl map normal Super+Shift 0 set-view-tags $all_tags
+all_tags=$(((1 << 32) - 1))
+# riverctl map normal Super 0 set-focused-tags $all_tags
+# riverctl map normal Super+Shift 0 set-view-tags $all_tags
 #+end_src
 
 *** Toggle Float
