@@ -109,7 +109,7 @@ alias watch-amd-gpu "sudo watch -n 0.5  cat /sys/kernel/debug/dri/0/amdgpu_pm_in
 
 #ytdlp
 alias youtube-dl "yt-dlp"
-alias yt-dlp-mp3 "yt-dlp --no-playlist -x --audio-format=mp3"
+alias yt-dlp-mp3 "yt-dlp --no-playlist -x --audio-format=mp3 -f bestaudio"
 
 #distrobox
 alias fedora-distrobox "distrobox-enter fedora-toolbox-35"
@@ -140,7 +140,7 @@ alias arch "OVERFS_MODE=1 /home/drishal/Desktop/iso/arch/runimage.superlite --ru
 
 #waydroid
 alias waydroid-start "waydroid session start; rm ~/.local/share/applications/waydroid*"
-alias waydroid-ui "waydroid show-full-ui"
+alias waydroid-ui "waydroid show-full-ui; rm ~/.local/share/applications/waydroid*"
 
 #+end_src
 
