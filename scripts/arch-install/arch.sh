@@ -2,7 +2,7 @@ pacman -S base base-devel efibootmgr grub linux linux-headers linux-firmware vim
 echo "setting hostnam"
 echo "127.0.0.1 localhost" >> /etc/hosts
 echo "::1       localhost" >> /etc/hosts
-echo "127.0.1.1 arch.localdomain archlinux" >> /etc/hosts
+echo "127.0.1.1 archlinux.localdomain archlinux" >> /etc/hosts
 echo "archlinux" >> /etc/hostname
 
 # echo "Fstab"
