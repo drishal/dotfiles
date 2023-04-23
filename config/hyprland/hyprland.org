@@ -112,7 +112,7 @@ animations {
 * Layouts
 ** Dwindle
 See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
-#+begin_src conf :tangle no
+#+begin_src conf 
 dwindle {
      pseudotile = yes # master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
      preserve_split = yes # you probably want this
