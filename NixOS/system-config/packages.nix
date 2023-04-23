@@ -22,6 +22,9 @@
     #openvpn
     openvpn3.enable = true;
 
+    #kde connect
+    kdeconnect.enable=true;
+
     # systemtap
     # systemtap.enable=true;
   };
@@ -54,7 +57,6 @@
         "--enable-hardware-overlays"
       ];
     })
-    bottles-unwrapped
     btop
     bun
     brightnessctl
@@ -63,12 +65,27 @@
     cargo
     #carnix
     # chromium
+    (chromium.override {
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--enable-gpu-rasterization"
+        "--enable-zero-copy"
+        "--force-dark-mode"
+        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
+        "--disable-features=UseChromeOSDirectVideoDecoder"
+        "--use-vulkan"
+        "--ozone-platform-hint=auto"
+        "--enable-hardware-overlays"
+      ];
+    })
+
     chromium-bsu
     cinnamon.nemo
     cinnamon.nemo-with-extensions
     # clang
     clang-tools
-    cloudflare-warp
+    # cloudflare-warp
+    (cloudflare-warp.overrideAttrs(_: {buildInputs=[pkgs.dbus pkgs.stdenv.cc.cc.lib];}))
     cmake
     cmatrix
     conky
@@ -111,6 +128,9 @@
     git
     gitRepo
     glxinfo
+    gns3-gui
+    gns3-server
+    gnome.gnome-boxes
     gnome.cheese
     gnome.gnome-calculator
     gnome.gnome-sound-recorder
@@ -137,7 +157,7 @@
     leafpad
     #linuxKernel.packages.linux_5_19.v4l2loopback    
     libnotify
-    # libreoffice
+    libreoffice
     libva-utils
     libsixel
     libfaketime
@@ -200,6 +220,7 @@
     powertop
     protonvpn-cli
     protonvpn-gui
+    procps
     protonup-qt
     ps_mem
     python3
@@ -242,6 +263,7 @@
     tmux
     tofi
     tor-browser-bundle-bin
+    toolbox
     trayer
     tree
     unrar
@@ -251,28 +273,28 @@
     vim
     virt-manager
     virtualenv
-    # (vivaldi.override {
-    #   commandLineArgs = [
-    #     "--ignore-gpu-blocklist"
-    #     "--enable-gpu-rasterization"
-    #     "--enable-zero-copy"
-    #     "--force-dark-mode"
-    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
-    #     "--disable-features=UseChromeOSDirectVideoDecoder"
-    #     "--use-vulkan"
-    #     "--ozone-platform-hint=auto"
-    #     "--enable-hardware-overlays"
-    #   ];
-    # })
-    # vivaldi-widevine
-    # vivaldi-ffmpeg-codecs
-    ventoy-bin-full
+    (vivaldi.override {
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--enable-gpu-rasterization"
+        "--enable-zero-copy"
+        "--force-dark-mode"
+        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
+        "--disable-features=UseChromeOSDirectVideoDecoder"
+        "--use-vulkan"
+        "--ozone-platform-hint=auto"
+        "--enable-hardware-overlays"
+      ];
+    })
+    vivaldi-ffmpeg-codecs
+    ventoy-full
     # vscode-fhs
     vlc
     volumeicon
     # waybar-hyprland
     wget
     woeusb
+    widevine-cdm
     wine
     win-virtio 
     wirelesstools
@@ -391,7 +413,9 @@
   #   })
   # ];
   # services.teamviewer.enable = true;
-  systemd.packages = with pkgs; [ cloudflare-warp ];
+  systemd.packages = with pkgs; [
+    (cloudflare-warp.overrideAttrs(_: {buildInputs=[pkgs.dbus pkgs.stdenv.cc.cc.lib];}))
+];
 
   
   #swaylock
