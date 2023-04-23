@@ -14,6 +14,9 @@
     #docker
     docker.enable = true;
 
+    #podman
+    # podman.enable = true;
+
     #waydroid
     waydroid.enable = true;
     lxd.enable = true;
