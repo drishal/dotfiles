@@ -36,7 +36,6 @@
 - [[#direnv][direnv]]
 - [[#some-misc-exports][some misc exports]]
   - [[#terminfo-stull][Terminfo stull]]
-  - [[#load-angluar-cli-completions][Load Angluar cli completions]]
 
 * tramp fix
 #+begin_src shell
@@ -102,11 +101,12 @@ git clone https://github.com/zsh-users/zsh-history-substring-search.git
 #+begin_src shell
 zstyle :compinstall filename '/home/drishal/.zshrc'
 autoload -Uz compinit
-if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
-	compinit;
-else
-	compinit -C;
-fi;
+ZSH_DISABLE_COMPFIX=true
+# if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
+# 	compinit;
+# else
+# 	compinit -C;
+# fi;
 #+end_src
 
 * Setting some paths
@@ -446,8 +446,4 @@ eval "$(direnv hook zsh)"
 ** Terminfo stull
 #+begin_src shell :tangle no
  export TERMINFO_DIRS=/usr/share/terminfo
-#+end_src
-** Load Angluar cli completions
-#+begin_src shell :tangle no
-source <(ng completion script)
 #+end_src
