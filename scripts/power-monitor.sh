@@ -6,8 +6,8 @@ BAT_CAP="$BAT/capacity"
 LOW_BAT_PERCENT=30
 
 AC_PROFILE="performance"
-BAT_PROFILE="power-saver"
-LOW_BAT_PROFILE="power-saver"
+BAT_PROFILE="balanced"
+LOW_BAT_PROFILE="balanced"
 
 # wait a while if needed
 [[ -z $STARTUP_WAIT ]] || sleep "$STARTUP_WAIT"
