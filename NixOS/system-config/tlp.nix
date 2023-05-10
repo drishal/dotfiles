@@ -1,7 +1,7 @@
 { config, pkgs, inputs, lib, ... }:
 {
   services.tlp = {
-    enable=true;
+    enable=false;
     settings = {
       # platform profile
       PLATFORM_PROFILE_ON_AC="performance";
