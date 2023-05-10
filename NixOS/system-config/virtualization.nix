@@ -31,6 +31,22 @@
     # };
   };
 
-  users.extraGroups.vboxusers.members = [ "drishal" ];
+  # services.kubernetes = {
+  #   roles = ["master" "node"];
+  #   masterAddress = kubeMasterHostname;
+  #   apiserverAddress = "https://${kubeMasterHostname}:${toString kubeMasterAPIServerPort}";
+  #   easyCerts = true;
+  #   apiserver = {
+  #     securePort = kubeMasterAPIServerPort;
+  #     advertiseAddress = kubeMasterIP;
+  #   };
 
-}
+  #   # use coredns
+  #   addons.dns.enable = true;
+  # };
+
+
+    
+    users.extraGroups.vboxusers.members = [ "drishal" ];
+
+  }
