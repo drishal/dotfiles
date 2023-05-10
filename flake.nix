@@ -27,12 +27,13 @@
 
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
-    hyprland.url = "github:hyprwm/Hyprland/1c50a11688451049185baae3109ddc87a268a75e";
-    # hyprland.url = "github:hyprwm/Hyprland/4a92deec544dc26e809112bd0578d7269fad4095";
+    hyprland.url = "github:hyprwm/Hyprland/f27873a6f06dc2f87600edb890f3c38298bfb55f";
+    # hyprland.url = "github:hyprwm/Hyprland/1c50a11688451049185baae3109ddc87a268a75e";
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      url = "github:nix-community/emacs-overlay/12ba135e863d25ffc3d80f05678ef7deacfd3689";
+      # url = "github:nix-community/emacs-overlay/23488bbca5ea0012bafa2c75b88902b540ff9940";
+      url = "github:nix-community/emacs-overlay/42a2a718bdcbe389e7ef284666d4aba09339a416";
     };
 
     private-stuff = {
