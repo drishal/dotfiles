@@ -2,10 +2,11 @@
 
 # base system configuration
 {
-  boot.kernelPackages = pkgs.linuxPackages_xanmod_latest; # alternative: linuxPackages_latest pkgs.linuxPackages_zen
+  # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest; # alternative: linuxPackages_latest pkgs.linuxPackages_zen
+  boot.kernelPackages = pkgs.linuxPackages_latest; # alternative: linuxPackages_latest pkgs.linuxPackages_zen
 
   # kernel parameters
-  boot.kernelParams = [ "mitigations=off" "clearcpuid=514"];
+  boot.kernelParams = [ "mitigations=off" "clearcpuid=514" ];
 
   # microde
   hardware.cpu.amd.updateMicrocode = true;
@@ -32,7 +33,7 @@
   services.fwupd.enable = true;
 
   #man
-  documentation.man.generateCaches = false;
+  # documentation.man.generateCaches = false;
 
   #openssh
   services.openssh = {
@@ -46,7 +47,8 @@
       enable = true;
       cpuFreqGovernor = "schedutil";
     };
-  # services.power-profiles-daemon.enable=true;
+  services.power-profiles-daemon.enable=true;
+  services.acpid.enable=true;
 
   hardware.opengl =
     {
@@ -129,6 +131,8 @@
 
   # mongodb
   # services.mongodb.enable = true;
+
+  services.smartd.enable = true;
 
   security.rtkit.enable = true;
 
