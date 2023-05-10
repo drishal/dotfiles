@@ -63,6 +63,7 @@ window#waybar {
     /* color: @colfg; */
     transition-property: background-color;
     transition-duration: .5s;
+    /* opacity: 0.9;  */
 }
 
 window#waybar.empty #window {
