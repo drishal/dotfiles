@@ -123,7 +123,6 @@
     extraConfig = "IdleAction=ignore";
   };
 
-  services.power-profiles-daemon.enable = false;
   # portal
   services.dbus.enable = true;
   # xdg.portal = {
