@@ -138,12 +138,16 @@
     gnome.zenity
     gnumake
     gnupg
+    gsmartcontrol
     gparted
     gtk-layer-shell
+    gtklock
     haruna
     haskellPackages.xmobar
+    hdparm
     htop
     hollywood
+    hwinfo
     imagemagick
     imagemagick
     inetutils
@@ -154,6 +158,9 @@
     keepassxc
     killall
     kitty
+    kompose
+    kubectl
+    kubernetes
     leafpad
     #linuxKernel.packages.linux_5_19.v4l2loopback    
     libnotify
@@ -168,6 +175,7 @@
     lm_sensors
     lolcat
     libsForQt5.ark
+    libsForQt5.okular 
     lsd
     lshw
     lutris
@@ -199,6 +207,7 @@
     noto-fonts
     ntfs3g
     obs-studio
+    okteto
     openvpn
     onefetch
     # onboard
@@ -217,6 +226,8 @@
     plasma5Packages.spectacle
     polybar
     powershell
+    postman
+    poppler_utils
     powertop
     protonvpn-cli
     protonvpn-gui
@@ -258,6 +269,7 @@
     swaybg
     tdesktop
     tetex
+    texlive.combined.scheme-medium
     thinkfan
     tigervnc
     tmux
@@ -328,7 +340,7 @@
     xorg.xmodmap
     xorg.xhost
 
-
+    zathura
     # python39Packages.numpy python39Packages.pandas
     #     ((emacsPackagesFor emacsPgtkGcc).emacsWithPackages
     #       (epkgs: [
