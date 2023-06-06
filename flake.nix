@@ -27,13 +27,13 @@
 
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
-    hyprland.url = "github:hyprwm/Hyprland/f27873a6f06dc2f87600edb890f3c38298bfb55f";
-    # hyprland.url = "github:hyprwm/Hyprland/1c50a11688451049185baae3109ddc87a268a75e";
+    # hyprland.url = "github:hyprwm/Hyprland/51a930f802c71a0e67f05e7b176ded74e8e95f87";
+    hyprland.url = "github:hyprwm/Hyprland/4afeedbd567ca2114f682f14a6de26d4a8188878";
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      # url = "github:nix-community/emacs-overlay/23488bbca5ea0012bafa2c75b88902b540ff9940";
-      url = "github:nix-community/emacs-overlay/42a2a718bdcbe389e7ef284666d4aba09339a416";
+      # url = "github:nix-community/emacs-overlay/d0fc4dae0e0248453324e8d05733163a6a2f102e";
+      url = "github:nix-community/emacs-overlay/9bc16d788b9b09e986b2fba5a76fe44d35010d52";
     };
 
     private-stuff = {
@@ -91,6 +91,7 @@
           specialArgs = { inherit inputs; };
         };
       };
+      packages."x86_64-linux".thorium = pkgs.callPackage ./NixOS/custom-packages/thorium-browser/default.nix {};
 
     };
 }
