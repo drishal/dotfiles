@@ -1,7 +1,7 @@
 
 {
     "layer":"top",
-    "modules-left": [ "wlr/workspaces" ,"wlr/taskbar" ],
+    "modules-left": [ "wlr/workspaces" , "hyprland/window" ],
     "modules-center": [ "clock"],
     "modules-right": ["battery","network","memory","cpu", "tray"],
     "battery": {
@@ -79,6 +79,10 @@
      "format": "{name}",
 },
 
+    "hyprland/window": {
+    "format": "{}",
+    "separate-outputs": true
+},
    
     "tray": {
         "icon-size": 19,

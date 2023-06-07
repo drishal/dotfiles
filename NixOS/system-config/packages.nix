@@ -33,6 +33,8 @@
   environment.systemPackages = with pkgs; [
     acpi
     adwaita-qt 
+    aircrack-ng
+    # anydesk
     alacritty
     appimage-run
     arandr
@@ -60,6 +62,7 @@
     btop
     bun
     brightnessctl
+    bridge-utils
     cachix
     # calibre
     cargo
@@ -93,8 +96,8 @@
     debootstrap
     deluge
     dejavu_fonts
-    dolphin
-    # discord
+    # dolphin
+    discord
     distrobox
     dmg2img
     dmenu
@@ -103,7 +106,7 @@
     dunst
     dwmblocks
     ed
-    microsoft-edge
+    ethtool
     # etcher
     evince
     evince
@@ -113,6 +116,7 @@
     # fastfetch
     fdk_aac
     feh
+    fim
     ffmpeg
     figlet
     firefox-bin
@@ -135,6 +139,7 @@
     gnome.gnome-calculator
     gnome.gnome-sound-recorder
     gnome.gnome-tweaks
+    # gnome.nautilus
     gnome.zenity
     gnumake
     gnupg
@@ -147,6 +152,8 @@
     hdparm
     htop
     hollywood
+    hyprpaper
+    hyfetch
     hwinfo
     imagemagick
     imagemagick
@@ -184,11 +191,12 @@
     man
     materia-theme
     mesa-demos
-    mpv
-    motrix
-    mosh
-    mplayer
+    microsoft-edge
     mongodb-compass
+    mosh
+    motrix
+    mplayer
+    mpv
     #mullvad
     #mullvad-vpn
     ncdu
@@ -229,6 +237,7 @@
     postman
     poppler_utils
     powertop
+    powercap
     protonvpn-cli
     protonvpn-gui
     procps
@@ -243,11 +252,14 @@
     python3Packages.shodan
     python3Packages.pyqt5
     python3Packages.venvShellHook
+    python3Packages.qtile-extras
     qbittorrent
     qt5ct
     qpdf
     ranger
+    radeontop
     redshift
+    read-edid
     ripgrep
     rnix-lsp
     rofi
@@ -271,6 +283,8 @@
     tetex
     texlive.combined.scheme-medium
     thinkfan
+    # thorium
+    inputs.self.packages.${pkgs.system}.thorium
     tigervnc
     tmux
     tofi
@@ -378,20 +392,20 @@
       };
       buildInputs = old.buildInputs ++ [ pkgs.pcre2 ];
     }))
-    (discord.overrideAttrs (_: {
-      # extraOptions
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--enable-gpu-rasterization"
-        "--enable-zero-copy"
-        "--force-dark-mode"
-        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
-        "--disable-features=UseChromeOSDirectVideoDecoder"
-        "--use-vulkan"
-        "--ozone-platform-hint=auto"
-        "--enable-hardware-overlays"
-      ];
-    }))
+    # (discord.overrideAttrs (_: {
+    #   # extraOptions
+    #   commandLineArgs = [
+    #     "--ignore-gpu-blocklist"
+    #     "--enable-gpu-rasterization"
+    #     "--enable-zero-copy"
+    #     "--force-dark-mode"
+    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
+    #     "--disable-features=UseChromeOSDirectVideoDecoder"
+    #     "--use-vulkan"
+    #     "--ozone-platform-hint=auto"
+    #     "--enable-hardware-overlays"
+    #   ];
+    # }))
     # river
     (river.overrideAttrs (prevAttrs: rec {
       postInstall =
@@ -411,6 +425,7 @@
       passthru.providedSessions = [ "river" ];
     }))
   ];
+
 
   # powerManagement = {
   #   powerDownCommands = ''

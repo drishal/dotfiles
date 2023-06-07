@@ -6,7 +6,7 @@
   boot.kernelPackages = pkgs.linuxPackages_latest; # alternative: linuxPackages_latest pkgs.linuxPackages_zen
 
   # kernel parameters
-  boot.kernelParams = [ "mitigations=off" "clearcpuid=514" ];
+  boot.kernelParams = [ "mitigations=off" "clearcpuid=514" "amd_pstate=active"];
 
   # microde
   hardware.cpu.amd.updateMicrocode = true;
@@ -18,6 +18,8 @@
 
   # Set your time zone.
   time.timeZone = "Asia/Kolkata";
+  services.ntp.enable = true;
+  services.timesyncd.enable = true;
 
   # systemd settings 
   systemd.extraConfig = ''
@@ -71,9 +73,21 @@
   };
 
   # Networking
+
   # services.resolved = {
-    # enable=true;
-  # }
+  #   enable = true;
+  #   dnssec = "true";
+  #   domains = [ "~." ];
+  #   fallbackDns = [ "1.1.1.1#one.one.one.one"
+  #                   "1.0.0.1#one.one.one.one"
+  #                   "2606:4700:4700::1111#1dot1dot1dot1.cloudflare-dns.com"
+  #                   "2606:4700:4700::1001#1dot1dot1dot1.cloudflare-dns.com"
+  #                 ];
+  #   extraConfig = ''
+  #   DNSOverTLS=yes
+  # '';
+  # };
+  
   networking = {
     networkmanager = {
       enable = true;
@@ -95,7 +109,7 @@
       # "8.8.8.8"
       # "2001:4860:4860::8888"
     ];
-    extraHosts = "185.199.108.133 raw.githubusercontent.com";  
+    #extraHosts = "185.199.108.133 raw.githubusercontent.com";  
   };
   # Configure keymap in X11
   services.xserver.layout = "us";
@@ -134,6 +148,8 @@
 
   services.smartd.enable = true;
 
+  services.haveged.enable = true;
+
   security.rtkit.enable = true;
 
   services.fstrim = {
@@ -152,4 +168,9 @@
   hardware.pulseaudio.enable = false;
   # backlight
   hardware.acpilight.enable = true;
+  
+  # udev 250 doesn't reliably reinitialize devices after restart
+  systemd.services.systemd-udevd.restartIfChanged = false;
+
+
 }

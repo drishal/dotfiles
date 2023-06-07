@@ -8,7 +8,7 @@
 
     # window wmanagers
     windowManager = {
-      # qtile.enable = true;
+      qtile.enable = true;
 
       xmonad = {
         enable = true;
@@ -39,7 +39,7 @@
 
 
     # displayManager.gdm.enable = true;
-    displayManager.sddm.enable = true;
+    # displayManager.sddm.enable = true;
     # displayManager.lightdm.enable = false;
     # displayManager.lightdm = {
     #  enable = true;
@@ -56,25 +56,25 @@
     };
   };
 
- services.greetd = {
-   enable = false;
-   settings = rec {
-     initial_session = {
-       command = "Hyprland";
-       # command = "river";
-       # command = "startplasma-wayland";
-       user = "drishal";
-     };
-     default_session = initial_session;
-   };
- };
+  services.greetd = {
+    enable = true;
+    settings = rec {
+      initial_session = {
+        command = "Hyprland";
+        # command = "river";
+        # command = "startplasma-wayland";
+        user = "drishal";
+      };
+      default_session = initial_session;
+    };
+  };
 
 
 
- programs.hyprland = {
-   package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-   enable = true;
- };
+  programs.hyprland = {
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    enable = true;
+  };
   # QT settings
   # environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "";
   # qt.platformTheme="qt5ct";
@@ -95,7 +95,7 @@
               Type=Application
             '';
           in
-          ''
+            ''
             mkdir -p $out/share/wayland-sessions
             echo "${riverSession}" > $out/share/wayland-sessions/river.desktop
           '';
@@ -139,6 +139,25 @@
       dwm = prev.dwm.overrideAttrs (old: { src = ../../suckless/dwm-6.4; });
       dwmblocks = prev.dwmblocks.override (old: {
         conf = ../../suckless/dwmblocks/blocks.def.h;
+      });
+    })
+
+    (self: super: {
+      qtile-unwrapped = super.qtile-unwrapped.overrideAttrs(_: rec {
+        postInstall = let
+          qtileSession = ''
+[Desktop Entry]
+Name=Qtile Wayland
+Comment=Qtile on Wayland
+Exec=qtile start -b wayland
+Type=Application
+'';
+        in
+          ''
+mkdir -p $out/share/wayland-sessions
+echo "${qtileSession}" > $out/share/wayland-sessions/qtile.desktop
+'';
+        passthru.providedSessions = [ "qtile" ];
       });
     })
   ];

@@ -142,6 +142,9 @@ alias arch "OVERFS_MODE=1 /home/drishal/Desktop/iso/arch/runimage.superlite --ru
 alias waydroid-start "waydroid session start; rm ~/.local/share/applications/waydroid*"
 alias waydroid-ui "waydroid show-full-ui; rm ~/.local/share/applications/waydroid*"
 
+#hyprland monitor
+alias laptop-disable "hyprctl keyword monitor eDP-1,  disable"
+
 #+end_src
 
 

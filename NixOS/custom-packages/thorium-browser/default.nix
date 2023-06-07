@@ -8,6 +8,7 @@
 , cups
 , dbus
 , expat
+, vivaldi-ffmpeg-codecs
 , fontconfig
 , freetype
 , gdk-pixbuf
@@ -18,13 +19,13 @@
 , libuuid
 , libdrm
 , libX11
-, lib.Orgposite
+, libXcomposite
 , libXcursor
 , libXdamage
 , libXext
 , libXfixes
 , libXi
-, libxk.orgmon
+, libxkbcommon
 , libXrandr
 , libXrender
 , libXScrnSaver
@@ -42,8 +43,8 @@
 , xdg-utils
 , snappy
 
-#.orgmand line arguments which are always set e.g "--disable-gpu"
-,.orgmandLineArgs ? ""
+# command line arguments which are always set e.g "--disable-gpu"
+, commandLineArgs ? ""
 
 # Necessary for USB audio devices.
 , pulseSupport ? stdenv.isLinux
@@ -69,11 +70,11 @@ let
 
   deps = [
     alsa-lib at-spi2-atk at-spi2-core atk cairo cups dbus expat
-    fontconfig freetype gdk-pixbuf glib gtk3 libdrm libX11 libGL
-    libxk.orgmon libXScrnSaver libXcomposite libXcursor libXdamage
+    vivaldi-ffmpeg-codecs fontconfig freetype gdk-pixbuf glib gtk3 libdrm libX11 libGL
+    libxkbcommon libXScrnSaver libXcomposite libXcursor libXdamage
     libXext libXfixes libXi libXrandr libXrender libxshmfence
     libXtst libuuid mesa nspr nss pango pipewire udev wayland
-    xorg.libxcb zlib snappy
+    xorg.libxcb zlib snappy stdenv.cc.cc.lib
   ]
     ++ optional pulseSupport libpulseaudio
     ++ optional libvaSupport libva;
@@ -84,7 +85,7 @@ let
   enableFeatures = optionals enableVideoAcceleration [ "VaapiVideoDecoder" "VaapiVideoEncoder" ]
     ++ optional enableVulkan "Vulkan";
 
-    # The feature disable is needed for VAAPI to work correctly: https://github.org/thorium/thorium-browser/issues/20935
+    # The feature disable is needed for VAAPI to work correctly: https://github.com/thorium/thorium-browser/issues/20935
   disableFeatures = optional enableVideoAcceleration "UseChromeOSDirectVideoDecoder";
 in
 
@@ -93,10 +94,10 @@ stdenv.mkDerivation rec {
   version = "112.0.5615.166";
 
   src = fetchurl {
-    # https://github.com/Alex313031/thorium/releases/download/M113.0.5672.134/thorium-browser_113.0.5672.134-1_amd64.deb
-    # https://github.com/Alex313031/thorium/releases/download/M112.0.5615.166/thorium-browser_112.0.5615.166-1_amd64.deb
-    url = "https://github.org/Alex313031/thorium/releases/download/M${version}/thorium-browser_${version}_amd64.deb";
-    sha256 = "sha256-oI/KRAfPGS5WEjLmTF6CQBjXLxv4vvpFMqPmh+O51QY=";
+    #https://github.com/alex313031/thorium/releases/download/M112.0.5615.166/thorium-browser_112.0.5615.166-1_amd64.deb
+    #https://github.com/alex313031/thorium/releases/download/M112.0.5615.166/thorium-browser_112.0.5615.166_amd64.deb
+    url = "https://github.com/alex313031/thorium/releases/download/M${version}/thorium-browser_${version}-1_amd64.deb";
+    sha256 = "sha256-dOp4Aod+XIN1qThuGF5bvQV621b83gm8Ry7ZDMPvV+0=";
   };
 
   dontConfigure = true;
@@ -112,6 +113,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     # needed for GSETTINGS_SCHEMAS_PATH
     glib gsettings-desktop-schemas gtk3
+    vivaldi-ffmpeg-codecs
 
     # needed for XDG_ICON_DIRS
     gnome.adwaita-icon-theme
@@ -145,11 +147,11 @@ stdenv.mkDerivation rec {
       substituteInPlace $out/share/applications/thorium-browser.desktop \
           --replace /usr/bin/thorium-browser $out/bin/thorium
       substituteInPlace $out/share/gnome-control-center/default-apps/thorium-browser.xml \
-          --replace /opt/chromium.org $out/opt/thorium.org
+          --replace /opt/chromium.org $out/opt/chromium.org
       substituteInPlace $out/share/menu/thorium-browser.menu \
-          --replace /opt/chromium.org $out/opt/thorium.org
+          --replace /opt/chromium.org $out/opt/chromium.org
       substituteInPlace $out/opt/chromium.org/thorium/default-app-block \
-          --replace /opt/chromium.org $out/opt/thorium.org
+          --replace /opt/chromium.org $out/opt/chromium.org
 
       # Correct icons location
       icon_sizes=("16" "24" "32" "48" "64" "128" "256")
@@ -168,11 +170,11 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    # Add.orgmand line args to wrapGApp.
+    # Add command line args to wrapGApp.
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : ${rpath}
       --prefix PATH : ${binpath}
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils vivaldi-ffmpeg-codecs]}
       ${optionalString (enableFeatures != []) ''
       --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}"
       ''}
@@ -183,7 +185,7 @@ stdenv.mkDerivation rec {
       ${optionalString vulkanSupport ''
       --prefix XDG_DATA_DIRS  : "${addOpenGLRunpath.driverLink}/share"
       ''}
-      --add-flags ${escapeShellArg.orgmandLineArgs}
+      --add-flags ${escapeShellArg commandLineArgs}
     )
   '';
 
@@ -192,14 +194,14 @@ stdenv.mkDerivation rec {
     $out/opt/chromium.org/thorium/thorium --version
   '';
 
-  # passthru.updateScript = ./update.sh;
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    homepage = "https://chromium.org/";
-    description = "Chromium fork for linux";
-    changelog = "https://github.org/thorium/thorium-browser/blob/master/CHANGELOG_DESKTOP.md#" + replaceStrings [ "." ] [ "" ] version;
+    homepage = "https://thorium.rocks/";
+    description = "Thorium - The fastest browser on Earth (Based on chromium)";
+    changelog = "https://github.com/thorium/thorium-browser/blob/master/CHANGELOG_DESKTOP.md#" + replaceStrings [ "." ] [ "" ] version;
     longDescription = ''
-    Optimized chromium fork for Linux 
+      Chromium fork for Linux, MacOS, Raspberry Pi, and Windows named after radioactive element No. 90.
     '';
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;

@@ -108,7 +108,8 @@ window#waybar.empty #window {
     color: @colgrey;
 }
 #workspaces button.active{
-    background-color: @colgrey; 
+    background-color: @colgrey;
+    border-bottom: 2px solid @colviolet;
     color: @colfg;
 }
 #workspaces button.urgent{
@@ -149,6 +150,14 @@ window#waybar.empty #window {
      color: @colfg
  }
 
+#window {
+     background: @colbg2; 
+     padding: 0 10px;
+     margin: 3px 3px 3px 3px;
+     border-radius: 90px;
+     background-clip: padding-box;
+
+ }
 
 #battery,
 #clock,

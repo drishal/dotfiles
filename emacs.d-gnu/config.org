@@ -74,6 +74,7 @@
   - [[#erc-server-settings][ERC server settings]]
   - [[#elfeed-rss-reader][elfeed RSS reader]]
   - [[#multi-cursor][Multi cursor]]
+  - [[#ement-el-matrix-client][ement el matrix client]]
 - [[#language-and-completion-support][Language and completion support]]
   - [[#completion-engines][completion engines:]]
   - [[#treesitter][treesitter]]
@@ -926,6 +927,11 @@ https://github.com/karthink/popper
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 #+end_src
 
+** ement el matrix client
+#+begin_src emacs-lisp :tangle no 
+(use-package ement :ensure t)
+#+end_src
+
 * Language and completion support
 ** completion engines:
 *** company mode
@@ -936,7 +942,7 @@ https://github.com/karthink/popper
       company-idle-delay 0.1) ;; default is 0.2
 #+end_src
 *** tabnine
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle no 
 (use-package company-tabnine :ensure t)
 (require 'company-tabnine)
 (add-to-list 'company-backends #'company-tabnine)
