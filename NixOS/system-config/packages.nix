@@ -38,7 +38,7 @@
     alacritty
     appimage-run
     arandr
-    arc-theme
+    # arc-theme
     aria
     scrcpy
     axel
@@ -191,6 +191,7 @@
     man
     materia-theme
     mesa-demos
+    metasploit
     microsoft-edge
     mongodb-compass
     mosh
@@ -246,7 +247,7 @@
     python3
     poppler
     pdfgrep
-    python3Packages.mysql-connector
+    # python3Packages.mysql-connector
     python3Packages.pip
     python3Packages.tkinter
     python3Packages.shodan
@@ -268,6 +269,7 @@
     rustup
     rust-analyzer
     simplescreenrecorder
+    sony-headphones-client
     smplayer
     speedtest-cli
     spot
@@ -299,19 +301,19 @@
     vim
     virt-manager
     virtualenv
-    (vivaldi.override {
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--enable-gpu-rasterization"
-        "--enable-zero-copy"
-        "--force-dark-mode"
-        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
-        "--disable-features=UseChromeOSDirectVideoDecoder"
-        "--use-vulkan"
-        "--ozone-platform-hint=auto"
-        "--enable-hardware-overlays"
-      ];
-    })
+    # (vivaldi.override {
+    #   commandLineArgs = [
+    #     "--ignore-gpu-blocklist"
+    #     "--enable-gpu-rasterization"
+    #     "--enable-zero-copy"
+    #     "--force-dark-mode"
+    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
+    #     "--disable-features=UseChromeOSDirectVideoDecoder"
+    #     "--use-vulkan"
+    #     "--ozone-platform-hint=auto"
+    #     "--enable-hardware-overlays"
+    #   ];
+    # })
     vivaldi-ffmpeg-codecs
     ventoy-full
     # vscode-fhs
@@ -339,6 +341,7 @@
     # Xfce stuff
     (xfce.thunar.override { thunarPlugins = with pkgs; [ xfce.thunar-volman xfce.thunar-archive-plugin ]; })
     xclip
+    xdg-ninja
     xfce.exo
     xfce.xfce4-clipman-plugin
     xfce.xfce4-notifyd
@@ -392,6 +395,7 @@
       };
       buildInputs = old.buildInputs ++ [ pkgs.pcre2 ];
     }))
+
     # (discord.overrideAttrs (_: {
     #   # extraOptions
     #   commandLineArgs = [
@@ -466,5 +470,8 @@
 
   # # mullvad
   # services.mullvad-vpn.enable = true;
+
+  # chaotic bincache
+  # chaotic.nyx.cache.enable = true;
 }
 

@@ -2,8 +2,10 @@
 
 # base system configuration
 {
-  # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest; # alternative: linuxPackages_latest pkgs.linuxPackages_zen
-  boot.kernelPackages = pkgs.linuxPackages_latest; # alternative: linuxPackages_latest pkgs.linuxPackages_zen
+  boot.kernelPackages = pkgs.linuxPackages_xanmod_latest; 
+  # boot.kernelPackages = pkgs.linuxPackages_latest; 
+  # boot.kernelPackages = pkgs.linuxPackages_zen; 
+  # boot.kernelPackages = pkgs.linuxPackages_cachyos; 
 
   # kernel parameters
   boot.kernelParams = [ "mitigations=off" "clearcpuid=514" "amd_pstate=active"];
@@ -49,8 +51,22 @@
       enable = true;
       cpuFreqGovernor = "schedutil";
     };
-  services.power-profiles-daemon.enable=true;
+  # services.power-profiles-daemon.enable=true;
   services.acpid.enable=true;
+  # services.auto-cpufreq =
+  #   {
+  #     enable=true;
+  #     settings = {
+  #       charger = {
+  #         governor = "performance";
+  #         turbo = "always";
+  #       };
+  #       battery={
+  #         governor = "schedutil";
+  #         turbo = "auto";
+  #       };
+  #     };
+  #   };
 
   hardware.opengl =
     {

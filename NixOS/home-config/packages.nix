@@ -67,36 +67,25 @@
     });
   };
 
-  #icon theme
-  # gtk = {
-  #   enable = true;
-  #   font = {
-  #     name = "Sans";
-  #     size = 10;
-  #   };
-  #   theme = {
-  #     # package = pkgs.gnome-icon-theme;
-  #     name = "Adwaita-dark";
-  #   };
-  #   iconTheme = {
-  #     package = pkgs.papirus-icon-theme;
-  #     name = "Papirus-Dark";
-  #   };
-  #   gtk3.extraConfig ={
-  #     gtk-font-name="Sans 10";
-  #     gtk-icon-theme-name="Papirus-Dark";
-  #     gtk-theme-name="Adwaita-dark";
-  #     gtk-cursor-theme-size=0;
-  #     gtk-button-images=0;
-  #     gtk-menu-images=0;
-  #     gtk-enable-event-sounds=1;
-  #     gtk-enable-input-feedback-sounds=1;
-  #     gtk-xft-antialias=1;
-  #     gtk-xft-hinting=1;
-  #     gtk-xft-hintstyle="hintslight";
-  #     gtk-xft-rgba="rgb";
-  #   };
-  # };
+  gtk = {
+    enable = true;
+    theme.name = "Adwaita-dark";
+    iconTheme = with pkgs; {
+      name = "Papirus-Dark";
+      package = papirus-icon-theme;
+    };
+    font.name="Sans 10";
+    cursorTheme.name="breeze_cursors";
+    gtk2.extraConfig = ''
+      gtk-button-images=1
+      gtk-menu-images=1
+   ''; 
+    gtk3.extraConfig = {
+      gtk-button-images=1;
+      gtk-menu-images=1;
+    };
+  };
+
     # swaylock
     # programs.swaylock={
     #   # enable=true;

@@ -18,14 +18,14 @@
       dwm.enable = true;
 
       leftwm.enable = true;
-      awesome = {
-        enable = true;
-        luaModules = with pkgs.luaPackages; [
-          luarocks # is the package manager for Lua modules
-          luadbi-mysql # Database abstraction layer
-        ];
+      # awesome = {
+      #   enable = true;
+      #   luaModules = with pkgs.luaPackages; [
+      #     luarocks # is the package manager for Lua modules
+      #     luadbi-mysql # Database abstraction layer
+      #   ];
 
-      };
+      # };
       # awesome.enable = true;
     };
 
@@ -160,5 +160,14 @@ echo "${qtileSession}" > $out/share/wayland-sessions/qtile.desktop
         passthru.providedSessions = [ "qtile" ];
       });
     })
+    (self: super:
+      {
+        tlp = super.tlp.overrideAttrs (_: {
+          repo = "linrunner";
+          owner = "TLP";
+          rev = "f67faac1a0a7c82c9cee45c9ad8566f00bda28cc";
+          sha256 = "sha256-0000000000000000000000000000000000000000000000000000=";
+        });
+      }) 
   ];
 }

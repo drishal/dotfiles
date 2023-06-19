@@ -1,9 +1,9 @@
 {
   description = "Configuration for my system";
-  nixConfig.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
+  # nixConfig.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
   # nixConfig.substituters = [ "https://aseipp-nix-cache.freetls.fastly.net" ];
   # nixConfig.extra-substituters = [ "https://contamination.cachix.org" "https://nix-community.cachix.org" ];
-  nixConfig.extra-trusted-public-keys = [ "contamination.cachix.org-1:KmdW5xVF8ccKEb9tvK6qtEMW+lGa83seGgFyBOkeM/4=" "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
+  # nixConfig.extra-trusted-public-keys = [ "contamination.cachix.org-1:KmdW5xVF8ccKEb9tvK6qtEMW+lGa83seGgFyBOkeM/4=" "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
   # nixConfig.trusted-users=["root" "drishal"];
   # nixConfig.extra-substituters = [ "https://nix-community.cachix.org" ];
   # nixConfig.extra-trusted-public-keys = [  "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="];
@@ -21,6 +21,8 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     discord-flake = { url = github:InternetUnexplorer/discord-overlay; };
 
+    # chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+
     nur.url = "github:nix-community/NUR";
 
     cachix.url = "github:cachix/cachix";
@@ -32,8 +34,8 @@
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
-      # url = "github:nix-community/emacs-overlay/d0fc4dae0e0248453324e8d05733163a6a2f102e";
-      url = "github:nix-community/emacs-overlay/9bc16d788b9b09e986b2fba5a76fe44d35010d52";
+      # url = "github:nix-community/emacs-overlay/9bc16d788b9b09e986b2fba5a76fe44d35010d52";
+      url = "github:nix-community/emacs-overlay/631e36d9e02f4b2f9f1b32739c5fc12a66f94301";
     };
 
     private-stuff = {
@@ -43,7 +45,7 @@
 
   };
 
-  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,hyprland,  private-stuff, ... }@inputs:
+  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,hyprland, private-stuff, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -86,6 +88,7 @@
             { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay  ]; }
             # hyprland.nixosModules.default
             ./NixOS/system-config/configuration.nix
+            # chaotic.nixosModules.default
             # { programs.hyprland.enable = true; }
           ];
           specialArgs = { inherit inputs; };

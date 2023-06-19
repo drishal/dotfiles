@@ -24,6 +24,7 @@
 
     # virtualbox
     # virtualbox.host.enable = true;
+    # virtualbox.host.enableExtensionPack = true;
 
     #podman
     # podman = {
