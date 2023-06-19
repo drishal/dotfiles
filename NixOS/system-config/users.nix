@@ -12,12 +12,12 @@
   '';
 
   # fprint
-  services.fprintd.enable = true;
-  security.pam.services = {
-    # login.fprintAuth = true;
-    sudo.fprintAuth = true;
-    # xscreensaver.fprintAuth = true;
-  };
+  # services.fprintd.enable = true;
+  # security.pam.services = {
+  #   # login.fprintAuth = true;
+  #   sudo.fprintAuth = true;
+  #   # xscreensaver.fprintAuth = true;
+  # };
 
   security.polkit = {
     enable=true;

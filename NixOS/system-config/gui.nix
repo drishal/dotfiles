@@ -5,10 +5,24 @@
     enable = true;
 
     videoDrivers = [ "amdgpu" ];
-
+    deviceSection = ''
+        Option "DRI" "3"
+      '';
     # window wmanagers
     windowManager = {
-      qtile.enable = true;
+      qtile = {
+        enable = true;
+        backend = "wayland";
+        package = (pkgs.qtile.overrideAttrs (old: {
+          src = pkgs.fetchFromGitHub {
+            repo = "qtile";
+            owner = "qtile";
+            rev = "42ed926a68a61a412260c07cb6e027a777c3a94f";
+            # sha256 = "sha256-lVwBwOvzn4ro1jInRuNvn1vQuwUHUp4MYrDaFRmW9pc=";
+            sha256 = lib.fakeSha256;
+          };
+        }));
+      };
 
       xmonad = {
         enable = true;
@@ -141,33 +155,16 @@
         conf = ../../suckless/dwmblocks/blocks.def.h;
       });
     })
-
-    (self: super: {
-      qtile-unwrapped = super.qtile-unwrapped.overrideAttrs(_: rec {
-        postInstall = let
-          qtileSession = ''
-[Desktop Entry]
-Name=Qtile Wayland
-Comment=Qtile on Wayland
-Exec=qtile start -b wayland
-Type=Application
-'';
-        in
-          ''
-mkdir -p $out/share/wayland-sessions
-echo "${qtileSession}" > $out/share/wayland-sessions/qtile.desktop
-'';
-        passthru.providedSessions = [ "qtile" ];
-      });
-    })
-    (self: super:
-      {
-        tlp = super.tlp.overrideAttrs (_: {
-          repo = "linrunner";
-          owner = "TLP";
-          rev = "f67faac1a0a7c82c9cee45c9ad8566f00bda28cc";
-          sha256 = "sha256-0000000000000000000000000000000000000000000000000000=";
-        });
-      }) 
+#     
+    # (self: super:
+    #   {
+    #     tlp = super.tlp.overrideAttrs (_: {
+    #       src = self.fetchFromGitHub {
+    #         repo = "TLP";
+    #         owner = "linrunner";
+    #         rev = "f67faac1a0a7c82c9cee45c9ad8566f00bda28cc";
+    #         sha256 = "sha256-VSj6VoTpLYm/nPAfIeOhoQ0Q1vmbsiLL+xFHzd/ngyk=";};
+    #     });
+    #   }) 
   ];
 }

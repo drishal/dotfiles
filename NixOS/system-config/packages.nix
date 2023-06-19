@@ -52,11 +52,12 @@
         "--enable-gpu-rasterization"
         "--enable-zero-copy"
         "--force-dark-mode"
-        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
-        "--disable-features=UseChromeOSDirectVideoDecoder"
+        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,DCompTripleBufferVideoSwapChain"
+        # "--disable-features=UseChromeOSDirectVideoDecoder"
         "--use-vulkan"
         "--ozone-platform-hint=auto"
         "--enable-hardware-overlays"
+        "--disable-gpu-vsync"
       ];
     })
     btop
@@ -128,6 +129,19 @@
     gcc
     # geekbench
     # google-chrome
+    (google-chrome.override {
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--enable-gpu-rasterization"
+        "--enable-zero-copy"
+        "--force-dark-mode"
+        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
+        # "--disable-features=UseChromeOSDirectVideoDecoder"
+        "--use-vulkan"
+        "--ozone-platform-hint=auto"
+        "--enable-hardware-overlays"
+      ];
+    })
     gimp
     git
     gitRepo
@@ -234,6 +248,7 @@
     pkg-config
     plasma5Packages.spectacle
     polybar
+    podman-compose
     powershell
     postman
     poppler_utils
@@ -301,23 +316,24 @@
     vim
     virt-manager
     virtualenv
-    # (vivaldi.override {
-    #   commandLineArgs = [
-    #     "--ignore-gpu-blocklist"
-    #     "--enable-gpu-rasterization"
-    #     "--enable-zero-copy"
-    #     "--force-dark-mode"
-    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
-    #     "--disable-features=UseChromeOSDirectVideoDecoder"
-    #     "--use-vulkan"
-    #     "--ozone-platform-hint=auto"
-    #     "--enable-hardware-overlays"
-    #   ];
-    # })
+    (vivaldi.override {
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--enable-gpu-rasterization"
+        "--enable-zero-copy"
+        "--force-dark-mode"
+        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
+        "--disable-features=UseChromeOSDirectVideoDecoder"
+        "--use-vulkan"
+        "--ozone-platform-hint=auto"
+        "--enable-hardware-overlays"
+      ];
+    })
     vivaldi-ffmpeg-codecs
     ventoy-full
     # vscode-fhs
     vlc
+    vulkan-tools
     volumeicon
     # waybar-hyprland
     wget
@@ -395,7 +411,14 @@
       };
       buildInputs = old.buildInputs ++ [ pkgs.pcre2 ];
     }))
-
+    # (tlp.overrideAttrs (old: {
+    #   src = pkgs.fetchFromGitHub {
+    #     repo = "linrunner";
+    #     owner = "TLP";
+    #     rev = "e9d49c30b0f074eaa91a3853182da7cf67ca8ab7";
+    #     sha256 = "sha256-LVWBWOVZN4RO1JINRUNVN1VQUWUHUP4MYRDAFRMW9PC=";
+    #   };
+    # }))
     # (discord.overrideAttrs (_: {
     #   # extraOptions
     #   commandLineArgs = [

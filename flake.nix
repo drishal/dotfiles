@@ -21,7 +21,7 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     discord-flake = { url = github:InternetUnexplorer/discord-overlay; };
 
-    # chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 
     nur.url = "github:nix-community/NUR";
 
@@ -30,7 +30,7 @@
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
     # hyprland.url = "github:hyprwm/Hyprland/51a930f802c71a0e67f05e7b176ded74e8e95f87";
-    hyprland.url = "github:hyprwm/Hyprland/4afeedbd567ca2114f682f14a6de26d4a8188878";
+    hyprland.url = "github:hyprwm/Hyprland/5ac625d7bdff6b6318058f396f0fa1641bb6e807";
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
@@ -45,7 +45,7 @@
 
   };
 
-  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,hyprland, private-stuff, ... }@inputs:
+  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,hyprland, private-stuff,chaotic, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -88,13 +88,14 @@
             { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay  ]; }
             # hyprland.nixosModules.default
             ./NixOS/system-config/configuration.nix
-            # chaotic.nixosModules.default
+            chaotic.nixosModules.default
             # { programs.hyprland.enable = true; }
           ];
           specialArgs = { inherit inputs; };
         };
       };
       packages."x86_64-linux".thorium = pkgs.callPackage ./NixOS/custom-packages/thorium-browser/default.nix {};
+      packages."x86_64-linux".qtile= pkgs.callPackage ./NixOS/custom-packages/qtile/default.nix {};
 
     };
 }

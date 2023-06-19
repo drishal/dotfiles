@@ -2,14 +2,15 @@
 
 # base system configuration
 {
-  boot.kernelPackages = pkgs.linuxPackages_xanmod_latest; 
+  # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest; 
   # boot.kernelPackages = pkgs.linuxPackages_latest; 
   # boot.kernelPackages = pkgs.linuxPackages_zen; 
-  # boot.kernelPackages = pkgs.linuxPackages_cachyos; 
+  boot.kernelPackages = pkgs.linuxPackages_cachyos; 
+  # boot.kernelPackages = pkgs.linuxPackages_testing; 
 
   # kernel parameters
-  boot.kernelParams = [ "mitigations=off" "clearcpuid=514" "amd_pstate=active"];
-
+  boot.kernelParams = [ "mitigations=off" "clearcpuid=514"  ];
+  #"processor.max_cstate=1" "intel_idle.max_cstate=0"
   # microde
   hardware.cpu.amd.updateMicrocode = true;
 
@@ -37,7 +38,7 @@
   services.fwupd.enable = true;
 
   #man
-  # documentation.man.generateCaches = false;
+  documentation.man.generateCaches = false;
 
   #openssh
   services.openssh = {
@@ -81,6 +82,32 @@
       driSupport = true;
       driSupport32Bit = true;
     };
+
+  #chaotic mesa
+  # chaotic.mesa-git = {
+  #   enable = true;
+  #    extraPackages = with pkgs; [
+  #      rocm-opencl-icd
+  #      rocm-opencl-runtime
+  #      intel-media-driver 
+  #      vaapiIntel
+  #      vaapiVdpau
+  #      libvdpau-va-gl
+  #      mesa_git.opencl
+  #    ];
+  # };
+  chaotic.gamescope = {
+    enable = true;
+    # package = pkgs.gamescope_git;
+  #   args = [ "--rt" "--prefer-vk-device 8086:9bc4" ];
+  #   env = { "__GLX_VENDOR_LIBRARY_NAME" = "nvidia"; };
+  #   session = {
+  #     enable = true;
+  #     args = [ "--rt" ];
+  #     env = { };
+  #     steamArgs = [ "-tenfoot" "-pipewire-dmabuf" ];
+  #   };
+  };
 
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
