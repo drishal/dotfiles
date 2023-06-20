@@ -35,7 +35,7 @@
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
       # url = "github:nix-community/emacs-overlay/9bc16d788b9b09e986b2fba5a76fe44d35010d52";
-      url = "github:nix-community/emacs-overlay/631e36d9e02f4b2f9f1b32739c5fc12a66f94301";
+      url = "github:nix-community/emacs-overlay/128bdc6a54bcf514c515377240f0809377f3d9b0";
     };
 
     private-stuff = {

@@ -53,11 +53,9 @@
         "--enable-zero-copy"
         "--force-dark-mode"
         "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,DCompTripleBufferVideoSwapChain"
-        # "--disable-features=UseChromeOSDirectVideoDecoder"
-        "--use-vulkan"
+        "--disable-features=UseChromeOSDirectVideoDecoder"
         "--ozone-platform-hint=auto"
         "--enable-hardware-overlays"
-        "--disable-gpu-vsync"
       ];
     })
     btop
@@ -118,9 +116,11 @@
     fdk_aac
     feh
     fim
-    ffmpeg
+    ffmpeg-full
+    # ff2mpv
     figlet
     firefox-bin
+    # firefox-devedition-bin
     file
     # fish
     flameshot
@@ -314,21 +314,22 @@
     usbutils
     uutils-coreutils
     vim
+    vdpauinfo
     virt-manager
     virtualenv
-    (vivaldi.override {
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--enable-gpu-rasterization"
-        "--enable-zero-copy"
-        "--force-dark-mode"
-        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
-        "--disable-features=UseChromeOSDirectVideoDecoder"
-        "--use-vulkan"
-        "--ozone-platform-hint=auto"
-        "--enable-hardware-overlays"
-      ];
-    })
+    # (vivaldi.override {
+    #   commandLineArgs = [
+    #     "--ignore-gpu-blocklist"
+    #     "--enable-gpu-rasterization"
+    #     "--enable-zero-copy"
+    #     "--force-dark-mode"
+    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
+    #     "--disable-features=UseChromeOSDirectVideoDecoder"
+    #     # "--use-vulkan"
+    #     "--ozone-platform-hint=auto"
+    #     "--enable-hardware-overlays"
+    #   ];
+    # })
     vivaldi-ffmpeg-codecs
     ventoy-full
     # vscode-fhs
@@ -496,5 +497,6 @@
 
   # chaotic bincache
   # chaotic.nyx.cache.enable = true;
+  # programs.firefox.nativeMessagingHosts.ff2mpv=true;
 }
 

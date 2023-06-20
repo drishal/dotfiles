@@ -8,6 +8,7 @@
   - [[#general-settings][General settings]]
   - [[#device-specific-settings][Device specific settings]]
 - [[#general-settings-1][General Settings]]
+- [[#misc-settings][Misc settings]]
 - [[#decoration-settings][Decoration settings]]
 - [[#animations][Animations]]
 - [[#layouts][Layouts]]
@@ -27,18 +28,18 @@ mkdir -p ~/.config/hypr
 * Monitor config
 #+begin_src conf
 monitor=,preferred,auto,1
-# monitor=eDP-1,1920x1080,1920X0,1
-# monitor=HDMI-A-1,1920x1080@165,0x0,1
-# workspace = 1, monitor:HDMI-A-1
-# workspace = 2, monitor:HDMI-A-1
-# workspace = 3, monitor:HDMI-A-1
-# workspace = 4, monitor:HDMI-A-1
-# workspace = 5, monitor:HDMI-A-1
-# workspace = 6, monitor:eDP-1
-# workspace = 7, monitor:eDP-1
-# workspace = 8, monitor:eDP-1
-# workspace = 9, monitor:eDP-1
-# workspace = 10, monitor:eDP-1
+monitor=eDP-1,1920x1080,1920X0,1
+monitor=HDMI-A-1,1920x1080@144,0x0,1
+workspace = 1, monitor:HDMI-A-1
+workspace = 2, monitor:HDMI-A-1
+workspace = 3, monitor:HDMI-A-1
+workspace = 4, monitor:HDMI-A-1
+workspace = 5, monitor:HDMI-A-1
+workspace = 6, monitor:eDP-1
+workspace = 7, monitor:eDP-1
+workspace = 8, monitor:eDP-1
+workspace = 9, monitor:eDP-1
+workspace = 10, monitor:eDP-1
 #+end_src
 * Autostart programs 
  Execute apps at launch
@@ -88,6 +89,15 @@ general {
     col.inactive_border = rgba(3f444aff)
     layout = master
     cursor_inactive_timeout = 3
+}
+#+end_src
+
+* Misc settings
+#+begin_src conf
+misc {
+    # vrr = 1
+    mouse_move_focuses_monitor = false
+    no_direct_scanout = false
 }
 #+end_src
 

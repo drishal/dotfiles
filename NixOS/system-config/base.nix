@@ -9,7 +9,7 @@
   # boot.kernelPackages = pkgs.linuxPackages_testing; 
 
   # kernel parameters
-  boot.kernelParams = [ "mitigations=off" "clearcpuid=514"  ];
+  boot.kernelParams = [ "mitigations=off" "clearcpuid=514" "iommu=soft" ];
   #"processor.max_cstate=1" "intel_idle.max_cstate=0"
   # microde
   hardware.cpu.amd.updateMicrocode = true;
@@ -77,13 +77,15 @@
         intel-media-driver # LIBVA_DRIVER_NAME=iHD
         vaapiIntel
         vaapiVdpau
+        libva
         libvdpau-va-gl
+        mesa.drivers
       ];
       driSupport = true;
       driSupport32Bit = true;
     };
 
-  #chaotic mesa
+  # chaotic mesa
   # chaotic.mesa-git = {
   #   enable = true;
   #    extraPackages = with pkgs; [
@@ -98,15 +100,6 @@
   # };
   chaotic.gamescope = {
     enable = true;
-    # package = pkgs.gamescope_git;
-  #   args = [ "--rt" "--prefer-vk-device 8086:9bc4" ];
-  #   env = { "__GLX_VENDOR_LIBRARY_NAME" = "nvidia"; };
-  #   session = {
-  #     enable = true;
-  #     args = [ "--rt" ];
-  #     env = { };
-  #     steamArgs = [ "-tenfoot" "-pipewire-dmabuf" ];
-  #   };
   };
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -214,6 +207,14 @@
   
   # udev 250 doesn't reliably reinitialize devices after restart
   systemd.services.systemd-udevd.restartIfChanged = false;
+
+  #session variables
+  
+  environment.sessionVariables = rec {
+    # LIBVA_DRIVER_NAME="radeonsi";
+    VDPAU_DRIVER = "radeonsi";
+    MOZ_DISABLE_RDD_SANDBOX="1";
+  };
 
 
 }
