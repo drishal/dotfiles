@@ -245,9 +245,8 @@ https://github.com/progfolio/elpaca
 ** Fonts
 remove/add tangle no to whatever font you prefer
 #+begin_src emacs-lisp
-(add-to-list 'default-frame-alist '(font . "FantasqueSansMono Nerd Font-15.5:weight=medium" ))
-
-;; (add-to-list 'default-frame-alist '(font . "ComicShannsMono Nerd Font-15.5:weight=medium" ))
+;(add-to-list 'default-frame-alist '(font . "FantasqueSansM Nerd Font-15.5:weight=medium" ))
+(add-to-list 'default-frame-alist '(font . "ComicShannsMono Nerd Font-15.5:weight=medium" ))
 ;; (set-face-attribute 'default nil :font "FantasqueSansMono Nerd Font-15.5:weight=medium")
 ;; (add-to-list 'default-frame-alist '(font . "FantasqueSansMono Nerd Font-15.5:weight=medium"))
 

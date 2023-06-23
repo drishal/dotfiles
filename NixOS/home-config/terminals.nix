@@ -8,8 +8,8 @@
       settings = {
         main = {
           term = "xterm-256color";
-          font = "FantasqueSansMono Nerd Font:size=12";
-          # font = "ComicShannsMono Nerd Font:size=8";
+          # font = "FantasqueSansM Nerd Font:size=12";
+          font = "ComicShannsMono Nerd Font:size=13";
           dpi-aware = "yes";
           pad = "15x10";
         };

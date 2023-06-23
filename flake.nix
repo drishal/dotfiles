@@ -21,6 +21,14 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     discord-flake = { url = github:InternetUnexplorer/discord-overlay; };
 
+    #mozilla.url = "github:mozilla/nixpkgs-mozilla";
+
+    firefox-nightly = {
+      url = "github:colemickens/flake-firefox-nightly";
+      # inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 
     nur.url = "github:nix-community/NUR";
@@ -45,7 +53,7 @@
 
   };
 
-  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,hyprland, private-stuff,chaotic, ... }@inputs:
+  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,hyprland, private-stuff,chaotic,firefox-nightly, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -85,7 +93,7 @@
           inherit system;
           modules = [
             # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
-            { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay  ]; }
+            { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay]; }
             # hyprland.nixosModules.default
             ./NixOS/system-config/configuration.nix
             chaotic.nixosModules.default
