@@ -46,45 +46,25 @@
     bc
     bison
     bookworm
-    (brave.override {
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--enable-gpu-rasterization"
-        "--enable-zero-copy"
-        "--force-dark-mode"
-        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,DCompTripleBufferVideoSwapChain"
-        "--disable-features=UseChromeOSDirectVideoDecoder"
-        "--ozone-platform-hint=auto"
-        "--enable-accelerated-video-decode"
-        "--enable-accelerated-video-encode"
-        "--enable-hardware-overlays"
-        "--disable-gpu-driver-bug-workarounds" 
-        "--enable-native-gpu-memory-buffers" 
-        "--enable-webrtc-hw-decoding" 
-        "--enable-webrtc-hw-encoding"
-      ];
-    })
+    brave
     # (brave.override {
     #   commandLineArgs = [
-    #     "--disable-software-rasterizer"
-    #     "--disable-gpu-driver-bug-workarounds"
-    #     "--disable-gpu-driver-workarounds"
-    #     "--enable-accelerated-video-decode"
-    #     "--enable-accelerated-mjpeg-decode"
-    #     "--enable-features=VaapiVideoDecoder,ParallelDownloading,UnexpireFlagsM90,VaapiVideoEncoder,CanvasOopRasterization,Vulkan,RawDraw"
-    #     "--disable-features=UseChromeOSDirectVideoDecoder"
-    #     "--enable-drdc"
-    #     "--enable-gpu-compositing"
-    #     "--enable-gpu-rasterization"
-    #     "--enable-gpu-memory-buffer-video-frames"
-    #     "--enable-hardware-overlays"
-    #     "--enable-native-gpu-memory-buffers"
-    #     "--enable-oop-rasterization"
-    #     "--enable-zero-copy"
     #     "--ignore-gpu-blocklist"
+    #     "--enable-gpu-rasterization"
+    #     "--enable-zero-copy"
+    #     "--force-dark-mode"
+    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,DCompTripleBufferVideoSwapChain"
+    #     "--disable-features=UseChromeOSDirectVideoDecoder"
+    #     "--ozone-platform-hint=auto"
+    #     "--enable-accelerated-video-decode"
+    #     "--enable-accelerated-video-encode"
+    #     "--enable-hardware-overlays"
+    #     "--disable-gpu-driver-bug-workarounds" 
+    #     "--enable-native-gpu-memory-buffers" 
+    #     "--enable-webrtc-hw-decoding" 
+    #     "--enable-webrtc-hw-encoding"
     #   ];
     # })
-
     btop
     bun
     brightnessctl
@@ -93,20 +73,20 @@
     # calibre
     cargo
     #carnix
-    # chromium
-    (chromium.override {
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--enable-gpu-rasterization"
-        "--enable-zero-copy"
-        "--force-dark-mode"
-        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
-        "--disable-features=UseChromeOSDirectVideoDecoder"
-        "--use-vulkan"
-        "--ozone-platform-hint=auto"
-        "--enable-hardware-overlays"
-      ];
-    })
+    chromium
+    # (chromium.override {
+    #   commandLineArgs = [
+    #     "--ignore-gpu-blocklist"
+    #     "--enable-gpu-rasterization"
+    #     "--enable-zero-copy"
+    #     "--force-dark-mode"
+    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
+    #     "--disable-features=UseChromeOSDirectVideoDecoder"
+    #     "--use-vulkan"
+    #     "--ozone-platform-hint=auto"
+    #     "--enable-hardware-overlays"
+    #   ];
+    # })
 
     chromium-bsu
     cinnamon.nemo
@@ -115,6 +95,14 @@
     clang-tools
     # cloudflare-warp
     # (cloudflare-warp.overrideAttrs(_: {buildInputs=[pkgs.dbus pkgs.stdenv.cc.cc.lib];}))
+    (cloudflare-warp.overrideAttrs (old: {
+      src = pkgs.fetchurl {
+        url = "https://pkg.cloudflareclient.com/pool/jammy/main/c/cloudflare-warp/cloudflare-warp_2023.3.470-1_amd64.deb";
+        sha256 = "sha256-AYnmisEQKFiEB2iRJifEqRbdzAyBcfrU0ITeUokKLag=";
+        # sha256 = lib.fakeHash;
+      };
+      unpackPhase = null;
+    }))
     cmake
     cmatrix
     conky
@@ -146,8 +134,9 @@
     ffmpeg-full
     # ff2mpv
     figlet
-    #firefox-bin
-    inputs.firefox-nightly.packages.${pkgs.system}.firefox-beta-bin
+    # firefox-bin
+    firefox-wayland
+    # inputs.firefox-nightly.packages.${pkgs.system}.firefox-beta-bin
     # inputs.firefox.packages.${pkgs.system}.firefox-nightly-bin
     # firefox-wayland
     # firefox-devedition-bin
@@ -237,7 +226,6 @@
     materia-theme
     mesa-demos
     metasploit
-    microsoft-edge
     mongodb-compass
     mosh
     motrix
@@ -505,9 +493,10 @@
     (cloudflare-warp.overrideAttrs (old: {
       src = pkgs.fetchurl {
         url = "https://pkg.cloudflareclient.com/pool/jammy/main/c/cloudflare-warp/cloudflare-warp_2023.3.470-1_amd64.deb";
-        # sha256 = "sha256-AYnmisEQKFiEB2iRJifEqRbdzAyBcfrU0ITeUokKLag=";
-        sha256 = lib.fakeHash;
+        sha256 = "sha256-AYnmisEQKFiEB2iRJifEqRbdzAyBcfrU0ITeUokKLag=";
+        # sha256 = lib.fakeHash;
       };
+      unpackPhase = null;
     }))
 ];
 

@@ -3,9 +3,9 @@
 # base system configuration
 {
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest; 
-  boot.kernelPackages = pkgs.linuxPackages_latest; 
+  # boot.kernelPackages = pkgs.linuxPackages_latest; 
   # boot.kernelPackages = pkgs.linuxPackages_zen; 
-  # boot.kernelPackages = pkgs.linuxPackages_cachyos; 
+  boot.kernelPackages = pkgs.linuxPackages_cachyos; 
   # boot.kernelPackages = pkgs.linuxPackages_testing; 
 
   # kernel parameters
@@ -78,6 +78,7 @@
         mesa.drivers
         libvpx
       ];
+      enable = true;
       driSupport = true;
       driSupport32Bit = true;
     };
@@ -208,7 +209,7 @@
   #session variables
   
   environment.sessionVariables = rec {
-    # LIBVA_DRIVER_NAME="radeonsi";
+    LIBVA_DRIVER_NAME="radeonsi";
     VDPAU_DRIVER = "radeonsi";
     MOZ_DISABLE_RDD_SANDBOX="1";
     AMD_VULKAN_ICD = "RADV";
