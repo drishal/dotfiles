@@ -1,5 +1,0 @@
-misc {
-    # vrr = 1
-    mouse_move_focuses_monitor = false
-    no_direct_scanout = false
-}
