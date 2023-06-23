@@ -27,7 +27,7 @@ mkdir -p ~/.config/hypr
 
 * Monitor config
 #+begin_src conf
-monitor=,preferred,auto,1
+monitor=,highrr,auto,1
 monitor=eDP-1,1920x1080,1920X0,1
 monitor=HDMI-A-1,1920x1080@144,0x0,1
 workspace = 1, monitor:HDMI-A-1
@@ -93,7 +93,7 @@ general {
 #+end_src
 
 * Misc settings
-#+begin_src conf
+#+begin_src conf :tangle no
 misc {
     # vrr = 1
     mouse_move_focuses_monitor = false
@@ -180,6 +180,7 @@ bind = $mainMod, V, exec, pavucontrol
 bind = $mainMod, Q, killactive, 
 bind = $mainMod SHIFT, Q, exit, 
 bind = $mainMod SHIFT, F, exec, firefox
+# bind = $mainMod SHIFT, F, exec, firefox-devedition -p default
 # bind = $mainMod SHIFT, F, exec, ${pkgs.firefox-bin}/bin/firefox,
 bind = $mainMod SHIFT, L, exec, swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 7x5 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000  --fade-in 0.2
 bind = $mainMod, E, exec, nemo
@@ -190,7 +191,7 @@ bind = $mainMod, P, pseudo, # dwindle
 bind = $mainMod, J, togglesplit, # dwindle
 bind=  $mainMod, F,fullscreen,
 bind = $mainMod SHIFT, s, exec, grimshot copy area
-bind = $mainMod, s, exec, grimshot copy screen
+bind = $mainMod, s, exec, grimshot copy output
 # Move focus with mainMod + arrow keys
 # bind = $mainMod, H , movefocus, l
 # bind = $mainMod, L, movefocus, r

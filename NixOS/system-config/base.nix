@@ -3,13 +3,13 @@
 # base system configuration
 {
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest; 
-  # boot.kernelPackages = pkgs.linuxPackages_latest; 
+  boot.kernelPackages = pkgs.linuxPackages_latest; 
   # boot.kernelPackages = pkgs.linuxPackages_zen; 
-  boot.kernelPackages = pkgs.linuxPackages_cachyos; 
+  # boot.kernelPackages = pkgs.linuxPackages_cachyos; 
   # boot.kernelPackages = pkgs.linuxPackages_testing; 
 
   # kernel parameters
-  boot.kernelParams = [ "mitigations=off" "clearcpuid=514" "iommu=soft" ];
+  boot.kernelParams = [ "mitigations=off" "clearcpuid=514" "iommu=soft"];
   #"processor.max_cstate=1" "intel_idle.max_cstate=0"
   # microde
   hardware.cpu.amd.updateMicrocode = true;
@@ -52,7 +52,7 @@
       enable = true;
       cpuFreqGovernor = "schedutil";
     };
-  # services.power-profiles-daemon.enable=true;
+  services.power-profiles-daemon.enable=true;
   services.acpid.enable=true;
   # services.auto-cpufreq =
   #   {
@@ -72,14 +72,11 @@
   hardware.opengl =
     {
       extraPackages = with pkgs; [
-        rocm-opencl-icd
-        rocm-opencl-runtime
-        intel-media-driver # LIBVA_DRIVER_NAME=iHD
-        vaapiIntel
         vaapiVdpau
         libva
         libvdpau-va-gl
         mesa.drivers
+        libvpx
       ];
       driSupport = true;
       driSupport32Bit = true;
@@ -214,6 +211,9 @@
     # LIBVA_DRIVER_NAME="radeonsi";
     VDPAU_DRIVER = "radeonsi";
     MOZ_DISABLE_RDD_SANDBOX="1";
+    AMD_VULKAN_ICD = "RADV";
+    VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+    MOZ_ENABLE_WAYLAND="1";
   };
 
 
