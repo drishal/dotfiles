@@ -13,6 +13,7 @@
 - [[#exa-icon-spacing][Exa icon spacing]]
 - [[#manpager][manpager]]
 - [[#direnv][direnv]]
+- [[#locale-archive-fix][locale archive fix]]
 - [[#lutis-skip-init][Lutis skip init]]
 
 * interactive
@@ -29,13 +30,14 @@
 fish_add_path ~/.local/bin
 fish_add_path ~/.node_modules/bin
 fish_add_path ~/.nimble/bin
+fish_add_path ~/.cargo/bin
 #+end_src
 
 * Aliases
 #+begin_src fish
 alias nix-config "sudo vim /etc/nixos/configuration.nix"
-alias xon "steam-run ~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
-alias xon-glx "steam-run ~/Desktop/games/Xonotic/xonotic-linux-glx.sh"
+alias xon "~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
+alias xon-glx "~/Desktop/games/Xonotic/xonotic-linux-glx.sh"
 alias stk "~/Desktop/games/SuperTuxKart-1.2-linux/run_game.sh"
 alias sudo "sudo "
 # yay   pary
@@ -86,6 +88,7 @@ alias perf2 "powerprofilesctl set performance; sudo cpupower frequency-set -g pe
 alias bal "powerprofilesctl set balanced; sudo cpupower frequency-set -g schedutil"
 alias ps "powerprofilesctl set power-saver"
 alias pnow "cat /sys/firmware/acpi/platform_profile"
+alias amdgpu_high "echo 'high' >  /sys/class/drm/card0/device/power_dpm_force_performance_level"
 
 
 # fixes 
@@ -145,6 +148,10 @@ alias waydroid-ui "waydroid show-full-ui; rm ~/.local/share/applications/waydroi
 #hyprland monitor
 alias laptop-disable "hyprctl keyword monitor eDP-1,  disable"
 
+#warp
+alias wcon "sudo systemctl stop systemd-resolved; warp-cli connect"
+alias wdis "sudo systemctl restart systemd-resolved; warp-cli disconnect"
+
 #+end_src
 
 
@@ -201,6 +208,11 @@ set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 #+begin_src fish
 direnv hook fish | source
 set -x DIRENV_LOG_FORMAT ""
+#+end_src
+
+* locale archive fix
+#+begin_src fish 
+set -x LOCALE_ARCHIVE "/usr/lib/locale/locale-archive"
 #+end_src
 
 * Lutis skip init

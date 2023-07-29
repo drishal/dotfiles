@@ -19,6 +19,7 @@
 - [[#keybindings][Keybindings]]
   - [[#mod-key][Mod key]]
   - [[#binds][Binds]]
+- [[#hyprpaper-config][Hyprpaper config]]
 
 * Init
 #+begin_src bash :tangle no
@@ -98,6 +99,7 @@ misc {
     # vrr = 1
     mouse_move_focuses_monitor = false
     no_direct_scanout = false
+    no_vfr = true
 }
 #+end_src
 
@@ -177,6 +179,7 @@ $mainMod = SUPER
 bind = $mainMod, RETURN, exec, footclient
 bind = $mainMod, D, exec, wofi --show drun
 bind = $mainMod, V, exec, pavucontrol
+bind = $mainMod, T, exec, GDK_BACKEND=x11 xfce4-taskmanager
 bind = $mainMod, Q, killactive, 
 bind = $mainMod SHIFT, Q, exit, 
 bind = $mainMod SHIFT, F, exec, firefox
@@ -235,4 +238,15 @@ bind = $mainMod SHIFT, 0, movetoworkspace, 10
 # Scroll through existing workspaces with mainMod + scroll
 bind = $mainMod, mouse_down, workspace, e+1
 bind = $mainMod, mouse_up, workspace, e-1
+#+end_src
+
+* Hyprpaper config
+#+begin_src conf :tangle ~/.config/hypr/hyprpaper.conf
+preload = /home/drishal/dotfiles/wallpapers/NixOS-1.png 
+preload = /home/drishal/dotfiles/wallpapers/archlinux/archlinux-onedark.png
+# preload =~/dotfiles/wallpapers/darkest_hour.jpg
+# wallpaper = eDP-1,~/dotfiles/wallpapers/NixOS-1.png
+wallpaper = eDP-1,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
+# wallpaper = eDP-1,~/dotfiles/wallpapers/darkest_hour.jpg
+wallpaper = HDMI-A-1,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
 #+end_src

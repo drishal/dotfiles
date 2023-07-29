@@ -1,5 +1,5 @@
 #+TITLE: Xmonad
-#+PROPERTY: header-args :tangle ~/.xmonad/xmonad.hs
+#+PROPERTY: header-args :tangle ~/.config/xmonad/xmonad.hs
 * Table of contents :toc:
 - [[#before-tangling][Before Tangling]]
 - [[#imports][Imports]]
@@ -31,9 +31,9 @@
 
 * Before Tangling
 #+begin_src bash :tangle no
-mkdir ~/.xmonad/
-mkdir ~/.xmonad/lib
-mkdir ~/.xmonad/lib/Colors
+mkdir ~/.config/xmonad/
+mkdir ~/.config/xmonad/lib
+mkdir ~/.config/xmonad/lib/Colors
 #+end_src
 
 * Imports
@@ -551,7 +551,7 @@ main =
 
 * Color schemes
 ** Dracula
-#+begin_src haskell :tangle ~/.xmonad/lib/Colors/Dracula.hs 
+#+begin_src haskell :tangle ~/.config/xmonad/lib/Colors/Dracula.hs 
 module Colors.Dracula where
 
 import XMonad
@@ -574,7 +574,7 @@ colTrayer :: String
 colTrayer = "--tint 0x282a36"
 #+end_src
 ** OneDark
-#+begin_src haskell  :tangle ~/.xmonad/lib/Colors/DoomOne.hs 
+#+begin_src haskell  :tangle ~/.config/xmonad/lib/Colors/DoomOne.hs 
 module Colors.DoomOne where
 
 import XMonad
@@ -598,7 +598,7 @@ colorTrayer :: String
 colorTrayer = "--tint 0x282c34"
 #+end_src
 ** Palenight
-#+begin_src haskell  :tangle ~/.xmonad/lib/Colors/Palenight.hs 
+#+begin_src haskell  :tangle ~/.config/xmonad/lib/Colors/Palenight.hs 
 module Colors.Palenight where
 
 import XMonad

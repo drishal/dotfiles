@@ -43,9 +43,9 @@ from libqtile.config import Click, Drag, Group, Key, Screen, Match, KeyChord
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile import qtile,hook
-from libqtile.widget import statusnotifier
+# from libqtile.widget import statusnotifier
 # from libqtile.backend.wayland import inputs
-# from qtile_extras.widget import StatusNotifier
+from qtile_extras.widget import StatusNotifier
 from libqtile.backend.wayland import inputs,InputConfig
 #+end_src
 * Some variables
@@ -53,7 +53,7 @@ from libqtile.backend.wayland import inputs,InputConfig
 mod = "mod4"
 if qtile.core.name=="wayland":
     terminal = "foot"
-    # tray =  statusnotifier(icon_theme="Papirus-Dark", padding=4, icon_size=20)
+    tray =  StatusNotifier(icon_theme="Papirus-Dark", padding=4, icon_size=20)
     launcher="wofi --show drun"
     wifi="networkmanager_dmenu"
     ss="grimshot copy output"
@@ -312,7 +312,7 @@ keys = [
 ** Defaults
 #+begin_src python
   widget_defaults = dict(
-      font='FantasqueSansMono Nerd Font Regular',
+      font='FantasqueSansMonoM Nerd Font Regular',
       fontsize=14.5,
       padding=1,
       background=color[0],
@@ -322,7 +322,7 @@ keys = [
 #+end_src
 ** Bar widgets
 #+begin_src python
- screens = [
+screens = [
     Screen(
         wallpaper='~/dotfiles/wallpapers/archlinux/archlinux-onedark.png',
         wallpaper_mode='stretch',
@@ -382,12 +382,12 @@ keys = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-              widget.Battery(
-                  format='{char} {percent:2.0%} {hour:d}:{min:02d} {watt:.2f} W',
-                  update_interval=10,
-                  foreground=color[5],
-                  background = color[0],
-              ),
+                widget.Battery(
+                    format='{char} {percent:2.0%} {hour:d}:{min:02d} {watt:.2f} W',
+                    update_interval=10,
+                    foreground=color[5],
+                    background = color[0],
+                ),
                 widget.TextBox(
                     text = '  ', # this one has a small space after the symbol to make it look more consistent with the spaces
                     foreground = color[3],
@@ -439,11 +439,143 @@ keys = [
 
 
                 # widget.Systray(padding=5,),
-                widget.StatusNotifier(
-                    icon_theme="Papirus-Dark",
-                    padding=4,
+                # widget.StatusNotifier(
+                #     icon_theme="Papirus-Dark",
+                #     padding=4,
+                # ),
+                tray,
+                widget.TextBox(
+                    text = ' ', # this one has a small space after the symbol to make it look more consistent with the spaces
+                    foreground = color[3],
+                    fontsize = 15
                 ),
-                # tray,
+
+            ],
+            25,
+            # margin=[7, 10, 2, 10], # [N E S W] 
+        ), 
+    ),
+    Screen(
+        wallpaper='~/dotfiles/wallpapers/archlinux/archlinux-onedark.png',
+        wallpaper_mode='stretch',
+        top=bar.Bar(
+            [
+                widget.CurrentLayout(
+                    # foreground = color[0],
+                    fmt = ' {}',
+                    foreground=color[6],
+                    # background="",
+                ),
+
+                widget.GroupBox(
+                    fontsize = 9,
+                    margin_y = 3,
+                    margin_x = 3,
+                    padding_y = 5,
+                    padding_x = 5,
+                    borderwidth = 3,
+                    active = color[2],
+                    inactive = color[3],
+                    rounded = True,
+                    highlight_color = [color[1]] ,
+                    highlight_method = "line",
+                    this_current_screen_border = color[3],
+                    # this_current_screen_border = colors[3],
+                    # this_screen_border = #bd93f9,
+                    # other_current_screen_border = colors[0],
+                    # other_screen_border = colors[0],
+                    foreground = color[2],
+                    background = color[0],
+                    disable_drag = True
+                    # padding = 5
+
+                ),
+                # widget.Prompt(
+                #     background=color[1],
+                #     foreground=color[2],
+                #     record_history = True
+                # ),
+                widget.WindowName(
+                    max_chars = 50,
+                    padding= 5,
+                    # foreground = "f8f8f8",
+                    # background=color[3],
+                     foreground=color[7],
+                    # foreground=color[2]
+                    # background=color[8],
+                ),
+
+                widget.Spacer(
+                    length = bar.STRETCH,
+                ),
+                widget.Chord(
+                    chords_colors={
+                        'launch': ("#ff0000", "#ffffff"),
+                    },
+                    name_transform=lambda name: name.upper(),
+                ),
+                widget.Battery(
+                    format='{char} {percent:2.0%} {hour:d}:{min:02d} {watt:.2f} W',
+                    update_interval=10,
+                    foreground=color[5],
+                    background = color[0],
+                ),
+                widget.TextBox(
+                    text = '  ', # this one has a small space after the symbol to make it look more consistent with the spaces
+                    foreground = color[3],
+                    fontsize = 15
+                ),
+
+                widget.CPU(
+                    foreground=color[4],
+                    format='   {freq_current}GHz {load_percent}% ',
+                ),
+                widget.TextBox(
+                    text = '',
+                    foreground = color[3],
+                    fontsize = 15
+                ),
+
+                widget.Memory(
+                    #background=color[4],
+                    foreground=color[10],
+                    format='   {MemUsed: .0f}M /{MemTotal: .0f}M ',
+                ),
+                widget.TextBox(
+                    text = '',
+                    foreground = color[3],
+                    fontsize = 15
+                ),
+                widget.Net(
+                    format=' {down}  {up} ',
+                    foreground=color[7]
+                ),
+                widget.TextBox(
+                    text = '  ', # this one has a small space after the symbol to make it look more consistent with the spaces
+                    foreground = color[3],
+                    fontsize = 15
+                ),
+
+                 widget.Clock(format='   %Y-%m-%d %a %H:%M:%S',
+                              foreground=color[8],
+                              # foreground=color[0],
+                             ),
+                
+                widget.TextBox(
+                    text = '  ', # this one has a small space after the symbol to make it look more consistent with the spaces
+                    foreground = color[3],
+                    fontsize = 15
+                ),
+
+                # widget.BatteryIcon(),
+
+
+                # widget.Systray(padding=5,),
+                # widget.StatusNotifier(
+                #     icon_theme="Papirus-Dark",
+                #     padding=4,
+                # ),
+                tray,
                 widget.TextBox(
                     text = ' ', # this one has a small space after the symbol to make it look more consistent with the spaces
                     foreground = color[3],

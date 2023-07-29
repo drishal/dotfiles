@@ -58,7 +58,7 @@
 
     # Emacs
     emacs = {
-      enable = true;
+      enable = false;
       package = pkgs.emacs-pgtk;
       extraPackages = (epkgs: [ epkgs.vterm epkgs.telega]);
     };

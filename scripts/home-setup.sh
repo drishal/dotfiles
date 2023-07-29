@@ -57,7 +57,7 @@ mkdir -p ~/.config/hyprland/
 emacs --batch --eval "(require 'org)" --eval '(org-babel-tangle-file "~/dotfiles/config/hyprland/hyprland.org ")'
 
 # xmonad config
-mkdir -p ~/.xmonad/
+mkdir -p ~/.config/xmonad
 emacs --batch --eval "(require 'org)" --eval '(org-babel-tangle-file "~/dotfiles/xmonad/README.org")'
 
 #qtile config
@@ -70,6 +70,14 @@ emacs --batch --eval "(require 'org)" --eval '(org-babel-tangle-file "~/dotfiles
 
 #zsh config
 emacs --batch --eval "(require 'org)" --eval '(org-babel-tangle-file "~/dotfiles/zshrc.org")'
+
+#dwm setup
+echo "make install dwm"
+cd ~/dotfiles/suckless/dwm-6.4
+sudo make clean install
+sudo cp ~/dotfiles/suckless/dwm.desktop /usr/share/xsessions
+cd ~/dotfiles/suckless/dwmblocks
+sudo make clean install
 
 # emacs conifg
 # mkdir -p ~/.emacs.d
