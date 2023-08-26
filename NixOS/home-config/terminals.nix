@@ -8,9 +8,9 @@
       settings = {
         main = {
           term = "xterm-256color";
-          font = "FantasqueSansM Nerd Font:size=12";
+          font = "FantasqueSansM Nerd Font:size=14";
           # font = "ComicShannsMono Nerd Font:size=13";
-          dpi-aware = "yes";
+          dpi-aware = "no";
           pad = "15x10";
         };
         cursor = {

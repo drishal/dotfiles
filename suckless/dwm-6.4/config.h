@@ -15,7 +15,7 @@ static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
-static const char *fonts[]          = { "FantasqueSansMono Nerd Font:size=12", "Noto Color Emoji:size=9:antialias=true:autohint=true"};
+static const char *fonts[]          = { "FantasqueSansM Nerd Font:size=12", "Noto Color Emoji:size=9:antialias=true:autohint=true"};
 static const char dmenufont[]       = "FantasqueSansMono Nerd Font:size=12";
 /* static const char col_cyan[]        = "#005577"; */
 
@@ -103,7 +103,7 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_bg, "-nf", col_fg, "-sb", col_purple, "-sf", col_bg, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
-static const char *roficmd[]  = { "rofi", "-show", "drun","-icon-theme"," Papirus", "-show-icons" ,NULL };
+static const char *roficmd[]  = { "/usr/bin/rofi", "-show", "drun","-icon-theme"," Papirus", "-show-icons" ,NULL };
 static const char *nmcmd[]  = { "nmcli-rofi", NULL };
 static const char *powercmd[]  = { "rofi", "-show", "power-menu", "-modi", "power-menu:~/Desktop/rofis/rofi-power-menu/rofi-power-menu", NULL };
 static const char *mysystray[]  = {"stalonetray",NULL};

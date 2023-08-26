@@ -17,7 +17,7 @@ dwm_networkmanager () {
     if [ "$IDENTIFIER" = "unicode" ]; then
         printf "  %s %s" "$CONNAME" 
     else
-        printf " %s" "$CONNAME" 
+        printf "󰈁 %s" "$CONNAME" 
     fi
     printf "%s" #"$SEP2"
 }

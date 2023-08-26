@@ -23,7 +23,7 @@ if [[ $device == e* ]]; then
   # If the device name starts with "e", output "eth: {name of interface}"
   # Use cut to remove the ":" and everything after it
   device=$(echo $device | cut -d ':' -f 1)
-  echo "^c$orange^ eth: $device"
+  echo "^c$orange^ 󰈁 eth: $device"
 elif [[ $device == w* ]]; then
   # If the device name starts with "w", get the current connection and strength
   connection_info=$(nmcli -t -f NAME,SIGNAL device wifi list | cut -d ':' -f 2 )

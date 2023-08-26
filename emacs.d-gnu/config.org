@@ -236,10 +236,23 @@ https://github.com/progfolio/elpaca
 #+end_src
 
 ** Setting up paths
+*** main path from shell
 #+begin_src emacs-lisp 
 (use-package exec-path-from-shell :ensure t)
 (when (daemonp)
   (exec-path-from-shell-initialize))
+#+end_src
+*** .local/bin path 
+#+begin_src emacs-lisp
+(add-to-list 'exec-path "~/.local/bin")
+(setenv "PATH" (concat (getenv "PATH")":~/.local/bin"))
+#+end_src
+
+
+*** adding cargo to path
+#+begin_src emacs-lisp
+(add-to-list 'exec-path "~/.cargo/bin")
+(setenv "PATH" (concat (getenv "PATH")":~/.cargo/bin"))
 #+end_src
 * Customizing the Editor and Appearence
 ** Fonts
@@ -276,6 +289,32 @@ remove/add tangle no to whatever font you prefer
 (add-to-list 'recentf-exclude "/nix/store.*") 
 (add-to-list 'recentf-exclude "~/.mozilla.*") 
 (add-to-list 'recentf-exclude "/sudo::/.*") 
+(setq recentf-max-saved-items 2048
+      recentf-exclude '("/tmp/"
+                        "/ssh:"
+                        "/sudo:"
+                        "recentf$"
+                        "company-statistics-cache\\.el$"
+                        ;; ctags
+                        "/TAGS$"
+                        ;; global
+                        "/GTAGS$"
+                        "/GRAGS$"
+                        "/GPATH$"
+                        ;; binary
+                        "\\.mkv$"
+                        "\\.mp[34]$"
+                        "\\.avi$"
+                        "\\.pdf$"
+                        "\\.docx?$"
+                        "\\.xlsx?$"
+                        ;; sub-titles
+                        "\\.sub$"
+                        "\\.srt$"
+                        "\\.ass$"
+                        ;; ~/.emacs.d/**/*.el included
+                        ;; "/home/[a-z]\+/\\.[a-df-z]" ; configuration file should not be excluded
+                        ))
 #+end_src
 ** rainbow mode for colors
 #+begin_src emacs-lisp

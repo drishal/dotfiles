@@ -47,7 +47,7 @@ workspace = 10, monitor:eDP-1
  See https://wiki.hyprland.org/Configuring/Keywords/ for more
  #+begin_src conf 
  exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP 
- exec-once =  waybar & dunst & nm-applet --indicator & blueman-applet & emacs --daemon & foot --server  & hyprpaper
+ exec-once =  waybar & dunst & nm-applet --indicator & lxpolkit & blueman-applet & emacs --daemon & foot --server  & hyprpaper
  #bash ~/dotfiles/scripts/power-monitor.sh & 
  # & swaybg -i ~/dotfiles/wallpapers/NixOS-1.png
  #+end_src
@@ -96,7 +96,7 @@ general {
 * Misc settings
 #+begin_src conf :tangle no
 misc {
-    # vrr = 1
+    vrr = 1
     mouse_move_focuses_monitor = false
     no_direct_scanout = false
     no_vfr = true
@@ -109,9 +109,9 @@ See https://wiki.hyprland.org/Configuring/Variables/ for more
 decoration {
 
     rounding = 7
-    blur = yes
-    blur_size = 5
-    blur_passes = 1
+    # blur = yes
+    # blur_size = 5
+    # blur_passes = 1
     blurls = waybar
     drop_shadow = yes
     shadow_range = 4

@@ -324,149 +324,149 @@ keys = [
 #+end_src
 ** Bar widgets
 #+begin_src python
-bar_widgets = [
-                widget.CurrentLayout(
-                    # foreground = color[0],
-                    fmt = ' {}',
-                    foreground=color[6],
-                    # background="",
-                ),
+def init_widgets_list():
+    bar_widgets = [
+                    widget.CurrentLayout(
+                        # foreground = color[0],
+                        fmt = ' {}',
+                        foreground=color[6],
+                        # background="",
+                    ),
 
-                widget.GroupBox(
-                    fontsize = 9,
-                    margin_y = 3,
-                    margin_x = 3,
-                    padding_y = 5,
-                    padding_x = 5,
-                    borderwidth = 3,
-                    active = color[2],
-                    inactive = color[3],
-                    rounded = True,
-                    highlight_color = [color[1]] ,
-                    highlight_method = "line",
-                    this_current_screen_border = color[3],
-                    # this_current_screen_border = colors[3],
-                    # this_screen_border = #bd93f9,
-                    # other_current_screen_border = colors[0],
-                    # other_screen_border = colors[0],
-                    foreground = color[2],
-                    background = color[0],
-                    disable_drag = True
-                    # padding = 5
+                    widget.GroupBox(
+                        fontsize = 9,
+                        margin_y = 3,
+                        margin_x = 3,
+                        padding_y = 5,
+                        padding_x = 5,
+                        borderwidth = 3,
+                        active = color[2],
+                        inactive = color[3],
+                        rounded = True,
+                        highlight_color = [color[1]] ,
+                        highlight_method = "line",
+                        this_current_screen_border = color[3],
+                        # this_current_screen_border = colors[3],
+                        # this_screen_border = #bd93f9,
+                        # other_current_screen_border = colors[0],
+                        # other_screen_border = colors[0],
+                        foreground = color[2],
+                        background = color[0],
+                        disable_drag = True
+                        # padding = 5
 
-                ),
-                # widget.Prompt(
-                #     background=color[1],
-                #     foreground=color[2],
-                #     record_history = True
-                # ),
-                widget.WindowName(
-                    max_chars = 50,
-                    padding= 5,
-                    # foreground = "f8f8f8",
-                    # background=color[3],
-                     foreground=color[7],
-                    # foreground=color[2]
-                    # background=color[8],
-                ),
+                    ),
+                    widget.WindowName(
+                        max_chars = 50,
+                        padding= 5,
+                        # foreground = "f8f8f8",
+                        # background=color[3],
+                        foreground=color[7],
+                        # foreground=color[2]
+                        # background=color[8],
+                    ),
 
-                widget.Spacer(
-                    length = bar.STRETCH,
-                ),
-                widget.Chord(
-                    chords_colors={
-                        'launch': ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
-                widget.Battery(
-                    format='{char} {percent:2.0%} {hour:d}:{min:02d} {watt:.2f} W',
-                    update_interval=5,
-                    foreground=color[5],
-                    background = color[0],
-                ),
-                widget.TextBox(
-                    text = '  ', # this one has a small space after the symbol to make it look more consistent with the spaces
-                    foreground = color[3],
-                    fontsize = 15
-                ),
+                    widget.Spacer(
+                        length = bar.STRETCH,
+                    ),
+                    widget.Chord(
+                        chords_colors={
+                            'launch': ("#ff0000", "#ffffff"),
+                        },
+                        name_transform=lambda name: name.upper(),
+                    ),
+                    widget.Battery(
+                        format='{char} {percent:2.0%} {hour:d}:{min:02d} {watt:.2f} W',
+                        update_interval=5,
+                        foreground=color[5],
+                        background = color[0],
+                    ),
+                    widget.TextBox(
+                        text = '  ', # this one has a small space after the symbol to make it look more consistent with the spaces
+                        foreground = color[3],
+                        fontsize = 15
+                    ),
 
-                widget.CPU(
-                    foreground=color[4],
-                    format='   {freq_current}GHz {load_percent}% ',
-                ),
-                widget.TextBox(
-                    text = ' ',
-                    foreground = color[3],
-                    fontsize = 15
-                ),
+                    widget.CPU(
+                        foreground=color[4],
+                        format='   {freq_current}GHz {load_percent}% ',
+                    ),
+                    widget.TextBox(
+                        text = ' ',
+                        foreground = color[3],
+                        fontsize = 15
+                    ),
 
-                widget.Memory(
-                    #background=color[4],
-                    foreground=color[10],
-                    format='   {MemUsed: .0f}M /{MemTotal: .0f}M ',
-                ),
-                widget.TextBox(
-                    text = ' ',
-                    foreground = color[3],
-                    fontsize = 15
-                ),
-                widget.Net(
-                    format=' {down}  {up} ',
-                    foreground=color[7]
-                ),
-                widget.TextBox(
-                    text = '  ', # this one has a small space after the symbol to make it look more consistent with the spaces
-                    foreground = color[3],
-                    fontsize = 15
-                ),
+                    widget.Memory(
+                        #background=color[4],
+                        foreground=color[10],
+                        format='   {MemUsed: .0f}M /{MemTotal: .0f}M ',
+                    ),
+                    widget.TextBox(
+                        text = ' ',
+                        foreground = color[3],
+                        fontsize = 15
+                    ),
+                    widget.Net(
+                        format=' {down}  {up} ',
+                        foreground=color[7]
+                    ),
+                    widget.TextBox(
+                        text = '  ', # this one has a small space after the symbol to make it look more consistent with the spaces
+                        foreground = color[3],
+                        fontsize = 15
+                    ),
 
-                 widget.Clock(format='   %Y-%m-%d %a %H:%M:%S',
-                              foreground=color[8],
-                              # foreground=color[0],
-                             ),
-                
-                widget.TextBox(
-                    text = '  ', # this one has a small space after the symbol to make it look more consistent with the spaces
-                    foreground = color[3],
-                    fontsize = 15
-                ),
+                    widget.Clock(format='   %Y-%m-%d %a %H:%M:%S',
+                                foreground=color[8],
+                                # foreground=color[0],
+                                ),
 
-                # widget.BatteryIcon(),
+                    widget.TextBox(
+                        text = '  ', # this one has a small space after the symbol to make it look more consistent with the spaces
+                        foreground = color[3],
+                        fontsize = 15
+                    ),
+
+                    # widget.BatteryIcon(),
 
 
-                # widget.Systray(padding=5,),
-                # widget.StatusNotifier(
-                #     icon_theme="Papirus-Dark",
-                #     padding=4,
-                # ),
-                tray,
-                widget.TextBox(
-                    text = ' ', # this one has a small space after the symbol to make it look more consistent with the spaces
-                    foreground = color[3],
-                    fontsize = 15
-                ),
+                    # widget.Systray(padding=5,),
+                    # widget.StatusNotifier(
+                    #     icon_theme="Papirus-Dark",
+                    #     padding=4,
+                    # ),
+                    tray,
+                    widget.TextBox(
+                        text = ' ', # this one has a small space after the symbol to make it look more consistent with the spaces
+                        foreground = color[3],
+                        fontsize = 15
+                    ),
+    ]
+    return bar_widgets
 
-
-]
 screens = [
     Screen(
         wallpaper='~/dotfiles/wallpapers/archlinux/archlinux-onedark.png',
         wallpaper_mode='stretch',
         top=bar.Bar(
-          bar_widgets
+          # widgets=bar_widgets()
+          widgets=init_widgets_list()
             ,
             25,
             # margin=[7, 10, 2, 10], # [N E S W] 
         ), 
+
+
     ),
     Screen(
         wallpaper='~/dotfiles/wallpapers/archlinux/archlinux-onedark.png',
         wallpaper_mode='stretch',
         top=bar.Bar(
-          bar_widgets
+          # widgets=bar_widgets()
+          widgets=init_widgets_list()
             ,
-            25,
+            size=25,
             # margin=[7, 10, 2, 10], # [N E S W] 
         ), 
 
