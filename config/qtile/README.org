@@ -269,22 +269,73 @@ keys = [
 #+end_src
 * Groups
 #+begin_src python
-  groups = [Group(i) for i in "1234567890"]
+'''
+groups = [Group(i) for i in "1234567890"]
 
-  for i in groups:
-      keys.extend([
-          # mod1 + letter of group = switch to group
-          Key([mod], i.name, lazy.group[i.name].toscreen(toggle=False),
-              desc="Switch to group {}".format(i.name)),
+for i in groups:
+    keys.extend([
+        # mod1 + letter of group = switch to group
+        Key([mod], i.name, lazy.group[i.name].toscreen(toggle=False),
+            desc="Switch to group {}".format(i.name)),
 
-          # mod1 + shift + letter of group = switch to & move focused window to group
-          Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=False),
-              desc="Switch to & move focused window to group {}".format(i.name)),
-          # Or, use below if you prefer not to switch to that group.
-          # # mod1 + shift + letter of group = move focused window to group
-          # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
-          #     desc="move focused window to group {}".format(i.name)),
-      ])
+        # mod1 + shift + letter of group = switch to & move focused window to group
+        Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=False),
+            desc="Switch to & move focused window to group {}".format(i.name)),
+        # Or, use below if you prefer not to switch to that group.
+        # # mod1 + shift + letter of group = move focused window to group
+        # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
+        #     desc="move focused window to group {}".format(i.name)),
+    ])
+'''
+NUM_SCREENS = 2
+NUM_GROUPS = 9
+GROUP_MAP = {}
+GROUP_LIST = []
+
+# Here we create two objects:
+# 1) A dict, "GROUP_MAP", which has a key relating to the screen index. The value is another dict
+#    where groups are numbered from 1 to NUM_GROUPS. The value is a unique group name.
+# 2) A list of all groups. Each group has a unique name but the label is between 1 and NUM_GROUPS
+for screen in range(NUM_SCREENS):
+    screen_dict = {}
+    for group in range(NUM_GROUPS):
+        name = f"{screen * NUM_GROUPS + group}"
+        group_num = group + 1
+        screen_dict[group_num] = name
+        GROUP_LIST.append(Group(name, label=str(group_num)))
+    GROUP_MAP[screen] = screen_dict
+
+@lazy.function
+def switch_group(qtile, group_num):
+    """
+    This function looks up the unique group name for group number on the current screen
+    and then displays that group.
+    """
+    group_name = GROUP_MAP[qtile.current_screen.index + 1][group_num]
+    qtile.groups_map[group_name].toscreen()
+
+
+@lazy.window.function
+def move_window_to_group(window, group_num, switch_group=False, toggle=False):
+    """
+    This function looks up the unique group name for group number on the current screen
+    and then moves the window to that group.
+    """   
+    group_name = GROUP_MAP[window.qtile.current_screen.index + 1][group_num]
+    window.togroup(group_name, switch_group, toggle)
+
+# Groups should be set to our group list
+groups = GROUP_LIST
+
+# We bind keys mod + 1-8 to call our function to display a group depending on the focused screen
+# mod + shift + 1-8 moves window to that group on the active screen
+for i in range(NUM_GROUPS):
+    keys.append(Key([mod], str(i + 1), switch_group(i + 1)))
+    keys.append(Key([mod, "shift"], str(i + 1), move_window_to_group(i + 1, switch_group=True)))
+
+# mod + control + 1-3 moves window to current group on that screen
+for i in range(NUM_SCREENS):
+    keys.append(Key([mod, "control"], str(i + 1), lazy.window.toscreen(i)))
 #+end_src
 * Layouts
 #+begin_src python
