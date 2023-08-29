@@ -84,7 +84,8 @@ alias tt_balancer_cfs "sudo sysctl -w kernel.sched_tt_balancer_opt=2"
 alias tt_balancer_ps "sudo sysctl -w kernel.sched_tt_balancer_opt=3"
 
 #powerctl
-alias perf "powerprofilesctl set performance"
+# alias perf "powerprofilesctl set performance;sudo echo 'performance' | sudo tee /sys/firmware/acpi/platform_profile"
+alias perf "sudo echo 'performance' | sudo tee /sys/firmware/acpi/platform_profile"
 alias perf2 "powerprofilesctl set performance; sudo cpupower frequency-set -g performance"
 alias bal "powerprofilesctl set balanced; sudo cpupower frequency-set -g schedutil"
 alias ps "powerprofilesctl set power-saver"
