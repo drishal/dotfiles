@@ -4,3 +4,4 @@ lxpolkit&
 blueman-applet&
 nm-applet --indicator&
 emacs --daemon&
+foot --server&
