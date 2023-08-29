@@ -52,7 +52,7 @@ from libqtile.backend.wayland import inputs,InputConfig
 #+begin_src python
 mod = "mod4"
 if qtile.core.name=="wayland":
-    terminal = "foot"
+    terminal = "footclient"
     tray =  StatusNotifier(icon_theme="Papirus-Dark", padding=4, icon_size=20)
     launcher="wofi --show drun"
     wifi="networkmanager_dmenu"
@@ -269,7 +269,6 @@ keys = [
 #+end_src
 * Groups
 #+begin_src python
-'''
 groups = [Group(i) for i in "1234567890"]
 
 for i in groups:
@@ -287,55 +286,29 @@ for i in groups:
         #     desc="move focused window to group {}".format(i.name)),
     ])
 '''
-NUM_SCREENS = 2
-NUM_GROUPS = 9
-GROUP_MAP = {}
-GROUP_LIST = []
+def go_to_group(name: str) -> Callable:
+    def _inner(qtile: Qtile) -> None:
+        if len(qtile.screens) == 1:
+            qtile.groups_map[name].cmd_toscreen()
+            return
 
-# Here we create two objects:
-# 1) A dict, "GROUP_MAP", which has a key relating to the screen index. The value is another dict
-#    where groups are numbered from 1 to NUM_GROUPS. The value is a unique group name.
-# 2) A list of all groups. Each group has a unique name but the label is between 1 and NUM_GROUPS
-for screen in range(NUM_SCREENS):
-    screen_dict = {}
-    for group in range(NUM_GROUPS):
-        name = f"{screen * NUM_GROUPS + group}"
-        group_num = group + 1
-        screen_dict[group_num] = name
-        GROUP_LIST.append(Group(name, label=str(group_num)))
-    GROUP_MAP[screen] = screen_dict
+        if name in '12345':
+            qtile.focus_screen(0)
+            qtile.groups_map[name].cmd_toscreen()
+        else:
+            qtile.focus_screen(1)
+            qtile.groups_map[name].cmd_toscreen()
 
-@lazy.function
-def switch_group(qtile, group_num):
-    """
-    This function looks up the unique group name for group number on the current screen
-    and then displays that group.
-    """
-    group_name = GROUP_MAP[qtile.current_screen.index + 1][group_num]
-    qtile.groups_map[group_name].toscreen()
+    return _inner
 
+for i in groups:
+    keys.append(
+        Key([mod], i.name, lazy.function(go_to_group(i.name))),
+        Key([mod, "Shift"], i.name, lazy.function(window_to_group(i.name, switch_group=false))),
+        
+    )
 
-@lazy.window.function
-def move_window_to_group(window, group_num, switch_group=False, toggle=False):
-    """
-    This function looks up the unique group name for group number on the current screen
-    and then moves the window to that group.
-    """   
-    group_name = GROUP_MAP[window.qtile.current_screen.index + 1][group_num]
-    window.togroup(group_name, switch_group, toggle)
-
-# Groups should be set to our group list
-groups = GROUP_LIST
-
-# We bind keys mod + 1-8 to call our function to display a group depending on the focused screen
-# mod + shift + 1-8 moves window to that group on the active screen
-for i in range(NUM_GROUPS):
-    keys.append(Key([mod], str(i + 1), switch_group(i + 1)))
-    keys.append(Key([mod, "shift"], str(i + 1), move_window_to_group(i + 1, switch_group=True)))
-
-# mod + control + 1-3 moves window to current group on that screen
-for i in range(NUM_SCREENS):
-    keys.append(Key([mod, "control"], str(i + 1), lazy.window.toscreen(i)))
+'''
 #+end_src
 * Layouts
 #+begin_src python
@@ -376,6 +349,8 @@ for i in range(NUM_SCREENS):
 ** Bar widgets
 #+begin_src python
 def init_widgets_list():
+    # groupbox1 = widget.GroupBox(visible_groups=['1', '2', '3','4','5'])
+    # groupbox2 = widget.GroupBox(visible_groups=['6', '7', '8', '9','10'])
     bar_widgets = [
                     widget.CurrentLayout(
                         # foreground = color[0],
@@ -403,9 +378,9 @@ def init_widgets_list():
                         # other_screen_border = colors[0],
                         foreground = color[2],
                         background = color[0],
-                        disable_drag = True
+                        disable_drag = True,
                         # padding = 5
-
+                        #visible_groups=['1', '2', '3','4','5']
                     ),
                     widget.WindowName(
                         max_chars = 50,
@@ -504,7 +479,7 @@ screens = [
           # widgets=bar_widgets()
           widgets=init_widgets_list()
             ,
-            25,
+            size=25,
             # margin=[7, 10, 2, 10], # [N E S W] 
         ), 
 
