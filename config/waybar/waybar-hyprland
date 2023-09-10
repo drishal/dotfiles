@@ -1,7 +1,7 @@
 
 {
     "layer":"top",
-    "modules-left": [ "wlr/workspaces" , "hyprland/window" ],
+    "modules-left": [ "hyprland/workspaces" , "hyprland/window" ],
     "modules-center": [ "clock"],
     "modules-right": ["battery","network","memory","cpu", "tray"],
     "battery": {
@@ -10,12 +10,6 @@
 	"interval": 10,
     },
 
-    "custom/dwlbar": {
-        "format": "{}",
-        "max-length": 500,
-        "escape": true,
-        "exec": "~/dotfiles/config/waybar/dwl.sh 1"
-    },
     "clock": {
         "format": "  {: %F (%a) %H:%M:%S}",
 	"interval": 1, 
