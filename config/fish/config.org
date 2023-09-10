@@ -85,10 +85,11 @@ alias tt_balancer_ps "sudo sysctl -w kernel.sched_tt_balancer_opt=3"
 
 #powerctl
 # alias perf "powerprofilesctl set performance;sudo echo 'performance' | sudo tee /sys/firmware/acpi/platform_profile"
-alias perf "sudo echo 'performance' | sudo tee /sys/firmware/acpi/platform_profile"
-alias perf2 "powerprofilesctl set performance; sudo cpupower frequency-set -g performance"
-alias bal "powerprofilesctl set balanced; sudo cpupower frequency-set -g schedutil"
-alias ps "powerprofilesctl set power-saver"
+alias perf "sudo  echo 'performance' | sudo  tee /sys/firmware/acpi/platform_profile"
+# alias bal "powerprofilesctl set balanced; sudo cpupower frequency-set -g schedutil"
+alias bal "sudo echo 'balanced' | sudo tee /sys/firmware/acpi/platform_profile; sudo cpupower frequency-set -g schedutil"
+alias ps "sudo echo 'low-power' | sudo tee /sys/firmware/acpi/platform_profile; sudo cpupower frequency-set -g schedutil"
+# alias ps "powerprofilesctl set power-saver"
 alias pnow "cat /sys/firmware/acpi/platform_profile"
 alias amdgpu_high "echo 'high' >  /sys/class/drm/card0/device/power_dpm_force_performance_level"
 
@@ -110,7 +111,7 @@ alias hms-offline "home-manager switch --flake ~/dotfiles --option substitute fa
 
 #watch sync
 alias watch-sync "watch -d grep -e Dirty: -e Writeback: /proc/meminfo"
-alias watch-amd-gpu "sudo watch -n 0.5  cat /sys/kernel/debug/dri/0/amdgpu_pm_info"
+alias watch-amd-gpu "sudo watch -n 0.5  bat /sys/kernel/debug/dri/0/amdgpu_pm_info"
 
 #ytdlp
 alias youtube-dl "yt-dlp"
@@ -196,7 +197,9 @@ set -x EXA_ICON_SPACING 2
 * manpager
 #+begin_src fish
 # bat as manpager
-set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+# set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+set -x MANROFFOPT "-c" 
+set -x MANPAGER "sh -c 'col -bx | bat -plman'"
 
 ### "vim" as manpager
 # set -x MANPAGER '/bin/bash -c "vim -MRn -c \"set buftype=nofile showtabline=0 ft=man ts=8 nomod nolist norelativenumber nonu noma\" -c \"normal L\" -c \"nmap q :qa<CR>\"</dev/tty <(col -b)"'
