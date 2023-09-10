@@ -127,29 +127,56 @@ window#waybar.empty #window {
     color: @colviolet;
 }
 
- #custom-dwl_layout {
-     color: @colviolet;
- }
+#tags button{
+    background-color: @colbg;
+    padding: 3px;
+    border-radius: 10px;
+    min-width: 20px;
+    color: @colgrey;
+}
 
- #custom-dwl_title {
-     color: @colmagenta;
- }
+#tags button.occupied{
+    background-color: @colbg2;
+    padding: 3px;
+    border-radius: 10px;
+    min-width: 20px;
+}
 
- #custom-dwl_tag {
-     color: @colgrey
- }
+#tags button.focused{
+    background-color: @colgrey;
+    border-bottom: 2px solid @colviolet;
+    color: @colfg;
+}
 
- #custom-dwl_tag.selected {
-     border-top: 1px solid @colmagenta
- }
+#tags button.urgent{
+    background-color: @colred;
+    color: @colfg;
+}
 
- #custom-dwl_tag.urgent {
-     background-color: @colred
-     }
+ /* #custom-dwl_layout { */
+ /*     color: @colviolet; */
+ /* } */
 
- #custom-dwl_tag.active {
-     color: @colfg
- }
+ /* #custom-dwl_title { */
+ /*     color: @colmagenta; */
+ /* } */
+
+ /* #custom-dwl_tag { */
+ /*     color: @colgrey */
+ /* } */
+
+ /* #custom-dwl_tag.selected { */
+ /*     border-top: 1px solid @colmagenta */
+ /* } */
+
+ /* #custom-dwl_tag.urgent { */
+ /*     background-color: @colred */
+ /*     } */
+
+ /* #custom-dwl_tag.active { */
+ /*     color: @colfg */
+ /* } */
+
 
 #window {
      background: @colbg2; 
