@@ -136,5 +136,7 @@ alias home-setup="~/dotfiles/scripts/home-setup.sh"
 #upload files; use as "upload filename"
 alias upload="curl -sL https://git.io/file-transfer | sh && ./transfer wet"  
 
+#locale archive
+export LOCALE_ARCHIVE="/usr/lib/locale/locale-archive"
 
 
