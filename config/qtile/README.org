@@ -278,35 +278,66 @@ for i in groups:
             desc="Switch to group {}".format(i.name)),
 
         # mod1 + shift + letter of group = switch to & move focused window to group
-        Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=False),
+        Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=True),
             desc="Switch to & move focused window to group {}".format(i.name)),
         # Or, use below if you prefer not to switch to that group.
         # # mod1 + shift + letter of group = move focused window to group
         # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
         #     desc="move focused window to group {}".format(i.name)),
+        Key([mod], "comma",
+            lazy.to_screen(0),
+            desc='Keyboard focus to monitor 1'
+            ),
+        Key([mod], "period",
+            lazy.to_screen(1),
+            desc='Keyboard focus to monitor 2'
+            ),
     ])
 '''
-def go_to_group(name: str) -> Callable:
-    def _inner(qtile: Qtile) -> None:
-        if len(qtile.screens) == 1:
-            qtile.groups_map[name].cmd_toscreen()
-            return
+screens = []
+groups_by_screens = [
+	["1", "2", "3", "4","5"], # screen 0
+	["6", "7", "8", "9", "0"] # screen 1
+]
 
-        if name in '12345':
-            qtile.focus_screen(0)
-            qtile.groups_map[name].cmd_toscreen()
-        else:
-            qtile.focus_screen(1)
-            qtile.groups_map[name].cmd_toscreen()
+groups = []
+for screen, group_labels in enumerate(groups_by_screens):
+	for i, label in enumerate(group_labels):
+		groups.append(
+			Group(name=f"{screen}{i + 1}", screen_affinity=screen, label=label)
+                )
 
-    return _inner
+def switch_to_group(qtile, group_number):
+	current_screen = qtile.screens.index(qtile.current_screen)
+	name = f'{current_screen}{group_number}'
+	qtile.focus_screen(current_screen)
+	qtile.groups_map[name].cmd_toscreen()
 
-for i in groups:
-    keys.append(
-        Key([mod], i.name, lazy.function(go_to_group(i.name))),
-        Key([mod, "Shift"], i.name, lazy.function(window_to_group(i.name, switch_group=false))),
-        
-    )
+def send_to_group(qtile, group_number):
+	current_screen = qtile.screens.index(qtile.current_screen)
+	name = f'{current_screen}{group_number}'
+	qtile.focus_screen(current_screen)
+	qtile.current_window.cmd_togroup(name)
+
+def send_to_screen(qtile, screen_number):
+	current_window = qtile.current_window
+	qtile.focus_screen(screen_number)
+	current_window.cmd_togroup(qtile.current_group.name)
+
+def focus_screen(qtile, screen_number):
+	qtile.focus_screen(screen_number)
+
+for i, group in enumerate(groups):
+	keys.extend([
+		Key([mod], str(i), lazy.function(switch_to_group, i), desc=f"Switch to group {group.name}"),
+		Key([mod, "shift"], str(i), lazy.function(send_to_group, i), desc=f"Send window to group {group.name}"),
+	])
+
+for i in range(len(screens)):
+	keys.extend([
+		Key(["mod1", "shift"], str(i + 1), lazy.function(send_to_screen, i), desc=f"Send window to screen {i + 1}"),
+		Key(["mod1"], str(i + 1), lazy.function(focus_screen, i), desc=f"Focus on screen {i + 1}"),
+	])
 
 '''
 #+end_src
