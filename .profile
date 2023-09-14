@@ -37,8 +37,8 @@ fi
 #aliases 
 # aliases
 alias nix-config="sudo vim /etc/nixos/configuration.nix"
-alias xon="steam-run ~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
-alias xon-glx="steam-run ~/Desktop/games/Xonotic/xonotic-linux-glx.sh"
+alias xon="~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
+alias xon-glx="~/Desktop/games/Xonotic/xonotic-linux-glx.sh"
 alias stk="~/Desktop/games/SuperTuxKart-1.2-linux/run_game.sh"
 alias sudo="sudo "
 # yay = pary
