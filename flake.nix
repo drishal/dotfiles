@@ -29,7 +29,7 @@
     };
 
 
-    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    #chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 
     nur.url = "github:nix-community/NUR";
 
@@ -53,7 +53,7 @@
 
   };
 
-  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,hyprland, private-stuff,chaotic,firefox-nightly, ... }@inputs:
+  outputs = { nixpkgs, home-manager, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,hyprland, private-stuff,firefox-nightly, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -96,7 +96,7 @@
             { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay]; }
             # hyprland.nixosModules.default
             ./NixOS/system-config/configuration.nix
-            chaotic.nixosModules.default
+            # chaotic.nixosModules.default
             # { programs.hyprland.enable = true; }
           ];
           specialArgs = { inherit inputs; };
