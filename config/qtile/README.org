@@ -293,53 +293,7 @@ for i in groups:
             desc='Keyboard focus to monitor 2'
             ),
     ])
-'''
-screens = []
-groups_by_screens = [
-	["1", "2", "3", "4","5"], # screen 0
-	["6", "7", "8", "9", "0"] # screen 1
-]
 
-groups = []
-for screen, group_labels in enumerate(groups_by_screens):
-	for i, label in enumerate(group_labels):
-		groups.append(
-			Group(name=f"{screen}{i + 1}", screen_affinity=screen, label=label)
-                )
-
-def switch_to_group(qtile, group_number):
-	current_screen = qtile.screens.index(qtile.current_screen)
-	name = f'{current_screen}{group_number}'
-	qtile.focus_screen(current_screen)
-	qtile.groups_map[name].cmd_toscreen()
-
-def send_to_group(qtile, group_number):
-	current_screen = qtile.screens.index(qtile.current_screen)
-	name = f'{current_screen}{group_number}'
-	qtile.focus_screen(current_screen)
-	qtile.current_window.cmd_togroup(name)
-
-def send_to_screen(qtile, screen_number):
-	current_window = qtile.current_window
-	qtile.focus_screen(screen_number)
-	current_window.cmd_togroup(qtile.current_group.name)
-
-def focus_screen(qtile, screen_number):
-	qtile.focus_screen(screen_number)
-
-for i, group in enumerate(groups):
-	keys.extend([
-		Key([mod], str(i), lazy.function(switch_to_group, i), desc=f"Switch to group {group.name}"),
-		Key([mod, "shift"], str(i), lazy.function(send_to_group, i), desc=f"Send window to group {group.name}"),
-	])
-
-for i in range(len(screens)):
-	keys.extend([
-		Key(["mod1", "shift"], str(i + 1), lazy.function(send_to_screen, i), desc=f"Send window to screen {i + 1}"),
-		Key(["mod1"], str(i + 1), lazy.function(focus_screen, i), desc=f"Focus on screen {i + 1}"),
-	])
-
-'''
 #+end_src
 * Layouts
 #+begin_src python
@@ -465,7 +419,7 @@ def init_widgets_list():
                         fontsize = 15
                     ),
                     widget.Net(
-                        format=' {down}  {up} ',
+                        format=' {down:6.2f}{down_suffix:<2} ↓↑ {up:6.2f}{up_suffix:<2} ',
                         foreground=color[7]
                     ),
                     widget.TextBox(
