@@ -1,31 +1,10 @@
 --- dwl.c
 +++ dwl.c
-@@ -235,17 +246,20 @@ static void createlayersurface(struct wl_listener *listener, void *data);
- static void createmon(struct wl_listener *listener, void *data);
- static void createnotify(struct wl_listener *listener, void *data);
- static void createpointer(struct wlr_pointer *pointer);
-+static void createpointerconstraint(struct wl_listener *listener, void *data);
- static void cursorframe(struct wl_listener *listener, void *data);
- static void destroydragicon(struct wl_listener *listener, void *data);
- static void destroyidleinhibitor(struct wl_listener *listener, void *data);
- static void destroylayersurfacenotify(struct wl_listener *listener, void *data);
- static void destroynotify(struct wl_listener *listener, void *data);
-+static void destroypointerconstraint(struct wl_listener *listener, void *data);
- static Monitor *dirtomon(enum wlr_direction dir);
- static void focusclient(Client *c, int lift);
- static void focusmon(const Arg *arg);
- static void focusstack(const Arg *arg);
- static Client *focustop(Monitor *m);
- static void fullscreennotify(struct wl_listener *listener, void *data);
-+static void handleconstraintcommit(struct wl_listener *listener, void *data);
- static void incnmaster(const Arg *arg);
- static void inputdevice(struct wl_listener *listener, void *data);
- static int keybinding(uint32_t mods, xkb_keysym_t sym);
-@@ -361,6 +380,7 @@ static struct wl_listener new_input = {.notify = inputdevice};
- static struct wl_listener new_virtual_keyboard = {.notify = virtualkeyboard};
- static struct wl_listener new_output = {.notify = createmon};
- static struct wl_listener new_xdg_surface = {.notify = createnotify};
-+static struct wl_listener pointer_constraint_create = {.notify = createpointerconstraint};
- static struct wl_listener new_layer_shell_surface = {.notify = createlayersurface};
- static struct wl_listener output_mgr_apply = {.notify = outputmgrapply};
- static struct wl_listener output_mgr_test = {.notify = outputmgrtest};
+@@ -2059,6 +2261,7 @@ printstatus(void)
+ 		printf("%s tags %u %u %u %u\n", m->wlr_output->name, occ, m->tagset[m->seltags],
+ 				sel, urg);
+ 		printf("%s layout %s\n", m->wlr_output->name, m->ltsymbol);
++        dwl_ipc_output_printstatus(m);
+ 	}
+ 	fflush(stdout);
+ }

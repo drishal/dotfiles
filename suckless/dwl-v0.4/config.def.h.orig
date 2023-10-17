@@ -27,6 +27,9 @@ static const char *const autostart[] = {
 	NULL /* terminate */
 };
 
+/* pointer constraints */
+static const int allow_constrain      = 1;
+
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
@@ -130,7 +133,8 @@ static const char *browser[]  = {"firefox",NULL};
 static const char *emacs[]  = {"emacsclient", "-c",NULL};
 static const char *pavucontrol[]  = {"pavucontrol",NULL};
 static const char *ss[]  = {"grimshot",  "copy", "screen",NULL};
-static const char *lock[]  = {"slock",NULL};
+static const char *ssa[]  = {"grimshot",  "copy", "area",NULL};
+static const char *screenlock[]  = {"slock",NULL};
 
 
 
@@ -142,6 +146,7 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_v,          spawn,          {.v = pavucontrol} },
 	{ MODKEY,                    XKB_KEY_e,          spawn,          {.v = files} },
 	{ MODKEY,                    XKB_KEY_s,          spawn,          {.v = ss }},
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_S,          spawn,          {.v = ssa }},
 	{ MODKEY,                    XKB_KEY_Return,     spawn,          {.v = termcmd} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_F,          spawn,          {.v = browser} },
 	{ MODKEY,                    XKB_KEY_j,          focusstack,     {.i = +1} },
