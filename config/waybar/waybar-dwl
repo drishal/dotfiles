@@ -1,84 +1,17 @@
 {
-    "modules-left": ["custom/dwl_tag#0", "custom/dwl_tag#1", "custom/dwl_tag#2", "custom/dwl_tag#3", "custom/dwl_tag#4", "custom/dwl_tag#5", "custom/dwl_tag#6", "custom/dwl_tag#7","custom/dwl_tag#8","custom/dwl_layout", "custom/dwl_title"],
+    "modules-left": [ "dwl/tags" ],
     "modules-center": [ "clock"],
     "modules-right": ["battery","network","memory","cpu", "tray"],
-
-
-   "custom/dwl_tag#0": {
-     "exec": "/home/drishal/dotfiles/config/waybar/waybar-dwl.sh '' 0",
-     "format": "{}",
-     "return-type": "json"
-   },
-   "custom/dwl_tag#1": {
-     "exec": "/home/drishal/dotfiles/config/waybar/waybar-dwl.sh '' 1",
-     "format": "{}",
-     "return-type": "json"
-   },
-   "custom/dwl_tag#2": {
-     "exec": "/home/drishal/dotfiles/config/waybar/waybar-dwl.sh '' 2",
-     "format": "{}",
-     "return-type": "json"
-   },
-   "custom/dwl_tag#3": {
-     "exec": "/home/drishal/dotfiles/config/waybar/waybar-dwl.sh '' 3",
-     "format": "{}",
-     "return-type": "json"
-   },
-   "custom/dwl_tag#4": {
-     "exec": "/home/drishal/dotfiles/config/waybar/waybar-dwl.sh '' 4",
-     "format": "{}",
-     "return-type": "json"
-   },
-   "custom/dwl_tag#5": {
-     "exec": "/home/drishal/dotfiles/config/waybar/waybar-dwl.sh '' 5",
-     "format": "{}",
-     "return-type": "json"
-   },
-   "custom/dwl_tag#6": {
-     "exec": "/home/drishal/dotfiles/config/waybar/waybar-dwl.sh '' 6",
-     "format": "{}",
-     "return-type": "json"
-   },
-   "custom/dwl_tag#7": {
-     "exec": "/home/drishal/dotfiles/config/waybar/waybar-dwl.sh '' 7",
-     "format": "{}",
-     "return-type": "json"
-   },
-   "custom/dwl_tag#8": {
-     "exec": "/home/drishal/dotfiles/config/waybar/waybar-dwl.sh '' 8",
-     "format": "{}",
-     "return-type": "json"
-   },
-   "custom/dwl_tag#9": {
-     "exec": "/home/drishal/dotfiles/config/waybar/waybar-dwl.sh '' 9",
-     "format": "{}",
-     "return-type": "json"
-   },
-   "custom/dwl_layout": {
-     "exec": "/home/drishal/dotfiles/config/waybar/waybar-dwl.sh '' layout",
-     "format": "{}",
-     "return-type": "json"
-   },
-   "custom/dwl_title": {
-     "exec": "/home/drishal/dotfiles/config/waybar/waybar-dwl.sh '' title",
-     "format": "{}",
-     "escape": true,
-     "return-type": "json"
-   },
-
     "battery": {
         "format": "{icon} {capacity}% ",
-        "format-icons": ["", "", "", "", "" ],
+        "format-icons": ["󰁻", "󰁽", "󰁿", "󰂁", "󰁹" ],
 	"interval": 10,
     },
 
-    "custom/dwlbar": {
-        "format": "{}",
-        "max-length": 500,
-        "escape": true,
-        "exec": "~/dotfiles/config/waybar/dwl.sh 1"
-    },
-    "clock": {
+    "dwl/tags": {
+        "num-tags": 10,
+       },
+   "clock": {
         "format": "  {: %F (%a) %H:%M:%S}",
 	"interval": 1, 
     },
@@ -98,12 +31,12 @@
      // "interface": "wlp2s0",
      "format": "{ifname}",
      "format-wifi": "   {essid} ({signalStrength}%)  ",
-     "format-ethernet": "  {ifname} ",
+     "format-ethernet": " 󰈁 {ifname} ",
      "format-disconnected": "", //An empty format will hide the module.
      "format-disconnected": "",
      "tooltip-format": "{ifname}",
      "tooltip-format-wifi": "  {essid} ({signalStrength}%)  ",
-     "tooltip-format-ethernet": " {ifname} ",
+     "tooltip-format-ethernet": " 󰈁 {ifname} ",
      "tooltip-format-disconnected": "Disconnected",
      "max-length": 50,
      "interval": 10,
@@ -124,6 +57,7 @@
     "wlr/workspaces": {
      "all-outputs": true,
      "active-only": false,
+     "sort-by-number": true,
      "format-icons": {
          "1": "1",
          "2": "2",
@@ -134,11 +68,16 @@
          "7": "7",
          "8": "8",
          "9": "9",
+         "10": "10",
     },
 
      "format": "{name}",
 },
 
+    "hyprland/window": {
+    "format": "{}",
+    "separate-outputs": true
+},
    
     "tray": {
         "icon-size": 19,
