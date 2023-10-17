@@ -28,6 +28,7 @@
 ** ~/.local/bin
 #+begin_src fish
 fish_add_path ~/.local/bin
+fish_add_path ~/.local/bin/platform-tools
 fish_add_path ~/.node_modules/bin
 fish_add_path ~/.nimble/bin
 fish_add_path ~/.cargo/bin
