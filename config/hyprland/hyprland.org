@@ -181,7 +181,8 @@ bind = $mainMod, D, exec, wofi --show drun
 bind = $mainMod, V, exec, pavucontrol
 bind = $mainMod, T, exec, GDK_BACKEND=x11 xfce4-taskmanager
 bind = $mainMod, Q, killactive, 
-bind = $mainMod SHIFT, Q, exit, 
+# bind = $mainMod SHIFT, Q, exit, 
+bind = $mainMod SHIFT, Q, exec, killall -9 Hyprland 
 bind = $mainMod SHIFT, F, exec, firefox
 # bind = $mainMod SHIFT, F, exec, firefox-devedition -p default
 # bind = $mainMod SHIFT, F, exec, ${pkgs.firefox-bin}/bin/firefox,
