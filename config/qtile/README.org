@@ -162,7 +162,8 @@ else:
 #+begin_src python
 wl_input_rules = {
     # "type:pointer": InputConfig(pointer_accel=0.6, tap=True),
-    "2:7:SynPS/2 Synaptics TouchPad": InputConfig(pointer_accel=0.6, tap=True),
+    # "2:7:SynPS/2 Synaptics TouchPad": InputConfig(pointer_accel=0.6, tap=True),
+    "type:touchpad": InputConfig(pointer_accel=0.6, tap=True),
     # "type:keyboard": InputConfig(kb_repeat_rate=50, kb_repeate_delay=300),
     "type:keyboard": InputConfig(kb_repeat_rate=50, kb_repeate_delay=300),
 }
