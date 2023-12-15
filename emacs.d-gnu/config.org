@@ -343,7 +343,13 @@ remove/add tangle no to whatever font you prefer
 #+begin_src emacs-lisp 
 ;;config :tangle no
 (use-package dashboard :elpaca t
-  :init      ;; tweak dashboard config before loading it
+  :config
+  (setq dashboard-icon-type 'all-the-icons)
+  (setq dashboard-heading-icons '((recents   . "file-text")
+                                (bookmarks . "book")
+                                (agenda    . "calendar")
+                                (projects  . "rocket")
+                                (registers . "database")))
   (setq dashboard-set-heading-icons t)
   ;; Content is not centered by default. To center, set
   (setq dashboard-set-file-icons t)
@@ -356,18 +362,14 @@ remove/add tangle no to whatever font you prefer
                           (bookmarks . 5)
                           (projects . 3)
                           ))
-  :config
-  (setq dashboard-icon-type 'all-the-icons)
-  (setq dashboard-heading-icons '((recents   . "file-text")
-                                (bookmarks . "book")
-                                (agenda    . "calendar")
-                                (projects  . "rocket")
-                                (registers . "database")))
+
+  :init      ;; tweak dashboard config before loading it
+  (dashboard-setup-startup-hook)
+  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
   (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
   (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
-  (dashboard-setup-startup-hook))
+  )
 
-(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
 
 ;;enable recentf mode
 (require 'recentf)
@@ -1640,7 +1642,7 @@ https://github.com/pwalsh/pipenv.el
 (setq-default warning-minimum-level :error)
 #+end_src
 * elaca stuff for dashboard
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp 
 (setq elpaca-after-init-time (current-time)) ;; prevents `elpaca-after-init-hook` from running later.
 (elpaca-wait)
 #+end_src
