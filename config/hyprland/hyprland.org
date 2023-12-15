@@ -96,7 +96,7 @@ general {
 * Misc settings
 #+begin_src conf :tangle no
 misc {
-    vrr = 1
+    # vrr = 1
     mouse_move_focuses_monitor = false
     no_direct_scanout = false
     no_vfr = true
@@ -107,7 +107,6 @@ misc {
 See https://wiki.hyprland.org/Configuring/Variables/ for more
 #+begin_src conf 
 decoration {
-
     rounding = 7
     # blur = yes
     # blur_size = 5
@@ -117,6 +116,10 @@ decoration {
     shadow_range = 4
     shadow_render_power = 3
     col.shadow = rgba(1a1a1aee)
+    blur {
+    enabled = true
+    new_optimizations = true
+    }
 }
 #+end_src
 
