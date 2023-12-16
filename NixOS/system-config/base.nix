@@ -4,7 +4,7 @@
 {
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest; 
   # boot.kernelPackages = pkgs.linuxPackages_latest; 
-  # boot.kernelPackages = pkgs.linuxPackages_zen; 
+  #boot.kernelPackages = pkgs.linuxPackages_zen; 
   boot.kernelPackages = pkgs.linuxPackages_cachyos; 
   # boot.kernelPackages = pkgs.linuxPackages_testing; 
 
@@ -17,7 +17,7 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  boot.loader.efi.efiSysMountPoint = "/boot";
 
   # Set your time zone.
   time.timeZone = "Asia/Kolkata";
@@ -71,13 +71,13 @@
 
   hardware.opengl =
     {
-      extraPackages = with pkgs; [
-        vaapiVdpau
-        libva
-        libvdpau-va-gl
-        mesa.drivers
-        libvpx
-      ];
+      #extraPackages = with pkgs; [
+        #vaapiVdpau
+        #libva
+        #libvdpau-va-gl
+        #mesa.drivers
+        #libvpx
+      #];
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
@@ -96,9 +96,9 @@
   #      mesa_git.opencl
   #    ];
   # };
-  chaotic.gamescope = {
-    enable = true;
-  };
+  # chaotic.gamescope = {
+  #  enable = true;
+  #};
 
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
@@ -208,14 +208,14 @@
 
   #session variables
   
-  environment.sessionVariables = rec {
-    LIBVA_DRIVER_NAME="radeonsi";
-    VDPAU_DRIVER = "radeonsi";
-    MOZ_DISABLE_RDD_SANDBOX="1";
-    AMD_VULKAN_ICD = "RADV";
-    VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
-    MOZ_ENABLE_WAYLAND="1";
-  };
+ # environment.sessionVariables = rec {
+ #   LIBVA_DRIVER_NAME="radeonsi";
+ #    VDPAU_DRIVER = "radeonsi";
+ #  MOZ_DISABLE_RDD_SANDBOX="1";
+ #  AMD_VULKAN_ICD = "RADV";
+ #   VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+ #   MOZ_ENABLE_WAYLAND="1";
+ # };
 
 
 }
