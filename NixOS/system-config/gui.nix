@@ -10,19 +10,19 @@
       '';
     # window wmanagers
     windowManager = {
-      qtile = {
-        enable = true;
-        backend = "wayland";
-        package = (pkgs.qtile.overrideAttrs (old: {
-          src = pkgs.fetchFromGitHub {
-            repo = "qtile";
-            owner = "qtile";
-            rev = "42ed926a68a61a412260c07cb6e027a777c3a94f";
+      #qtile = {
+      #  enable = true;
+      #  backend = "wayland";
+      #  package = (pkgs.qtile.overrideAttrs (old: {
+      #    src = pkgs.fetchFromGitHub {
+      #      repo = "qtile";
+      #      owner = "qtile";
+      #      rev = "42ed926a68a61a412260c07cb6e027a777c3a94f";
             # sha256 = "sha256-lVwBwOvzn4ro1jInRuNvn1vQuwUHUp4MYrDaFRmW9pc=";
-            sha256 = lib.fakeSha256;
-          };
-        }));
-      };
+      #      sha256 = lib.fakeSha256;
+      #    };
+      #  }));
+      #};
 
       xmonad = {
         enable = true;
@@ -45,15 +45,15 @@
 
     # Desktop Environment
     desktopManager = {
-      # plasma5.enable = true;
-      xfce.enable = true;
+      plasma5.enable = true;
+      #xfce.enable = true;
       # lxqt.enable = true;
       # gnome.enable = true;
     };
 
 
     # displayManager.gdm.enable = true;
-    #displayManager.sddm.enable = true;
+    displayManager.sddm.enable = true;
     # displayManager.lightdm.enable = false;
     # displayManager.lightdm = {
     #  enable = true;
@@ -70,19 +70,19 @@
     };
   };
 
-  services.greetd = {
-    enable = true;
-    settings = rec {
-      initial_session = {
-        command = "Hyprland";
+  #services.greetd = {
+  #  enable = true;
+  #  settings = rec {
+  #    initial_session = {
+  #      command = "Hyprland";
         # command = "qtile start -b wayland";
         # command = "river";
         # command = "startplasma-wayland";
-        user = "drishal";
-      };
-      default_session = initial_session;
-    };
-  };
+  #      user = "drishal";
+  #    };
+  #    default_session = initial_session;
+  #  };
+  #};
 
 
 
@@ -93,7 +93,7 @@
   # QT settings
   # environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "";
   # qt.platformTheme="qt5ct";
-  environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "qt5ct";
+  # environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "qt5ct";
   # qt.platformTheme="qt5ct";
   # environment.variables.QT_STYLE_OVERRIDE= lib.mkForce "";
   # river 
