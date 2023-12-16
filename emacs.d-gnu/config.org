@@ -614,6 +614,8 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 ** magit
 #+begin_src emacs-lisp
 (use-package magit :demand t)
+(use-package transient :demand t)
+(setq package-install-upgrade-built-in t)
 #+end_src
 
 ** Some indentation settings
