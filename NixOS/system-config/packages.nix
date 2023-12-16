@@ -126,7 +126,7 @@
     evince
     easyeffects
     extundelete
-    exa
+    lsd
     # fastfetch
     fdk_aac
     feh
@@ -193,7 +193,7 @@
     inetutils
     inxi
     inotify-tools
-    python3Packages.ipython
+    #python3Packages.ipython
     python3Packages.python-lsp-server
     keepassxc
     killall
@@ -269,7 +269,7 @@
     polybar
     podman-compose
     powershell
-    postman
+    #postman
     poppler_utils
     powertop
     powercap
@@ -282,12 +282,12 @@
     poppler
     pdfgrep
     # python3Packages.mysql-connector
-    python3Packages.pip
-    python3Packages.tkinter
-    python3Packages.shodan
-    python3Packages.pyqt5
-    python3Packages.venvShellHook
-    python3Packages.qtile-extras
+    #python3Packages.pip
+    #python3Packages.tkinter
+    #python3Packages.shodan
+    #python3Packages.pyqt5
+    #python3Packages.venvShellHook
+    #$python3Packages.qtile-extras
     qbittorrent
     qt5ct
     qpdf
@@ -320,7 +320,7 @@
     texlive.combined.scheme-medium
     thinkfan
     # thorium
-    inputs.self.packages.${pkgs.system}.thorium
+    #inputs.self.packages.${pkgs.system}.thorium
     tigervnc
     tmux
     tofi
@@ -336,20 +336,20 @@
     vdpauinfo
     virt-manager
     virtualenv
-    (vivaldi.override {
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--enable-gpu-rasterization"
-        "--enable-zero-copy"
-        "--force-dark-mode"
-        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
-        "--disable-features=UseChromeOSDirectVideoDecoder"
+    #(vivaldi.override {
+    #  commandLineArgs = [
+    #    "--ignore-gpu-blocklist"
+    #    "--enable-gpu-rasterization"
+    #    "--enable-zero-copy"
+    #    "--force-dark-mode"
+    #    "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
+    #    "--disable-features=UseChromeOSDirectVideoDecoder"
         # "--use-vulkan"
-        "--ozone-platform-hint=auto"
-        "--enable-hardware-overlays"
-      ];
-    })
-    vivaldi-ffmpeg-codecs
+   #     "--ozone-platform-hint=auto"
+    #    "--enable-hardware-overlays"
+   #   ];
+   # })
+    #vivaldi-ffmpeg-codecs
     ventoy-full
     # vscode-fhs
     vlc
@@ -512,7 +512,7 @@
     "electron-12.2.3"
   ];
   #fonts
-  fonts.fonts = with pkgs; [
+  fonts.packages= with pkgs; [
     noto-fonts
     noto-fonts-cjk
   #   (pkgs.nerdfonts.override {
