@@ -25,6 +25,9 @@
     #kde connect
     kdeconnect.enable=true;
 
+    #wireshark
+    wireshark.enable=true;
+
     # systemtap
     # systemtap.enable=true;
   };
@@ -46,25 +49,25 @@
     bc
     bison
     bookworm
-    brave
-    # (brave.override {
-    #   commandLineArgs = [
-    #     "--ignore-gpu-blocklist"
-    #     "--enable-gpu-rasterization"
-    #     "--enable-zero-copy"
-    #     "--force-dark-mode"
-    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,DCompTripleBufferVideoSwapChain"
-    #     "--disable-features=UseChromeOSDirectVideoDecoder"
-    #     "--ozone-platform-hint=auto"
-    #     "--enable-accelerated-video-decode"
-    #     "--enable-accelerated-video-encode"
-    #     "--enable-hardware-overlays"
-    #     "--disable-gpu-driver-bug-workarounds" 
-    #     "--enable-native-gpu-memory-buffers" 
-    #     "--enable-webrtc-hw-decoding" 
-    #     "--enable-webrtc-hw-encoding"
-    #   ];
-    # })
+    # brave
+    (brave.override {
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--enable-gpu-rasterization"
+        "--enable-zero-copy"
+        "--force-dark-mode"
+        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,DCompTripleBufferVideoSwapChain"
+        "--disable-features=UseChromeOSDirectVideoDecoder"
+        "--ozone-platform-hint=auto"
+        "--enable-accelerated-video-decode"
+        "--enable-accelerated-video-encode"
+        "--enable-hardware-overlays"
+        "--disable-gpu-driver-bug-workarounds" 
+        "--enable-native-gpu-memory-buffers" 
+        "--enable-webrtc-hw-decoding" 
+        "--enable-webrtc-hw-encoding"
+      ];
+    })
     btop
     bun
     brightnessctl
@@ -105,6 +108,7 @@
     }))
     cmake
     cmatrix
+    config.boot.kernelPackages.v4l2loopback 
     conky
     cpufetch
     debootstrap
@@ -120,6 +124,7 @@
     dunst
     dwmblocks
     ed
+    element-desktop
     ethtool
     # etcher
     evince
@@ -129,17 +134,20 @@
     lsd
     # fastfetch
     fdk_aac
+    # floorp
     feh
     fim
     ffmpeg-full
     # ff2mpv
     figlet
     # firefox-bin
-    firefox-wayland
+    firefox
+    # firefox-wayland
     # inputs.firefox-nightly.packages.${pkgs.system}.firefox-beta-bin
     # inputs.firefox.packages.${pkgs.system}.firefox-nightly-bin
     # firefox-wayland
     # firefox-devedition-bin
+    findutils
     file
     # fish
     flameshot
@@ -148,19 +156,19 @@
     gcc
     # geekbench
     # google-chrome
-    (google-chrome.override {
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--enable-gpu-rasterization"
-        "--enable-zero-copy"
-        "--force-dark-mode"
-        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
-        # "--disable-features=UseChromeOSDirectVideoDecoder"
-        "--use-vulkan"
-        "--ozone-platform-hint=auto"
-        "--enable-hardware-overlays"
-      ];
-    })
+    # (google-chrome.override {
+    #   commandLineArgs = [
+    #     "--ignore-gpu-blocklist"
+    #     "--enable-gpu-rasterization"
+    #     "--enable-zero-copy"
+    #     "--force-dark-mode"
+    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
+    #     # "--disable-features=UseChromeOSDirectVideoDecoder"
+    #     "--use-vulkan"
+    #     "--ozone-platform-hint=auto"
+    #     "--enable-hardware-overlays"
+    #   ];
+    # })
     gimp
     git
     gitRepo
@@ -176,16 +184,18 @@
     gnome.zenity
     gnumake
     gnupg
+    # go
     gsmartcontrol
     gparted
     gtk-layer-shell
     gtklock
-    haruna
+    # haruna
     haskellPackages.xmobar
     hdparm
     htop
     hollywood
     hyprpaper
+    hyperfine
     hyfetch
     hwinfo
     imagemagick
@@ -193,6 +203,7 @@
     inetutils
     inxi
     inotify-tools
+    jq
     #python3Packages.ipython
     python3Packages.python-lsp-server
     keepassxc
@@ -202,7 +213,8 @@
     kubectl
     kubernetes
     leafpad
-    #linuxKernel.packages.linux_5_19.v4l2loopback    
+    # linuxKernel.packages.v4l2loopback
+    # linuxKernel.packages.linux_cachyos.v4l2loopback
     libnotify
     libreoffice
     libva-utils
@@ -217,6 +229,7 @@
     libsForQt5.ark
     libsForQt5.okular 
     libsForQt5.konsole
+    libsForQt5.qtstyleplugin-kvantum
     lsd
     lshw
     lutris
@@ -224,12 +237,21 @@
     lxsession
     man
     materia-theme
+    (materia-kde-theme.overrideAttrs (old: {
+      src = pkgs.fetchFromGitHub {
+        repo = "materia-kde";
+        owner = "PapirusDevelopmentTeam";
+        rev = "6cc4c1867c78b62f01254f6e369ee71dce167a15";
+        sha256 = "sha256-tZWEVq2VYIvsQyFyMp7VVU1INbO7qikpQs4mYwghAVM=";
+      };
+    }))
     mesa-demos
     metasploit
+    mlocate
     mongodb-compass
     mosh
     motrix
-    mplayer
+    # mplayer
     mpv
     #mullvad
     #mullvad-vpn
@@ -244,6 +266,7 @@
     nim
     nixpkgs-fmt
     nmap
+    nvtop-amd
     nodejs
     # nodePackages_latest.create-react-app
     noto-fonts
@@ -254,6 +277,14 @@
     onefetch
     # onboard
     onlyoffice-bin
+    (orchis-theme.overrideAttrs (old: {
+      src = pkgs.fetchFromGitHub {
+        repo = "Orchis-theme";
+        owner = "vinceliuice";
+        rev = "c774328344413a7ea416da242cc50e8cc1a99caa";
+        sha256 = "sha256-COOmg7XW79iH/H+o81nfW+mrMjyii8jhmlP48lI2SGg=";
+      };
+    }))
     p7zip
     pandoc
     papirus-icon-theme
@@ -282,7 +313,7 @@
     poppler
     pdfgrep
     # python3Packages.mysql-connector
-    #python3Packages.pip
+    python3Packages.pip
     #python3Packages.tkinter
     #python3Packages.shodan
     #python3Packages.pyqt5
@@ -291,6 +322,7 @@
     qbittorrent
     qt5ct
     qpdf
+    # qtile-extras_git
     ranger
     radeontop
     redshift
@@ -304,7 +336,7 @@
     rust-analyzer
     simplescreenrecorder
     sony-headphones-client
-    smplayer
+    # smplayer
     speedtest-cli
     spot
     starship
@@ -315,11 +347,12 @@
     sway-contrib.grimshot
     swaylock-effects
     swaybg
-    tdesktop
+    telegram-desktop_git
     tetex
-    texlive.combined.scheme-medium
+    #texlive.combined.scheme-medium
     thinkfan
     # thorium
+    # inputs.self.packages.${pkgs.system}.freedownloadmanager
     #inputs.self.packages.${pkgs.system}.thorium
     tigervnc
     tmux
@@ -334,7 +367,7 @@
     uutils-coreutils
     vim
     vdpauinfo
-    virt-manager
+    # virt-manager
     virtualenv
     #(vivaldi.override {
     #  commandLineArgs = [
@@ -356,6 +389,7 @@
     vulkan-tools
     volumeicon
     # waybar-hyprland
+    webcamoid
     wget
     woeusb
     widevine-cdm
@@ -363,6 +397,7 @@
     win-virtio 
     wirelesstools
     wine64
+    wireshark
     wofi
     wl-clipboard
     wlr-randr
@@ -371,6 +406,7 @@
     yarn
     youtube-dl
     yt-dlp
+    ytfzf
     zip
     zoom-us
 
@@ -519,12 +555,20 @@
   #     fonts = [ "FiraCode"   "Monofur" ];
   #   })
   ];
-
+  # programs.command-not-found.enable = true;
+  # programs.nix-index =
+  #   {
+  #     enable = true;
+  #     enableFishIntegration = true;
+  #     enableBashIntegration = true;
+  #     enableZshIntegration = true;
+  #   };
   # # mullvad
   # services.mullvad-vpn.enable = true;
 
   # chaotic bincache
   # chaotic.nyx.cache.enable = true;
   # programs.firefox.nativeMessagingHosts.ff2mpv=true;
+  programs.command-not-found.dbPath = inputs.programsdb.packages.${pkgs.system}.programs-sqlite;
 }
 
