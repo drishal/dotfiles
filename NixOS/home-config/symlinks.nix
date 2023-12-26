@@ -8,7 +8,7 @@
   #zsh config
   # home.file."/home/drishal/.zshrc".source = ../.zshrc;
   # xresources path
-  xresources.path="~/dotfiles/.Xresources";
+  # xresources.path="~/dotfiles/.Xresources";
   # sleep test
   # home.file."${pkgs.systemd}/lib/systemd/system-sleep/batdistrack".source = ../batdistrack;
 
