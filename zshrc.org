@@ -18,11 +18,13 @@
 - [[#fixes][Fixes]]
   - [[#kitty-config][Kitty config]]
   - [[#word-navigation][word navigation]]
+  - [[#history-navigation][history navigation]]
 - [[#configs-from-grml][Configs from grml]]
   - [[#setopt-values][Setopt values]]
   - [[#completion-system][completion system]]
 - [[#source][Source]]
   - [[#profile][profile]]
+  - [[#alias][alias]]
 - [[#history][History]]
 - [[#prompts][Prompts]]
   - [[#starship][Starship]]
@@ -101,8 +103,9 @@ zinit light zsh-users/zsh-completions
 #+end_src
 
 ** zsh fzf
-#+begin_src shell :tangle no
+#+begin_src shell
 zinit light Aloxaf/fzf-tab
+# zinit pack for fzf
 #+end_src
 
 ** zsh autocomplete
@@ -119,6 +122,11 @@ export KITTY_SHELL_INTEGRATION=no-cursor
 bindkey -e 
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
+#+end_src
+** history navigation
+#+begin_src shell
+bindkey "^[[A" history-beginning-search-backward
+bindkey "^[[B" history-beginning-search-forward
 #+end_src
 
 * Configs from grml
@@ -189,7 +197,7 @@ setopt unset
 #+end_src
 
 ** completion system
-#+begin_src shell
+#+begin_src shell :tangle no
 function is42 () {
     [[ $ZSH_VERSION == 4.<2->* || $ZSH_VERSION == <5->* ]] && return 0
     return 1
@@ -428,6 +436,10 @@ compdef _hosts upgrade
 ** profile
 #+begin_src shell
 source ~/dotfiles/.profile
+#+end_src
+** alias
+#+begin_src shell
+source ~/dotfiles/aliases.sh
 #+end_src
 * History
 #+begin_src shell
