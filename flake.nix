@@ -23,10 +23,10 @@
 
     #mozilla.url = "github:mozilla/nixpkgs-mozilla";
 
-    firefox-nightly = {
-      url = "github:colemickens/flake-firefox-nightly";
+    #firefox-nightly = {
+    #  url = "github:colemickens/flake-firefox-nightly";
       # inputs.nixpkgs.follows = "nixpkgs";
-    };
+    #};
 
 
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
@@ -37,13 +37,18 @@
 
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
-    # hyprland.url = "github:hyprwm/Hyprland/51a930f802c71a0e67f05e7b176ded74e8e95f87";
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland.url = "github:hyprwm/Hyprland/4f99e805b900b72f5e2bed54a1a44d10c8d54771";
+    # hyprland.url = "github:hyprwm/Hyprland";
 
     emacs-overlay = {
       # url = "github:nix-community/emacs-overlay";
       # url = "github:nix-community/emacs-overlay/9bc16d788b9b09e986b2fba5a76fe44d35010d52";
       url = "github:nix-community/emacs-overlay/128bdc6a54bcf514c515377240f0809377f3d9b0";
+    };
+
+    programsdb = {
+      url = "github:wamserma/flake-programs-sqlite";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     private-stuff = {
@@ -53,7 +58,7 @@
 
   };
 
-  outputs = { nixpkgs, chaotic ,home-manager, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,hyprland, private-stuff,firefox-nightly, ... }@inputs:
+  outputs = { nixpkgs, chaotic ,home-manager,programsdb, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,hyprland, private-stuff, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -104,6 +109,7 @@
       };
       # packages."x86_64-linux".thorium = pkgs.callPackage ./NixOS/custom-packages/thorium-browser/default.nix {};
       # packages."x86_64-linux".qtile= pkgs.callPackage ./NixOS/custom-packages/qtile/default.nix {};
+      # packages."x86_64-linux".freedownloadmanager= pkgs.callPackage ./NixOS/custom-packages/free-download-manager/default.nix {};
 
     };
 }
