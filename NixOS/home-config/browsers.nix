@@ -29,7 +29,5 @@
     qutebrowser = {
       enable = true;
     };
-
-    # firefox
   };
 }
