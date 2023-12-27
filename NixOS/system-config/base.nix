@@ -2,11 +2,11 @@
 
 # base system configuration
 {
-  # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest; 
-  # boot.kernelPackages = pkgs.linuxPackages_latest; 
-  #boot.kernelPackages = pkgs.linuxPackages_zen; 
-  boot.kernelPackages = pkgs.linuxPackages_cachyos; 
-  # boot.kernelPackages = pkgs.linuxPackages_testing; 
+  # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelPackages = pkgs.linuxPackages_cachyos;
+  # boot.kernelPackages = pkgs.linuxPackages_testing;
 
   # kernel parameters
   boot.kernelParams = [ "mitigations=off" "clearcpuid=514" "iommu=soft"];
@@ -17,7 +17,7 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot";
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
   # Set your time zone.
   time.timeZone = "Asia/Kolkata";
@@ -28,9 +28,12 @@
   systemd.extraConfig = ''
   DefaultTimeoutStopSec=10s
 '';
+
+  # cgroups support
+  systemd.enableUnifiedCgroupHierarchy=true;
   #bluetooth
   hardware.bluetooth.enable = true;
-  hardware.bluetooth.package = pkgs.bluez;
+  hardware.bluetooth.package = pkgs.bluez5-experimental;
   services.blueman.enable = true;
 
 
@@ -38,7 +41,7 @@
   services.fwupd.enable = true;
 
   #man
-  documentation.man.generateCaches = false;
+  # documentation.man.generateCaches = false;
 
   #openssh
   services.openssh = {
@@ -143,7 +146,7 @@
       # "8.8.8.8"
       # "2001:4860:4860::8888"
     ];
-    #extraHosts = "185.199.108.133 raw.githubusercontent.com";  
+    extraHosts = "185.199.108.133 raw.githubusercontent.com";  
   };
   # Configure keymap in X11
   services.xserver.layout = "us";
