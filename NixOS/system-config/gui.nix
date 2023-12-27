@@ -10,19 +10,12 @@
       '';
     # window wmanagers
     windowManager = {
-      #qtile = {
-      #  enable = true;
-      #  backend = "wayland";
-      #  package = (pkgs.qtile.overrideAttrs (old: {
-      #    src = pkgs.fetchFromGitHub {
-      #      repo = "qtile";
-      #      owner = "qtile";
-      #      rev = "42ed926a68a61a412260c07cb6e027a777c3a94f";
-            # sha256 = "sha256-lVwBwOvzn4ro1jInRuNvn1vQuwUHUp4MYrDaFRmW9pc=";
-      #      sha256 = lib.fakeSha256;
-      #    };
-      #  }));
-      #};
+      qtile = {
+        enable = true;
+        backend = "wayland";
+        package = pkgs.qtile-module_git;
+        extraPackages = _: [ pkgs.qtile-extras_git ];
+      };
 
       xmonad = {
         enable = true;
@@ -93,7 +86,7 @@
   # QT settings
   # environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "";
   # qt.platformTheme="qt5ct";
-  # environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "qt5ct";
+  environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "qt5ct";
   # qt.platformTheme="qt5ct";
   # environment.variables.QT_STYLE_OVERRIDE= lib.mkForce "";
   # river 
@@ -117,8 +110,36 @@
         passthru.providedSessions = [ "river" ];
       })
     )
+      
+    
+  #qtile wayland 
+    # (pkgs.qtile_git.overrideAttrs
+    #   (prevAttrs: rec {
+    #     postInstall =
+    #       let
+    #         cfg = config.services.xserver.windowManager.qtile;
+    #         pyEnv = pkgs.python3.withPackages (p: [ (cfg.package.unwrapped or cfg.package) ] ++ (cfg.extraPackages p));
+    #         qtileSession = ''
+    #           [Desktop Entry]
+    #           Name=Qtile (wayland)
+    #           Comment=Dynamic Wayland compositor
+    #           Exec=${pkgs.writeShellScript "start-qtile" ''
+    #                   exec ${pyEnv}/bin/qtile start -b ${cfg.backend} \
+    #                   ${pkgs.lib.optionalString (cfg.configFile != null)
+    #                     "--config \"${cfg.configFile}\""} "$@"
+    #            ''}
+    #           Type=Application
+    #         '';
+    #       in
+    #         ''
+    #         mkdir -p $out/share/wayland-sessions
+    #         echo "${qtileSession}" > $out/share/wayland-sessions/qtile.desktop
+    #       '';
+    #     passthru.providedSessions = [ "qtile" ];
+    #   })
+    # )
   ];
-
+  chaotic.qtile.enable = true;
   services.gnome.tracker.enable = false;
   services.gnome.gnome-keyring.enable = true;
   environment.gnome.excludePackages = [
