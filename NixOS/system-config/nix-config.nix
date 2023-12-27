@@ -6,6 +6,8 @@
     package = pkgs.nixUnstable;
     extraOptions = ''
       experimental-features = nix-command flakes
+      max-substitution-jobs = 32
+      http-connections = 32
       # extra-sandbox-paths = /nix/var/cache/ccache
     '';
     # settings.trusted-substituters = ["s3://nix-cache"];
