@@ -40,7 +40,7 @@ export GTK_USE_PORTAL=0
 
 ** Applications
 #+begin_src bash
-riverctl map normal $mod Return spawn "foot" 
+riverctl map normal $mod Return spawn "footclient" 
 
 # Mod+Q to close the focused view
 riverctl map normal $mod Q close
@@ -260,7 +260,7 @@ riverctl map passthrough $mod F11 enter-mode normal
 
 *** Focus follows mouse
 #+begin_src bash
-riverctl focus-follows-cursor disabled
+riverctl focus-follows-cursor always
 
 #+end_src
 
@@ -312,14 +312,15 @@ riverctl set-repeat 50 300
 riverctl spawn "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
 riverctl spawn "systemctl --user import-environment"
 # riverctl spawn "swaybg -i ~/dotfiles/wallpapers/darkest_hour.jpg" 
-# riverctl spawn "swaybg -i ~/dotfiles/wallpapers/NixOS-1.png" 
-riverctl spawn "swaybg -i ~/dotfiles/wallpapers/archlinux/archlinux-onedark.png"
+riverctl spawn "swaybg -i ~/dotfiles/wallpapers/NixOS-1.png" 
+# riverctl spawn "swaybg -i ~/dotfiles/wallpapers/archlinux/archlinux-onedark.png"
 riverctl spawn lxpolkit 
 riverctl spawn waybar
 # riverctl spawn /usr/lib/notification-daemon-1.0/notification-daemon
 riverctl spawn dunst
 # riverctl spawn  "deadd-notification-center"
 riverctl spawn "nm-applet --indicator"
+riverctl spawn "foot --server"
 riverctl spawn "blueman-applet"
 riverctl spawn "emacs --daemon"
 #riverctl spawn "redshift -O 5000"
