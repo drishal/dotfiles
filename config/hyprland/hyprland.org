@@ -47,7 +47,7 @@ workspace = 10, monitor:eDP-1
  See https://wiki.hyprland.org/Configuring/Keywords/ for more
  #+begin_src conf 
  exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP 
- exec-once =  waybar & dunst & nm-applet --indicator & lxpolkit & blueman-applet & emacs --daemon & /usr/bin/foot --server  & hyprpaper
+ exec-once =  waybar & dunst & nm-applet --indicator & lxpolkit & blueman-applet & emacs --daemon & foot --server  & hyprpaper
  #bash ~/dotfiles/scripts/power-monitor.sh & 
  # & swaybg -i ~/dotfiles/wallpapers/NixOS-1.png
  #+end_src
@@ -117,7 +117,7 @@ decoration {
     shadow_render_power = 3
     col.shadow = rgba(1a1a1aee)
     blur {
-    enabled = true
+    enabled = false
     new_optimizations = true
     }
 }
@@ -179,7 +179,7 @@ $mainMod = SUPER
 #+end_src
 ** Binds
 #+begin_src conf
-bind = $mainMod, RETURN, exec, /usr/bin/footclient
+bind = $mainMod, RETURN, exec, footclient
 bind = $mainMod, D, exec, wofi --show drun
 bind = $mainMod, V, exec, pavucontrol
 bind = $mainMod, T, exec, GDK_BACKEND=x11 xfce4-taskmanager
@@ -247,10 +247,11 @@ bind = $mainMod, mouse_up, workspace, e-1
 * Hyprpaper config
 #+begin_src conf :tangle ~/.config/hypr/hyprpaper.conf
 preload = /home/drishal/dotfiles/wallpapers/NixOS-1.png 
-preload = /home/drishal/dotfiles/wallpapers/archlinux/archlinux-onedark.png
+# preload = /home/drishal/dotfiles/wallpapers/archlinux/archlinux-onedark.png
 # preload =~/dotfiles/wallpapers/darkest_hour.jpg
-# wallpaper = eDP-1,~/dotfiles/wallpapers/NixOS-1.png
-wallpaper = eDP-1,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
+wallpaper = eDP-1,~/dotfiles/wallpapers/NixOS-1.png
+# wallpaper = eDP-1,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
 # wallpaper = eDP-1,~/dotfiles/wallpapers/darkest_hour.jpg
-wallpaper = HDMI-A-1,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
+wallpaper = HDMI-A-1,~/dotfiles/wallpapers/NixOS-1.png
+# wallpaper = HDMI-A-1,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
 #+end_src
