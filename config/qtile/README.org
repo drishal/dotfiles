@@ -50,6 +50,7 @@ from libqtile.backend.wayland import inputs,InputConfig
 #+end_src
 * Some variables
 #+begin_src python
+wallpaper1="~/dotfiles/wallpapers/NixOS-1.png"
 mod = "mod4"
 if qtile.core.name=="wayland":
     terminal = "footclient"
@@ -459,7 +460,8 @@ def init_widgets_list():
 
 screens = [
     Screen(
-        wallpaper='~/dotfiles/wallpapers/archlinux/archlinux-onedark.png',
+        # wallpaper='~/dotfiles/wallpapers/archlinux/archlinux-onedark.png',
+        wallpaper=wallpaper1,
         wallpaper_mode='stretch',
         top=bar.Bar(
           # widgets=bar_widgets()
@@ -472,7 +474,8 @@ screens = [
 
     ),
     Screen(
-        wallpaper='~/dotfiles/wallpapers/archlinux/archlinux-onedark.png',
+        # wallpaper='~/dotfiles/wallpapers/archlinux/archlinux-onedark.png',
+        wallpaper=wallpaper1,
         wallpaper_mode='stretch',
         top=bar.Bar(
           # widgets=bar_widgets()
