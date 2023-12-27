@@ -23,7 +23,7 @@
 
     #waydroid
     waydroid.enable = true;
-    lxd.enable = true;
+    # lxd.enable = true;
 
 
     # virtualbox
@@ -49,7 +49,7 @@
   #   # use coredns
   #   addons.dns.enable = true;
   # };
-
+  programs.virt-manager.enable = true;
 
     
     users.extraGroups.vboxusers.members = [ "drishal" ];
