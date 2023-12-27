@@ -8,31 +8,31 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "nvme" "ehci_pci" "xhci_pci" "usb_storage" "uas" "usbhid" "sd_mod" "rtsx_pci_sdmmc" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [ ];
+  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usbhid" "uas" "rtsx_pci_sdmmc" ];
+  boot.initrd.kernelModules = [ "amdgpu" "i8042"];
+  boot.kernelModules = [ "kvm-amd" "v4l2loopback" ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/7965afd8-e62b-469e-9c18-c799f219ea58";
+    { device = "/dev/disk/by-uuid/f95000a8-1ed3-4585-b8d7-ef1a613c8057";
       fsType = "btrfs";
       options = [ "subvol=root" "compress=zstd" "noatime" ];
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/7965afd8-e62b-469e-9c18-c799f219ea58";
+    { device = "/dev/disk/by-uuid/f95000a8-1ed3-4585-b8d7-ef1a613c8057";
       fsType = "btrfs";
       options = [ "subvol=home" "compress=zstd" "noatime" ];
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/7965afd8-e62b-469e-9c18-c799f219ea58";
+    { device = "/dev/disk/by-uuid/f95000a8-1ed3-4585-b8d7-ef1a613c8057";
       fsType = "btrfs";
       options = [ "subvol=nix" "compress=zstd" "noatime" ];
     };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/B998-7577";
+  fileSystems."/boot/efi" =
+    { device = "/dev/disk/by-uuid/DBDC-8563" ;
       fsType = "vfat";
     };
 
@@ -45,7 +45,7 @@
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp2s0f0.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp5s0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlp3s0.useDHCP = lib.mkDefault true;
+  # networking.interfaces.wlan0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
