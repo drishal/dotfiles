@@ -1,3 +1,4 @@
 ./suckless/dwm-6.3/config.h
 ./suckless/dwm-6.3/dwm
+./NixOS/system-config/hardware-configuration.nix
 ./result
