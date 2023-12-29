@@ -1,1 +1,0 @@
-hardware-configuration/hardware-configuration-laptop.nix

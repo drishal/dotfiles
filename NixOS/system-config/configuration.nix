@@ -8,7 +8,7 @@
     ./users.nix
     ./virtualization.nix
     ./searx.nix
-    ./hardware-configuration.nix
+    # ./hardware-configuration.nix
     # ./tlp.nix
   ];
 

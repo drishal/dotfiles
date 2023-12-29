@@ -33,7 +33,7 @@
 
     #firefox-nightly = {
     #  url = "github:colemickens/flake-firefox-nightly";
-      # inputs.nixpkgs.follows = "nixpkgs";
+    # inputs.nixpkgs.follows = "nixpkgs";
     #};
 
 
@@ -83,41 +83,68 @@
 
       lib = nixpkgs.lib;
     in
-    {
-      homeConfigurations."drishal" = home-manager.lib.homeManagerConfiguration {
-        # pkgs = nixpkgs.legacyPackages.${system};
-        inherit pkgs;
-        modules = [
-          ./NixOS/home-config/home.nix
-          {nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];}
-          # hyprland.homeManagerModules.default
-          "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
-          {
-            home = {
-              username = "drishal";
-              homeDirectory = "/home/drishal";
-              stateVersion = "22.05";
-            };
-          }
-        ];
-      };
-      nixosConfigurations = {
-        nixos = lib.nixosSystem {
-          inherit system;
+      {
+        homeConfigurations."drishal" = home-manager.lib.homeManagerConfiguration {
+          # pkgs = nixpkgs.legacyPackages.${system};
+          inherit pkgs;
           modules = [
-            # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
-            { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay]; }
-            # hyprland.nixosModules.default
-            ./NixOS/system-config/configuration.nix
-            chaotic.nixosModules.default
-            # { programs.hyprland.enable = true; }
+            ./NixOS/home-config/home.nix
+            {nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];}
+            # hyprland.homeManagerModules.default
+            "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
+            {
+              home = {
+                username = "drishal";
+                homeDirectory = "/home/drishal";
+                stateVersion = "22.05";
+              };
+            }
           ];
-          specialArgs = { inherit inputs; };
         };
-      };
-      # packages."x86_64-linux".thorium = pkgs.callPackage ./NixOS/custom-packages/thorium-browser/default.nix {};
-      # packages."x86_64-linux".qtile= pkgs.callPackage ./NixOS/custom-packages/qtile/default.nix {};
-      # packages."x86_64-linux".freedownloadmanager= pkgs.callPackage ./NixOS/custom-packages/free-download-manager/default.nix {};
+        nixosConfigurations =
+          let
+            commonModules = [
+              { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay]; }
+              ./NixOS/system-config/hardware-configuration/hardware-configuration-desktop.nix
+              ./NixOS/system-config/configuration.nix
+              chaotic.nixosModules.default
+            ];
+          in
+            {
+              nixos-desktop = lib.nixosSystem {
+                inherit system;
+                modules = commonModules ++ [
+                  ./NixOS/system-config/hardware-configuration/hardware-configuration-desktop.nix
+                ];
+                specialArgs = { inherit inputs; };
+              };
+              nixos = lib.nixosSystem {
+                inherit system;
+                modules = commonModules ++ [
+                  ./NixOS/system-config/hardware-configuration/hardware-configuration-laptop.nix
+                ];
+                specialArgs = { inherit inputs; };
+              };
+            };
 
-    };
+        # nixosConfigurations = {
+        #   nixos = lib.nixosSystem {
+        #     inherit system;
+        #     modules = [
+        #       # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
+        #       { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay]; }
+        #       # hyprland.nixosModules.default
+        #       ./NixOS/system-config/hardware-configuration/hardware-configuration-laptop.nix
+        #       ./NixOS/system-config/configuration.nix
+        #       chaotic.nixosModules.default
+        #       # { programs.hyprland.enable = true; }
+        #     ];
+        #     specialArgs = { inherit inputs; };
+        #   };
+        # };
+        # # packages."x86_64-linux".thorium = pkgs.callPackage ./NixOS/custom-packages/thorium-browser/default.nix {};
+        # packages."x86_64-linux".qtile= pkgs.callPackage ./NixOS/custom-packages/qtile/default.nix {};
+        # packages."x86_64-linux".freedownloadmanager= pkgs.callPackage ./NixOS/custom-packages/free-download-manager/default.nix {};
+
+      };
 }
