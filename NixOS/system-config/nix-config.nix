@@ -5,15 +5,20 @@
     # trustedUsers = [ "root" "drishal" ];
     package = pkgs.nixUnstable;
     extraOptions = ''
-      experimental-features = nix-command flakes
-      max-substitution-jobs = 32
-      http-connections = 32
+      experimental-features = nix-command flakes configurable-impure-env  auto-allocate-uids
+      max-substitution-jobs = 64
+      http-connections = 64
+      auto-allocate-uids = true
+      # configurable-impure-env = true
       # extra-sandbox-paths = /nix/var/cache/ccache
     '';
     # settings.trusted-substituters = ["s3://nix-cache"];
     settings = {
       auto-optimise-store = true;
       trusted-users = [ "root" "drishal" ];
+      substituters = ["https://hyprland.cachix.org"];
+      trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+
     };
     gc = {
       automatic = true;
