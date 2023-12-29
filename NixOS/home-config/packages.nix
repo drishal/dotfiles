@@ -20,6 +20,7 @@
     man-pages
     neofetch
     #rnix
+    sl
     # neovide
     nixpkgs-fmt
     papirus-icon-theme
@@ -75,7 +76,8 @@
 
   gtk = {
     enable = true;
-    theme.name = "Orchis-Dark";
+    # theme.name = "Orchis-Dark";
+    theme.name = "Adwaita-dark";
     iconTheme = with pkgs; {
       name = "Papirus-Dark";
       package = papirus-icon-theme;
@@ -98,7 +100,7 @@
       gtk-menu-images=1;
       gtk-modules="colorreload-gtk-module";
       gtk-primary-button-warps-slider=false;
-      gtk-theme-name="Orchis-Dark";
+      # gtk-theme-name="Orchis-Dark";
       # gtk-toolbar-style=GTK_TOOLBAR_BOTH_HORIZ;
       # gtk-xft-dpi=98304;
       # gtk-toolbar-icon-size=GTK_ICON_SIZE_LARGE_TOOLBAR;
@@ -118,7 +120,7 @@
       gtk-icon-theme-name="Papirus-Dark";
       gtk-modules="colorreload-gtk-module";
       gtk-primary-button-warps-slider="false";
-      gtk-theme-name="Orchis-Dark";
+      # gtk-theme-name="Orchis-Dark";
       # gtk-xft-dpi=98304;
     };
   };

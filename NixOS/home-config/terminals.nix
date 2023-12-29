@@ -31,5 +31,31 @@
         };
       };
     };
+    rio={
+      enable=false;
+      settings={
+        # cursor = '▇';
+        blinking-cursor = false;
+        # theme="dracula";
+        fonts={
+          size=18;
+          family="FantasqueSansM Nerd Font";
+        };
+        colors={
+          foreground = "#bbc2cf";
+          background = "#282c34";
+          regular0 = "#282c34"; # black
+          red = "#ff6c6b"; # red
+          green = "#98be65"; # green
+          yellow = "#ecbe7b"; # yellow
+          blue = "#51afef"; # blue
+          magenta = "#c678dd"; # magenta
+          cyan = "#46d9ff"; # cyan
+          white = "#bbc2cf"; # white
+          tabs = "#443d40";
+          tabs-active = "#F38BA3";
+        };
+      };
+    };
   };
 }

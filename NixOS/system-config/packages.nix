@@ -76,20 +76,20 @@
     # calibre
     cargo
     #carnix
-    chromium
-    # (chromium.override {
-    #   commandLineArgs = [
-    #     "--ignore-gpu-blocklist"
-    #     "--enable-gpu-rasterization"
-    #     "--enable-zero-copy"
-    #     "--force-dark-mode"
-    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
-    #     "--disable-features=UseChromeOSDirectVideoDecoder"
-    #     "--use-vulkan"
-    #     "--ozone-platform-hint=auto"
-    #     "--enable-hardware-overlays"
-    #   ];
-    # })
+    # chromium
+    (chromium.override {
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--enable-gpu-rasterization"
+        "--enable-zero-copy"
+        "--force-dark-mode"
+        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
+        "--disable-features=UseChromeOSDirectVideoDecoder"
+        "--use-vulkan"
+        "--ozone-platform-hint=auto"
+        "--enable-hardware-overlays"
+      ];
+    })
 
     chromium-bsu
     cinnamon.nemo
@@ -269,6 +269,7 @@
     nvtop-amd
     nodejs
     # nodePackages_latest.create-react-app
+    nodePackages_latest.bash-language-server
     noto-fonts
     ntfs3g
     obs-studio

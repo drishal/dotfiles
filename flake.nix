@@ -7,6 +7,14 @@
   # nixConfig.trusted-users=["root" "drishal"];
   # nixConfig.extra-substituters = [ "https://nix-community.cachix.org" ];
   # nixConfig.extra-trusted-public-keys = [  "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="];
+  nixConfig = {
+    extra-substituters = [
+      "https://nix-community.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+  };
   inputs = {
 
     nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
@@ -37,7 +45,7 @@
 
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
-    hyprland.url = "github:hyprwm/Hyprland/4f99e805b900b72f5e2bed54a1a44d10c8d54771";
+    hyprland.url = "github:hyprwm/Hyprland/f9c13b614c780c45933440ddecaaa57cc5f1cc12";
     # hyprland.url = "github:hyprwm/Hyprland";
 
     emacs-overlay = {

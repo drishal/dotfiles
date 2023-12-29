@@ -1612,6 +1612,12 @@ https://github.com/pwalsh/pipenv.el
   (use-package zig-mode :demand t)
   (setq lsp-zig-zls-executable "~/zls/zls")
 #+end_src
+*** Dap mode
+#+begin_src emacs-lisp
+(use-package dap-mode :demand t)
+(dap-auto-configure-mode 1)
+#+end_src
+
 ** which key
 #+begin_src emacs-lisp
 (use-package which-key

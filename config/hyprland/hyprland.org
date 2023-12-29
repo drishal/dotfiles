@@ -11,7 +11,7 @@
 - [[#misc-settings][Misc settings]]
 - [[#decoration-settings][Decoration settings]]
 - [[#animations][Animations]]
-- [[#layouts][Layouts]]
+- [[#layout][Layout]]
   - [[#dwindle][Dwindle]]
   - [[#master][Master]]
 - [[#gestures][Gestures]]
@@ -119,6 +119,12 @@ decoration {
     blur {
     enabled = false
     new_optimizations = true
+    size=8
+    passes=3
+    noise=0.04
+    brightness=0.9
+    contrast=0.9
+    popups=true
     }
 }
 #+end_src
@@ -138,7 +144,7 @@ animations {
 }
 #+end_src
 
-* Layouts
+* Layout
 ** Dwindle
 See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
 #+begin_src conf 
