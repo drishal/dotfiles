@@ -13,3 +13,4 @@ static const Block blocks[] = {
 static char delim[] = "^c#5B6268^  ";
 static unsigned int delimLen = 100;
 #define CMDLENGTH		10000
+
