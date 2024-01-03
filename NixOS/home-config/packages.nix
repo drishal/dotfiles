@@ -21,6 +21,7 @@
     neofetch
     #rnix
     sl
+    starship
     # neovide
     nixpkgs-fmt
     papirus-icon-theme
