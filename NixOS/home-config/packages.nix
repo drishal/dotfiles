@@ -11,6 +11,7 @@
     # neovide
     # vivaldi-ffmpeg-codecs
     # vivaldi-widevine
+    bat
     cachix
     fd
     fzf
