@@ -616,6 +616,14 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 (use-package magit :demand t)
 (use-package transient :demand t)
 (setq package-install-upgrade-built-in t)
+;;fixing seq
+(defun +elpaca-unload-seq (e) "Unload seq before continuing the elpaca build, then continue to build the recipe E."
+  (and (featurep 'seq) (unload-feature 'seq t))
+  (elpaca--continue-build e))
+(elpaca `(seq :build ,(append (butlast (if (file-exists-p (expand-file-name "seq" elpaca-builds-directory))
+                                          elpaca--pre-built-steps
+                                        elpaca-build-steps))
+                             (list '+elpaca-unload-seq 'elpaca--activate-package))))
 #+end_src
 
 ** Some indentation settings
