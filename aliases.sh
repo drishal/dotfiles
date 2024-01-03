@@ -124,3 +124,5 @@ alias laptop-disable="hyprctl keyword monitor eDP-1,  disable"
 alias wcon="warp-cli connect"
 alias wdis="warp-cli disconnect"
 
+# qemu 
+alias qemu-create-img="qemu-img create -f qcow2" 
