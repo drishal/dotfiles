@@ -32,7 +32,7 @@
     # sessionVariables.LOCALES_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
     # sessionVariables.LOCALES_ARCHIVE = "/usr/lib/locale/locale-archive";
   };
-  # programs.man.generateCaches=true;
+  programs.man.generateCaches=true;
 
   # home.stateVersion = "21.05";
 

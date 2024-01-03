@@ -3,7 +3,7 @@
   # lib.fakeSha256
 
   programs.fish = {
-    enable=true;
+    enable=false;
     interactiveShellInit = ''
     # paths
     fish_add_path ~/.local/bin
