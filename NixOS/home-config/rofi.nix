@@ -8,6 +8,7 @@
       font = "FantasqueSansMono Nerd Font 14";
       plugins = [
         pkgs.rofi-emoji
+        pkgs.glibcLocales
       ];
     };
   };
