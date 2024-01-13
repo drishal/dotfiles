@@ -437,10 +437,12 @@ compdef _hosts upgrade
 #+begin_src shell
 source ~/dotfiles/.profile
 #+end_src
+
 ** alias
 #+begin_src shell
-source ~/dotfiles/aliases.sh
+source ~/dotfiles/scripts/aliases.sh
 #+end_src
+
 * History
 #+begin_src shell
 HISTFILE=~/.zsh_history
