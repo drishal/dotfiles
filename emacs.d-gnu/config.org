@@ -279,6 +279,8 @@ remove/add tangle no to whatever font you prefer
 (add-to-list 'recentf-exclude "~/Downloads.*") 
 (add-to-list 'recentf-exclude "~/Movies.*") 
 (add-to-list 'recentf-exclude "~/notes.*") 
+(add-to-list 'recentf-exclude "~/.config/emacs/eln-cache.*") 
+(add-to-list 'recentf-exclude "~/.config/emacs/elpaca.*") 
 (add-to-list 'recentf-exclude "/nix/store.*") 
 (add-to-list 'recentf-exclude "~/.mozilla.*") 
 (add-to-list 'recentf-exclude "/sudo::/.*") 
@@ -418,7 +420,7 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 ** theme
 *** Doom themes
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;; (use-package dracula- ensure t)
 ;; (use-package modus-themes :demand t)
 (use-package doom-themes :demand t
@@ -444,9 +446,13 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 *** Other themes:
 **** Catppuccin
-#+begin_src emacs-lisp :tangle no
-(add-to-list 'custom-theme-load-path "~/dotfiles/emacs.d-gnu/themes")
-(load-theme 'catppuccin t)
+#+begin_src emacs-lisp  :tangle no
+(use-package catppuccin-theme :demand t
+  :config
+  (setq catppuccin-flavor 'frappe) ;; or 'latte, 'macchiato, or 'mocha
+  (load-theme 'catppuccin t :no-confirm)
+  )
+;; (catppuccin-reload)
 #+end_src
 **** Modus
 #+begin_src emacs-lisp :tangle no
