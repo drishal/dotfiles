@@ -5,11 +5,12 @@
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
   # boot.kernelPackages = pkgs.linuxPackages_latest;
   # boot.kernelPackages = pkgs.linuxPackages_zen;
-  boot.kernelPackages = pkgs.linuxPackages_cachyos;
+  # boot.kernelPackages = pkgs.linuxPackages_cachyos;
+  boot.kernelPackages = pkgs.linuxPackages_cachyos-sched-ext;
   # boot.kernelPackages = pkgs.linuxPackages_testing;
 
   # kernel parameters
-  boot.kernelParams = [ "mitigations=off" "clearcpuid=514" "iommu=soft"];
+  boot.kernelParams = ["mitigations=off" "clearcpuid=514"];
   #"processor.max_cstate=1" "intel_idle.max_cstate=0"
   # microde
   hardware.cpu.amd.updateMicrocode = true;
@@ -210,6 +211,9 @@
   systemd.services.systemd-udevd.restartIfChanged = false;
 
   #session variables
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL="1";
+  };
   
  # environment.sessionVariables = rec {
  #   LIBVA_DRIVER_NAME="radeonsi";
