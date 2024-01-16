@@ -108,6 +108,9 @@ require('lazy').setup({
     end,
   },
 
+  { 
+	"catppuccin/nvim", name = "catppuccin", priority = 1000 
+  },
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
