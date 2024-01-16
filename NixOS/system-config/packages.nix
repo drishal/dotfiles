@@ -39,6 +39,7 @@
     aircrack-ng
     # anydesk
     alacritty
+    ani-cli
     appimage-run
     arandr
     # arc-theme
@@ -50,24 +51,24 @@
     bison
     bookworm
     # brave
-    (brave.override {
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--enable-gpu-rasterization"
-        "--enable-zero-copy"
-        "--force-dark-mode"
-        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,DCompTripleBufferVideoSwapChain"
-        "--disable-features=UseChromeOSDirectVideoDecoder"
-        "--ozone-platform-hint=auto"
-        "--enable-accelerated-video-decode"
-        "--enable-accelerated-video-encode"
-        "--enable-hardware-overlays"
-        "--disable-gpu-driver-bug-workarounds" 
-        "--enable-native-gpu-memory-buffers" 
-        "--enable-webrtc-hw-decoding" 
-        "--enable-webrtc-hw-encoding"
-      ];
-    })
+    # (brave.override {
+    #   commandLineArgs = [
+    #     "--ignore-gpu-blocklist"
+    #     "--enable-gpu-rasterization"
+    #     "--enable-zero-copy"
+    #     "--force-dark-mode"
+    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,DCompTripleBufferVideoSwapChain"
+    #     "--disable-features=UseChromeOSDirectVideoDecoder"
+    #     "--ozone-platform-hint=auto"
+    #     "--enable-accelerated-video-decode"
+    #     "--enable-accelerated-video-encode"
+    #     "--enable-hardware-overlays"
+    #     "--disable-gpu-driver-bug-workarounds" 
+    #     "--enable-native-gpu-memory-buffers" 
+    #     "--enable-webrtc-hw-decoding" 
+    #     "--enable-webrtc-hw-encoding"
+    #   ];
+    # })
     btop
     bun
     brightnessctl
@@ -116,7 +117,16 @@
     dejavu_fonts
     # dolphin
     discord
-    distrobox
+    distrobox_git
+    dig
+    # (distrobox.overrideAttrs (old: {
+    #   src = pkgs.fetchFromGitHub {
+    #     repo = "distrobox";
+    #     owner = "89luca89";
+    #     rev = "3435f4d27070a99668bfa29a3e508db4ecc09009";
+    #     sha256 = "sha256-UWrXpb20IHcwadPpwbhSjvOP1MBXic5ay+nP+OEVQE4=";
+    #   };
+    # }))
     dmg2img
     dmenu
     dmidecode
@@ -132,7 +142,7 @@
     easyeffects
     extundelete
     lsd
-    # fastfetch
+    fastfetch
     fdk_aac
     # floorp
     feh
@@ -247,6 +257,7 @@
     }))
     mesa-demos
     metasploit
+    # mov-cli
     mlocate
     mongodb-compass
     mosh
@@ -259,8 +270,8 @@
     ncurses
     neofetch
     nitch
-    neovim
-    neovide
+    neovim-nightly
+    # neovide
     networkmanagerapplet
     nitrogen
     nim
@@ -308,6 +319,7 @@
     protonvpn-cli
     protonvpn-gui
     procps
+    prow
     protonup-qt
     ps_mem
     python3
@@ -336,7 +348,8 @@
     rustup
     rust-analyzer
     simplescreenrecorder
-    sony-headphones-client
+    # sony-headphones-client
+    scx
     # smplayer
     speedtest-cli
     spot
@@ -370,6 +383,7 @@
     vdpauinfo
     # virt-manager
     virtualenv
+    virtiofsd
     #(vivaldi.override {
     #  commandLineArgs = [
     #    "--ignore-gpu-blocklist"
@@ -378,11 +392,11 @@
     #    "--force-dark-mode"
     #    "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
     #    "--disable-features=UseChromeOSDirectVideoDecoder"
-        # "--use-vulkan"
-   #     "--ozone-platform-hint=auto"
+    # "--use-vulkan"
+    #     "--ozone-platform-hint=auto"
     #    "--enable-hardware-overlays"
-   #   ];
-   # })
+    #   ];
+    # })
     #vivaldi-ffmpeg-codecs
     ventoy-full
     # vscode-fhs
@@ -535,7 +549,7 @@
       };
       unpackPhase = null;
     }))
-];
+  ];
 
   
   #swaylock
@@ -549,13 +563,24 @@
     "electron-12.2.3"
   ];
   #fonts
-  fonts.packages= with pkgs; [
-    noto-fonts
-    noto-fonts-cjk
-  #   (pkgs.nerdfonts.override {
-  #     fonts = [ "FiraCode"   "Monofur" ];
-  #   })
-  ];
+  fonts = {
+    enableDefaultPackages = true;
+    # fontDir.enable = true;
+    packages = with pkgs; [
+      noto-fonts
+      noto-fonts-cjk
+      (pkgs.nerdfonts.override {
+        fonts = [ "FiraCode" "Monofur" "FantasqueSansMono"];
+      })
+    ];
+    fontconfig = {
+      defaultFonts = {
+        serif = [ "Noto Sans" ];
+        sansSerif = [ "Noto Serif"];
+        monospace = [ "FantasqueSansM Nerd Font" ];
+      };
+    };
+  };
   # programs.command-not-found.enable = true;
   # programs.nix-index =
   #   {
