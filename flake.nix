@@ -26,6 +26,13 @@
       url = "github:nix-community/home-manager";
     };
 
+    # base16-schemes = "github.com:tinted-theming/schemes"; 
+    nix-colors = {
+      url = "github:misterio77/nix-colors";
+      # inputs.base16-schemes.follows = "base16-schemes";
+    };
+
+
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     discord-flake = { url = github:InternetUnexplorer/discord-overlay; };
 
@@ -37,7 +44,8 @@
     #};
 
 
-    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    # chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    chaotic.url = "github:chaotic-cx/nyx/distrobox-use-out";
 
     nur.url = "github:nix-community/NUR";
 
@@ -45,7 +53,7 @@
 
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
-    hyprland.url = "github:hyprwm/Hyprland/f9c13b614c780c45933440ddecaaa57cc5f1cc12";
+    hyprland.url = "github:hyprwm/Hyprland/c4da4b026deefd58f532353b64e9f17130e760ca";
     # hyprland.url = "github:hyprwm/Hyprland";
 
     emacs-overlay = {
@@ -66,7 +74,7 @@
 
   };
 
-  outputs = { nixpkgs, chaotic ,home-manager,programsdb, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,hyprland, private-stuff, ... }@inputs:
+  outputs = { nixpkgs, chaotic ,home-manager,programsdb, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,hyprland,nix-colors, private-stuff, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -74,23 +82,15 @@
         inherit system;
         config = { allowUnfree = true; };
       };
-
-      # master-pkgs = import nixpkgs-master {
-      #   inherit system;
-      #   config = { allowUnfree = true; };
-      # };
-
-
       lib = nixpkgs.lib;
     in
       {
         homeConfigurations."drishal" = home-manager.lib.homeManagerConfiguration {
-          # pkgs = nixpkgs.legacyPackages.${system};
           inherit pkgs;
+          extraSpecialArgs={inherit inputs;};
           modules = [
             ./NixOS/home-config/home.nix
             {nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];}
-            # hyprland.homeManagerModules.default
             "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
             {
               home = {
@@ -104,7 +104,7 @@
         nixosConfigurations =
           let
             commonModules = [
-              { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay]; }
+              { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay inputs.neovim-nightly-overlay.overlay]; }
               ./NixOS/system-config/hardware-configuration/hardware-configuration-desktop.nix
               ./NixOS/system-config/configuration.nix
               chaotic.nixosModules.default
@@ -142,7 +142,7 @@
         #     specialArgs = { inherit inputs; };
         #   };
         # };
-        # # packages."x86_64-linux".thorium = pkgs.callPackage ./NixOS/custom-packages/thorium-browser/default.nix {};
+        # packages."x86_64-linux".thorium = pkgs.callPackage ./NixOS/custom-packages/thorium-browser/default.nix {};
         # packages."x86_64-linux".qtile= pkgs.callPackage ./NixOS/custom-packages/qtile/default.nix {};
         # packages."x86_64-linux".freedownloadmanager= pkgs.callPackage ./NixOS/custom-packages/free-download-manager/default.nix {};
 

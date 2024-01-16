@@ -1,4 +1,4 @@
-{ config, inputs, pkgs, ... }:
+{ config, inputs, pkgs, nix-colors, ... }:
 {
   imports = [
     # ./browsers.nix
@@ -11,6 +11,9 @@
     ./terminals.nix
     ./rofi.nix
     ./shells.nix
+    ./lf.nix
+    ./colors/doomone.nix
+    inputs.nix-colors.homeManagerModules.default
   ];
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -28,11 +31,16 @@
   home = {
     username = "drishal";
     homeDirectory = "/home/drishal";
+    sessionVariables = {
+      EDITOR="nvim";
+    };
     # language.base = "en_US.UTF-8";
     # sessionVariables.LOCALES_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
     # sessionVariables.LOCALES_ARCHIVE = "/usr/lib/locale/locale-archive";
   };
   programs.man.generateCaches=true;
+
+  # colorScheme = inputs.nix-colors.colorSchemes.onedark;
 
   # home.stateVersion = "21.05";
 
