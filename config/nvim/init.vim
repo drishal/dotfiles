@@ -4,7 +4,7 @@ let g:airline_powerline_fonts = 1
 
 
 " neovide settings
-set guifont=FantasqueSansMono\ Nerd\ Font:h10
+set guifont=FantasqueSansM\ Nerd\ Font:h18
 let g:neovide_cursor_vfx_mode = "railgun"
 augroup packer_user_config
   autocmd!
