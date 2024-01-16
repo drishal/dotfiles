@@ -2,6 +2,7 @@
 {
   programs.fish.enable=true;
   programs.zsh.enable=true;
+  programs.xonsh.enable=true;
   users.users.drishal = {
     shell = pkgs.fish;
     isNormalUser = true;
