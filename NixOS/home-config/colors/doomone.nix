@@ -3,22 +3,22 @@
   colorScheme = {
     name = "doomone";
     colors = {
-      base00 = "282c34"; 
-      base01 = "21242b";
-      base02 = "3f444a";
+      base00 = "282C34"; 
+      base01 = "21242B";
+      base02 = "3F444A";
       base03 = "5B6268"; #brightblack
-      base04 = "bbc2cf";
-      base05 = "bbc2cf"; #white
-      base06 = "bbc2cf";
-      base07 = "bbc2cf";
-      base08 = "ff6c6b"; #brightred
-      base09 = "da8548"; #
+      base04 = "BBC2CF";
+      base05 = "BBC2CF"; #white
+      base06 = "BBC2CF";
+      base07 = "BBC2CF";
+      base08 = "FF6C6B"; #brightred
+      base09 = "DA8548"; #
       base0A = "ECBE7B"; #yellow
-      base0B = "98be65"; #green
+      base0B = "98BE65"; #green
       base0C = "46D9FF"; #cyan 
-      base0D = "51afef"; #blue
-      base0E = "c678dd"; #magenta
-      base0F = "a9a1e1";
+      base0D = "51AFEF"; #blue
+      base0E = "C678DD"; #magenta
+      base0F = "A9A1E1";
     };
   };
 
