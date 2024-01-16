@@ -46,12 +46,12 @@
 
 
     # displayManager.gdm.enable = true;
-    displayManager.sddm.enable = true;
+    # displayManager.sddm.enable = true;
     # displayManager.lightdm.enable = false;
-    # displayManager.lightdm = {
-    #  enable = true;
-    #  greeter.enable = true;
-    #};
+    displayManager.lightdm = {
+     enable = true;
+     greeter.enable = true;
+    };
 
     libinput = {
       enable = true;
@@ -63,19 +63,19 @@
     };
   };
 
-  #services.greetd = {
-  #  enable = true;
-  #  settings = rec {
-  #    initial_session = {
-  #      command = "Hyprland";
-        # command = "qtile start -b wayland";
-        # command = "river";
-        # command = "startplasma-wayland";
-  #      user = "drishal";
-  #    };
-  #    default_session = initial_session;
-  #  };
-  #};
+  # services.greetd = {
+  #   enable = false;
+  #   settings = rec {
+  #     initial_session = {
+  #       command = "Hyprland";
+  #      # command = "qtile start -b wayland";
+  #      # command = "river";
+  #      # command = "startplasma-wayland";
+  #       user = "drishal";
+  #     };
+  #     default_session = initial_session;
+  #   };
+  # };
 
 
 
