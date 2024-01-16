@@ -44,8 +44,7 @@
     #};
 
 
-    # chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
-    chaotic.url = "github:chaotic-cx/nyx/distrobox-use-out";
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 
     nur.url = "github:nix-community/NUR";
 
