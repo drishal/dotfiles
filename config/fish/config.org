@@ -102,5 +102,5 @@ set -x LUTRIS_SKIP_INIT 1
 #+end_src
 * source aliases
 #+begin_src fish
-source ~/dotfiles/aliases.sh
+source ~/dotfiles/scripts/aliases.sh
 #+end_src
