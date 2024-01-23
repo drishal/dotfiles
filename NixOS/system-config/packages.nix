@@ -35,6 +35,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     acpi
+    argc
     adwaita-qt 
     aircrack-ng
     # anydesk
@@ -75,7 +76,7 @@
     bridge-utils
     cachix
     # calibre
-    cargo
+    # cargo
     #carnix
     # chromium
     (chromium.override {
@@ -259,7 +260,7 @@
     metasploit
     # mov-cli
     mlocate
-    mongodb-compass
+    # mongodb-compass
     mosh
     motrix
     # mplayer
@@ -344,9 +345,9 @@
     rnix-lsp
     rofi
     rofi-emoji
-    rustc
-    rustup
-    rust-analyzer
+    # rustc
+    # rustup
+    # rust-analyzer
     simplescreenrecorder
     # sony-headphones-client
     scx
@@ -372,7 +373,7 @@
     tmux
     tofi
     tor-browser-bundle-bin
-    toolbox
+    # toolbox
     trayer
     tree
     unrar
