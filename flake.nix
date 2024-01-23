@@ -32,6 +32,10 @@
       # inputs.base16-schemes.follows = "base16-schemes";
     };
 
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     discord-flake = { url = github:InternetUnexplorer/discord-overlay; };
@@ -52,7 +56,7 @@
 
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
-    hyprland.url = "github:hyprwm/Hyprland/c4da4b026deefd58f532353b64e9f17130e760ca";
+    hyprland.url = "github:hyprwm/Hyprland/c4365f20ed8ff0dd480b7ed7cf1bfff1a0b6911a";
     # hyprland.url = "github:hyprwm/Hyprland";
 
     emacs-overlay = {
@@ -73,7 +77,7 @@
 
   };
 
-  outputs = { nixpkgs, chaotic ,home-manager,programsdb, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,hyprland,nix-colors, private-stuff, ... }@inputs:
+  outputs = { nixpkgs, chaotic ,home-manager,programsdb, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,hyprland,nix-colors, nixvim, private-stuff, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -90,6 +94,7 @@
           modules = [
             ./NixOS/home-config/home.nix
             {nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];}
+            nixvim.homeManagerModules.nixvim
             "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
             {
               home = {
