@@ -26,10 +26,8 @@
       url = "github:nix-community/home-manager";
     };
 
-    # base16-schemes = "github.com:tinted-theming/schemes"; 
     nix-colors = {
       url = "github:misterio77/nix-colors";
-      # inputs.base16-schemes.follows = "base16-schemes";
     };
 
     nixvim = {
@@ -40,14 +38,6 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     discord-flake = { url = github:InternetUnexplorer/discord-overlay; };
 
-    #mozilla.url = "github:mozilla/nixpkgs-mozilla";
-
-    #firefox-nightly = {
-    #  url = "github:colemickens/flake-firefox-nightly";
-    # inputs.nixpkgs.follows = "nixpkgs";
-    #};
-
-
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 
     nur.url = "github:nix-community/NUR";
@@ -56,13 +46,11 @@
 
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
-    hyprland.url = "github:hyprwm/Hyprland/c4365f20ed8ff0dd480b7ed7cf1bfff1a0b6911a";
-    # hyprland.url = "github:hyprwm/Hyprland";
+    # hyprland.url = "github:hyprwm/Hyprland/12d79d63421e2ed3f31130755c7a37f0e4fb5cb1";
+    hyprland.url = "github:hyprwm/Hyprland/";
 
     emacs-overlay = {
-      # url = "github:nix-community/emacs-overlay";
-      # url = "github:nix-community/emacs-overlay/9bc16d788b9b09e986b2fba5a76fe44d35010d52";
-      url = "github:nix-community/emacs-overlay/128bdc6a54bcf514c515377240f0809377f3d9b0";
+      url = "github:nix-community/emacs-overlay/";
     };
 
     programsdb = {
