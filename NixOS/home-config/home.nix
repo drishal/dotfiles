@@ -13,6 +13,8 @@
     ./shells.nix
     ./lf.nix
     ./colors/doomone.nix
+    ./tmux.nix
+    ./waybar/waybar.nix
     inputs.nix-colors.homeManagerModules.default
   ];
   # Let Home Manager install and manage itself.
@@ -40,7 +42,7 @@
   };
   programs.man.generateCaches=true;
 
-  # colorScheme = inputs.nix-colors.colorSchemes.onedark;
+  # colorScheme = inputs.nix-colors.colorSchemes.material-palenight;
 
   # home.stateVersion = "21.05";
 
