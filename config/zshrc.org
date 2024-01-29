@@ -26,6 +26,7 @@
   - [[#profile][profile]]
   - [[#alias][alias]]
 - [[#history][History]]
+- [[#direnv][Direnv]]
 - [[#prompts][Prompts]]
   - [[#starship][Starship]]
 
@@ -100,11 +101,13 @@ zinit light "zsh-users/zsh-history-substring-search"
 ** zsh completions
 #+begin_src shell
 zinit light zsh-users/zsh-completions
+# bindkey '^I' fzf_completion
 #+end_src
 
 ** zsh fzf
-#+begin_src shell
+#+begin_src shell :tangle no
 zinit light Aloxaf/fzf-tab
+# zinit light sigoden/argc-completions
 # zinit pack for fzf
 #+end_src
 
@@ -112,6 +115,7 @@ zinit light Aloxaf/fzf-tab
 #+begin_src shell :tangle no
 zinit light marlonrichert/zsh-autocomplete
 #+end_src
+
 * Fixes
 ** Kitty config
 #+begin_src shell
@@ -197,62 +201,7 @@ setopt unset
 #+end_src
 
 ** completion system
-#+begin_src shell :tangle no
-function is42 () {
-    [[ $ZSH_VERSION == 4.<2->* || $ZSH_VERSION == <5->* ]] && return 0
-    return 1
-}
-
-typeset -A GRML_STATUS_FEATURES
-
-function grml_status_feature () {
-    emulate -L zsh
-    local f=$1
-    local -i success=$2
-    if (( success == 0 )); then
-        GRML_STATUS_FEATURES[$f]=success
-    else
-        GRML_STATUS_FEATURES[$f]=failure
-    fi
-    return 0
-}
-# TODO: This could use some additional information
-function zrcautoload () {
-    emulate -L zsh
-    setopt extended_glob
-    local fdir ffile
-    local -i ffound
-
-    ffile=$1
-    (( ffound = 0 ))
-    for fdir in ${fpath} ; do
-        [[ -e ${fdir}/${ffile} ]] && (( ffound = 1 ))
-    done
-
-    (( ffound == 0 )) && return 1
-    if [[ $ZSH_VERSION == 3.1.<6-> || $ZSH_VERSION == <4->* ]] ; then
-        autoload -U ${ffile} || return 1
-    else
-        autoload ${ffile} || return 1
-    fi
-    return 0
-}
-
-COMPDUMPFILE=${COMPDUMPFILE:-${ZDOTDIR:-${HOME}}/.zcompdump}
-if zrcautoload compinit ; then
-    typeset -a tmp
-    zstyle -a ':grml:completion:compinit' arguments tmp
-    compinit -d ${COMPDUMPFILE} "${tmp[@]}"
-    grml_status_feature compinit $?
-    unset tmp
-else
-    grml_status_feature compinit 1
-    function compdef { }
-fi
-
-# Make sure the completion system is initialised
-(( ${+_comps} )) || return 1
-
+#+begin_src shell 
 # allow one error for every three characters typed in approximate completer
 zstyle ':completion:*:approximate:'    max-errors 'reply=( $((($#PREFIX+$#SUFFIX)/3 )) numeric )'
 
@@ -381,61 +330,28 @@ zstyle ':completion:*:urls' local 'www' '/var/www/' 'public_html'
 
 # Some functions, like _apt and _dpkg, are very slow. We can use a cache in
 # order to speed things up
-if [[ ${GRML_COMP_CACHING:-yes} == yes ]]; then
-    GRML_COMP_CACHE_DIR=${GRML_COMP_CACHE_DIR:-${ZDOTDIR:-$HOME}/.cache}
-    if [[ ! -d ${GRML_COMP_CACHE_DIR} ]]; then
-        command mkdir -p "${GRML_COMP_CACHE_DIR}"
-    fi
-    zstyle ':completion:*' use-cache  yes
-    zstyle ':completion:*:complete:*' cache-path "${GRML_COMP_CACHE_DIR}"
-fi
+# if [[ ${GRML_COMP_CACHING:-yes} == yes ]]; then
+#     GRML_COMP_CACHE_DIR=${GRML_COMP_CACHE_DIR:-${ZDOTDIR:-$HOME}/.cache}
+#     if [[ ! -d ${GRML_COMP_CACHE_DIR} ]]; then
+#         command mkdir -p "${GRML_COMP_CACHE_DIR}"
+#     fi
+#     zstyle ':completion:*' use-cache  yes
+#     zstyle ':completion:*:complete:*' cache-path "${GRML_COMP_CACHE_DIR}"
+# fi
 
-# host completion
-_etc_hosts=()
-_ssh_config_hosts=()
-_ssh_hosts=()
-if is42 ; then
-    if [[ -r ~/.ssh/config ]] ; then
-        _ssh_config_hosts=(${${(s: :)${(ps:\t:)${${(@M)${(f)"$(<$HOME/.ssh/config)"}:#Host *}#Host }}}:#*[*?]*})
-    fi
+# for compcom in cp deborphan df feh fetchipac gpasswd head hnb ipacsum mv \
+#                pal stow uname ; do
+#     [[ -z ${_comps[$compcom]} ]] && compdef _gnu_generic ${compcom}
+# done; unset compcom
 
-    if [[ -r ~/.ssh/known_hosts ]] ; then
-        _ssh_hosts=(${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[\|]*}%%\ *}%%,*})
-    fi
-
-    if [[ -r /etc/hosts ]] && [[ "$NOETCHOSTS" -eq 0 ]] ; then
-        : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(grep -v '^0\.0\.0\.0\|^127\.0\.0\.1\|^::1 ' /etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}}
-    fi
-fi
-
-local localname
-localname="$(uname -n)"
-hosts=(
-    "${localname}"
-    "$_ssh_config_hosts[@]"
-    "$_ssh_hosts[@]"
-    "$_etc_hosts[@]"
-    localhost
-)
-zstyle ':completion:*:hosts' hosts $hosts
-# TODO: so, why is this here?
-#  zstyle '*' hosts $hosts
-
-# use generic completion system for programs not yet defined; (_gnu_generic works
-# with commands that provide a --help option with "standard" gnu-like output.)
-for compcom in cp deborphan df feh fetchipac gpasswd head hnb ipacsum mv \
-               pal stow uname ; do
-    [[ -z ${_comps[$compcom]} ]] && compdef _gnu_generic ${compcom}
-done; unset compcom
-
-# see upgrade function in this file
+# # see upgrade function in this file
 compdef _hosts upgrade
 
 #+end_src
 * Source
 ** profile
 #+begin_src shell
-source ~/dotfiles/.profile
+source ~/dotfiles/scripts/.profile
 #+end_src
 
 ** alias
@@ -448,6 +364,11 @@ source ~/dotfiles/scripts/aliases.sh
 HISTFILE=~/.zsh_history
 HISTSIZE=1000
 SAVEHIST=1000
+#+end_src
+
+* Direnv
+#+begin_src shell
+eval "$(direnv hook zsh)"
 #+end_src
 
 * Prompts
