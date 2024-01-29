@@ -419,8 +419,13 @@ remove/add tangle no to whatever font you prefer
 (blink-cursor-mode 0)
 #+end_src
 ** theme
-*** Doom themes
+*** disable package check signature 
 #+begin_src emacs-lisp
+(setq package-check-signature nil)
+
+#+end_src
+*** Doom themes
+#+begin_src emacs-lisp 
 ;; (use-package dracula- ensure t)
 ;; (use-package modus-themes :demand t)
 (use-package doom-themes :demand t
@@ -446,13 +451,15 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 *** Other themes:
 **** Catppuccin
-#+begin_src emacs-lisp  :tangle no
-(use-package catppuccin-theme :demand t
+#+begin_src emacs-lisp :tangle no 
+(use-package catppuccin-theme
+  :ensure t
+  :demand
   :config
-  (setq catppuccin-flavor 'frappe) ;; or 'latte, 'macchiato, or 'mocha
-  (load-theme 'catppuccin t :no-confirm)
-  )
-;; (catppuccin-reload)
+  (load-theme 'catppuccin t)
+  (catppuccin-load-flavor 'macchiato)
+  (catppuccin-reload))
+
 #+end_src
 **** Modus
 #+begin_src emacs-lisp :tangle no
