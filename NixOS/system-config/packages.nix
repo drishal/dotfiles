@@ -85,7 +85,7 @@
         "--enable-gpu-rasterization"
         "--enable-zero-copy"
         "--force-dark-mode"
-        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
+        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,VaapiVideoDecodeLinuxGL"
         "--disable-features=UseChromeOSDirectVideoDecoder"
         "--use-vulkan"
         "--ozone-platform-hint=auto"
