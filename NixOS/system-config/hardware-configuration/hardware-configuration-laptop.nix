@@ -8,9 +8,9 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usbhid" "uas" "rtsx_pci_sdmmc" ];
-  boot.initrd.kernelModules = [ "amdgpu" "i8042"];
-  boot.kernelModules = [ "kvm-amd" "v4l2loopback" ];
+  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usbhid" "uas" "rtsx_pci_sdmmc" "amdgpu"];
+  boot.initrd.kernelModules = [""];
+  boot.kernelModules = [ "kvm-amd" "v4l2loopback" "amdgpu" "i8042"];
   boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
   fileSystems."/" =
