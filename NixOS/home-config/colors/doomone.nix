@@ -2,7 +2,7 @@
 {
   colorScheme = {
     name = "doomone";
-    colors = {
+    palette = {
       base00 = "282C34"; 
       base01 = "21242B";
       base02 = "3F444A";

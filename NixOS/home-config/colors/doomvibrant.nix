@@ -3,7 +3,7 @@
   colorScheme = {
     name = "doom-vibrant";
     author = "hlissner";
-    colors = {
+    palette = {
       base00 = "2E3440";
       base01 = "3B4252";
       base02 = "434C5E";

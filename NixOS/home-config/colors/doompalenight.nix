@@ -1,7 +1,7 @@
 { config, inputs, pkgs, lib , ... }:
   colorScheme = {
   name = "palenight"; 
-    colors = {
+    palette = {
       base00 = "292D3E";
       base01 = "676E95";
       base02 = "3F444A";
