@@ -39,6 +39,7 @@
   - [[#magit][magit]]
   - [[#some-indentation-settings][Some indentation settings]]
   - [[#y-for-yes][y for yes]]
+  - [[#centaur-tabs][Centaur tabs]]
 - [[#hook-to-tangle-on-save][Hook to tangle on save]]
 - [[#org-mode][Org mode:]]
   - [[#org-mode-indent][org mode indent]]
@@ -290,6 +291,7 @@ remove/add tangle no to whatever font you prefer
                         "/sudo:"
                         "recentf$"
                         "company-statistics-cache\\.el$"
+                        "~/dotfiles/NixOS/system-config/hardware-configuration.*"
                         ;; ctags
                         "/TAGS$"
                         ;; global
@@ -652,6 +654,17 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 ** y for yes
 #+begin_src emacs-lisp
 (defalias 'yes-or-no-p 'y-or-n-p)
+#+end_src
+
+** Centaur tabs
+#+begin_src emacs-lisp :tangle no
+(use-package centaur-tabs
+  :demand
+  :config
+  (centaur-tabs-mode t)
+  :bind
+  ("C-<prior>" . centaur-tabs-backward)
+  ("C-<next>" . centaur-tabs-forward))
 #+end_src
 * Hook to tangle on save
 #+begin_src emacs-lisp
