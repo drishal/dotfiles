@@ -60,7 +60,7 @@
 
 window#waybar {
     background-color: @colbg;
-    /* color: @colfg; */
+    /* background: rgba(0, 0, 0, 0.3); */
     transition-property: background-color;
     transition-duration: .5s;
     /* opacity: 0.9;  */
