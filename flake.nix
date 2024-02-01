@@ -18,6 +18,7 @@
   inputs = {
 
     nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
+    # nixpkgs = { url = "github:PedroHLC/nixpkgs/pull-284487"; };
     # nixpkgs-master= { url = "github:nixos/nixpkgs/master"; };
 
     # nixpkgs-master.url = "github:NixOS/nixpkgs/master";
@@ -97,7 +98,7 @@
           let
             commonModules = [
               { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay inputs.neovim-nightly-overlay.overlay]; }
-              ./NixOS/system-config/hardware-configuration/hardware-configuration-desktop.nix
+              # ./NixOS/system-config/hardware-configuration/hardware-configuration-desktop.nix
               ./NixOS/system-config/configuration.nix
               chaotic.nixosModules.default
             ];
@@ -106,7 +107,7 @@
               nixos-desktop = lib.nixosSystem {
                 inherit system;
                 modules = commonModules ++ [
-                  ./NixOS/system-config/hardware-configuration/hardware-configuration-desktop.nix
+                  # ./NixOS/system-config/hardware-configuration/hardware-configuration-desktop.nix
                 ];
                 specialArgs = { inherit inputs; };
               };
