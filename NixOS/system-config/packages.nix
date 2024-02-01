@@ -374,6 +374,7 @@
     tofi
     tor-browser-bundle-bin
     # toolbox
+    trashy
     trayer
     tree
     unrar
