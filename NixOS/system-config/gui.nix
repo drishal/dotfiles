@@ -47,9 +47,9 @@
 
     # displayManager.gdm.enable = true;
     # displayManager.sddm = {
-    #   enable = true;
-    #   wayland.enable = true;
-    # };
+    #  enable = true;
+    #  wayland.enable = true;
+    #};
     # displayManager.lightdm.enable = false;
     # displayManager.lightdm = {
     #  enable = true;
@@ -71,9 +71,9 @@
     settings = rec {
       initial_session = {
         command = "Hyprland";
-       # command = "qtile start -b wayland";
-       # command = "river";
-       # command = "startplasma-wayland";
+        # command = "qtile start -b wayland";
+        # command = "river";
+        # command = "startplasma-wayland";
         user = "drishal";
       };
       default_session = initial_session;
@@ -113,9 +113,9 @@
         passthru.providedSessions = [ "river" ];
       })
     )
-      
     
-  #qtile wayland 
+    
+    #qtile wayland 
     # (pkgs.qtile_git.overrideAttrs
     #   (prevAttrs: rec {
     #     postInstall =
@@ -180,7 +180,7 @@
         conf = ../../suckless/dwmblocks/blocks.def.h;
       });
     })
-#     
+    #     
     # (self: super:
     #   {
     #     tlp = super.tlp.overrideAttrs (_: {
