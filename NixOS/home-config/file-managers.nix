@@ -74,5 +74,15 @@
     '';
   };
 
-  # ...
+  programs.yazi = {
+    enable = true;
+    settings = {
+      manager = {
+        show_hidden = false;
+        sort_by = "alphabetical";
+        sort_dir_first = true;
+        # sort_reverse = true;
+      };
+    };
+  };
 }
