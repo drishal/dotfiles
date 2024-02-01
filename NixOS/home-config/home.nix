@@ -11,7 +11,7 @@
     ./terminals.nix
     ./rofi.nix
     ./shells.nix
-    ./lf.nix
+    ./file-managers.nix
     ./colors/doomone.nix
     ./tmux.nix
     ./waybar/waybar.nix
