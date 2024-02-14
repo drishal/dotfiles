@@ -1,5 +1,4 @@
 let g:vim_markdown_folding_disabled = 1
-"set clipboard+=unnamedplus
 let g:airline_powerline_fonts = 1
 
 
