@@ -16,7 +16,7 @@
     };
 
     nixvim = {
-      enable = true;
+      enable = false;
       enableMan = true;
       colorschemes.onedark.enable = true;
       extraConfigLua = ''
@@ -59,6 +59,9 @@
         extraPackages = with pkgs;[
                          vimPlugins.nvim-web-devicons
                        ];
+        extraPlugins = with pkgs.vimPlugins;[
+          orgmode
+        ];
       clipboard.register="unnamedplus";
       #lsp config
       plugins = {
@@ -85,6 +88,11 @@
         nvim-autopairs.enable=true;
         neorg.enable=true;
         neo-tree.enable=true;
+
+        treesitter = {
+          enable=true;
+          # folding=true;
+        };
         barbar={
           enable=true;
           autoHide=true;
