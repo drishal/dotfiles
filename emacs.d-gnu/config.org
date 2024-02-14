@@ -46,7 +46,7 @@
   - [[#org-mode-disable-begin_example-blocks][org mode disable begin_example blocks]]
   - [[#org-blocks-insert-mode][Org blocks insert mode]]
   - [[#snippets][snippets:]]
-  - [[#org-tempo-for-all-the-beautiful-snippets][org tempo for all the beautiful snippets:]]
+  - [[#org-temposnippets][org tempo(snippets):]]
   - [[#org-modern][org modern]]
   - [[#org-toc][org-toc]]
   - [[#fixing-org-blocks][fixing org blocks]]
@@ -224,7 +224,6 @@ https://github.com/progfolio/elpaca
 #+end_src
 ** enable native comp for packages
 #+begin_src emacs-lisp
-;; (setq comp-deferred-compilation t)
 (setq native-comp-deferred-compilation t)
 #+end_src
 
@@ -277,14 +276,8 @@ remove/add tangle no to whatever font you prefer
 (setq recentf-max-menu-items 25)
 (setq recentf-max-saved-items 25)
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
-(add-to-list 'recentf-exclude "~/Downloads.*") 
-(add-to-list 'recentf-exclude "~/Movies.*") 
-(add-to-list 'recentf-exclude "~/notes.*") 
-(add-to-list 'recentf-exclude "~/.config/emacs/eln-cache.*") 
-(add-to-list 'recentf-exclude "~/.config/emacs/elpaca.*") 
-(add-to-list 'recentf-exclude "/nix/store.*") 
-(add-to-list 'recentf-exclude "~/.mozilla.*") 
-(add-to-list 'recentf-exclude "/sudo::/.*") 
+;; add recentf exclusions
+
 (setq recentf-max-saved-items 2048
       recentf-exclude '("/tmp/"
                         "/ssh:"
@@ -309,6 +302,14 @@ remove/add tangle no to whatever font you prefer
                         "\\.sub$"
                         "\\.srt$"
                         "\\.ass$"
+                        "~/Downloads.*"
+                        "~/Movies.*"
+                        "~/notes.*"
+                        "~/.config/emacs/eln-cache.*"
+                        "~/.config/emacs/elpaca.*"
+                        "/nix/store.*"
+                        "~/.mozilla.*"
+                        "/sudo::/.*"
                         ;; ~/.emacs.d/**/*.el included
                         ;; "/home/[a-z]\+/\\.[a-df-z]" ; configuration file should not be excluded
                         ))
@@ -316,32 +317,19 @@ remove/add tangle no to whatever font you prefer
 ** rainbow mode for colors
 #+begin_src emacs-lisp
 (use-package rainbow-mode
-  :demand t)
-
-
-(elpaca-wait)
-
-(define-globalized-minor-mode my-global-rainbow-mode rainbow-mode
-  (lambda () (rainbow-mode 1)))
-
-(my-global-rainbow-mode 1)
+  :demand t
+  :init
+  (define-globalized-minor-mode my-global-rainbow-mode rainbow-mode
+    (lambda () (rainbow-mode 1)))
+  (my-global-rainbow-mode 1)
+  )
 #+end_src
 ** smooth scrolling
 #+begin_src emacs-lisp 
-;; (use-package good-scroll :demand t)
-;; (good-scroll-mode 1)
 (pixel-scroll-precision-mode 1)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 (setq scroll-step 1) 
-;;(pixel-scroll-precision-mode 1)
-;; (use-package smooth-scroll :demand t)
-;; (smooth-scroll-mode 1)
-;; (global-set-key [(down)]  'scroll-up-1)
-;; (global-set-key [(up)]    'scroll-down-1)
-;; (global-set-key [(left)]  'scroll-right-1)
-;; (global-set-key [(right)] 'scroll-left-1)
-
 #+end_src
 ** Dashboard
 #+begin_src emacs-lisp 
@@ -379,9 +367,6 @@ remove/add tangle no to whatever font you prefer
 (require 'recentf)
 (recentf-mode 1)
 
-;; add recentf exclusions
-(add-to-list 'recentf-exclude "~/Downloads/")
-(add-to-list 'recentf-exclude "~/Desktop/")
 #+end_src
 ** highlight current line
 #+begin_src emacs-lisp
@@ -428,8 +413,6 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 *** Doom themes
 #+begin_src emacs-lisp 
-;; (use-package dracula- ensure t)
-;; (use-package modus-themes :demand t)
 (use-package doom-themes :demand t
   :config
   ;; Global settings (defaults)
@@ -677,15 +660,9 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 * Org mode:
 #+begin_src emacs-lisp :tangle no
 (use-package org :demand t)
-;; (ensure-use-package '(org :host nil :type git
-;;   :repo "git@github.com:emacs-ensure/org-mode.git"))
-;; (ensure-use-package '(org :type built-in))
-;; (ensure-use-package '(org :host github :repo "emacs-straight/org-mode"))
-#+end_src
-
-#+begin_src emacs-lisp
 (setq org-export-html-validation-link nil)
 #+end_src
+
 ** org mode indent
 #+begin_src emacs-lisp
   (setq org-startup-indented t)
@@ -720,7 +697,7 @@ Switch to org edit mode when pressing `i` insert key
 (yas-global-mode 1)
 #+end_src
 
-** org tempo for all the beautiful snippets:
+** org tempo(snippets):
 
 #+begin_src emacs-lisp
 ;; (use-package 'org-tempo :demand t)
@@ -773,7 +750,6 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 ** org bable evaulate
 #+begin_src emacs-lisp
 (setq org-confirm-babel-evaluate t)
-
 #+end_src
 ** org preserve line breaks
 #+begin_src emacs-lisp
@@ -788,7 +764,6 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 (setq org-html-validation-link nil)
 (setq org-html-include-created-date nil)
 (setq org-export-preserve-breaks t)
-
 #+end_src
 ** org-html-themeify
 #+begin_src emacs-lisp :tangle no
@@ -1175,6 +1150,15 @@ https://github.com/karthink/popper
 
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t))
+
+(use-package vertico-posframe
+  :demand t
+  :init
+  (vertico-posframe-mode)
+  :custom
+  (vertico-posframe-parameters
+   '((left-fringe . 8)
+     (right-fringe . 8))))
 #+end_src
 
 *** consult
