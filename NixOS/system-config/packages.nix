@@ -19,10 +19,7 @@
       dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     };
 
-    #openvpn
-    openvpn3.enable = true;
-
-    #kde connect
+      #kde connect
     kdeconnect.enable=true;
 
     #wireshark
@@ -118,7 +115,7 @@
     dejavu_fonts
     # dolphin
     discord
-    distrobox_git
+    distrobox
     dig
     # (distrobox.overrideAttrs (old: {
     #   src = pkgs.fetchFromGitHub {
@@ -362,7 +359,7 @@
     sway-contrib.grimshot
     swaylock-effects
     swaybg
-    telegram-desktop_git
+    telegram-desktop
     tetex
     #texlive.combined.scheme-medium
     thinkfan
