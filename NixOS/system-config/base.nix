@@ -27,7 +27,7 @@
   # systemd settings 
   systemd.extraConfig = ''
   DefaultTimeoutStopSec=10s
-'';
+  '';
 
   # cgroups support
   systemd.enableUnifiedCgroupHierarchy=true;
@@ -75,11 +75,11 @@
   hardware.opengl =
     {
       #extraPackages = with pkgs; [
-        #vaapiVdpau
-        #libva
-        #libvdpau-va-gl
-        #mesa.drivers
-        #libvpx
+      #vaapiVdpau
+      #libva
+      #libvdpau-va-gl
+      #mesa.drivers
+      #libvpx
       #];
       enable = true;
       driSupport = true;
@@ -110,46 +110,45 @@
   };
 
   # Networking
-
+  #openvpn
+  # programs.openvpn3.enable = true;
   # services.resolved = {
   #   enable = true;
   #   dnssec = "true";
   #   domains = [ "~." ];
-  #   fallbackDns = [ "1.1.1.1#one.one.one.one"
-  #                   "1.0.0.1#one.one.one.one"
-  #                   "2606:4700:4700::1111#1dot1dot1dot1.cloudflare-dns.com"
-  #                   "2606:4700:4700::1001#1dot1dot1dot1.cloudflare-dns.com"
-  #                 ];
+  #   fallbackDns = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
   #   extraConfig = ''
   #   DNSOverTLS=yes
-  # '';
+  #   '';
   # };
-  
   networking = {
     networkmanager = {
       enable = true;
       # dns = "systemd-resolved";
       wifi.macAddress = "random";
+
     };
     wireless.iwd.enable = true;
     # hostname
     hostName = "nixos";
     # dns
-    nameservers = [
-      # cloudflare
-      # "45.90.28.182"
-      # "45.90.30.182"
-      "1.1.1.1"
-      "2606:4700:4700::1111"
-
-      #  google
-      # "8.8.8.8"
-      # "2001:4860:4860::8888"
-    ];
+    nameservers = [ "1.1.1.1" "1.0.0.1" ];
     extraHosts = "185.199.108.133 raw.githubusercontent.com";  
+    # nameservers= [
+    # cloudflare
+    # "45.90.28.182"
+    # "45.90.30.182"
+    # "1.1.1.1"
+    # "2606:4700:4700::1111"
+    
+    #  google
+    # "8.8.8.8"
+    # "2001:4860:4860::8888"
+    # ];
   };
   # Configure keymap in X11
-  services.xserver.layout = "us";
+  # services.xserver.layout = "us";
+  services.xserver.xkb.layout = "us";
   # services.xserver.xkbOptions = "eurosign:e";
 
   # Enable CUPS to print documents.
@@ -214,14 +213,14 @@
     NIXOS_OZONE_WL="1";
   };
   
- # environment.sessionVariables = rec {
- #   LIBVA_DRIVER_NAME="radeonsi";
- #    VDPAU_DRIVER = "radeonsi";
- #  MOZ_DISABLE_RDD_SANDBOX="1";
- #  AMD_VULKAN_ICD = "RADV";
- #   VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
- #   MOZ_ENABLE_WAYLAND="1";
- # };
+  # environment.sessionVariables = rec {
+  #   LIBVA_DRIVER_NAME="radeonsi";
+  #    VDPAU_DRIVER = "radeonsi";
+  #  MOZ_DISABLE_RDD_SANDBOX="1";
+  #  AMD_VULKAN_ICD = "RADV";
+  #   VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+  #   MOZ_ENABLE_WAYLAND="1";
+  # };
 
 
 }
