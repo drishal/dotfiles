@@ -139,6 +139,7 @@
     evince
     easyeffects
     extundelete
+    eza
     lsd
     fastfetch
     fdk_aac
