@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 
 {
-  # xdg.configFile."lf/icons".source = ./icons;
+  xdg.configFile."lf/icons".source = ./icons;
 
   programs.lf = {
     enable = true;
@@ -18,7 +18,6 @@
     };
 
     keybindings = {
-
       "\\\"" = "";
       o = "";
       c = "mkdir";
@@ -35,8 +34,6 @@
 
       ee = "editor-open";
       V = ''$${pkgs.bat}/bin/bat --paging=always --theme=gruvbox "$f"'';
-
-      # ...
     };
 
     settings = {
