@@ -333,7 +333,6 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 ** Dashboard
 #+begin_src emacs-lisp 
-;;config :tangle no
 (use-package dashboard :elpaca t
   :config
   (setq dashboard-icon-type 'all-the-icons)
@@ -1296,9 +1295,12 @@ https://github.com/minad/marginalia
 ** languages and lsp-mode
 https://emacs-lsp.github.io/lsp-mode/
 and also https://emacs-lsp.github.io/lsp-mode/page/languages/
-*** General Setup with lsp
-#+begin_src emacs-lisp 
+*** flycheck install
+#+begin_src emacs-lisp
 (use-package flycheck :demand t)
+#+end_src
+*** General Setup with lsp
+#+begin_src emacs-lisp
 (use-package lsp-mode :demand t
   :init
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
@@ -1333,18 +1335,9 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (setq lsp-idle-delay 0.001)
 (setq lsp-enable-on-type-formatting nil)
 #+end_src
-*** lsp file watchers
-#+begin_src emacs-lisp
-;; (with-eval-after-load 'lsp-mode
-;;   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\catuserbot\\'")
-;;   ;; or
-;;   ;; (add-to-list 'lsp-file-watch-ignored-files "[/\\\\]\\.my-files\\'")
-;;   )
-;; (setq lsp-enable-file-watchers nil)
 
-#+end_src
 *** lsp on demand
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp 
 (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
 #+end_src
 *** Eglot setup
@@ -1373,25 +1366,7 @@ not tangling atm
                           (lsp))))  ; or lsp-deferred
 
 #+end_src
-**** jedi
-#+begin_src emacs-lisp :tangle no
-(use-package lsp-jedi
-  :demand t
-  :config
-  (with-eval-after-load "lsp-mode"
-    (add-to-list 'lsp-disabled-clients 'pyls 'pyright)))
-#+end_src
-**** python lsp
-#+begin_src emacs-lisp :tangle no
-(use-package lsp-python-ms
-  :demand t
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-python-ms)
-                         (lsp)))
-  :init
-  (setq lsp-python-ms-executable (executable-find "python-language-server")))
 
-#+end_src
 **** pipenv.el
 https://github.com/pwalsh/pipenv.el
 #+begin_src emacs-lisp
