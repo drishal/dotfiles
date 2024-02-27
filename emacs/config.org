@@ -690,8 +690,8 @@ Switch to org edit mode when pressing `i` insert key
 (elpaca-wait)
 ;; (add-to-list 'load-path ("~/dotfiles/emacs.d-gnu/snippets")
 (add-to-list 'load-path
-              "snippets")
-(setq yas-snippet-dirs '("snippets"))
+              "~/dotfiles/emacs/snippets")
+(setq yas-snippet-dirs '("~/dotfiles/emacs/snippets/"))
 (require 'yasnippet)
 (yas-global-mode 1)
 #+end_src
