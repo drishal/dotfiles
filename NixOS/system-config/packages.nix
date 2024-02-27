@@ -37,7 +37,16 @@
     aircrack-ng
     # anydesk
     alacritty
-    ani-cli
+    # ani-cli
+    (ani-cli.overrideAttrs (old: {
+      src = pkgs.fetchFromGitHub {
+        repo = "ani-cli";
+        owner = "pystardust";
+        rev = "e90dd8b50ac12ade21d74bc82a20c777bbb63e1f";
+        sha256 = "sha256-0uSD+TMeKSSwB0f875MYsHAUlIKjmJmzEnT7Z3m8bnY=";
+      };
+    }))
+    
     appimage-run
     arandr
     # arc-theme
@@ -221,6 +230,7 @@
     kompose
     kubectl
     kubernetes
+    lbreakout2
     leafpad
     # linuxKernel.packages.v4l2loopback
     # linuxKernel.packages.linux_cachyos.v4l2loopback
@@ -355,6 +365,7 @@
     starship
     sass
     steam-run
+    stremio
     surf
     # swaylock
     sway-contrib.grimshot
