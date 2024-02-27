@@ -59,8 +59,8 @@
 
 
 window#waybar {
-    background-color: @colbg;
-    /* background: rgba(0, 0, 0, 0.3); */
+    /* background-color: @colbg; */
+    background: rgba(0, 0, 0, 0);
     transition-property: background-color;
     transition-duration: .5s;
     /* opacity: 0.9;  */
