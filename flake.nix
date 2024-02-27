@@ -98,7 +98,6 @@
           let
             commonModules = [
               { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay inputs.neovim-nightly-overlay.overlay]; }
-              # ./NixOS/system-config/hardware-configuration/hardware-configuration-desktop.nix
               ./NixOS/system-config/configuration.nix
               chaotic.nixosModules.default
             ];
