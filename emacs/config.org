@@ -1300,6 +1300,9 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (use-package flycheck :demand t)
 #+end_src
 *** General Setup with lsp
+  :PROPERTIES:
+  :header-args: :tangle no
+   :END:
 #+begin_src emacs-lisp
 (use-package lsp-mode :demand t
   :init
@@ -1335,16 +1338,94 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (setq lsp-idle-delay 0.001)
 (setq lsp-enable-on-type-formatting nil)
 #+end_src
-
-*** lsp on demand
+**** Other lsp specific configurations
+***** Lsp Java
+#+begin_src emacs-lisp 
+(use-package lsp-java :demand t)
+(add-hook 'java-mode-hook (lambda ()
+                            (setq c-basic-offset 4
+                                  ;; tab-width 4
+                                  indent-tabs-mode nil)))
+(setq lsp-java-format-on-type-enabled nil)
+#+end_src
+***** lsp on demand
 #+begin_src emacs-lisp 
 (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
 #+end_src
+***** lsp eldoc and flyspell configuration
+#+begin_src emacs-lisp
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            ;; Use spaces, not tabs.
+            (setq indent-tabs-mode nil)
+            ;; Keep M-TAB for `completion-at-point'
+            (define-key flyspell-mode-map "\M-\t" nil)
+            ;; Pretty-print eval'd expressions.
+            (define-key emacs-lisp-mode-map
+                        "\C-x\C-e" 'pp-eval-last-sexp)
+            ;; Recompile if .elc exists.
+            (add-hook (make-local-variable 'after-save-hook)
+                      (lambda ()
+                        (byte-force-recompile default-directory)))
+            (define-key emacs-lisp-mode-map
+                        "\r" 'reindent-then-newline-and-indent)))
+(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode) ;; Requires Ispell
+#+end_src
+***** pyright
+#+begin_src emacs-lisp 
+(use-package lsp-pyright
+  :demand t
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)
+                          (lsp))))  ; or lsp-deferred
+#+end_src
+***** Dap mode
+#+begin_src emacs-lisp
+(use-package dap-mode :demand t)
+(dap-auto-configure-mode 1)
+#+end_src
+***** rust 
+#+begin_src emacs-lisp :tangle no
+(use-package rustic
+  :demand t
+  :bind (:map rustic-mode-map
+              ("M-j" . lsp-ui-imenu)
+              ("M-?" . lsp-find-references)
+              ("C-c C-c l" . flycheck-list-errors)
+              ("C-c C-c a" . lsp-execute-code-action)
+              ("C-c C-c r" . lsp-rename)
+              ("C-c C-c q" . lsp-workspace-restart)
+              ("C-c C-c Q" . lsp-workspace-shutdown)
+              ("C-c C-c s" . lsp-rust-analyzer-status))
+  :config
+  ;; uncomment for less flashiness
+  ;; (setq lsp-eldoc-hook nil)
+  ;; (setq lsp-enable-symbol-highlighting nil)
+  ;; (setq lsp-signature-auto-activate nil)
+
+  ;; comment to disable rustfmt on save
+  (setq rustic-format-on-save nil)
+  (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
+
+(defun rk/rustic-mode-hook ()
+  ;; so that run C-c C-c C-r works without having to confirm, but don't try to
+  ;; save rust buffers that are not file visiting. Once
+  ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
+  ;; no longer be necessary.
+  (when buffer-file-name
+    (setq-local buffer-save-without-query t)))
+#+end_src
+
 *** Eglot setup
 not tangling atm
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp  
 (use-package eglot :demand t)
-(add-hook 'foo-mode-hook 'eglot-ensure)
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '(conf-toml-mode . ("taplo" "lsp" "stdio"))))
+;; (add-hook 'foo-mode-hook 'eglot-ensure)
+;; (use-package eglot-x :demand t)
 #+end_src
 *** sql
 #+begin_src emacs-lisp
@@ -1357,16 +1438,6 @@ not tangling atm
   :demand t)
 #+end_src
 *** python
-**** pyright
-#+begin_src emacs-lisp 
-(use-package lsp-pyright
-  :demand t
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-pyright)
-                          (lsp))))  ; or lsp-deferred
-
-#+end_src
-
 **** pipenv.el
 https://github.com/pwalsh/pipenv.el
 #+begin_src emacs-lisp
@@ -1466,15 +1537,6 @@ https://github.com/pwalsh/pipenv.el
 ;;                   :server-id 'nix))
 #+end_src
 
-*** java
-#+begin_src emacs-lisp 
-(use-package lsp-java :demand t)
-(add-hook 'java-mode-hook (lambda ()
-                            (setq c-basic-offset 4
-                                  ;; tab-width 4
-                                  indent-tabs-mode nil)))
-(setq lsp-java-format-on-type-enabled nil)
-#+end_src
 *** lua
 #+begin_src emacs-lisp
 (use-package lua-mode
@@ -1499,26 +1561,6 @@ https://github.com/pwalsh/pipenv.el
 *** rust
 #+begin_src emacs-lisp
 (use-package rust-mode :demand t)
-#+end_src
-*** lsp
-#+begin_src emacs-lisp
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            ;; Use spaces, not tabs.
-            (setq indent-tabs-mode nil)
-            ;; Keep M-TAB for `completion-at-point'
-            (define-key flyspell-mode-map "\M-\t" nil)
-            ;; Pretty-print eval'd expressions.
-            (define-key emacs-lisp-mode-map
-                        "\C-x\C-e" 'pp-eval-last-sexp)
-            ;; Recompile if .elc exists.
-            (add-hook (make-local-variable 'after-save-hook)
-                      (lambda ()
-                        (byte-force-recompile default-directory)))
-            (define-key emacs-lisp-mode-map
-                        "\r" 'reindent-then-newline-and-indent)))
-(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-(add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode) ;; Requires Ispell
 #+end_src
 
 *** C/C++ mode
@@ -1569,47 +1611,13 @@ https://github.com/pwalsh/pipenv.el
   :demand t
   :bind ("C-c d" . docker))
 #+end_src
-*** rust 
-#+begin_src emacs-lisp
-(use-package rustic
-  :demand t
-  :bind (:map rustic-mode-map
-              ("M-j" . lsp-ui-imenu)
-              ("M-?" . lsp-find-references)
-              ("C-c C-c l" . flycheck-list-errors)
-              ("C-c C-c a" . lsp-execute-code-action)
-              ("C-c C-c r" . lsp-rename)
-              ("C-c C-c q" . lsp-workspace-restart)
-              ("C-c C-c Q" . lsp-workspace-shutdown)
-              ("C-c C-c s" . lsp-rust-analyzer-status))
-  :config
-  ;; uncomment for less flashiness
-  ;; (setq lsp-eldoc-hook nil)
-  ;; (setq lsp-enable-symbol-highlighting nil)
-  ;; (setq lsp-signature-auto-activate nil)
 
-  ;; comment to disable rustfmt on save
-  (setq rustic-format-on-save nil)
-  (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
-
-(defun rk/rustic-mode-hook ()
-  ;; so that run C-c C-c C-r works without having to confirm, but don't try to
-  ;; save rust buffers that are not file visiting. Once
-  ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
-  ;; no longer be necessary.
-  (when buffer-file-name
-    (setq-local buffer-save-without-query t)))
-#+end_src
 *** zig
 #+begin_src emacs-lisp
   (use-package zig-mode :demand t)
   (setq lsp-zig-zls-executable "~/zls/zls")
 #+end_src
-*** Dap mode
-#+begin_src emacs-lisp
-(use-package dap-mode :demand t)
-(dap-auto-configure-mode 1)
-#+end_src
+
 
 ** which key
 #+begin_src emacs-lisp
