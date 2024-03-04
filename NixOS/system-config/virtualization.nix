@@ -8,8 +8,8 @@
       qemu.ovmf.enable = true;
       # qemuOvmf = true;
       qemu.swtpm.enable = true;
-      onBoot="ignore";
-      onShutdown="shutdown";
+      onBoot = "ignore";
+      onShutdown = "shutdown";
       # qemu.ovmf.package = pkgs.OVMFFull;
     };
 
@@ -53,7 +53,7 @@
   # };
   programs.virt-manager.enable = true;
 
-    
-    users.extraGroups.vboxusers.members = [ "drishal" ];
 
-  }
+  users.extraGroups.vboxusers.members = [ "drishal" ];
+
+}

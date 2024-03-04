@@ -1,9 +1,9 @@
-{ config, inputs, pkgs, lib , ... }:
+{ config, inputs, pkgs, lib, ... }:
 {
   colorScheme = {
     name = "doomone";
     palette = {
-      base00 = "282C34"; 
+      base00 = "282C34";
       base01 = "21242B";
       base02 = "3F444A";
       base03 = "5B6268"; #brightblack
@@ -44,6 +44,6 @@
   #   };
   # };
 
-    # ./modules/myModule.nix
+  # ./modules/myModule.nix
 
 }

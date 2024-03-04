@@ -6,8 +6,8 @@
 
     videoDrivers = [ "amdgpu" ];
     deviceSection = ''
-        Option "DRI" "3"
-      '';
+      Option "DRI" "3"
+    '';
     # window wmanagers
     windowManager = {
       qtile = {
@@ -106,15 +106,15 @@
               Type=Application
             '';
           in
-            ''
+          ''
             mkdir -p $out/share/wayland-sessions
             echo "${riverSession}" > $out/share/wayland-sessions/river.desktop
           '';
         passthru.providedSessions = [ "river" ];
       })
     )
-    
-    
+
+
     #qtile wayland 
     # (pkgs.qtile_git.overrideAttrs
     #   (prevAttrs: rec {

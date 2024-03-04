@@ -1,4 +1,4 @@
-{ config, inputs, pkgs, lib , ... }:
+{ config, inputs, pkgs, lib, ... }:
 {
   colorScheme = {
     name = "doom-vibrant";
@@ -22,4 +22,4 @@
       base0F = "5E81AC";
     };
   }
-}
+    }

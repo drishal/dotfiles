@@ -7,23 +7,23 @@
         mainBar = {
           layer = "top";
           modules-left = [ "hyprland/workspaces" "hyprland/window" ];
-          modules-center = [ "clock"];
-          modules-right = ["battery" "network" "memory" "cpu" "tray"];
+          modules-center = [ "clock" ];
+          modules-right = [ "battery" "network" "memory" "cpu" "tray" ];
           battery = {
             format = "{icon} {capacity}% ";
-            format-icons = ["󰁻"  "󰁽"  "󰁿" "󰂁" "󰁹" ];
+            format-icons = [ "󰁻" "󰁽" "󰁿" "󰂁" "󰁹" ];
             interval = 10;
           };
 
           clock = {
             format = "  {: %F (%a) %H:%M:%S}";
-	          interval = 1; 
+            interval = 1;
           };
-          
+
           cpu = {
             format = "   {}% ";
             max-length = 10;
-	          interval = 10;
+            interval = 10;
           };
 
           memory = {
@@ -34,7 +34,7 @@
             format = "{ifname}";
             format-wifi = "   {essid} ({signalStrength}%)  ";
             format-ethernet = " 󰈁 {ifname} ";
-            format-disconnected = "";  # An empty format will hide the module.
+            format-disconnected = ""; # An empty format will hide the module.
             # format-disconnected = "";
             tooltip-format = "{ifname}";
             tooltip-format-wifi = "  {essid} ({signalStrength}%)  ";
@@ -44,10 +44,10 @@
             interval = 10;
           };
 
-          
+
           "wlr/taskbar" = {
             all-outputs = false;
-            current-only =true;
+            current-only = true;
             format = "{icon}";
             icon-size = 9;
             icon-theme = "Papirus";
@@ -80,7 +80,7 @@
             format = "{}";
             separate-outputs = true;
           };
-          
+
           tray = {
             icon-size = 19;
             spacing = 10;

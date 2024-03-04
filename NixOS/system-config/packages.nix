@@ -19,11 +19,11 @@
       dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     };
 
-      #kde connect
-    kdeconnect.enable=true;
+    #kde connect
+    kdeconnect.enable = true;
 
     #wireshark
-    wireshark.enable=true;
+    wireshark.enable = true;
 
     # systemtap
     # systemtap.enable=true;
@@ -33,7 +33,7 @@
   environment.systemPackages = with pkgs; [
     acpi
     argc
-    adwaita-qt 
+    adwaita-qt
     aircrack-ng
     # anydesk
     alacritty
@@ -46,7 +46,7 @@
         sha256 = "sha256-0uSD+TMeKSSwB0f875MYsHAUlIKjmJmzEnT7Z3m8bnY=";
       };
     }))
-    
+
     appimage-run
     arandr
     # arc-theme
@@ -76,28 +76,35 @@
     #     "--enable-webrtc-hw-encoding"
     #   ];
     # })
+    (brave.override {
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--ozone-platform-hint=auto"
+        "--enable-features=VaapiVideoDecodeLinuxGL"
+      ];
+    })
     btop
     bun
     brightnessctl
     bridge-utils
     cachix
     # calibre
-    # cargo
+    cargo
     #carnix
     # chromium
-    (chromium.override {
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--enable-gpu-rasterization"
-        "--enable-zero-copy"
-        "--force-dark-mode"
-        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,VaapiVideoDecodeLinuxGL"
-        "--disable-features=UseChromeOSDirectVideoDecoder"
-        "--use-vulkan"
-        "--ozone-platform-hint=auto"
-        "--enable-hardware-overlays"
-      ];
-    })
+    # (chromium.override {
+    #   commandLineArgs = [
+    #     "--ignore-gpu-blocklist"
+    #     "--enable-gpu-rasterization"
+    #     "--enable-zero-copy"
+    #     "--force-dark-mode"
+    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,VaapiVideoDecodeLinuxGL"
+    #     "--disable-features=UseChromeOSDirectVideoDecoder"
+    #     "--use-vulkan"
+    #     "--ozone-platform-hint=auto"
+    #     "--enable-hardware-overlays"
+    #   ];
+    # })
 
     chromium-bsu
     cinnamon.nemo
@@ -116,7 +123,7 @@
     }))
     cmake
     cmatrix
-    config.boot.kernelPackages.v4l2loopback 
+    config.boot.kernelPackages.v4l2loopback
     conky
     cpufetch
     debootstrap
@@ -139,6 +146,7 @@
     dmidecode
     docker-compose
     dunst
+    dust
     dwmblocks
     ed
     element-desktop
@@ -246,7 +254,7 @@
     lm_sensors
     lolcat
     libsForQt5.ark
-    libsForQt5.okular 
+    libsForQt5.okular
     libsForQt5.konsole
     libsForQt5.qtstyleplugin-kvantum
     lsd
@@ -420,7 +428,7 @@
     woeusb
     widevine-cdm
     wine
-    win-virtio 
+    win-virtio
     wirelesstools
     wine64
     wireshark
@@ -527,7 +535,7 @@
             Type=Application
           '';
         in
-          ''
+        ''
           mkdir -p $out/share/wayland-sessions
           echo "${riverSession}" > $out/share/wayland-sessions/river.desktop
         '';
@@ -562,7 +570,7 @@
     }))
   ];
 
-  
+
   #swaylock
   security.pam.services.swaylock = {
     text = ''
@@ -581,13 +589,13 @@
       noto-fonts
       noto-fonts-cjk
       (pkgs.nerdfonts.override {
-        fonts = [ "FiraCode" "Monofur" "FantasqueSansMono"];
+        fonts = [ "FiraCode" "Monofur" "FantasqueSansMono" ];
       })
     ];
     fontconfig = {
       defaultFonts = {
         serif = [ "Noto Sans" ];
-        sansSerif = [ "Noto Serif"];
+        sansSerif = [ "Noto Serif" ];
         monospace = [ "FantasqueSansM Nerd Font" ];
       };
     };

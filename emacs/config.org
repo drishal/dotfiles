@@ -114,10 +114,10 @@ touch ~/.emacs.d/custom.el
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 (defun efs/display-startup-time ()
   (message "Emacs loaded in %s with %d garbage collections."
-	   (format "%.2f seconds"
-		   (float-time
-		    (time-subtract after-init-time before-init-time)))
-	   gcs-done))
+	       (format "%.2f seconds"
+		           (float-time
+		            (time-subtract after-init-time before-init-time)))
+	       gcs-done))
 
 (add-hook 'emacs-startup-hook #'efs/display-startup-time)
 #+end_src
@@ -125,7 +125,7 @@ touch ~/.emacs.d/custom.el
 * Initialize package sources
 ** Package.el
 #+begin_src emacs-lisp :tangle no
-  
+
 ;; Initialize package sources
 (require 'package)
 
@@ -137,7 +137,7 @@ touch ~/.emacs.d/custom.el
 (unless package-archive-contents
   (package-refresh-contents))
 
-  ;; Initialize use-package on non-Linux platforms
+;; Initialize use-package on non-Linux platforms
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
@@ -148,22 +148,22 @@ touch ~/.emacs.d/custom.el
 ** Straight.el
 Note: This is not currently tangled 
 #+begin_src emacs-lisp :tangle no
-  (defvar bootstrap-version)
-  (let ((bootstrap-file
-	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-	(bootstrap-version 5))
-    (unless (file-exists-p bootstrap-file)
-      (with-current-buffer
-	  (url-retrieve-synchronously
-	   "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-	   'silent 'inhibit-cookies)
-	(goto-char (point-max))
-	(eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage))
-  (setq package-enable-at-startup nil)
-  (straight-use-package 'use-package)
-  ;; (setq straight-recipes-gnu-elpa-use-mirror t)
-  (setq straight-recipes-emacsmirror-use-mirror t)
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+	    (url-retrieve-synchronously
+	     "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	     'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+(setq package-enable-at-startup nil)
+(straight-use-package 'use-package)
+;; (setq straight-recipes-gnu-elpa-use-mirror t)
+(setq straight-recipes-emacsmirror-use-mirror t)
 #+end_src
 
 ** elpaca.el
@@ -337,10 +337,10 @@ remove/add tangle no to whatever font you prefer
   :config
   (setq dashboard-icon-type 'all-the-icons)
   (setq dashboard-heading-icons '((recents   . "file-text")
-                                (bookmarks . "book")
-                                (agenda    . "calendar")
-                                (projects  . "rocket")
-                                (registers . "database")))
+                                  (bookmarks . "book")
+                                  (agenda    . "calendar")
+                                  (projects  . "rocket")
+                                  (registers . "database")))
   (setq dashboard-set-heading-icons t)
   ;; Content is not centered by default. To center, set
   (setq dashboard-set-file-icons t)
@@ -585,8 +585,8 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
   (mkdir "~/.emacs-temp"))
 #+end_src
 *** Autosave/Backups directory
- https://emacs.stackexchange.com/questions/33/put-all-backups-into-one-backup-folder
- Put backup files neatly away                                                 
+https://emacs.stackexchange.com/questions/33/put-all-backups-into-one-backup-folder
+Put backup files neatly away                                                 
 #+begin_src emacs-lisp
 (let ((backup-dir "~/.emacs-temp/")
       (auto-saves-dir "~/.emacs-temp/"))
@@ -615,12 +615,12 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 (setq package-install-upgrade-built-in t)
 ;;fixing seq
 (defun +elpaca-unload-seq (e) "Unload seq before continuing the elpaca build, then continue to build the recipe E."
-  (and (featurep 'seq) (unload-feature 'seq t))
-  (elpaca--continue-build e))
+       (and (featurep 'seq) (unload-feature 'seq t))
+       (elpaca--continue-build e))
 (elpaca `(seq :build ,(append (butlast (if (file-exists-p (expand-file-name "seq" elpaca-builds-directory))
-                                          elpaca--pre-built-steps
-                                        elpaca-build-steps))
-                             (list '+elpaca-unload-seq 'elpaca--activate-package))))
+                                           elpaca--pre-built-steps
+                                         elpaca-build-steps))
+                              (list '+elpaca-unload-seq 'elpaca--activate-package))))
 #+end_src
 
 ** Some indentation settings
@@ -664,7 +664,7 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 
 ** org mode indent
 #+begin_src emacs-lisp
-  (setq org-startup-indented t)
+(setq org-startup-indented t)
 #+end_src
 ** org mode disable begin_example blocks
 #+begin_src emacs-lisp
@@ -674,13 +674,13 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 Switch to org edit mode when pressing `i` insert key
 #+begin_src emacs-lisp :tangle no
 (add-hook 'org-mode-hook
-  (lambda ()
-    (add-hook 'evil-insert-state-entry-hook
-      (lambda ()
-        (when (org-in-src-block-p)
-          (org-edit-special)
-          (evil-insert-state)))
-      0 t)))
+          (lambda ()
+            (add-hook 'evil-insert-state-entry-hook
+                      (lambda ()
+                        (when (org-in-src-block-p)
+                          (org-edit-special)
+                          (evil-insert-state)))
+                      0 t)))
 #+end_src
 ** snippets:
 *** yas-snippet
@@ -690,7 +690,7 @@ Switch to org edit mode when pressing `i` insert key
 (elpaca-wait)
 ;; (add-to-list 'load-path ("~/dotfiles/emacs.d-gnu/snippets")
 (add-to-list 'load-path
-              "~/dotfiles/emacs/snippets")
+             "~/dotfiles/emacs/snippets")
 (setq yas-snippet-dirs '("~/dotfiles/emacs/snippets/"))
 (require 'yasnippet)
 (yas-global-mode 1)
@@ -756,7 +756,7 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 #+end_src
 ** org roam
 #+begin_src emacs-lisp :tangle no
-  (use-package org-roam :demand t)
+(use-package org-roam :demand t)
 #+end_src
 ** org export settings
 #+begin_src emacs-lisp
@@ -791,14 +791,14 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 * Tools
 ** vterm
 #+begin_src emacs-lisp
-  (use-package vterm
-    ;;:demand t
-    :demand t 
-    :config
-    ;;(setq vterm-shell "/bin/zsh")
-    ;; (set-popup-rule! "^\\*vterm" :size 0.25 :vslot -4 :select t :quit nil :ttl 0)
-    (setq vterm-timer-delay 0)
-    )
+(use-package vterm
+  ;;:demand t
+  :demand t 
+  :config
+  ;;(setq vterm-shell "/bin/zsh")
+  ;; (set-popup-rule! "^\\*vterm" :size 0.25 :vslot -4 :select t :quit nil :ttl 0)
+  (setq vterm-timer-delay 0)
+  )
 #+end_src
 ** Bongo
 https://github.com/dbrock/bongo
@@ -813,7 +813,7 @@ https://github.com/dbrock/bongo
 ** Mentor Torrent client
 https://github.com/skangas/mentor
 #+begin_src emacs-lisp
-  (use-package mentor :demand t)
+(use-package mentor :demand t)
 #+end_src
 ** selectrical mode
 #+begin_src emacs-lisp
@@ -1080,7 +1080,7 @@ https://github.com/karthink/popper
 (add-to-list 'company-backends #'company-tabnine)
 #+end_src
 ** treesitter
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package tree-sitter :demand t)
 (use-package tree-sitter-langs :demand t)
 (elpaca-wait)
@@ -1262,7 +1262,7 @@ https://github.com/minad/consult
   ;; Optionally configure the narrowing key.
   ;; Both < and C-+ work reasonably well.
   (setq consult-narrow-key "<") ;; (kbd "C-+")
-)
+  )
 #+end_src
 
 *** Marginalia.el
@@ -1287,8 +1287,8 @@ https://github.com/minad/marginalia
 *** emacs-direnv
 #+begin_src emacs-lisp
 (use-package direnv :demand t
- :config
- (direnv-mode))
+  :config
+  (direnv-mode))
 (setq direnv-always-show-summary nil)
 #+end_src
 
@@ -1300,9 +1300,9 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (use-package flycheck :demand t)
 #+end_src
 *** General Setup with lsp
-  :PROPERTIES:
-  :header-args: :tangle no
-   :END:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 #+begin_src emacs-lisp
 (use-package lsp-mode :demand t
   :init
@@ -1378,7 +1378,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   :demand t
   :hook (python-mode . (lambda ()
                          (require 'lsp-pyright)
-                          (lsp))))  ; or lsp-deferred
+                         (lsp))))  ; or lsp-deferred
 #+end_src
 ***** Dap mode
 #+begin_src emacs-lisp
@@ -1420,12 +1420,10 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 *** Eglot setup
 not tangling atm
 #+begin_src emacs-lisp  
-(use-package eglot :demand t)
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-               '(conf-toml-mode . ("taplo" "lsp" "stdio"))))
-;; (add-hook 'foo-mode-hook 'eglot-ensure)
-;; (use-package eglot-x :demand t)
+(use-package eglot
+  :demand t
+  :config
+  (add-to-list 'eglot-server-programs '(conf-toml-mode . ("taplo" "lsp" "stdio"))))
 #+end_src
 *** sql
 #+begin_src emacs-lisp
@@ -1540,15 +1538,15 @@ https://github.com/pwalsh/pipenv.el
 *** lua
 #+begin_src emacs-lisp
 (use-package lua-mode
- :demand t
- :mode "\\.lua$"
- :interpreter "lua"
- :hook (lua-mode . set-company-backends-for-lua)
- :config
- (setq lua-indent-level 4)
- (setq lua-indent-string-contents t)
- (setq lua-prefix-key nil)
- )
+  :demand t
+  :mode "\\.lua$"
+  :interpreter "lua"
+  :hook (lua-mode . set-company-backends-for-lua)
+  :config
+  (setq lua-indent-level 4)
+  (setq lua-indent-string-contents t)
+  (setq lua-prefix-key nil)
+  )
 #+end_src
 
 *** PKGBUILD
@@ -1560,7 +1558,10 @@ https://github.com/pwalsh/pipenv.el
 
 *** rust
 #+begin_src emacs-lisp
-(use-package rust-mode :demand t)
+(use-package rust-mode :demand t
+  :init
+  (setq rust-mode-treesitter-derive t)
+  )
 #+end_src
 
 *** C/C++ mode
@@ -1614,8 +1615,8 @@ https://github.com/pwalsh/pipenv.el
 
 *** zig
 #+begin_src emacs-lisp
-  (use-package zig-mode :demand t)
-  (setq lsp-zig-zls-executable "~/zls/zls")
+(use-package zig-mode :demand t)
+(setq lsp-zig-zls-executable "~/zls/zls")
 #+end_src
 
 

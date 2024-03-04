@@ -30,18 +30,18 @@
       };
     };
 
-    rio={
-      enable=true;
-      settings={
+    rio = {
+      enable = true;
+      settings = {
         # cursor = '▇';
         blinking-cursor = false;
         # theme="dracula";
-        fonts={
-          size=18;
-          family="FantasqueSansM Nerd Font";
+        fonts = {
+          size = 18;
+          family = "FantasqueSansM Nerd Font";
           # family="monospace";
         };
-        colors= with config.colorScheme.colors;{
+        colors = with config.colorScheme.colors;{
           background = "#${base00}";
           foreground = "#${base07}";
           cursor = "#${base0D}";
@@ -101,14 +101,14 @@
         };
         window = {
           dynamic_title = true;
-          dynamic_padding = true; 
+          dynamic_padding = true;
           padding = {
-            x=5;
-            y=5;
+            x = 5;
+            y = 5;
           };
         };
-        font ={
-          normal={
+        font = {
+          normal = {
             family = "FantasqueSansM Nerd Font";
             # family="monospace";
           };

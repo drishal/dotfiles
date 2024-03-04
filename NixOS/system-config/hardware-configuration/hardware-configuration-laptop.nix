@@ -5,34 +5,39 @@
 
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usbhid" "uas" "rtsx_pci_sdmmc" "amdgpu"];
-  boot.initrd.kernelModules = [""];
-  boot.kernelModules = [ "kvm-amd" "v4l2loopback" "amdgpu" "i8042"];
+  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usbhid" "uas" "rtsx_pci_sdmmc" "amdgpu" ];
+  boot.initrd.kernelModules = [ "" ];
+  boot.kernelModules = [ "kvm-amd" "v4l2loopback" "amdgpu" "i8042" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/f95000a8-1ed3-4585-b8d7-ef1a613c8057";
+    {
+      device = "/dev/disk/by-uuid/f95000a8-1ed3-4585-b8d7-ef1a613c8057";
       fsType = "btrfs";
       options = [ "subvol=root" "compress=zstd" "noatime" ];
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/f95000a8-1ed3-4585-b8d7-ef1a613c8057";
+    {
+      device = "/dev/disk/by-uuid/f95000a8-1ed3-4585-b8d7-ef1a613c8057";
       fsType = "btrfs";
       options = [ "subvol=home" "compress=zstd" "noatime" ];
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/f95000a8-1ed3-4585-b8d7-ef1a613c8057";
+    {
+      device = "/dev/disk/by-uuid/f95000a8-1ed3-4585-b8d7-ef1a613c8057";
       fsType = "btrfs";
       options = [ "subvol=nix" "compress=zstd" "noatime" ];
     };
 
   fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/DBDC-8563" ;
+    {
+      device = "/dev/disk/by-uuid/DBDC-8563";
       fsType = "vfat";
     };
 

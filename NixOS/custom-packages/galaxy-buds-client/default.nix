@@ -32,6 +32,6 @@ buildDotnetModule rec {
     homepage = "https://github.com/ThePBone/GalaxyBudsClient";
     license = licenses.gpl3;
     maintainers = [ maintainers.Madouura ];
-    platforms = platforms.linux;  # It can work with all, not sure yet how to implement
+    platforms = platforms.linux; # It can work with all, not sure yet how to implement
   };
 }

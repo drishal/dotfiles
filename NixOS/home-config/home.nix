@@ -34,13 +34,13 @@
     username = "drishal";
     homeDirectory = "/home/drishal";
     sessionVariables = {
-      EDITOR="nvim";
+      EDITOR = "nvim";
     };
     # language.base = "en_US.UTF-8";
     # sessionVariables.LOCALES_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
     # sessionVariables.LOCALES_ARCHIVE = "/usr/lib/locale/locale-archive";
   };
-  programs.man.generateCaches=true;
+  programs.man.generateCaches = true;
 
   # colorScheme = inputs.nix-colors.colorSchemes.material-palenight;
 

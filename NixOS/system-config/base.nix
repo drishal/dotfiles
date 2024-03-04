@@ -9,7 +9,7 @@
   # boot.kernelPackages = pkgs.linuxPackages_testing;
 
   # kernel parameters
-  boot.kernelParams = ["mitigations=off" "clearcpuid=514"];
+  boot.kernelParams = [ "mitigations=off" "clearcpuid=514" ];
   #"processor.max_cstate=1" "intel_idle.max_cstate=0"
   # microde
   hardware.cpu.amd.updateMicrocode = true;
@@ -26,11 +26,11 @@
 
   # systemd settings 
   systemd.extraConfig = ''
-  DefaultTimeoutStopSec=10s
+    DefaultTimeoutStopSec=10s
   '';
 
   # cgroups support
-  systemd.enableUnifiedCgroupHierarchy=true;
+  systemd.enableUnifiedCgroupHierarchy = true;
   #bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.package = pkgs.bluez5-experimental;
@@ -46,7 +46,7 @@
   #openssh
   services.openssh = {
     enable = true;
-    ports = [22];
+    ports = [ 22 ];
   };
 
   # power-management
@@ -55,8 +55,8 @@
       enable = true;
       cpuFreqGovernor = "schedutil";
     };
-  services.power-profiles-daemon.enable=true;
-  services.acpid.enable=true;
+  services.power-profiles-daemon.enable = true;
+  services.acpid.enable = true;
   # services.auto-cpufreq =
   #   {
   #     enable=true;
@@ -133,14 +133,14 @@
     hostName = "nixos";
     # dns
     nameservers = [ "1.1.1.1" "1.0.0.1" ];
-    extraHosts = "185.199.108.133 raw.githubusercontent.com";  
+    extraHosts = "185.199.108.133 raw.githubusercontent.com";
     # nameservers= [
     # cloudflare
     # "45.90.28.182"
     # "45.90.30.182"
     # "1.1.1.1"
     # "2606:4700:4700::1111"
-    
+
     #  google
     # "8.8.8.8"
     # "2001:4860:4860::8888"
@@ -204,15 +204,15 @@
   hardware.pulseaudio.enable = false;
   # backlight
   hardware.acpilight.enable = true;
-  
+
   # udev 250 doesn't reliably reinitialize devices after restart
   systemd.services.systemd-udevd.restartIfChanged = false;
 
   #session variables
   environment.sessionVariables = {
-    NIXOS_OZONE_WL="1";
+    NIXOS_OZONE_WL = "1";
   };
-  
+
   # environment.sessionVariables = rec {
   #   LIBVA_DRIVER_NAME="radeonsi";
   #    VDPAU_DRIVER = "radeonsi";

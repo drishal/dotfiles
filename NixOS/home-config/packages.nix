@@ -56,11 +56,11 @@
 
   #lsd
   programs.lsd = {
-    enable=true;
+    enable = true;
     settings = {
       icons = {
         theme = "fancy";
-        separator="  ";
+        separator = "  ";
       };
     };
   };
@@ -74,44 +74,44 @@
       name = "Papirus-Dark";
       package = papirus-icon-theme;
     };
-    font.name="Noto Sans 10";
-    cursorTheme.name="breeze_cursors";
+    font.name = "Noto Sans 10";
+    cursorTheme.name = "breeze_cursors";
     gtk2.extraConfig = ''
       gtk-button-images=1
       gtk-menu-images=1
-   ''; 
+    '';
     gtk3.extraConfig = {
-      gtk-application-prefer-dark-theme=true;
-      gtk-button-images=1;
-      gtk-cursor-theme-name="breeze_cursors";
-      gtk-cursor-theme-size=24;
-      gtk-decoration-layout="icon:minimize,maximize,close";
-      gtk-enable-animations=true;
+      gtk-application-prefer-dark-theme = true;
+      gtk-button-images = 1;
+      gtk-cursor-theme-name = "breeze_cursors";
+      gtk-cursor-theme-size = 24;
+      gtk-decoration-layout = "icon:minimize,maximize,close";
+      gtk-enable-animations = true;
       # gtk-font-name="Noto Sans, 10";
-      gtk-icon-theme-name="Papirus-Dark";
-      gtk-menu-images=1;
-      gtk-modules="colorreload-gtk-module";
-      gtk-primary-button-warps-slider=false;
+      gtk-icon-theme-name = "Papirus-Dark";
+      gtk-menu-images = 1;
+      gtk-modules = "colorreload-gtk-module";
+      gtk-primary-button-warps-slider = false;
       # gtk-theme-name="Orchis-Dark";
       # gtk-toolbar-style=GTK_TOOLBAR_BOTH_HORIZ;
       # gtk-xft-dpi=98304;
       # gtk-toolbar-icon-size=GTK_ICON_SIZE_LARGE_TOOLBAR;
-      gtk-enable-event-sounds=1;
-      gtk-enable-input-feedback-sounds=1;
-      gtk-xft-antialias=1;
-      gtk-xft-hinting=1;
-      gtk-xft-hintstyle="hintmedium";
+      gtk-enable-event-sounds = 1;
+      gtk-enable-input-feedback-sounds = 1;
+      gtk-xft-antialias = 1;
+      gtk-xft-hinting = 1;
+      gtk-xft-hintstyle = "hintmedium";
     };
     gtk4.extraConfig = {
-      gtk-application-prefer-dark-theme=true;
-      gtk-cursor-theme-name="breeze_cursors";
-      gtk-cursor-theme-size=24;
-      gtk-decoration-layout="icon:minimize,maximize,close";
-      gtk-enable-animations=true;
+      gtk-application-prefer-dark-theme = true;
+      gtk-cursor-theme-name = "breeze_cursors";
+      gtk-cursor-theme-size = 24;
+      gtk-decoration-layout = "icon:minimize,maximize,close";
+      gtk-enable-animations = true;
       # gtk-font-name="Noto Sans 10";
-      gtk-icon-theme-name="Papirus-Dark";
-      gtk-modules="colorreload-gtk-module";
-      gtk-primary-button-warps-slider="false";
+      gtk-icon-theme-name = "Papirus-Dark";
+      gtk-modules = "colorreload-gtk-module";
+      gtk-primary-button-warps-slider = "false";
       # gtk-theme-name="Orchis-Dark";
       # gtk-xft-dpi=98304;
     };

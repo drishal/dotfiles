@@ -66,7 +66,7 @@
 
   };
 
-  outputs = { nixpkgs, chaotic ,home-manager,programsdb, discord-flake, nur, emacs-overlay, cachix, declarative-cachix,hyprland,nix-colors, nixvim, private-stuff, ... }@inputs:
+  outputs = { nixpkgs, chaotic, home-manager, programsdb, discord-flake, nur, emacs-overlay, cachix, declarative-cachix, hyprland, nix-colors, nixvim, private-stuff, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -76,67 +76,67 @@
       };
       lib = nixpkgs.lib;
     in
-      {
-        homeConfigurations."drishal" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          extraSpecialArgs={inherit inputs;};
-          modules = [
-            ./NixOS/home-config/home.nix
-            {nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];}
-            nixvim.homeManagerModules.nixvim
-            "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
-            {
-              home = {
-                username = "drishal";
-                homeDirectory = "/home/drishal";
-                stateVersion = "22.05";
-              };
-            }
-          ];
-        };
-        nixosConfigurations =
-          let
-            commonModules = [
-              { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay inputs.neovim-nightly-overlay.overlay]; }
-              ./NixOS/system-config/configuration.nix
-              chaotic.nixosModules.default
-            ];
-          in
-            {
-              nixos-desktop = lib.nixosSystem {
-                inherit system;
-                modules = commonModules ++ [
-                  # ./NixOS/system-config/hardware-configuration/hardware-configuration-desktop.nix
-                ];
-                specialArgs = { inherit inputs; };
-              };
-              nixos = lib.nixosSystem {
-                inherit system;
-                modules = commonModules ++ [
-                  ./NixOS/system-config/hardware-configuration/hardware-configuration-laptop.nix
-                ];
-                specialArgs = { inherit inputs; };
-              };
+    {
+      homeConfigurations."drishal" = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        extraSpecialArgs = { inherit inputs; };
+        modules = [
+          ./NixOS/home-config/home.nix
+          { nixpkgs.overlays = [ inputs.emacs-overlay.overlay ]; }
+          nixvim.homeManagerModules.nixvim
+          "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
+          {
+            home = {
+              username = "drishal";
+              homeDirectory = "/home/drishal";
+              stateVersion = "22.05";
             };
-
-        # nixosConfigurations = {
-        #   nixos = lib.nixosSystem {
-        #     inherit system;
-        #     modules = [
-        #       # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
-        #       { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay]; }
-        #       # hyprland.nixosModules.default
-        #       ./NixOS/system-config/hardware-configuration/hardware-configuration-laptop.nix
-        #       ./NixOS/system-config/configuration.nix
-        #       chaotic.nixosModules.default
-        #       # { programs.hyprland.enable = true; }
-        #     ];
-        #     specialArgs = { inherit inputs; };
-        #   };
-        # };
-        # packages."x86_64-linux".thorium = pkgs.callPackage ./NixOS/custom-packages/thorium-browser/default.nix {};
-        # packages."x86_64-linux".qtile= pkgs.callPackage ./NixOS/custom-packages/qtile/default.nix {};
-        # packages."x86_64-linux".freedownloadmanager= pkgs.callPackage ./NixOS/custom-packages/free-download-manager/default.nix {};
-
+          }
+        ];
       };
+      nixosConfigurations =
+        let
+          commonModules = [
+            { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay inputs.neovim-nightly-overlay.overlay ]; }
+            ./NixOS/system-config/configuration.nix
+            chaotic.nixosModules.default
+          ];
+        in
+        {
+          nixos-desktop = lib.nixosSystem {
+            inherit system;
+            modules = commonModules ++ [
+              # ./NixOS/system-config/hardware-configuration/hardware-configuration-desktop.nix
+            ];
+            specialArgs = { inherit inputs; };
+          };
+          nixos = lib.nixosSystem {
+            inherit system;
+            modules = commonModules ++ [
+              ./NixOS/system-config/hardware-configuration/hardware-configuration-laptop.nix
+            ];
+            specialArgs = { inherit inputs; };
+          };
+        };
+
+      # nixosConfigurations = {
+      #   nixos = lib.nixosSystem {
+      #     inherit system;
+      #     modules = [
+      #       # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
+      #       { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay]; }
+      #       # hyprland.nixosModules.default
+      #       ./NixOS/system-config/hardware-configuration/hardware-configuration-laptop.nix
+      #       ./NixOS/system-config/configuration.nix
+      #       chaotic.nixosModules.default
+      #       # { programs.hyprland.enable = true; }
+      #     ];
+      #     specialArgs = { inherit inputs; };
+      #   };
+      # };
+      # packages."x86_64-linux".thorium = pkgs.callPackage ./NixOS/custom-packages/thorium-browser/default.nix {};
+      # packages."x86_64-linux".qtile= pkgs.callPackage ./NixOS/custom-packages/qtile/default.nix {};
+      # packages."x86_64-linux".freedownloadmanager= pkgs.callPackage ./NixOS/custom-packages/free-download-manager/default.nix {};
+
+    };
 }

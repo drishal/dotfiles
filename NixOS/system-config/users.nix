@@ -1,12 +1,12 @@
 { config, pkgs, inputs, lib, ... }:
 {
-  programs.fish.enable=true;
-  programs.zsh.enable=true;
-  programs.xonsh.enable=true;
+  programs.fish.enable = true;
+  programs.zsh.enable = true;
+  programs.xonsh.enable = true;
   users.users.drishal = {
     shell = pkgs.fish;
     isNormalUser = true;
-    extraGroups = [ "wheel" "netdev" "network" "video" "manager" "docker" "adb" "libvirtd" "plugdev"];
+    extraGroups = [ "wheel" "netdev" "network" "video" "manager" "docker" "adb" "libvirtd" "plugdev" ];
   };
   security.sudo.extraConfig = ''
     Defaults   insults
@@ -21,12 +21,12 @@
   # };
 
   security.polkit = {
-    enable=true;
-    extraConfig=
+    enable = true;
+    extraConfig =
       ''
-      polkit.addAdminRule(function(action, subject) {
-        return ["unix-group:wheel"];
-      });
+        polkit.addAdminRule(function(action, subject) {
+          return ["unix-group:wheel"];
+        });
       '';
   };
 }
