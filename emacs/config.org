@@ -1300,9 +1300,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (use-package flycheck :demand t)
 #+end_src
 *** General Setup with lsp
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+
 #+begin_src emacs-lisp
 (use-package lsp-mode :demand t
   :init
@@ -1419,7 +1417,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 *** Eglot setup
 not tangling atm
-#+begin_src emacs-lisp  
+#+begin_src emacs-lisp  :tangle no
 (use-package eglot
   :demand t
   :config
