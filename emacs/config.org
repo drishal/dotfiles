@@ -1380,8 +1380,12 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+end_src
 ***** Dap mode
 #+begin_src emacs-lisp
-(use-package dap-mode :demand t)
-(dap-auto-configure-mode 1)
+(use-package dap-mode
+  :demand t
+  :init
+  (dap-auto-configure-mode 1)
+  )
+
 #+end_src
 ***** rust 
 #+begin_src emacs-lisp :tangle no
