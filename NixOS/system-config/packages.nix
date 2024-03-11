@@ -285,7 +285,7 @@
     }))
     mesa-demos
     metasploit
-    # mov-cli
+    mov-cli
     mlocate
     # mongodb-compass
     mosh
@@ -369,7 +369,7 @@
     redshift
     read-edid
     ripgrep
-    rnix-lsp
+    # rnix-lsp
     rofi
     rofi-emoji
     # rustc
@@ -476,9 +476,12 @@
 
     zathura
     # python39Packages.numpy python39Packages.pandas
-    #     ((emacsPackagesFor emacsPgtkGcc).emacsWithPackages
-    #       (epkgs: [
-    #         epkgs.vterm]))
+    ((emacsPackagesFor emacs-pgtk).emacsWithPackages
+      (epkgs: with epkgs; [
+        treesit-grammars.with-all-grammars
+        vterm
+        telega
+      ]))
     # (pkgs.callPackage ../packages/batdistrack/default.nix { })
     # (pkgs.callPackage ../custom-packages/galaxy-buds-client/default.nix { })
     #(distrobox.overrideAttrs)
