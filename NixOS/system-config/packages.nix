@@ -25,6 +25,17 @@
     #wireshark
     wireshark.enable = true;
 
+    #neovim
+    # neovim = {
+    #   enable = true;
+    #   package = pkgs.neovim-nightly;
+    #   configure = {
+    #     packages.myVimPackage = with pkgs; {
+    #       start = [ lua-language-server ];
+    #     };
+    #   };
+    # };
+
     # systemtap
     # systemtap.enable=true;
   };
