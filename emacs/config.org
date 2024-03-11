@@ -1300,6 +1300,9 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (use-package flycheck :demand t)
 #+end_src
 *** General Setup with lsp
+   :PROPERTIES:
+   :header-args:    :tangle no
+   :END:
 
 #+begin_src emacs-lisp
 (use-package lsp-mode :demand t
