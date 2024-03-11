@@ -66,7 +66,6 @@
             installRustc = false;
           };
           lua-ls.enable = true;
-          rnix-lsp.enable = true;
         };
       };
       lsp-format.enable = true;
@@ -93,28 +92,28 @@
       cmp = {
         enable = true;
         autoEnableSources = true;
-        # cmdline.sources =
-        #   [
-        #     { name = "nvim_lsp"; }
-        #     { name = "luasnip"; }
-        #     { name = "path"; }
-        #     { name = "buffer"; }
-        #   ];
-        # snippet.expand = ''
-        # function(args)
-        #   luasnip.lsp_expand(args.body)
-        # end,
-        # '';
-        # snippet.expand = "luasnip";
-        settings.mapping = {
-          "<Down>" = "cmp.mapping.select_next_item()";
-          "<Up>" = "cmp.mapping.select_prev_item()";
-          "<C-d>" = "cmp.mapping.scroll_docs(-4)";
-          "<C-f>" = "cmp.mapping.scroll_docs(4)";
-          "<C-Space>" = " cmp.mapping.complete {}";
-          "<CR>" = "cmp.mapping.confirm({ select = true })";
-          "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
-          "<S-Tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
+        settings = {
+          mapping = {
+            "<Down>" = "cmp.mapping.select_next_item()";
+            "<Up>" = "cmp.mapping.select_prev_item()";
+            "<C-d>" = "cmp.mapping.scroll_docs(-4)";
+            "<C-f>" = "cmp.mapping.scroll_docs(4)";
+            "<C-Space>" = " cmp.mapping.complete {}";
+            "<CR>" = "cmp.mapping.confirm({ select = true })";
+            "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
+            "<S-Tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
+          };
+          sources = [
+            { name = "nvim_lsp"; }
+            { name = "path"; }
+            { name = "buffer"; }
+            { name = "luasnip"; }
+          ];
+          snippet.expand = ''
+            function(args)
+              require "luasnip".lsp_expand(args.body)
+            end
+          '';
         };
       };
       cmp-nvim-lsp = {
