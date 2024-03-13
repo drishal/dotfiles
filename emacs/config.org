@@ -1423,12 +1423,15 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+end_src
 
 *** Eglot setup
-not tangling atm
-#+begin_src emacs-lisp  :tangle no
+#+begin_src emacs-lisp  
 (use-package eglot
   :demand t
   :config
-  (add-to-list 'eglot-server-programs '(conf-toml-mode . ("taplo" "lsp" "stdio"))))
+  (add-to-list 'eglot-server-programs '(conf-toml-mode . ("taplo" "lsp" "stdio"))
+               '(nix-mode . ("nil")))
+  :hook
+  (nix-mode . eglot-ensure)
+  )
 #+end_src
 *** sql
 #+begin_src emacs-lisp
