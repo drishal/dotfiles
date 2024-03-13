@@ -294,19 +294,20 @@
     mpv
     #mullvad
     #mullvad-vpn
+    # neovide
     ncdu
     ncurses
     neofetch
-    nitch
     neovim-nightly
-    # neovide
     networkmanagerapplet
-    nitrogen
+    nil
     nim
+    nitch
+    nitrogen
     nixpkgs-fmt
     nmap
-    nvtop-amd
     nodejs
+    nvtop-amd
     # nodePackages_latest.create-react-app
     nodePackages_latest.bash-language-server
     noto-fonts
