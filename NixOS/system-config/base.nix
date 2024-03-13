@@ -33,7 +33,7 @@
   systemd.enableUnifiedCgroupHierarchy = true;
   #bluetooth
   hardware.bluetooth.enable = true;
-  hardware.bluetooth.package = pkgs.bluez5-experimental;
+  hardware.bluetooth.package = pkgs.bluez;
   services.blueman.enable = true;
 
 
