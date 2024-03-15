@@ -87,13 +87,13 @@
     #     "--enable-webrtc-hw-encoding"
     #   ];
     # })
-    (brave.override {
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--ozone-platform-hint=auto"
-        "--enable-features=VaapiVideoDecodeLinuxGL"
-      ];
-    })
+    # (brave.override {
+    #   commandLineArgs = [
+    #     "--ignore-gpu-blocklist"
+    #     "--ozone-platform-hint=auto"
+    #     "--enable-features=VaapiVideoDecodeLinuxGL"
+    #   ];
+    # })
     btop
     bun
     brightnessctl
@@ -415,20 +415,13 @@
     # virt-manager
     virtualenv
     virtiofsd
-    #(vivaldi.override {
-    #  commandLineArgs = [
-    #    "--ignore-gpu-blocklist"
-    #    "--enable-gpu-rasterization"
-    #    "--enable-zero-copy"
-    #    "--force-dark-mode"
-    #    "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
-    #    "--disable-features=UseChromeOSDirectVideoDecoder"
-    # "--use-vulkan"
-    #     "--ozone-platform-hint=auto"
-    #    "--enable-hardware-overlays"
-    #   ];
-    # })
-    #vivaldi-ffmpeg-codecs
+    (vivaldi.override {
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--ozone-platform-hint=auto"
+        "--enable-features=VaapiVideoDecodeLinuxGL"
+      ];
+    })    vivaldi-ffmpeg-codecs
     ventoy-full
     # vscode-fhs
     vlc
