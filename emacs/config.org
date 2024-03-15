@@ -412,7 +412,8 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 *** Doom themes
 #+begin_src emacs-lisp 
-(use-package doom-themes :demand t
+(use-package doom-themes
+  :ensure t
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -421,17 +422,23 @@ remove/add tangle no to whatever font you prefer
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
-
   ;; Enable custom neotree theme (all-the-icons must be installed!)
   (doom-themes-neotree-config)
   ;; or for treemacs users
-  ;; (setq doom-themes-treemacs-theme "doom-one") ; use the colorful treemacs theme
+  (setq doom-themes-treemacs-theme "doom-one") ; use "doom-colors" for less minimal icon theme
   (doom-themes-treemacs-config)
-
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config)
-  )
 
+  ;; neotree settings
+  (setq doom-neotree-project-size 1
+   doom-neotree-folder-size 1
+   doom-neotree-chevron-size 1
+   doom-themes-neotree-file-icons t
+   doom-themes-neotree-enable-variable-pitch t
+   doom-themes-neotree-file-icons 'simple
+   doom-themes-neotree-line-spacing 2
+  ))
 #+end_src
 *** Other themes:
 **** Catppuccin
@@ -967,7 +974,17 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
 #+end_src
 ** neotree
 #+begin_src emacs-lisp
-(use-package neotree :demand t)
+(use-package neotree :demand t
+  :config
+  (setq neo-smart-open t
+        neo-show-hidden-files t
+        neo-window-width 25
+        neo-window-fixed-size nil
+        inhibit-compacting-font-caches t
+        neo-banner-message nil
+        neo-keymap-style 'concise
+        projectile-switch-project-action 'neotree-projectile-action) 
+  )
 #+end_src
 ** dired
 #+begin_src emacs-lisp
@@ -1149,15 +1166,6 @@ https://github.com/karthink/popper
 
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t))
-
-(use-package vertico-posframe
-  :demand t
-  :init
-  (vertico-posframe-mode)
-  :custom
-  (vertico-posframe-parameters
-   '((left-fringe . 8)
-     (right-fringe . 8))))
 #+end_src
 
 *** consult
@@ -1265,6 +1273,17 @@ https://github.com/minad/consult
   )
 #+end_src
 
+*** vertico posframe
+#+begin_src emacs-lisp :tangle no
+(use-package vertico-posframe
+  :demand t
+  :init
+  (vertico-posframe-mode)
+  :custom
+  (vertico-posframe-parameters
+   '((left-fringe . 8)
+     (right-fringe . 8))))
+#+end_src
 *** Marginalia.el
 https://github.com/minad/marginalia
 #+begin_src emacs-lisp
