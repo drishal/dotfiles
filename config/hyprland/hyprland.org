@@ -28,7 +28,8 @@ mkdir -p ~/.config/hypr
 
 * Monitor config
 #+begin_src conf
-monitor=,highrr,auto,1
+# monitor=,highrr,auto,1
+
 monitor=eDP-1,1920x1080,1920X0,1
 monitor=HDMI-A-1,1920x1080@144,0x0,1
 workspace = 1, monitor:HDMI-A-1
@@ -41,6 +42,19 @@ workspace = 7, monitor:eDP-1
 workspace = 8, monitor:eDP-1
 workspace = 9, monitor:eDP-1
 workspace = 10, monitor:eDP-1
+
+monitor=DP-1, 1920x1080, 0x0, 1
+monitor=DP-2, 1920x1080, 1920x0, 1
+workspace = 1, monitor:DP-1
+workspace = 2, monitor:DP-1
+workspace = 3, monitor:DP-1
+workspace = 4, monitor:DP-1
+workspace = 5, monitor:DP-1
+workspace = 6, monitor:DP-2
+workspace = 7, monitor:DP-2
+workspace = 8, monitor:DP-2
+workspace = 9, monitor:DP-2
+workspace = 10, monitor:DP-2
 #+end_src
 * Autostart programs 
  Execute apps at launch
@@ -73,7 +87,7 @@ input {
 #+end_src 
 ** Device specific settings
 *** Touchpad 
-#+begin_src conf
+#+begin_src conf :tangle no
 device:synps/2-synaptics-touchpad {
     sensitivity=0.6
 }
@@ -252,7 +266,8 @@ bind = $mainMod, mouse_up, workspace, e-1
 
 * Hyprpaper config
 #+begin_src conf :tangle ~/.config/hypr/hyprpaper.conf
-preload = /home/drishal/dotfiles/wallpapers/NixOS-1.png 
+preload = /home/drishal/dotfiles/wallpapers/NixOS-1.png
+preload = ~/dotfiles/wallpapers/archlinux/archlinux-onedark.png 
 # preload = /home/drishal/dotfiles/wallpapers/archlinux/archlinux-onedark.png
 # preload =~/dotfiles/wallpapers/darkest_hour.jpg
 wallpaper = eDP-1,~/dotfiles/wallpapers/NixOS-1.png
@@ -260,4 +275,6 @@ wallpaper = eDP-1,~/dotfiles/wallpapers/NixOS-1.png
 # wallpaper = eDP-1,~/dotfiles/wallpapers/darkest_hour.jpg
 wallpaper = HDMI-A-1,~/dotfiles/wallpapers/NixOS-1.png
 # wallpaper = HDMI-A-1,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
+wallpaper = DP-1,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
+wallpaper = DP-2,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
 #+end_src
