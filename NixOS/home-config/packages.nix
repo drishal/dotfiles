@@ -21,7 +21,7 @@
     man-pages
     neofetch
     #rnix
-    sl
+    # sl
     starship
     # neovide
     nixpkgs-fmt
