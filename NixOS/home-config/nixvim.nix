@@ -18,6 +18,7 @@
       timeoutlen = 300;
       completeopt = "menuone,noselect";
       termguicolors = true;
+      guifont = "FantasqueSansM Nerd Font:h14";
     };
     extraPackages = with pkgs;[
       vimPlugins.nvim-web-devicons
@@ -48,6 +49,7 @@
             installRustc = false;
           };
           lua-ls.enable = true;
+          pyright.enable = true;
         };
       };
       lsp-format.enable = true;
