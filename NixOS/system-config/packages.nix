@@ -134,7 +134,6 @@
     }))
     cmake
     cmatrix
-    config.boot.kernelPackages.v4l2loopback
     conky
     cpufetch
     debootstrap
@@ -421,7 +420,8 @@
         "--ozone-platform-hint=auto"
         "--enable-features=VaapiVideoDecodeLinuxGL"
       ];
-    })    vivaldi-ffmpeg-codecs
+    })
+    vivaldi-ffmpeg-codecs
     ventoy-full
     # vscode-fhs
     vlc
