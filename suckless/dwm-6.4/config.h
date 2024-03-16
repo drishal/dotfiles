@@ -15,8 +15,8 @@ static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
-static const char *fonts[]          = { "FantasqueSansMono Nerd Font:size=12", "Noto Color Emoji:size=9:antialias=true:autohint=true"};
-static const char dmenufont[]       = "FantasqueSansMono Nerd Font:size=12";
+static const char *fonts[]          = { "FantasqueSansM Nerd Font:size=12", "Noto Color Emoji:size=9:antialias=true:autohint=true"};
+static const char dmenufont[]       = "FantasqueSansM Nerd Font:size=12";
 /* static const char col_cyan[]        = "#005577"; */
 
 // dracula
