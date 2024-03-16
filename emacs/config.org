@@ -8,7 +8,6 @@
   - [[#emacs-startup-performance][emacs startup performance]]
 - [[#initialize-package-sources][Initialize package sources]]
   - [[#packageel][Package.el]]
-  - [[#straightel][Straight.el]]
   - [[#elpacael][elpaca.el]]
   - [[#enable-native-comp-for-packages][enable native comp for packages]]
   - [[#setting-up-paths][Setting up paths]]
@@ -145,32 +144,11 @@ touch ~/.emacs.d/custom.el
 
 #+end_src
 
-** Straight.el
-Note: This is not currently tangled 
-#+begin_src emacs-lisp :tangle no
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-	    (url-retrieve-synchronously
-	     "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-	     'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-(setq package-enable-at-startup nil)
-(straight-use-package 'use-package)
-;; (setq straight-recipes-gnu-elpa-use-mirror t)
-(setq straight-recipes-emacsmirror-use-mirror t)
-#+end_src
-
 ** elpaca.el
 https://github.com/progfolio/elpaca
 
 #+begin_src emacs-lisp
-(defvar elpaca-installer-version 0.6)
+(defvar elpaca-installer-version 0.7)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
 (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
@@ -220,7 +198,11 @@ https://github.com/progfolio/elpaca
 (use-package org :demand t)
 ;; Block until current queue processed.
 (elpaca-wait)
+#+end_src
 
+Disable early package startup
+#+begin_src emacs-lisp :tangle ~/.config/emacs/early-init.el
+(setq package-enable-at-startup nil)
 #+end_src
 ** enable native comp for packages
 #+begin_src emacs-lisp
@@ -230,10 +212,10 @@ https://github.com/progfolio/elpaca
 ** Setting up paths
 *** main path from shell
 #+begin_src emacs-lisp 
-(use-package exec-path-from-shell :demand t)
-(elpaca-wait)
-(when (daemonp)
-  (exec-path-from-shell-initialize))
+(use-package exec-path-from-shell :demand t
+  :config (when (daemonp)
+            (exec-path-from-shell-initialize))
+  )
 #+end_src
 *** .local/bin path 
 #+begin_src emacs-lisp
@@ -333,8 +315,11 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 ** Dashboard
 #+begin_src emacs-lisp 
-(use-package dashboard :elpaca t
+(use-package dashboard
+  :demand t
   :config
+  (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
+  (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
   (setq dashboard-icon-type 'all-the-icons)
   (setq dashboard-heading-icons '((recents   . "file-text")
                                   (bookmarks . "book")
@@ -353,19 +338,9 @@ remove/add tangle no to whatever font you prefer
                           (bookmarks . 5)
                           (projects . 3)
                           ))
-
-  :init      ;; tweak dashboard config before loading it
   (dashboard-setup-startup-hook)
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
-  (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
-  (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
   )
-
-
-;;enable recentf mode
-(require 'recentf)
-(recentf-mode 1)
-
 #+end_src
 ** highlight current line
 #+begin_src emacs-lisp
@@ -432,12 +407,13 @@ remove/add tangle no to whatever font you prefer
 
   ;; neotree settings
   (setq doom-neotree-project-size 1
-   doom-neotree-folder-size 1
-   doom-neotree-chevron-size 1
-   doom-themes-neotree-file-icons t
-   doom-themes-neotree-enable-variable-pitch t
+   ;; doom-neotree-folder-size 1
+   ;; doom-neotree-chevron-size 1
+   ;; doom-themes-neotree-file-icons t
+   ;; doom-themes-neotree-enable-variable-pitch t
    doom-themes-neotree-file-icons 'simple
    doom-themes-neotree-line-spacing 2
+   doom-neotree-enable-variable-pitch nil
   ))
 #+end_src
 *** Other themes:
@@ -534,21 +510,21 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 #+end_src
 *** Evil args
 #+begin_src emacs-lisp
-(use-package evil-args :demand t)
-(elpaca-wait)
+(use-package evil-args :demand t
+  :config
+  ;; bind evil-args text objects
+  (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
+  (define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
 
-;; bind evil-args text objects
-(define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
-(define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
+  ;; bind evil-forward/backward-args
+  (define-key evil-normal-state-map "L" 'evil-forward-arg)
+  (define-key evil-normal-state-map "H" 'evil-backward-arg)
+  (define-key evil-motion-state-map "L" 'evil-forward-arg)
+  (define-key evil-motion-state-map "H" 'evil-backward-arg)
 
-;; bind evil-forward/backward-args
-(define-key evil-normal-state-map "L" 'evil-forward-arg)
-(define-key evil-normal-state-map "H" 'evil-backward-arg)
-(define-key evil-motion-state-map "L" 'evil-forward-arg)
-(define-key evil-motion-state-map "H" 'evil-backward-arg)
-
-;; bind evil-jump-out-args
-(define-key evil-normal-state-map "K" 'evil-jump-out-args)
+  ;; bind evil-jump-out-args
+  (define-key evil-normal-state-map "K" 'evil-jump-out-args)
+  )
 #+end_src
 *** Evil intent plus
 #+begin_src emacs-lisp
@@ -556,11 +532,13 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 #+end_src
 *** Evil Snipe
 #+begin_src emacs-lisp
-(use-package evil-snipe :demand t)
-(elpaca-wait)
-(evil-snipe-mode +1)
-(evil-snipe-override-mode +1)
+(use-package evil-snipe :demand t
+  :init
+  (evil-snipe-mode +1)
+  (evil-snipe-override-mode +1)
+  )
 #+end_src
+
 ** Undo system
 #+begin_src emacs-lisp
 (use-package undo-tree
@@ -691,20 +669,19 @@ Switch to org edit mode when pressing `i` insert key
 #+end_src
 ** snippets:
 *** yas-snippet
-
 #+begin_src emacs-lisp
-(use-package yasnippet :demand t)
-(elpaca-wait)
-;; (add-to-list 'load-path ("~/dotfiles/emacs.d-gnu/snippets")
-(add-to-list 'load-path
-             "~/dotfiles/emacs/snippets")
-(setq yas-snippet-dirs '("~/dotfiles/emacs/snippets/"))
-(require 'yasnippet)
-(yas-global-mode 1)
+(use-package yasnippet :demand t
+  :init
+  (require 'yasnippet)
+  (yas-global-mode 1)
+  :config
+  (add-to-list 'load-path
+               "~/dotfiles/emacs/snippets")
+  (setq yas-snippet-dirs '("~/dotfiles/emacs/snippets/"))
+  )
 #+end_src
 
 ** org tempo(snippets):
-
 #+begin_src emacs-lisp
 ;; (use-package 'org-tempo :demand t)
 (require 'org-tempo)
@@ -978,12 +955,19 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
   :config
   (setq neo-smart-open t
         neo-show-hidden-files t
-        neo-window-width 25
+        neo-window-width 35
         neo-window-fixed-size nil
         inhibit-compacting-font-caches t
         neo-banner-message nil
         neo-keymap-style 'concise
         projectile-switch-project-action 'neotree-projectile-action) 
+  (add-hook 'neo-after-create-hook
+            #'(lambda (_)
+                (with-current-buffer (get-buffer neo-buffer-name)
+                  (setq truncate-lines t)
+                  (setq word-wrap nil)
+                  (make-local-variable 'auto-hscroll-mode)
+                  (setq auto-hscroll-mode nil))))
   )
 #+end_src
 ** dired
@@ -991,6 +975,25 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
 (setq dired-listing-switches "-alh  --group-directories-first")
 ;; (setq insert-directory-program "exa")
 ;; (setq dired-listing-switches "-alh --group-directories-first --color=always --time-style=long-iso --icons")
+#+end_src
+*** Dired Sidebar
+#+begin_src emacs-lisp
+(use-package dired-sidebar
+  :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
+  :ensure t
+  :commands (dired-sidebar-toggle-sidebar)
+  :init
+  (add-hook 'dired-sidebar-mode-hook
+            (lambda ()
+              (unless (file-remote-p default-directory)
+                (auto-revert-mode))))
+  :config
+  (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
+  (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
+
+  (setq dired-sidebar-subtree-line-prefix "__")
+  (setq dired-sidebar-use-term-integration t)
+  )
 #+end_src
 ** elcord
 #+begin_src emacs-lisp
@@ -1067,12 +1070,13 @@ https://github.com/karthink/popper
 
 ** Multi cursor
 #+begin_src emacs-lisp
-(use-package multiple-cursors :demand t)
-(elpaca-wait)
-(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(use-package multiple-cursors :demand t
+  :config
+  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+  )
 #+end_src
 
 ** ement el matrix client
@@ -1084,26 +1088,22 @@ https://github.com/karthink/popper
 ** completion engines:
 *** company mode
 #+begin_src emacs-lisp
-(use-package company :demand t)
-(elpaca-wait)
-(add-hook 'after-init-hook 'global-company-mode)
-(setq company-minimum-prefix-length 1
+(use-package company :demand t
+  :init
+  (add-hook 'after-init-hook 'global-company-mode)
+  :config
+  (setq company-minimum-prefix-length 1
       company-idle-delay 0.1) ;; default is 0.2
-#+end_src
-*** tabnine
-#+begin_src emacs-lisp :tangle no 
-(use-package company-tabnine :demand t)
-(require 'company-tabnine)
-(add-to-list 'company-backends #'company-tabnine)
+  )
 #+end_src
 ** treesitter
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
 (use-package tree-sitter :demand t)
-(use-package tree-sitter-langs :demand t)
-(elpaca-wait)
-(global-tree-sitter-mode)
-(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-;; (require 'treesit)
+(use-package tree-sitter-langs :demand t
+  :init
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+  )
 #+end_src
 
 ** emoji mode
@@ -1114,16 +1114,16 @@ https://github.com/karthink/popper
 #+end_src
 ** Parentheses Completion
 #+begin_src emacs-lisp
-(use-package smartparens :demand t)
-(elpaca-wait)
-(require 'smartparens-config)
-;; (add-hook 'smartparens-mode)
-(smartparens-global-mode t)
+(use-package smartparens
+  :demand t;; install the package
+  :hook (prog-mode text-mode markdown-mode org-mode) ;; add `smartparens-mode` to these hooks
+  :config
+  ;; load default config
+  (require 'smartparens-config))
 #+end_src
 ** Projectile
 #+begin_src emacs-lisp
 (use-package projectile :demand t)
-(require 'smartparens-config)
 #+end_src
 
 ** vertico and orderless
@@ -1446,8 +1446,10 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (use-package eglot
   :demand t
   :config
-  (add-to-list 'eglot-server-programs '(conf-toml-mode . ("taplo" "lsp" "stdio"))
-               '(nix-mode . ("nil")))
+  (add-to-list 'eglot-server-programs
+               '(conf-toml-mode . ("taplo" "lsp" "stdio"))
+               '(nix-mode . ("nil"))
+               )
   :hook
   (nix-mode . eglot-ensure)
   )
@@ -1578,9 +1580,10 @@ https://github.com/pwalsh/pipenv.el
 
 *** PKGBUILD
 #+begin_src emacs-lisp
-(use-package pkgbuild-mode :demand t)
-(elpaca-wait)
-(require 'pkgbuild-mode)
+(use-package pkgbuild-mode :demand
+  :init
+  (require 'pkgbuild-mode)
+  )
 #+end_src
 
 *** rust
@@ -1663,9 +1666,9 @@ https://github.com/pwalsh/pipenv.el
         which-key-idle-delay 0.8
         which-key-max-description-length 25
         which-key-allow-imprecise-window-fit t
-        which-key-separator " → " ))
-(elpaca-wait)
-(which-key-mode)
+        which-key-separator " → " )
+  (which-key-mode)
+  )
 #+end_src
 
 
