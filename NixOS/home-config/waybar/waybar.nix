@@ -16,7 +16,7 @@
           };
 
           clock = {
-            format = "  {: %F (%a) %H:%M:%S}";
+            format = "  {:%F (%a) %H:%M:%S}";
             interval = 1;
           };
 
@@ -32,7 +32,7 @@
           };
           network = {
             format = "{ifname}";
-            format-wifi = "   {essid} ({signalStrength}%)  ";
+            format-wifi = "   {essid} ({signalStrength}%) ";
             format-ethernet = " 󰈁 {ifname} ";
             format-disconnected = ""; # An empty format will hide the module.
             # format-disconnected = "";
