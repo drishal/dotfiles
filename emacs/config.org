@@ -67,6 +67,7 @@
   - [[#telega][telega]]
   - [[#emacs-pdf-tools][emacs pdf tools]]
   - [[#mu4e][mu4e]]
+  - [[#perspectiveel][perspective.el]]
   - [[#treemacs][treemacs]]
   - [[#neotree][neotree]]
   - [[#dired][dired]]
@@ -407,13 +408,9 @@ remove/add tangle no to whatever font you prefer
 
   ;; neotree settings
   (setq doom-neotree-project-size 1
-   ;; doom-neotree-folder-size 1
-   ;; doom-neotree-chevron-size 1
-   ;; doom-themes-neotree-file-icons t
-   ;; doom-themes-neotree-enable-variable-pitch t
    doom-themes-neotree-file-icons 'simple
-   doom-themes-neotree-line-spacing 2
-   doom-neotree-enable-variable-pitch nil
+   doom-themes-neotree-line-spacing 1
+   ;; doom-neotree-enable-variable-pitch nil
   ))
 #+end_src
 *** Other themes:
@@ -843,6 +840,17 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
           (:maildir "/[Gmail]/All Mail"  :key ?a))))
 
 
+#+end_src
+** perspective.el
+#+begin_src emacs-lisp :tangle no
+(use-package perspective
+  :demand t
+  :bind
+  ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
+  :custom
+  (persp-mode-prefix-key (kbd "C-c M-p"))  ; pick your own prefix key here
+  :init
+  (persp-mode))
 #+end_src
 ** treemacs
 #+begin_src emacs-lisp
