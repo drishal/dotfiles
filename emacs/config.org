@@ -401,14 +401,15 @@ remove/add tangle no to whatever font you prefer
   ;; Enable custom neotree theme (all-the-icons must be installed!)
   (doom-themes-neotree-config)
   ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-one") ; use "doom-colors" for less minimal icon theme
+  (setq doom-themes-treemacs-theme "doom-colors") ; use "doom-colors" for less minimal icon theme
+  (setq doom-themes-treemacs-enable-variable-pitch nil)
   (doom-themes-treemacs-config)
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config)
 
   ;; neotree settings
   (setq doom-neotree-project-size 1
-   doom-themes-neotree-file-icons 'simple
+   doom-themes-neotree-file-icons t 
    doom-themes-neotree-line-spacing 1
    ;; doom-neotree-enable-variable-pitch nil
   ))
@@ -1327,10 +1328,9 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (use-package flycheck :demand t)
 #+end_src
 *** General Setup with lsp
-   :PROPERTIES:
-   :header-args:    :tangle no
-   :END:
-
+   # :PROPERTIES:
+   # :header-args:    :tangle no
+   # :END:
 #+begin_src emacs-lisp
 (use-package lsp-mode :demand t
   :init
@@ -1417,8 +1417,24 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   )
 
 #+end_src
-***** rust 
-#+begin_src emacs-lisp :tangle no
+
+
+*** Eglot setup
+#+begin_src emacs-lisp :tangle no 
+(use-package eglot
+  :demand t
+  :config
+  (add-to-list 'eglot-server-programs
+               '(conf-toml-mode . ("taplo" "lsp" "stdio"))
+               '(nix-mode . ("nil"))
+               )
+  :hook
+  (nix-mode . eglot-ensure)
+  )
+#+end_src
+
+*** rust 
+#+begin_src emacs-lisp
 (use-package rustic
   :demand t
   :bind (:map rustic-mode-map
@@ -1432,13 +1448,15 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
               ("C-c C-c s" . lsp-rust-analyzer-status))
   :config
   ;; uncomment for less flashiness
-  ;; (setq lsp-eldoc-hook nil)
-  ;; (setq lsp-enable-symbol-highlighting nil)
-  ;; (setq lsp-signature-auto-activate nil)
-
+  (setq lsp-eldoc-hook nil)
+  (setq lsp-enable-symbol-highlighting nil)
+  (setq lsp-signature-auto-activate nil)
   ;; comment to disable rustfmt on save
-  (setq rustic-format-on-save nil)
-  (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
+  ;; (setq rustic-format-on-save nil)
+  (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook)
+  ;; eglot mode
+  ;; (setq rustic-lsp-client 'eglot)
+  )
 
 (defun rk/rustic-mode-hook ()
   ;; so that run C-c C-c C-r works without having to confirm, but don't try to
@@ -1447,20 +1465,6 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   ;; no longer be necessary.
   (when buffer-file-name
     (setq-local buffer-save-without-query t)))
-#+end_src
-
-*** Eglot setup
-#+begin_src emacs-lisp  
-(use-package eglot
-  :demand t
-  :config
-  (add-to-list 'eglot-server-programs
-               '(conf-toml-mode . ("taplo" "lsp" "stdio"))
-               '(nix-mode . ("nil"))
-               )
-  :hook
-  (nix-mode . eglot-ensure)
-  )
 #+end_src
 *** sql
 #+begin_src emacs-lisp
