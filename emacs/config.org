@@ -384,7 +384,7 @@ remove/add tangle no to whatever font you prefer
 *** disable package check signature 
 #+begin_src emacs-lisp
 (setq package-check-signature nil)
-
+(setq custom-safe-themes t)
 #+end_src
 *** Doom themes
 #+begin_src emacs-lisp 
@@ -429,6 +429,10 @@ remove/add tangle no to whatever font you prefer
 **** Modus
 #+begin_src emacs-lisp :tangle no
 (load-theme 'modus-vivendi t)
+#+end_src
+**** ef theme
+#+begin_src emacs-lisp
+(use-package ef-themes :demand t)
 #+end_src
 ** Disable Menubar
 #+begin_src emacs-lisp
