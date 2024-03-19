@@ -14,7 +14,7 @@
     ./file-managers.nix
     ./colors/doomone.nix
     ./tmux.nix
-    ./waybar/waybar.nix
+    ./waybar.nix
     inputs.nix-colors.homeManagerModules.default
   ];
   # Let Home Manager install and manage itself.
