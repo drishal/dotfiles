@@ -2,6 +2,21 @@
 {
   programs.waybar = {
     enable = true;
+    style = with config.colorScheme.colors; ''
+      @define-color colbg        #${base00}; 
+      @define-color colbg2       #${base02};
+      @define-color colfg        #${base05};
+      @define-color colgrey      #${base03};
+      @define-color colcyan      #${base0C};
+      @define-color colgreen     #${base0B};
+      @define-color colorange    #${base09};
+      @define-color colmagenta   #${base0E};
+      @define-color colviolet    #${base0F};
+      @define-color colred       #${base08};
+      @define-color colyellow    #${base0A};
+      ${builtins.readFile ../../config/waybar/style.css}
+    ''
+    ;
     settings =
       {
         mainBar = {
