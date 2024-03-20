@@ -1,7 +1,8 @@
-{ config, inputs, pkgs, ... }:
+{ config, inputs, pkgs, pkgs-master, ... }:
 {
   programs.waybar = {
     enable = true;
+    package = pkgs-master.waybar;
     style = with config.colorScheme.colors; ''
       @define-color colbg        #${base00}; 
       @define-color colbg2       #${base02};

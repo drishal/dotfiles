@@ -19,7 +19,7 @@
 
     nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
     # nixpkgs = { url = "github:PedroHLC/nixpkgs/pull-284487"; };
-    # nixpkgs-master= { url = "github:nixos/nixpkgs/master"; };
+    nixpkgs-master= { url = "github:nixos/nixpkgs/master"; };
 
     # nixpkgs-master.url = "github:NixOS/nixpkgs/master";
 
@@ -66,7 +66,7 @@
 
   };
 
-  outputs = { nixpkgs, chaotic, home-manager, programsdb, discord-flake, nur, emacs-overlay, cachix, declarative-cachix, hyprland, nix-colors, nixvim, private-stuff, ... }@inputs:
+  outputs = { nixpkgs,nixpkgs-master, chaotic, home-manager, programsdb, discord-flake, nur, emacs-overlay, cachix, declarative-cachix, hyprland, nix-colors, nixvim, private-stuff, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -74,12 +74,17 @@
         inherit system;
         config = { allowUnfree = true; };
       };
+      pkgs-master = import nixpkgs-master {
+        inherit system;
+        config = { allowUnfree = true; };
+      };
       lib = nixpkgs.lib;
+
     in
     {
       homeConfigurations."drishal" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        extraSpecialArgs = { inherit inputs; };
+        extraSpecialArgs = { inherit inputs; inherit pkgs-master; };
         modules = [
           ./NixOS/home-config/home.nix
           { nixpkgs.overlays = [ inputs.emacs-overlay.overlay ]; }
