@@ -3,6 +3,8 @@
 * Table of Contents :toc:
 - [[#init][Init]]
 - [[#monitor-config][Monitor config]]
+  - [[#base-laptop-monitor-setup][Base Laptop Monitor setup]]
+  - [[#monitor-setup-1][Monitor setup 1]]
 - [[#autostart-programs][Autostart programs]]
 - [[#input-settings][Input settings]]
   - [[#general-settings][General settings]]
@@ -27,9 +29,13 @@ mkdir -p ~/.config/hypr
 #+end_src
 
 * Monitor config
-#+begin_src conf
-# monitor=,highrr,auto,1
-
+** Base Laptop Monitor setup 
+#+begin_src  conf
+# monitor=eDP-1,1920x1080,1920X0,1
+monitor=,highrr,auto,1
+#+end_src
+** Monitor setup 1 
+#+begin_src conf :tangle no
 monitor=eDP-1,1920x1080,1920X0,1
 monitor=HDMI-A-1,1920x1080@144,0x0,1
 workspace = 1, monitor:HDMI-A-1
@@ -83,6 +89,7 @@ input {
         natural_scroll = no
         # scroll_factor=1.4
     }
+    sensitivity = 0.5
 }
 #+end_src 
 ** Device specific settings
@@ -268,6 +275,7 @@ bind = $mainMod, mouse_up, workspace, e-1
 #+begin_src conf :tangle ~/.config/hypr/hyprpaper.conf
 preload = /home/drishal/dotfiles/wallpapers/NixOS-1.png
 preload = ~/dotfiles/wallpapers/archlinux/archlinux-onedark.png 
+preload = ~/dotfiles/wallpapers/darkest_hour.jpg
 # preload = /home/drishal/dotfiles/wallpapers/archlinux/archlinux-onedark.png
 # preload =~/dotfiles/wallpapers/darkest_hour.jpg
 wallpaper = eDP-1,~/dotfiles/wallpapers/NixOS-1.png
