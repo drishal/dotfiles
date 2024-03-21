@@ -416,10 +416,9 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 *** Other themes:
 **** Catppuccin
-#+begin_src emacs-lisp :tangle no 
+#+begin_src emacs-lisp :tangle no
 (use-package catppuccin-theme
-  :ensure t
-  :demand
+  :demand t
   :config
   (load-theme 'catppuccin t)
   (catppuccin-load-flavor 'macchiato)
