@@ -19,7 +19,7 @@
 
     nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
     # nixpkgs = { url = "github:PedroHLC/nixpkgs/pull-284487"; };
-    nixpkgs-master= { url = "github:nixos/nixpkgs/master"; };
+    nixpkgs-master= { url = "github:nixos/nixpkgs/9b5ca6a80c775a62734e1fefa0d04f1b0c91c91b"; };
 
     # nixpkgs-master.url = "github:NixOS/nixpkgs/master";
 
@@ -37,7 +37,9 @@
     };
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    discord-flake = { url = github:InternetUnexplorer/discord-overlay; };
+    discord-flake = {
+      url = "github:InternetUnexplorer/discord-overlay";
+    };
 
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 
