@@ -78,7 +78,7 @@ window#waybar.empty #window {
 #tags button  {
     background-color: @colbg;
     padding: 3px;
-    border-radius: 10px;
+    /* border-radius: 10px; */
     min-width: 20px;
     color: @colgrey;
     }
@@ -92,15 +92,10 @@ window#waybar.empty #window {
     color: @colfg;
 }
 
-
-#window {
-    color: @colviolet;
-}
-
 #workspaces button  {
     background-color: @colbg;
     padding: 3px;
-    border-radius: 10px;
+    /* border-radius: 10px; */
     min-width: 20px;
     color: @colgrey;
 }
@@ -108,7 +103,7 @@ window#waybar.empty #window {
 #workspaces button  {
     background-color: @colbg;
     padding: 3px;
-    border-radius: 10px;
+    /* border-radius: 10px; */
     min-width: 20px;
     color: @colgrey;
 }
@@ -126,10 +121,12 @@ window#waybar.empty #window {
     background-color: @colbg; 
     color: @colfg;
 }
-
+/*
 #window {
-    color: @colviolet;
+    color: @colbg;
+    background-color: @colviolet;
 }
+*/
 
 #tags button{
     background-color: @colbg;
@@ -182,18 +179,22 @@ window#waybar.empty #window {
  /* } */
 
 
-#window {
-     background: @colbg2; 
-     padding: 0 10px;
-     margin: 3px 3px 3px 3px;
-     border-radius: 90px;
-     background-clip: padding-box;
+/* #window { */
+/*      /\* background: @colbg2;  *\/ */
+/*      padding: 0 10px; */
+/*      margin: 3px 3px 3px 3px; */
+/*      /\* border-radius: 90px; *\/ */
+/*      background-clip: padding-box; */
+/*      /\* color: @colviolet; *\/ */
+/*      color: @colbg; */
+/*      background-color: @colbg;  */
 
- }
+/*  } */
 
 #battery,
 #clock,
 #cpu,
+#window,
 #memory,
 #network,
 #tray
@@ -201,8 +202,9 @@ window#waybar.empty #window {
   background: @colbg2; 
   padding: 0 10px;
   margin: 3px 3px 3px 3px;
-  border-radius: 90px;
+  /* border-radius: 90px; */
   background-clip: padding-box;
+  color: @colbg;
 }
 
 #battery {
@@ -221,4 +223,9 @@ window#waybar.empty #window {
 }
 #network {
     color: @colorange; 
+}
+
+#window {
+    /* color: @colbg; */
+    color: @colviolet;
 }
