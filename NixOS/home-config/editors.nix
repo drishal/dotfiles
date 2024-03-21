@@ -60,6 +60,7 @@
             pyright.enable = true;
           };
         };
+        rust-tools.enable = true;
         lsp-format.enable = true;
         luasnip.enable = true;
         cmp_luasnip.enable = true;
@@ -69,6 +70,7 @@
         neorg.enable = true;
         neo-tree.enable = true;
         fugitive.enable = true;
+        gitsigns.enable = true;
         treesitter = {
           enable = true;
           #folding = true;
