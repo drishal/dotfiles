@@ -9,7 +9,7 @@
   # boot.kernelPackages = pkgs.linuxPackages_testing;
 
   # kernel parameters
-  boot.kernelParams = [ "mitigations=off" "clearcpuid=514" ];
+  boot.kernelParams = [ "mitigations=off" "clearcpuid=514" "i8042.probe_defer" ];
   #"processor.max_cstate=1" "intel_idle.max_cstate=0"
   # microde
   hardware.cpu.amd.updateMicrocode = true;
