@@ -66,9 +66,11 @@
       flake = false;
     };
 
+    ags.url = "github:Aylur/ags";
+
   };
 
-  outputs = { nixpkgs,nixpkgs-master, chaotic, home-manager, programsdb, discord-flake, nur, emacs-overlay, cachix, declarative-cachix, hyprland, nix-colors, nixvim, private-stuff, ... }@inputs:
+  outputs = { nixpkgs,nixpkgs-master, chaotic, home-manager, programsdb, discord-flake, nur, emacs-overlay, cachix, declarative-cachix, hyprland, nix-colors, nixvim, private-stuff,ags, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -90,6 +92,7 @@
         modules = [
           ./NixOS/home-config/home.nix
           { nixpkgs.overlays = [ inputs.emacs-overlay.overlay ]; }
+          inputs.ags.homeManagerModules.default
           nixvim.homeManagerModules.nixvim
           "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
           {
