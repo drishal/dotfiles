@@ -116,7 +116,6 @@
       # gtk-xft-dpi=98304;
     };
   };
-
   # home.pointerCursor = {
   #   name = "breeze_cursors";
   #   # package = pkgs.gnome.adwaita-icon-theme;

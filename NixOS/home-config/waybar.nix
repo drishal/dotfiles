@@ -22,6 +22,10 @@
       {
         mainBar = {
           layer = "top";
+          margin-top = 5;
+          margin-left= 5;
+          margin-right= 5;
+          height = 10;
           modules-left = [ "hyprland/workspaces" "hyprland/window" ];
           modules-center = [ "clock" ];
           modules-right = [ "battery" "network" "memory" "cpu" "tray" ];

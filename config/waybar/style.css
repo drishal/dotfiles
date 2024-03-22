@@ -50,7 +50,7 @@
 * {
     /*all: initial; Ignore gtk theme*/ 
     border: none;
-    border-radius: 0;
+    border-radius: 10px;
     /* `otf-font-awesome` is required to be installed for icons */
     font-family: "FantasqueSansM Nerd Font","Roboto", "Helvetica", "Arial", "sans-serif";
     /* font-family: "ComicShannsMono Nerd Font","Roboto", "Helvetica", "Arial", "sans-serif"; */
@@ -64,8 +64,8 @@
 
 
 window#waybar {
-    /* background-color: @colbg; */
-    background: rgba(0, 0, 0, 0);
+    background-color: @colbg;
+    /* background: rgba(0, 0, 0, 0); */
     transition-property: background-color;
     transition-duration: .5s;
     /* opacity: 0.9;  */
@@ -202,7 +202,6 @@ window#waybar.empty #window {
   background: @colbg2; 
   padding: 0 10px;
   margin: 3px 3px 3px 3px;
-  /* border-radius: 90px; */
   background-clip: padding-box;
   color: @colbg;
 }
