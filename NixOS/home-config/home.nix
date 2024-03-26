@@ -12,7 +12,7 @@
     ./rofi.nix
     ./shells.nix
     ./file-managers.nix
-    ./colors/doomone.nix
+    ./colors/doompalenight.nix
     ./tmux.nix
     ./waybar.nix
     inputs.nix-colors.homeManagerModules.default
@@ -41,6 +41,7 @@
     # sessionVariables.LOCALES_ARCHIVE = "/usr/lib/locale/locale-archive";
   };
   programs.man.generateCaches = true;
+  # colorScheme = inputs.nix-colors.lib.schemeFromYAML "doompalenight" (builtins.readFile ./colors/doompalenight.yaml);
 
   # colorScheme = inputs.nix-colors.colorSchemes.material-palenight;
 
