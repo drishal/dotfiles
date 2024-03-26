@@ -1,4 +1,4 @@
-{ config, inputs, pkgs, ... }:
+{ config, inputs, pkgs, lib, ... }:
 
 # Editors
 {
@@ -12,7 +12,19 @@
     nixvim = {
       enable = true;
       enableMan = true;
-      colorschemes.onedark.enable = true;
+      # colorschemes.onedark.enable = true;
+      # colorschemes.catppuccin = {
+      #   enable = true;
+      #   background.dark = "mocha";
+      # };
+      colorschemes.base16 = {
+        enable = true;
+        colorscheme =
+          lib.concatMapAttrs (name: value: {
+            ${name} = "#${value}";
+          })
+            config.colorScheme.palette;
+      };
       options = {
         hlsearch = false;
         number = true;
@@ -116,7 +128,7 @@
         lualine = {
           enable = true;
           iconsEnabled = true;
-          theme = "onedark";
+          # theme = "onedark";
           componentSeparators = {
             left = " ";
             right = " ";
@@ -127,7 +139,7 @@
           };
         };
 
-        comment-nvim = {
+        comment = {
           enable = true;
         };
 
@@ -165,13 +177,13 @@
   };
 }
 
-# Emacs: just keeping this as a reference if I decide to setup emacs via home manager in the future
-# emacs = {
-#   enable = true;
-#   package = pkgs.emacs-pgtk;
-#   extraPackages = epkgs: with epkgs; [
-#     treesit-grammars.with-all-grammars
-#     vterm
-#     telega
-#   ];
-# };
+  # Emacs: just keeping this as a reference if I decide to setup emacs via home manager in the future
+  # emacs = {
+  #   enable = true;
+  #   package = pkgs.emacs-pgtk;
+  #   extraPackages = epkgs: with epkgs; [
+  #     treesit-grammars.with-all-grammars
+  #     vterm
+  #     telega
+  #   ];
+  # };
