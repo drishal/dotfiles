@@ -13,18 +13,18 @@
       enable = true;
       enableMan = true;
       # colorschemes.onedark.enable = true;
-      # colorschemes.catppuccin = {
-      #   enable = true;
-      #   background.dark = "mocha";
-      # };
-      colorschemes.base16 = {
+      colorschemes.catppuccin = {
         enable = true;
-        colorscheme =
-          lib.concatMapAttrs (name: value: {
-            ${name} = "#${value}";
-          })
-            config.colorScheme.palette;
+        background.dark = "mocha";
       };
+      # colorschemes.base16 = {
+      #   enable = true;
+      #   colorscheme =
+      #     lib.concatMapAttrs (name: value: {
+      #       ${name} = "#${value}";
+      #     })
+      #       config.colorScheme.palette;
+      # };
       options = {
         hlsearch = false;
         number = true;

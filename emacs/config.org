@@ -107,6 +107,7 @@ touch ~/.emacs.d/custom.el
 (load-file (expand-file-name "custom.el" user-emacs-directory))
 (setq gc-cons-threshold 100000000)
 #+end_src
+
 ** emacs startup performance
 #+begin_src emacs-lisp :tangle no 
 ;; The default is 800 kilobytes.  Measured in bytes.
@@ -340,8 +341,7 @@ remove/add tangle no to whatever font you prefer
                           (projects . 3)
                           ))
   (dashboard-setup-startup-hook)
-  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
-  )
+  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))))
 #+end_src
 ** highlight current line
 #+begin_src emacs-lisp
@@ -385,16 +385,17 @@ remove/add tangle no to whatever font you prefer
 #+begin_src emacs-lisp
 (setq package-check-signature nil)
 (setq custom-safe-themes t)
+(setq custom-theme-directory "~/dotfiles/emacs/themes")
 #+end_src
 *** Doom themes
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package doom-themes
   :ensure t
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-palenight t)
+  (load-theme 'doom-catppuccin t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -402,6 +403,7 @@ remove/add tangle no to whatever font you prefer
   (doom-themes-neotree-config)
   ;; or for treemacs users
   (setq doom-themes-treemacs-theme "doom-colors") ; use "doom-colors" for less minimal icon theme
+  (setq doom-catppuccin-dark-variant "mocha")
   (setq doom-themes-treemacs-enable-variable-pitch nil)
   (doom-themes-treemacs-config)
   ;; Corrects (and improves) org-mode's native fontification.
@@ -416,15 +418,15 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 *** Other themes:
 **** Catppuccin
-#+begin_src emacs-lisp :tangle no 
+#+begin_src emacs-lisp 
 (use-package catppuccin-theme
   :demand t
   :init
   (load-theme 'catppuccin :noconfirm)
-  (catppuccin-load-flavor 'macchiato)
+  (catppuccin-load-flavor 'mocha)
   (add-hook 'emacs-startup-hook (lambda () (catppuccin-reload)))
-  (when (daemonp)
-    (catppuccin-reload)))
+  (add-hook 'server-after-make-frame-hook #'catppuccin-reload)
+  (catppuccin-reload))
 #+end_src
 **** Modus
 #+begin_src emacs-lisp :tangle no

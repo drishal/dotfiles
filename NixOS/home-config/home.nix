@@ -12,7 +12,7 @@
     ./rofi.nix
     ./shells.nix
     ./file-managers.nix
-    ./colors/doompalenight.nix
+    # ./colors/doompalenight.nix
     ./tmux.nix
     ./waybar.nix
     inputs.nix-colors.homeManagerModules.default
@@ -43,7 +43,7 @@
   programs.man.generateCaches = true;
   # colorScheme = inputs.nix-colors.lib.schemeFromYAML "doompalenight" (builtins.readFile ./colors/doompalenight.yaml);
 
-  # colorScheme = inputs.nix-colors.colorSchemes.material-palenight;
+  colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
 
   # home.stateVersion = "21.05";
 
