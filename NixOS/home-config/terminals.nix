@@ -15,7 +15,7 @@
         cursor = {
           color = "282c34 51afef";
         };
-        colors = with config.colorScheme.colors; {
+        colors = with config.colorScheme.palette; {
           background = "${base00}";
           foreground = "${base07}";
           regular0 = "${base00}"; # black
@@ -41,7 +41,7 @@
           family = "FantasqueSansM Nerd Font";
           # family="monospace";
         };
-        colors = with config.colorScheme.colors;{
+        colors = with config.colorScheme.palette;{
           background = "#${base00}";
           foreground = "#${base07}";
           cursor = "#${base0D}";
@@ -69,7 +69,7 @@
     alacritty = {
       enable = true;
       settings = {
-        colors = with config.colorScheme.colors; {
+        colors = with config.colorScheme.palette; {
           bright = {
             black = "0x${base00}";
             blue = "0x${base0D}";
