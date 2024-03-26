@@ -10,9 +10,11 @@
   nixConfig = {
     extra-substituters = [
       "https://nix-community.cachix.org"
+      # "https://emacsng.cachix.org"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      # "emacsng.cachix.org-1:i7wOr4YpdRpWWtShI8bT6V7lOTnPeI7Ho6HaZegFWMI="
     ];
   };
   inputs = {
@@ -56,6 +58,8 @@
       url = "github:nix-community/emacs-overlay/";
     };
 
+    emacs-ng.url ="github:emacs-ng/emacs-ng";
+
     programsdb = {
       url = "github:wamserma/flake-programs-sqlite";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -66,11 +70,12 @@
       flake = false;
     };
 
-    ags.url = "github:Aylur/ags";
+    # ags.url = "github:Aylur/ags";
 
+    lobster.url = "github:justchokingaround/lobster";
   };
 
-  outputs = { nixpkgs,nixpkgs-master, chaotic, home-manager, programsdb, discord-flake, nur, emacs-overlay, cachix, declarative-cachix, hyprland, nix-colors, nixvim, private-stuff,ags, ... }@inputs:
+  outputs = { nixpkgs,nixpkgs-master, chaotic, home-manager, programsdb, discord-flake, nur, emacs-overlay, cachix, declarative-cachix, hyprland, nix-colors, nixvim, private-stuff,emacs-ng, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -92,7 +97,7 @@
         modules = [
           ./NixOS/home-config/home.nix
           { nixpkgs.overlays = [ inputs.emacs-overlay.overlay ]; }
-          inputs.ags.homeManagerModules.default
+          # inputs.ags.homeManagerModules.default
           nixvim.homeManagerModules.nixvim
           "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
           {
