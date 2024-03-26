@@ -100,7 +100,7 @@
     bridge-utils
     cachix
     # calibre
-    cargo
+    # cargo
     #carnix
     # chromium
     # (chromium.override {
@@ -209,8 +209,8 @@
     git
     gitRepo
     glxinfo
-    gns3-gui
-    gns3-server
+    # gns3-gui
+    # gns3-server
     gnome.gnome-boxes
     gnome.cheese
     gnome.gnome-calculator
@@ -239,6 +239,7 @@
     inetutils
     inxi
     inotify-tools
+    inputs.lobster.packages.x86_64-linux.lobster
     jq
     #python3Packages.ipython
     python3Packages.python-lsp-server
@@ -284,7 +285,16 @@
     }))
     mesa-demos
     metasploit
-    mov-cli
+    # mov-cli
+    # (mov-cli.overrideAttrs (old: {
+    #   src = pkgs.fetchFromGitHub {
+    #     repo = "mov-cli";
+    #     owner = "mov-cli";
+    #     rev = "b667f747aaf10ca182c7405a37ceb3ed4520dde9";
+    #     sha256 = "sha256-9kC0rHU73Umv6vEtFpc5agn/qUAsWxSQSgVXW4qvjKQ=";
+    #   };
+    #   buildInputs = old.buildInputs ++ [ pkgs.python311Packages.setuptools-scm ];
+    # }))
     mlocate
     # mongodb-compass
     mosh
@@ -306,7 +316,8 @@
     nixpkgs-fmt
     nmap
     nodejs
-    nvtop-amd
+    # nvtop-amd
+    nvtopPackages.amd
     # nodePackages_latest.create-react-app
     nodePackages_latest.bash-language-server
     noto-fonts
@@ -361,6 +372,7 @@
     #python3Packages.venvShellHook
     #$python3Packages.qtile-extras
     qbittorrent
+    qutebrowser
     qt5ct
     qpdf
     # qtile-extras_git
@@ -467,14 +479,14 @@
     xorg.xkill
     xorg.xmodmap
     xorg.xhost
-
     zathura
+    # inputs.emacs-ng.packages.x86_64-linux.default
     # python39Packages.numpy python39Packages.pandas
     ((emacsPackagesFor emacs-pgtk).emacsWithPackages
       (epkgs: with epkgs; [
         treesit-grammars.with-all-grammars
         vterm
-        telega
+        # telega
       ]))
     # (pkgs.callPackage ../packages/batdistrack/default.nix { })
     # (pkgs.callPackage ../custom-packages/galaxy-buds-client/default.nix { })
