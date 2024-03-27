@@ -75,31 +75,6 @@ window#waybar.empty #window {
 	background: transparent;
 }
 
-#tags button  {
-    background-color: @colbg;
-    padding: 3px;
-    /* border-radius: 10px; */
-    min-width: 20px;
-    color: @colgrey;
-    }
-
-#tags button.occupied  {
-    background-color: @colbg2;
-    color: @colfg;
-}
-#tags button.focused{
-    background-color: @colgrey; 
-    color: @colfg;
-}
-
-#workspaces button  {
-    background-color: @colbg;
-    padding: 3px;
-    /* border-radius: 10px; */
-    min-width: 20px;
-    color: @colgrey;
-}
-
 #workspaces button  {
     background-color: @colbg;
     padding: 3px;
@@ -109,7 +84,7 @@ window#waybar.empty #window {
 }
 #workspaces button.active{
     background-color: @colgrey;
-    border-bottom: 2px solid @colviolet;
+    /* border-bottom: 2px solid @colviolet; */
     color: @colfg;
 }
 #workspaces button.urgent{
@@ -121,12 +96,6 @@ window#waybar.empty #window {
     background-color: @colbg; 
     color: @colfg;
 }
-/*
-#window {
-    color: @colbg;
-    background-color: @colviolet;
-}
-*/
 
 #tags button{
     background-color: @colbg;
@@ -153,43 +122,6 @@ window#waybar.empty #window {
     background-color: @colred;
     color: @colfg;
 }
-
- /* #custom-dwl_layout { */
- /*     color: @colviolet; */
- /* } */
-
- /* #custom-dwl_title { */
- /*     color: @colmagenta; */
- /* } */
-
- /* #custom-dwl_tag { */
- /*     color: @colgrey */
- /* } */
-
- /* #custom-dwl_tag.selected { */
- /*     border-top: 1px solid @colmagenta */
- /* } */
-
- /* #custom-dwl_tag.urgent { */
- /*     background-color: @colred */
- /*     } */
-
- /* #custom-dwl_tag.active { */
- /*     color: @colfg */
- /* } */
-
-
-/* #window { */
-/*      /\* background: @colbg2;  *\/ */
-/*      padding: 0 10px; */
-/*      margin: 3px 3px 3px 3px; */
-/*      /\* border-radius: 90px; *\/ */
-/*      background-clip: padding-box; */
-/*      /\* color: @colviolet; *\/ */
-/*      color: @colbg; */
-/*      background-color: @colbg;  */
-
-/*  } */
 
 #battery,
 #clock,

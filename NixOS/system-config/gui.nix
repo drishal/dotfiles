@@ -70,7 +70,7 @@
     enable = true;
     settings = rec {
       initial_session = {
-        command = "Hyprland";
+        command = "dbus-run-session Hyprland";
         # command = "qtile start -b wayland";
         # command = "river";
         # command = "startplasma-wayland";
