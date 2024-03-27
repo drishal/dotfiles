@@ -79,6 +79,7 @@
         cmp-treesitter.enable = true;
         which-key.enable = true;
         nvim-autopairs.enable = true;
+        direnv.enable = true;
         neorg.enable = true;
         neo-tree.enable = true;
         fugitive.enable = true;
