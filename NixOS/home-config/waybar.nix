@@ -3,7 +3,7 @@
   programs.waybar = {
     enable = true;
     package = pkgs-master.waybar;
-    style = with config.colorScheme.palette; ''
+    style = with config.scheme; ''
       @define-color colbg        #${base00}; 
       @define-color colbg2       #${base02};
       @define-color colfg        #${base05};

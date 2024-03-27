@@ -15,9 +15,9 @@
         cursor = {
           color = "282c34 51afef";
         };
-        colors = with config.colorScheme.palette; {
+        colors = with config.scheme; {
           background = "${base00}";
-          foreground = "${base07}";
+          foreground = "${base05}";
           regular0 = "${base00}"; # black
           regular1 = "${base08}"; # red
           regular2 = "${base0B}"; # green
@@ -41,9 +41,9 @@
           family = "FantasqueSansM Nerd Font";
           # family="monospace";
         };
-        colors = with config.colorScheme.palette;{
+        colors = with config.scheme;{
           background = "#${base00}";
-          foreground = "#${base07}";
+          foreground = "#${base05}";
           cursor = "#${base0D}";
           bright-cursor = "#${base0C}";
           bright-black = "#${base00}";
@@ -60,7 +60,7 @@
           green = "#${base0B}";
           magenta = "#${base0E}";
           red = "#${base08}";
-          white = "#${base07}";
+          white = "#${base05}";
           yellow = "#${base0A}";
         };
       };
@@ -69,7 +69,7 @@
     alacritty = {
       enable = true;
       settings = {
-        colors = with config.colorScheme.palette; {
+        colors = with config.scheme; {
           bright = {
             black = "0x${base00}";
             blue = "0x${base0D}";
@@ -91,12 +91,12 @@
             green = "0x${base0B}";
             magenta = "0x${base0E}";
             red = "0x${base08}";
-            white = "0x${base07}";
+            white = "0x${base05}";
             yellow = "0x${base0A}";
           };
           primary = {
             background = "0x${base00}";
-            foreground = "0x${base07}";
+            foreground = "0x${base05}";
           };
         };
         window = {

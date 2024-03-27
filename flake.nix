@@ -29,9 +29,9 @@
       url = "github:nix-community/home-manager";
     };
 
-    nix-colors = {
-      url = "github:misterio77/nix-colors";
-    };
+    # nix-colors = {
+    #   url = "github:misterio77/nix-colors";
+    # };
 
     nixvim = {
       url = "github:nix-community/nixvim";
@@ -73,9 +73,16 @@
     # ags.url = "github:Aylur/ags";
 
     lobster.url = "github:justchokingaround/lobster";
+
+    base16.url = "github:SenchoPens/base16.nix";
+
+    tt-schemes = {
+      url = "github:tinted-theming/schemes";
+      flake = false;
+    };
   };
 
-  outputs = { nixpkgs,nixpkgs-master, chaotic, home-manager, programsdb, discord-flake, nur, emacs-overlay, cachix, declarative-cachix, hyprland, nix-colors, nixvim, private-stuff,emacs-ng, ... }@inputs:
+  outputs = { nixpkgs,nixpkgs-master, chaotic, home-manager, programsdb, discord-flake, nur, emacs-overlay, cachix, declarative-cachix, hyprland, nixvim, private-stuff,emacs-ng, base16, tt-schemes, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -98,6 +105,7 @@
           ./NixOS/home-config/home.nix
           { nixpkgs.overlays = [ inputs.emacs-overlay.overlay ]; }
           # inputs.ags.homeManagerModules.default
+          base16.homeManagerModule
           nixvim.homeManagerModules.nixvim
           "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
           {

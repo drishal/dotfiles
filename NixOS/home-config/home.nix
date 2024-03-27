@@ -15,7 +15,7 @@
     # ./colors/doompalenight.nix
     ./tmux.nix
     ./waybar.nix
-    inputs.nix-colors.homeManagerModules.default
+    # inputs.nix-colors.homeManagerModules.default
   ];
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -43,7 +43,9 @@
   programs.man.generateCaches = true;
   # colorScheme = inputs.nix-colors.lib.schemeFromYAML "doompalenight" (builtins.readFile ./colors/doompalenight.yaml);
 
-  colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
+  # colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
+
+  scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
 
   # home.stateVersion = "21.05";
 
