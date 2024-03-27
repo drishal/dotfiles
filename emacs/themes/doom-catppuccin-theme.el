@@ -234,7 +234,7 @@ background contrast. All other values default to \"mocha\"."
    (operators      _sky)
    (type           _yellow)
    (strings        _green)
-   (variables      _text)
+   (variables      _blue)
    (numbers        _peach)
    ;; (region         `(,(doom-lighten (car bg-alt) 0.15) ,@(doom-lighten (cdr base1) 0.35)))
    ;; (region         _surface2)
@@ -341,7 +341,28 @@ background contrast. All other values default to \"mocha\"."
    ((org-tag &override) :foreground (doom-lighten orange 0.3))
    (org-todo :foreground orange :bold 'inherit :background (doom-darken base1 0.02))
    (org-upcoming-deadline :foreground yellow)
-   (org-warning :foreground magenta))
+   (org-warning :foreground magenta)
+   ;;;; rjsx-mode
+   (rjsx-tag :foreground magenta)
+   (rjsx-attr :foreground green :slant 'italic :weight 'medium)
+   ;;;; solaire-mode
+   (solaire-hl-line-face :background base2)
+   (solaire-mode-line-face
+    :inherit 'mode-line
+    :background modeline-bg
+    :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-l)))
+   (solaire-mode-line-inactive-face
+    :inherit 'mode-line-inactive
+    :background modeline-bg-inactive
+    :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-inactive-l)))
+   (solaire-region-face :background region)
+   ;;;; web-mode
+   (web-mode-builtin-face :foreground orange)
+   (web-mode-css-selector-face :foreground green)
+   (web-mode-html-attr-name-face :foreground green)
+   (web-mode-html-tag-bracket-face :inherit 'default)
+   (web-mode-html-tag-face :foreground magenta :weight 'bold)
+   (web-mode-preprocessor-face :foreground orange))
 
   ;;;; Base theme variable overrides-
   ())

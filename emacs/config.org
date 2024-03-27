@@ -388,7 +388,7 @@ remove/add tangle no to whatever font you prefer
 (setq custom-theme-directory "~/dotfiles/emacs/themes")
 #+end_src
 *** Doom themes
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp 
 (use-package doom-themes
   :ensure t
   :config
@@ -416,9 +416,18 @@ remove/add tangle no to whatever font you prefer
    ;; doom-neotree-enable-variable-pitch nil
   ))
 #+end_src
+
+*** emacs-gruvbox
+#+begin_src emacs-lisp :tangle no
+(use-package gruvbox-theme
+  :demand t
+  :init
+  (load-theme 'gruvbox-dark-hard)
+  )
+#+end_src
 *** Other themes:
 **** Catppuccin
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle no 
 (use-package catppuccin-theme
   :demand t
   :init
@@ -975,6 +984,7 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
         inhibit-compacting-font-caches t
         neo-banner-message nil
         neo-keymap-style 'concise
+        neo-theme (if (display-graphic-p) 'icons 'arrow)
         projectile-switch-project-action 'neotree-projectile-action) 
   (add-hook 'neo-after-create-hook
             #'(lambda (_)
@@ -982,8 +992,7 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
                   (setq truncate-lines t)
                   (setq word-wrap nil)
                   (make-local-variable 'auto-hscroll-mode)
-                  (setq auto-hscroll-mode nil))))
-  )
+                  (setq auto-hscroll-mode nil)))))
 #+end_src
 ** dired
 #+begin_src emacs-lisp
