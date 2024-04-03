@@ -5,7 +5,7 @@
     # trustedUsers = [ "root" "drishal" ];
     package = pkgs.nixUnstable;
     extraOptions = ''
-      experimental-features = nix-command flakes configurable-impure-env  auto-allocate-uids
+      experimental-features = nix-command flakes auto-allocate-uids
       max-substitution-jobs = 64
       http-connections = 64
       auto-allocate-uids = true
