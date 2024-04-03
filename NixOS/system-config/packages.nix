@@ -355,8 +355,8 @@
     poppler_utils
     powertop
     powercap
-    protonvpn-cli
-    protonvpn-gui
+    # protonvpn-cli
+    # protonvpn-gui
     procps
     prow
     protonup-qt
@@ -426,14 +426,14 @@
     # virt-manager
     virtualenv
     virtiofsd
-    (vivaldi.override {
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--ozone-platform-hint=auto"
-        "--enable-features=VaapiVideoDecodeLinuxGL"
-      ];
-    })
-    vivaldi-ffmpeg-codecs
+    # (vivaldi.override {
+    #   commandLineArgs = [
+    #     "--ignore-gpu-blocklist"
+    #     "--ozone-platform-hint=auto"
+    #     "--enable-features=VaapiVideoDecodeLinuxGL"
+    #   ];
+    # })
+    # vivaldi-ffmpeg-codecs
     ventoy-full
     # vscode-fhs
     vlc
@@ -486,12 +486,12 @@
       (epkgs: with epkgs; [
         treesit-grammars.with-all-grammars
         vterm
+        dockerfile-language-server-nodejs
         # telega
       ]))
     # (pkgs.callPackage ../packages/batdistrack/default.nix { })
     # (pkgs.callPackage ../custom-packages/galaxy-buds-client/default.nix { })
     #(distrobox.overrideAttrs)
-
 
     (st.overrideAttrs (oldAttrs: rec {
       patches = [
@@ -629,7 +629,11 @@
   #     enableZshIntegration = true;
   #   };
   # # mullvad
-  # services.mullvad-vpn.enable = true;
+  services.mullvad-vpn = {
+    enable = true;
+    package = pkgs.mullvad-vpn;
+  };
+
 
   # chaotic bincache
   # chaotic.nyx.cache.enable = true;
