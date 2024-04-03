@@ -25,7 +25,7 @@
       #     })
       #       config.colorScheme.palette;
       # };
-      options = {
+      opts = {
         hlsearch = false;
         number = true;
         mouse = "a";
@@ -53,7 +53,6 @@
           xclip.enable = true;
         };
       };
-
       #lsp config
       plugins = {
         dashboard = {
@@ -70,8 +69,12 @@
             };
             lua-ls.enable = true;
             pyright.enable = true;
+            dockerls.enable=true;
+            nil_ls.enable=true;
           };
         };
+        lspkind.enable = true;
+        # image.enable = true;
         rust-tools.enable = true;
         lsp-format.enable = true;
         luasnip.enable = true;
@@ -80,15 +83,39 @@
         which-key.enable = true;
         nvim-autopairs.enable = true;
         direnv.enable = true;
-        neorg.enable = true;
+        neorg = {
+          enable = true;
+          modules = {
+            "core.defaults".__empty = null;
+            "core.concealer" = {__empty = null;};
+            "core.dirman".config.workspaces = {vault = "~/doc/vault";};
+            #"core.tempus".__empty = null; # waiting for nvim 0.10
+            #"core.ui.calendar".__empty = null;
+            #  "core.completion".config.engine = "nvim-cmp";
+            "core.integrations.telescope" = {__empty = null;};
+            "core.integrations.treesitter" = {__empty = null;};
+            # "core.integrations.image" = {__empty = null;};
+            # "core.export" = {__empty = null;};
+            # "core.export.markdown" = {__empty = null;};
+          };
+        };
         neo-tree.enable = true;
         fugitive.enable = true;
         gitsigns.enable = true;
         treesitter = {
           enable = true;
-          #folding = true;
           ensureInstalled = "all";
+          incrementalSelection = {
+            enable = true;
+            keymaps = {
+              initSelection = "+";
+              nodeIncremental = "+";
+              nodeDecremental = "-";
+            };
+          };
+          nixvimInjections = true;
         };
+        treesitter-context.enable = true;
         barbar = {
           enable = true;
           autoHide = true;
