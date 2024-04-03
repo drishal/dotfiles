@@ -362,7 +362,14 @@ background contrast. All other values default to \"mocha\"."
    (web-mode-html-attr-name-face :foreground green)
    (web-mode-html-tag-bracket-face :inherit 'default)
    (web-mode-html-tag-face :foreground magenta :weight 'bold)
-   (web-mode-preprocessor-face :foreground orange))
+   (web-mode-preprocessor-face :foreground orange)
+   ;; dired
+   (dired-directory :foreground _blue)
+   (dired-marked :foreground yellow)
+   (dired-symlink :foreground cyan)
+   (dired-header :foreground cyan))
+
+
 
   ;;;; Base theme variable overrides-
   ())
