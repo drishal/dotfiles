@@ -40,6 +40,7 @@
   - [[#y-for-yes][y for yes]]
   - [[#centaur-tabs][Centaur tabs]]
 - [[#hook-to-tangle-on-save][Hook to tangle on save]]
+- [[#reverse-a-string][reverse a string]]
 - [[#org-mode][Org mode:]]
   - [[#org-mode-indent][org mode indent]]
   - [[#org-mode-disable-begin_example-blocks][org mode disable begin_example blocks]]
@@ -390,7 +391,7 @@ remove/add tangle no to whatever font you prefer
 *** Doom themes
 #+begin_src emacs-lisp 
 (use-package doom-themes
-  :ensure t
+  :demand t
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -654,6 +655,16 @@ Put backup files neatly away
       (org-babel-tangle)))
 (add-hook 'after-save-hook #'tangle-all-org-on-save-h)
 #+end_src
+* reverse a string
+#+begin_src emacs-lisp
+(defun my-reverse-region (beg end)
+ "Reverse characters between BEG and END."
+ (interactive "r")
+ (let ((region (buffer-substring beg end)))
+   (delete-region beg end)
+   (insert (nreverse region))))
+#+end_src
+
 * Org mode:
 #+begin_src emacs-lisp :tangle no
 (use-package org :demand t)
@@ -1343,9 +1354,9 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (use-package flycheck :demand t)
 #+end_src
 *** General Setup with lsp
-   # :PROPERTIES:
-   # :header-args:    :tangle no
-   # :END:
+    :PROPERTIES:
+    :header-args:    :tangle no
+    :END:
 #+begin_src emacs-lisp
 (use-package lsp-mode :demand t
   :init
@@ -1435,7 +1446,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 
 *** Eglot setup
-#+begin_src emacs-lisp :tangle no 
+#+begin_src emacs-lisp 
 (use-package eglot
   :demand t
   :config
@@ -1443,9 +1454,12 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
                '(conf-toml-mode . ("taplo" "lsp" "stdio"))
                '(nix-mode . ("nil"))
                )
+  (setq project-vc-extra-root-markers '("Cargo.toml"))
   :hook
   (nix-mode . eglot-ensure)
   )
+
+(use-package eglot-x :ensure (:host github :repo "nemethf/eglot-x"))
 #+end_src
 
 *** rust 
@@ -1470,7 +1484,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   ;; (setq rustic-format-on-save nil)
   (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook)
   ;; eglot mode
-  ;; (setq rustic-lsp-client 'eglot)
+  (setq rustic-lsp-client 'eglot)
   )
 
 (defun rk/rustic-mode-hook ()
