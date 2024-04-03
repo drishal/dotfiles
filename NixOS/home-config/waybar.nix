@@ -2,7 +2,7 @@
 {
   programs.waybar = {
     enable = true;
-    package = pkgs-master.waybar;
+    # package = pkgs-master.waybar;
     style = with config.scheme; ''
       @define-color colbg        #${base00}; 
       @define-color colbg2       #${base02};
