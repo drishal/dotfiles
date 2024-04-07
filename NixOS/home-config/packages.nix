@@ -1,4 +1,9 @@
-{ config, inputs, pkgs, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 {
   home.packages = with pkgs; [
     # # firefox
@@ -24,7 +29,8 @@
     # sl
     starship
     # neovide
-    nixpkgs-fmt
+    # nixpkgs-fmt
+    nixfmt-rfc-style
     papirus-icon-theme
     gnome.gnome-themes-extra
     #nodePackages.create-react-app
@@ -53,7 +59,6 @@
     enableBashIntegration = true;
   };
 
-
   #lsd
   programs.lsd = {
     enable = true;
@@ -64,7 +69,6 @@
       };
     };
   };
-
 
   gtk = {
     enable = true;

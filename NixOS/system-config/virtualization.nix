@@ -1,4 +1,10 @@
-{ config, pkgs, inputs, lib, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  lib,
+  ...
+}:
 
 {
   virtualisation = {
@@ -27,7 +33,6 @@
     waydroid.enable = true;
     # lxd.enable = true;
 
-
     # virtualbox
     # virtualbox.host.enable = true;
     # virtualbox.host.enableExtensionPack = true;
@@ -53,7 +58,5 @@
   # };
   programs.virt-manager.enable = true;
 
-
   users.extraGroups.vboxusers.members = [ "drishal" ];
-
 }

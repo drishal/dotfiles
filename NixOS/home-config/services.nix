@@ -1,4 +1,9 @@
-{ config, inputs, pkgs, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 {
   # services
   services = {
@@ -12,5 +17,4 @@
     #  iconTheme = pkgs.papirus-icon-theme; 
     # };
   };
-
 }

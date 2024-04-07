@@ -1,4 +1,10 @@
-{ config, pkgs, inputs, lib, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  lib,
+  ...
+}:
 {
   services.tlp = {
     enable = true;
@@ -29,6 +35,4 @@
       CPU_BOOST_ON_BAT = 0;
     };
   };
-
-
 }

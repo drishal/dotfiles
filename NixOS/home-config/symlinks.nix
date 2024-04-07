@@ -1,4 +1,9 @@
-{ config, inputs, pkgs, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 {
   #xmonad config
   #home.file."/home/drishal/.xmonad/xmonad.hs".source = ../.xmonad/xmonad.hs;
@@ -37,7 +42,6 @@
   # home.file."/home/drishal/.config/waybar/config".source = ../../config/waybar/waybar-dwl;
   # home.file."/home/drishal/.config/waybar/config".source = ../../config/waybar/waybar-river;
   # home.file."/home/drishal/.config/waybar/style.css".source = ../../config/waybar/style.css;
-
 
   # alacritty
   # home.file."/home/drishal/.config/alacritty/alacritty.yml".source = ../../config/alacritty/alacritty.yml;

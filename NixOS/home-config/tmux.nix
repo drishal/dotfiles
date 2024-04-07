@@ -1,4 +1,9 @@
-{ config, inputs, pkgs, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 {
   programs.tmux = {
     enable = true;
@@ -9,7 +14,6 @@
       tmuxPlugins.vim-tmux-navigator
       tmuxPlugins.onedark-theme
     ];
-    extraConfig = ''
-    '';
+    extraConfig = '''';
   };
 }

@@ -1,4 +1,10 @@
-{ config, pkgs, inputs, lib, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  lib,
+  ...
+}:
 
 {
   services.xserver = {
@@ -43,7 +49,6 @@
       # lxqt.enable = true;
       # gnome.enable = true;
     };
-
 
     # displayManager.gdm.enable = true;
     # displayManager.sddm = {
@@ -92,26 +97,23 @@
   # environment.variables.QT_STYLE_OVERRIDE= lib.mkForce "";
   # river 
   services.xserver.displayManager.sessionPackages = [
-    (pkgs.river.overrideAttrs
-      (prevAttrs: rec {
-        postInstall =
-          let
-            riverSession = ''
-              [Desktop Entry]
-              Name=River
-              Comment=Dynamic Wayland compositor
-              Exec=river
-              Type=Application
-            '';
-          in
-          ''
-            mkdir -p $out/share/wayland-sessions
-            echo "${riverSession}" > $out/share/wayland-sessions/river.desktop
+    (pkgs.river.overrideAttrs (prevAttrs: rec {
+      postInstall =
+        let
+          riverSession = ''
+            [Desktop Entry]
+            Name=River
+            Comment=Dynamic Wayland compositor
+            Exec=river
+            Type=Application
           '';
-        passthru.providedSessions = [ "river" ];
-      })
-    )
-
+        in
+        ''
+          mkdir -p $out/share/wayland-sessions
+          echo "${riverSession}" > $out/share/wayland-sessions/river.desktop
+        '';
+      passthru.providedSessions = [ "river" ];
+    }))
 
     #qtile wayland 
     # (pkgs.qtile_git.overrideAttrs
@@ -173,7 +175,9 @@
   nixpkgs.overlays = [
     #suckless overlays
     (final: prev: {
-      dwm = prev.dwm.overrideAttrs (old: { src = ../../suckless/dwm-6.4; });
+      dwm = prev.dwm.overrideAttrs (old: {
+        src = ../../suckless/dwm-6.4;
+      });
       dwmblocks = prev.dwmblocks.override (old: {
         conf = ../../suckless/dwmblocks/blocks.def.h;
       });

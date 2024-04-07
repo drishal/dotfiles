@@ -1,4 +1,9 @@
-{ config, inputs, pkgs, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 {
   programs = {
     foot = {
@@ -41,7 +46,7 @@
           family = "FantasqueSansM Nerd Font";
           # family="monospace";
         };
-        colors = with config.scheme;{
+        colors = with config.scheme; {
           background = "#${base00}";
           foreground = "#${base05}";
           cursor = "#${base0D}";

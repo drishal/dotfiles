@@ -1,4 +1,10 @@
-{ config, inputs, pkgs, lib, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
 
 # Editors
 {
@@ -40,12 +46,8 @@
         termguicolors = true;
         guifont = "FantasqueSansM Nerd Font:h14";
       };
-      extraPackages = with pkgs;[
-        vimPlugins.nvim-web-devicons
-      ];
-      extraPlugins = with pkgs.vimPlugins;[
-        orgmode
-      ];
+      extraPackages = with pkgs; [ vimPlugins.nvim-web-devicons ];
+      extraPlugins = with pkgs.vimPlugins; [ orgmode ];
       clipboard = {
         register = "unnamedplus";
         providers = {
@@ -69,8 +71,8 @@
             };
             lua-ls.enable = true;
             pyright.enable = true;
-            dockerls.enable=true;
-            nil_ls.enable=true;
+            dockerls.enable = true;
+            nil_ls.enable = true;
           };
         };
         lspkind.enable = true;
@@ -87,13 +89,21 @@
           enable = true;
           modules = {
             "core.defaults".__empty = null;
-            "core.concealer" = {__empty = null;};
-            "core.dirman".config.workspaces = {vault = "~/doc/vault";};
+            "core.concealer" = {
+              __empty = null;
+            };
+            "core.dirman".config.workspaces = {
+              vault = "~/doc/vault";
+            };
             #"core.tempus".__empty = null; # waiting for nvim 0.10
             #"core.ui.calendar".__empty = null;
             #  "core.completion".config.engine = "nvim-cmp";
-            "core.integrations.telescope" = {__empty = null;};
-            "core.integrations.treesitter" = {__empty = null;};
+            "core.integrations.telescope" = {
+              __empty = null;
+            };
+            "core.integrations.treesitter" = {
+              __empty = null;
+            };
             # "core.integrations.image" = {__empty = null;};
             # "core.export" = {__empty = null;};
             # "core.export.markdown" = {__empty = null;};
@@ -115,7 +125,7 @@
           };
           nixvimInjections = true;
         };
-        treesitter-context.enable = true;
+        #treesitter-context.enable = true;
         barbar = {
           enable = true;
           autoHide = true;
@@ -205,13 +215,13 @@
   };
 }
 
-  # Emacs: just keeping this as a reference if I decide to setup emacs via home manager in the future
-  # emacs = {
-  #   enable = true;
-  #   package = pkgs.emacs-pgtk;
-  #   extraPackages = epkgs: with epkgs; [
-  #     treesit-grammars.with-all-grammars
-  #     vterm
-  #     telega
-  #   ];
-  # };
+# Emacs: just keeping this as a reference if I decide to setup emacs via home manager in the future
+# emacs = {
+#   enable = true;
+#   package = pkgs.emacs-pgtk;
+#   extraPackages = epkgs: with epkgs; [
+#     treesit-grammars.with-all-grammars
+#     vterm
+#     telega
+#   ];
+# };

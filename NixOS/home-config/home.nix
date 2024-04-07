@@ -1,4 +1,10 @@
-{ config, inputs, pkgs, nix-colors, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  nix-colors,
+  ...
+}:
 {
   imports = [
     # ./browsers.nix
@@ -48,5 +54,4 @@
   scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
 
   # home.stateVersion = "21.05";
-
 }

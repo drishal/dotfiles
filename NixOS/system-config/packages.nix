@@ -1,4 +1,10 @@
-{ config, pkgs, inputs, lib, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  lib,
+  ...
+}:
 {
   services.flatpak.enable = true;
   services.gvfs.enable = true;
@@ -9,7 +15,9 @@
     # dconf
     dconf.enable = true;
     # java 
-    java = { enable = true; };
+    java = {
+      enable = true;
+    };
     # nm-applet
     nm-applet.enable = true;
     #steams
@@ -462,7 +470,12 @@
     zoom-us
 
     # Xfce stuff
-    (xfce.thunar.override { thunarPlugins = with pkgs; [ xfce.thunar-volman xfce.thunar-archive-plugin ]; })
+    (xfce.thunar.override {
+      thunarPlugins = with pkgs; [
+        xfce.thunar-volman
+        xfce.thunar-archive-plugin
+      ];
+    })
     xclip
     xdg-ninja
     xfce.exo
@@ -482,13 +495,14 @@
     zathura
     # inputs.emacs-ng.packages.x86_64-linux.default
     # python39Packages.numpy python39Packages.pandas
-    ((emacsPackagesFor emacs-pgtk).emacsWithPackages
-      (epkgs: with epkgs; [
+    ((emacsPackagesFor emacs-pgtk).emacsWithPackages (
+      epkgs: with epkgs; [
         treesit-grammars.with-all-grammars
         vterm
         dockerfile-language-server-nodejs
         # telega
-      ]))
+      ]
+    ))
     # (pkgs.callPackage ../packages/batdistrack/default.nix { })
     # (pkgs.callPackage ../custom-packages/galaxy-buds-client/default.nix { })
     #(distrobox.overrideAttrs)
@@ -563,7 +577,6 @@
     }))
   ];
 
-
   # powerManagement = {
   #   powerDownCommands = ''
   #     ${pkgs.batdistrack}/bin/batdistrack
@@ -590,7 +603,6 @@
     }))
   ];
 
-
   #swaylock
   security.pam.services.swaylock = {
     text = ''
@@ -598,9 +610,7 @@
     '';
   };
 
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-12.2.3"
-  ];
+  nixpkgs.config.permittedInsecurePackages = [ "electron-12.2.3" ];
   #fonts
   fonts = {
     enableDefaultPackages = true;
@@ -609,7 +619,11 @@
       noto-fonts
       noto-fonts-cjk
       (pkgs.nerdfonts.override {
-        fonts = [ "FiraCode" "Monofur" "FantasqueSansMono" ];
+        fonts = [
+          "FiraCode"
+          "Monofur"
+          "FantasqueSansMono"
+        ];
       })
     ];
     fontconfig = {
@@ -634,10 +648,8 @@
     package = pkgs.mullvad-vpn;
   };
 
-
   # chaotic bincache
   # chaotic.nyx.cache.enable = true;
   # programs.firefox.nativeMessagingHosts.ff2mpv=true;
   programs.command-not-found.dbPath = inputs.programsdb.packages.${pkgs.system}.programs-sqlite;
 }
-

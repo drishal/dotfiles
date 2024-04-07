@@ -1,4 +1,9 @@
-{ config, inputs, pkgs, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 {
   programs = {
 
@@ -19,7 +24,7 @@
       ];
       extensions = [
         { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # ublock origin
-        { id = "nngceckbapebfimnlniiiahkandclblb"; } # bitwarden 
+        { id = "nngceckbapebfimnlniiiahkandclblb"; } # bitwarden
         { id = "lcbjdhceifofjlpecfpeimnnphbcjgnc"; } # xbrowsersync
         # { id = "nbokbjkabcmbfdlbddjidfmibcpneigj"; } #smoothscroll 
       ];

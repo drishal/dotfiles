@@ -1,4 +1,10 @@
-{ config, pkgs, inputs, lib, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  lib,
+  ...
+}:
 
 # base system configuration
 {
@@ -9,7 +15,11 @@
   # boot.kernelPackages = pkgs.linuxPackages_testing;
 
   # kernel parameters
-  boot.kernelParams = [ "mitigations=off" "clearcpuid=514" "i8042.probe_defer" ];
+  boot.kernelParams = [
+    "mitigations=off"
+    "clearcpuid=514"
+    "i8042.probe_defer"
+  ];
   #"processor.max_cstate=1" "intel_idle.max_cstate=0"
   # microde
   hardware.cpu.amd.updateMicrocode = true;
@@ -36,7 +46,6 @@
   hardware.bluetooth.package = pkgs.bluez;
   services.blueman.enable = true;
 
-
   # firmware updator
   services.fwupd.enable = true;
 
@@ -50,11 +59,10 @@
   };
 
   # power-management
-  powerManagement =
-    {
-      enable = true;
-      cpuFreqGovernor = "schedutil";
-    };
+  powerManagement = {
+    enable = true;
+    cpuFreqGovernor = "schedutil";
+  };
   services.power-profiles-daemon.enable = true;
   services.acpid.enable = true;
   # services.auto-cpufreq =
@@ -72,19 +80,18 @@
   #     };
   #   };
 
-  hardware.opengl =
-    {
-      #extraPackages = with pkgs; [
-      #vaapiVdpau
-      #libva
-      #libvdpau-va-gl
-      #mesa.drivers
-      #libvpx
-      #];
-      enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
-    };
+  hardware.opengl = {
+    #extraPackages = with pkgs; [
+    #vaapiVdpau
+    #libva
+    #libvdpau-va-gl
+    #mesa.drivers
+    #libvpx
+    #];
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+  };
 
   # chaotic mesa
   # chaotic.mesa-git = {
@@ -126,13 +133,15 @@
       enable = true;
       # dns = "systemd-resolved";
       wifi.macAddress = "random";
-
     };
     wireless.iwd.enable = true;
     # hostname
     hostName = "nixos";
     # dns
-    nameservers = [ "1.1.1.1" "1.0.0.1" ];
+    nameservers = [
+      "1.1.1.1"
+      "1.0.0.1"
+    ];
     extraHosts = "185.199.108.133 raw.githubusercontent.com";
     # nameservers= [
     # cloudflare
@@ -221,6 +230,4 @@
   #   VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
   #   MOZ_ENABLE_WAYLAND="1";
   # };
-
-
 }
