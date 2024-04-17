@@ -19,14 +19,19 @@
   };
   inputs = {
 
-    nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
+    nixpkgs = {
+      url = "github:nixos/nixpkgs/nixos-unstable";
+    };
     # nixpkgs = { url = "github:PedroHLC/nixpkgs/pull-284487"; };
-    nixpkgs-master= { url = "github:nixos/nixpkgs/9b5ca6a80c775a62734e1fefa0d04f1b0c91c91b"; };
+    nixpkgs-master = {
+      url = "github:nixos/nixpkgs/9b5ca6a80c775a62734e1fefa0d04f1b0c91c91b";
+    };
 
     # nixpkgs-master.url = "github:NixOS/nixpkgs/master";
 
     home-manager = {
       url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # nix-colors = {
@@ -44,6 +49,7 @@
     };
 
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    # chaotic.url = "path:/home/drishal/Desktop/git-stuff/nyx";
 
     nur.url = "github:nix-community/NUR";
 
@@ -52,13 +58,14 @@
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
     # hyprland.url = "github:hyprwm/Hyprland/12d79d63421e2ed3f31130755c7a37f0e4fb5cb1";
-    hyprland.url = "github:hyprwm/Hyprland/";
+    # hyprland.url = "github:hyprwm/Hyprland/v0.38.1";
+    hyprland.url = "github:hyprwm/Hyprland";
 
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay/";
     };
 
-    emacs-ng.url ="github:emacs-ng/emacs-ng";
+    emacs-ng.url = "github:emacs-ng/emacs-ng";
 
     programsdb = {
       url = "github:wamserma/flake-programs-sqlite";
@@ -82,25 +89,50 @@
     };
   };
 
-  outputs = { nixpkgs,nixpkgs-master, chaotic, home-manager, programsdb, discord-flake, nur, emacs-overlay, cachix, declarative-cachix, hyprland, nixvim, private-stuff,emacs-ng, base16, tt-schemes, ... }@inputs:
+  outputs =
+    {
+      nixpkgs,
+      nixpkgs-master,
+      chaotic,
+      home-manager,
+      programsdb,
+      discord-flake,
+      nur,
+      emacs-overlay,
+      cachix,
+      declarative-cachix,
+      hyprland,
+      nixvim,
+      private-stuff,
+      emacs-ng,
+      base16,
+      tt-schemes,
+      ...
+    }@inputs:
     let
       system = "x86_64-linux";
 
       pkgs = import nixpkgs {
         inherit system;
-        config = { allowUnfree = true; };
+        config = {
+          allowUnfree = true;
+        };
       };
       pkgs-master = import nixpkgs-master {
         inherit system;
-        config = { allowUnfree = true; };
+        config = {
+          allowUnfree = true;
+        };
       };
       lib = nixpkgs.lib;
-
     in
     {
       homeConfigurations."drishal" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        extraSpecialArgs = { inherit inputs; inherit pkgs-master; };
+        extraSpecialArgs = {
+          inherit inputs;
+          inherit pkgs-master;
+        };
         modules = [
           ./NixOS/home-config/home.nix
           { nixpkgs.overlays = [ inputs.emacs-overlay.overlay ]; }
@@ -120,7 +152,14 @@
       nixosConfigurations =
         let
           commonModules = [
-            { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay inputs.neovim-nightly-overlay.overlay ]; }
+            {
+              nixpkgs.overlays = [
+                nur.overlay
+                inputs.emacs-overlay.overlay
+                inputs.discord-flake.overlay
+                inputs.neovim-nightly-overlay.overlay
+              ];
+            }
             ./NixOS/system-config/configuration.nix
             chaotic.nixosModules.default
           ];
@@ -131,14 +170,18 @@
             modules = commonModules ++ [
               # ./NixOS/system-config/hardware-configuration/hardware-configuration-desktop.nix
             ];
-            specialArgs = { inherit inputs; };
+            specialArgs = {
+              inherit inputs;
+            };
           };
           nixos = lib.nixosSystem {
             inherit system;
             modules = commonModules ++ [
-              ./NixOS/system-config/hardware-configuration/hardware-configuration-laptop.nix
+              ./NixOS/system-config/nixos/hardware-configuration.nix
             ];
-            specialArgs = { inherit inputs; };
+            specialArgs = {
+              inherit inputs;
+            };
           };
         };
 
@@ -160,6 +203,5 @@
       # packages."x86_64-linux".thorium = pkgs.callPackage ./NixOS/custom-packages/thorium-browser/default.nix {};
       # packages."x86_64-linux".qtile= pkgs.callPackage ./NixOS/custom-packages/qtile/default.nix {};
       # packages."x86_64-linux".freedownloadmanager= pkgs.callPackage ./NixOS/custom-packages/free-download-manager/default.nix {};
-
     };
 }
