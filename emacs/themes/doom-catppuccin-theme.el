@@ -308,7 +308,7 @@ background contrast. All other values default to \"mocha\"."
     :inherit 'mode-line-inactive
     :background modeline-bg-inactive-alt
     :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-inactive-alt)))
-   (cursor :background _rosewater)
+   (cursor :background _blue)
 
    ;; company
    (company-tooltip-selection     :background base3)
