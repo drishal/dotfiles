@@ -10,6 +10,7 @@
   - [[#palenight][Palenight]]
   - [[#gruvbox][Gruvbox]]
   - [[#nord][Nord]]
+  - [[#catppuccin][Catppuccin]]
   - [[#theme][theme]]
 - [[#wayland-settings][Wayland settings]]
   - [[#inputs][Inputs]]
@@ -50,7 +51,7 @@ from libqtile.backend.wayland import inputs,InputConfig
 #+end_src
 * Some variables
 #+begin_src python
-wallpaper1="~/dotfiles/wallpapers/NixOS-1.png"
+wallpaper1="~/dotfiles/wallpapers/darkest_hour.jpg"
 mod = "mod4"
 if qtile.core.name=="wayland":
     terminal = "footclient"
@@ -150,13 +151,28 @@ else:
      "#BF616A",  # 9  red
      "#EBCB8B",  # 10 yellow 
   ]
+#+end_src
 
- 
+** Catppuccin
+#+begin_src python
+ catppuccin = [
+   "##1E1E2E",  # 0  Background
+   "##313244",  # 1  current line/lighter_black
+   "##CDD6F4",  # 2  foreground
+   "##45475A",  # 3  comment/dark_grey
+   "##94E2D5",  # 4  cyan
+   "##A6E3A1",  # 5  green
+   "##FAB387",  # 6  orange 
+   "##CBA6F7",  # 7  magenta 
+   "##F2CDCD",  # 8  violet
+   "##F38BA8",  # 9  red
+   "##F9E2AF",  # 10 yellow 
+]
 #+end_src
 
 ** theme 
 #+begin_src python 
-  color = onedark 
+  color = catppuccin 
 #+end_src
 * Wayland settings
 ** Inputs
