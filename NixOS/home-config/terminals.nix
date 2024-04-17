@@ -13,7 +13,6 @@
         main = {
           term = "xterm-256color";
           font = "FantasqueSansM Nerd Font:size=14";
-          # font = "monospace:size=14";
           dpi-aware = "no";
           pad = "15x10";
         };
@@ -21,9 +20,9 @@
           color = "282c34 51afef";
         };
         colors = with config.scheme; {
-          background = "${base00}";
-          foreground = "${base05}";
-          regular0 = "${base00}"; # black
+          foreground = "${base05}"; # Text
+          background = "${base00}"; # Base
+          regular0 = "${base03}"; # Surface 1
           regular1 = "${base08}"; # red
           regular2 = "${base0B}"; # green
           regular3 = "${base0A}"; # yellow
@@ -31,6 +30,14 @@
           regular5 = "${base0E}"; # magenta
           regular6 = "${base0C}"; # cyan
           regular7 = "${base07}"; # white
+          bright0 = "${base04}";
+          bright1 = "${base08}";
+          bright2 = "${base0B}";
+          bright3 = "${base0A}";
+          bright4 = "${base0D}";
+          bright5 = "${base0E}";
+          bright6 = "${base0C}";
+          bright7 = "${base07}";
         };
       };
     };
