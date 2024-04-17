@@ -51,7 +51,8 @@
 
   # colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
 
-  scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
+  # scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
+  scheme = ./colors/doomone.yaml;
 
   # home.stateVersion = "21.05";
 }

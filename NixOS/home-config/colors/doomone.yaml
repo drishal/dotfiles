@@ -1,0 +1,21 @@
+system: "base16"
+name: "doom-one"
+author: "Drishal"
+variant: "dark"
+palette:
+  base00: "282c34" # Default Background
+  base01: "1b2229" # Black
+  base02: "202328" # Bright Black
+  base03: "3f444a" # Grey
+  base04: "5b6268" # Light Grey
+  base05: "bbc2cf" # Foreground
+  base06: "9ca0a4" # White
+  base07: "dfdfdf" # Bright White
+  base08: "ff6c6b" # red
+  base09: "da8548" # orange
+  base0A: "ecbe7b" # yellow
+  base0B: "98be65" # green
+  base0C: "46d9ff" # cyan
+  base0D: "51afef" # blue
+  base0E: "c678dd" # magenta
+  base0F: "a9a1e1" # violet

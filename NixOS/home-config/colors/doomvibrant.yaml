@@ -1,0 +1,21 @@
+system: "base16"
+name: "doom-vibrant"
+author: "Drishal"
+variant: "dark"
+palette:
+  base00: "242730" # Default Background
+  base01: "1c1f24" # Black
+  base02: "21272d" # Bright Black
+  base03: "484854" # Grey
+  base04: "62686E" # Light Grey
+  base05: "bbc2cf" # Foreground
+  base06: "9ca0a4" # White
+  base07: "DFDFDF" # Bright White
+  base08: "ff665c" # red
+  base09: "e69055" # orange
+  base0A: "FCCE7B" # yellow
+  base0B: "7bc275" # green
+  base0C: "5cEfFF" # cyan
+  base0D: "51afef" # blue
+  base0E: "C57BDB" # magenta
+  base0F: "a991f1" # violet
