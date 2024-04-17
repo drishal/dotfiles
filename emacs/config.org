@@ -48,6 +48,8 @@
   - [[#snippets][snippets:]]
   - [[#org-temposnippets][org tempo(snippets):]]
   - [[#org-modern][org modern]]
+  - [[#org-appear][org appear]]
+  - [[#org-fancy-prioritie][org-fancy-prioritie]]
   - [[#org-toc][org-toc]]
   - [[#fixing-org-blocks][fixing org blocks]]
   - [[#company-org-block][company org block]]
@@ -389,14 +391,15 @@ remove/add tangle no to whatever font you prefer
 (setq custom-theme-directory "~/dotfiles/emacs/themes")
 #+end_src
 *** Doom themes
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package doom-themes
   :demand t
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-catppuccin t)
+  (load-theme 'doom-one t)
+  (setq doom-catppuccin-dark-variant "mocha")
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -404,7 +407,6 @@ remove/add tangle no to whatever font you prefer
   (doom-themes-neotree-config)
   ;; or for treemacs users
   (setq doom-themes-treemacs-theme "doom-colors") ; use "doom-colors" for less minimal icon theme
-  (setq doom-catppuccin-dark-variant "mocha")
   (setq doom-themes-treemacs-enable-variable-pitch nil)
   (doom-themes-treemacs-config)
   ;; Corrects (and improves) org-mode's native fontification.
@@ -416,14 +418,23 @@ remove/add tangle no to whatever font you prefer
    doom-themes-neotree-line-spacing 1
    ;; doom-neotree-enable-variable-pitch nil
   ))
-#+end_src
 
+ ;; (setq doom-gruvbox-material-background  "hard")  ; or hard (defaults to soft)
+#+end_src
+*** rose-pine
+#+begin_src emacs-lisp :tangle no
+(use-package autothemer :demand t)
+(use-package rose-pine-theme :ensure (:host github :repo "konrad1977/pinerose-emacs")
+  :init
+  (load-theme 'rose-pine)
+  )
+#+end_src
 *** emacs-gruvbox
 #+begin_src emacs-lisp :tangle no
 (use-package gruvbox-theme
   :demand t
   :init
-  (load-theme 'gruvbox-dark-hard)
+  (load-theme 'gruvbox-dark-medium)
   )
 #+end_src
 *** Other themes:
@@ -440,26 +451,33 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 **** Modus
 #+begin_src emacs-lisp :tangle no
-(load-theme 'modus-vivendi t)
+(load-theme 'modus-vivendi-tinted t)
 #+end_src
 **** ef theme
-#+begin_src emacs-lisp
-(use-package ef-themes :demand t)
+#+begin_src emacs-lisp :tangle no
+(use-package ef-themes :demand t
+  :init
+  (load-theme 'ef-winter)
+  )
 #+end_src
+
 ** Disable Menubar
 #+begin_src emacs-lisp
 (menu-bar-mode -1)
 #+end_src
+
 ** disable scrollbar
 #+begin_src emacs-lisp
 (scroll-bar-mode -1)
 #+end_src
+
 **  Line Numbers
 #+begin_src emacs-lisp
 (global-visual-line-mode t)
 ;; (setq display-line-numbers-type 'relative)
 (global-display-line-numbers-mode 1)
 #+end_src
+
 ** Modeline
 *** Doom Modeline
 #+begin_src emacs-lisp
@@ -467,11 +485,12 @@ remove/add tangle no to whatever font you prefer
   :demand t
   :init (doom-modeline-mode 1))
 #+end_src
+
 *** Airline
 https://github.com/AnthonyDiGirolamo/airline-themes
 #+begin_src emacs-lisp :tangle no
-;; (use-package airline-themes :demand t)
-;; (load-theme 'airline-base16_dracula t)
+(use-package airline-themes :demand t)
+(load-theme 'airline-base16_dracula t)
 #+end_src
 
 ** Evil mode
@@ -713,9 +732,51 @@ Switch to org edit mode when pressing `i` insert key
 ** org modern
 https://github.com/minad/org-modern
 #+begin_src emacs-lisp
-(use-package org-modern :demand t)
+(use-package org-modern :demand t
+  :config
+
+  (setq
+   ;; Edit settings
+   org-auto-align-tags nil
+   org-tags-column 0
+   org-catch-invisible-edits 'show-and-error
+   org-special-ctrl-a/e t
+   org-insert-heading-respect-content t
+
+   ;; Org styling, hide markup etc.
+   ;; org-hide-emphasis-markers t
+   org-pretty-entities t
+   org-ellipsis "…"))
 (add-hook 'org-mode-hook #'org-modern-mode)
 (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
+#+end_src
+** org appear
+#+begin_src emacs-lisp
+(use-package org-appear
+  :after org
+  :demand t
+  :hook (org-mode . org-appear-mode)
+  :config
+  (setq org-appear-autoemphasis   t
+        org-hide-emphasis-markers t
+        org-appear-autolinks      t
+        org-appear-autoentities   t
+        org-appear-autosubmarkers t)
+  (run-at-time nil nil #'org-appear--set-elements))
+
+#+end_src
+** org-fancy-prioritie
+#+begin_src emacs-lisp
+(use-package org-fancy-priorities
+  :after (org all-the-icons)
+  :demand t
+  :hook (org-mode        . org-fancy-priorities-mode)
+  :hook (org-agenda-mode . org-fancy-priorities-mode)
+  :config
+  (setq org-fancy-priorities-list `(,(all-the-icons-faicon "flag"     :height 1.1 :v-adjust 0.0)
+                                    ,(all-the-icons-faicon "arrow-up" :height 1.1 :v-adjust 0.0)
+                                    ,(all-the-icons-faicon "square"   :height 1.1 :v-adjust 0.0))))
+
 #+end_src
 ** org-toc
 #+begin_src emacs-lisp
@@ -1611,7 +1672,6 @@ https://github.com/pwalsh/pipenv.el
   :demand t
   :mode "\\.lua$"
   :interpreter "lua"
-  :hook (lua-mode . set-company-backends-for-lua)
   :config
   (setq lua-indent-level 4)
   (setq lua-indent-string-contents t)
