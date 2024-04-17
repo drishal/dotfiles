@@ -7,6 +7,7 @@
 - [[#custom-color-scheme][Custom color scheme]]
 - [[#remove-greeting][remove greeting]]
 - [[#starship-prompt][Starship Prompt]]
+- [[#variables][Variables]]
 - [[#newline][Newline]]
 - [[#pfetch][pfetch]]
 - [[#exa-icon-spacing][Exa icon spacing]]
@@ -53,6 +54,10 @@ starship init fish | source
 set -x STARSHIP_CONFIG ~/dotfiles/config/starship.toml
 #+end_src
 
+* Variables
+#+begin_src fish 
+set -x EDITOR nvim
+#+end_src
 * Newline
 #+begin_src fish
 function postexec_test --on-event fish_postexec
@@ -105,6 +110,8 @@ set -x LUTRIS_SKIP_INIT 1
 source ~/dotfiles/scripts/aliases.sh
 # source /nix/var/nix/profiles/default/etc/profile.d/nix.fish
 if test (cat /etc/os-release | grep '^ID=' | cut -d= -f2) = "arch"
-    source /etc/profile.d/nix-daemon.fish
+    if test -e /etc/profile.d/nix-daemon.fish
+        source /etc/profile.d/nix-daemon.fish
+    end
 end
 #+end_src
