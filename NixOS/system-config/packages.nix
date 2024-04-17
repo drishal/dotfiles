@@ -366,12 +366,12 @@
     # protonvpn-cli
     # protonvpn-gui
     procps
-    prow
+    pdfgrep
+    poppler
     protonup-qt
+    prow
     ps_mem
     python3
-    poppler
-    pdfgrep
     # python3Packages.mysql-connector
     python3Packages.pip
     #python3Packages.tkinter
@@ -379,10 +379,11 @@
     #python3Packages.pyqt5
     #python3Packages.venvShellHook
     #$python3Packages.qtile-extras
-    qbittorrent
-    qutebrowser
-    qt5ct
     qpdf
+    qt5ct
+    quickemu
+    qutebrowser
+    qbittorrent
     # qtile-extras_git
     ranger
     radeontop
@@ -456,7 +457,7 @@
     win-virtio
     wirelesstools
     wine64
-    wireshark
+    # wireshark
     wofi
     wl-clipboard
     wlr-randr
