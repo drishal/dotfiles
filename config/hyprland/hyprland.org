@@ -5,6 +5,7 @@
 - [[#monitor-config][Monitor config]]
   - [[#base-laptop-monitor-setup][Base Laptop Monitor setup]]
   - [[#monitor-setup-1][Monitor setup 1]]
+  - [[#monitor-setup-2][Monitor Setup 2]]
 - [[#autostart-programs][Autostart programs]]
 - [[#input-settings][Input settings]]
   - [[#general-settings][General settings]]
@@ -35,9 +36,11 @@ mkdir -p ~/.config/hypr
 monitor=,highrr,auto,1
 #+end_src
 ** Monitor setup 1 
-#+begin_src conf :tangle no
-monitor=eDP-1,1920x1080,1920X0,1
-monitor=HDMI-A-1,1920x1080@144,0x0,1
+#+begin_src conf 
+# monitor=DP-1, 1920x1080, 0x0, 1
+# monitor=DP-2, 1920x1080, 1920x0, 1
+monitor=HDMI-A-1,1920x1080, 0x0, 1
+monitor=eDP-1, 1920x1080, 1920x0, 1
 workspace = 1, monitor:HDMI-A-1
 workspace = 2, monitor:HDMI-A-1
 workspace = 3, monitor:HDMI-A-1
@@ -48,7 +51,9 @@ workspace = 7, monitor:eDP-1
 workspace = 8, monitor:eDP-1
 workspace = 9, monitor:eDP-1
 workspace = 10, monitor:eDP-1
-
+#+end_src
+** Monitor Setup 2
+#+begin_src conf :tangle no
 monitor=DP-1, 1920x1080, 0x0, 1
 monitor=DP-2, 1920x1080, 1920x0, 1
 workspace = 1, monitor:DP-1
@@ -154,14 +159,32 @@ decoration {
  Some default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
 
 #+begin_src conf
+
+# animations {
+#     enabled = yes
+#     bezier = myBezier, 0.05, 0.7, 0.1, 1.05
+#     animation = windows, 1, 4, myBezier
+#     # animation = windowsOut, 1, 3, default, popin 80%
+#     animation = windowsIn, 1, 5, default, popin 80%
+#     animation = border, 1, 7, default
+#     animation = fade, 1, 5, default
+#     animation = workspaces, 1, 5, default
+#     animation = windowsMove, 1, 3, default
+# }
+
 animations {
-    enabled = yes
-    bezier = myBezier, 0.05, 0.7, 0.1, 1.05
-    animation = windows, 1, 4, myBezier
+    enabled = true
+
+    # Some default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
+
+    bezier = myBezier, 0.05, 0.9, 0.1, 1.05
+
+    animation = windows, 1, 5, myBezier
     animation = windowsOut, 1, 5, default, popin 80%
-    animation = border, 1, 7, default
+    animation = border, 1, 8, default
+    animation = borderangle, 1, 6, default
     animation = fade, 1, 5, default
-    animation = workspaces, 1, 5, default
+    animation = workspaces, 1, 4, default
 }
 #+end_src
 
@@ -193,7 +216,9 @@ gestures {
 See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
 #+begin_src conf
 # Example windowrule v1
-# windowrule = float, ^(kitty)$
+# windowrule = rounding 0, ^(firefox)$
+windowrule = rounding 0, ^(waybar)$
+windowrulev2 = rounding 0, class:^[fF]irefox
 # windowrule=float,^(zoom)$
 # Example windowrule v2
 # windowrulev2 = float,class:^(kitty)$,title:^(kitty)$
@@ -275,16 +300,23 @@ bind = $mainMod, mouse_up, workspace, e-1
 #+begin_src conf :tangle ~/.config/hypr/hyprpaper.conf
 preload = /home/drishal/dotfiles/wallpapers/NixOS-1.png
 preload = ~/dotfiles/wallpapers/archlinux/archlinux-onedark.png 
+preload = ~/Downloads/gruvbox-nix.png
 # preload = ~/dotfiles/wallpapers/darkest_hour.jpg
-preload = ~/Downloads/nika.webp
+preload = ~/Downloads/nika.jpg
 # preload = /home/drishal/dotfiles/wallpapers/archlinux/archlinux-onedark.png
 preload =~/dotfiles/wallpapers/darkest_hour.jpg
 # wallpaper = eDP-1,~/dotfiles/wallpapers/NixOS-1.png
 # wallpaper = eDP-1,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
-wallpaper = eDP-1,~/dotfiles/wallpapers/darkest_hour.jpg
+# wallpaper = eDP-1,~/dotfiles/wallpapers/darkest_hour.jpg
+# wallpaper = HDMI-A-1,~/dotfiles/wallpapers/darkest_hour.jpg
+# wallpaper = eDP-1,~/Downloads/gruvbox-nix.png
 # wallpaper = eDP-1,~/Downloads/nika.webp
 # wallpaper = HDMI-A-1,~/dotfiles/wallpapers/NixOS-1.png
 # wallpaper = HDMI-A-1,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
 wallpaper = DP-1,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
 wallpaper = DP-2,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
+
+wallpaper = eDP-1,~/Downloads/nika.jpg
+wallpaper = HDMI-A-1,~/Downloads/nika.jpg
+
 #+end_src
