@@ -144,7 +144,8 @@
     cmatrix
     conky
     cpufetch
-    debootstrap
+    # debootstrap
+    debian-goodies
     deluge
     dejavu_fonts
     # dolphin
@@ -463,6 +464,7 @@
     wlr-randr
     wdisplays
     xarchiver
+    xonotic
     yarn
     youtube-dl
     yt-dlp
