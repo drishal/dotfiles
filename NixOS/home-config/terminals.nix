@@ -19,6 +19,9 @@
         cursor = {
           color = "282c34 51afef";
         };
+        scrollback = {
+          indicator-position = "none";
+        };
         colors = with config.scheme; {
           foreground = "${base05}"; # Text
           background = "${base00}"; # Base
