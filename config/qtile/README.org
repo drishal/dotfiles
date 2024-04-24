@@ -155,7 +155,7 @@ else:
 #+end_src
 
 ** Catppuccin
-#+begin_src python
+#+begin_src python :tangle no
  catppuccin = [
    "##1E1E2E",  # 0  Background
    "##313244",  # 1  current line/lighter_black
@@ -173,7 +173,7 @@ else:
 
 ** theme 
 #+begin_src python 
-  color = catppuccin 
+  color = onedark
 #+end_src
 * Wayland settings
 ** Inputs
@@ -406,7 +406,7 @@ async def _():
 ** Defaults
 #+begin_src python
   widget_defaults = dict(
-      font='FantasqueSansMonoM Nerd Font',
+      font='FantasqueSansM Nerd Font',
       fontsize=14.5,
       padding=1,
       background=color[0],
