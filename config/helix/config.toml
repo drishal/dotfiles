@@ -1,4 +1,5 @@
-theme="catppuccin_mocha"
+#theme="catppuccin_mocha"
+theme="onedark"
 
 [editor.cursor-shape]
 insert = "bar"
