@@ -61,6 +61,7 @@
   - [[#org-html-themeify][org-html-themeify]]
   - [[#org-present][org present]]
   - [[#image-settings][Image settings]]
+  - [[#org-download][org-download]]
 - [[#tools][Tools]]
   - [[#vterm][vterm]]
   - [[#bongo][Bongo]]
@@ -856,7 +857,14 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 #+begin_src emacs-lisp
 (setq org-image-actual-width nil)
 #+end_src
-
+** org-download
+#+begin_src emacs-lisp
+(use-package org-download
+  :demand t
+  :config
+  (add-hook 'dired-mode-hook 'org-download-enable)
+  (add-hook 'org-mode-hook 'org-download-enable))
+#+end_src
 * Tools
 ** vterm
 #+begin_src emacs-lisp
