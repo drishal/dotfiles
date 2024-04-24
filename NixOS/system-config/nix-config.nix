@@ -30,11 +30,11 @@
       trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
       #"emacsng.cachix.org-1:i7wOr4YpdRpWWtShI8bT6V7lOTnPeI7Ho6HaZegFWMI=" ]
     };
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 3d";
-    };
+    # gc = {
+    #   automatic = true;
+    #   dates = "weekly";
+    #   options = "--delete-older-than 3d";
+    # };
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -47,4 +47,11 @@
     ];
   nixpkgs.config.permittedInsecurePackages = [ "openssl-1.1.1t" ];
   hardware.enableRedistributableFirmware = true;
+
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep-since 2d --keep 2";
+    flake = "/home/drishal/dotfiles";
+  };
 }
