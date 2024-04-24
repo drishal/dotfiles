@@ -1,4 +1,3 @@
-
 # aliases
 alias nix-config="sudo vim /etc/nixos/configuration.nix"
 alias xon="steam-run ~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"
@@ -67,7 +66,7 @@ alias amdgpu_high="echo 'high' >  /sys/class/drm/card0/device/power_dpm_force_pe
 alias touchpad-fix="sudo modprobe -r i8042; sudo modprobe i8042"
 
 # #nix 
-alias nfu="sudo nix flake update --flake ~/dotfiles"
+alias nfu="nix flake update --flake ~/dotfiles"
 alias nrs="sudo nixos-rebuild switch --flake ~/dotfiles -L"
 alias nrb="sudo nixos-rebuild boot --flake ~/dotfiles -L"
 alias nrsi="sudo nixos-rebuild switch --flake --impure ~/dotfiles -L"
