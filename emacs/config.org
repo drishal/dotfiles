@@ -717,12 +717,9 @@ Switch to org edit mode when pressing `i` insert key
 (use-package yasnippet :demand t
   :init
   (require 'yasnippet)
-  (yas-global-mode 1)
-  :config
-  (add-to-list 'load-path
-               "~/dotfiles/emacs/snippets")
-  (setq yas-snippet-dirs '("~/dotfiles/emacs/snippets/"))
-  )
+  (add-to-list 'load-path (expand-file-name "~/dotfiles/emacs/snippets"))
+  (add-to-list 'yas-snippet-dirs (expand-file-name "~/dotfiles/emacs/snippets"))
+  (yas-global-mode 1))
 #+end_src
 
 ** org tempo(snippets):
