@@ -10,7 +10,7 @@
   programs.zsh.enable = true;
   programs.xonsh.enable = true;
   users.users.drishal = {
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
     isNormalUser = true;
     extraGroups = [
       "wheel"
