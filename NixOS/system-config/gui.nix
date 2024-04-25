@@ -1,9 +1,8 @@
-{
-  config,
-  pkgs,
-  inputs,
-  lib,
-  ...
+{ config
+, pkgs
+, inputs
+, lib
+, ...
 }:
 
 {
@@ -51,10 +50,18 @@
     };
 
     # displayManager.gdm.enable = true;
-    # displayManager.sddm = {
-    #  enable = true;
-    #  wayland.enable = true;
-    #};
+    displayManager.sddm = {
+      enable = true;
+      wayland.enable = true;
+      package = (pkgs.sddm.overrideAttrs (old: {
+        patches = (old.patches or []) ++ [(pkgs.fetchpatch {
+            url =
+              "https://patch-diff.githubusercontent.com/raw/sddm/sddm/pull/1779.patch";
+            sha256 = "sha256-8QP9Y8V9s8xrc+MIUlB7iHVNHbntGkw0O/N510gQ+bE=";
+          })
+        ];
+      }));
+    };
     # displayManager.lightdm.enable = false;
     # displayManager.lightdm = {
     #  enable = true;
@@ -71,19 +78,19 @@
     };
   };
 
-  services.greetd = {
-    enable = true;
-    settings = rec {
-      initial_session = {
-        command = "Hyprland";
-        # command = "qtile start -b wayland";
-        # command = "river";
-        # command = "startplasma-wayland";
-        user = "drishal";
-      };
-      default_session = initial_session;
-    };
-  };
+  # services.greetd = {
+  #   enable = true;
+  #   settings = rec {
+  #     initial_session = {
+  #       command = "Hyprland";
+  #       # command = "qtile start -b wayland";
+  #       # command = "river";
+  #       # command = "startplasma-wayland";
+  #       user = "drishal";
+  #     };
+  #     default_session = initial_session;
+  #   };
+  # };
 
   programs.hyprland = {
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
