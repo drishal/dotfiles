@@ -1,392 +1,92 @@
-#+TITLE: zshrc
+#+TITLE: zshrc enhanced 
 #+PROPERTY: header-args :tangle ~/.zshrc
-* Table of contents :toc:
-- [[#initialize-zinit][Initialize Zinit]]
-- [[#manual-way-to-install-plugins][Manual way to install plugins]]
-- [[#setting-paths][Setting paths]]
-  - [[#localbin][~~/.local/bin/~]]
-- [[#plugins][Plugins]]
-  - [[#zsh-async][Zsh async]]
-  - [[#zsh-nix-shell][Zsh Nix shell]]
-  - [[#zsh-nix-completions][zsh-nix-completions]]
-  - [[#title][Title]]
-  - [[#autosuggestions-and-syntax-highlighting][Autosuggestions and syntax highlighting]]
-  - [[#zsh-history-substring-search][Zsh History substring search]]
-  - [[#zsh-completions][zsh completions]]
-  - [[#zsh-fzf][zsh fzf]]
-  - [[#zsh-autocomplete][zsh autocomplete]]
-- [[#fixes][Fixes]]
-  - [[#kitty-config][Kitty config]]
-  - [[#word-navigation][word navigation]]
-  - [[#history-navigation][history navigation]]
-- [[#configs-from-grml][Configs from grml]]
-  - [[#setopt-values][Setopt values]]
-  - [[#completion-system][completion system]]
-- [[#source][Source]]
-  - [[#profile][profile]]
-  - [[#alias][alias]]
-- [[#history][History]]
-- [[#direnv][Direnv]]
-- [[#prompts][Prompts]]
-  - [[#starship][Starship]]
 
-* Initialize Zinit
+* zinit
 #+begin_src shell
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
+#+end_src
+* compinit
+#+begin_src shell
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 #+end_src
-
-* Manual way to install plugins
-This is the manual way to install plugins, execute this block in a terminal which should clone the plugins
-#+begin_src shell :tangle no 
-mkdir ~/.zsh-plugins
-cd ~/.zsh-plugins
-git clone https://github.com/zsh-users/zsh-completions.git
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-git clone https://github.com/zsh-users/zsh-autosuggestions.git
-git clone https://github.com/jeffreytse/zsh-vi-mode.git
-git clone https://github.com/zsh-users/zsh-history-substring-search.git
-#+end_src
-
-* Setting paths
-** ~~/.local/bin/~
-#+begin_src shell
-if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
-then
-    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
-fi
-autoload -U colors && colors
-export PATH
-#+end_src
-
-* Plugins
-** Zsh async 
-#+begin_src shell
-zinit light mafredri/zsh-async
-#+end_src
-** Zsh Nix shell
-#+begin_src shell :tangle no
-zinit light chisui/zsh-nix-shell
-#+end_src
-** zsh-nix-completions
-#+begin_src shell
-zinit light nix-community/nix-zsh-completions
-#+end_src
-** Title
-#+begin_src shell 
-DISABLE_AUTO_TITLE="false"
-zinit light trystan2k/zsh-tab-title
-ZSH_TAB_TITLE_ADDITIONAL_TERMS='alacritty|kitty|foot'
-#+end_src
-** Autosuggestions and syntax highlighting
-#+begin_src shell
-export ZSH_AUTOSUGGEST_USE_ASYNC=true
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#6272a4'
-
-zinit wait lucid for \
- atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-    zdharma-continuum/fast-syntax-highlighting \
- atload"!_zsh_autosuggest_start" \
-    zsh-users/zsh-autosuggestions
-#+end_src
-** Zsh History substring search
-#+begin_src shell 
-zinit light "zsh-users/zsh-history-substring-search"
-#+end_src
-
-** zsh completions
-#+begin_src shell
-zinit light zsh-users/zsh-completions
-# bindkey '^I' fzf_completion
-#+end_src
-
-** zsh fzf
-#+begin_src shell
-zinit light Aloxaf/fzf-tab
-# zinit light sigoden/argc-completions
-# zinit pack for fzf
-#+end_src
-
-** zsh autocomplete
-#+begin_src shell :tangle no
-zinit light marlonrichert/zsh-autocomplete
-#+end_src
-
-* Fixes
-** Kitty config
-#+begin_src shell
-export KITTY_SHELL_INTEGRATION=no-cursor
-#+end_src
-** word navigation
-#+begin_src shell
-bindkey -e 
-bindkey "^[[1;5C" forward-word
-bindkey "^[[1;5D" backward-word
-#+end_src
-** history navigation
-#+begin_src shell
-bindkey "^[[A" history-beginning-search-backward
-bindkey "^[[B" history-beginning-search-forward
-#+end_src
-
-* Configs from grml
-** Setopt values
-#+begin_src shell
-# set some important options (as early as possible)
-
-# append history list to the history file; this is the default but we make sure
-# because it's required for share_history.
-setopt append_history
-
-# import new commands from the history file also in other zsh-session
-setopt share_history
-
-# save each command's beginning timestamp and the duration to the history file
-setopt extended_history
-
-# If a new command line being added to the history list duplicates an older
-# one, the older command is removed from the list
-setopt histignorealldups
-
-# remove command lines from the history list when the first character on the
-# line is a space
-setopt histignorespace
-
-# if a command is issued that can't be executed as a normal command, and the
-# command is the name of a directory, perform the cd command to that directory.
-setopt auto_cd
-
-# in order to use #, ~ and ^ for filename generation grep word
-# *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files
-# don't forget to quote '^', '~' and '#'!
-setopt extended_glob
-
-# display PID when suspending processes as well
-setopt longlistjobs
-
-# report the status of backgrounds jobs immediately
-setopt notify
-
-# whenever a command completion is attempted, make sure the entire command path
-# is hashed first.
-setopt hash_list_all
-
-# not just at the end
-setopt completeinword
-
-# Don't send SIGHUP to background processes when the zsh exits.
-setopt nohup
-
-# make cd push the old directory onto the directory stack.
-setopt auto_pushd
-
-# avoid "beep"ing
-setopt nobeep
-
-# don't push the same dir twice.
-setopt pushd_ignore_dups
-
-# * shouldn't match dotfiles. ever.
-setopt noglobdots
-
-# use zsh style word splitting
-setopt noshwordsplit
-
-# don't error out when unset parameters are used
-setopt unset
-#+end_src
-
-** completion system
-#+begin_src shell :tangle no 
-# allow one error for every three characters typed in approximate completer
-zstyle ':completion:*:approximate:'    max-errors 'reply=( $((($#PREFIX+$#SUFFIX)/3 )) numeric )'
-
-# don't complete backup files as executables
-zstyle ':completion:*:complete:-command-::commands' ignored-patterns '(aptitude-*|*\~)'
-
-# start menu completion only if it could find no unambiguous initial string
-zstyle ':completion:*:correct:*'       insert-unambiguous true
-zstyle ':completion:*:corrections'     format $'%{\e[0;31m%}%d (errors: %e)%{\e[0m%}'
-zstyle ':completion:*:correct:*'       original true
-
-# activate color-completion
-zstyle ':completion:*:default'         list-colors ${(s.:.)LS_COLORS}
-
-# format on completion
-zstyle ':completion:*:descriptions'    format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
-
-# automatically complete 'cd -<tab>' and 'cd -<ctrl-d>' with menu
-# zstyle ':completion:*:*:cd:*:directory-stack' menu yes select
-
-# insert all expansions for expand completer
-zstyle ':completion:*:expand:*'        tag-order all-expansions
-zstyle ':completion:*:history-words'   list false
-
-# activate menu
-zstyle ':completion:*:history-words'   menu yes
-
-# ignore duplicate entries
-zstyle ':completion:*:history-words'   remove-all-dups yes
-zstyle ':completion:*:history-words'   stop yes
-
-# match uppercase from lowercase
-zstyle ':completion:*'                 matcher-list 'm:{a-z}={A-Z}'
-
-# separate matches into groups
-zstyle ':completion:*:matches'         group 'yes'
-zstyle ':completion:*'                 group-name ''
-
-if [[ "$NOMENU" -eq 0 ]] ; then
-    # if there are more than 5 options allow selecting from a menu
-    zstyle ':completion:*'               menu select=5
-else
-    # don't use any menus at all
-    setopt no_auto_menu
-fi
-
-zstyle ':completion:*:messages'        format '%d'
-zstyle ':completion:*:options'         auto-description '%d'
-
-# describe options in full
-zstyle ':completion:*:options'         description 'yes'
-
-# on processes completion complete all user processes
-zstyle ':completion:*:processes'       command 'ps -au$USER'
-
-# offer indexes before parameters in subscripts
-zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters
-
-# provide verbose completion information
-zstyle ':completion:*'                 verbose true
-
-# recent (as of Dec 2007) zsh versions are able to provide descriptions
-# for commands (read: 1st word in the line) that it will list for the user
-# to choose from. The following disables that, because it's not exactly fast.
-zstyle ':completion:*:-command-:*:'    verbose false
-
-# set format for warnings
-zstyle ':completion:*:warnings'        format $'%{\e[0;31m%}No matches for:%{\e[0m%} %d'
-
-# define files to ignore for zcompile
-zstyle ':completion:*:*:zcompile:*'    ignored-patterns '(*~|*.zwc)'
-zstyle ':completion:correct:'          prompt 'correct to: %e'
-
-# Ignore completion functions for commands you don't have:
-zstyle ':completion::(^approximate*):*:functions' ignored-patterns '_*'
-
-# Provide more processes in completion of programs like killall:
-zstyle ':completion:*:processes-names' command 'ps c -u ${USER} -o command | uniq'
-
-# complete manual by their section
-zstyle ':completion:*:manuals'    separate-sections true
-zstyle ':completion:*:manuals.*'  insert-sections   true
-zstyle ':completion:*:man:*'      menu yes select
-
-# Search path for sudo completion
-zstyle ':completion:*:sudo:*' command-path /usr/local/sbin \
-                                           /usr/local/bin  \
-                                           /usr/sbin       \
-                                           /usr/bin        \
-                                           /sbin           \
-                                           /bin            \
-                                           /usr/X11R6/bin
-
-# provide .. as a completion
-zstyle ':completion:*' special-dirs ..
-
-# run rehash on completion so new installed program are found automatically:
-function _force_rehash () {
-    (( CURRENT == 1 )) && rehash
-    return 1
-}
-
-## correction
-# some people don't like the automatic correction - so run 'NOCOR=1 zsh' to deactivate it
-if [[ "$NOCOR" -gt 0 ]] ; then
-    zstyle ':completion:*' completer _oldlist _expand _force_rehash _complete _files _ignored
-    setopt nocorrect
-else
-    # try to be smart about when to use what completer...
-    setopt correct
-    zstyle -e ':completion:*' completer '
-        if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]] ; then
-            _last_try="$HISTNO$BUFFER$CURSOR"
-            reply=(_complete _match _ignored _prefix _files)
-        else
-            if [[ $words[1] == (rm|mv) ]] ; then
-                reply=(_complete _files)
-            else
-                reply=(_oldlist _expand _force_rehash _complete _ignored _correct _approximate _files)
-            fi
-        fi'
-fi
-
-# command for process lists, the local web server details and host completion
-zstyle ':completion:*:urls' local 'www' '/var/www/' 'public_html'
-
-# Some functions, like _apt and _dpkg, are very slow. We can use a cache in
-# order to speed things up
-# if [[ ${GRML_COMP_CACHING:-yes} == yes ]]; then
-#     GRML_COMP_CACHE_DIR=${GRML_COMP_CACHE_DIR:-${ZDOTDIR:-$HOME}/.cache}
-#     if [[ ! -d ${GRML_COMP_CACHE_DIR} ]]; then
-#         command mkdir -p "${GRML_COMP_CACHE_DIR}"
-#     fi
-#     zstyle ':completion:*' use-cache  yes
-#     zstyle ':completion:*:complete:*' cache-path "${GRML_COMP_CACHE_DIR}"
-# fi
-
-# for compcom in cp deborphan df feh fetchipac gpasswd head hnb ipacsum mv \
-#                pal stow uname ; do
-#     [[ -z ${_comps[$compcom]} ]] && compdef _gnu_generic ${compcom}
-# done; unset compcom
-
-# # see upgrade function in this file
-compdef _hosts upgrade
-
-#+end_src
-* Source
-** profile
-#+begin_src shell
-source ~/dotfiles/scripts/.profile
-#+end_src
-
-** alias
+* aliases
 #+begin_src shell
 source ~/dotfiles/scripts/aliases.sh
 #+end_src
 
-* History
+* keybinds 
 #+begin_src shell
-HISTFILE=~/.zsh_history
-HISTSIZE=1000
-SAVEHIST=1000
+bindkey -e 
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
+bindkey "^[[A" history-beginning-search-backward
+bindkey "^[[B" history-beginning-search-forward
 #+end_src
 
-* Direnv
+* kitty configuration
 #+begin_src shell
-# eval "$(direnv hook zsh)"
-_direnv_hook() {
-  trap -- '' SIGINT
-  eval "$(direnv hook zsh)"
-  compinit
-  trap - SIGINT
-}
-typeset -ag precmd_functions
-if (( ! ${precmd_functions[(I)_direnv_hook]} )); then
-  precmd_functions=(_direnv_hook $precmd_functions)
-fi
-typeset -ag chpwd_functions
-if (( ! ${chpwd_functions[(I)_direnv_hook]} )); then
-  chpwd_functions=(_direnv_hook $chpwd_functions)
-fi
+export KITTY_SHELL_INTEGRATION=no-cursor
 #+end_src
 
-* Prompts
-** Starship
+* Plugins
+#+begin_src shell
+zinit for \
+    light-mode \
+    zsh-users/zsh-autosuggestions \
+    light-mode \
+    zdharma-continuum/fast-syntax-highlighting \
+    zdharma-continuum/history-search-multi-word \
+    light-mode\
+    trystan2k/zsh-tab-title\
+    Aloxaf/fzf-tab
+
+# zinit snippet OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh
+#+end_src
+* auto title settings
+#+begin_src shell
+DISABLE_AUTO_TITLE="false"
+ZSH_TAB_TITLE_ADDITIONAL_TERMS='alacritty|kitty|foot'
+#+end_src
+
+*  direnv
+#+begin_src shell
+eval "$(direnv hook zsh)"
+export DIRENV_LOG_FORMAT=""
+# zinit from"gh-r" as"program" mv"direnv* -> direnv" \
+#    atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' \
+#    pick"direnv" src="zhook.zsh" for \
+#        direnv/direnv
+# _direnv_hook() {
+#   trap -- '' SIGINT
+#   eval "$(direnv hook zsh)"
+#   compinit
+#   trap - SIGINT
+# }
+# typeset -ag precmd_functions
+# if (( ! ${precmd_functions[(I)_direnv_hook]} )); then
+#   precmd_functions=(_direnv_hook $precmd_functions)
+# fi
+# typeset -ag chpwd_functions
+# if (( ! ${chpwd_functions[(I)_direnv_hook]} )); then
+#   chpwd_functions=(_direnv_hook $chpwd_functions)
+# fi
+#+end_src
+
+* compinit
+#+begin_src shell
+zi for \
+   atload"zicompinit; zicdreplay" \
+   blockf \
+   lucid \
+   wait \
+   zsh-users/zsh-completions
+#+end_src
+
+* starship
 #+begin_src shell
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG=~/dotfiles/config/starship.toml
@@ -396,3 +96,5 @@ precmd() {
     }
 }
 #+end_src
+
+
