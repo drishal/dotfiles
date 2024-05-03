@@ -382,7 +382,8 @@
     #$python3Packages.qtile-extras
     qpdf
     qt5ct
-    quickemu
+    # quickemu
+    (quickemu.override { qemu = qemu_full; })
     qutebrowser
     qbittorrent
     # qtile-extras_git
@@ -649,6 +650,11 @@
   services.mullvad-vpn = {
     enable = true;
     package = pkgs.mullvad-vpn;
+  };
+
+  #samba
+  services.samba = {
+    enable = true;
   };
 
   # chaotic bincache
