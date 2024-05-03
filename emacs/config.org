@@ -740,6 +740,7 @@ https://github.com/minad/org-modern
    org-catch-invisible-edits 'show-and-error
    org-special-ctrl-a/e t
    org-insert-heading-respect-content t
+   org-modern-star t
 
    ;; Org styling, hide markup etc.
    ;; org-hide-emphasis-markers t
@@ -1061,7 +1062,7 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
         inhibit-compacting-font-caches t
         neo-banner-message nil
         neo-keymap-style 'concise
-        neo-theme (if (display-graphic-p) 'icons 'arrow)
+        ;; neo-theme (if (display-graphic-p) 'icons 'arrow)
         projectile-switch-project-action 'neotree-projectile-action) 
   (add-hook 'neo-after-create-hook
             #'(lambda (_)
