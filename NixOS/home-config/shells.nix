@@ -76,7 +76,34 @@
   #   enable=true;
   #   enableFishIntegration=true;
   # };
+  programs.starship = {
+    enable = true;
+    settings = {
+      add_newline = false;
+      line_break.disabled = true;
+    };
+  };
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
 
+  # environment.pathsToLink = [ "/share/zsh" ];
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    autosuggestion = {
+      enable = true;
+    };
+    initExtra = ''
+    source ~/dotfiles/scripts/aliases.sh
+    '';
+    syntaxHighlighting.enable = true;
+    oh-my-zsh = {
+      enable = true;
+      plugins = ["git" "sudo" "direnv"];
+    };
+  };
   # programs.zsh.enable=true;
   # programs.zsh = {
   #   enable=true;
