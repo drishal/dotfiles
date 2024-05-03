@@ -51,7 +51,7 @@ set fish_color_param '#98be65'
 * Starship Prompt 
 #+begin_src fish
 starship init fish | source
-set -x STARSHIP_CONFIG ~/dotfiles/config/starship.toml
+# set -x STARSHIP_CONFIG ~/dotfiles/config/starship.toml
 #+end_src
 
 * Variables

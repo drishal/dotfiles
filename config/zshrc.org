@@ -34,14 +34,20 @@ export KITTY_SHELL_INTEGRATION=no-cursor
 
 * Plugins
 #+begin_src shell
+zinit wait lucid light-mode for \
+  atinit"zicompinit; zicdreplay" \
+      zdharma-continuum/fast-syntax-highlighting \
+  atload"_zsh_autosuggest_start" \
+      zsh-users/zsh-autosuggestions \
+  blockf atpull'zinit creinstall -q .' \
+      zsh-users/zsh-completions
+
 zinit for \
     light-mode \
-    zsh-users/zsh-autosuggestions \
-    light-mode \
-    zdharma-continuum/fast-syntax-highlighting \
     zdharma-continuum/history-search-multi-word \
     light-mode\
     trystan2k/zsh-tab-title\
+    light-mode\
     Aloxaf/fzf-tab
 
 # zinit snippet OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh
@@ -50,40 +56,6 @@ zinit for \
 #+begin_src shell
 DISABLE_AUTO_TITLE="false"
 ZSH_TAB_TITLE_ADDITIONAL_TERMS='alacritty|kitty|foot'
-#+end_src
-
-*  direnv
-#+begin_src shell
-eval "$(direnv hook zsh)"
-export DIRENV_LOG_FORMAT=""
-# zinit from"gh-r" as"program" mv"direnv* -> direnv" \
-#    atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' \
-#    pick"direnv" src="zhook.zsh" for \
-#        direnv/direnv
-# _direnv_hook() {
-#   trap -- '' SIGINT
-#   eval "$(direnv hook zsh)"
-#   compinit
-#   trap - SIGINT
-# }
-# typeset -ag precmd_functions
-# if (( ! ${precmd_functions[(I)_direnv_hook]} )); then
-#   precmd_functions=(_direnv_hook $precmd_functions)
-# fi
-# typeset -ag chpwd_functions
-# if (( ! ${chpwd_functions[(I)_direnv_hook]} )); then
-#   chpwd_functions=(_direnv_hook $chpwd_functions)
-# fi
-#+end_src
-
-* compinit
-#+begin_src shell
-zi for \
-   atload"zicompinit; zicdreplay" \
-   blockf \
-   lucid \
-   wait \
-   zsh-users/zsh-completions
 #+end_src
 
 * starship
@@ -97,4 +69,13 @@ precmd() {
 }
 #+end_src
 
+*  direnv
+#+begin_src shell
+eval "$(direnv hook zsh)"
+export DIRENV_LOG_FORMAT=""
+# zinit from"gh-r" as"program" mv"direnv* -> direnv" \
+#     atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' \
+#     pick"direnv" src="zhook.zsh" for \
+#         direnv/direnv
 
+#+end_src
