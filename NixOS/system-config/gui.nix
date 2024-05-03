@@ -6,6 +6,33 @@
 }:
 
 {
+  # displayManager.gdm.enable = true;
+    # services.displayManager.sddm = {
+    #   enable = true;
+    #   wayland.enable = true;
+    #   package = (pkgs.sddm.overrideAttrs (old: {
+    #     patches = (old.patches or []) ++ [(pkgs.fetchpatch {
+    #         url =
+    #           "https://patch-diff.githubusercontent.com/raw/sddm/sddm/pull/1779.patch";
+    #         sha256 = "sha256-8QP9Y8V9s8xrc+MIUlB7iHVNHbntGkw0O/N510gQ+bE=";
+    #       })
+    #     ];
+    #   }));
+    # };
+  services.desktopManager = {
+    plasma6 = {
+      enable = true;
+    };
+  };
+
+  services.libinput = {
+    enable = true;
+    # disable mouse acceleration
+    #mouse.accelProfile = "flat";
+    # mouse.accelSpeed = "0.5";
+    touchpad.accelSpeed = "0.4";
+    mouse.middleEmulation = false;
+  };
   services.xserver = {
     enable = true;
 
@@ -43,24 +70,10 @@
 
     # Desktop Environment
     desktopManager = {
-      plasma5.enable = true;
+      # plasma6.enable = true;
       #xfce.enable = true;
       # lxqt.enable = true;
       # gnome.enable = true;
-    };
-
-    # displayManager.gdm.enable = true;
-    displayManager.sddm = {
-      enable = true;
-      wayland.enable = true;
-      package = (pkgs.sddm.overrideAttrs (old: {
-        patches = (old.patches or []) ++ [(pkgs.fetchpatch {
-            url =
-              "https://patch-diff.githubusercontent.com/raw/sddm/sddm/pull/1779.patch";
-            sha256 = "sha256-8QP9Y8V9s8xrc+MIUlB7iHVNHbntGkw0O/N510gQ+bE=";
-          })
-        ];
-      }));
     };
     # displayManager.lightdm.enable = false;
     # displayManager.lightdm = {
@@ -68,14 +81,6 @@
     #  greeter.enable = true;
     # };
 
-    libinput = {
-      enable = true;
-      # disable mouse acceleration
-      #mouse.accelProfile = "flat";
-      # mouse.accelSpeed = "0.5";
-      touchpad.accelSpeed = "0.4";
-      mouse.middleEmulation = false;
-    };
   };
 
   # services.greetd = {
@@ -91,6 +96,34 @@
   #     default_session = initial_session;
   #   };
   # };
+  # https://github.com/sjcobb2022/nixos-config/blob/main/hosts/common/optional/greetd.nix
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command =
+          let
+            session = config.services.displayManager.sessionData.desktops;
+          in
+            "${pkgs.greetd.tuigreet}/bin/tuigreet -t -s ${session}/share/xsessions:${session}/share/wayland-sessions";
+          # "${pkgs.greetd.tuigreet}/bin/tuigreet -t -s
+# ${config.services.displayManager.sessionData.desktops}/share/xsessions:${config.services.displayManager.sessionData.desktops}/share/wayland-sessions";
+      };
+    };
+  };
+  # this is a life saver.
+  # literally no documentation about this anywhere.
+  # might be good to write about this...
+  # https://www.reddit.com/r/NixOS/comments/u0cdpi/tuigreet_with_xmonad_how/
+  systemd.services.greetd.serviceConfig = {
+    Type = "idle";
+    StandardInput = "tty";
+    StandardOutput = "tty";
+    StandardError = "journal"; # Without this errors will spam on screen
+    TTYReset = true; # Without these bootlogs will spam on screen
+    TTYVHangup = true;
+    TTYVTDisallocate = true;
+  };
 
   programs.hyprland = {
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
@@ -99,7 +132,7 @@
   # QT settings
   # environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "";
   # qt.platformTheme="qt5ct";
-  environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "qt5ct";
+  environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "kde";
   # qt.platformTheme="qt5ct";
   # environment.variables.QT_STYLE_OVERRIDE= lib.mkForce "";
   # river 
