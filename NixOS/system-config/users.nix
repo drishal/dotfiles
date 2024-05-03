@@ -6,11 +6,17 @@
   ...
 }:
 {
+  programs.bash = {
+    enableCompletion = true;
+    blesh.enable = true;
+  };
   programs.fish.enable = true;
-  programs.zsh.enable = true;
+  programs.zsh ={
+    enable = true;
+  };
   programs.xonsh.enable = true;
   users.users.drishal = {
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
     isNormalUser = true;
     extraGroups = [
       "wheel"
