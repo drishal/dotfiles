@@ -328,6 +328,7 @@ groups = [
     Group(name="7", screen_affinity=1),
     Group(name="8", screen_affinity=1),
     Group(name="9", screen_affinity=1),
+    Group(name="0", screen_affinity=1),
 ]
 
 def go_to_group(name: str):
@@ -374,7 +375,7 @@ async def _():
     if len(qtile.screens) > 1:
         groupbox1.visible_groups = ['1', '2', '3', '4','5']
     else:
-        groupbox1.visible_groups = ['1', '2', '3', '4', '5', '6', '7','8', '9']
+        groupbox1.visible_groups = ['1', '2', '3', '4', '5', '6', '7','8', '9', '0']
     if hasattr(groupbox1, 'bar'):
         groupbox1.bar.draw()
 #+end_src
