@@ -83,7 +83,7 @@
           interval = 10;
         };
 
-        "wlr/taskbar" = {
+        "hyprland/taskbar" = {
           all-outputs = false;
           current-only = true;
           format = "{icon}";
@@ -94,8 +94,8 @@
           on-click-middle = "close";
         };
 
-        "wlr/workspaces" = {
-          all-outputs = true;
+        "hyprland/workspaces" = {
+          all-outputs = false;
           active-only = false;
           sort-by-number = true;
           format-icons = {
