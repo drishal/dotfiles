@@ -39,8 +39,8 @@ monitor=,highrr,auto,1
 #+begin_src conf 
 # monitor=DP-1, 1920x1080, 0x0, 1
 # monitor=DP-2, 1920x1080, 1920x0, 1
-monitor=HDMI-A-1,1920x1080, 0x0, 1
-monitor=eDP-1, 1920x1080, 1920x0, 1
+monitor=HDMI-A-1,1920x1080@120, 0x0, 1
+monitor=eDP-1, 1920x1080@60, 1920x0, 1
 workspace = 1, monitor:HDMI-A-1
 workspace = 2, monitor:HDMI-A-1
 workspace = 3, monitor:HDMI-A-1
@@ -72,7 +72,7 @@ workspace = 10, monitor:DP-2
  See https://wiki.hyprland.org/Configuring/Keywords/ for more
  #+begin_src conf 
  exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP 
- exec-once =  waybar & dunst & nm-applet --indicator & lxpolkit & blueman-applet & emacs --daemon & foot --server  & hyprpaper
+ exec-once = lxpolkit & waybar & dunst & nm-applet --indicator &  blueman-applet & emacs --daemon & foot --server  & hyprpaper
  #bash ~/dotfiles/scripts/power-monitor.sh & 
  # & swaybg -i ~/dotfiles/wallpapers/NixOS-1.png
  #+end_src
@@ -219,6 +219,7 @@ See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
 # windowrule = rounding 0, ^(firefox)$
 windowrule = rounding 0, ^(waybar)$
 windowrulev2 = rounding 0, class:^[fF]irefox
+# windowrulev2 = immediate, class:^(xonotic-sdl)$
 # windowrule=float,^(zoom)$
 # Example windowrule v2
 # windowrulev2 = float,class:^(kitty)$,title:^(kitty)$
@@ -307,8 +308,8 @@ preload = ~/Downloads/nika.jpg
 preload =~/dotfiles/wallpapers/darkest_hour.jpg
 # wallpaper = eDP-1,~/dotfiles/wallpapers/NixOS-1.png
 # wallpaper = eDP-1,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
-# wallpaper = eDP-1,~/dotfiles/wallpapers/darkest_hour.jpg
-# wallpaper = HDMI-A-1,~/dotfiles/wallpapers/darkest_hour.jpg
+wallpaper = eDP-1,~/dotfiles/wallpapers/darkest_hour.jpg
+wallpaper = HDMI-A-1,~/dotfiles/wallpapers/darkest_hour.jpg
 # wallpaper = eDP-1,~/Downloads/gruvbox-nix.png
 # wallpaper = eDP-1,~/Downloads/nika.webp
 # wallpaper = HDMI-A-1,~/dotfiles/wallpapers/NixOS-1.png
@@ -316,7 +317,7 @@ preload =~/dotfiles/wallpapers/darkest_hour.jpg
 wallpaper = DP-1,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
 wallpaper = DP-2,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
 
-wallpaper = eDP-1,~/Downloads/nika.jpg
-wallpaper = HDMI-A-1,~/Downloads/nika.jpg
+# wallpaper = eDP-1,~/Downloads/nika.jpg
+# wallpaper = HDMI-A-1,~/Downloads/nika.jpg
 
 #+end_src
