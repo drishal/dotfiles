@@ -23,9 +23,9 @@
       url = "github:nixos/nixpkgs/nixos-unstable";
     };
     # nixpkgs = { url = "github:PedroHLC/nixpkgs/pull-284487"; };
-    nixpkgs-master = {
-      url = "github:nixos/nixpkgs/9b5ca6a80c775a62734e1fefa0d04f1b0c91c91b";
-    };
+    # nixpkgs-master = {
+    #   url = "github:nixos/nixpkgs/9b5ca6a80c775a62734e1fefa0d04f1b0c91c91b";
+    # };
 
     # nixpkgs-master.url = "github:NixOS/nixpkgs/master";
 
@@ -58,13 +58,13 @@
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
     # hyprland.url = "github:hyprwm/Hyprland/12d79d63421e2ed3f31130755c7a37f0e4fb5cb1";
-    hyprland.url = "github:hyprwm/Hyprland/v0.39.1";
+    hyprland.url = "github:hyprwm/Hyprland";
     # hyprland.url = "github:hyprwm/Hyprland";
 
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay/";
     };
-
+    emacs-lsp-booster.url = "github:slotThe/emacs-lsp-booster-flake";
     emacs-ng.url = "github:emacs-ng/emacs-ng";
 
     programsdb = {
@@ -92,7 +92,7 @@
   outputs =
     {
       nixpkgs,
-      nixpkgs-master,
+      # nixpkgs-master,
       chaotic,
       home-manager,
       programsdb,
@@ -106,6 +106,7 @@
       private-stuff,
       emacs-ng,
       base16,
+      emacs-lsp-booster,
       tt-schemes,
       ...
     }@inputs:
@@ -118,12 +119,12 @@
           allowUnfree = true;
         };
       };
-      pkgs-master = import nixpkgs-master {
-        inherit system;
-        config = {
-          allowUnfree = true;
-        };
-      };
+      # pkgs-master = import nixpkgs-master {
+      #   inherit system;
+      #   config = {
+      #     allowUnfree = true;
+      #   };
+      # };
       lib = nixpkgs.lib;
     in
     {
@@ -131,7 +132,7 @@
         inherit pkgs;
         extraSpecialArgs = {
           inherit inputs;
-          inherit pkgs-master;
+          # inherit pkgs-master;
         };
         modules = [
           ./NixOS/home-config/home.nix
@@ -158,6 +159,7 @@
                 inputs.emacs-overlay.overlay
                 inputs.discord-flake.overlay
                 inputs.neovim-nightly-overlay.overlay
+                emacs-lsp-booster.overlays.default
               ];
             }
             ./NixOS/system-config/configuration.nix
