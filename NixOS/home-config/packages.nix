@@ -31,6 +31,7 @@
     # neovide
     # nixpkgs-fmt
     nixfmt-rfc-style
+    nil
     papirus-icon-theme
     gnome.gnome-themes-extra
     #nodePackages.create-react-app
@@ -75,18 +76,18 @@
     # theme.name = "Orchis-Dark";
     # theme.name = "Adwaita-dark";
     theme = {
-      # name = "Catppuccin-Mocha-Compact-Pink-Dark";
-      # package = pkgs.catppuccin-gtk.override {
-      #   accents = [ "pink" ];
-      #   size = "compact";
-      #   tweaks = [ "rimless" ];
-      #   variant = "mocha";
-      # };
+      name = "Catppuccin-Mocha-Compact-Pink-Dark";
+      package = pkgs.catppuccin-gtk.override {
+        accents = [ "pink" ];
+        size = "compact";
+        tweaks = [ "rimless" ];
+        variant = "mocha";
+      };
       # package = pkgs.gruvbox-gtk-theme;
       # name = "Gruvbox";
-      name = "Orchis-Dark";
+      # name = "Orchis-Dark";
       # name = "Arc-Dark";
-      package = pkgs.orchis-theme;
+      # package = pkgs.orchis-theme;
     };
     iconTheme = with pkgs; {
       name = "Papirus-Dark";

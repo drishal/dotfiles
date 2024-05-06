@@ -47,12 +47,7 @@
     # sessionVariables.LOCALES_ARCHIVE = "/usr/lib/locale/locale-archive";
   };
   programs.man.generateCaches = true;
-  # colorScheme = inputs.nix-colors.lib.schemeFromYAML "doompalenight" (builtins.readFile ./colors/doompalenight.yaml);
-
-  # colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
-
   # scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
-  scheme = ./colors/doomone.yaml;
-
+  scheme = ./colors/doompalenight.yaml;
   # home.stateVersion = "21.05";
 }

@@ -9,7 +9,7 @@
 {
   nix = {
     # trustedUsers = [ "root" "drishal" ];
-    package = pkgs.nixUnstable;
+    # package = pkgs.nixUnstable;
     extraOptions = ''
       experimental-features = nix-command flakes auto-allocate-uids
       max-substitution-jobs = 64

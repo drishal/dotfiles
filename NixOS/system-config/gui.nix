@@ -106,8 +106,6 @@
             session = config.services.displayManager.sessionData.desktops;
           in
             "${pkgs.greetd.tuigreet}/bin/tuigreet -t -s ${session}/share/xsessions:${session}/share/wayland-sessions";
-          # "${pkgs.greetd.tuigreet}/bin/tuigreet -t -s
-# ${config.services.displayManager.sessionData.desktops}/share/xsessions:${config.services.displayManager.sessionData.desktops}/share/wayland-sessions";
       };
     };
   };

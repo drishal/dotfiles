@@ -1,0 +1,21 @@
+system: "base16"
+name: "doom-palenight"
+author: "Drishal"
+variant: "dark"
+palette:
+  base00: "292D3E" # Default Background
+  base01: "1C1F2B" # Black
+  base02: "1E212E" # Bright Black
+  base03: "3C435E" # Grey
+  base04: "4E5579" # Light Grey
+  base05: "EEFFFF" # Foreground
+  base06: "BFC7D5" # White
+  base07: "EEFFFF" # Bright White
+  base08: "FF5370" # red
+  base09: "F78C6C" # orange
+  base0A: "FFCB6B" # yellow
+  base0B: "C3E88D" # green
+  base0C: "89DDFF" # cyan
+  base0D: "82AAFF" # blue
+  base0E: "C792EA" # magenta
+  base0F: "BB80B3" # violet

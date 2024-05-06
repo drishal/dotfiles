@@ -17,7 +17,13 @@
     nixvim = {
       enable = true;
       enableMan = true;
-      colorschemes.onedark.enable = true;
+      # colorschemes.onedark.enable = true;
+      # colorschemes.tokyonight = {
+      #   enable = true;
+      #   settings = {
+      #     style = "night";
+      #   };
+      # };
       # colorschemes.catppuccin = {
       #   enable = true;
       #   settings.background.dark = "mocha";
@@ -47,6 +53,7 @@
       #   };
       # };
       # colorscheme = "gruvbox-material";
+      colorscheme = "palenight";
       opts = {
         hlsearch = false;
         number = true;
@@ -79,6 +86,15 @@
             sha256 = "sha256-a6rbmGB5WlGG2deEwo5e/anR1S35gfmAYc+sNxnHp5I=";
           };
         }))
+        (pkgs.vimUtils.buildVimPlugin{
+          name = "palenight";
+          src = pkgs.fetchFromGitHub {
+            owner = "alexmozaidze";
+            repo = "palenight.nvim";
+            rev = "43445069c058a717183458cb895b68563e91ff22";
+            sha256 = "sha256-Qa8qUC0oAByYtDoxdZEZTPBM0n6P3WOAn0uL01j0W+k=";
+          };
+        })
       ];
       clipboard = {
         register = "unnamedplus";
