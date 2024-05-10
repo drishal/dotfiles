@@ -1724,6 +1724,10 @@ https://github.com/pwalsh/pipenv.el
   )
 #+end_src
 
+*** go-mode
+#+begin_src emacs-lisp
+(use-package go-mode :demand t)
+#+end_src
 *** C/C++ mode
 #+begin_src emacs-lisp
 (setq c-default-style "linux"
