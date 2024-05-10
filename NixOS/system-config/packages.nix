@@ -8,6 +8,7 @@
 {
   services.flatpak.enable = true;
   services.gvfs.enable = true;
+  services.zerotierone.enable = true;
   # xdg.portal.enable = true;
   programs = {
     # adb
@@ -319,6 +320,7 @@
     neofetch
     neovim-nightly
     networkmanagerapplet
+    netcat-gnu
     # nil
     nim
     nitch

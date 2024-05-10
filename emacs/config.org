@@ -599,6 +599,8 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
   :diminish
   :config
   (evil-set-undo-system 'undo-tree)
+  ;;fix undo tree hang
+  (setq undo-tree-enable-undo-in-region nil)
   (global-undo-tree-mode 1))
 
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs-temp/")))
