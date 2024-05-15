@@ -30,6 +30,8 @@ static const char col_cyan[]        = "#bd93f9";
 */
 
 //onedark
+
+/*
 static const char col_bg[]          = "#282a36"; 
 static const char col_bg2[]         = "#44475a"; 
 static const char col_fg[]          = "#f8f8f2"; 
@@ -41,18 +43,22 @@ static const char col_pink[]         = "#ff79c6";
 static const char col_purple[]          = "#bd93f9"; 
 static const char col_red[]         = "#ff5555"; 
 static const char col_yellow[]         =  "#f1fa8c";
-
+*/
 
 
 //Palenight
-/*
-static const char col_gray1[]       = ""; 
-static const char col_gray2[]       = ""; 
-static const char col_gray3[]       = ""; 
-static const char col_gray4[]       = ""; 
-static const char col_gray5[]       = ""; 
-static const char col_cyan[]        = ""; 
-*/
+static const char col_bg[]      = "#292d3e"; 
+static const char col_bg2[]     = "#1c1f2b"; 
+static const char col_fg[]      = "#eeffff"; 
+static const char col_grey[]    = "#3c435e"; 
+static const char col_cyan[]    = "#89ddff"; 
+static const char col_green2[]  = "#c3e88d"; 
+static const char col_orange[]  = "#f78c6c"; 
+static const char col_pink[]    = "#c792ea"; 
+static const char col_purple[]  = "#bb80b3"; 
+static const char col_red[]     = "#ff5370"; 
+static const char col_yellow[]  = "#ffcb6b";
+
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_fg, col_bg, col_bg },
