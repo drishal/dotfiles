@@ -36,7 +36,7 @@ mkdir -p ~/.config/hypr
 monitor=,highrr,auto,1
 #+end_src
 ** Monitor setup 1 
-#+begin_src conf 
+#+begin_src conf :tangle (if (equal (system-name) "nixos") "~/.config/hypr/hyprland.conf" "no")
 # monitor=DP-1, 1920x1080, 0x0, 1
 # monitor=DP-2, 1920x1080, 1920x0, 1
 monitor=HDMI-A-1,1920x1080@120, 0x0, 1
@@ -53,7 +53,7 @@ workspace = 9, monitor:eDP-1
 workspace = 10, monitor:eDP-1
 #+end_src
 ** Monitor Setup 2
-#+begin_src conf :tangle no
+#+begin_src conf :tangle (if (equal (system-name) "archlinux") "~/.config/hypr/hyprland.conf" "no")
 monitor=DP-1, 1920x1080, 0x0, 1
 monitor=DP-2, 1920x1080, 1920x0, 1
 workspace = 1, monitor:DP-1
@@ -115,7 +115,7 @@ general {
     col.active_border = rgba(bd93f9ff)
     col.inactive_border = rgba(3f444aff)
     layout = master
-    cursor_inactive_timeout = 3
+    # cursor_inactive_timeout = 3
 }
 #+end_src
 
@@ -314,8 +314,8 @@ wallpaper = HDMI-A-1,~/dotfiles/wallpapers/darkest_hour.jpg
 # wallpaper = eDP-1,~/Downloads/nika.webp
 # wallpaper = HDMI-A-1,~/dotfiles/wallpapers/NixOS-1.png
 # wallpaper = HDMI-A-1,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
-wallpaper = DP-1,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
-wallpaper = DP-2,~/dotfiles/wallpapers/archlinux/archlinux-onedark.png
+wallpaper = DP-1,~/dotfiles/wallpapers/darkest_hour.jpg
+wallpaper = DP-2,~/dotfiles/wallpapers/darkest_hour.jpg
 
 # wallpaper = eDP-1,~/Downloads/nika.jpg
 # wallpaper = HDMI-A-1,~/Downloads/nika.jpg
