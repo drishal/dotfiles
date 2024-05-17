@@ -173,7 +173,7 @@ else:
 
 ** theme 
 #+begin_src python 
-  color = onedark
+  color = palenight
 #+end_src
 * Wayland settings
 ** Inputs
