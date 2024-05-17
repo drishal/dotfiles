@@ -332,6 +332,7 @@
     nvtopPackages.amd
     # nodePackages_latest.create-react-app
     nodePackages_latest.bash-language-server
+    nodePackages_latest.typescript-language-server
     noto-fonts
     ntfs3g
     obs-studio
@@ -449,7 +450,8 @@
     # })
     # vivaldi-ffmpeg-codecs
     ventoy-full
-    # vscode-fhs
+    vscode-fhs
+    vscode-langservers-extracted
     vlc
     vulkan-tools
     volumeicon
@@ -475,7 +477,6 @@
     ytfzf
     zip
     zoom-us
-
     # Xfce stuff
     (xfce.thunar.override {
       thunarPlugins = with pkgs; [
