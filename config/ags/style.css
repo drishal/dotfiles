@@ -1,16 +1,19 @@
 @import "color.css";
+@import "notificationPopups.css";
 * {
     font-family: "FantasqueSansM Nerd Font","Roboto", "Helvetica", "Arial", "sans-serif";
 }
+
 window.bar {
     background-color: @colbg;
     color: @colfg;
+    border-radius: 10px;
 }
 
 button {
     background-color: @colbg;
     /* padding: 3px; */
-    min-width: 20px;
+    min-width: 10px;
     color: @colgrey;
 }
 
@@ -27,25 +30,31 @@ label {
     font-weight: bold;
 }
 
-.workspaces button  {
+.ws-inactive  {
     background-color: @colbg;
-    /* padding: 3px; */
-    /* min-width: 20px; */
     color: @colgrey;
+    min-width: 20px;
+    padding: 3px;
+}
+.ws-occupied {
+    /* background-color: @colgrey; */
+    color: @colfg;
+    min-width: 20px;
+    padding: 3px;
+
 }
 
-.workspaces button.focused {
-    background-color: @colgrey;
+.ws-active {
+    background-color: @colgrey; 
     color: @colfg;
+    min-width: 20px;
+    padding: 3px;
 }
 
 .client-title {
     color: @colviolet;
 }
 
-.notification {
-    color: @colyellow;
-}
 
 .clock {
     background: @colgrey; 
@@ -58,3 +67,8 @@ levelbar block,
 highlight {
     min-height: 10px;
 }
+
+window.notification-popups box.notifications {
+    padding: .5em;
+}
+
