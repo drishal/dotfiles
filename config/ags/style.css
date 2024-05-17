@@ -1,0 +1,60 @@
+@import "color.css";
+* {
+    font-family: "FantasqueSansM Nerd Font","Roboto", "Helvetica", "Arial", "sans-serif";
+}
+window.bar {
+    background-color: @colbg;
+    color: @colfg;
+}
+
+button {
+    background-color: @colbg;
+    /* padding: 3px; */
+    min-width: 20px;
+    color: @colgrey;
+}
+
+button:active {
+    background-color: @colgrey;
+    color: @colfg;
+}
+
+/* button:hover { */
+/*     border-bottom: 3px solid @colfg; */
+/* } */
+
+label {
+    font-weight: bold;
+}
+
+.workspaces button  {
+    background-color: @colbg;
+    /* padding: 3px; */
+    /* min-width: 20px; */
+    color: @colgrey;
+}
+
+.workspaces button.focused {
+    background-color: @colgrey;
+    color: @colfg;
+}
+
+.client-title {
+    color: @colviolet;
+}
+
+.notification {
+    color: @colyellow;
+}
+
+.clock {
+    background: @colgrey; 
+    padding: 0 10px;
+    margin: 3px 3px 3px 3px;
+    background-clip: padding-box;
+    color: @colviolet;
+}
+levelbar block,
+highlight {
+    min-height: 10px;
+}
