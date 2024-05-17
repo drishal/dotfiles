@@ -5,6 +5,7 @@
   ...
 }:
 {
+  imports = [ inputs.ags.homeManagerModules.default ];
   home.packages = with pkgs; [
     # # firefox
     # chromium
@@ -18,6 +19,7 @@
     # vivaldi-widevine
     bat
     cachix
+    # inputs.eww.packages.${pkgs.stdenv.hostPlatform.system}.eww
     fd
     fzf
     ispell
@@ -60,6 +62,61 @@
     enableBashIntegration = true;
   };
 
+  # ags
+  programs.ags = {
+    enable = true;
+
+    # null or path, leave as null if you don't want hm to manage the config
+    # configDir = ../../config/ags;
+
+    # additional packages to add to gjs's runtime
+    extraPackages = with pkgs; [
+      gtksourceview
+      webkitgtk
+      accountsservice
+    ];
+  };
+
+  # xdg.configFile."ags".source = ../../config/ags;
+  # xdg.configFile."ags".recursive = true;
+  # xdg.configFile."ags/color.css".text = with config.scheme; ''
+  #     @define-color colbg        #${base00}; 
+  #     @define-color colbg2       #${base02};
+  #     @define-color colfg        #${base05};
+  #     @define-color colgrey      #${base03};
+  #     @define-color colcyan      #${base0C};
+  #     @define-color colgreen     #${base0B};
+  #     @define-color colorange    #${base09};
+  #     @define-color colmagenta   #${base0E};
+  #     @define-color colviolet    #${base0F};
+  #     @define-color colred       #${base08};
+  #     @define-color colyellow    #${base0A};
+  # '';
+  # home.file."${config.home.homeDirectory}/.config/ags".recursive = true;
+
+  # home.file."/home/drishal/.config/ags".source = ../../config/ags;
+  # ".config/ags".source = config.lib.file.mkOutOfStoreSymlink "../../config/ags";
+  # xdg.configFile."ags".recursive = true;
+  # eww
+  # programs.eww = {
+  #   enable = true;
+  #   package = inputs.eww.packages.${pkgs.stdenv.hostPlatform.system}.eww;
+  #   configDir = ../../config/eww/eww-bar;
+  # };
+  # xdg.configFile."eww/color.css".text = with config.scheme; ''
+  #     @define-color colbg        #${base00}; 
+  #     @define-color colbg2       #${base02};
+  #     @define-color colfg        #${base05};
+  #     @define-color colgrey      #${base03};
+  #     @define-color colcyan      #${base0C};
+  #     @define-color colgreen     #${base0B};
+  #     @define-color colorange    #${base09};
+  #     @define-color colmagenta   #${base0E};
+  #     @define-color colviolet    #${base0F};
+  #     @define-color colred       #${base08};
+  #     @define-color colyellow    #${base0A};
+  # '';
+  # xdg.configFile."eww".recursive = true;
   #lsd
   programs.lsd = {
     enable = true;

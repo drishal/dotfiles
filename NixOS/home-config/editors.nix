@@ -269,7 +269,7 @@
 # emacs = {
 #   enable = true;
 #   package = pkgs.emacs-pgtk;
-#   extraPackages = epkgs: with epkgs; [
+#   extrapackages = epkgs: with epkgs; [
 #     treesit-grammars.with-all-grammars
 #     vterm
 #     telega

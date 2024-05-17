@@ -70,4 +70,5 @@
   # qtile config
   #home.file."/home/drishal/.config/qti../../config.py".source =../config/qtile/config.py;
   # home.file."/home/drishal/.config/qtile/autostart.sh".source =../../config/qtile/autostart.sh;
+  #ags
 }
