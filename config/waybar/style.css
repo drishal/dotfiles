@@ -78,13 +78,11 @@ window#waybar.empty #window {
 #workspaces button  {
     background-color: @colbg;
     padding: 3px;
-    /* border-radius: 10px; */
     min-width: 20px;
     color: @colgrey;
 }
 #workspaces button.active{
     background-color: @colgrey;
-    /* border-bottom: 2px solid @colviolet; */
     color: @colfg;
 }
 #workspaces button.urgent{
