@@ -323,6 +323,9 @@ remove/add tangle no to whatever font you prefer
 #+begin_src emacs-lisp 
 (use-package dashboard
   :demand t
+  :init
+  (dashboard-setup-startup-hook)
+  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
   :config
   (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
   (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
@@ -344,8 +347,7 @@ remove/add tangle no to whatever font you prefer
                           (bookmarks . 5)
                           (projects . 3)
                           ))
-  (dashboard-setup-startup-hook)
-  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))))
+)
 #+end_src
 ** highlight current line
 #+begin_src emacs-lisp
@@ -531,7 +533,7 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
   (efs/leader-keys
     "t"  '(:ignore t :which-key "toggles")
     "tt" '(counsel-load-theme :which-key "choose theme")
-    "fde" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/Emacs.org")))))
+    "fde" '(lambda () (interactive) (find-file (expand-file-name "~/dotfiles/emacs/config.org")))))
 
 (use-package evil
   :demand t
@@ -1426,13 +1428,19 @@ https://github.com/minad/marginalia
 #+end_src
 
 *** emacs-direnv
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package direnv :demand t
   :config
   (direnv-mode))
 (setq direnv-always-show-summary nil)
 #+end_src
 
+*** envrc.el
+#+begin_src emacs-lisp
+(use-package envrc
+  :demand t
+  :hook (after-init . envrc-global-mode))
+#+end_src
 ** languages and lsp-mode
 https://emacs-lsp.github.io/lsp-mode/
 and also https://emacs-lsp.github.io/lsp-mode/page/languages/
@@ -1786,6 +1794,10 @@ https://github.com/pwalsh/pipenv.el
 #+end_src
 
 
+*** yuck mode
+#+begin_src emacs-lisp
+(use-package yuck-mode :demand t)
+#+end_src
 ** which key
 #+begin_src emacs-lisp
 (use-package which-key
