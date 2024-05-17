@@ -58,7 +58,8 @@
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
     # hyprland.url = "github:hyprwm/Hyprland/12d79d63421e2ed3f31130755c7a37f0e4fb5cb1";
-    hyprland.url = "github:hyprwm/Hyprland";
+    # hyprland.url = "github:hyprwm/Hyprland/v0.40.0";
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     # hyprland.url = "github:hyprwm/Hyprland";
 
     emacs-overlay = {
@@ -77,7 +78,7 @@
       flake = false;
     };
 
-    # ags.url = "github:Aylur/ags";
+    ags.url = "github:Aylur/ags";
 
     lobster.url = "github:justchokingaround/lobster";
 
@@ -87,26 +88,31 @@
       url = "github:tinted-theming/schemes";
       flake = false;
     };
+    eww = {
+      url = "github:elkowar/eww";
+    };
   };
 
   outputs =
     {
-      nixpkgs,
       # nixpkgs-master,
-      chaotic,
-      home-manager,
-      programsdb,
-      discord-flake,
-      nur,
-      emacs-overlay,
-      cachix,
-      declarative-cachix,
-      hyprland,
-      nixvim,
-      private-stuff,
-      emacs-ng,
+      ags,
       base16,
+      cachix,
+      chaotic,
+      declarative-cachix,
+      discord-flake,
       emacs-lsp-booster,
+      emacs-ng,
+      emacs-overlay,
+      eww,
+      home-manager,
+      hyprland,
+      nixpkgs,
+      nixvim,
+      nur,
+      private-stuff,
+      programsdb,
       tt-schemes,
       ...
     }@inputs:
