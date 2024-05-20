@@ -84,12 +84,17 @@
     eww = {
       url = "github:elkowar/eww";
     };
+    auto-cpufreq = {
+      url = "github:AdnanHodzic/auto-cpufreq";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
     {
       # nixpkgs-master,
       ags,
+      auto-cpufreq,
       base16,
       cachix,
       chaotic,
@@ -162,6 +167,7 @@
               ];
             }
             ./NixOS/system-config/configuration.nix
+            auto-cpufreq.nixosModules.default
             chaotic.nixosModules.default
           ];
         in
