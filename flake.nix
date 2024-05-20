@@ -34,10 +34,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # nix-colors = {
-    #   url = "github:misterio77/nix-colors";
-    # };
-
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -49,7 +45,6 @@
     };
 
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
-    # chaotic.url = "path:/home/drishal/Desktop/git-stuff/nyx";
 
     nur.url = "github:nix-community/NUR";
 
@@ -57,10 +52,8 @@
 
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
-    # hyprland.url = "github:hyprwm/Hyprland/12d79d63421e2ed3f31130755c7a37f0e4fb5cb1";
     # hyprland.url = "github:hyprwm/Hyprland/v0.40.0";
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
-    # hyprland.url = "github:hyprwm/Hyprland";
 
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay/";

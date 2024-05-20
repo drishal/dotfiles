@@ -2,12 +2,13 @@
 @import "notificationPopups.css";
 * {
     font-family: "FantasqueSansM Nerd Font","Roboto", "Helvetica", "Arial", "sans-serif";
+    font-size: 13px;
+    border-radius: 10px;
 }
 
 window.bar {
     background-color: @colbg;
     color: @colfg;
-    border-radius: 10px;
 }
 
 button {
@@ -56,13 +57,46 @@ label {
 }
 
 
-.clock {
+.clock, .battery, .network, .volume{
     background: @colgrey; 
     padding: 0 10px;
     margin: 3px 3px 3px 3px;
     background-clip: padding-box;
-    color: @colviolet;
 }
+.tray {
+    background: @colgrey; 
+    padding: 0 10px;
+    margin: 3px 3px 3px 3px;
+    background-clip: padding-box;
+}
+.trayicons {
+    background: @colgrey; 
+}
+.clock {
+    color: @colviolet;
+    
+}
+.battery {
+    color: @colgreen;
+}
+.volume {
+    color: @colmagenta;
+    /* font-size: 8px; */
+    min-width: 180px;
+    /* border-radius: 10px; */
+    margin: -5px -5px -5px -5px;
+    /* margin: 0px 0px 0px 0px; */
+}
+.network {
+    color: @colorange;
+}
+/* .battery{ */
+/*     background: @colgrey;  */
+/*     padding: 0 10px; */
+/*     margin: 3px 3px 3px 3px; */
+/*     background-clip: padding-box; */
+/*     color: @colviolet; */
+/* } */
 levelbar block,
 highlight {
     min-height: 10px;
@@ -72,3 +106,31 @@ window.notification-popups box.notifications {
     padding: .5em;
 }
 
+.controlcenter {
+    color: @colfg;
+    background-color: @colbg;
+    border-radius: 12px;
+    font-weight: bolder;
+}
+
+.controlcenter button{
+    padding: 6px 6px;
+    margin: 5px 5px;
+    border-radius: 6px;
+    background-color: @colgrey;
+    color: @colfg;
+    font-size: 16pt;
+}
+
+.controlcenter label{
+    padding: 6px 6px;
+    margin: 5px 5px;
+    border-radius: 6px;
+    background-color: @colgrey;
+    color: @colfg;
+    font-size: 12pt;
+}
+.controlCenterButton {
+    background-color: @colgrey;
+    color: @colfg;
+}

@@ -67,7 +67,7 @@
     enable = true;
 
     # null or path, leave as null if you don't want hm to manage the config
-    # configDir = ../../config/ags;
+    configDir = ../../config/ags;
 
     # additional packages to add to gjs's runtime
     extraPackages = with pkgs; [
@@ -77,21 +77,22 @@
     ];
   };
 
+  xdg.configFile."ags".recursive = true;
+  xdg.configFile."ags/color.css".text = with config.scheme; ''
+      @define-color colbg        #${base00}; 
+      @define-color colbg2       #${base02};
+      @define-color colfg        #${base05};
+      @define-color colgrey      #${base03};
+      @define-color colcyan      #${base0C};
+      @define-color colgreen     #${base0B};
+      @define-color colorange    #${base09};
+      @define-color colmagenta   #${base0E};
+      @define-color colviolet    #${base0F};
+      @define-color colred       #${base08};
+      @define-color colyellow    #${base0A};
+  '';
+
   # xdg.configFile."ags".source = ../../config/ags;
-  # xdg.configFile."ags".recursive = true;
-  # xdg.configFile."ags/color.css".text = with config.scheme; ''
-  #     @define-color colbg        #${base00}; 
-  #     @define-color colbg2       #${base02};
-  #     @define-color colfg        #${base05};
-  #     @define-color colgrey      #${base03};
-  #     @define-color colcyan      #${base0C};
-  #     @define-color colgreen     #${base0B};
-  #     @define-color colorange    #${base09};
-  #     @define-color colmagenta   #${base0E};
-  #     @define-color colviolet    #${base0F};
-  #     @define-color colred       #${base08};
-  #     @define-color colyellow    #${base0A};
-  # '';
   # home.file."${config.home.homeDirectory}/.config/ags".recursive = true;
 
   # home.file."/home/drishal/.config/ags".source = ../../config/ags;

@@ -70,7 +70,7 @@ workspace = 10, monitor:DP-2
  See https://wiki.hyprland.org/Configuring/Keywords/ for more
  #+begin_src conf 
  exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP 
- exec-once = lxpolkit & waybar & dunst & nm-applet --indicator &  blueman-applet & emacs --daemon & foot --server  & hyprpaper
+ exec-once = lxpolkit & ags & nm-applet --indicator &  blueman-applet & emacs --daemon & foot --server  & hyprpaper
  #bash ~/dotfiles/scripts/power-monitor.sh & 
  # & swaybg -i ~/dotfiles/wallpapers/NixOS-1.png
  #+end_src

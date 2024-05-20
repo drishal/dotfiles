@@ -5,6 +5,8 @@ const systemtray = await Service.import("systemtray")
 const network = await Service.import('network')
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+// import controlCenterButton from controlCenterButton;
+import controlCenterButton from './controlCenterButton.js'
 
 const date = Variable("", {
     poll: [1000, 'date "+%H:%M:%S | %b %e %Y"'],
@@ -83,14 +85,32 @@ function Volume() {
 
     return Widget.Box({
         class_name: "volume",
-        css: "min-width: 150px",
         children: [icon, slider],
     })
 }
+const VolumeSlider = (type = 'speaker') => Widget.Slider({
+    hexpand: true,
+    drawValue: false,
+    onChange: ({ value }) => audio[type].volume = value,
+    value: audio[type].bind('volume'),
+})
 
+const speakerSlider = VolumeSlider('speaker')
+// const volslider = () => {
+//     const slider = Widget.Slider({
+//         hexpand: true,
+//         draw_value: false,
+//         css: "min-width: 150px",
+//         on_change: ({ value }) => audio.speaker.volume = value,
+//         setup: self => self.hook(audio.speaker, () => {
+//             self.value = audio.speaker.volume || 0
+//         }),
+//     })
+// }
 
 function BatteryLabel() {
     const value = battery.bind("percent").as(p => p > 0 ? p / 100 : 0)
+	const percent = value.emitter.percent
     const icon = battery.bind("percent").as(p =>
         `battery-level-${Math.floor(p / 10) * 10}-symbolic`)
 
@@ -99,19 +119,21 @@ function BatteryLabel() {
         visible: battery.bind("available"),
         children: [
             Widget.Icon({ icon }),
-            Widget.LevelBar({
-                widthRequest: 140,
-                vpack: "center",
-                value,
+            Widget.Label({
+                // widthRequest: 140,
+                // vpack: "center",
+                // label: value,
+				label: " ".concat(String(percent).concat("%")),
             }),
         ],
     })
 }
 
-
 function SysTray() {
     const items = systemtray.bind("items")
         .as(items => items.map(item => Widget.Button({
+			// class_name: "tray",
+			class_name: "trayicons",
             child: Widget.Icon({ icon: item.bind("icon") }),
             on_primary_click: (_, event) => item.activate(event),
             on_secondary_click: (_, event) => item.openMenu(event),
@@ -120,17 +142,18 @@ function SysTray() {
 
     return Widget.Box({
         children: items,
+		class_name: "tray",
     })
 }
 
+const wifiindicator = network.wifi.bind('ssid').as(ssid => ssid || 'Unknown')
 const WifiIndicator = () => Widget.Box({
     children: [
         Widget.Icon({
             icon: network.wifi.bind('icon_name'),
         }),
         Widget.Label({
-            label: network.wifi.bind('ssid')
-                .as(ssid => ssid || 'Unknown'),
+            label: " ".concat(wifiindicator.emitter.ssid),
         }),
     ],
 })
@@ -152,6 +175,8 @@ const NetworkIndicator = () => Widget.Stack({
         wifi: WifiIndicator(),
         wired: WiredIndicator(),
     },
+
+    class_name: "network",
     shown: network.bind('primary').as(p => p || 'wifi'),
 })
 // layout of the bar
@@ -181,10 +206,11 @@ function Right() {
         hpack: "end",
         spacing: 8,
         children: [
-			NetworkIndicator(),
-            Volume(),
+			// NetworkIndicator(),
+            // Volume(),
             BatteryLabel(),
             SysTray(),
+			controlCenterButton(),
         ],
     })
 }

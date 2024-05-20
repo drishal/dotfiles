@@ -34,6 +34,9 @@
     #wireshark
     wireshark.enable = true;
 
+    #game mode
+    gamemode.enable = true;
+
     #neovim
     # neovim = {
     #   enable = true;
@@ -566,23 +569,23 @@
     #   ];
     # }))
     # river
-    (river.overrideAttrs (prevAttrs: rec {
-      postInstall =
-        let
-          riverSession = ''
-            [Desktop Entry]
-            Name=River
-            Comment=Dynamic Wayland compositor
-            Exec=river
-            Type=Application
-          '';
-        in
-        ''
-          mkdir -p $out/share/wayland-sessions
-          echo "${riverSession}" > $out/share/wayland-sessions/river.desktop
-        '';
-      passthru.providedSessions = [ "river" ];
-    }))
+    # (river.overrideAttrs (prevAttrs: rec {
+    #   postInstall =
+    #     let
+    #       riverSession = ''
+    #         [Desktop Entry]
+    #         Name=River
+    #         Comment=Dynamic Wayland compositor
+    #         Exec=river
+    #         Type=Application
+    #       '';
+    #     in
+    #     ''
+    #       mkdir -p $out/share/wayland-sessions
+    #       echo "${riverSession}" > $out/share/wayland-sessions/river.desktop
+    #     '';
+    #   passthru.providedSessions = [ "river" ];
+    # }))
   ];
 
   # powerManagement = {
