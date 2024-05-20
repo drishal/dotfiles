@@ -133,30 +133,30 @@
         which-key.enable = true;
         nvim-autopairs.enable = true;
         direnv.enable = true;
-        neorg = {
-          enable = true;
-          modules = {
-            "core.defaults".__empty = null;
-            "core.concealer" = {
-              __empty = null;
-            };
-            "core.dirman".config.workspaces = {
-              vault = "~/doc/vault";
-            };
-            #"core.tempus".__empty = null; # waiting for nvim 0.10
-            "core.ui.calendar".__empty = null;
-            "core.completion".config.engine = "nvim-cmp";
-            "core.integrations.telescope" = {
-              __empty = null;
-            };
-            "core.integrations.treesitter" = {
-              __empty = null;
-            };
-            "core.integrations.image" = { __empty = null; };
-            "core.export" = { __empty = null; };
-            "core.export.markdown" = { __empty = null; };
-          };
-        };
+        # neorg = {
+        #   enable = true;
+        #   modules = {
+        #     "core.defaults".__empty = null;
+        #     "core.concealer" = {
+        #       __empty = null;
+        #     };
+        #     "core.dirman".config.workspaces = {
+        #       vault = "~/doc/vault";
+        #     };
+        #     #"core.tempus".__empty = null; # waiting for nvim 0.10
+        #     "core.ui.calendar".__empty = null;
+        #     "core.completion".config.engine = "nvim-cmp";
+        #     "core.integrations.telescope" = {
+        #       __empty = null;
+        #     };
+        #     "core.integrations.treesitter" = {
+        #       __empty = null;
+        #     };
+        #     "core.integrations.image" = { __empty = null; };
+        #     "core.export" = { __empty = null; };
+        #     "core.export.markdown" = { __empty = null; };
+        #   };
+        # };
         neo-tree.enable = true;
         fugitive.enable = true;
         lazygit.enable = true;
