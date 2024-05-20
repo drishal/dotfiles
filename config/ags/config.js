@@ -7,12 +7,7 @@ App.config({
     windows: [
         Bar(0),
         ControlCenter(),
-        // Bar(1),
         NotificationPopups(),
-
-        // you can call it, for each monitor
-        // Bar(0),
-        // Bar(1)
     ],
 })
 

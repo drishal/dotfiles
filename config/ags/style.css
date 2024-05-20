@@ -57,7 +57,7 @@ label {
 }
 
 
-.clock, .battery, .network, .volume{
+.clock, .battery, .network, .volume, .ram, .cpu{
     background: @colgrey; 
     padding: 0 10px;
     margin: 3px 3px 3px 3px;
@@ -89,6 +89,12 @@ label {
 }
 .network {
     color: @colorange;
+}
+.cpu {
+    color: @colcyan
+}
+.ram {
+    color: @colmagenta; 
 }
 /* .battery{ */
 /*     background: @colgrey;  */
