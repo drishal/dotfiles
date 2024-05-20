@@ -159,6 +159,7 @@
         };
         neo-tree.enable = true;
         fugitive.enable = true;
+        lazygit.enable = true;
         gitsigns.enable = true;
         treesitter = {
           enable = true;
