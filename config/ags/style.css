@@ -12,10 +12,10 @@ window.bar {
 }
 
 button {
-    background-color: @colbg;
+    background-color: @colgrey;
     /* padding: 3px; */
     min-width: 10px;
-    color: @colgrey;
+    color: @colbg;
 }
 
 button:active {
@@ -38,7 +38,7 @@ label {
     padding: 3px;
 }
 .ws-occupied {
-    /* background-color: @colgrey; */
+    background-color: @colbg;
     color: @colfg;
     min-width: 20px;
     padding: 3px;
@@ -65,8 +65,8 @@ label {
 }
 .tray {
     background: @colgrey; 
-    padding: 0 10px;
-    margin: 3px 3px 3px 3px;
+    /* padding: 0 10px; */
+    /* margin: 3px 3px 3px 3px; */
     background-clip: padding-box;
 }
 .trayicons {

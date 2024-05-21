@@ -37,6 +37,7 @@
     #game mode
     gamemode.enable = true;
 
+
     #neovim
     # neovim = {
     #   enable = true;
@@ -51,6 +52,23 @@
     # systemtap
     # systemtap.enable=true;
   };
+
+  #autocpufreq
+  services.auto-cpufreq =
+    {
+      enable = true;
+      settings = {
+        charger = {
+          governor = "performance";
+          turbo = "on";
+        };
+        
+        battery = {
+          governor = "schedutil";
+          turbo = "auto";
+        };
+      };
+    };
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
