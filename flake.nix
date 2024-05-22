@@ -77,6 +77,8 @@
 
     base16.url = "github:SenchoPens/base16.nix";
 
+    ngrok.url = "github:ngrok/ngrok-nix";
+
     tt-schemes = {
       url = "github:tinted-theming/schemes";
       flake = false;
@@ -108,6 +110,7 @@
       hyprland,
       nixpkgs,
       nixvim,
+      ngrok,
       nur,
       private-stuff,
       programsdb,
@@ -166,6 +169,7 @@
                 emacs-lsp-booster.overlays.default
               ];
             }
+            ngrok.nixosModules.ngrok
             ./NixOS/system-config/configuration.nix
             auto-cpufreq.nixosModules.default
             chaotic.nixosModules.default
