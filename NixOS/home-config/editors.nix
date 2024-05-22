@@ -24,10 +24,10 @@
       #     style = "night";
       #   };
       # };
-      # colorschemes.catppuccin = {
-      #   enable = true;
-      #   settings.background.dark = "mocha";
-      # };
+      colorschemes.catppuccin = {
+        enable = true;
+        settings.background.dark = "mocha";
+      };
       # colorschemes.gruvbox = {
       #   enable = true;
       # };
@@ -53,7 +53,7 @@
       #   };
       # };
       # colorscheme = "gruvbox-material";
-      colorscheme = "palenight";
+      # colorscheme = "palenight";
       opts = {
         hlsearch = false;
         number = true;

@@ -9,6 +9,12 @@
   services.flatpak.enable = true;
   services.gvfs.enable = true;
   services.zerotierone.enable = true;
+  # services.ngrok = {
+    # enable = true;
+    # extraConfigFiles = [
+    #   "${inputs.private-stuff}/ngrok.txt"
+    # ];
+  # };
   # xdg.portal.enable = true;
   programs = {
     # adb
@@ -274,6 +280,7 @@
     inputs.lobster.packages.x86_64-linux.lobster
     jq
     #python3Packages.ipython
+    # python3Packages.pyngrok
     python3Packages.python-lsp-server
     keepassxc
     killall
