@@ -20,6 +20,7 @@
     bat
     cachix
     # inputs.eww.packages.${pkgs.stdenv.hostPlatform.system}.eww
+    emacs-lsp-booster
     fd
     fzf
     ispell

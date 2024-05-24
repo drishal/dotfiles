@@ -196,7 +196,7 @@
     dust
     dwmblocks
     ed
-    emacs-lsp-booster
+    # emacs-lsp-booster
     element-desktop
     ethtool
     # etcher
@@ -281,6 +281,7 @@
     jq
     #python3Packages.ipython
     # python3Packages.pyngrok
+    # python3Packages.pygobject3
     python3Packages.python-lsp-server
     keepassxc
     killall
@@ -407,6 +408,7 @@
     python3
     # python3Packages.mysql-connector
     python3Packages.pip
+    pyright
     #python3Packages.tkinter
     #python3Packages.shodan
     #python3Packages.pyqt5
@@ -452,6 +454,7 @@
     # thorium
     # inputs.self.packages.${pkgs.system}.freedownloadmanager
     #inputs.self.packages.${pkgs.system}.thorium
+    # inputs.astal.packages.${pkgs.stdenv.hostPlatform.system}.astal
     tigervnc
     tmux
     tofi
@@ -529,6 +532,10 @@
     xorg.xmodmap
     xorg.xhost
     zathura
+    (pkgs.python3.withPackages (pypkgs: [
+      pypkgs.pygobject3
+      inputs.astal.packages.${pkgs.stdenv.hostPlatform.system}.astal
+    ]))
     # inputs.emacs-ng.packages.x86_64-linux.default
     # python39Packages.numpy python39Packages.pandas
     ((emacsPackagesFor emacs-pgtk).emacsWithPackages (

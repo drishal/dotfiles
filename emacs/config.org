@@ -394,7 +394,7 @@ remove/add tangle no to whatever font you prefer
 (setq custom-theme-directory "~/dotfiles/emacs/themes")
 #+end_src
 *** Doom themes
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp 
 (use-package doom-themes
   :demand t
   :config
@@ -446,11 +446,13 @@ remove/add tangle no to whatever font you prefer
 (use-package catppuccin-theme
   :demand t
   :init
-  (load-theme 'catppuccin :noconfirm)
-  (catppuccin-load-flavor 'mocha)
-  (add-hook 'emacs-startup-hook (lambda () (catppuccin-reload)))
-  (add-hook 'server-after-make-frame-hook #'catppuccin-reload)
-  (catppuccin-reload))
+  ;; (set catppuccin-load-flavor 'mocha)
+  (setq catppuccin-flavor 'mocha) ;; or 'latte, 'macchiato, or 'mocha
+  (load-theme 'catppuccin)
+  ;; (add-hook 'emacs-startup-hook (lambda () (catppuccin-reload)))
+  ;; (add-hook 'server-after-make-frame-hook #'catppuccin-reload)
+  ;; (catppuccin-reload)
+  )
 #+end_src
 **** Modus
 #+begin_src emacs-lisp :tangle no
