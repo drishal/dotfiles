@@ -72,6 +72,7 @@
     };
 
     ags.url = "github:Aylur/ags";
+    astal.url = "github:astal-sh/libastal";
 
     lobster.url = "github:justchokingaround/lobster";
 
@@ -96,6 +97,7 @@
     {
       # nixpkgs-master,
       ags,
+      astal,
       auto-cpufreq,
       base16,
       cachix,
@@ -143,7 +145,7 @@
         };
         modules = [
           ./NixOS/home-config/home.nix
-          { nixpkgs.overlays = [ inputs.emacs-overlay.overlay ]; }
+          { nixpkgs.overlays = [ inputs.emacs-overlay.overlay emacs-lsp-booster.overlays.default ]; }
           # inputs.ags.homeManagerModules.default
           base16.homeManagerModule
           nixvim.homeManagerModules.nixvim
@@ -166,7 +168,6 @@
                 inputs.emacs-overlay.overlay
                 inputs.discord-flake.overlay
                 inputs.neovim-nightly-overlay.overlay
-                emacs-lsp-booster.overlays.default
               ];
             }
             ngrok.nixosModules.ngrok
