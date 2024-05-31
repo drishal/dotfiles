@@ -5,7 +5,7 @@ Color\
 ILoveCandy\
 CheckSpace\
 ParallelDownloads = 20' /etc/pacman.conf
-cp mirrorlist /etc/pacman.conf 
+cp mirrorlist /etc/pacman.d/mirrorlist
 
 pacman -S base base-devel efibootmgr grub linux-zen linux-zen-headers linux-firmware vim nano networkmanager iwd intel-ucode amd-ucode --needed
 echo "enter a hostname: "
