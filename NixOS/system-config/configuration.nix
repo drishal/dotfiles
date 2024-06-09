@@ -14,6 +14,7 @@
     ./users.nix
     ./virtualization.nix
     ./searx.nix
+    ../stylix.nix
     # ./hardware-configuration.nix
     # ./tlp.nix
   ];

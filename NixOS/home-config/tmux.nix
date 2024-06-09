@@ -10,10 +10,10 @@
     mouse = true;
     terminal = "xterm";
     plugins = with pkgs; [
-      tmuxPlugins.sensible
+      #tmuxPlugins.sensible
       tmuxPlugins.vim-tmux-navigator
-      tmuxPlugins.onedark-theme
+      #tmuxPlugins.onedark-theme
     ];
-    extraConfig = '''';
+    #extraConfig = '''';
   };
 }

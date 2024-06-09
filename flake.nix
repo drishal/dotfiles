@@ -66,6 +66,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    quickemu = {
+      url = "github:quickemu-project/quickemu";
+    };
+
+
     private-stuff = {
       url = "path:/home/drishal/.private-stuff";
       flake = false;
@@ -91,6 +96,7 @@
       url = "github:AdnanHodzic/auto-cpufreq";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    stylix.url = "github:danth/stylix";
   };
 
   outputs =
@@ -116,6 +122,8 @@
       nur,
       private-stuff,
       programsdb,
+      quickemu,
+      stylix,
       tt-schemes,
       ...
     }@inputs:
@@ -135,6 +143,9 @@
       #   };
       # };
       lib = nixpkgs.lib;
+
+      # here we would define some variables for stylix so we can use it across both home manager and system-configuration
+      # wallpaper = ./wallpapers/summer_1am.jpg;
     in
     {
       homeConfigurations."drishal" = home-manager.lib.homeManagerConfiguration {
@@ -149,6 +160,7 @@
           # inputs.ags.homeManagerModules.default
           base16.homeManagerModule
           nixvim.homeManagerModules.nixvim
+          stylix.homeManagerModules.stylix
           "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
           {
             home = {
@@ -167,13 +179,14 @@
                 nur.overlay
                 inputs.emacs-overlay.overlay
                 inputs.discord-flake.overlay
-                inputs.neovim-nightly-overlay.overlay
+                # inputs.neovim-nightly-overlay.overlay
               ];
             }
             ngrok.nixosModules.ngrok
             ./NixOS/system-config/configuration.nix
             auto-cpufreq.nixosModules.default
             chaotic.nixosModules.default
+            stylix.nixosModules.stylix
           ];
         in
         {

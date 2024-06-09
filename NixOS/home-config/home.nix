@@ -21,6 +21,7 @@
     # ./colors/doompalenight.nix
     ./tmux.nix
     ./waybar.nix
+    ../stylix.nix
     # inputs.nix-colors.homeManagerModules.default
   ];
   # Let Home Manager install and manage itself.
