@@ -11,7 +11,9 @@
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
   # boot.kernelPackages = pkgs.linuxPackages_latest;
   # boot.kernelPackages = pkgs.linuxPackages_zen;
+
   boot.kernelPackages = pkgs.linuxPackages_cachyos;
+  chaotic.scx.enable = true; # by default uses rustland
   # boot.kernelPackages = pkgs.linuxPackages_testing;
 
   # kernel parameters
@@ -80,35 +82,25 @@
   #     };
   #   };
 
+  #amdgpu
   hardware.opengl = {
-    #extraPackages = with pkgs; [
-    #vaapiVdpau
-    #libva
-    #libvdpau-va-gl
-    #mesa.drivers
-    #libvpx
-    #];
+    extraPackages = with pkgs; [
+      # rocmPackages.clr.icd
+      amdvlk # AMD Vulkan driver
+      vaapiVdpau
+      libvdpau-va-gl
+      libva
+    ];
+    # For 32 bit applications
+    extraPackages32 = with pkgs.driversi686Linux; [
+      amdvlk
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
     enable = true;
     driSupport = true;
     driSupport32Bit = true;
   };
-
-  # chaotic mesa
-  # chaotic.mesa-git = {
-  #   enable = true;
-  #    extraPackages = with pkgs; [
-  #      rocm-opencl-icd
-  #      rocm-opencl-runtime
-  #      intel-media-driver 
-  #      vaapiIntel
-  #      vaapiVdpau
-  #      libvdpau-va-gl
-  #      mesa_git.opencl
-  #    ];
-  # };
-  # chaotic.gamescope = {
-  #  enable = true;
-  #};
 
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
@@ -222,12 +214,12 @@
     NIXOS_OZONE_WL = "1";
   };
 
-  # environment.sessionVariables = rec {
-  #   LIBVA_DRIVER_NAME="radeonsi";
-  #    VDPAU_DRIVER = "radeonsi";
-  #  MOZ_DISABLE_RDD_SANDBOX="1";
-  #  AMD_VULKAN_ICD = "RADV";
-  #   VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
-  #   MOZ_ENABLE_WAYLAND="1";
-  # };
+  environment.sessionVariables = {
+    LIBVA_DRIVER_NAME="radeonsi";
+    VDPAU_DRIVER = "radeonsi";
+    # MOZ_DISABLE_RDD_SANDBOX="1";
+    # AMD_VULKAN_ICD = "RADV";
+    # VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+    # MOZ_ENABLE_WAYLAND="1";
+  };
 }
