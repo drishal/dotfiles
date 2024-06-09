@@ -10,8 +10,8 @@
     ];
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usbhid" "uas" "rtsx_pci_sdmmc" "amdgpu" ];
-  boot.initrd.kernelModules = ["i8042"];
-  boot.kernelModules = [ "kvm-amd" "amdgpu" ];
+  boot.initrd.kernelModules = ["i8042" "amdgpu"];
+  boot.kernelModules = [ "kvm-amd" ];
   # boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
   fileSystems."/" =
