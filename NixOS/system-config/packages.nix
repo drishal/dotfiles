@@ -112,6 +112,7 @@
     #     "--enable-zero-copy"
     #     "--force-dark-mode"
     #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,DCompTripleBufferVideoSwapChain"
+    #     "--enable-features=Vulkan,VulkanFromANGLE,DefaultANGLEVulkan,VaapiIgnoreDriverChecks,VaapiVideoDecoder,UseMultiPlaneFormatForHardwareVideo"
     #     "--disable-features=UseChromeOSDirectVideoDecoder"
     #     "--ozone-platform-hint=auto"
     #     "--enable-accelerated-video-decode"
@@ -121,13 +122,6 @@
     #     "--enable-native-gpu-memory-buffers" 
     #     "--enable-webrtc-hw-decoding" 
     #     "--enable-webrtc-hw-encoding"
-    #   ];
-    # })
-    # (brave.override {
-    #   commandLineArgs = [
-    #     "--ignore-gpu-blocklist"
-    #     "--ozone-platform-hint=auto"
-    #     "--enable-features=VaapiVideoDecodeLinuxGL"
     #   ];
     # })
     btop
@@ -158,7 +152,7 @@
     cinnamon.nemo-with-extensions
     # clang
     clang-tools
-    # cloudflare-warp
+    cloudflare-warp
     # (cloudflare-warp.overrideAttrs(_: {buildInputs=[pkgs.dbus pkgs.stdenv.cc.cc.lib];}))
     # (cloudflare-warp.overrideAttrs (old: {
     #   src = pkgs.fetchurl {
@@ -216,6 +210,7 @@
     figlet
     # firefox-bin
     firefox
+    # inputs.quickemu.packages.${pkgs.stdenv.hostPlatform.system}.quickemu
     # firefox-wayland
     # inputs.firefox-nightly.packages.${pkgs.system}.firefox-beta-bin
     # inputs.firefox.packages.${pkgs.system}.firefox-nightly-bin
@@ -261,6 +256,7 @@
     # go
     gsmartcontrol
     gparted
+    gpt4all
     gtk-layer-shell
     gtklock
     # haruna
@@ -347,7 +343,7 @@
     ncdu
     ncurses
     neofetch
-    neovim-nightly
+    # neovim-nightly
     networkmanagerapplet
     netcat-gnu
     # nil
@@ -416,8 +412,8 @@
     #$python3Packages.qtile-extras
     qpdf
     qt5ct
-    quickemu
-    # (quickemu.override { qemu = qemu_full; })
+    # quickemu
+    (quickemu.override { qemu = qemu_full; })
     qutebrowser
     qbittorrent
     # qtile-extras_git
@@ -455,6 +451,7 @@
     # inputs.self.packages.${pkgs.system}.freedownloadmanager
     #inputs.self.packages.${pkgs.system}.thorium
     # inputs.astal.packages.${pkgs.stdenv.hostPlatform.system}.astal
+
     tigervnc
     tmux
     tofi
