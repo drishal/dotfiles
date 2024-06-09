@@ -38,7 +38,8 @@ monitor=,highrr,auto,1
 ** Monitor setup 1 
 #+begin_src conf :tangle (if (equal (system-name) "nixos") "~/.config/hypr/hyprland.conf" "no")
 monitor=HDMI-A-1,1920x1080@120, 0x0, 1
-monitor=eDP-1, 1920x1080@60, 1920x0, 1
+# monitor=eDP-1, 1920x1080@60, 1920x0, 1
+monitor=eDP-1, 1920x1080@60, 1921x0, 1
 workspace = 1, monitor:HDMI-A-1
 workspace = 2, monitor:HDMI-A-1
 workspace = 3, monitor:HDMI-A-1
@@ -125,6 +126,7 @@ misc {
     mouse_move_focuses_monitor = false
     no_direct_scanout = false
     no_vfr = true
+    no_cursor_warps = true
 }
 #+end_src
 
