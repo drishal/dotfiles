@@ -4,6 +4,7 @@
 * Table of contents :toc:
 - [[#emacs-startup][emacs startup]]
   - [[#just-make-sure-to-run-this-once][Just make sure to run this once]]
+  - [[#early-init-settings][early init settings]]
   - [[#shift-theme-variables-to-customel-make-sure-to-create-it-if-it-does-not-exist][shift theme variables to ~custom.el~, make sure to create it if it does not exist]]
   - [[#emacs-startup-performance][emacs startup performance]]
 - [[#initialize-package-sources][Initialize package sources]]
@@ -100,6 +101,12 @@
 ** Just make sure to run this once
 #+begin_src bash :tangle no
 touch ~/.emacs.d/custom.el
+#+end_src
+
+** early init settings
+#+begin_src emacs-lisp :tangle ~/.config/emacs/early-init.el
+(setq package-enable-at-startup nil)
+(setenv "LSP_USE_PLISTS" "true")
 #+end_src
 
 ** shift theme variables to ~custom.el~, make sure to create it if it does not exist
@@ -206,10 +213,6 @@ https://github.com/progfolio/elpaca
 (elpaca-wait)
 #+end_src
 
-Disable early package startup
-#+begin_src emacs-lisp :tangle ~/.config/emacs/early-init.el
-(setq package-enable-at-startup nil)
-#+end_src
 ** enable native comp for packages
 #+begin_src emacs-lisp
 (setq native-comp-deferred-compilation t)
@@ -1451,9 +1454,9 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (use-package flycheck :demand t)
 #+end_src
 *** General Setup with lsp
-    :PROPERTIES:
-    :header-args:    :tangle no
-    :END:
+    # :PROPERTIES:
+    # :header-args:    :tangle no
+    # :END:
 #+begin_src emacs-lisp
 (use-package lsp-mode :demand t
   :init
@@ -1485,9 +1488,40 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 ;;(use-package lsp-treemacs :demand t)
                                         ; (add-hook 'prog-mode-hook 'lsp)
 
-;; (setq lsp-use-plists t)
+(setq lsp-use-plists t)
 (setq lsp-idle-delay 0.001)
 (setq lsp-enable-on-type-formatting nil)
+#+end_src
+**** emacs-lsp-booster
+#+begin_src emacs-lisp
+(defun lsp-booster--advice-json-parse (old-fn &rest args)
+  "Try to parse bytecode instead of json."
+  (or
+   (when (equal (following-char) ?#)
+     (let ((bytecode (read (current-buffer))))
+       (when (byte-code-function-p bytecode)
+         (funcall bytecode))))
+   (apply old-fn args)))
+(advice-add (if (progn (require 'json)
+                       (fboundp 'json-parse-buffer))
+                'json-parse-buffer
+              'json-read)
+            :around
+            #'lsp-booster--advice-json-parse)
+
+(defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+  "Prepend emacs-lsp-booster command to lsp CMD."
+  (let ((orig-result (funcall old-fn cmd test?)))
+    (if (and (not test?)                             ;; for check lsp-server-present?
+             (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+             lsp-use-plists
+             (not (functionp 'json-rpc-connection))  ;; native json-rpc
+             (executable-find "emacs-lsp-booster"))
+        (progn
+          (message "Using emacs-lsp-booster for %s!" orig-result)
+          (cons "emacs-lsp-booster" orig-result))
+      orig-result)))
+(advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
 #+end_src
 **** Other lsp specific configurations
 ***** Lsp Java
@@ -1543,7 +1577,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 
 *** Eglot setup
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle no
 (use-package eglot
   :demand t
   :config
@@ -1579,14 +1613,14 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
               ("C-c C-c s" . lsp-rust-analyzer-status))
   :config
   ;; uncomment for less flashiness
-  (setq lsp-eldoc-hook nil)
+  ;; (setq lsp-eldoc-hook nil)
   (setq lsp-enable-symbol-highlighting nil)
   (setq lsp-signature-auto-activate nil)
   ;; comment to disable rustfmt on save
   ;; (setq rustic-format-on-save nil)
   (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook)
   ;; eglot mode
-  (setq rustic-lsp-client 'eglot)
+  ;; (setq rustic-lsp-client 'eglot)
   )
 
 (defun rk/rustic-mode-hook ()
