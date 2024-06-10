@@ -120,7 +120,7 @@
             lua-ls.enable = true;
             pyright.enable = true;
             dockerls.enable = true;
-            nil_ls.enable = true;
+            nil-ls.enable = true;
           };
         };
         lspkind.enable = true;
@@ -177,8 +177,10 @@
         #treesitter-context.enable = true;
         barbar = {
           enable = true;
-          autoHide = true;
-          clickable = true;
+          settings = {
+            clickable = true;
+            autoHide = true;
+          };
         };
         nix.enable = true;
         tmux-navigator.enable = true;
