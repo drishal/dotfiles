@@ -134,25 +134,25 @@
     enable = true;
     # theme.name = "Orchis-Dark";
     # theme.name = "Adwaita-dark";
-    theme = {
-      name = "Catppuccin-Mocha-Compact-Pink-Dark";
-      package = pkgs.catppuccin-gtk.override {
-        accents = [ "pink" ];
-        size = "compact";
-        tweaks = [ "rimless" ];
-        variant = "mocha";
-      };
+    # theme = {
+    #   name = "Catppuccin-Mocha-Compact-Pink-Dark";
+    #   package = pkgs.catppuccin-gtk.override {
+    #     accents = [ "pink" ];
+    #     size = "compact";
+    #     tweaks = [ "rimless" ];
+    #     variant = "mocha";
+    #   };
       # package = pkgs.gruvbox-gtk-theme;
       # name = "Gruvbox";
       # name = "Orchis-Dark";
       # name = "Arc-Dark";
       # package = pkgs.orchis-theme;
-    };
+    # };
     iconTheme = with pkgs; {
       name = "Papirus-Dark";
       package = papirus-icon-theme;
     };
-    font.name = "Noto Sans 10";
+    # font.name = "Noto Sans 10";
     cursorTheme.name = "breeze_cursors";
     gtk2.extraConfig = ''
       gtk-button-images=1
