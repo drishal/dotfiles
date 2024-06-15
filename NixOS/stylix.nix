@@ -8,6 +8,7 @@
 }:
 {
   stylix = {
+    enable = true;
     base16Scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
     cursor = {
       name = "breeze_cursors";
