@@ -1,5 +1,6 @@
 import { NotificationPopups } from "./notificationPopups.js"
-import ControlCenter from './ControlCenter/ControlCenter.js';
+// import from './';
+import { ControlPanel } from './ControlPanel.js';
 import { Bar } from "./bar.js"
 
 App.config({
@@ -7,7 +8,7 @@ App.config({
     windows: [
         Bar(0),
         Bar(1),
-        ControlCenter(),
+		ControlPanel,
         NotificationPopups(),
     ],
 })

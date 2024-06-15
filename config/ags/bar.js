@@ -6,7 +6,8 @@ const network = await Service.import('network')
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 // import controlCenterButton from controlCenterButton;
-import controlCenterButton from './controlCenterButton.js'
+// import controlCenterButton from './controlCenterButton.js'
+import { ControlPanelToggleButton } from './ControlPanel.js';
 
 
 
@@ -76,19 +77,6 @@ function Cpu(){
 		label: cpu.bind(),
 	})
 }
-
-// const speakerSlider = VolumeSlider('speaker')
-// const volslider = () => {
-//     const slider = Widget.Slider({
-//         hexpand: true,
-//         draw_value: false,
-//         css: "min-width: 150px",
-//         on_change: ({ value }) => audio.speaker.volume = value,
-//         setup: self => self.hook(audio.speaker, () => {
-//             self.value = audio.speaker.volume || 0
-//         }),
-//     })
-// }
 
 function BatteryLabel() {
 	const value = battery.bind("percent").as(p => p > 0 ? p / 100 : 0)
@@ -182,8 +170,9 @@ function Center() {
 	})
 }
 
-function Right() {
-	return Widget.Box({
+// function Right() {
+const Right = (monitor) => Widget.Box({
+	// return Widget.Box({
 		hpack: "end",
 		spacing: 8,
 		children: [
@@ -191,10 +180,11 @@ function Right() {
 			Cpu(),
 			BatteryLabel(),
 			SysTray(),
-			controlCenterButton(),
+			// controlCenterButton(),
+			ControlPanelToggleButton(monitor)
 		],
 	})
-}
+// }
 
 export function Bar(monitor = 0) {
 	return Widget.Window({

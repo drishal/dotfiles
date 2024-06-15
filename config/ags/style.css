@@ -103,40 +103,51 @@ label {
 /*     background-clip: padding-box; */
 /*     color: @colviolet; */
 /* } */
-levelbar block,
-highlight {
-    min-height: 10px;
-}
+/* levelbar block, */
+/* highlight { */
+/*     min-height: 10px; */
+/* } */
 
 window.notification-popups box.notifications {
     padding: .5em;
 }
 
-.controlcenter {
-    color: @colfg;
+/* // Control Panel */
+.control-panel-button{
+    background-color: @colbg2;
+    border-radius: 1rem;
+    margin: 0.2rem;
+}
+
+.control-panel-sub-button{
+    margin: 0.2rem;
+}
+
+
+.control-panel-button:hover{
+    background-color: @colgrey;
+}
+
+.control-panel-sub-button:hover{
+    background-color: @colgrey;
+}
+
+
+ /* This is used to provide padding for content within a control panel button */
+.control-panel-button-content{
+    padding: 0.4rem;
+}
+
+.control-panel-audio-box {
+    border-radius: 1rem;
+    padding: 0.4rem;
+    margin: 0.2rem;
+    background-color: @colbg2;
+}
+
+.control-panel-widget-large{
+    padding: 0.4rem;
     background-color: @colbg;
-    border-radius: 12px;
-    font-weight: bolder;
-}
-
-.controlcenter button{
-    padding: 6px 6px;
-    margin: 5px 5px;
-    border-radius: 6px;
-    background-color: @colgrey;
-    color: @colfg;
-    font-size: 16pt;
-}
-
-.controlcenter label{
-    padding: 6px 6px;
-    margin: 5px 5px;
-    border-radius: 6px;
-    background-color: @colgrey;
-    color: @colfg;
-    font-size: 12pt;
-}
-.controlCenterButton {
-    background-color: @colgrey;
-    color: @colfg;
+    border-radius: 1rem;
+    margin: 0.2rem;
 }
