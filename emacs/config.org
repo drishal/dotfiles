@@ -1565,6 +1565,11 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
                          (require 'lsp-pyright)
                          (lsp))))  ; or lsp-deferred
 #+end_src
+***** typescript
+#+begin_src emacs-lisp
+(use-package typescript-mode
+  :demand t)
+#+end_src
 ***** Dap mode
 #+begin_src emacs-lisp
 (use-package dap-mode
