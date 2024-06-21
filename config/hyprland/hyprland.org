@@ -6,6 +6,7 @@
   - [[#base-laptop-monitor-setup][Base Laptop Monitor setup]]
   - [[#monitor-setup-1][Monitor setup 1]]
   - [[#monitor-setup-2][Monitor Setup 2]]
+  - [[#mirroring-setup][mirroring setup]]
 - [[#autostart-programs][Autostart programs]]
 - [[#input-settings][Input settings]]
   - [[#general-settings][General settings]]
@@ -38,8 +39,7 @@ monitor=,highrr,auto,1
 ** Monitor setup 1 
 #+begin_src conf :tangle (if (equal (system-name) "nixos") "~/.config/hypr/hyprland.conf" "no")
 monitor=HDMI-A-1,1920x1080@120, 0x0, 1
-# monitor=eDP-1, 1920x1080@60, 1920x0, 1
-monitor=eDP-1, 1920x1080@60, 1921x0, 1
+monitor=eDP-1, 1920x1080@60, 1920x0, 1
 workspace = 1, monitor:HDMI-A-1
 workspace = 2, monitor:HDMI-A-1
 workspace = 3, monitor:HDMI-A-1
@@ -65,6 +65,11 @@ workspace = 7, monitor:DP-2
 workspace = 8, monitor:DP-2
 workspace = 9, monitor:DP-2
 workspace = 10, monitor:DP-2
+#+end_src
+** mirroring setup
+#+begin_src  conf :tangle no
+# monitor=eDP-1,1920x1080@60,0x0,1,mirror,HDMI-A-1
+monitor=,preferred,auto,1,mirror,HDMI-A-1
 #+end_src
 * Autostart programs 
  Execute apps at launch
@@ -202,8 +207,9 @@ dwindle {
 See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
 #+begin_src conf
 master {
-    new_is_master = true
+    # new_is_master = true
     mfact=0.5
+    new_status=master
 }
 #+end_src
 * Gestures
@@ -220,6 +226,7 @@ See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
 # windowrule = rounding 0, ^(firefox)$
 windowrule = rounding 0, ^(waybar)$
 windowrulev2 = rounding 0, class:^[fF]irefox
+windowrulev2 = float, class:Waydroid
 # windowrulev2 = immediate, class:^(xonotic-sdl)$
 # windowrule=float,^(zoom)$
 # Example windowrule v2
@@ -245,8 +252,8 @@ bind = $mainMod SHIFT, F, exec, firefox
 # bind = $mainMod SHIFT, F, exec, ${pkgs.firefox-bin}/bin/firefox,
 bind = $mainMod SHIFT, L, exec, swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 7x5 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000  --fade-in 0.2
 bind = $mainMod, E, exec, nemo
-# bind = $mainMod, x, exec, ags --quit; ags
-bind = $mainMod, x, exec, pkill waybar; waybar
+bind = $mainMod, x, exec, ags --quit; ags
+# bind = $mainMod, x, exec, pkill waybar; waybar
 bind = $mainMod, A, exec, emacsclient -c
 bind = $mainMod, SPACE, togglefloating, 
 bind = $mainMod, R, exec, wofi --show drun
