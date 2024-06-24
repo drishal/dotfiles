@@ -161,56 +161,56 @@ touch ~/.emacs.d/custom.el
 https://github.com/progfolio/elpaca
 
 #+begin_src emacs-lisp
-(defvar elpaca-installer-version 0.7)
-(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
-(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
-(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
-(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-                              :ref nil
-                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
-                              :build (:not elpaca--activate-package)))
-(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
-       (build (expand-file-name "elpaca/" elpaca-builds-directory))
-       (order (cdr elpaca-order))
-       (default-directory repo))
-  (add-to-list 'load-path (if (file-exists-p build) build repo))
-  (unless (file-exists-p repo)
-    (make-directory repo t)
-    (when (< emacs-major-version 28) (require 'subr-x))
-    (condition-case-unless-debug err
-        (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
-                 ((zerop (call-process "git" nil buffer t "clone"
-                                       (plist-get order :repo) repo)))
-                 ((zerop (call-process "git" nil buffer t "checkout"
-                                       (or (plist-get order :ref) "--"))))
-                 (emacs (concat invocation-directory invocation-name))
-                 ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
-                                       "--eval" "(byte-recompile-directory \".\" 0 'force)")))
-                 ((require 'elpaca))
-                 ((elpaca-generate-autoloads "elpaca" repo)))
-            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
-          (error "%s" (with-current-buffer buffer (buffer-string))))
-      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
-  (unless (require 'elpaca-autoloads nil t)
-    (require 'elpaca)
-    (elpaca-generate-autoloads "elpaca" repo)
-    (load "./elpaca-autoloads")))
-(add-hook 'after-init-hook #'elpaca-process-queues)
-(elpaca `(,@elpaca-order))
+  (defvar elpaca-installer-version 0.7)
+  (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+  (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+  (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+  (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                                :ref nil
+                                :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+                                :build (:not elpaca--activate-package)))
+  (let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+         (build (expand-file-name "elpaca/" elpaca-builds-directory))
+         (order (cdr elpaca-order))
+         (default-directory repo))
+    (add-to-list 'load-path (if (file-exists-p build) build repo))
+    (unless (file-exists-p repo)
+      (make-directory repo t)
+      (when (< emacs-major-version 28) (require 'subr-x))
+      (condition-case-unless-debug err
+          (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                   ((zerop (call-process "git" nil buffer t "clone"
+                                         (plist-get order :repo) repo)))
+                   ((zerop (call-process "git" nil buffer t "checkout"
+                                         (or (plist-get order :ref) "--"))))
+                   (emacs (concat invocation-directory invocation-name))
+                   ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                         "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                   ((require 'elpaca))
+                   ((elpaca-generate-autoloads "elpaca" repo)))
+              (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+            (error "%s" (with-current-buffer buffer (buffer-string))))
+        ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+    (unless (require 'elpaca-autoloads nil t)
+      (require 'elpaca)
+      (elpaca-generate-autoloads "elpaca" repo)
+      (load "./elpaca-autoloads")))
+  (add-hook 'after-init-hook #'elpaca-process-queues)
+  (elpaca `(,@elpaca-order))
 
 
-(setq package-enable-at-startup nil)
-;; Install use-package support
-(elpaca elpaca-use-package
-  ;; Enable :elpaca use-package keyword.
-  (elpaca-use-package-mode)
-  ;; Assume :elpaca t unless otherwise specified.
-  (setq elpaca-use-package-by-default t))
+  ;; (setq package-enable-at-startup nil)
+  ;; Install use-package support
+  (elpaca elpaca-use-package
+    ;; Enable :elpaca use-package keyword.
+    (elpaca-use-package-mode)
+    ;; Assume :elpaca t unless otherwise specified.
+    (setq elpaca-use-package-by-default t))
 
 
-(use-package org :demand t)
-;; Block until current queue processed.
-(elpaca-wait)
+  ;; (use-package org :demand t)
+  ;; Block until current queue processed.
+  (elpaca-wait)
 #+end_src
 
 ** enable native comp for packages
@@ -1193,6 +1193,7 @@ https://github.com/karthink/popper
         ("https://www.phoronix.com/rss.php" Phoronix)
         ("https://suckless.org/atom.xml" suckless)
         ("https://micronews.debian.org/feeds/feed.rss" Debian)
+        ("https://github.com/jc141x/releases-feed/releases/latest/download/releases.rss" Games)
         )
       )
 #+end_src
@@ -1454,9 +1455,9 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (use-package flycheck :demand t)
 #+end_src
 *** General Setup with lsp
-    # :PROPERTIES:
-    # :header-args:    :tangle no
-    # :END:
+    :PROPERTIES:
+    :header-args:    :tangle no
+    :END:
 #+begin_src emacs-lisp
 (use-package lsp-mode :demand t
   :init
@@ -1478,6 +1479,8 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
          (zig-mode . lsp)
          (sh-mode . lsp)
          (lua-mode . lsp)
+         (nix-mode . lsp)
+         (conf-toml-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
 
@@ -1582,7 +1585,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 
 *** Eglot setup
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
 (use-package eglot
   :demand t
   :config
@@ -1623,9 +1626,9 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   (setq lsp-signature-auto-activate nil)
   ;; comment to disable rustfmt on save
   ;; (setq rustic-format-on-save nil)
-  (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook)
+  ;; (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook)
   ;; eglot mode
-  ;; (setq rustic-lsp-client 'eglot)
+  (setq rustic-lsp-client 'eglot)
   )
 
 (defun rk/rustic-mode-hook ()
