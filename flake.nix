@@ -187,6 +187,7 @@
             auto-cpufreq.nixosModules.default
             chaotic.nixosModules.default
             stylix.nixosModules.stylix
+            base16.nixosModule
           ];
         in
         {
