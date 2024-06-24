@@ -1455,14 +1455,19 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (use-package flycheck :demand t)
 #+end_src
 *** General Setup with lsp
-    :PROPERTIES:
-    :header-args:    :tangle no
-    :END:
+    # :PROPERTIES:
+    # :header-args:    :tangle no
+    # :END:
 #+begin_src emacs-lisp
 (use-package lsp-mode :demand t
   :init
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
   (setq lsp-keymap-prefix "C-c l")
+  (setq lsp-inlay-hint-enable t)
+  (setq lsp-rust-analyzer-binding-mode-hints t)
+  (setq lsp-rust-analyzer-closing-brace-hints t)
+  (setq lsp-rust-analyzer-closure-capture-hints t)
+  (setq lsp-rust-analyzer-display-parameter-hints t)
   :config
   (add-hook 'typescript-mode-hook 'lsp)
   (add-hook 'js-mode-hook 'lsp)
@@ -1481,7 +1486,9 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
          (lua-mode . lsp)
          (nix-mode . lsp)
          (conf-toml-mode . lsp)
-         (lsp-mode . lsp-enable-which-key-integration))
+         (lsp-mode . lsp-enable-which-key-integration)
+         ;; (lsp-mode . lsp-inlay-hints-mode)
+         )
   :commands lsp)
 
 ;; optionally
@@ -1585,7 +1592,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 
 *** Eglot setup
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package eglot
   :demand t
   :config
@@ -1628,7 +1635,8 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   ;; (setq rustic-format-on-save nil)
   ;; (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook)
   ;; eglot mode
-  (setq rustic-lsp-client 'eglot)
+  ;; (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+  ;; (setq rustic-lsp-client 'eglot)
   )
 
 (defun rk/rustic-mode-hook ()
