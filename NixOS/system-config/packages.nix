@@ -8,7 +8,12 @@
 {
   services.flatpak.enable = true;
   services.gvfs.enable = true;
-  services.zerotierone.enable = true;
+  services.zerotierone = {
+    enable = true;
+    localConf.settings = { 
+      softwareUpdate = "disable";
+    };
+  };
   # services.ngrok = {
     # enable = true;
     # extraConfigFiles = [
@@ -105,25 +110,13 @@
     bison
     bookworm
     # brave
-    # (brave.override {
-    #   commandLineArgs = [
-    #     "--ignore-gpu-blocklist"
-    #     "--enable-gpu-rasterization"
-    #     "--enable-zero-copy"
-    #     "--force-dark-mode"
-    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,DCompTripleBufferVideoSwapChain"
-    #     "--enable-features=Vulkan,VulkanFromANGLE,DefaultANGLEVulkan,VaapiIgnoreDriverChecks,VaapiVideoDecoder,UseMultiPlaneFormatForHardwareVideo"
-    #     "--disable-features=UseChromeOSDirectVideoDecoder"
-    #     "--ozone-platform-hint=auto"
-    #     "--enable-accelerated-video-decode"
-    #     "--enable-accelerated-video-encode"
-    #     "--enable-hardware-overlays"
-    #     "--disable-gpu-driver-bug-workarounds" 
-    #     "--enable-native-gpu-memory-buffers" 
-    #     "--enable-webrtc-hw-decoding" 
-    #     "--enable-webrtc-hw-encoding"
-    #   ];
-    # })
+    (brave.override {
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "-enable-unsafe-webgpu"
+        "--enable-features=VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+      ];
+    })
     btop
     bun
     brightnessctl
@@ -220,6 +213,7 @@
     file
     # fish
     flameshot
+    fluent-reader
     foremost
     flex
     gcc
@@ -469,13 +463,13 @@
     # virt-manager
     virtualenv
     virtiofsd
-    # (vivaldi.override {
-    #   commandLineArgs = [
-    #     "--ignore-gpu-blocklist"
-    #     "--ozone-platform-hint=auto"
-    #     "--enable-features=VaapiVideoDecodeLinuxGL"
-    #   ];
-    # })
+    (vivaldi.override {
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--ozone-platform-hint=auto"
+        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,VaapiVideoDecodeLinuxGL"
+      ];
+    })
     # vivaldi-ffmpeg-codecs
     ventoy-full
     vscode-fhs

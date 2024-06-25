@@ -35,6 +35,7 @@
     # nixpkgs-fmt
     nixfmt-rfc-style
     nil
+    taplo
     papirus-icon-theme
     gnome.gnome-themes-extra
     #nodePackages.create-react-app
@@ -68,7 +69,7 @@
     enable = true;
 
     # null or path, leave as null if you don't want hm to manage the config
-    configDir = ../../config/ags;
+    configDir = null;
 
     # additional packages to add to gjs's runtime
     extraPackages = with pkgs; [
@@ -77,9 +78,15 @@
       accountsservice
     ];
   };
+  # xdg.configFile."ags/color.css".text = with config.scheme; ''
+  # xdg.configFile."ags".recursive = true;
+  # xdg.configFile."ags".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/ags/";
+  home.file."${config.home.homeDirectory}/.config/ags/" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/ags/";
+    recursive = true;
+  };
 
-  xdg.configFile."ags".recursive = true;
-  xdg.configFile."ags/color.css".text = with config.scheme; ''
+  home.file."${config.home.homeDirectory}/.config/css/ags-color.css".text = with config.scheme;  ''
       @define-color colbg        #${base00}; 
       @define-color colbg2       #${base02};
       @define-color colfg        #${base05};
@@ -193,6 +200,11 @@
       # gtk-theme-name="Orchis-Dark";
       # gtk-xft-dpi=98304;
     };
+  };
+
+  # zellij
+  programs.zellij = {
+    enable = true;
   };
   # home.pointerCursor = {
   #   name = "breeze_cursors";

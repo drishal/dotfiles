@@ -2,19 +2,19 @@
   config,
   inputs,
   pkgs,
-  nix-colors,
-  wallpaper,
   ...
 }:
 {
+  scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
   stylix = {
     enable = true;
-    base16Scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
+    # base16Scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
+    base16Scheme = "${config.scheme}";
     cursor = {
       name = "breeze_cursors";
       size = 24;
     };
-    image = ../wallpapers/summer_1am.jpg;
+    image = ../wallpapers/darkest_hour.jpg;
     fonts = {
       serif = {
         package = pkgs.noto-fonts;

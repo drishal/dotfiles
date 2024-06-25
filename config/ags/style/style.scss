@@ -1,5 +1,5 @@
-@import "color.css";
-@import "notificationPopups.css";
+@import "../../css/ags-color.css";
+@import "notificationPopups.scss";
 * {
     font-family: "FantasqueSansM Nerd Font","Roboto", "Helvetica", "Arial", "sans-serif";
     font-size: 13px;
@@ -15,7 +15,7 @@ button {
     background-color: @colgrey;
     /* padding: 3px; */
     min-width: 10px;
-    color: @colbg;
+    color: @colfg;
 }
 
 button:active {
@@ -42,7 +42,6 @@ label {
     color: @colfg;
     min-width: 20px;
     padding: 3px;
-
 }
 
 .ws-active {
@@ -65,8 +64,6 @@ label {
 }
 .tray {
     background: @colgrey; 
-    /* padding: 0 10px; */
-    /* margin: 3px 3px 3px 3px; */
     background-clip: padding-box;
 }
 .trayicons {
@@ -79,14 +76,7 @@ label {
 .battery {
     color: @colgreen;
 }
-.volume {
-    color: @colmagenta;
-    /* font-size: 8px; */
-    min-width: 180px;
-    /* border-radius: 10px; */
-    margin: -5px -5px -5px -5px;
-    /* margin: 0px 0px 0px 0px; */
-}
+
 .network {
     color: @colorange;
 }
@@ -114,8 +104,9 @@ window.notification-popups box.notifications {
 
 /* // Control Panel */
 .control-panel-button{
-    background-color: @colbg2;
-    border-radius: 1rem;
+    background-color: @colgrey;
+    /* border-radius: 1rem; */
+    background-color: @colgrey;
     margin: 0.2rem;
 }
 
@@ -124,9 +115,9 @@ window.notification-popups box.notifications {
 }
 
 
-.control-panel-button:hover{
-    background-color: @colgrey;
-}
+/* .control-panel-button:hover{ */
+/*     background-color: @colgrey; */
+/* } */
 
 .control-panel-sub-button:hover{
     background-color: @colgrey;
@@ -147,7 +138,81 @@ window.notification-popups box.notifications {
 
 .control-panel-widget-large{
     padding: 0.4rem;
-    background-color: @colbg;
+    background-color: transparent;
     border-radius: 1rem;
     margin: 0.2rem;
+}
+
+.system-stats-circular-progress{
+    background-color: @colgrey;
+    color: @colgreen;
+    font-size: 4px;
+    min-height: 22px;
+}
+
+/* Buttons */
+
+/* // Normal Button */
+.normal-button {
+    background-color: transparent;
+    padding: 0.28rem;  /* Currently determines bar height */
+}
+
+/* .normal-button:active { */
+/* } */
+
+.normal-button > * {
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.8rem;
+}
+
+.normal-button:hover > * {
+    background-color: @colgrey;
+}
+
+/*  Power Button */
+
+.power-button > * {
+    padding: 0.4rem;
+    border-radius: 1rem;
+}
+
+.power-button:hover > * {
+    background-color: @colgrey;
+}
+
+/* The background */
+.sliders trough{
+  background-color: @colgrey;
+  border-radius: 20px;
+  /* Accounts for the extension of the highlight */
+  padding: 4px 20px; 
+}
+
+.sliders trough:hover > slider{
+  background-color: @colgrey;
+}
+
+/* The highligh */
+.sliders highlight{
+  border-radius: 20px;
+  background-color: @colviolet;
+  /* Forces highlight to extend to match the slider positon  on the ends */
+  margin: 0 -14px; 
+}
+
+/* The dot */
+.sliders slider{
+  min-height: 28px;
+  min-width: 28px;
+  border-radius: 20px;
+  background-color: @colbg2;
+  border-style: solid;
+  border-width: 0px;
+  border-color: @colviolet;
+  box-shadow: 0px 0px 4px @colbg;
+}
+
+.sliders slider:hover{
+    background-color: @colgrey;
 }

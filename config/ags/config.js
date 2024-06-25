@@ -1,16 +1,16 @@
-import { NotificationPopups } from "./notificationPopups.js"
+import { NotificationPopups } from "./windows/notificationPopups.js"
 // import from './';
-import { ControlPanel } from './ControlPanel.js';
-import { Bar } from "./bar.js"
+import { ControlPanel } from './windows/ControlPanel.js';
+import { Bar } from "./windows/bar.js"
 
 App.config({
-    style: "./style.css",
-    windows: [
-        Bar(0),
-        Bar(1),
+	style: "./style/style.scss",
+	windows: [
+		Bar(0),
+		Bar(1),
 		ControlPanel,
-        NotificationPopups(),
-    ],
+		NotificationPopups(),
+	],
 })
 
 export { }

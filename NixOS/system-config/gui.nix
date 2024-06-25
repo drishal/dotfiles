@@ -44,7 +44,7 @@
     windowManager = {
       qtile = {
         enable = true;
-        backend = "wayland";
+        # backend = "wayland";
         package = pkgs.qtile-module_git;
         extraPackages = _: [ pkgs.qtile-extras_git ];
       };
@@ -180,7 +180,7 @@
     #   })
     # )
   ];
-  chaotic.qtile.enable = true;
+  # chaotic.qtile.enable = true;
   services.gnome.tracker.enable = false;
   services.gnome.gnome-keyring.enable = true;
   environment.gnome.excludePackages = [

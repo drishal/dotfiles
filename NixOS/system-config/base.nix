@@ -13,7 +13,10 @@
   # boot.kernelPackages = pkgs.linuxPackages_zen;
 
   boot.kernelPackages = pkgs.linuxPackages_cachyos;
-  chaotic.scx.enable = true; # by default uses rustland
+  chaotic.scx = {
+    enable = true;
+  }; # by default uses rustland
+  systemd.services.scx.serviceConfig.Restart = lib.mkForce "always";
   # boot.kernelPackages = pkgs.linuxPackages_testing;
 
   # kernel parameters
@@ -98,7 +101,7 @@
       libvdpau-va-gl
     ];
     enable = true;
-    driSupport = true;
+    # driSupport = true;
     driSupport32Bit = true;
   };
 
@@ -153,7 +156,17 @@
   # services.xserver.xkbOptions = "eurosign:e";
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  services.printing =
+    {
+      enable = true;
+      drivers = with pkgs; [foomatic-db-ppds-withNonfreeDb];
+    };
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+    openFirewall = true;
+  };
+
 
   # services.logind.lidSwitch = "suspend"; 
   # Enable sound.
@@ -194,7 +207,16 @@
     interval = "weekly";
   };
   services.pipewire = {
-    wireplumber.enable = true;
+    wireplumber = {
+      enable = true;
+      extraConfig = {
+        actions = {
+          update-props = {
+            "bluez5.autoswitch-profile" = true;
+          };
+        };
+      };
+    };
     # media-session.enable = false;
     enable = true;
     alsa.enable = true;

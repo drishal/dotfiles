@@ -48,7 +48,7 @@
     # sessionVariables.LOCALES_ARCHIVE = "/usr/lib/locale/locale-archive";
   };
   programs.man.generateCaches = true;
-  scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
+  # scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
   # scheme = ./colors/doompalenight.yaml;
   # home.stateVersion = "21.05";
 }

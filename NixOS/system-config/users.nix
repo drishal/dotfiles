@@ -7,7 +7,7 @@
 }:
 {
   programs.bash = {
-    enableCompletion = true;
+    completion.enable = true;
     blesh.enable = true;
   };
   programs.fish.enable = true;
