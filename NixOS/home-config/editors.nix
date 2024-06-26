@@ -24,6 +24,12 @@
       #     style = "night";
       #   };
       # };
+      # colorschemes.gruvbox = {
+      #   enable = true ;
+      #   settings = {
+      #     contrast = "hard"; 
+      #   };
+      # };
       colorschemes.catppuccin = {
         enable = true;
         settings.background.dark = "mocha";
@@ -73,7 +79,7 @@
       globals = {
         mapleader = " ";
         # gruvbox_material_better_performance = 1;
-        # gruvbox_material_background = "hard";
+        gruvbox_material_background = "hard";
       };
       extraPackages = with pkgs; [ vimPlugins.nvim-web-devicons luajitPackages.lua-utils-nvim ];
       extraPlugins = with pkgs.vimPlugins; [
@@ -82,8 +88,8 @@
           src = pkgs.fetchFromGitHub {
             repo = "gruvbox-material";
             owner = "sainnhe";
-            rev = "80331fbbec9ba18590a17bc6b7d277d96c05c2b6";
-            sha256 = "sha256-a6rbmGB5WlGG2deEwo5e/anR1S35gfmAYc+sNxnHp5I=";
+            rev = "607fac66a5a4418dd9fe1c8fe7d1368099f5bf96";
+            sha256 = "sha256-fZInzV3cTAu94/j7hkeWxQhJbtFeuvAjeWrSG0UVv1A=";
           };
         }))
         (pkgs.vimUtils.buildVimPlugin{
