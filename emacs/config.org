@@ -238,6 +238,21 @@ https://github.com/progfolio/elpaca
 (add-to-list 'exec-path "~/.cargo/bin")
 (setenv "PATH" (concat (getenv "PATH")":~/.cargo/bin"))
 #+end_src
+
+*** emacs-direnv
+setup direnv as early as possible
+#+begin_src emacs-lisp :tangle no
+(use-package direnv
+ :config
+ (direnv-mode))
+#+end_src
+
+*** envrc.el
+#+begin_src emacs-lisp 
+(use-package envrc
+  :demand t
+  :hook (after-init . envrc-global-mode))
+#+end_src
 * Customizing the Editor and Appearence
 ** Fonts
 remove/add tangle no to whatever font you prefer
@@ -397,7 +412,7 @@ remove/add tangle no to whatever font you prefer
 (setq custom-theme-directory "~/dotfiles/emacs/themes")
 #+end_src
 *** Doom themes
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package doom-themes
   :demand t
   :config
@@ -425,7 +440,15 @@ remove/add tangle no to whatever font you prefer
    ;; doom-neotree-enable-variable-pitch nil
   ))
 
- ;; (setq doom-gruvbox-material-background  "hard")  ; or hard (defaults to soft)
+ (setq doom-gruvbox-material-background  "hard")  ; or hard (defaults to soft)
+ (setq doom-gruvbox-dark-variant  "hard")  ; or hard (defaults to soft)
+#+end_src
+*** base-16
+#+begin_src emacs-lisp :tangle no
+(use-package base16-theme
+  :demand t
+  :config
+  (load-theme 'base16-tokyo-night-storm t))
 #+end_src
 *** rose-pine
 #+begin_src emacs-lisp :tangle no
@@ -462,16 +485,16 @@ remove/add tangle no to whatever font you prefer
 (load-theme 'modus-vivendi-tinted t)
 #+end_src
 **** ef theme
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp 
 (use-package ef-themes :demand t
-  :init
-  (load-theme 'ef-winter)
+  ;; :init
+  ;; (load-theme 'ef-winter)
   )
 #+end_src
 **** tokyo-night
 #+begin_src emacs-lisp :tangle no
-;; (use-package tokyonight-themes
-;;   :ensure (:host github :repo "xuchengpeng/tokyonight-themes"))
+(use-package tokyonight-themes
+  :ensure (:host github :repo "xuchengpeng/tokyonight-themes"))
 ;; (load-theme tokyonight-night)
 ;; (use-package tokyonight-themes
 ;;   :ensure (:repo "/home/drishal/dotfiles/emacs/themes/tokyonight-themes")
@@ -1433,20 +1456,6 @@ https://github.com/minad/marginalia
   (marginalia-mode))
 #+end_src
 
-*** emacs-direnv
-#+begin_src emacs-lisp :tangle no
-(use-package direnv :demand t
-  :config
-  (direnv-mode))
-(setq direnv-always-show-summary nil)
-#+end_src
-
-*** envrc.el
-#+begin_src emacs-lisp
-(use-package envrc
-  :demand t
-  :hook (after-init . envrc-global-mode))
-#+end_src
 ** languages and lsp-mode
 https://emacs-lsp.github.io/lsp-mode/
 and also https://emacs-lsp.github.io/lsp-mode/page/languages/
@@ -1472,7 +1481,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   (add-hook 'typescript-mode-hook 'lsp)
   (add-hook 'js-mode-hook 'lsp)
   :hook (
-         (rust-mode  . lsp)
+         ;; (rust-mode  . lsp)
          (html-mode  . lsp)
          (web-mode  . lsp)
          (sgml-mode  . lsp)
