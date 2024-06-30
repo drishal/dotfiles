@@ -420,8 +420,12 @@ remove/add tangle no to whatever font you prefer
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
   (load-theme 'doom-catppuccin t)
-  (setq doom-catppuccin-dark-variant "mocha")
-
+  ;; (setq doom-catppuccin-dark-variant "mocha")
+  ;; (custom-set-faces
+   ;; `(mode-line ((t (:background ,(doom-color 'dark-violet)))))
+   ;; `(org-block ((t (:background ,(doom-color 'base2)))))
+   ;; `(org-block-background ((t (:background ,(doom-color 'base3)))))
+   ;; )
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
   ;; Enable custom neotree theme (all-the-icons must be installed!)
@@ -435,13 +439,15 @@ remove/add tangle no to whatever font you prefer
 
   ;; neotree settings
   (setq doom-neotree-project-size 1
-   doom-themes-neotree-file-icons t 
-   doom-themes-neotree-line-spacing 1
-   ;; doom-neotree-enable-variable-pitch nil
-  ))
+        doom-themes-neotree-file-icons t 
+        doom-themes-neotree-line-spacing 1
+        ;; doom-neotree-enable-variable-pitch nil
+        ))
 
- (setq doom-gruvbox-material-background  "hard")  ; or hard (defaults to soft)
- (setq doom-gruvbox-dark-variant  "hard")  ; or hard (defaults to soft)
+(setq doom-gruvbox-material-background  "hard")  ; or hard (defaults to soft)
+(setq doom-gruvbox-dark-variant  "hard")  ; or hard (defaults to soft)
+;; Must be used *after* the theme is loaded
+
 #+end_src
 *** base-16
 #+begin_src emacs-lisp :tangle no
@@ -458,12 +464,20 @@ remove/add tangle no to whatever font you prefer
   (load-theme 'rose-pine)
   )
 #+end_src
+*** everforest
+#+begin_src emacs-lisp
+;; (use-package doom-everforest-theme :ensure (:host github :repo "Cardoso1994/doom-everforest-theme")
+;;   ;; :init
+;;   ;; (load-theme 'rose-pine)
+;;   )
+(setq doom-everforest-background  "hard")
+#+end_src
 *** emacs-gruvbox
 #+begin_src emacs-lisp :tangle no
 (use-package gruvbox-theme
   :demand t
-  :init
-  (load-theme 'gruvbox-dark-medium)
+  :config
+  (load-theme 'gruvbox-dark-hard)
   )
 #+end_src
 *** Other themes:
@@ -1250,7 +1264,7 @@ https://github.com/karthink/popper
   )
 #+end_src
 ** treesitter
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package tree-sitter :demand t)
 (use-package tree-sitter-langs :demand t
   :init
@@ -1759,6 +1773,9 @@ https://github.com/pwalsh/pipenv.el
 ;;                   :server-id 'nix))
 
 (use-package nixpkgs-fmt :demand t)
+;; (use-package nix-ts-mode
+;;   :demand t
+;;   :mode "\\.nix\\'")
 ;; (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
 ;; (lsp-register-client
 ;;  (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
