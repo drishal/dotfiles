@@ -90,15 +90,17 @@
     extraPackages = with pkgs; [
       # rocmPackages.clr.icd
       amdvlk # AMD Vulkan driver
-      vaapiVdpau
+      # vaapiVdpau
       libvdpau-va-gl
       libva
+      libva-vdpau-driver
     ];
     # For 32 bit applications
     extraPackages32 = with pkgs.driversi686Linux; [
       amdvlk
-      vaapiVdpau
+      # vaapiVdpau
       libvdpau-va-gl
+      libva-vdpau-driver
     ];
     enable = true;
     # driSupport = true;
