@@ -169,14 +169,9 @@
         gitsigns.enable = true;
         treesitter = {
           enable = true;
-          ensureInstalled = "all";
+          settings.ensureInstalled = "all";
           incrementalSelection = {
             enable = true;
-            keymaps = {
-              initSelection = "+";
-              nodeIncremental = "+";
-              nodeDecremental = "-";
-            };
           };
           nixvimInjections = true;
         };
