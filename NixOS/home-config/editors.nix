@@ -84,14 +84,15 @@
       extraPackages = with pkgs; [ vimPlugins.nvim-web-devicons luajitPackages.lua-utils-nvim ];
       extraPlugins = with pkgs.vimPlugins; [
         orgmode
-        (gruvbox-material.overrideAttrs (old: {
-          src = pkgs.fetchFromGitHub {
-            repo = "gruvbox-material";
-            owner = "sainnhe";
-            rev = "607fac66a5a4418dd9fe1c8fe7d1368099f5bf96";
-            sha256 = "sha256-fZInzV3cTAu94/j7hkeWxQhJbtFeuvAjeWrSG0UVv1A=";
-          };
-        }))
+        # orgmode
+        # (gruvbox-material.overrideAttrs (old: {
+        #   src = pkgs.fetchFromGitHub {
+        #     repo = "gruvbox-material";
+        #     owner = "sainnhe";
+        #     rev = "607fac66a5a4418dd9fe1c8fe7d1368099f5bf96";
+        #     sha256 = "sha256-fZInzV3cTAu94/j7hkeWxQhJbtFeuvAjeWrSG0UVv1A=";
+        #   };
+        # }))
         (pkgs.vimUtils.buildVimPlugin{
           name = "palenight";
           src = pkgs.fetchFromGitHub {
@@ -111,9 +112,7 @@
       };
       #lsp config
       plugins = {
-        dashboard = {
-          enable = true;
-        };
+        dashboard.enable = true;
         lsp = {
           enable = true;
           servers = {
@@ -130,6 +129,13 @@
           };
         };
         lspkind.enable = true;
+        # lazy = {
+        #   enable = true;
+        #   plugins = with pkgs.vimPlugins; [
+        #     # "sainnhe/gruvbox-material"
+        #     orgmode
+        #   ];
+        # };
         image.enable = true;
         rust-tools.enable = true;
         lsp-format.enable = true;

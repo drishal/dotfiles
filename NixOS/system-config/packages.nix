@@ -238,15 +238,16 @@
     glxinfo
     # gns3-gui
     # gns3-server
-    gnome.gnome-boxes
-    gnome.cheese
-    gnome.gnome-calculator
-    gnome.gnome-sound-recorder
-    gnome.gnome-tweaks
+    # gnome-boxes
+    cheese
+    gnome-calculator
+    # gnome-sound-recorder
+    # gnome-tweaks
     # gnome.nautilus
-    gnome.zenity
+    # gnome.zenity
     gnumake
     gnupg
+    ghostscript
     # go
     gsmartcontrol
     gparted
@@ -407,8 +408,8 @@
     qpdf
     qt5ct
     # quickemu
-    (quickemu.override { qemu = qemu_full; })
-    qutebrowser
+    # (quickemu.override { qemu = qemu_full; })
+    # qutebrowser
     qbittorrent
     # qtile-extras_git
     ranger
@@ -494,7 +495,6 @@
     xarchiver
     xonotic
     yarn
-    youtube-dl
     yt-dlp
     ytfzf
     zip

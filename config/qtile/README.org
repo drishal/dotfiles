@@ -73,107 +73,107 @@ else:
 * Colors
 ** Dracula
 #+begin_src python
-  dracula = [
-     "#282a36",  # 0  Background
-     "#44475a",  # 1  current line/lighter_black
-     "#f8f8f2",  # 2  foreground
-     "#6272a4",  # 3  comment/dark_grey
-     "#8be9fd",  # 4  cyan
-     "#50fa7b",  # 5  green
-     "#ffb86c",  # 6  orange 
-     "#ff79c6",  # 7  pink    
-     "#bd93f9",  # 8  purple
-     "#ff5555",  # 9  red
-     "#f1fa8c",  # 10 yellow 
-  ]
+dracula = [
+    "#282a36",  # 0  Background
+    "#44475a",  # 1  current line/lighter_black
+    "#f8f8f2",  # 2  foreground
+    "#6272a4",  # 3  comment/dark_grey
+    "#8be9fd",  # 4  cyan
+    "#50fa7b",  # 5  green
+    "#ffb86c",  # 6  orange 
+    "#ff79c6",  # 7  pink    
+    "#bd93f9",  # 8  purple
+    "#ff5555",  # 9  red
+    "#f1fa8c",  # 10 yellow 
+]
 
 #+end_src
 ** onedark
 #+begin_src python
-  onedark = [
-     "#282c34", # 0 background
-     "#3f444a", # 1 bg-alt
-     "#bbc2cf", # 2 foreground
-     "#5B6268", # 3 dark grey / comments
-     "#46d9ff", # 4 cyan
-     "#98be65", # 5 green 
-     "#da8548", # 6 orange 
-     "#c678dd", # 7 magenta
-     "#a9a1e1", # 8 violet
-     "#ff6c6b", # 9 red 
-     "#ecbe7b", # 10 yellow 
-        ]
+onedark = [
+    "#282c34", # 0 background
+    "#3f444a", # 1 bg-alt
+    "#bbc2cf", # 2 foreground
+    "#5B6268", # 3 dark grey / comments
+    "#46d9ff", # 4 cyan
+    "#98be65", # 5 green 
+    "#da8548", # 6 orange 
+    "#c678dd", # 7 magenta
+    "#a9a1e1", # 8 violet
+    "#ff6c6b", # 9 red 
+    "#ecbe7b", # 10 yellow 
+]
 #+end_src
 ** Palenight 
 #+begin_src python 
-   palenight = [
-     "#292D3E", # 0 background
-     "#242837", # 1 bg-alt
-     "#EEFFFF", # 2 foreground
-     "#676E95", # 3 dark grey / comments
-     "#80cbc4", # 4 cyan
-     "#c3e88d", # 5 green 
-     "#f78c6c", # 6 orange 
-     "#c792ea", # 7 magenta
-     "#bb80b3", # 8 violet
-     "#ff5370", # 9 red 
-     "#ffcb6b", # 10 yellow 
-        ]
+palenight = [
+    "#292D3E", # 0 background
+    "#242837", # 1 bg-alt
+    "#EEFFFF", # 2 foreground
+    "#676E95", # 3 dark grey / comments
+    "#80cbc4", # 4 cyan
+    "#c3e88d", # 5 green 
+    "#f78c6c", # 6 orange 
+    "#c792ea", # 7 magenta
+    "#bb80b3", # 8 violet
+    "#ff5370", # 9 red 
+    "#ffcb6b", # 10 yellow 
+]
 #+end_src
 ** Gruvbox
 #+begin_src python 
-   gruvbox = [
-     "#282828", # 0 background
-     "#0d1011", # 1 bg-alt
-     "#ebdbb2", # 2 foreground
-     "#928374", # 3 dark grey / comments
-     "#689d6a", # 4 cyan
-     "#b8bb26", # 5 green 
-     "#fe8019", # 6 orange 
-     "#cc241d", # 7 magenta
-     "#d3869b", # 8 violet
-     "#fb4934", # 9 red 
-     "#fabd2f", # 10 yellow 
-        ]
+gruvbox = [
+    "#282828", # 0 background
+    "#0d1011", # 1 bg-alt
+    "#ebdbb2", # 2 foreground
+    "#928374", # 3 dark grey / comments
+    "#689d6a", # 4 cyan
+    "#b8bb26", # 5 green 
+    "#fe8019", # 6 orange 
+    "#cc241d", # 7 magenta
+    "#d3869b", # 8 violet
+    "#fb4934", # 9 red 
+    "#fabd2f", # 10 yellow 
+]
 #+end_src
 
 ** Nord
 #+begin_src python
-   nord = [
-     "#2E3440",  # 0  Background
-     "#434C5E",  # 1  current line/lighter_black
-     "#ECEFF4",  # 2  foreground
-     "#434C5E",  # 3  comment/dark_grey
-     "#88C0D0",  # 4  cyan
-     "#A3BE8C",  # 5  green
-     "#D08770",  # 6  orange 
-     "#B48EAD",  # 7  magenta 
-     "#5D80AE",  # 8  violet
-     "#BF616A",  # 9  red
-     "#EBCB8B",  # 10 yellow 
-  ]
+nord = [
+    "#2E3440",  # 0  Background
+    "#434C5E",  # 1  current line/lighter_black
+    "#ECEFF4",  # 2  foreground
+    "#434C5E",  # 3  comment/dark_grey
+    "#88C0D0",  # 4  cyan
+    "#A3BE8C",  # 5  green
+    "#D08770",  # 6  orange 
+    "#B48EAD",  # 7  magenta 
+    "#5D80AE",  # 8  violet
+    "#BF616A",  # 9  red
+    "#EBCB8B",  # 10 yellow 
+]
 #+end_src
 
 ** Catppuccin
-#+begin_src python :tangle no
- catppuccin = [
-   "##1E1E2E",  # 0  Background
-   "##313244",  # 1  current line/lighter_black
-   "##CDD6F4",  # 2  foreground
-   "##45475A",  # 3  comment/dark_grey
-   "##94E2D5",  # 4  cyan
-   "##A6E3A1",  # 5  green
-   "##FAB387",  # 6  orange 
-   "##CBA6F7",  # 7  magenta 
-   "##F2CDCD",  # 8  violet
-   "##F38BA8",  # 9  red
-   "##F9E2AF",  # 10 yellow 
+#+begin_src python
+catppuccin = [
+    "##1E1E2E",  # 0  Background
+    "##313244",  # 1  current line/lighter_black
+    "##CDD6F4",  # 2  foreground
+    "##45475A",  # 3  comment/dark_grey
+    "##94E2D5",  # 4  cyan
+    "##A6E3A1",  # 5  green
+    "##FAB387",  # 6  orange 
+    "##CBA6F7",  # 7  magenta 
+    "##F2CDCD",  # 8  violet
+    "##F38BA8",  # 9  red
+    "##F9E2AF",  # 10 yellow 
 ]
 #+end_src
 
 ** theme 
 #+begin_src python 
-  color = palenight
+color = catppuccin
 #+end_src
 * Wayland settings
 ** Inputs

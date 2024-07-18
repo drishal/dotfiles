@@ -42,12 +42,12 @@
     '';
     # window wmanagers
     windowManager = {
-      qtile = {
-        enable = true;
-        # backend = "wayland";
-        package = pkgs.qtile-module_git;
-        extraPackages = _: [ pkgs.qtile-extras_git ];
-      };
+      # qtile = {
+      #   enable = true;
+      #   # backend = "wayland";
+      #   package = pkgs.qtile-module_git;
+      #   extraPackages = _: [ pkgs.qtile-extras_git ];
+      # };
 
       xmonad = {
         enable = true;

@@ -19,6 +19,7 @@
     # vivaldi-widevine
     bat
     cachix
+    cowsay
     # inputs.eww.packages.${pkgs.stdenv.hostPlatform.system}.eww
     emacs-lsp-booster
     fd

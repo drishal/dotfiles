@@ -13,9 +13,10 @@
   # boot.kernelPackages = pkgs.linuxPackages_zen;
 
   boot.kernelPackages = pkgs.linuxPackages_cachyos;
-  chaotic.scx = {
-    enable = true;
-  }; # by default uses rustland
+  # chaotic.scx = {
+    # enable = true;
+    # scheduler = "scx_rusty";
+  # }; # by default uses rustland
   systemd.services.scx.serviceConfig.Restart = lib.mkForce "always";
   # boot.kernelPackages = pkgs.linuxPackages_testing;
 
@@ -172,7 +173,7 @@
 
   # services.logind.lidSwitch = "suspend"; 
   # Enable sound.
-  sound.enable = true;
+  # sound.enable = true;
 
   #postgresql
   services.postgresql = {
