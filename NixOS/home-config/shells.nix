@@ -83,6 +83,13 @@
       line_break.disabled = true;
     };
   };
+  programs.bash = {
+    enable = true;
+    enableCompletion = true;
+    bashrcExtra = ''
+    source ~/dotfiles/scripts/aliases.sh
+    '';
+  };
   # programs.direnv = {
   #   enable = true;
   #   nix-direnv.enable = true;

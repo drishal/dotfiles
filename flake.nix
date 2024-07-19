@@ -194,7 +194,7 @@
           nixos-desktop = lib.nixosSystem {
             inherit system;
             modules = commonModules ++ [
-              # ./NixOS/system-config/hardware-configuration/hardware-configuration-desktop.nix
+              ./NixOS/system-config/nixos-desktop/hardware-configuration.nix
             ];
             specialArgs = {
               inherit inputs;

@@ -33,7 +33,7 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  #boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
   # Set your time zone.
   time.timeZone = "Asia/Kolkata";
@@ -61,9 +61,10 @@
   #openssh
   services.openssh = {
     enable = true;
-    ports = [ 22 ];
+    ports = [ 22 8022 ];
   };
 
+  networking.firewall.allowedTCPPorts = [22 8022 8000];
   # power-management
   powerManagement = {
     enable = true;
@@ -134,7 +135,7 @@
     };
     wireless.iwd.enable = true;
     # hostname
-    hostName = "nixos";
+    #hostName = "nixos";
     # dns
     nameservers = [
       "1.1.1.1"

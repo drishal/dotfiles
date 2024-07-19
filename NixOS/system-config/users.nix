@@ -8,7 +8,7 @@
 {
   programs.bash = {
     completion.enable = true;
-    blesh.enable = true;
+    # blesh.enable = true;
   };
   programs.fish.enable = true;
   programs.zsh ={

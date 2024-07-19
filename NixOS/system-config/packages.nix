@@ -217,7 +217,7 @@
     foremost
     flex
     gcc
-    # geekbench
+    geekbench
     # google-chrome
     # (google-chrome.override {
     #   commandLineArgs = [
