@@ -83,6 +83,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    # _9base
     acpi
     argc
     adwaita-qt
@@ -189,7 +190,7 @@
     # etcher
     evince
     evince
-    easyeffects
+    # easyeffects
     extundelete
     eza
     lsd
@@ -427,14 +428,15 @@
     # sony-headphones-client
     scx
     # smplayer
+    sass
     speedtest-cli
     spot
     starship
-    sass
     steam-run
     stremio
     surf
     # swaylock
+    svp
     sway-contrib.grimshot
     swaylock-effects
     swaybg

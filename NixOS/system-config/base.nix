@@ -17,7 +17,7 @@
     # enable = true;
     # scheduler = "scx_rusty";
   # }; # by default uses rustland
-  systemd.services.scx.serviceConfig.Restart = lib.mkForce "always";
+  # systemd.services.scx.serviceConfig.Restart = lib.mkForce "always";
   # boot.kernelPackages = pkgs.linuxPackages_testing;
 
   # kernel parameters
@@ -90,7 +90,7 @@
   #amdgpu
   hardware.opengl = {
     extraPackages = with pkgs; [
-      # rocmPackages.clr.icd
+      rocmPackages.clr.icd
       amdvlk # AMD Vulkan driver
       # vaapiVdpau
       libvdpau-va-gl
@@ -248,4 +248,5 @@
     # VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
     # MOZ_ENABLE_WAYLAND="1";
   };
+  zramSwap.enable = true;
 }

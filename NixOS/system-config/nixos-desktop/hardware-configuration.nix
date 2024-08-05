@@ -56,7 +56,11 @@
     openrgb = {
       enable = true;
       motherboard = "amd";
+      package = pkgs.openrgb-with-all-plugins;
     };
   };
-  environment.systemPackages = with pkgs; [ openrgb-with-all-plugins ];
+  environment.systemPackages = with pkgs; [
+    i2c-tools
+  ];
+  users.groups.i2c.members = [ "drishal" ];
 }

@@ -59,4 +59,5 @@
   programs.virt-manager.enable = true;
 
   users.extraGroups.vboxusers.members = [ "drishal" ];
+  virtualisation.spiceUSBRedirection.enable = true;
 }

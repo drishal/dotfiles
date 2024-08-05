@@ -87,6 +87,7 @@
 - [[#language-and-completion-support][Language and completion support]]
   - [[#completion-engines][completion engines:]]
   - [[#treesitter][treesitter]]
+  - [[#treesitter-auto][treesitter auto]]
   - [[#emoji-mode][emoji mode]]
   - [[#parentheses-completion][Parentheses Completion]]
   - [[#projectile][Projectile]]
@@ -1272,7 +1273,15 @@ https://github.com/karthink/popper
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
   )
 #+end_src
-
+** treesitter auto
+#+begin_src emacs-lisp
+(use-package treesit-auto :demand t
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
+#+end_src
 ** emoji mode
 #+begin_src emacs-lisp
 (use-package emojify
