@@ -63,4 +63,11 @@
     i2c-tools
   ];
   users.groups.i2c.members = [ "drishal" ];
+  services.sunshine = {
+    enable = true;
+    # autoStart = true;
+    capSysAdmin = true;
+    openFirewall = true;
+  };
+
 }

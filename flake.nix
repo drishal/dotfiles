@@ -97,6 +97,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     stylix.url = "github:danth/stylix";
+
+    nix-gaming.url = "github:fufexan/nix-gaming";
   };
 
   outputs =
@@ -118,6 +120,7 @@
       hyprland,
       nixpkgs,
       nixvim,
+      nix-gaming,
       ngrok,
       nur,
       private-stuff,
@@ -161,6 +164,7 @@
           base16.homeManagerModule
           nixvim.homeManagerModules.nixvim
           stylix.homeManagerModules.stylix
+          nix-gaming.nixosModules.nix-gaming
           "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
           {
             home = {

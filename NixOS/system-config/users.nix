@@ -28,6 +28,7 @@
       "adb"
       "libvirtd"
       "plugdev"
+      "input"
     ];
   };
   security.sudo.extraConfig = ''

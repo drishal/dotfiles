@@ -15,6 +15,7 @@
 - [[#direnv][direnv]]
 - [[#locale-archive-fix][locale archive fix]]
 - [[#lutis-skip-init][Lutis skip init]]
+- [[#mangohud][mangohud]]
 - [[#source-aliases][source aliases]]
 
 * interactive
@@ -105,6 +106,12 @@ set -x LOCALE_ARCHIVE "/usr/lib/locale/locale-archive"
 #+begin_src fish
 set -x LUTRIS_SKIP_INIT 1
 #+end_src
+
+* mangohud
+#+begin_src fish
+set -x MANGOHUD 1
+#+end_src
+
 * source aliases
 #+begin_src fish
 source ~/dotfiles/scripts/aliases.sh

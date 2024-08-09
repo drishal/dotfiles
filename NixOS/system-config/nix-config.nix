@@ -28,9 +28,9 @@
       # access-tokens = "${builtins.readFile ${private-stuff}/token.txt;}";
       access-tokens = builtins.readFile "${inputs.private-stuff}/token.txt";
 
-      substituters = [ "https://hyprland.cachix.org" ];
+      substituters = [ "https://hyprland.cachix.org" "https://nix-gaming.cachix.org" ];
       #"https://emacsng.cachix.org"];
-      trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
+      trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="];
       #"emacsng.cachix.org-1:i7wOr4YpdRpWWtShI8bT6V7lOTnPeI7Ho6HaZegFWMI=" ]
     };
     # gc = {

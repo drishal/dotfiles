@@ -46,7 +46,7 @@
   '';
 
   # cgroups support
-  systemd.enableUnifiedCgroupHierarchy = true;
+  # systemd.enableUnifiedCgroupHierarchy = true;
   #bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.package = pkgs.bluez;
