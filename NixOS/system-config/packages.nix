@@ -2,14 +2,22 @@
   config,
   pkgs,
   inputs,
+  pkgs-master,
   lib,
   ...
 }:
 {
+  # imports = [
+    # pkgs-master
+    # inputs.lobster.packages.x86_64-linux.lobster
+  # ];
   services.flatpak.enable = true;
   services.gvfs.enable = true;
+  # inputs.nixpkgs-fix.packages.${pkgs.system}.
   services.zerotierone = {
     enable = true;
+    # package = inputs.nixpkgs-master.legacyPackages.${pkgs.system}.zerotierone ;
+    package = pkgs-master.zerotierone ;
     localConf.settings = { 
       softwareUpdate = "disable";
     };
@@ -114,8 +122,6 @@
     (brave.override {
       commandLineArgs = [
         "--ignore-gpu-blocklist"
-        "-enable-unsafe-webgpu"
-        "--enable-features=VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
       ];
     })
     btop
@@ -505,7 +511,7 @@
     xonotic
     yarn
     yt-dlp
-    ytfzf
+    # ytfzf
     zip
     zoom-us
     # Xfce stuff

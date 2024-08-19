@@ -56,7 +56,7 @@
 
       dwm.enable = true;
 
-      leftwm.enable = true;
+      # leftwm.enable = true;
       # awesome = {
       #   enable = true;
       #   luaModules = with pkgs.luaPackages; [

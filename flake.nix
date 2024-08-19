@@ -20,12 +20,13 @@
   inputs = {
 
     nixpkgs = {
-      url = "github:nixos/nixpkgs/nixos-unstable";
+      url = "github:nixos/nixpkgs/nixos-unstable/";
     };
+    # nixpkgs-master.url = "github:NixOS/nixpkgs/fb6f374d56fc599f958a0c418511fddd7f46257e";
     # nixpkgs = { url = "github:PedroHLC/nixpkgs/pull-284487"; };
-    # nixpkgs-master = {
-    #   url = "github:nixos/nixpkgs/9b5ca6a80c775a62734e1fefa0d04f1b0c91c91b";
-    # };
+    nixpkgs-master = {
+      url = "github:nixos/nixpkgs/9b5ca6a80c775a62734e1fefa0d04f1b0c91c91b";
+    };
 
     # nixpkgs-master.url = "github:NixOS/nixpkgs/master";
 
@@ -103,7 +104,6 @@
 
   outputs =
     {
-      # nixpkgs-master,
       ags,
       astal,
       auto-cpufreq,
@@ -119,6 +119,7 @@
       home-manager,
       hyprland,
       nixpkgs,
+      nixpkgs-master,
       nixvim,
       nix-gaming,
       ngrok,
@@ -139,16 +140,15 @@
           allowUnfree = true;
         };
       };
-      # pkgs-master = import nixpkgs-master {
-      #   inherit system;
-      #   config = {
-      #     allowUnfree = true;
-      #   };
-      # };
+
+      pkgs-master = import nixpkgs-master {
+        inherit system;
+        config = {
+          allowUnfree = true;
+        };
+      };
       lib = nixpkgs.lib;
 
-      # here we would define some variables for stylix so we can use it across both home manager and system-configuration
-      # wallpaper = ./wallpapers/summer_1am.jpg;
     in
     {
       homeConfigurations."drishal" = home-manager.lib.homeManagerConfiguration {
@@ -164,7 +164,6 @@
           base16.homeManagerModule
           nixvim.homeManagerModules.nixvim
           stylix.homeManagerModules.stylix
-          nix-gaming.nixosModules.nix-gaming
           "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
           {
             home = {
@@ -193,25 +192,25 @@
             stylix.nixosModules.stylix
             base16.nixosModule
           ];
+          specialArgs = {
+            inherit inputs;
+            inherit pkgs-master;
+          };
         in
-        {
+          {
           nixos-desktop = lib.nixosSystem {
             inherit system;
             modules = commonModules ++ [
               ./NixOS/system-config/nixos-desktop/hardware-configuration.nix
             ];
-            specialArgs = {
-              inherit inputs;
-            };
+            specialArgs = specialArgs;
           };
           nixos = lib.nixosSystem {
             inherit system;
             modules = commonModules ++ [
               ./NixOS/system-config/nixos/hardware-configuration.nix
             ];
-            specialArgs = {
-              inherit inputs;
-            };
+            specialArgs = specialArgs;
           };
         };
 
