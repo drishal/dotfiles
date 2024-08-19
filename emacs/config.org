@@ -420,8 +420,9 @@ remove/add tangle no to whatever font you prefer
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  ;; (load-theme 'doom-catppuccin t)
   (load-theme 'doom-catppuccin t)
-  ;; (setq doom-catppuccin-dark-variant "mocha")
+  (setq doom-catppuccin-dark-variant "mocha")
   ;; (custom-set-faces
    ;; `(mode-line ((t (:background ,(doom-color 'dark-violet)))))
    ;; `(org-block ((t (:background ,(doom-color 'base2)))))
@@ -466,7 +467,7 @@ remove/add tangle no to whatever font you prefer
   )
 #+end_src
 *** everforest
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 ;; (use-package doom-everforest-theme :ensure (:host github :repo "Cardoso1994/doom-everforest-theme")
 ;;   ;; :init
 ;;   ;; (load-theme 'rose-pine)
@@ -487,12 +488,9 @@ remove/add tangle no to whatever font you prefer
 (use-package catppuccin-theme
   :demand t
   :init
-  ;; (set catppuccin-load-flavor 'mocha)
   (setq catppuccin-flavor 'mocha) ;; or 'latte, 'macchiato, or 'mocha
   (load-theme 'catppuccin)
-  ;; (add-hook 'emacs-startup-hook (lambda () (catppuccin-reload)))
-  ;; (add-hook 'server-after-make-frame-hook #'catppuccin-reload)
-  ;; (catppuccin-reload)
+  (add-hook 'server-after-make-frame-hook #'catppuccin-reload)
   )
 #+end_src
 **** Modus
@@ -933,7 +931,7 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 #+begin_src emacs-lisp
 (use-package vterm
   ;;:demand t
-  :demand t 
+  :ensure nil 
   :config
   ;;(setq vterm-shell "/bin/zsh")
   ;; (set-popup-rule! "^\\*vterm" :size 0.25 :vslot -4 :select t :quit nil :ttl 0)
@@ -1277,7 +1275,7 @@ https://github.com/karthink/popper
 #+begin_src emacs-lisp
 (use-package treesit-auto :demand t
   :custom
-  (treesit-auto-install 'prompt)
+  (setq treesit-auto-install t)
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
@@ -1487,9 +1485,9 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (use-package flycheck :demand t)
 #+end_src
 *** General Setup with lsp
-    # :PROPERTIES:
-    # :header-args:    :tangle no
-    # :END:
+    :PROPERTIES:
+    :header-args:    :tangle no
+    :END:
 #+begin_src emacs-lisp
 (use-package lsp-mode :demand t
   :init
@@ -1516,7 +1514,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
          (zig-mode . lsp)
          (sh-mode . lsp)
          (lua-mode . lsp)
-         (nix-mode . lsp)
+         (nix-ts-mode . lsp)
          (conf-toml-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration)
          ;; (lsp-mode . lsp-inlay-hints-mode)
@@ -1624,7 +1622,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 
 *** Eglot setup
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
 (use-package eglot
   :demand t
   :config
@@ -1645,9 +1643,20 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   :config  (eglot-booster-mode))
 #+end_src
 
+*** breadcrumb mode
+#+begin_src emacs-lisp
+(use-package breadcrumb :demand t)
+#+end_src
+
 *** rust 
 #+begin_src emacs-lisp
+(use-package rust-mode
+  :demand t
+  :init
+  (setq rust-mode-treesitter-derive t))
+
 (use-package rustic
+  :after (rust-mode)
   :demand t
   :bind (:map rustic-mode-map
               ("M-j" . lsp-ui-imenu)
@@ -1659,16 +1668,11 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
               ("C-c C-c Q" . lsp-workspace-shutdown)
               ("C-c C-c s" . lsp-rust-analyzer-status))
   :config
-  ;; uncomment for less flashiness
-  ;; (setq lsp-eldoc-hook nil)
   (setq lsp-enable-symbol-highlighting nil)
   (setq lsp-signature-auto-activate nil)
-  ;; comment to disable rustfmt on save
-  ;; (setq rustic-format-on-save nil)
-  ;; (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook)
   ;; eglot mode
   ;; (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
-  ;; (setq rustic-lsp-client 'eglot)
+  (setq rustic-lsp-client 'eglot)
   )
 
 (defun rk/rustic-mode-hook ()
@@ -1773,8 +1777,8 @@ https://github.com/pwalsh/pipenv.el
 #+end_src
 *** nix
 #+begin_src emacs-lisp
-(use-package nix-mode :demand t
-  :mode "\\.nix\\'")
+;; (use-package nix-mode :demand t
+;;   :mode "\\.nix\\'")
 ;; (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
 ;; (lsp-register-client
 ;;  (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
@@ -1782,6 +1786,8 @@ https://github.com/pwalsh/pipenv.el
 ;;                   :server-id 'nix))
 
 (use-package nixpkgs-fmt :demand t)
+(use-package nix-ts-mode :demand t
+ :mode "\\.nix\\'")
 ;; (use-package nix-ts-mode
 ;;   :demand t
 ;;   :mode "\\.nix\\'")
@@ -1814,7 +1820,7 @@ https://github.com/pwalsh/pipenv.el
 #+end_src
 
 *** rust
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package rust-mode :demand t
   :init
   (setq rust-mode-treesitter-derive t)
