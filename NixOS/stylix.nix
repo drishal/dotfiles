@@ -11,6 +11,7 @@
     # base16Scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
     base16Scheme = "${config.scheme}";
     cursor = {
+      package = pkgs.kdePackages.breeze-icons;
       name = "breeze_cursors";
       size = 24;
     };
@@ -46,6 +47,11 @@
         applications = 10;
         desktop = 10;
       };
+    };
+    targets = {
+      emacs.enable = false;
+      neovim.enable = false;
+      nixvim.enable = false;
     };
   };
 }

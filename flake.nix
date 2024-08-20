@@ -100,6 +100,14 @@
     stylix.url = "github:danth/stylix";
 
     nix-gaming.url = "github:fufexan/nix-gaming";
+    nvchad4nix = {
+      url = "github:NvChad/nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nvchad-on-steroids = {  # <- here
+      url = "github:MOIS3Y/nvchad-on-steroids";
+      flake = false;
+    };
   };
 
   outputs =
@@ -123,6 +131,8 @@
       nixvim,
       nix-gaming,
       ngrok,
+      # nvchad4nix,
+      # nvchad-on-steroids,
       nur,
       private-stuff,
       programsdb,
@@ -159,7 +169,7 @@
         };
         modules = [
           ./NixOS/home-config/home.nix
-          { nixpkgs.overlays = [ inputs.emacs-overlay.overlay emacs-lsp-booster.overlays.default ]; }
+          { nixpkgs.overlays = [ inputs.emacs-overlay.overlay emacs-lsp-booster.overlays.default inputs.nvchad4nix.overlays.default ]; }
           # inputs.ags.homeManagerModules.default
           base16.homeManagerModule
           nixvim.homeManagerModules.nixvim

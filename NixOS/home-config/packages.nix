@@ -29,6 +29,7 @@
     man
     man-pages
     neofetch
+    # nvchad
     #rnix
     # sl
     starship
@@ -161,7 +162,7 @@
       package = papirus-icon-theme;
     };
     # font.name = "Noto Sans 10";
-    cursorTheme.name = "breeze_cursors";
+    # cursorTheme.name = "breeze_cursors";
     gtk2.extraConfig = ''
       gtk-button-images=1
       gtk-menu-images=1

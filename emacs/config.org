@@ -420,7 +420,6 @@ remove/add tangle no to whatever font you prefer
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  ;; (load-theme 'doom-catppuccin t)
   (load-theme 'doom-catppuccin t)
   (setq doom-catppuccin-dark-variant "mocha")
   ;; (custom-set-faces
@@ -1628,7 +1627,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   :config
   (add-to-list 'eglot-server-programs
                '(conf-toml-mode . ("taplo" "lsp" "stdio"))
-               '(nix-mode . ("nil"))
+               '(nix-ts-mode . ("nil"))
                )
   (setq project-vc-extra-root-markers '("Cargo.toml"))
   :hook
