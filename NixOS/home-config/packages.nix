@@ -38,7 +38,7 @@
     nixfmt-rfc-style
     nil
     taplo
-    papirus-icon-theme
+    # papirus-icon-theme
     gnome.gnome-themes-extra
     #nodePackages.create-react-app
     #nodePackages.eslint
