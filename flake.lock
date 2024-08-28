@@ -1320,11 +1320,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1724845513,
-        "narHash": "sha256-pnS/Ekhh4raBWhB1wSDqrsee1RaRl3so/XayT56JvzI=",
+        "lastModified": 1724846731,
+        "narHash": "sha256-r3m7UCIn9UiTPtowu0pG79nN7RjLChjsqkZjjiCcIjM=",
         "ref": "refs/heads/main",
-        "rev": "00ee1cf98e3d8ef7cf71a9a505ba8d1382697e35",
-        "revCount": 5149,
+        "rev": "d105c7403c2b700e4572149ecadd21e1d1ad24d3",
+        "revCount": 5150,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/hyprwm/Hyprland"
@@ -2256,14 +2256,17 @@
     "private-stuff": {
       "flake": false,
       "locked": {
-        "lastModified": 1724820878,
-        "narHash": "sha256-P8FWHU1opshjnKvUgZ/JKxXrsMB+ba63OvBYMjqrQaQ=",
-        "path": "/home/drishal/.private-stuff",
-        "type": "path"
+        "lastModified": 1724820949,
+        "narHash": "sha256-d98LDUK9alUb1Su5oVah7vd0LblZZwCMIBz1ZWqKUyM=",
+        "ref": "refs/heads/main",
+        "rev": "e0129fb785d685011157f40c122acefe51634f79",
+        "revCount": 8,
+        "type": "git",
+        "url": "file:/home/drishal/.private-stuff"
       },
       "original": {
-        "path": "/home/drishal/.private-stuff",
-        "type": "path"
+        "type": "git",
+        "url": "file:/home/drishal/.private-stuff"
       }
     },
     "programsdb": {
