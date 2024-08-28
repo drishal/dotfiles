@@ -1,9 +1,9 @@
-;;; doom-tokyonight-night-theme.el --- inspired by VSCode's Tokyo Night theme -*- lexical-binding: t; no-byte-compile: t; -*-
+;;; doom-tokyonight-theme.el --- inspired by VSCode's Tokyo Night theme -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;
 ;; Added: December 15, 2021 (#650)
 ;; Author: FosterHangdaan <https://github.com/FosterHangdaan>
 ;; Maintainer:
-;; Source: https://github.com/enkia/tokyo-night-vscode-theme
+;; Source: https://github.com/enkia/tokyonight-vscode-theme
 ;;
 ;;; Commentary:
 ;;; Code:
@@ -14,35 +14,35 @@
 ;;
 ;;; Variables
 
-(defgroup doom-tokyonight-night-theme nil
+(defgroup doom-tokyonight-theme nil
   "Options for doom-themes"
   :group 'doom-themes)
 
-(defcustom doom-tokyonight-night-brighter-modeline nil
+(defcustom doom-tokyonight-brighter-modeline nil
   "If non-nil, more vivid colors will be used to style the mode-line."
-  :group 'doom-tokyonight-night-theme
+  :group 'doom-tokyonight-theme
   :type 'boolean)
 
-(defcustom doom-tokyonight-night-brighter-comments nil
+(defcustom doom-tokyonight-brighter-comments nil
   "If non-nil, comments will be highlighted in more vivid colors."
-  :group 'doom-tokyonight-night-theme
+  :group 'doom-tokyonight-theme
   :type 'boolean)
 
-(defcustom doom-tokyonight-night-comment-bg doom-tokyonight-night-brighter-comments
+(defcustom doom-tokyonight-comment-bg doom-tokyonight-brighter-comments
   "If non-nil, comments will have a subtle, darker background. Enhancing their legibility."
-  :group 'doom-tokyonight-night-theme
+  :group 'doom-tokyonight-theme
   :type 'boolean)
 
-(defcustom doom-tokyonight-night-padded-modeline nil
+(defcustom doom-tokyonight-padded-modeline nil
   "If non-nil, adds a 4px padding to the mode-line. Can be an integer to determine the exact padding."
-  :group 'doom-tokyonight-night-theme
+  :group 'doom-tokyonight-theme
   :type '(or integer boolean))
 
 
 ;;
 ;;; Theme definition
 
-(def-doom-theme doom-tokyonight-night
+(def-doom-theme doom-tokyonight
   "A clean, dark theme that celebrates the lights of downtown Tokyo at night."
 
   ; Color Scheme
@@ -102,8 +102,8 @@
    (vertical-bar   (doom-lighten bg 0.05))
    (selection      base0)
    (builtin        red)
-   (comments       (if doom-tokyonight-night-brighter-comments base5 base1))
-   (doc-comments   (doom-lighten (if doom-tokyonight-night-brighter-comments base5 base1) 0.25))
+   (comments       (if doom-tokyonight-brighter-comments base5 base1))
+   (doc-comments   (doom-lighten (if doom-tokyonight-brighter-comments base5 base1) 0.25))
    (constants      orange)
    (functions      blue)
    (keywords       magenta)
@@ -111,7 +111,7 @@
    (operators      dark-cyan)
    (type           base8)
    (strings        dark-green)
-   (variables      teal)
+   (variables      base8)
    (numbers        orange)
    (region         base0)
    (error          red)
@@ -123,10 +123,10 @@
 
    ;; custom categories
    (hidden     `(,(car bg) "black" "black"))
-   (-modeline-bright doom-tokyonight-night-brighter-modeline)
+   (-modeline-bright doom-tokyonight-brighter-modeline)
    (-modeline-pad
-    (when doom-tokyonight-night-padded-modeline
-      (if (integerp doom-tokyonight-night-padded-modeline) doom-tokyonight-night-padded-modeline 4)))
+    (when doom-tokyonight-padded-modeline
+      (if (integerp doom-tokyonight-padded-modeline) doom-tokyonight-padded-modeline 4)))
 
    (modeline-fg     'unspecified)
    (modeline-fg-alt base5)
@@ -150,10 +150,12 @@
 
    (font-lock-comment-face
     :foreground comments
-    :background (if doom-tokyonight-night-comment-bg (doom-lighten bg 0.05) 'unspecified))
+    :background (if doom-tokyonight-comment-bg (doom-lighten bg 0.05) 'unspecified)
+    :slant 'italic)
    (font-lock-doc-face
     :inherit 'font-lock-comment-face
     :foreground doc-comments)
+   (font-lock-keyword-face :foreground keywords :slant 'italic)
 
    ;;; Doom Modeline
    (doom-modeline-bar :background (if -modeline-bright modeline-bg highlight))
@@ -170,6 +172,11 @@
     :foreground (if -modeline-bright base8 highlight))
    (mode-line-buffer-id
     :foreground highlight)
+
+   ;;; Doom Dashboard
+   (doom-dashboard-banner :foreground comments :slant 'normal)
+   (doom-dashboard-loaded :foreground comments :slant 'normal)
+   (doom-dashboard-menu-title :foreground magenta :slant 'normal)
 
    ;;; Indentation
    (whitespace-indentation :background bg)
@@ -271,6 +278,7 @@
    ;;; web-mode
    (web-mode-json-context-face :foreground brown)
    (web-mode-json-key-face :foreground teal)
+   (web-mode-keyword-face :inherit 'font-lock-keyword-face)
    ;;;; Block
    (web-mode-block-delimiter-face :foreground yellow)
    ;;;; Code
@@ -280,6 +288,8 @@
    (web-mode-css-pseudo-class-face :foreground orange)
    (web-mode-css-property-name-face :foreground blue)
    (web-mode-css-selector-face :foreground teal)
+   (web-mode-css-selector-class-face :foreground keywords :slant 'normal)
+   (web-mode-css-selector-tag-face :inherit 'web-mode-css-selector-class-face)
    (web-mode-css-function-face :foreground yellow)
    ;;;; HTML
    (web-mode-html-attr-engine-face :foreground yellow)
@@ -293,4 +303,4 @@
   ;; ()
   )
 
-;;; doom-tokyonight-night-theme.el ends here
+;;; doom-tokyonight-theme.el ends here

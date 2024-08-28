@@ -225,7 +225,7 @@ background contrast. All other values default to \"mocha\"."
    (vertical-bar   _crust)
    (selection      _blue)
    (builtin        _peach)
-   (comments       (if doom-catppuccin-brighter-comments _sapphire base5))
+   (comments       _overlay0)
    (doc-comments   (if doom-catppuccin-brighter-comments _sky base6))
    (constants      _peach)
    (functions      _blue)
@@ -268,7 +268,9 @@ background contrast. All other values default to \"mocha\"."
   (((line-number &override) :foreground base4)
    ((line-number-current-line &override) :foreground fg)
    ((font-lock-comment-face &override)
-    :background (if doom-catppuccin-brighter-comments (doom-lighten bg 0.1)))
+    :background (if doom-catppuccin-brighter-comments (doom-lighten bg 0.1))
+    :slant 'italic)
+   (font-lock-keyword-face :foreground keywords)
    (mode-line
     :background modeline-bg :foreground modeline-fg
     :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg)))

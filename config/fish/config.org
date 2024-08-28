@@ -115,10 +115,10 @@ set -x MANGOHUD 1
 * source aliases
 #+begin_src fish
 source ~/dotfiles/scripts/aliases.sh
-# source /nix/var/nix/profiles/default/etc/profile.d/nix.fish
-if test (cat /etc/os-release | grep '^ID=' | cut -d= -f2) = "arch"
-    if test -e /etc/profile.d/nix-daemon.fish
-        source /etc/profile.d/nix-daemon.fish
-    end
-end
+. /nix/var/nix/profiles/default/etc/profile.d/nix.fish
+# if test (cat /etc/os-release | grep '^ID=' | cut -d= -f2) = "arch"
+#     if test -e /etc/profile.d/nix-daemon.fish
+#         source /etc/profile.d/nix-daemon.fish
+#     end
+# end
 #+end_src

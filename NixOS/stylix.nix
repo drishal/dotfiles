@@ -11,7 +11,7 @@
     # base16Scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
     base16Scheme = "${config.scheme}";
     cursor = {
-      # package = pkgs.kdePackages.breeze-icons;
+      package = pkgs.libsForQt5.breeze-qt5;
       name = "breeze_cursors";
       size = 24;
     };

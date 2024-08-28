@@ -9,7 +9,7 @@
 {
   imports = [
     ./nixvim.nix
-    # inputs.nvchad4nix.homeManagerModule
+    inputs.nvchad4nix.homeManagerModule
   ];
   programs = {
     micro = {
@@ -26,16 +26,18 @@
         vterm
       ];
     };
-  # nvchad = {
-  #   enable = true;
-  #   extraPackages = with pkgs; [
-  #     emmet-language-server
-  #     nixd
-  #   ];
-  #   extraConfig = inputs.nvchad-on-steroids; # <- here extraConfig from inputs
-  #   hm-activation = true;
-  #   backup = false;
-  # };
+    # nvchad = {
+    #   enable = true;
+    #   extraPackages = with pkgs; [
+    #     emmet-language-server
+    #   ];
+    #   # extraConfig = inputs.nvchad-on-steroids; # <- here extraConfig from inputs
+    #   extraConfig = ''
+    #   ${inputs.nvchad-on-steroids}
+    #   '';
+    #   hm-activation = true;
+    #   backup = false;
+    # };
   };
 }
 

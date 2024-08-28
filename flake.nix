@@ -101,8 +101,9 @@
 
     nix-gaming.url = "github:fufexan/nix-gaming";
     nvchad4nix = {
-      url = "github:NvChad/nix";
+      url = "github:nix-community/nix4nvchad";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nvchad-starter.follows = "nvchad-on-steroids";
     };
     nvchad-on-steroids = {  # <- here
       url = "github:MOIS3Y/nvchad-on-steroids";
@@ -169,7 +170,7 @@
         };
         modules = [
           ./NixOS/home-config/home.nix
-          { nixpkgs.overlays = [ inputs.emacs-overlay.overlay emacs-lsp-booster.overlays.default inputs.nvchad4nix.overlays.default ]; }
+          { nixpkgs.overlays = [ inputs.emacs-overlay.overlay emacs-lsp-booster.overlays.default ]; }
           # inputs.ags.homeManagerModules.default
           base16.homeManagerModule
           nixvim.homeManagerModules.nixvim

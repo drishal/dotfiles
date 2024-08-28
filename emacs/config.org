@@ -45,6 +45,7 @@
 - [[#org-mode][Org mode:]]
   - [[#org-mode-indent][org mode indent]]
   - [[#org-mode-disable-begin_example-blocks][org mode disable begin_example blocks]]
+  - [[#org-mode-fontify-settings][org mode fontify settings]]
   - [[#org-blocks-insert-mode][Org blocks insert mode]]
   - [[#snippets][snippets:]]
   - [[#org-temposnippets][org tempo(snippets):]]
@@ -760,6 +761,10 @@ Put backup files neatly away
 ** org mode disable begin_example blocks
 #+begin_src emacs-lisp
 (setq org-babel-min-lines-for-block-output 1000)
+#+end_src
+** org mode fontify settings
+#+begin_src emacs-lisp
+(setq org-src-fontify-natively t)
 #+end_src
 ** Org blocks insert mode
 Switch to org edit mode when pressing `i` insert key
@@ -1631,7 +1636,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
                )
   (setq project-vc-extra-root-markers '("Cargo.toml"))
   :hook
-  (nix-mode . eglot-ensure)
+  (nix-ts-mode . eglot-ensure)
   )
 
 (use-package eglot-x :ensure (:host github :repo "nemethf/eglot-x"))
