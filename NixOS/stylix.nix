@@ -48,10 +48,5 @@
         desktop = 10;
       };
     };
-    targets = {
-      emacs.enable = false;
-      neovim.enable = false;
-      nixvim.enable = false;
-    };
   };
 }

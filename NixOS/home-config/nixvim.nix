@@ -167,11 +167,16 @@
         gitsigns.enable = true;
         treesitter = {
           enable = true;
-          settings.ensureInstalled = "all";
-          incrementalSelection = {
-            enable = true;
+          settings = {
+            ensureInstalled = "all";
+            incremental_selection = {
+              enable = true;
+            };
+            nixvimInjections = true;
+            indent = {
+              enable = true;
+            };
           };
-          nixvimInjections = true;
         };
         #treesitter-context.enable = true;
         barbar = {

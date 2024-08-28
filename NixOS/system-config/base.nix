@@ -14,8 +14,8 @@
 
   boot.kernelPackages = pkgs.linuxPackages_cachyos;
   # chaotic.scx = {
-    # enable = true;
-    # scheduler = "scx_rusty";
+  #   enable = true;
+  #   scheduler = "scx_rusty";
   # }; # by default uses rustland
   # systemd.services.scx.serviceConfig.Restart = lib.mkForce "always";
   # boot.kernelPackages = pkgs.linuxPackages_testing;
@@ -91,16 +91,12 @@
   hardware.opengl = {
     extraPackages = with pkgs; [
       rocmPackages.clr.icd
-      amdvlk # AMD Vulkan driver
-      # vaapiVdpau
       libvdpau-va-gl
       libva
       libva-vdpau-driver
     ];
     # For 32 bit applications
     extraPackages32 = with pkgs.driversi686Linux; [
-      amdvlk
-      # vaapiVdpau
       libvdpau-va-gl
       libva-vdpau-driver
     ];

@@ -134,5 +134,8 @@
     kitty = {
       enable = true;
     };
+    zellij = {
+      enable = true;
+    };
   };
 }
