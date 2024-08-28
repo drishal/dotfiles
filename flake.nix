@@ -73,7 +73,7 @@
 
 
     private-stuff = {
-      url = "git+file://home/drishal/.private-stuff";
+      url = "git+file:/home/drishal/.private-stuff/";
       flake = false;
     };
 

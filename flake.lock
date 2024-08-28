@@ -2262,11 +2262,11 @@
         "rev": "e0129fb785d685011157f40c122acefe51634f79",
         "revCount": 8,
         "type": "git",
-        "url": "file:/home/drishal/.private-stuff"
+        "url": "file:/home/drishal/.private-stuff/"
       },
       "original": {
         "type": "git",
-        "url": "file:/home/drishal/.private-stuff"
+        "url": "file:/home/drishal/.private-stuff/"
       }
     },
     "programsdb": {
