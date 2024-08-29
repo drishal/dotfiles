@@ -227,6 +227,7 @@ See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
 windowrule = rounding 0, ^(waybar)$
 windowrulev2 = rounding 0, class:^[fF]irefox
 windowrulev2 = float, class:Waydroid
+windowrulev2 = float, class:^(Anydesk)$,title:^(anydesk)$
 # windowrulev2 = immediate, class:^(xonotic-sdl)$
 # windowrule=float,^(zoom)$
 # Example windowrule v2

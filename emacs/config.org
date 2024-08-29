@@ -1781,8 +1781,8 @@ https://github.com/pwalsh/pipenv.el
 #+end_src
 *** nix
 #+begin_src emacs-lisp
-;; (use-package nix-mode :demand t
-;;   :mode "\\.nix\\'")
+(use-package nix-mode :demand t
+  :mode "\\.nix\\'")
 ;; (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
 ;; (lsp-register-client
 ;;  (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
