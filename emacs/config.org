@@ -486,7 +486,8 @@ remove/add tangle no to whatever font you prefer
 **** Catppuccin
 #+begin_src emacs-lisp
 (use-package catppuccin-theme
-  :demand t
+  ;;:demand t
+  :ensure (:host github :repo "catppuccin/emacs")
   :init
   (setq catppuccin-flavor 'mocha) ;; or 'latte, 'macchiato, or 'mocha
   (load-theme 'catppuccin)
