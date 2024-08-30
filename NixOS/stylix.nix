@@ -48,5 +48,8 @@
         desktop = 10;
       };
     };
+    targets = {
+      gtk.enable = true;
+    };
   };
 }

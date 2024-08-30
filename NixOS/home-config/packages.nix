@@ -162,8 +162,8 @@
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = true;
       gtk-button-images = 1;
-      gtk-cursor-theme-name = "breeze_cursors";
-      gtk-cursor-theme-size = 24;
+      # gtk-cursor-theme-name = "breeze_cursors";
+      # gtk-cursor-theme-size = 24;
       gtk-decoration-layout = "icon:minimize,maximize,close";
       gtk-enable-animations = true;
       # gtk-font-name="Noto Sans, 10";
@@ -183,7 +183,7 @@
     };
     gtk4.extraConfig = {
       gtk-application-prefer-dark-theme = true;
-      gtk-cursor-theme-name = "breeze_cursors";
+      # gtk-cursor-theme-name = "breeze_cursors";
       gtk-cursor-theme-size = 24;
       gtk-decoration-layout = "icon:minimize,maximize,close";
       gtk-enable-animations = true;
