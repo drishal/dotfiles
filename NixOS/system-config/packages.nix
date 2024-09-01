@@ -280,7 +280,6 @@
     inxi
     inotify-tools
     inputs.lobster.packages.x86_64-linux.lobster
-    inputs.nix-gaming.packages.${pkgs.system}.wine-tkg
     jq
     #python3Packages.ipython
     # python3Packages.pyngrok
