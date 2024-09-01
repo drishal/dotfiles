@@ -4,6 +4,7 @@
 - [[#welcome-to-my-precious-dotfiles][Welcome to my precious dotfiles!]]
 - [[#what-do-my-dots-contain][What do my dots contain?]]
 - [[#how-to-set-it-up-on-nixos][How to set it up on NixOS]]
+- [[#screenshot-of-my-hyprland-setup][Screenshot of my Hyprland setup]]
 
 * Welcome to my precious dotfiles!
 + So you search for something, some tutorials for help with configuring something, and you end up here and are completely blank what is going on
@@ -29,3 +30,7 @@ Don't worry this readme is there just to tackle this very issue
    sudo nixos-rebuild switch --flake ~/dotfiles -L
    home-manager switch --flake ~/dotfiles
    #+end_src
+* Screenshot of my Hyprland setup
+#+CAPTION:this is a screenshot of my setup with hyprland 
+[[./setup.png]]
+
