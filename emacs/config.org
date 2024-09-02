@@ -490,9 +490,13 @@ remove/add tangle no to whatever font you prefer
   :ensure (:host github :repo "catppuccin/emacs")
   :init
   (setq catppuccin-flavor 'mocha) ;; or 'latte, 'macchiato, or 'mocha
+  (setq catppuccin-italic-comments 1)
   (load-theme 'catppuccin)
   (add-hook 'server-after-make-frame-hook #'catppuccin-reload)
   )
+;; Default italic face sets underline if the font supports it
+(custom-set-faces
+ '(italic ((t (:slant italic)))))
 #+end_src
 **** Modus
 #+begin_src emacs-lisp :tangle no
@@ -1632,7 +1636,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   :demand t
   :config
   (add-to-list 'eglot-server-programs
-               '(conf-toml-mode . ("taplo" "lsp" "stdio"))
+               '(toml-ts-mode . ("taplo" "lsp" "stdio"))
                '(nix-ts-mode . ("nil"))
                )
   (setq project-vc-extra-root-markers '("Cargo.toml"))

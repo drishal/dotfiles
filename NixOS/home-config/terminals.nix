@@ -11,7 +11,7 @@
       server.enable = false;
       settings = {
         main = {
-          term = "xterm-256color";
+          # term = "xterm-256color";
           # font = "FantasqueSansM Nerd Font:size=14";
           dpi-aware = "no";
           pad = "15x10";
