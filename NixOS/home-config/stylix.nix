@@ -11,6 +11,7 @@ pkgs,
       emacs.enable = false;
       neovim.enable = false;
       nixvim.enable = false;
+      helix.enable = false;
     };
   };
 }    
