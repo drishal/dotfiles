@@ -104,6 +104,7 @@
     # driSupport = true;
     driSupport32Bit = true;
   };
+  hardware.amdgpu.opencl.enable = true;
 
   i18n.defaultLocale = "en_US.UTF-8";
   console = {

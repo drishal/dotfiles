@@ -6,6 +6,7 @@
 {
   imports =
     [ (modulesPath + "/installer/scan/not-detected.nix")
+      ./packages.nix
     ];
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
@@ -69,5 +70,6 @@
     capSysAdmin = true;
     openFirewall = true;
   };
+
 
 }

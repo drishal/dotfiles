@@ -53,18 +53,18 @@ workspace = 10, monitor:eDP-1
 #+end_src
 ** Monitor Setup 2
 #+begin_src conf :tangle (if (equal (system-name) "archlinux") "~/.config/hypr/hyprland.conf" "no")
-monitor=DP-1, 1920x1080, 0x0, 1
-monitor=DP-2, 1920x1080, 1920x0, 1
-workspace = 1, monitor:DP-1
-workspace = 2, monitor:DP-1
-workspace = 3, monitor:DP-1
-workspace = 4, monitor:DP-1
-workspace = 5, monitor:DP-1
-workspace = 6, monitor:DP-2
-workspace = 7, monitor:DP-2
-workspace = 8, monitor:DP-2
-workspace = 9, monitor:DP-2
-workspace = 10, monitor:DP-2
+# monitor=DP-1, 1920x1080, 0x0, 1
+# monitor=DP-2, 1920x1080, 1920x0, 1
+# workspace = 1, monitor:DP-1
+# workspace = 2, monitor:DP-1
+# workspace = 3, monitor:DP-1
+# workspace = 4, monitor:DP-1
+# workspace = 5, monitor:DP-1
+# workspace = 6, monitor:DP-2
+# workspace = 7, monitor:DP-2
+# workspace = 8, monitor:DP-2
+# workspace = 9, monitor:DP-2
+# workspace = 10, monitor:DP-2
 #+end_src
 ** mirroring setup
 #+begin_src  conf :tangle no
@@ -255,6 +255,7 @@ bind = $mainMod SHIFT, L, exec, swaylock --screenshots --clock --indicator --ind
 bind = $mainMod, E, exec, nemo
 # bind = $mainMod, x, exec, ags --quit; ags
 bind = $mainMod, x, exec, pkill waybar; waybar
+bind = $mainMod SHIFT, X, exec, loginctl terminate-user "$USER"
 bind = $mainMod, A, exec, emacsclient -c
 bind = $mainMod, SPACE, togglefloating, 
 bind = $mainMod, R, exec, wofi --show drun

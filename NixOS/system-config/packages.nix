@@ -56,6 +56,9 @@
     #game mode
     gamemode.enable = true;
 
+    #gamescope
+    gamescope.enable = true;
+
 
     #neovim
     # neovim = {
@@ -272,7 +275,6 @@
     hollywood
     hyprpaper
     hyperfine
-    hyfetch
     hwinfo
     imagemagick
     imagemagick

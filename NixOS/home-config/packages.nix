@@ -1,8 +1,8 @@
 {
-  config,
-  inputs,
-  pkgs,
-  ...
+config,
+inputs,
+pkgs,
+...
 }:
 {
   imports = [ inputs.ags.homeManagerModules.default ];
@@ -67,33 +67,33 @@
   };
 
   # ags
-#  programs.ags = {
-#    enable = true;
-#    configDir = null;
-#    extraPackages = with pkgs; [
-#      gtksourceview
-#      webkitgtk
-#      accountsservice
-#    ];
-#  };
-#  home.file."${config.home.homeDirectory}/.config/ags/" = {
-#    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/ags/";
-#    recursive = true;
-#  };
-#  home.file."${config.home.homeDirectory}/.config/css/ags-color.css".text = with config.scheme;  ''
-#      @define-color colbg        #${base00}; 
-#      @define-color colbg2       #${base02};
-#      @define-color colfg        #${base05};
-#      @define-color colgrey      #${base03};
-#      @define-color colcyan      #${base0C};
-#      @define-color colgreen     #${base0B};
-#      @define-color colorange    #${base09};
-#      @define-color colmagenta   #${base0E};
-#      @define-color colviolet    #${base0F};
-#      @define-color colred       #${base08};
-#      @define-color colyellow    #${base0A};
-#  '';
-#
+  #  programs.ags = {
+  #    enable = true;
+  #    configDir = null;
+  #    extraPackages = with pkgs; [
+  #      gtksourceview
+  #      webkitgtk
+  #      accountsservice
+  #    ];
+  #  };
+  #  home.file."${config.home.homeDirectory}/.config/ags/" = {
+  #    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/ags/";
+  #    recursive = true;
+  #  };
+  #  home.file."${config.home.homeDirectory}/.config/css/ags-color.css".text = with config.scheme;  ''
+  #      @define-color colbg        #${base00}; 
+  #      @define-color colbg2       #${base02};
+  #      @define-color colfg        #${base05};
+  #      @define-color colgrey      #${base03};
+  #      @define-color colcyan      #${base0C};
+  #      @define-color colgreen     #${base0B};
+  #      @define-color colorange    #${base09};
+  #      @define-color colmagenta   #${base0E};
+  #      @define-color colviolet    #${base0F};
+  #      @define-color colred       #${base08};
+  #      @define-color colyellow    #${base0A};
+  #  '';
+  #
   # xdg.configFile."ags".source = ../../config/ags;
   # home.file."${config.home.homeDirectory}/.config/ags".recursive = true;
 
@@ -143,11 +143,11 @@
     #     tweaks = [ "rimless" ];
     #     variant = "mocha";
     #   };
-      # package = pkgs.gruvbox-gtk-theme;
-      # name = "Gruvbox";
-      # name = "Orchis-Dark";
-      # name = "Arc-Dark";
-      # package = pkgs.orchis-theme;
+    # package = pkgs.gruvbox-gtk-theme;
+    # name = "Gruvbox";
+    # name = "Orchis-Dark";
+    # name = "Arc-Dark";
+    # package = pkgs.orchis-theme;
     # };
     iconTheme = with pkgs; {
       name = "Papirus-Dark";
@@ -226,4 +226,126 @@
   #     sha256 = "00lpx4znr4dd0cc4w4q8fl97bdp7q19z1d3p50hcfxy26jz5g21g";
   #   }
   # ];
+  # programs.fastfetch = {
+  #   enable = true;
+  #   settings  = {
+  #     logo = {
+  #       type = "small";
+  #     };
+  #   };
+  # };
+  programs.fastfetch = {
+    enable = true;
+    settings = {
+
+      schema = "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json";
+      logo = {
+        type = "small";
+      };
+  
+      display = {
+        key.width = 4;
+        separator = " ";
+        size.binaryPrefix = "si";
+      };
+
+
+      modules = [
+        {
+          format = "{3}";
+          key = " ";
+          keyColor = "green";
+          type = "os";
+        }
+
+        {
+          key = " ";
+          keyColor = "yellow";
+          type = "kernel";
+        }
+
+        {
+          key = " ";
+          keyColor = "blue";
+          type = "uptime";
+        }
+
+        {
+          key = "󰏖 ";
+          keyColor = "magenta";
+          type = "packages";
+        }
+
+
+        "break"
+
+        {
+          format = "{1} ({5})";
+          key = " ";
+          keyColor = "green";
+          type = "cpu";
+        }
+
+        {
+          driverSpecific = true;
+          format = "{2}";
+          #hideType = "integrated";
+          key = " ";
+          keyColor = "yellow";
+          type = "gpu";
+        }
+
+        {
+          format = "{/1}{-}{/}{/2}{-}{/}{} / {}";
+          key = " ";
+          keyColor = "blue";
+          type = "memory";
+        }
+
+        {
+          key = "󰌢 ";
+          type = "host";
+          keyColor ="red";
+        }
+
+        "break"
+
+        {
+          compactType = "scaled";
+          key = "󰍹 ";
+          keyColor = "cyan";
+          type = "display";
+        }
+
+        {
+          format = "{2}";
+          key = " ";
+          keyColor = "green";
+          type = "wm";
+        }
+
+        {
+          format = "{3}";
+          key = " ";
+          keyColor = "yellow";
+          type = "terminal";
+        }
+
+        {
+          key = " ";
+          keyColor = "blue";
+          type = "shell";
+        }
+
+        "break"
+
+        {
+          key = " ";
+          symbol = "circle";
+          type = "colors";
+        }
+      ];
+
+    };
+  };
 }
