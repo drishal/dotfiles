@@ -121,7 +121,6 @@
           };
         };
         lspkind.enable = true;
-        rustaceanvim.enable = true;
         # lazy = {
         #   enable = true;
         #   plugins = with pkgs.vimPlugins; [
