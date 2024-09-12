@@ -310,8 +310,7 @@ bind = $mainMod, mouse_up, workspace, e-1
 #+end_src
 
 * Hyprpaper config
-# #+begin_src conf :tangle ~/.config/hypr/hyprpaper.conf
-#+begin_src conf :tangle no 
+#+begin_src conf :tangle ~/.config/hypr/hyprpaper.conf
 preload = /home/drishal/dotfiles/wallpapers/NixOS-1.png
 preload = ~/dotfiles/wallpapers/archlinux/archlinux-onedark.png 
 preload = ~/Downloads/gruvbox-nix.png
