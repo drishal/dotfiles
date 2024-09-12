@@ -12,6 +12,7 @@ pkgs,
       neovim.enable = false;
       nixvim.enable = false;
       helix.enable = false;
+      hyprpaper.enable = true;
     };
   };
 }    
