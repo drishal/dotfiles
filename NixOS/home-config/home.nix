@@ -19,7 +19,7 @@
     ./shells.nix
     ./file-managers.nix
     # ./colors/doompalenight.nix
-    ./tmux.nix
+    # ./tmux.nix
     ./waybar.nix
     ../stylix.nix
     ./stylix.nix

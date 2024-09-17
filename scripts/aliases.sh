@@ -37,7 +37,7 @@ alias galaxy-buds="steam-run ~/Downloads/GalaxyBudsClient_Linux_64bit_Portable.b
 alias remove-dunst="sudo rm /usr/share/dbus-1/services/org.knopwob.dunst.service"
 alias mongodb="sudo systemctl start mongodb.service"
 
-alias tmux="tmux -f ~/dotfiles/config/tmux/tmux.conf"
+# alias tmux="tmux -f ~/dotfiles/config/tmux/tmux.conf"
 
 alias wine64="env WINEARCH=win64 WINEPREFIX='/home/drishal/.wine64' wine64"
 

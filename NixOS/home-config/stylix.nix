@@ -13,6 +13,7 @@ pkgs,
       nixvim.enable = false;
       helix.enable = false;
       hyprpaper.enable = true;
+      tmux.enable = false;
     };
   };
 }    
