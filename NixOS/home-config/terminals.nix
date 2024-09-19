@@ -16,8 +16,8 @@
           dpi-aware = "no";
           pad = "15x10";
         };
-        cursor = {
-          color = "282c34 51afef";
+        cursor = with config.scheme; {
+          color = "${base00} ${base06}";
         };
         scrollback = {
           indicator-position = "none";
