@@ -25,6 +25,7 @@
     "mitigations=off"
     "clearcpuid=514"
     "i8042.probe_defer"
+    "split_lock_detect=off"
   ];
   #"processor.max_cstate=1" "intel_idle.max_cstate=0"
   # microde

@@ -60,7 +60,7 @@
       url = "github:nix-community/emacs-overlay/";
     };
     emacs-lsp-booster.url = "github:slotThe/emacs-lsp-booster-flake";
-    emacs-ng.url = "github:emacs-ng/emacs-ng";
+    # emacs-ng.url = "github:emacs-ng/emacs-ng";
 
     programsdb = {
       url = "github:wamserma/flake-programs-sqlite";
@@ -109,6 +109,10 @@
       url = "github:MOIS3Y/nvchad-on-steroids";
       flake = false;
     };
+    umu= {
+      url = "git+https://github.com/Open-Wine-Components/umu-launcher/?dir=packaging\/nix&submodules=1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -122,7 +126,7 @@
       declarative-cachix,
       discord-flake,
       emacs-lsp-booster,
-      emacs-ng,
+      # emacs-ng,
       emacs-overlay,
       eww,
       home-manager,

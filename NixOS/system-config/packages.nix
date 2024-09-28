@@ -59,6 +59,12 @@
     #gamescope
     gamescope.enable = true;
 
+    #appimage
+    appimage = {
+      enable = true;
+      binfmt = true;
+    };
+
 
     #neovim
     # neovim = {
@@ -132,6 +138,7 @@
     brightnessctl
     bridge-utils
     bubblewrap
+    cabextract
     cachix
     # calibre
     # cargo
@@ -263,6 +270,7 @@
     gnupg
     ghostscript
     # go
+    goverlay
     gsmartcontrol
     gparted
     gpt4all
@@ -270,6 +278,7 @@
     gtklock
     # haruna
     haskellPackages.xmobar
+    handbrake
     hdparm
     htop
     hollywood
@@ -282,6 +291,7 @@
     inxi
     inotify-tools
     inputs.lobster.packages.x86_64-linux.lobster
+    inputs.umu.packages.${pkgs.system}.umu
     jq
     #python3Packages.ipython
     # python3Packages.pyngrok
@@ -388,6 +398,7 @@
     papirus-icon-theme
     pass
     pavucontrol
+    patchelf
     pciutils
     pcmanfm
     peaclock
@@ -425,6 +436,7 @@
     # (quickemu.override { qemu = qemu_full; })
     # qutebrowser
     qbittorrent
+    qbittorrent-nox
     # qtile-extras_git
     ranger
     radeontop
@@ -447,6 +459,7 @@
     starship
     steam-run
     stremio
+    s-tui
     surf
     # swaylock
     svp
@@ -511,6 +524,7 @@
     xarchiver
     xonotic
     yarn
+    yad
     yt-dlp
     # ytfzf
     zip
@@ -540,6 +554,7 @@
     xorg.xhost
     zathura
     zed-editor
+    zenity
     (pkgs.python3.withPackages (pypkgs: [
       pypkgs.pygobject3
       inputs.astal.packages.${pkgs.stdenv.hostPlatform.system}.astal
@@ -694,10 +709,10 @@
   #     enableZshIntegration = true;
   #   };
   # # mullvad
-  services.mullvad-vpn = {
-    enable = true;
-    package = pkgs.mullvad-vpn;
-  };
+  # services.mullvad-vpn = {
+  #   enable = true;
+  #   package = pkgs.mullvad-vpn;
+  # };
 
   #samba
   services.samba = {
