@@ -17,13 +17,6 @@
       fish_add_path ~/.nimble/bin
       fish_add_path ~/.cargo/bin
 
-      #colors
-      set fish_color_normal '#98be65'
-      set fish_color_autosuggestion '#6272a4'
-      set fish_color_command '#98be65'
-      set fish_color_error '#ff6c6b'
-      set fish_color_param '#98be65'
-
       # greeting
       set fish_greeting
 
@@ -48,7 +41,7 @@
       set -x LUTRIS_SKIP_INIT 1
 
       #aliases
-      source ~/dotfiles/aliases.sh
+      source ~/dotfiles/scripts/aliases.sh
 
     '';
     plugins = [

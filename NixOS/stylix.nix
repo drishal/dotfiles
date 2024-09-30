@@ -5,7 +5,8 @@
   ...
 }:
 {
-  scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
+  scheme = "${inputs.tt-schemes}/base16/tokyo-night-dark.yaml";
+  # scheme = ./home-config/colors/doomvibrant.yaml;
   stylix = {
     enable = true;
     # base16Scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
