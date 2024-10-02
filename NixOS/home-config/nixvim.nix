@@ -10,22 +10,22 @@
     enable = true;
     enableMan = true;
       # colorschemes.onedark.enable = true;
-      colorschemes.tokyonight = {
-        enable = true;
-        settings = {
-          style = "night";
-        };
-      };
+      # colorschemes.tokyonight = {
+      #   enable = true;
+      #   settings = {
+      #     style = "night";
+      #   };
+      # };
       # colorschemes.gruvbox = {
       #   enable = true ;
       #   settings = {
       #     contrast = "hard"; 
       #   };
       # };
-      # colorschemes.catppuccin = {
-      #   enable = true;
-      #   settings.background.dark = "mocha";
-      # };
+      colorschemes.catppuccin = {
+        enable = true;
+        settings.background.dark = "mocha";
+      };
       # colorschemes.gruvbox = {
       #   enable = true;
       # };

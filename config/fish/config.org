@@ -40,7 +40,7 @@ fish_add_path ~/.cargo/bin
 
 * Custom color scheme
 ** Catppuccin mocha
-#+begin_src fish :tangle no
+#+begin_src fish 
 set fish_color_normal cdd6f4
 set fish_color_command 89b4fa
 set fish_color_param f2cdcd
@@ -69,7 +69,7 @@ set fish_pager_color_completion cdd6f4
 set fish_pager_color_description 6c7086
 #+end_src
 ** doom one theme
-#+begin_src fish 
+#+begin_src fish :tangle no
 set fish_color_normal bbc2cf
 set fish_color_command 51afef
 set fish_color_param c678dd

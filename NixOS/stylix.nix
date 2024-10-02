@@ -5,11 +5,10 @@
   ...
 }:
 {
-  scheme = "${inputs.tt-schemes}/base16/tokyo-night-dark.yaml";
+  scheme = "${inputs.tt-schemes}/base24/catppuccin-mocha.yaml";
   # scheme = ./home-config/colors/doomvibrant.yaml;
   stylix = {
     enable = true;
-    # base16Scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
     base16Scheme = "${config.scheme}";
     cursor = {
       package = pkgs.libsForQt5.breeze-qt5;

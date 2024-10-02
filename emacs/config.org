@@ -421,7 +421,7 @@ remove/add tangle no to whatever font you prefer
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-tokyonight t)
+  ;; (load-theme 'doom-tokyonight t)
   ;; (setq doom-catppuccin-dark-variant "mocha")
   ;; (custom-set-faces
    ;; `(mode-line ((t (:background ,(doom-color 'dark-violet)))))
@@ -484,7 +484,7 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 *** Other themes:
 **** Catppuccin
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
 (use-package catppuccin-theme
   ;;:demand t
   :ensure (:host github :repo "catppuccin/emacs")
