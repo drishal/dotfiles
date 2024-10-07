@@ -297,6 +297,7 @@ background contrast. All other values default to \"mocha\"."
    ;;;; markdown-mode
    (markdown-markup-face :foreground base5)
    (markdown-header-face :inherit 'bold :foreground _red)
+   (markdown-blockquote-face :inherit 'italic :foreground grey)
    ((markdown-code-face &override) :background (doom-lighten base3 0.1))
    ;;;; rjsx-mode
    (rjsx-tag :foreground _red)
