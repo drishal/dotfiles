@@ -10,7 +10,8 @@
   programs.waybar = {
     enable = true;
     # package = pkgs-master.waybar;
-    style = with config.scheme; ''
+    #style = with config.scheme; ''
+    style = with config.lib.stylix.colors; ''
       @define-color colbg        #${base00}; 
       @define-color colbg2       #${base02};
       @define-color colfg        #${base05};

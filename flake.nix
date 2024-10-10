@@ -82,7 +82,7 @@
 
     lobster.url = "github:justchokingaround/lobster";
 
-    base16.url = "github:SenchoPens/base16.nix";
+    #base16.url = "github:SenchoPens/base16.nix";
 
     ngrok.url = "github:ngrok/ngrok-nix";
 
@@ -97,7 +97,11 @@
       url = "github:AdnanHodzic/auto-cpufreq";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    stylix.url = "github:danth/stylix";
+    stylix = {
+      #url = "github:danth/stylix";
+      url = "github:trueNAHO/stylix/stylix-downgrade-and-lock-tinted-kitty-input";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nix-gaming.url = "github:fufexan/nix-gaming";
     nvchad4nix = {
@@ -120,7 +124,7 @@
       ags,
       astal,
       auto-cpufreq,
-      base16,
+      #base16,
       cachix,
       chaotic,
       declarative-cachix,
@@ -176,7 +180,7 @@
           ./NixOS/home-config/home.nix
           { nixpkgs.overlays = [ inputs.emacs-overlay.overlay emacs-lsp-booster.overlays.default ]; }
           # inputs.ags.homeManagerModules.default
-          base16.homeManagerModule
+          #base16.homeManagerModule
           nixvim.homeManagerModules.nixvim
           stylix.homeManagerModules.stylix
           "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
@@ -205,7 +209,7 @@
             auto-cpufreq.nixosModules.default
             chaotic.nixosModules.default
             stylix.nixosModules.stylix
-            base16.nixosModule
+            #base16.nixosModule
           ];
           specialArgs = {
             inherit inputs;

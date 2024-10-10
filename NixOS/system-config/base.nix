@@ -161,7 +161,7 @@
   services.printing =
     {
       enable = true;
-      drivers = with pkgs; [foomatic-db-ppds-withNonfreeDb];
+      # drivers = with pkgs; [foomatic-db-ppds-withNonfreeDb];
     };
   services.avahi = {
     enable = true;

@@ -16,7 +16,8 @@
           dpi-aware = "no";
           pad = "15x10";
         };
-        cursor = with config.scheme; {
+        # cursor = with config.scheme; {
+        cursor = with config.lib.stylix.colors; {
           color = "${base00} ${base06}";
         };
         scrollback = {
@@ -56,7 +57,7 @@
         #   family = "FantasqueSansM Nerd Font";
         # family="monospace";
         # };
-        colors = with config.scheme; {
+        colors = with config.lib.stylix.colors; {
           background = "#${base00}";
           foreground = "#${base05}";
           cursor = "#${base0D}";

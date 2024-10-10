@@ -159,8 +159,8 @@
     # })
 
     chromium-bsu
-    cinnamon.nemo
-    cinnamon.nemo-with-extensions
+    nemo
+    nemo-with-extensions
     # clang
     clang-tools
     cloudflare-warp
@@ -592,15 +592,15 @@
         })
       ];
     }))
-    (picom.overrideAttrs (old: {
-      src = pkgs.fetchFromGitHub {
-        repo = "picom";
-        owner = "yshui";
-        rev = "cee12875625465292bc11bf09dc8ab117cae75f4";
-        sha256 = "sha256-lVwBwOvzn4ro1jInRuNvn1vQuwUHUp4MYrDaFRmW9pc=";
-      };
-      buildInputs = old.buildInputs ++ [ pkgs.pcre2 ];
-    }))
+    # (picom.overrideAttrs (old: {
+    #   src = pkgs.fetchFromGitHub {
+    #     repo = "picom";
+    #     owner = "yshui";
+    #     rev = "cee12875625465292bc11bf09dc8ab117cae75f4";
+    #     sha256 = "sha256-lVwBwOvzn4ro1jInRuNvn1vQuwUHUp4MYrDaFRmW9pc=";
+    #   };
+    #   buildInputs = old.buildInputs ++ [ pkgs.pcre2 ];
+    # }))
     # (tlp.overrideAttrs (old: {
     #   src = pkgs.fetchFromGitHub {
     #     repo = "linrunner";
