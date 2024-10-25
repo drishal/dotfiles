@@ -39,7 +39,7 @@ pkgs,
     nil
     taplo
     # papirus-icon-theme
-    gnome.gnome-themes-extra
+    gnome-themes-extra
     #nodePackages.create-react-app
     #nodePackages.eslint
     #nodePackages.js-beautify

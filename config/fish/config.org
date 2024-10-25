@@ -7,6 +7,8 @@
 - [[#custom-color-scheme][Custom color scheme]]
   - [[#catppuccin-mocha][Catppuccin mocha]]
   - [[#doom-one-theme][doom one theme]]
+  - [[#tokyionight-theme][tokyionight theme]]
+  - [[#everforest-theme][Everforest theme]]
 - [[#remove-greeting][remove greeting]]
 - [[#starship-prompt][Starship Prompt]]
 - [[#variables][Variables]]
@@ -40,7 +42,7 @@ fish_add_path ~/.cargo/bin
 
 * Custom color scheme
 ** Catppuccin mocha
-#+begin_src fish 
+#+begin_src fish :tangle no
 set fish_color_normal cdd6f4
 set fish_color_command 89b4fa
 set fish_color_param f2cdcd
@@ -96,6 +98,78 @@ set fish_pager_color_progress 3f444a
 set fish_pager_color_prefix c678dd
 set fish_pager_color_completion bbc2cf
 set fish_pager_color_description 3f444a
+#+end_src
+** tokyionight theme
+#+begin_src fish :tangle no
+# TokyoNight Color Palette
+set -l foreground c0caf5
+set -l selection 283457
+set -l comment 565f89
+set -l red f7768e
+set -l orange ff9e64
+set -l yellow e0af68
+set -l green 9ece6a
+set -l purple 9d7cd8
+set -l cyan 7dcfff
+set -l pink bb9af7
+
+# Syntax Highlighting Colors
+set -g fish_color_normal $foreground
+set -g fish_color_command $cyan
+set -g fish_color_keyword $pink
+set -g fish_color_quote $yellow
+set -g fish_color_redirection $foreground
+set -g fish_color_end $orange
+set -g fish_color_option $pink
+set -g fish_color_error $red
+set -g fish_color_param $purple
+set -g fish_color_comment $comment
+set -g fish_color_selection --background=$selection
+set -g fish_color_search_match --background=$selection
+set -g fish_color_operator $green
+set -g fish_color_escape $pink
+set -g fish_color_autosuggestion $comment
+
+# Completion Pager Colors
+set -g fish_pager_color_progress $comment
+set -g fish_pager_color_prefix $cyan
+set -g fish_pager_color_completion $foreground
+set -g fish_pager_color_description $comment
+set -g fish_pager_color_selected_background --background=$selection
+#+end_src
+** Everforest theme
+#+begin_src fish
+set fish_color_normal FDF6D3
+set fish_color_command --bold C3E5A5
+set fish_color_param eebebe
+set fish_color_keyword F2A9A8
+set fish_color_quote FEFCBC
+set fish_color_redirection --bold F6CDF6
+set fish_color_end F3AF8A
+set fish_color_comment 5D6B66
+set fish_color_error --bold F2A9A8
+set fish_color_gray 5D6B66
+set fish_color_selection --background=637E73
+set fish_color_search_match --background=637E73
+set fish_color_option F6CDF6
+set fish_color_param C3D3FB
+set fish_color_operator F6CDF6
+set fish_color_escape F2A9A8
+set fish_color_autosuggestion 6e6e6e
+set fish_color_cancel F2A9A8
+set fish_color_cwd C3E5A5
+set fish_color_user BAFCF2
+set fish_color_host C3D3FB
+set fish_color_host_remote F3AF8A
+set fish_color_status F2A9A8
+set fish_pager_color_completion C3E5A5
+set fish_pager_color_description 6e6e6e
+set fish_pager_color_prefix F2EFDF
+set fish_pager_color_progress 6e6e6e
+set fish_pager_color_selected_completion --bold C3E5A5
+set fish_pager_color_selected_description --bold 6e6e6e
+set fish_pager_color_selected_prefix --bold F2EFDF
+set fish_pager_color_selected_progress --bold 6e6e6e
 #+end_src
 * remove greeting
 #+begin_src fish

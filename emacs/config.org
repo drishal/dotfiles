@@ -421,7 +421,7 @@ remove/add tangle no to whatever font you prefer
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  ;; (load-theme 'doom-tokyonight t)
+  (load-theme 'doom-everforest t)
   ;; (setq doom-catppuccin-dark-variant "mocha")
   ;; (custom-set-faces
    ;; `(mode-line ((t (:background ,(doom-color 'dark-violet)))))
@@ -448,6 +448,10 @@ remove/add tangle no to whatever font you prefer
 
 (setq doom-gruvbox-material-background  "hard")  ; or hard (defaults to soft)
 (setq doom-gruvbox-dark-variant  "hard")  ; or hard (defaults to soft)
+
+;;everforest
+(setq doom-everforest-background "hard")
+(setq doom-everforest-palette "original")
 ;; Must be used *after* the theme is loaded
 
 #+end_src
@@ -482,9 +486,14 @@ remove/add tangle no to whatever font you prefer
   (load-theme 'gruvbox-dark-hard)
   )
 #+end_src
+*** kanagawa
+#+begin_src emacs-lisp :tangle no
+(use-package autothemer :demand t)
+(load-theme kanagawa)
+#+end_src
 *** Other themes:
 **** Catppuccin
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package catppuccin-theme
   ;;:demand t
   :ensure (:host github :repo "catppuccin/emacs")

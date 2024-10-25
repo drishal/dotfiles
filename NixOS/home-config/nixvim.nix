@@ -73,7 +73,7 @@
         # gruvbox_material_better_performance = 1;
         gruvbox_material_background = "hard";
       };
-      extraPackages = with pkgs; [ vimPlugins.nvim-web-devicons luajitPackages.lua-utils-nvim ];
+      extraPackages = with pkgs; [ luajitPackages.lua-utils-nvim ];
       extraPlugins = with pkgs.vimPlugins; [
         orgmode
         # orgmode
@@ -108,16 +108,16 @@
         lsp = {
           enable = true;
           servers = {
-            tsserver.enable = true;
-            rust-analyzer = {
+            ts_ls.enable = true;
+            rust_analyzer = {
               enable = true;
               installCargo = false;
               installRustc = false;
             };
-            lua-ls.enable = true;
+            lua_ls.enable = true;
             pyright.enable = true;
             dockerls.enable = true;
-            nil-ls.enable = true;
+            nil_ls.enable = true;
           };
         };
         lspkind.enable = true;
@@ -186,6 +186,11 @@
             autoHide = true;
           };
         };
+
+        mini = {
+          enable = true;
+          # mockDevIcons = true;
+        };
         nix.enable = true;
         tmux-navigator.enable = true;
         cmp = {
@@ -220,15 +225,17 @@
         };
         lualine = {
           enable = true;
-          iconsEnabled = true;
-          # theme = "onedark";
-          componentSeparators = {
-            left = " ";
-            right = " ";
-          };
-          sectionSeparators = {
-            left = " ";
-            right = " ";
+          settings = {
+            icons_enabled = true;
+            # theme = "onedark";
+            component_separators = {
+              left = " ";
+              right = " ";
+            };
+            section_separators = {
+              left = " ";
+              right = " ";
+            };
           };
         };
 
