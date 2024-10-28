@@ -49,10 +49,10 @@
       #   extraPackages = _: [ pkgs.qtile-extras_git ];
       # };
 
-      xmonad = {
-        enable = true;
-        enableContribAndExtras = true;
-      };
+      # xmonad = {
+      #   enable = true;
+      #   enableContribAndExtras = true;
+      # };
 
       dwm.enable = true;
 

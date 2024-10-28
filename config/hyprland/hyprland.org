@@ -314,6 +314,7 @@ bind = $mainMod, mouse_up, workspace, e-1
 preload = /home/drishal/dotfiles/wallpapers/NixOS-1.png
 preload = ~/dotfiles/wallpapers/archlinux/archlinux-onedark.png 
 preload = ~/Downloads/gruvbox-nix.png
+# preload = ~/Documents/krishna1.jpg
 # preload = ~/dotfiles/wallpapers/darkest_hour.jpg
 preload = ~/Downloads/nika.jpg
 # preload = /home/drishal/dotfiles/wallpapers/archlinux/archlinux-onedark.png

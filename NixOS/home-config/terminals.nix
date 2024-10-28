@@ -52,11 +52,10 @@
         # cursor = '▇';
         blinking-cursor = false;
         # theme="dracula";
-        # fonts = {
-        #   size = 18;
-        #   family = "FantasqueSansM Nerd Font";
-        # family="monospace";
-        # };
+        fonts = {
+          size = 18;
+          family = "FantasqueSansM Nerd Font";
+        };
         colors = with config.lib.stylix.colors; {
           background = "#${base00}";
           foreground = "#${base05}";

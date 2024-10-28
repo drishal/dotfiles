@@ -13,10 +13,10 @@
   # boot.kernelPackages = pkgs.linuxPackages_zen;
 
   boot.kernelPackages = pkgs.linuxPackages_cachyos;
-  # chaotic.scx = {
-  #   enable = true;
-  #   scheduler = "scx_rusty";
-  # }; # by default uses rustland
+  chaotic.scx = {
+    enable = true;
+    scheduler = "scx_bpfland";
+  }; # by default uses rustland
   # systemd.services.scx.serviceConfig.Restart = lib.mkForce "always";
   # boot.kernelPackages = pkgs.linuxPackages_testing;
 

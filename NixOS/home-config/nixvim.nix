@@ -22,9 +22,13 @@
       #     contrast = "hard"; 
       #   };
       # };
-      colorschemes.catppuccin = {
+      # colorschemes.catppuccin = {
+      #   enable = true;
+      #   settings.background.dark = "mocha";
+      # };
+      colorschemes.everforest = {
         enable = true;
-        settings.background.dark = "mocha";
+        settings.background = "hard";
       };
       # colorschemes.gruvbox = {
       #   enable = true;
@@ -129,7 +133,9 @@
         #   ];
         # };
         image.enable = true;
-        rust-tools.enable = true;
+        # rustaceanvim = {
+        #   enable = true;
+        # };
         lsp-format.enable = true;
         luasnip.enable = true;
         cmp_luasnip.enable = true;

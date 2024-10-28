@@ -222,7 +222,7 @@
     figlet
     # firefox-bin
     firefox
-    # inputs.quickemu.packages.${pkgs.stdenv.hostPlatform.system}.quickemu
+    inputs.quickemu.packages.${pkgs.stdenv.hostPlatform.system}.quickemu
     # firefox-wayland
     # inputs.firefox-nightly.packages.${pkgs.system}.firefox-beta-bin
     # inputs.firefox.packages.${pkgs.system}.firefox-nightly-bin
@@ -273,7 +273,7 @@
     goverlay
     gsmartcontrol
     gparted
-    gpt4all
+    # gpt4all
     gtk-layer-shell
     gtklock
     # haruna
@@ -431,7 +431,7 @@
     #python3Packages.venvShellHook
     #$python3Packages.qtile-extras
     qpdf
-    qt5ct
+    libsForQt5.qt5ct
     # quickemu
     # (quickemu.override { qemu = qemu_full; })
     # qutebrowser
@@ -451,7 +451,7 @@
     # rust-analyzer
     simplescreenrecorder
     # sony-headphones-client
-    scx
+    # scx
     # smplayer
     sass
     speedtest-cli
@@ -683,7 +683,7 @@
     # fontDir.enable = true;
     packages = with pkgs; [
       noto-fonts
-      noto-fonts-cjk
+      noto-fonts-cjk-sans
       (pkgs.nerdfonts.override {
         fonts = [
           "FiraCode"
