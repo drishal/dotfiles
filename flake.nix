@@ -1,3 +1,4 @@
+
 {
   description = "Configuration for my system";
   # nixConfig.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
@@ -22,11 +23,11 @@
     nixpkgs = {
       url = "github:nixos/nixpkgs/nixos-unstable/";
     };
-    # nixpkgs-master.url = "github:NixOS/nixpkgs/fb6f374d56fc599f958a0c418511fddd7f46257e";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/a46925097143c5535a814c0d9ca53b29fb2a5d1d";
     # nixpkgs = { url = "github:PedroHLC/nixpkgs/pull-284487"; };
-    nixpkgs-master = {
-      url = "github:nixos/nixpkgs/9b5ca6a80c775a62734e1fefa0d04f1b0c91c91b";
-    };
+    # nixpkgs-master = {
+    #   url = "github:nixos/nixpkgs/9b5ca6a80c775a62734e1fefa0d04f1b0c91c91b";
+    # };
 
     # nixpkgs-master.url = "github:NixOS/nixpkgs/master";
 
