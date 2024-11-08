@@ -29,6 +29,7 @@ pkgs,
     lua-language-server
     man
     man-pages
+    nixd
     neofetch
     # nvchad
     neovim
@@ -60,6 +61,8 @@ pkgs,
     # })
   ];
 
+  #nixd path
+  nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
   # direnv
   programs.direnv = {
     enable = true;
