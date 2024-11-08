@@ -108,12 +108,16 @@
     nvchad4nix = {
       url = "github:nix-community/nix4nvchad";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nvchad-starter.follows = "nvchad-on-steroids";
+      inputs.nvchad-starter.follows = "nvchad-starter";
     };
-    nvchad-on-steroids = {  # <- here
-      url = "github:MOIS3Y/nvchad-on-steroids";
+    nvchad-starter = {
+      url = "github:NvChad/starter";
       flake = false;
     };
+    # nvchad-on-steroids = {  # <- here
+    #   url = "github:MOIS3Y/nvchad-on-steroids";
+    #   flake = false;
+    # };
     umu= {
       url = "git+https://github.com/Open-Wine-Components/umu-launcher/?dir=packaging\/nix&submodules=1";
       inputs.nixpkgs.follows = "nixpkgs";
