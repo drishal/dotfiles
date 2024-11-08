@@ -8,7 +8,7 @@
 # Editors
 {
   imports = [
-    ./nixvim.nix
+    # ./nixvim.nix
     inputs.nvchad4nix.homeManagerModule
   ];
   programs = {
@@ -31,9 +31,8 @@
     #   extraPackages = with pkgs; [
     #     emmet-language-server
     #   ];
-    #   # extraConfig = inputs.nvchad-on-steroids; # <- here extraConfig from inputs
-    #   extraConfig = ''
-    #   ${inputs.nvchad-on-steroids}
+    #   chadrcConfig= ''
+    #   ${builtins.readFile ../../config/nvim/nvchad/chadrc.lua}
     #   '';
     #   hm-activation = true;
     #   backup = false;
