@@ -26,17 +26,19 @@ pkgs,
     fzf
     ispell
     glibcLocales
+    lua-language-server
     man
     man-pages
     neofetch
     # nvchad
+    neovim
     #rnix
     # sl
     starship
     # neovide
     # nixpkgs-fmt
     nixfmt-rfc-style
-    nil
+    # nil
     taplo
     # papirus-icon-theme
     gnome-themes-extra
