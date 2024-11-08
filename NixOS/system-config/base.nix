@@ -16,7 +16,9 @@
   chaotic.scx = {
     enable = true;
     scheduler = "scx_bpfland";
-  }; # by default uses rustland
+    package = pkgs.scx.full;
+  };
+  # by default uses rustland
   # systemd.services.scx.serviceConfig.Restart = lib.mkForce "always";
   # boot.kernelPackages = pkgs.linuxPackages_testing;
 
