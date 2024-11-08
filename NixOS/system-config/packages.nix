@@ -131,6 +131,8 @@
     (brave.override {
       commandLineArgs = [
         "--ignore-gpu-blocklist"
+        "--enable-zero-copy"
+        "--enable-features=VaapiVideoDecodeLinuxGL"
       ];
     })
     btop
@@ -273,7 +275,7 @@
     goverlay
     gsmartcontrol
     gparted
-    # gpt4all
+    gpt4all
     gtk-layer-shell
     gtklock
     # haruna
@@ -304,10 +306,10 @@
     kubectl
     kubernetes
     lbreakout2
-    leafpad
     # linuxKernel.packages.v4l2loopback
     # linuxKernel.packages.linux_cachyos.v4l2loopback
     libnotify
+    libarchive
     libreoffice
     libva-utils
     libsixel
@@ -467,6 +469,7 @@
     swaylock-effects
     swaybg
     telegram-desktop
+    tmate
     tetex
     #texlive.combined.scheme-medium
     thinkfan
@@ -718,6 +721,9 @@
   services.samba = {
     enable = true;
   };
+
+  #nixd setting
+  #nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
 
   # chaotic bincache
   # chaotic.nyx.cache.enable = true;
