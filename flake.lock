@@ -454,11 +454,11 @@
         "nixpkgs-stable": "nixpkgs-stable_2"
       },
       "locked": {
-        "lastModified": 1731463490,
-        "narHash": "sha256-AtyI66bBn9IX9s+rXQEJHrkAQv3430urS6IxK5m1Uzs=",
+        "lastModified": 1731489158,
+        "narHash": "sha256-xxhjjRBM9P6536SATfoGkKcMBKPZxcgs3yx/cyQxbb0=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "395675b281ab1aea12ab75a6296b83e3b3152f13",
+        "rev": "98672e8948813f132851fb6768fa1265a8cab324",
         "type": "github"
       },
       "original": {
@@ -1401,11 +1401,11 @@
         "nixpkgs": "nixpkgs_13"
       },
       "locked": {
-        "lastModified": 1731447721,
-        "narHash": "sha256-QooUs2UbQ7hyNk08M9CgWrQqzluAmrxACWY2bhIh9xM=",
+        "lastModified": 1731500640,
+        "narHash": "sha256-bxtcbR33ftcSA+7+E52i+cqWAdoCQNFpxR1180HRX48=",
         "owner": "nix-community",
         "repo": "neovim-nightly-overlay",
-        "rev": "d5765f32d58bb2f11c0f3b4992ee753dece1be9c",
+        "rev": "1329ddcc318e77e4629eb629d39f7f7c9b2632f6",
         "type": "github"
       },
       "original": {
@@ -1417,11 +1417,11 @@
     "neovim-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1731352106,
-        "narHash": "sha256-NwzweeFDNLsBLk34x6/UKK/FnZyh/56yj3jmGMbVWh8=",
+        "lastModified": 1731454739,
+        "narHash": "sha256-ihuASDo2BVZpUpsW6Z8Ll/xvczRPgGT/EGrrNt7NnwU=",
         "owner": "neovim",
         "repo": "neovim",
-        "rev": "72a1df60652f20f5f47bf120ee0bc08466837f31",
+        "rev": "1128d75550fa0b481b8953a194bae890d733a166",
         "type": "github"
       },
       "original": {
@@ -1837,11 +1837,11 @@
     },
     "nixpkgs_13": {
       "locked": {
-        "lastModified": 1730958623,
-        "narHash": "sha256-JwQZIGSYnRNOgDDoIgqKITrPVil+RMWHsZH1eE1VGN0=",
+        "lastModified": 1731245184,
+        "narHash": "sha256-vmLS8+x+gHRv1yzj3n+GTAEObwmhxmkkukB2DwtJRdU=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "85f7e662eda4fa3a995556527c87b2524b691933",
+        "rev": "aebe249544837ce42588aa4b2e7972222ba12e8f",
         "type": "github"
       },
       "original": {
@@ -2083,11 +2083,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1731471470,
-        "narHash": "sha256-rHSaczwFQ2PoMeXWcPI/HLUSfuxUXecl4nxYewTeYjM=",
+        "lastModified": 1731494868,
+        "narHash": "sha256-gFzX+e1ATJmhjOMvbBmqf1v4WgMz770dZhtGN4dZtng=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "02d80ed1179fca2ca58adc9d4ba6c4c6c6c6ccc7",
+        "rev": "4b0e599bebf4bdf6725cdf8036a335096bf13097",
         "type": "github"
       },
       "original": {
@@ -2274,11 +2274,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1731438910,
-        "narHash": "sha256-kL9XvqmJdRFMN/dn8rsMB8+XoDTdpcHKeXxqc/PEWVo=",
+        "lastModified": 1731500275,
+        "narHash": "sha256-MMMUSPGxh97FBs+BFsM5s+pjapOlSTSYqYwUuLA9hCE=",
         "owner": "wamserma",
         "repo": "flake-programs-sqlite",
-        "rev": "5984e814fb3adb7b5283d7909a005f80038604aa",
+        "rev": "d542c8a67991547d380346a7f70d4aefe16c06a6",
         "type": "github"
       },
       "original": {
@@ -2617,11 +2617,11 @@
       },
       "locked": {
         "dir": "packaging/nix",
-        "lastModified": 1730836236,
-        "narHash": "sha256-8jrg1DQrgYVaO4hpPRxRTAVluo8cE1Lcuvyv2EXuXpA=",
+        "lastModified": 1731482559,
+        "narHash": "sha256-anoaUsHmI9b8xRYPzv8XyGLTfiyErtZz2Grrl+37dMQ=",
         "ref": "refs/heads/main",
-        "rev": "90352466d502c40e147cfd11a428dde6c2899ab3",
-        "revCount": 833,
+        "rev": "223cd9e2a5f62a9eede6ab6695b2e522fcf78301",
+        "revCount": 835,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/Open-Wine-Components/umu-launcher/?dir=packaging/nix"
