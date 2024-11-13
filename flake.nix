@@ -100,7 +100,7 @@
     };
     stylix = {
       #url = "github:danth/stylix";
-      url = "github:trueNAHO/stylix/stylix-downgrade-and-lock-tinted-kitty-input";
+      url = "github:trueNAHO/stylix/6863412636c8f2cb3b7360f747fbd020fbfddf68";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

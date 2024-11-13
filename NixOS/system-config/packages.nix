@@ -303,6 +303,7 @@
     killall
     kitty
     kompose
+    kotatogram-desktop
     kubectl
     kubernetes
     lbreakout2
@@ -468,7 +469,7 @@
     sway-contrib.grimshot
     swaylock-effects
     swaybg
-    telegram-desktop
+    # telegram-desktop
     tmate
     tetex
     #texlive.combined.scheme-medium
