@@ -9,7 +9,7 @@ local bruh = {
 }
 
 M.base46 = {
-	theme = "everforest",
+	theme = "doomchad",
 
 	hl_override = {
 		Comment = { italic = true },

@@ -71,7 +71,7 @@ set fish_pager_color_completion cdd6f4
 set fish_pager_color_description 6c7086
 #+end_src
 ** doom one theme
-#+begin_src fish :tangle no
+#+begin_src fish 
 set fish_color_normal bbc2cf
 set fish_color_command 51afef
 set fish_color_param c678dd
@@ -138,7 +138,7 @@ set -g fish_pager_color_description $comment
 set -g fish_pager_color_selected_background --background=$selection
 #+end_src
 ** Everforest theme
-#+begin_src fish
+#+begin_src fish :tangle no
 set fish_color_normal FDF6D3
 set fish_color_command --bold C3E5A5
 set fish_color_param eebebe
