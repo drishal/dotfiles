@@ -99,8 +99,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     stylix = {
-      #url = "github:danth/stylix";
-      url = "github:trueNAHO/stylix/6863412636c8f2cb3b7360f747fbd020fbfddf68";
+      url = "github:danth/stylix/";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
