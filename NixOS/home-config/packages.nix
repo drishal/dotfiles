@@ -32,7 +32,7 @@ pkgs,
     nixd
     neofetch
     # nvchad
-    neovim
+    # neovim
     #rnix
     # sl
     starship

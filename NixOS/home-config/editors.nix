@@ -8,7 +8,7 @@
 # Editors
 {
   imports = [
-    # ./nixvim.nix
+    ./nixvim.nix
     inputs.nvchad4nix.homeManagerModule
   ];
   programs = {

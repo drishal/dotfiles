@@ -22,14 +22,14 @@
       #     contrast = "hard"; 
       #   };
       # };
-      # colorschemes.catppuccin = {
-      #   enable = true;
-      #   settings.background.dark = "mocha";
-      # };
-      colorschemes.everforest = {
+      colorschemes.catppuccin = {
         enable = true;
-        settings.background = "hard";
+        settings.background.dark = "mocha";
       };
+      # colorschemes.everforest = {
+      #   enable = true;
+      #   settings.background = "hard";
+      # };
       # colorschemes.gruvbox = {
       #   enable = true;
       # };
