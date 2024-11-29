@@ -23,7 +23,7 @@
     nixpkgs = {
       url = "github:nixos/nixpkgs/nixos-unstable/";
     };
-    nixpkgs-master.url = "github:NixOS/nixpkgs/a46925097143c5535a814c0d9ca53b29fb2a5d1d";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/8e82ef5df1195370205a3bbaad3642bea8d526d1";
     # nixpkgs = { url = "github:PedroHLC/nixpkgs/pull-284487"; };
     # nixpkgs-master = {
     #   url = "github:nixos/nixpkgs/9b5ca6a80c775a62734e1fefa0d04f1b0c91c91b";

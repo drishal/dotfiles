@@ -13,7 +13,7 @@
   # boot.kernelPackages = pkgs.linuxPackages_zen;
 
   boot.kernelPackages = pkgs.linuxPackages_cachyos;
-  chaotic.scx = {
+  services.scx = {
     enable = true;
     scheduler = "scx_bpfland";
     package = pkgs.scx.full;

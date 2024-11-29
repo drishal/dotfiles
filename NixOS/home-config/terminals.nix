@@ -133,6 +133,12 @@
     };
     kitty = {
       enable = true;
+      settings = {
+        enable_audio_bell = false;
+        update_check_interval = 0;
+        window_padding_width = 5;
+        confirm_os_window_close = 0;
+      };
     };
     zellij = {
       enable = true;

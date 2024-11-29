@@ -242,7 +242,7 @@ $mainMod = SUPER
 ** Binds
 #+begin_src conf
 bind = $mainMod, RETURN, exec, footclient
-bind = $mainMod, D, exec, wofi --show drun
+bind = $mainMod, D, exec, rofi -show drun -icon-theme Papirus -show-icons
 bind = $mainMod, V, exec, pavucontrol
 bind = $mainMod, T, exec, GDK_BACKEND=x11 xfce4-taskmanager
 bind = $mainMod, Q, killactive, 

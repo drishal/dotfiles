@@ -121,7 +121,8 @@
     arandr
     # arc-theme
     aria
-    scrcpy
+    #scrcpy
+    pkgs-master.scrcpy
     axel
     bat
     bc
@@ -179,6 +180,7 @@
     cmatrix
     conky
     cpufetch
+    cpu-x
     # debootstrap
     debian-goodies
     deluge
@@ -293,7 +295,6 @@
     inxi
     inotify-tools
     inputs.lobster.packages.x86_64-linux.lobster
-    inputs.umu.packages.${pkgs.system}.umu
     jq
     #python3Packages.ipython
     # python3Packages.pyngrok
@@ -548,7 +549,7 @@
     xfce.xfce4-taskmanager
     xfce.xfce4-whiskermenu-plugin
     xfce.xfconf
-
+    xdotool
     ## Xorg stuff
     xorg.xbacklight
     xorg.xdpyinfo
@@ -556,8 +557,9 @@
     xorg.xkill
     xorg.xmodmap
     xorg.xhost
+    xorg.xwininfo
     zathura
-    zed-editor
+    # zed-editor
     zenity
     (pkgs.python3.withPackages (pypkgs: [
       pypkgs.pygobject3

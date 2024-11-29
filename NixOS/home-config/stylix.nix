@@ -14,6 +14,7 @@ pkgs,
       helix.enable = false;
       hyprpaper.enable = true;
       tmux.enable = false;
+      rofi.enable = true;
     };
   };
 }    
