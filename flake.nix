@@ -235,6 +235,13 @@
             ];
             specialArgs = specialArgs;
           };
+          nixos-work = lib.nixosSystem {
+            inherit system;
+            modules = commonModules ++ [
+              ./NixOS/system-config/nixos-work/hardware-configuration.nix
+            ];
+            specialArgs = specialArgs;
+          };
         };
 
       # nixosConfigurations = {

@@ -9,10 +9,10 @@
 # base system configuration
 {
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   # boot.kernelPackages = pkgs.linuxPackages_zen;
 
-  boot.kernelPackages = pkgs.linuxPackages_cachyos;
+  # boot.kernelPackages = pkgs.linuxPackages_cachyos;
   services.scx = {
     enable = true;
     scheduler = "scx_bpfland";
@@ -64,10 +64,17 @@
   #openssh
   services.openssh = {
     enable = true;
-    ports = [ 22 8022 ];
+    ports = [
+      22
+      8022
+    ];
   };
 
-  networking.firewall.allowedTCPPorts = [22 8022 8000];
+  networking.firewall.allowedTCPPorts = [
+    22
+    8022
+    8000
+  ];
   # power-management
   powerManagement = {
     enable = true;
@@ -160,17 +167,15 @@
   # services.xserver.xkbOptions = "eurosign:e";
 
   # Enable CUPS to print documents.
-  services.printing =
-    {
-      enable = true;
-      # drivers = with pkgs; [foomatic-db-ppds-withNonfreeDb];
-    };
+  services.printing = {
+    enable = true;
+    # drivers = with pkgs; [foomatic-db-ppds-withNonfreeDb];
+  };
   services.avahi = {
     enable = true;
     nssmdns = true;
     openFirewall = true;
   };
-
 
   # services.logind.lidSwitch = "suspend"; 
   # Enable sound.
@@ -241,7 +246,7 @@
   };
 
   environment.sessionVariables = {
-    LIBVA_DRIVER_NAME="radeonsi";
+    LIBVA_DRIVER_NAME = "radeonsi";
     VDPAU_DRIVER = "radeonsi";
     # MOZ_DISABLE_RDD_SANDBOX="1";
     # AMD_VULKAN_ICD = "RADV";

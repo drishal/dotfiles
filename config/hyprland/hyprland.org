@@ -52,7 +52,7 @@ workspace = 9, monitor:eDP-1
 workspace = 10, monitor:eDP-1
 #+end_src
 ** Monitor Setup 2
-#+begin_src conf :tangle (if (equal (system-name) "archlinux") "~/.config/hypr/hyprland.conf" "no")
+#+begin_src conf :tangle (if (equal (system-name) "nixos-work") "~/.config/hypr/hyprland.conf" "no")
 monitor=DP-1, 1920x1080, 0x0, 1
 monitor=DP-2, 1920x1080, 1920x0, 1
 workspace = 1, monitor:DP-1
