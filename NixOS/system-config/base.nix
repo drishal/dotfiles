@@ -97,24 +97,6 @@
   #     };
   #   };
 
-  #amdgpu
-  hardware.opengl = {
-    extraPackages = with pkgs; [
-      rocmPackages.clr.icd
-      libvdpau-va-gl
-      libva
-      libva-vdpau-driver
-    ];
-    # For 32 bit applications
-    extraPackages32 = with pkgs.driversi686Linux; [
-      libvdpau-va-gl
-      libva-vdpau-driver
-    ];
-    enable = true;
-    # driSupport = true;
-    driSupport32Bit = true;
-  };
-  hardware.amdgpu.opencl.enable = true;
 
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
