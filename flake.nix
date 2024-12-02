@@ -1,4 +1,3 @@
-
 {
   description = "Configuration for my system";
   # nixConfig.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
@@ -72,7 +71,6 @@
       url = "github:quickemu-project/quickemu";
     };
 
-
     private-stuff = {
       url = "git+file:/home/drishal/.private-stuff/";
       flake = false;
@@ -104,20 +102,20 @@
     };
 
     nix-gaming.url = "github:fufexan/nix-gaming";
-    nvchad4nix = {
-      url = "github:nix-community/nix4nvchad";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nvchad-starter.follows = "nvchad-starter";
-    };
-    nvchad-starter = {
-      url = "github:NvChad/starter";
-      flake = false;
-    };
+    # nvchad4nix = {
+    #   url = "github:nix-community/nix4nvchad";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    #   inputs.nvchad-starter.follows = "nvchad-starter";
+    # };
+    # nvchad-starter = {
+    #   url = "github:NvChad/starter";
+    #   flake = false;
+    # };
     # nvchad-on-steroids = {  # <- here
     #   url = "github:MOIS3Y/nvchad-on-steroids";
     #   flake = false;
     # };
-    umu= {
+    umu = {
       url = "git+https://github.com/Open-Wine-Components/umu-launcher/?dir=packaging\/nix&submodules=1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -182,7 +180,12 @@
         };
         modules = [
           ./NixOS/home-config/home.nix
-          { nixpkgs.overlays = [ inputs.emacs-overlay.overlay emacs-lsp-booster.overlays.default ]; }
+          {
+            nixpkgs.overlays = [
+              inputs.emacs-overlay.overlay
+              emacs-lsp-booster.overlays.default
+            ];
+          }
           # inputs.ags.homeManagerModules.default
           #base16.homeManagerModule
           nixvim.homeManagerModules.nixvim
@@ -220,7 +223,7 @@
             inherit pkgs-master;
           };
         in
-          {
+        {
           nixos-desktop = lib.nixosSystem {
             inherit system;
             modules = commonModules ++ [

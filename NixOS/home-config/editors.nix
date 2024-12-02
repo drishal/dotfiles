@@ -9,7 +9,6 @@
 {
   imports = [
     ./nixvim.nix
-    inputs.nvchad4nix.homeManagerModule
   ];
   programs = {
     micro = {

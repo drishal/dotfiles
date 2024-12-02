@@ -19,21 +19,21 @@
     {
       device = "/dev/disk/by-uuid/f95000a8-1ed3-4585-b8d7-ef1a613c8057";
       fsType = "btrfs";
-      options = [ "subvol=root" "compress=zstd" "noatime" ];
+      options = ["subvol=root" "compress=zstd:8" "noatime" "nodiratime" "ssd_spread" "discard=async" "space_cache=v2"];
     };
 
   fileSystems."/home" =
     {
       device = "/dev/disk/by-uuid/f95000a8-1ed3-4585-b8d7-ef1a613c8057";
       fsType = "btrfs";
-      options = [ "subvol=home" "compress=zstd" "noatime" ];
+      options = ["subvol=home" "compress=zstd:8" "noatime" "nodiratime" "ssd_spread" "discard=async" "space_cache=v2"];
     };
 
   fileSystems."/nix" =
     {
       device = "/dev/disk/by-uuid/f95000a8-1ed3-4585-b8d7-ef1a613c8057";
       fsType = "btrfs";
-      options = [ "subvol=nix" "compress=zstd" "noatime" ];
+      options = ["subvol=nix" "compress=zstd:8" "noatime" "nodiratime" "ssd_spread" "discard=async" "space_cache=v2"];
     };
 
   fileSystems."/boot/efi" =

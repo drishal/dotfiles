@@ -32,11 +32,7 @@
 
       monospace = {
         # package = pkgs.noto-fonts;
-        package = pkgs.nerdfonts.override {
-        fonts = [
-          "FantasqueSansMono"
-        ];
-      };
+        package = pkgs.nerd-fonts.fantasque-sans-mono;
         name = "FantasqueSansM Nerd Font";
       };
 

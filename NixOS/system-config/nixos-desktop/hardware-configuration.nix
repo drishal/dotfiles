@@ -35,20 +35,20 @@
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/2adf1ce4-49aa-4c82-a7f5-2273006ecd1b";
       fsType = "btrfs";
-      options = [ "subvol=root" "compress=zstd" "noatime"];
+      options = ["subvol=root" "compress=zstd:8" "noatime" "nodiratime" "ssd_spread" "discard=async" "space_cache=v2"];
 
     };
 
   fileSystems."/home" =
     { device = "/dev/disk/by-uuid/2adf1ce4-49aa-4c82-a7f5-2273006ecd1b";
       fsType = "btrfs";
-      options = [ "subvol=home" "compress=zstd" "noatime"];
+      options = ["subvol=home" "compress=zstd:8" "noatime" "nodiratime" "ssd_spread" "discard=async" "space_cache=v2"];
     };
 
   fileSystems."/nix" =
     { device = "/dev/disk/by-uuid/2adf1ce4-49aa-4c82-a7f5-2273006ecd1b";
       fsType = "btrfs";
-      options = [ "subvol=nix" "compress=zstd" "noatime"];
+      options = ["subvol=nix" "compress=zstd:8" "noatime" "nodiratime" "ssd_spread" "discard=async" "space_cache=v2"];
     };
 
   fileSystems."/boot" =

@@ -690,13 +690,7 @@
     packages = with pkgs; [
       noto-fonts
       noto-fonts-cjk-sans
-      (pkgs.nerdfonts.override {
-        fonts = [
-          "FiraCode"
-          "Monofur"
-          "FantasqueSansMono"
-        ];
-      })
+      nerd-fonts.fantasque-sans-mono
     ];
     fontconfig = {
       defaultFonts = {
