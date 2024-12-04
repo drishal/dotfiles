@@ -5,15 +5,22 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   # nvidia is the proprietary driver for Nvidia GPUs
   # Load nvidia driver for Xorg and Wayland
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   boot = {
-    kernelModules = ["nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" "i2c-nvidia_gpu"];
-    blacklistedKernelModules = ["nouveau"];
-    # kernelParams = ["nvidia-drm.fbdev=1"];
+    kernelModules = [
+      "nvidia"
+      "nvidia_modeset"
+      "nvidia_uvm"
+      "nvidia_drm"
+      "i2c-nvidia_gpu"
+    ];
+    blacklistedKernelModules = [ "nouveau" ];
+    kernelParams = ["nvidia-drm.fbdev=1" "nvidia_drm.modeset=1"];
 
     extraModprobeConfig = ''
       blacklist nouveau
@@ -24,7 +31,19 @@
   hardware = {
     nvidia = {
       #- <https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/os-specific/linux/nvidia-x11/default.nix>
-      package = config.boot.kernelPackages.nvidiaPackages.latest;
+      # package = config.boot.kernelPackages.nvidiaPackages.stable;
+      package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
+        version = "565.57.01";
+        sha256_64bit = "sha256-buvpTlheOF6IBPWnQVLfQUiHv4GcwhvZW3Ks0PsYLHo=";
+        sha256_aarch64 = "sha256-buvpTlheOF6IBPWnQVLfQUiHv4GcwhvZW3Ks0PsYLHo=";
+        openSha256 = "sha256-/tM3n9huz1MTE6KKtTCBglBMBGGL/GOHi5ZSUag4zXA=";
+        settingsSha256 = "sha256-kQsvDgnxis9ANFmwIwB7HX5MkIAcpEEAHc8IBOLdXvk=";
+        persistencedSha256 = "sha256-hdszsACWNqkCh8G4VBNitDT85gk9gJe1BlQ8LdrYIkg=";
+        patchesOpen = [
+          ./nvidia.patch
+        ];
+      };
+
       # package = pkgs.linuxPackages_latest.nvidiaPackages.beta;
 
       # Required
@@ -55,19 +74,19 @@
 
     # <https://wiki.nixos.org/wiki/Nvidia#Laptop_configuration:_hybrid_graphics_(Optimus_PRIME)>
     /*
-    nvidia.prime = {
-      sync.enable = true;
+      nvidia.prime = {
+        sync.enable = true;
 
-      offload = {
-        enable = true;
-        enableOffloadCmd = true;
+        offload = {
+          enable = true;
+          enableOffloadCmd = true;
+        };
+
+        # Find IDs using: `sudo lshw -c display`
+        # intelBusId = "PCI:0:2:0";
+        # nvidiaBusId = "PCI:14:0:0";
+        # amdgpuBusId = "PCI:54:0:0";
       };
-
-      # Find IDs using: `sudo lshw -c display`
-      # intelBusId = "PCI:0:2:0";
-      # nvidiaBusId = "PCI:14:0:0";
-      # amdgpuBusId = "PCI:54:0:0";
-    };
     */
   };
 

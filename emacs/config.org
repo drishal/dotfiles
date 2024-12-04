@@ -1626,7 +1626,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode) ;; Requires Ispell
 #+end_src
 ***** pyright
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package lsp-pyright
   :demand t
   :hook (python-mode . (lambda ()
@@ -1734,6 +1734,13 @@ https://github.com/pwalsh/pipenv.el
   (setq pipenv-keymap-prefix (kbd "C-c C-q"))
   )
 
+#+end_src
+**** elpy
+#+begin_src emacs-lisp :tangle no
+(use-package elpy
+  :demand t
+  :init
+  (elpy-enable))
 #+end_src
 *** php
 #+begin_src emacs-lisp

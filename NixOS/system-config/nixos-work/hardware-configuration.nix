@@ -13,7 +13,14 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ../graphics/nvidia.nix
+    ./packages.nix
+    ./virtualization.nix
   ];
+
+  # boot.kernelParams = [
+  #   "nouveau.config=NvGspRm=1"
+  #   "nouveau.debug=\"GSP=debug\""
+  # ];
 
   boot.initrd.availableKernelModules = [
     "nvme"
@@ -72,16 +79,11 @@
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.eno1.useDHCP = lib.mkDefault true;
   # networking.interfaces.eno2.useDHCP = lib.mkDefault true;
-
-  #nvidia-config
-  hardware.nvidia = {
-    modesetting.enable = true;
-    open = false;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-  };
-
+  # environment.sessionVariables = {
+  #   LIBVA_DRIVER_NAME = "nouveau";
+  # };
   networking.hostName = "nixos-work";
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.graphics.enable = true;
 }

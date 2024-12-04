@@ -154,10 +154,10 @@ pkgs,
     # name = "Arc-Dark";
     # package = pkgs.orchis-theme;
     # };
-    iconTheme = with pkgs; {
-      name = "Papirus-Dark";
-      package = papirus-icon-theme;
-    };
+    # iconTheme = with pkgs; {
+    #   name = "Papirus-Dark";
+    #   package = papirus-icon-theme;
+    # };
     # font.name = "Noto Sans 10";
     # cursorTheme.name = "breeze_cursors";
     gtk2.extraConfig = ''

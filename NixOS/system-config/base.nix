@@ -97,7 +97,6 @@
   #     };
   #   };
 
-
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
     font = "Lat2-Terminus16";
@@ -227,14 +226,6 @@
     NIXOS_OZONE_WL = "1";
   };
 
-  environment.sessionVariables = {
-    LIBVA_DRIVER_NAME = "radeonsi";
-    VDPAU_DRIVER = "radeonsi";
-    # MOZ_DISABLE_RDD_SANDBOX="1";
-    # AMD_VULKAN_ICD = "RADV";
-    # VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
-    # MOZ_ENABLE_WAYLAND="1";
-  };
   zramSwap = {
     enable = true;
     memoryPercent = 100;

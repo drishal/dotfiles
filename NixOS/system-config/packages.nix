@@ -402,6 +402,7 @@
     papirus-icon-theme
     pass
     pavucontrol
+    # pwvucontrol
     patchelf
     pciutils
     pcmanfm

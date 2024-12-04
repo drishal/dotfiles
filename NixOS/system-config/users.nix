@@ -29,6 +29,8 @@
       "libvirtd"
       "plugdev"
       "input"
+      "podman"
+      "docker"
     ];
   };
   security.sudo.extraConfig = ''
