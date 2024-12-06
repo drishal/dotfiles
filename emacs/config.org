@@ -706,6 +706,8 @@ Put backup files neatly away
       kept-new-versions 5    ; keep some new versions                           
       kept-old-versions 2)   ; and some old ones, too                           
 
+(setq lock-file-name-transforms
+      '(("\\`/.*/\\([^/]+\\)\\'" "/var/tmp/\\1" t)))
 #+end_src
 
 ** magit
