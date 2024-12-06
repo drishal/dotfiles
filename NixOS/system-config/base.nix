@@ -43,7 +43,7 @@
   services.ntp.enable = true;
   services.timesyncd.enable = true;
 
-  # systemd settings 
+  # systemd settings
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=10s
   '';
@@ -158,25 +158,25 @@
     openFirewall = true;
   };
 
-  # services.logind.lidSwitch = "suspend"; 
+  # services.logind.lidSwitch = "suspend";
   # Enable sound.
   # sound.enable = true;
 
   #postgresql
-  services.postgresql = {
-    enable = false;
-    enableTCPIP = true;
-    authentication = pkgs.lib.mkOverride 10 ''
-      local all all trust
-      host all all 127.0.0.1/32 trust
-      host all all ::1/128 trust
-    '';
-    initialScript = pkgs.writeText "backend-initScript" ''
-      CREATE ROLE drishal WITH LOGIN PASSWORD 'catuserbot' CREATEDB;
-      CREATE DATABASE catuserbot;
-      GRANT ALL PRIVILEGES ON DATABASE catuserbot TO drishal;
-    '';
-  };
+  # services.postgresql = {
+  #   enable = false;
+  #   enableTCPIP = true;
+  #   authentication = pkgs.lib.mkOverride 10 ''
+  #     local all all trust
+  #     host all all 127.0.0.1/32 trust
+  #     host all all ::1/128 trust
+  #   '';
+  #   initialScript = pkgs.writeText "backend-initScript" ''
+  #     CREATE ROLE drishal WITH LOGIN PASSWORD 'catuserbot' CREATEDB;
+  #     CREATE DATABASE catuserbot;
+  #     GRANT ALL PRIVILEGES ON DATABASE catuserbot TO drishal;
+  #   '';
+  # };
 
   # services.mysql = {
   #   enable=true;
