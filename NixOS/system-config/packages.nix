@@ -185,6 +185,7 @@
     debian-goodies
     deluge
     dejavu_fonts
+    devenv
     # dolphin
     discord
     distrobox
@@ -429,7 +430,6 @@
     python3
     # python3Packages.mysql-connector
     python3Packages.pip
-    pyright
     #python3Packages.tkinter
     #python3Packages.shodan
     #python3Packages.pyqt5

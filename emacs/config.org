@@ -1627,11 +1627,14 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+end_src
 ***** pyright
 #+begin_src emacs-lisp
-(use-package lsp-pyright
-  :demand t
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-pyright)
-                         (lsp))))  ; or lsp-deferred
+;; (use-package lsp-pyright
+;;   :demand t
+;;   :hook (python-mode . (lambda ()
+;;                          (require 'lsp-pyright)
+;;                          (lsp))))  ; or lsp-deferred
+(add-to-list 'eglot-server-programs
+             '((python-mode python-ts-mode)
+               "basedpyright-langserver" "--stdio"))
 #+end_src
 ***** typescript
 #+begin_src emacs-lisp
@@ -1656,13 +1659,14 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   :config
   (add-to-list 'eglot-server-programs
                '(toml-ts-mode . ("taplo" "lsp" "stdio"))
-               '(nix-ts-mode . ("nil"))
+               '((python-mode python-ts-mode) . ("basedpyright-langserver" "--stdio"))
+               ;; '(nix-ts-mode . ("nil"))
                )
+
   (setq project-vc-extra-root-markers '("Cargo.toml"))
   :hook
   (nix-ts-mode . eglot-ensure)
   )
-
 (use-package eglot-x :ensure (:host github :repo "nemethf/eglot-x"))
 
 (use-package eglot-booster
@@ -1724,7 +1728,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 *** python
 **** pipenv.el
 https://github.com/pwalsh/pipenv.el
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package pipenv
   :hook (python-mode . pipenv-mode)
   :init
@@ -1734,6 +1738,10 @@ https://github.com/pwalsh/pipenv.el
   (setq pipenv-keymap-prefix (kbd "C-c C-q"))
   )
 
+#+end_src
+**** python mode
+#+begin_src emacs-lisp
+(use-package python-mode :demand t)
 #+end_src
 **** elpy
 #+begin_src emacs-lisp :tangle no

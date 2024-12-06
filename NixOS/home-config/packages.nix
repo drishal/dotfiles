@@ -18,6 +18,7 @@ pkgs,
     # vivaldi-ffmpeg-codecs
     # vivaldi-widevine
     bat
+    basedpyright
     cachix
     cowsay
     # inputs.eww.packages.${pkgs.stdenv.hostPlatform.system}.eww
