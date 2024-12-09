@@ -133,7 +133,8 @@
       commandLineArgs = [
         "--ignore-gpu-blocklist"
         "--enable-zero-copy"
-        "--enable-features=VaapiVideoDecodeLinuxGL"
+        "--ozone-platform-hint=auto"
+        "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
       ];
     })
     btop
