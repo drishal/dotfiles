@@ -297,6 +297,9 @@
           };
         };
       };
+      snacks = {
+        enable = true;
+      };
     };
   };
 }

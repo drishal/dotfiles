@@ -19,7 +19,7 @@
     };
     emacs = {
       enable = true;
-      package = pkgs.emacs-pgtk;
+      package = pkgs.emacs-pgtk.override { withXwidgets = false; };
       extraPackages = epkgs: with epkgs; [
         treesit-grammars.with-all-grammars
         vterm

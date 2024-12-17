@@ -569,14 +569,14 @@
     ]))
     # inputs.emacs-ng.packages.x86_64-linux.default
     # python39Packages.numpy python39Packages.pandas
-    ((emacsPackagesFor emacs-pgtk).emacsWithPackages (
-      epkgs: with epkgs; [
-        treesit-grammars.with-all-grammars
-        vterm
-        dockerfile-language-server-nodejs
-        # telega
-      ]
-    ))
+    # ((emacsPackagesFor emacs-pgtk).emacsWithPackages (
+    #   epkgs: with epkgs; [
+    #     treesit-grammars.with-all-grammars
+    #     vterm
+    #     dockerfile-language-server-nodejs
+    #     # telega
+    #   ]
+    # ))
     # (pkgs.callPackage ../packages/batdistrack/default.nix { })
     # (pkgs.callPackage ../custom-packages/galaxy-buds-client/default.nix { })
     #(distrobox.overrideAttrs)
