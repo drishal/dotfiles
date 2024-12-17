@@ -18,6 +18,7 @@
   - [[#bookmarks-file][bookmarks file]]
   - [[#recents][recents]]
   - [[#rainbow-mode-for-colors][rainbow mode for colors]]
+  - [[#rainbow-delimiters-mode][Rainbow delimiters mode]]
   - [[#smooth-scrolling][smooth scrolling]]
   - [[#dashboard][Dashboard]]
   - [[#highlight-current-line][highlight current line]]
@@ -332,6 +333,13 @@ remove/add tangle no to whatever font you prefer
     (lambda () (rainbow-mode 1)))
   (my-global-rainbow-mode 1)
   )
+#+end_src
+** Rainbow delimiters mode
+#+begin_src emacs-lisp
+(use-package rainbow-delimiters
+  :demand t
+  :init
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+end_src
 ** smooth scrolling
 #+begin_src emacs-lisp 
@@ -1670,7 +1678,10 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   (nix-ts-mode . eglot-ensure)
   )
 (use-package eglot-x :ensure (:host github :repo "nemethf/eglot-x"))
-
+(use-package eldoc
+  :demand t
+  :config
+  (provide 'upgraded-eldoc))
 (use-package eglot-booster
   :ensure (:host github :repo "jdtsmith/eglot-booster")
   :after eglot
