@@ -22,7 +22,7 @@
     nixpkgs = {
       url = "github:nixos/nixpkgs/nixos-unstable/";
     };
-    nixpkgs-master.url = "github:NixOS/nixpkgs/8e82ef5df1195370205a3bbaad3642bea8d526d1";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/1b4a15a91f55a87de7bd6eccd705051df905d15c";
     # nixpkgs = { url = "github:PedroHLC/nixpkgs/pull-284487"; };
     # nixpkgs-master = {
     #   url = "github:nixos/nixpkgs/9b5ca6a80c775a62734e1fefa0d04f1b0c91c91b";
@@ -102,6 +102,10 @@
     };
 
     nix-gaming.url = "github:fufexan/nix-gaming";
+
+    ghostty = {
+      url = "github:ghostty-org/ghostty";
+    };
     # nvchad4nix = {
     #   url = "github:nix-community/nix4nvchad";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -150,6 +154,7 @@
       quickemu,
       stylix,
       tt-schemes,
+      ghostty,
       ...
     }@inputs:
     let
