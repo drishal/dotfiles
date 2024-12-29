@@ -143,13 +143,13 @@ decoration {
     # blur = yes
     # blur_size = 5
     # blur_passes = 1
-    blurls = waybar
+    # blurls = waybar
     # drop_shadow = yes
     # shadow_range = 4
     # shadow_render_power = 3
     # col.shadow = rgba(1a1a1aee)
     blur {
-    enabled = false
+    enabled = true
     new_optimizations = true
     size=8
     passes=3
@@ -224,7 +224,7 @@ See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
 #+begin_src conf
 # Example windowrule v1
 # windowrule = rounding 0, ^(firefox)$
-windowrule = rounding 0, ^(waybar)$
+# windowrule = rounding 0, ^(waybar)$
 windowrulev2 = rounding 0, class:^[fF]irefox
 windowrulev2 = float, class:Waydroid
 windowrulev2 = float, class:^(Anydesk)$,title:^(anydesk)$

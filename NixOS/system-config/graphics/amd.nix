@@ -31,5 +31,5 @@
     # MOZ_ENABLE_WAYLAND="1";
   };
 
-  hardware.amdgpu.opencl.enable = true;
+  # hardware.amdgpu.opencl.enable = true;
 }

@@ -80,6 +80,10 @@
     enable = true;
     enableCompletion = true;
     bashrcExtra = ''
+    if [ -x /usr/bin/ccache ]; then
+        export USE_CCACHE=1
+        export CCACHE_EXEC=/usr/bin/ccache
+    fi
     source ~/dotfiles/scripts/aliases.sh
     '';
   };

@@ -162,7 +162,7 @@
     #   ];
     # })
 
-    chromium-bsu
+    # chromium-bsu
     nemo
     nemo-with-extensions
     # clang
@@ -245,6 +245,7 @@
     fuse-overlayfs
     gcc
     geekbench
+    # inputs.ghostty.packages.x86_64-linux.default
     # google-chrome
     # (google-chrome.override {
     #   commandLineArgs = [
@@ -287,7 +288,7 @@
     handbrake
     hdparm
     htop
-    hollywood
+    # hollywood
     hyprpaper
     hyperfine
     hwinfo
@@ -319,7 +320,7 @@
     libsixel
     libfaketime
     linuxPackages.cpupower
-    lxqt.pcmanfm-qt
+    # lxqt.pcmanfm-qt
     # linuxPackages.systemtap
     # linuxKernel.packages.linux.systemtap
     lm_sensors
@@ -332,7 +333,7 @@
     lshw
     lutris-unwrapped
     lxappearance
-    lxsession
+    pkgs-master.lxsession
     man
     mangohud
     materia-theme
@@ -407,7 +408,7 @@
     # pwvucontrol
     patchelf
     pciutils
-    pcmanfm
+    # pkgs-master.pcmanfm
     peaclock
     pfetch
     php

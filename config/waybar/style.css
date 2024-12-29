@@ -49,11 +49,9 @@
 
 * {
     /*all: initial; Ignore gtk theme*/ 
-    border: none;
+    /* border: none; */
     border-radius: 10px;
-    /* `otf-font-awesome` is required to be installed for icons */
     font-family: "FantasqueSansM Nerd Font","Roboto", "Helvetica", "Arial", "sans-serif";
-    /* font-family: "ComicShannsMono Nerd Font","Roboto", "Helvetica", "Arial", "sans-serif"; */
     font-size: 13px;
     min-height: 0;
     padding: 1px;
@@ -98,7 +96,6 @@ window#waybar.empty #window {
 #tags button{
     background-color: @colbg;
     padding: 3px;
-    border-radius: 10px;
     min-width: 20px;
     color: @colgrey;
 }
@@ -106,14 +103,12 @@ window#waybar.empty #window {
 #tags button.occupied{
     background-color: @colbg2;
     padding: 3px;
-    border-radius: 10px;
     min-width: 20px;
 }
 
 #tags button.focused{
     background-color: @colgrey;
     color: @colfg;
-    /* border-bottom: 2px solid @colviolet; */
 }
 
 #tags button.urgent{
@@ -129,7 +124,6 @@ window#waybar.empty #window {
 #network,
 #tray
 {
-  /* background: @colgrey;  */
   background: @colbg2; 
   padding: 0 10px;
   margin: 3px 3px 3px 3px;
@@ -156,6 +150,5 @@ window#waybar.empty #window {
 }
 
 #window {
-    /* color: @colbg; */
     color: @colviolet;
 }
