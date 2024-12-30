@@ -360,11 +360,11 @@
         "nixpkgs-stable": "nixpkgs-stable_2"
       },
       "locked": {
-        "lastModified": 1735438498,
-        "narHash": "sha256-zVHyH34jY6naEqsJG06LlKulIyNiQMLEFBS/o+FYqXU=",
+        "lastModified": 1735462818,
+        "narHash": "sha256-GekGodAVddpJW6rx3Jd13nX3vactk2GMgCxi1atyRQU=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "4c344936ab4e21146d4fbe5806005a2e1b5c4844",
+        "rev": "3f0d0e1e5905cd4359aa2e4ed039c710cf047c99",
         "type": "github"
       },
       "original": {
@@ -1151,11 +1151,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1735394862,
-        "narHash": "sha256-34vW0z18FAZajpAU2bFmGjiepnu+9Nm769blbbp679g=",
+        "lastModified": 1735473418,
+        "narHash": "sha256-Zmf77Z+9XzdMureswTG+iVKw/6X4CVP9PLd0y8CaYf0=",
         "ref": "refs/heads/main",
-        "rev": "2b01a5bcf62956a5d641a3367edcd35e103edfcd",
-        "revCount": 5597,
+        "rev": "3f40d6d9361d0c5fec558b7549e58203fbe5cbd7",
+        "revCount": 5599,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/hyprwm/Hyprland"
@@ -1395,11 +1395,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1735431819,
-        "narHash": "sha256-1Mhdqza7WIdExqoeVWOLOZKM0qd/0mv137ScLrsk73A=",
+        "lastModified": 1735463474,
+        "narHash": "sha256-QTw0q1dJnoFygq9aiwjrXsX5cZEwruVzPz3VKg8KemQ=",
         "owner": "nix-community",
         "repo": "neovim-nightly-overlay",
-        "rev": "7f5ed8f34dbb092799ac490d1235be0513646dba",
+        "rev": "3d6e49088eae842b6c0556fba66cfb14123f0d59",
         "type": "github"
       },
       "original": {
@@ -1508,11 +1508,11 @@
         "umu": "umu"
       },
       "locked": {
-        "lastModified": 1735436588,
-        "narHash": "sha256-NJKfosnf5wzA4OlP6jadBwruqp5y+Tmhpz0UTqXu4GM=",
+        "lastModified": 1735476517,
+        "narHash": "sha256-LAggztaXXi0J/jlp7shlgwGy76nKSOlFxaN9ywmNrFM=",
         "owner": "fufexan",
         "repo": "nix-gaming",
-        "rev": "a24aac1a429c630cf31173fa7eb5bddc5a62c8b7",
+        "rev": "d4663263fe4389b0e6fa26ba6a03ceacd439a670",
         "type": "github"
       },
       "original": {
@@ -1985,11 +1985,11 @@
         "treefmt-nix": "treefmt-nix_3"
       },
       "locked": {
-        "lastModified": 1735446801,
-        "narHash": "sha256-cWw+Jq63Ug+tWlGLMB9AQ3F0ZOPyDlNlPslB8nhVULk=",
+        "lastModified": 1735463528,
+        "narHash": "sha256-zr2UZCcNj+slr5F+weZn02BBA/LaqhgGtNkx2RHNPcQ=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "96978136bd754cbbcb16d0584abefdd95a569427",
+        "rev": "493dbcd9df5aa49af2695721fc10978009b64dad",
         "type": "github"
       },
       "original": {
@@ -2069,11 +2069,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1735418544,
-        "narHash": "sha256-lrbgrr6JTmfJ/6T+wMU4rF9BI4rn+jkf1qFkX04K6+M=",
+        "lastModified": 1735463739,
+        "narHash": "sha256-Y5lH/vuGaq54bohMTOseXUSByQhiDvbbloXLrq/Pf5Q=",
         "owner": "wamserma",
         "repo": "flake-programs-sqlite",
-        "rev": "b65522425d7736ca74b0478c0473c30b8423fde0",
+        "rev": "7ee6144b7906a85dcb732a4d248aee6257316e05",
         "type": "github"
       },
       "original": {
