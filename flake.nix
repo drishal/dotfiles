@@ -53,8 +53,9 @@
 
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
-    # hyprland.url = "github:hyprwm/Hyprland/v0.40.0";
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+    hyprland.url = "github:hyprwm/Hyprland";
+    # hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1/v0.46.2";
+    #hyprland.url = "github:hyprwm/Hyprland/v0.46.2";
 
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay/";
