@@ -1,8 +1,9 @@
-{ config
-, inputs
-, pkgs
-, lib
-, ...
+{
+  config,
+  inputs,
+  pkgs,
+  lib,
+  ...
 }:
 
 # Editors
@@ -19,11 +20,12 @@
     };
     emacs = {
       enable = true;
-      package = pkgs.emacs-pgtk.override { withXwidgets = false; };
-      extraPackages = epkgs: with epkgs; [
-        treesit-grammars.with-all-grammars
-        vterm
-      ];
+      package = pkgs.emacs-pgtk; # .override { withXwidgets = false; };
+      extraPackages =
+        epkgs: with epkgs; [
+          treesit-grammars.with-all-grammars
+          vterm
+        ];
     };
     # nvchad = {
     #   enable = true;

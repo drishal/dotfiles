@@ -1,0 +1,9 @@
+theme = catppuccin-mocha
+font-family = "FantasqueSansM Nerd Font"
+shell-integration = fish
+font-size = 14
+scrollback-limit = 10_000
+window-theme = ghostty
+clipboard-read = allow
+clipboard-paste-protection = false
+window-decoration = false

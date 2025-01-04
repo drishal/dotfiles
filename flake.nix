@@ -76,8 +76,15 @@
       flake = false;
     };
 
-    ags.url = "github:Aylur/ags";
-    astal.url = "github:astal-sh/libastal";
+    # ags.url = "github:Aylur/ags";
+    astal = {
+      url = "github:aylur/astal";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    ags = {
+      url = "github:aylur/ags";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     lobster.url = "github:justchokingaround/lobster";
 
@@ -123,6 +130,7 @@
       url = "git+https://github.com/Open-Wine-Components/umu-launcher/?dir=packaging\/nix&submodules=1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
   };
 
   outputs =
@@ -153,6 +161,7 @@
       programsdb,
       quickemu,
       stylix,
+      hyprpanel,
       tt-schemes,
       ghostty,
       ...
@@ -174,6 +183,7 @@
         };
       };
       lib = nixpkgs.lib;
+      name = "myshell.py";
 
     in
     {
@@ -188,6 +198,7 @@
           {
             nixpkgs.overlays = [
               inputs.emacs-overlay.overlay
+              inputs.hyprpanel.overlay
               emacs-lsp-booster.overlays.default
             ];
           }
@@ -251,7 +262,44 @@
             specialArgs = specialArgs;
           };
         };
+      packages.${system}.default = pkgs.stdenv.mkDerivation {
+        inherit name;
+        src = ./config/ags;
+        
+        nativeBuildInputs = with pkgs; [
+          wrapGAppsHook
+          gobject-introspection
+        ];
+        
+        buildInputs = [
+          (pkgs.python3.withPackages (ps: [
+            # any other python package
+          ps.pygobject3
+          ]))
+          astal.packages.${system}.io
+          astal.packages.${system}.astal3
+          # any other gi lib
+        ];
 
+        # you shouldn't really copy the whole src to $out/bin
+        # but for now it works
+        installPhase = ''
+        mkdir -p $out/bin
+        cp * $out/bin
+        chmod +x $out/bin/${name}
+      '';
+      };
+      # devShell.x86_64-linux = nixpkgs.legacyPackages.${system}.mkShell {
+      #   buildInputs = with astal.packages.${system}; [
+      #     astal3
+      #     io
+      #   ];
+      #   nativeBuildInputs = [
+      #     ags.packages.${system}.default
+      #     pkgs.wrapGAppsHook
+      #   pkgs.gobject-introspection
+      #   ];
+      # };
       # nixosConfigurations = {
       #   nixos = lib.nixosSystem {
       #     inherit system;

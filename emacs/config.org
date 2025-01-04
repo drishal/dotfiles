@@ -73,6 +73,7 @@
   - [[#selectrical-mode][selectrical mode]]
   - [[#telega][telega]]
   - [[#emacs-pdf-tools][emacs pdf tools]]
+  - [[#csv-mode][csv mode]]
   - [[#mu4e][mu4e]]
   - [[#perspectiveel][perspective.el]]
   - [[#treemacs][treemacs]]
@@ -97,7 +98,7 @@
   - [[#vertico-and-orderless][vertico and orderless]]
   - [[#languages-and-lsp-mode][languages and lsp-mode]]
   - [[#which-key][which key]]
-- [[#prevent-saving-to-x-clipboard-manager][prevent "saving to x clipboard manager]]
+- [[#clipboard-settings][clipboard settings]]
 - [[#prevent-warnings-spam][prevent *warnings* spam]]
 - [[#elaca-stuff-for-dashboard][elaca stuff for dashboard]]
 
@@ -681,7 +682,7 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 #+end_src
 
 ** brackets
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (show-paren-mode 1)
 (setq show-paren-style 'parenthesis)
 #+end_src
@@ -999,6 +1000,10 @@ https://github.com/skangas/mentor
 ** emacs pdf tools
 #+begin_src emacs-lisp
 (use-package pdf-tools :demand t)
+#+end_src
+** csv mode
+#+begin_src emacs-lisp
+(use-package csv-mode :demand t)
 #+end_src
 ** mu4e
 https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-01.org
@@ -1969,9 +1974,19 @@ https://github.com/pwalsh/pipenv.el
 #+end_src
 
 
-* prevent "saving to x clipboard manager
+* clipboard settings 
 #+begin_src emacs-lisp
-(setq x-select-enable-clipboard-manager nil)
+(setq x-select-enable-clipboard-manager t)
+(when (getenv "WAYLAND_DISPLAY")
+  (setq wl-copy-p nil
+        interprogram-cut-function (lambda (text)
+                                    (setq-local process-connection-type 'pipe)
+                                    (setq wl-copy-p (start-process "wl-copy" nil "wl-copy" "-f" "-n"))
+                                    (process-send-string wl-copy-p text)
+                                    (process-send-eof wl-copy-p))
+        interprogram-paste-function (lambda ()
+                                      (unless (and wl-copy-p (process-live-p wl-copy-p))
+                                        (shell-command-to-string "wl-paste -n | tr -d '\r'")))))
 #+end_src
 
 * prevent *warnings* spam

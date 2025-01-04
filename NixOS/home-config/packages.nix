@@ -1,8 +1,8 @@
 {
-config,
-inputs,
-pkgs,
-...
+  config,
+  inputs,
+  pkgs,
+  ...
 }:
 {
   imports = [ inputs.ags.homeManagerModules.default ];
@@ -60,6 +60,26 @@ pkgs,
     # (pkgs.nerdfonts.override {
     #   fonts = [ "FiraCode"   "Monofur" ];
     # })
+    wrapGAppsHook
+    gobject-introspection
+    # hyprpanel
+    inputs.ags.packages.${pkgs.system}.agsFull
+    inputs.astal.packages.${pkgs.system}.tray
+    inputs.astal.packages.${pkgs.system}.hyprland
+    inputs.astal.packages.${pkgs.system}.io
+    inputs.astal.packages.${pkgs.system}.apps
+    inputs.astal.packages.${pkgs.system}.battery
+    inputs.astal.packages.${pkgs.system}.bluetooth
+    inputs.astal.packages.${pkgs.system}.mpris
+    inputs.astal.packages.${pkgs.system}.network
+    inputs.astal.packages.${pkgs.system}.notifd
+    inputs.astal.packages.${pkgs.system}.powerprofiles
+    inputs.astal.packages.${pkgs.system}.wireplumber
+    glib
+    (pkgs.python3.withPackages (pp: [
+      pp.pygobject3
+      pp.pygobject-stubs
+    ]))
   ];
 
   #nixd path
@@ -73,32 +93,32 @@ pkgs,
   };
 
   # ags
-  #  programs.ags = {
-  #    enable = true;
-  #    configDir = null;
-  #    extraPackages = with pkgs; [
-  #      gtksourceview
-  #      webkitgtk
-  #      accountsservice
-  #    ];
-  #  };
-  #  home.file."${config.home.homeDirectory}/.config/ags/" = {
-  #    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/ags/";
-  #    recursive = true;
-  #  };
-  #  home.file."${config.home.homeDirectory}/.config/css/ags-color.css".text = with config.scheme;  ''
-  #      @define-color colbg        #${base00}; 
-  #      @define-color colbg2       #${base02};
-  #      @define-color colfg        #${base05};
-  #      @define-color colgrey      #${base03};
-  #      @define-color colcyan      #${base0C};
-  #      @define-color colgreen     #${base0B};
-  #      @define-color colorange    #${base09};
-  #      @define-color colmagenta   #${base0E};
-  #      @define-color colviolet    #${base0F};
-  #      @define-color colred       #${base08};
-  #      @define-color colyellow    #${base0A};
-  #  '';
+  # programs.ags = {
+  #   enable = true;
+  #   configDir = null;
+  #   extraPackages = with pkgs; [
+  #     gtksourceview
+  #     webkitgtk
+  #     accountsservice
+  #   ];
+  # };
+  # home.file."${config.home.homeDirectory}/.config/ags/" = {
+  #   source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/ags/";
+  #   recursive = true;
+  # };
+  home.file."${config.home.homeDirectory}/.config/css/ags-color.css".text = with config.lib.stylix.colors;  ''
+    @define-color colbg        #${base00}; 
+       @define-color colbg2       #${base02};
+       @define-color colfg        #${base05};
+       @define-color colgrey      #${base03};
+       @define-color colcyan      #${base0C};
+       @define-color colgreen     #${base0B};
+       @define-color colorange    #${base09};
+       @define-color colmagenta   #${base0E};
+       @define-color colviolet    #${base0F};
+       @define-color colred       #${base08};
+       @define-color colyellow    #${base0A};
+  '';
   #
   # xdg.configFile."ags".source = ../../config/ags;
   # home.file."${config.home.homeDirectory}/.config/ags".recursive = true;

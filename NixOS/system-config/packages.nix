@@ -303,6 +303,10 @@
     # python3Packages.pyngrok
     # python3Packages.pygobject3
     python3Packages.python-lsp-server
+    # python3Packages.pygobject3
+    # python3Packages.pygobject-stubs
+    # inputs.astal.packages.${system}.astal3
+    # inputs.astal.packages.${system}.io
     keepassxc
     killall
     kitty
@@ -564,10 +568,11 @@
     zathura
     # zed-editor
     zenity
-    (pkgs.python3.withPackages (pypkgs: [
-      pypkgs.pygobject3
-      inputs.astal.packages.${pkgs.stdenv.hostPlatform.system}.astal
-    ]))
+    # (pkgs.python3.withPackages (ps: [
+    #   ps.pygobject3
+    #   ps.pygobject-stubs
+    #   inputs.astal.packages.${pkgs.stdenv.hostPlatform.system}.astal3
+    # ]))
     # inputs.emacs-ng.packages.x86_64-linux.default
     # python39Packages.numpy python39Packages.pandas
     # ((emacsPackagesFor emacs-pgtk).emacsWithPackages (
