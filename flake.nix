@@ -187,137 +187,180 @@
       name = "myshell.py";
 
     in
-    {
-      homeConfigurations."drishal" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        extraSpecialArgs = {
-          inherit inputs;
-          # inherit pkgs-master;
-        };
-        modules = [
-          ./NixOS/home-config/home.nix
-          {
-            nixpkgs.overlays = [
-              inputs.emacs-overlay.overlay
-              inputs.hyprpanel.overlay
-              emacs-lsp-booster.overlays.default
+      {
+        # homeConfigurations."drisha" = home-manager.lib.homeManagerConfiguration {
+        #   inherit pkgs;
+        #   extraSpecialArgs = {
+        #     inherit inputs;
+        #     # inherit pkgs-master;
+        #   };
+        #   modules = [
+        #     ./NixOS/home-config/home.nix
+        #     {
+        #       nixpkgs.overlays = [
+        #         inputs.emacs-overlay.overlay
+        #         inputs.hyprpanel.overlay
+        #         emacs-lsp-booster.overlays.default
+        #       ];
+        #     }
+        #     # inputs.ags.homeManagerModules.default
+        #     #base16.homeManagerModule
+        #     nixvim.homeManagerModules.nixvim
+        #     stylix.homeManagerModules.stylix
+        #     "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
+        #     {
+        #       home = {
+        #         username = "drishal";
+        #         homeDirectory = "/home/drishal";
+        #       };
+        #     }
+        #   ];
+        # };
+        homeConfigurations =
+          let
+            commonModules = [
+              ./NixOS/home-config/home.nix
+              {
+                nixpkgs.overlays = [
+                  inputs.emacs-overlay.overlay
+                  inputs.hyprpanel.overlay
+                  emacs-lsp-booster.overlays.default
+                ];
+              }
+              # inputs.ags.homeManagerModules.default
+              #base16.homeManagerModule
+              nixvim.homeManagerModules.nixvim
+              stylix.homeManagerModules.stylix
+              "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
             ];
-          }
-          # inputs.ags.homeManagerModules.default
-          #base16.homeManagerModule
-          nixvim.homeManagerModules.nixvim
-          stylix.homeManagerModules.stylix
-          "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
-          {
-            home = {
-              username = "drishal";
-              homeDirectory = "/home/drishal";
-              stateVersion = "22.05";
+            extraSpecialArgs = {
+              inherit inputs;
             };
-          }
-        ];
-      };
-      nixosConfigurations =
-        let
-          commonModules = [
+            user = "drishal";
+          in
             {
-              nixpkgs.overlays = [
-                nur.overlay
-                inputs.emacs-overlay.overlay
-                inputs.discord-flake.overlay
-                # inputs.neovim-nightly-overlay.overlay
-              ];
-            }
-            ngrok.nixosModules.ngrok
-            ./NixOS/system-config/configuration.nix
-            auto-cpufreq.nixosModules.default
-            chaotic.nixosModules.default
-            stylix.nixosModules.stylix
-            #base16.nixosModule
-          ];
-          specialArgs = {
-            inherit inputs;
-            inherit pkgs-master;
-          };
-        in
-        {
-          nixos-desktop = lib.nixosSystem {
-            inherit system;
-            modules = commonModules ++ [
-              ./NixOS/system-config/nixos-desktop/hardware-configuration.nix
-            ];
-            specialArgs = specialArgs;
-          };
-          nixos = lib.nixosSystem {
-            inherit system;
-            modules = commonModules ++ [
-              ./NixOS/system-config/nixos/hardware-configuration.nix
-            ];
-            specialArgs = specialArgs;
-          };
-          nixos-work = lib.nixosSystem {
-            inherit system;
-            modules = commonModules ++ [
-              ./NixOS/system-config/nixos-work/hardware-configuration.nix
-            ];
-            specialArgs = specialArgs;
-          };
-        };
-      packages.${system}.default = pkgs.stdenv.mkDerivation {
-        inherit name;
-        src = ./config/ags;
-        
-        nativeBuildInputs = with pkgs; [
-          wrapGAppsHook
-          gobject-introspection
-        ];
-        
-        buildInputs = [
-          (pkgs.python3.withPackages (ps: [
-            # any other python package
-          ps.pygobject3
-          ]))
-          astal.packages.${system}.io
-          astal.packages.${system}.astal3
-          # any other gi lib
-        ];
+              "${user}@nixos-desktop" = home-manager.lib.homeManagerConfiguration {
+                inherit pkgs;
+                modules = commonModules ++ [
+                  ./NixOS/home-config/nixos-desktop/home.nix
+                ];
+                extraSpecialArgs = extraSpecialArgs;
+              };
+              "${user}@nixos" = home-manager.lib.homeManagerConfiguration {
+                inherit pkgs;
+                modules = commonModules ++ [
+                ];
+                extraSpecialArgs = extraSpecialArgs;
+              };
+              "${user}@nixos-work" = home-manager.lib.homeManagerConfiguration {
+                inherit pkgs;
+                modules = commonModules ++ [
+                ];
+                extraSpecialArgs = extraSpecialArgs;
+              };
+            };
 
-        # you shouldn't really copy the whole src to $out/bin
-        # but for now it works
-        installPhase = ''
-        mkdir -p $out/bin
-        cp * $out/bin
-        chmod +x $out/bin/${name}
-      '';
+        nixosConfigurations =
+          let
+            commonModules = [
+              {
+                nixpkgs.overlays = [
+                  nur.overlay
+                  inputs.emacs-overlay.overlay
+                  inputs.discord-flake.overlay
+                  # inputs.neovim-nightly-overlay.overlay
+                ];
+              }
+              ngrok.nixosModules.ngrok
+              ./NixOS/system-config/configuration.nix
+              auto-cpufreq.nixosModules.default
+              chaotic.nixosModules.default
+              stylix.nixosModules.stylix
+              #base16.nixosModule
+            ];
+            specialArgs = {
+              inherit inputs;
+              inherit pkgs-master;
+            };
+          in
+            {
+              nixos-desktop = lib.nixosSystem {
+                inherit system;
+                modules = commonModules ++ [
+                  ./NixOS/system-config/nixos-desktop/hardware-configuration.nix
+                ];
+                specialArgs = specialArgs;
+              };
+              nixos = lib.nixosSystem {
+                inherit system;
+                modules = commonModules ++ [
+                  ./NixOS/system-config/nixos/hardware-configuration.nix
+                ];
+                specialArgs = specialArgs;
+              };
+              nixos-work = lib.nixosSystem {
+                inherit system;
+                modules = commonModules ++ [
+                  ./NixOS/system-config/nixos-work/hardware-configuration.nix
+                ];
+                specialArgs = specialArgs;
+              };
+            };
+        # packages.${system}.default = pkgs.stdenv.mkDerivation {
+        #   inherit name;
+        #   src = ./config/ags;
+        
+        #   nativeBuildInputs = with pkgs; [
+        #     wrapGAppsHook
+        #     gobject-introspection
+        #   ];
+        
+        #   buildInputs = [
+        #     (pkgs.python3.withPackages (ps: [
+        #       # any other python package
+        #     ps.pygobject3
+        #     ]))
+        #     astal.packages.${system}.io
+        #     astal.packages.${system}.astal3
+        #     # any other gi lib
+        #   ];
+
+        #   # you shouldn't really copy the whole src to $out/bin
+        #   # but for now it works
+        #   installPhase = ''
+        #   mkdir -p $out/bin
+        #   cp * $out/bin
+        #   chmod +x $out/bin/${name}
+        # '';
+        # };
+        # devShell.x86_64-linux = nixpkgs.legacyPackages.${system}.mkShell {
+        #   buildInputs = with astal.packages.${system}; [
+        #     astal3
+        #     io
+        #   ];
+        #   nativeBuildInputs = [
+        #     ags.packages.${system}.default
+        #     pkgs.wrapGAppsHook
+        #   pkgs.gobject-introspection
+        #   ];
+        # };
+        # nixosConfigurations = {
+        #   nixos = lib.nixosSystem {
+        #     inherit system;
+        #     modules = [
+        #       # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
+        #       { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay]; }
+        #       # hyprland.nixosModules.default
+        #       ./NixOS/system-config/hardware-configuration/hardware-configuration-laptop.nix
+        #       ./NixOS/system-config/configuration.nix
+        #       chaotic.nixosModules.default
+        #       # { programs.hyprland.enable = true; }
+        #     ];
+        #     specialArgs = { inherit inputs; };
+        #   };
+        # };
+        # packages."x86_64-linux".thorium = pkgs.callPackage ./NixOS/custom-packages/thorium-browser/default.nix {};
+        # packages."x86_64-linux".qtile= pkgs.callPackage ./NixOS/custom-packages/qtile/default.nix {};
+        # packages."x86_64-linux".freedownloadmanager= pkgs.callPackage ./NixOS/custom-packages/free-download-manager/default.nix {};
       };
-      # devShell.x86_64-linux = nixpkgs.legacyPackages.${system}.mkShell {
-      #   buildInputs = with astal.packages.${system}; [
-      #     astal3
-      #     io
-      #   ];
-      #   nativeBuildInputs = [
-      #     ags.packages.${system}.default
-      #     pkgs.wrapGAppsHook
-      #   pkgs.gobject-introspection
-      #   ];
-      # };
-      # nixosConfigurations = {
-      #   nixos = lib.nixosSystem {
-      #     inherit system;
-      #     modules = [
-      #       # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
-      #       { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay]; }
-      #       # hyprland.nixosModules.default
-      #       ./NixOS/system-config/hardware-configuration/hardware-configuration-laptop.nix
-      #       ./NixOS/system-config/configuration.nix
-      #       chaotic.nixosModules.default
-      #       # { programs.hyprland.enable = true; }
-      #     ];
-      #     specialArgs = { inherit inputs; };
-      #   };
-      # };
-      # packages."x86_64-linux".thorium = pkgs.callPackage ./NixOS/custom-packages/thorium-browser/default.nix {};
-      # packages."x86_64-linux".qtile= pkgs.callPackage ./NixOS/custom-packages/qtile/default.nix {};
-      # packages."x86_64-linux".freedownloadmanager= pkgs.callPackage ./NixOS/custom-packages/free-download-manager/default.nix {};
-    };
 }

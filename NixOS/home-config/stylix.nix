@@ -1,8 +1,8 @@
 {
-config,
-inputs,
-pkgs,
-...
+  config,
+  inputs,
+  pkgs,
+  ...
 }:
 
 {
@@ -23,4 +23,4 @@ pkgs,
       light = "Papirus-Light";
     };
   };
-}    
+}

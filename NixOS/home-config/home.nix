@@ -23,6 +23,7 @@
     ./waybar.nix
     ../stylix.nix
     ./stylix.nix
+    ./hyprland.nix
     # inputs.nix-colors.homeManagerModules.default
   ];
   # Let Home Manager install and manage itself.
@@ -51,5 +52,5 @@
   programs.man.generateCaches = true;
   # scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
   # scheme = ./colors/doompalenight.yaml;
-  # home.stateVersion = "21.05";
+  home.stateVersion = "25.05";
 }

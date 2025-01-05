@@ -134,7 +134,7 @@
         "--ignore-gpu-blocklist"
         "--enable-zero-copy"
         "--ozone-platform-hint=auto"
-        "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+        "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
       ];
     })
     btop
@@ -148,19 +148,14 @@
     # cargo
     #carnix
     # chromium
-    # (chromium.override {
-    #   commandLineArgs = [
-    #     "--ignore-gpu-blocklist"
-    #     "--enable-gpu-rasterization"
-    #     "--enable-zero-copy"
-    #     "--force-dark-mode"
-    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,VaapiVideoDecodeLinuxGL"
-    #     "--disable-features=UseChromeOSDirectVideoDecoder"
-    #     "--use-vulkan"
-    #     "--ozone-platform-hint=auto"
-    #     "--enable-hardware-overlays"
-    #   ];
-    # })
+    (chromium.override {
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--enable-zero-copy"
+        "--ozone-platform-hint=auto"
+        "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+      ];
+    })
 
     # chromium-bsu
     nemo
@@ -362,6 +357,7 @@
     #   buildInputs = old.buildInputs ++ [ pkgs.python311Packages.setuptools-scm ];
     # }))
     mlocate
+    mission-center
     # mongodb-compass
     mosh
     motrix
@@ -507,11 +503,12 @@
     (vivaldi.override {
       commandLineArgs = [
         "--ignore-gpu-blocklist"
+        "--enable-zero-copy"
         "--ozone-platform-hint=auto"
-        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,VaapiVideoDecodeLinuxGL"
+        "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
       ];
     })
-    # vivaldi-ffmpeg-codecs
+    vivaldi-ffmpeg-codecs
     ventoy-full
     vscode-fhs
     vscode-langservers-extracted
