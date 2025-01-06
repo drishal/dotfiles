@@ -240,7 +240,7 @@
     fuse-overlayfs
     gcc
     geekbench
-    inputs.ghostty.packages.x86_64-linux.default
+    # inputs.ghostty.packages.x86_64-linux.default
     # google-chrome
     # (google-chrome.override {
     #   commandLineArgs = [

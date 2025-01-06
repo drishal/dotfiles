@@ -230,4 +230,6 @@
     enable = true;
     memoryPercent = 100;
   };
+
+  networking.firewall.enable = false;
 }

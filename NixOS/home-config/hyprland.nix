@@ -6,11 +6,14 @@
 }:
 
 {
+  imports = [ inputs.hyprpanel.homeManagerModules.hyprpanel ];
   wayland.windowManager.hyprland = {
     enable = true;
     settings = {
-      exec-once = ["lxpolkit & dunst & waybar & nm-applet --indicator &  blueman-applet & emacs --daemon & foot --server"
-      "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"];
+      exec-once = [
+        "lxpolkit & hyprpanel & nm-applet --indicator &  blueman-applet & emacs --daemon & foot --server"
+        "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+      ];
       general = {
         gaps_in = 5;
         gaps_out = 20;
@@ -103,7 +106,8 @@
         "$mainMod SHIFT, F, exec, firefox"
         "$mainMod SHIFT, L, exec, swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 7x5 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000  --fade-in 0.2"
         "$mainMod, E, exec, nemo"
-        "$mainMod, x, exec, pkill waybar; waybar"
+        # "$mainMod, x, exec, pkill waybar; waybar"
+        "$mainMod, x, exec, pkill hyprpanel; hyprpanel"
         "$mainMod SHIFT, X, exec, loginctl terminate-user $USER"
         "$mainMod, A, exec, emacsclient -c"
         "$mainMod, SPACE, togglefloating, "
@@ -149,6 +153,47 @@
         "$mainMod, mouse:272, movewindow"
         "$mainMod, mouse:273, resizewindow"
       ];
+    };
+  };
+
+  #hyprpanel
+  programs.hyprpanel = {
+    enable = true;
+    overlay.enable = true;
+    systemd.enable = false;
+    hyprland.enable = true;
+    theme = "catppuccin_mocha";
+    layout = {
+      "bar.layouts" = {
+        "*" = {
+          left = [
+            "dashboard"
+            "workspaces"
+          ];
+          middle = [
+            "clock"
+            "notifications"
+          ];
+          right = [
+            "volume"
+            "network"
+            "bluetooth"
+            "ram"
+            "cpu"
+            "power"
+            "systray"
+          ];
+        };
+      };
+    };
+
+    settings = {
+      bar.workspaces.show_icons = true;
+      bar.launcher.icon = "";
+      theme.font = {
+        name = "${config.stylix.fonts.monospace.name}";
+        size = "${builtins.toString config.stylix.fonts.sizes.terminal}px";
+      };
     };
   };
 }

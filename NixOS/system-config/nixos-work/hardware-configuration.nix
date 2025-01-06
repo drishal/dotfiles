@@ -83,7 +83,6 @@
   #   LIBVA_DRIVER_NAME = "nouveau";
   # };
   networking.hostName = "nixos-work";
-  networking.firewall.enable = false;
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   hardware.graphics.enable = true;

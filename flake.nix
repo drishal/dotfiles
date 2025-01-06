@@ -222,8 +222,8 @@
               ./NixOS/home-config/home.nix
               {
                 nixpkgs.overlays = [
-                  inputs.emacs-overlay.overlay
                   inputs.hyprpanel.overlay
+                  inputs.emacs-overlay.overlay
                   emacs-lsp-booster.overlays.default
                 ];
               }
@@ -234,6 +234,7 @@
               "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
             ];
             extraSpecialArgs = {
+              inherit system;
               inherit inputs;
             };
             user = "drishal";
