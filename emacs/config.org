@@ -98,8 +98,8 @@
   - [[#vertico-and-orderless][vertico and orderless]]
   - [[#languages-and-lsp-mode][languages and lsp-mode]]
   - [[#which-key][which key]]
-- [[#clipboard-settings][clipboard settings]]
 - [[#prevent-warnings-spam][prevent *warnings* spam]]
+- [[#wl-clipboard][wl-clipboard]]
 - [[#elaca-stuff-for-dashboard][elaca stuff for dashboard]]
 
 * emacs startup
@@ -1974,25 +1974,30 @@ https://github.com/pwalsh/pipenv.el
 #+end_src
 
 
-* clipboard settings 
-#+begin_src emacs-lisp
-(setq x-select-enable-clipboard-manager t)
-(when (getenv "WAYLAND_DISPLAY")
-  (setq wl-copy-p nil
-        interprogram-cut-function (lambda (text)
-                                    (setq-local process-connection-type 'pipe)
-                                    (setq wl-copy-p (start-process "wl-copy" nil "wl-copy" "-f" "-n"))
-                                    (process-send-string wl-copy-p text)
-                                    (process-send-eof wl-copy-p))
-        interprogram-paste-function (lambda ()
-                                      (unless (and wl-copy-p (process-live-p wl-copy-p))
-                                        (shell-command-to-string "wl-paste -n | tr -d '\r'")))))
-#+end_src
-
 * prevent *warnings* spam
 #+begin_src emacs-lisp
 (setq-default warning-minimum-level :error)
 #+end_src
+
+* wl-clipboard
+#+begin_src emacs-lisp
+(setq wl-copy-process nil)
+(defun wl-copy (text)
+  (setq wl-copy-process (make-process :name "wl-copy"
+                                      :buffer nil
+                                      :command '("wl-copy" "-f" "-n")
+                                      :connection-type 'pipe
+                                      :noquery t))
+  (process-send-string wl-copy-process text)
+  (process-send-eof wl-copy-process))
+(defun wl-paste ()
+  (if (and wl-copy-process (process-live-p wl-copy-process))
+      nil ; should return nil if we're the current paste owner
+    (shell-command-to-string "wl-paste")))
+(setq interprogram-cut-function 'wl-copy)
+(setq interprogram-paste-function 'wl-paste) 
+#+end_src
+
 * elaca stuff for dashboard
 #+begin_src emacs-lisp 
 (setq elpaca-after-init-time (current-time)) ;; prevents `elpaca-after-init-hook` from running later.

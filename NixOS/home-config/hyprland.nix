@@ -169,6 +169,7 @@
           left = [
             "dashboard"
             "workspaces"
+            "windowtitle"
           ];
           middle = [
             "clock"
@@ -177,7 +178,6 @@
           right = [
             "volume"
             "network"
-            "bluetooth"
             "ram"
             "cpu"
             "power"
@@ -190,10 +190,12 @@
     settings = {
       bar.workspaces.show_icons = true;
       bar.launcher.icon = "";
+      theme.bar.border_radius = "1.0em";
       theme.font = {
         name = "${config.stylix.fonts.monospace.name}";
         size = "${builtins.toString config.stylix.fonts.sizes.terminal}px";
       };
     };
   };
+  programs.hyprlock.enable = true;
 }

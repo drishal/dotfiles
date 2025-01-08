@@ -29,7 +29,7 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  # nix settings...use only for single user installs 
+  # nix settings...use only for single user installs
   # nix = {
   #   package = pkgs.nix;
   #   settings = {
@@ -50,6 +50,7 @@
     # sessionVariables.LOCALES_ARCHIVE = "/usr/lib/locale/locale-archive";
   };
   programs.man.generateCaches = true;
+  news.display = "silent";
   # scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
   # scheme = ./colors/doompalenight.yaml;
   home.stateVersion = "25.05";
