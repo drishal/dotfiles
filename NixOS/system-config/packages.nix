@@ -537,7 +537,7 @@
     yt-dlp
     # ytfzf
     zip
-    zoom-us
+    # zoom-us
     # Xfce stuff
     (xfce.thunar.override {
       thunarPlugins = with pkgs; [

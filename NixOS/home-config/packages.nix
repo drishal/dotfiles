@@ -44,6 +44,7 @@
     taplo
     # papirus-icon-theme
     gnome-themes-extra
+    gjs
     #nodePackages.create-react-app
     #nodePackages.eslint
     #nodePackages.js-beautify
@@ -64,6 +65,8 @@
     gobject-introspection
     # hyprpanel
     inputs.ags.packages.${pkgs.system}.agsFull
+    inputs.ags.packages.${pkgs.system}.astal3
+    inputs.ags.packages.${pkgs.system}.gjs
     inputs.astal.packages.${pkgs.system}.tray
     inputs.astal.packages.${pkgs.system}.hyprland
     inputs.astal.packages.${pkgs.system}.io

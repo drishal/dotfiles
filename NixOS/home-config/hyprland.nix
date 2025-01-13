@@ -188,7 +188,7 @@
     };
 
     settings = {
-      bar.workspaces.show_icons = true;
+      bar.workspaces.show_icons = false;
       bar.launcher.icon = "";
       theme.bar.border_radius = "1.0em";
       theme.font = {

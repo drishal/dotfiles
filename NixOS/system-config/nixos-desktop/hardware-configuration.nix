@@ -84,7 +84,7 @@
   users.groups.i2c.members = [ "drishal" ];
   services.sunshine = {
     enable = true;
-    # autoStart = true;
+    autoStart = false;
     capSysAdmin = true;
     openFirewall = true;
   };
