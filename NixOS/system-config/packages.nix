@@ -307,8 +307,6 @@
     kitty
     kompose
     kotatogram-desktop
-    kubectl
-    kubernetes
     lbreakout2
     # linuxKernel.packages.v4l2loopback
     # linuxKernel.packages.linux_cachyos.v4l2loopback

@@ -1679,6 +1679,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
                )
 
   (setq project-vc-extra-root-markers '("Cargo.toml"))
+  (add-to-list 'project-vc-extra-root-markers "tsconfig.json")
   :hook
   (nix-ts-mode . eglot-ensure)
   )
@@ -1733,6 +1734,17 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   (when buffer-file-name
     (setq-local buffer-save-without-query t)))
 #+end_src
+
+*** TSX
+#+begin_src emacs-lisp
+(use-package tsx-mode
+ :ensure (:host github :repo "orzechowskid/tsx-mode.el")
+  :init
+  (require 'tsx-mode)
+  (add-to-list 'auto-mode-alist '("\\.[jt]s[x]?\\'" . tsx-mode))
+  )
+#+end_src
+
 *** sql
 #+begin_src emacs-lisp
 (require 'sql)

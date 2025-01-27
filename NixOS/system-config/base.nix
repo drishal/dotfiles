@@ -11,13 +11,13 @@
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
   # boot.kernelPackages = pkgs.linuxPackages_latest;
   # boot.kernelPackages = pkgs.linuxPackages_zen;
-
   boot.kernelPackages = pkgs.linuxPackages_cachyos;
-  services.scx = {
-    enable = true;
-    scheduler = "scx_bpfland";
-    package = pkgs.scx.full;
-  };
+  # boot.kernelPackages = pkgs.linuxPackages_6_11;
+  # services.scx = {
+  #   enable = true;
+  #   scheduler = "scx_bpfland";
+  #   package = pkgs.scx.full;
+  # };
   # by default uses rustland
   # systemd.services.scx.serviceConfig.Restart = lib.mkForce "always";
   # boot.kernelPackages = pkgs.linuxPackages_testing;
@@ -52,7 +52,6 @@
   # systemd.enableUnifiedCgroupHierarchy = true;
   #bluetooth
   hardware.bluetooth.enable = true;
-  hardware.bluetooth.package = pkgs.bluez;
   services.blueman.enable = true;
 
   # firmware updator
@@ -118,10 +117,12 @@
   networking = {
     networkmanager = {
       enable = true;
+      wifi.backend = "iwd";
       # dns = "systemd-resolved";
       wifi.macAddress = "random";
     };
-    wireless.iwd.enable = true;
+    # wireless.enable = true;
+    # wireless.iwd.enable = true;
     # hostname
     #hostName = "nixos";
     # dns

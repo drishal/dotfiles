@@ -109,19 +109,33 @@
   #   source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/ags/";
   #   recursive = true;
   # };
-  home.file."${config.home.homeDirectory}/.config/css/ags-color.css".text = with config.lib.stylix.colors;  ''
-    @define-color colbg        #${base00}; 
-       @define-color colbg2       #${base02};
-       @define-color colfg        #${base05};
-       @define-color colgrey      #${base03};
-       @define-color colcyan      #${base0C};
-       @define-color colgreen     #${base0B};
-       @define-color colorange    #${base09};
-       @define-color colmagenta   #${base0E};
-       @define-color colviolet    #${base0F};
-       @define-color colred       #${base08};
-       @define-color colyellow    #${base0A};
+  # home.file."${config.home.homeDirectory}/.config/css/ags-color.css".text = with config.lib.stylix.colors;  ''
+  #      @define-color colbg        #${base00}; 
+  #      @define-color colbg2       #${base02};
+  #      @define-color colfg        #${base05};
+  #      @define-color colgrey      #${base03};
+  #      @define-color colcyan      #${base0C};
+  #      @define-color colgreen     #${base0B};
+  #      @define-color colorange    #${base09};
+  #      @define-color colmagenta   #${base0E};
+  #      @define-color colviolet    #${base0F};
+  #      @define-color colred       #${base08};
+  #      @define-color colyellow    #${base0A};
+  # '';
+  home.file."${config.home.homeDirectory}/.config/css/ags-color.scss".text = with config.lib.stylix.colors;  ''
+        $colbg: #${base00}; 
+        $colbg2:  #${base02};
+        $colfg:  #${base05};
+        $colgrey:  #${base03};
+        $colcyan:  #${base0C};
+        $colgreen:  #${base0B};
+        $colorange:  #${base09};
+        $colmagenta:  #${base0E};
+        $colviole:  #${base0F};
+        $colred:  #${base08};
+        $colyellow:  #${base0A};
   '';
+
   #
   # xdg.configFile."ags".source = ../../config/ags;
   # home.file."${config.home.homeDirectory}/.config/ags".recursive = true;

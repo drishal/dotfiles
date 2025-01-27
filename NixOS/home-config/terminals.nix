@@ -143,5 +143,11 @@
     zellij = {
       enable = true;
     };
+    ghostty = {
+      enable = true;
+      settings = {
+        theme = "catppuccin-mocha";
+      };
+    };
   };
 }

@@ -69,10 +69,6 @@ window#waybar {
     /* opacity: 0.9;  */
 }
 
-window#waybar.empty #window {
-	background: transparent;
-}
-
 #workspaces button  {
     background-color: @colbg;
     padding: 3px;

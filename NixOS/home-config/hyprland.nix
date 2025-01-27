@@ -9,6 +9,7 @@
   imports = [ inputs.hyprpanel.homeManagerModules.hyprpanel ];
   wayland.windowManager.hyprland = {
     enable = true;
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     settings = {
       exec-once = [
         "lxpolkit & hyprpanel & nm-applet --indicator &  blueman-applet & emacs --daemon & foot --server"
@@ -91,10 +92,15 @@
         "float, class:Waydroid"
         "float, class:^(Anydesk)$,title:^(anydesk)$"
       ];
-      layerrule = [
-        "ignorealpha 0.1, waybar"
-        "blur, waybar"
-      ];
+      # experimental = {
+      #   hdr = true;
+      #   wide_color_gamut = true;
+      #   xx_color_management_v4 = true;
+      # };
+      # layerrule = [
+      #   "ignorealpha 0.1, waybar"
+      #   "blur, waybar"
+      # ];
       "$mainMod" = "SUPER";
       bind = [
         "$mainMod, RETURN, exec, footclient"
@@ -114,8 +120,10 @@
         "$mainMod, F,fullscreen,"
         "$mainMod SHIFT, s, exec, grimshot copy area"
         "$mainMod, s, exec, grimshot copy output"
-        "$mainMod, K, movefocus, u"
-        "$mainMod, J, movefocus, d"
+        # "$mainMod, K, movefocus, u"
+        # "$mainMod, J, movefocus, d"
+        "$mainMod, K, cyclenext"
+        "$mainMod, J, cyclenext, prev"
         "$mainMod SHIFT, M, exec, hyprctl keyword general:layout master"
         "$mainMod ,H,resizeactive,-20 0"
         "$mainMod ,L,resizeactive, 20 0"
@@ -188,8 +196,8 @@
     };
 
     settings = {
-      bar.workspaces.show_icons = false;
       bar.launcher.icon = "";
+      bar.workspaces.show_numbered = true;
       theme.bar.border_radius = "1.0em";
       theme.font = {
         name = "${config.stylix.fonts.monospace.name}";
