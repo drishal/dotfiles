@@ -112,8 +112,8 @@
       src = pkgs.fetchFromGitHub {
         repo = "ani-cli";
         owner = "pystardust";
-        rev = "e90dd8b50ac12ade21d74bc82a20c777bbb63e1f";
-        sha256 = "sha256-0uSD+TMeKSSwB0f875MYsHAUlIKjmJmzEnT7Z3m8bnY=";
+        rev = "25959086230e9354cf96acc6d3a310d57f392221";
+        sha256 = "sha256-8M5Hwo1OwGcEdjARb1zjjmR1YxekJZ5w/ztEoq6vOJ0=";
       };
     }))
 
@@ -512,6 +512,7 @@
     vscode-langservers-extracted
     vlc
     vulkan-tools
+    virt-viewer
     volumeicon
     # waybar-hyprland
     webcamoid
