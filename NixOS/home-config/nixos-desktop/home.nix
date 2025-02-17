@@ -2,6 +2,6 @@
 {
 
   wayland.windowManager.hyprland.settings = {
-    monitor = [",highrr,auto,1"];
+    monitor = [",highrr,auto,1, bitdepth, 10"];
   };
 }

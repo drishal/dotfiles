@@ -22,7 +22,7 @@
     nixpkgs = {
       url = "github:nixos/nixpkgs/nixos-unstable/";
     };
-    nixpkgs-master.url = "github:NixOS/nixpkgs/1b4a15a91f55a87de7bd6eccd705051df905d15c";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/08f2276e8a0e3fcf6b9788615e03e930fe1d1bac";
     # nixpkgs = { url = "github:PedroHLC/nixpkgs/pull-284487"; };
     # nixpkgs-master = {
     #   url = "github:nixos/nixpkgs/9b5ca6a80c775a62734e1fefa0d04f1b0c91c91b";
@@ -114,6 +114,8 @@
     ghostty = {
       url = "github:ghostty-org/ghostty";
     };
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+
     # nvchad4nix = {
     #   url = "github:nix-community/nix4nvchad";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -127,10 +129,7 @@
     #   url = "github:MOIS3Y/nvchad-on-steroids";
     #   flake = false;
     # };
-    umu = {
-      url = "git+https://github.com/Open-Wine-Components/umu-launcher/?dir=packaging\/nix&submodules=1";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    umu.url = "github:Open-Wine-Components/umu-launcher?dir=packaging/nix";
     hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
   };
 
@@ -143,7 +142,7 @@
       cachix,
       chaotic,
       declarative-cachix,
-      discord-flake,
+      # discord-flake,
       emacs-lsp-booster,
       # emacs-ng,
       emacs-overlay,
@@ -164,6 +163,7 @@
       stylix,
       hyprpanel,
       tt-schemes,
+      umu,
       ghostty,
       ...
     }@inputs:
@@ -269,7 +269,7 @@
               nixpkgs.overlays = [
                 nur.overlay
                 inputs.emacs-overlay.overlay
-                inputs.discord-flake.overlay
+                # inputs.discord-flake.overlay
                 # inputs.neovim-nightly-overlay.overlay
               ];
             }

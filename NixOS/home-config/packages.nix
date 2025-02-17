@@ -18,7 +18,7 @@
     # vivaldi-ffmpeg-codecs
     # vivaldi-widevine
     bat
-    basedpyright
+    #basedpyright
     cachix
     cowsay
     # inputs.eww.packages.${pkgs.stdenv.hostPlatform.system}.eww
@@ -45,6 +45,7 @@
     # papirus-icon-theme
     gnome-themes-extra
     gjs
+    hexedit
     #nodePackages.create-react-app
     #nodePackages.eslint
     #nodePackages.js-beautify
@@ -56,7 +57,7 @@
     # nodePackages.vscode-html-languageserver-bin
     #rofi-emoji
     #rust-analyzer
-    #sumneko-lua-language-server 
+    #sumneko-lua-language-server
     #tdlib
     # (pkgs.nerdfonts.override {
     #   fonts = [ "FiraCode"   "Monofur" ];
@@ -86,7 +87,7 @@
   ];
 
   #nixd path
-  nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
+  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   # direnv
   programs.direnv = {
     enable = true;
@@ -110,7 +111,7 @@
   #   recursive = true;
   # };
   # home.file."${config.home.homeDirectory}/.config/css/ags-color.css".text = with config.lib.stylix.colors;  ''
-  #      @define-color colbg        #${base00}; 
+  #      @define-color colbg        #${base00};
   #      @define-color colbg2       #${base02};
   #      @define-color colfg        #${base05};
   #      @define-color colgrey      #${base03};
@@ -122,19 +123,20 @@
   #      @define-color colred       #${base08};
   #      @define-color colyellow    #${base0A};
   # '';
-  home.file."${config.home.homeDirectory}/.config/css/ags-color.scss".text = with config.lib.stylix.colors;  ''
-        $colbg: #${base00}; 
-        $colbg2:  #${base02};
-        $colfg:  #${base05};
-        $colgrey:  #${base03};
-        $colcyan:  #${base0C};
-        $colgreen:  #${base0B};
-        $colorange:  #${base09};
-        $colmagenta:  #${base0E};
-        $colviole:  #${base0F};
-        $colred:  #${base08};
-        $colyellow:  #${base0A};
-  '';
+  home.file."${config.home.homeDirectory}/.config/css/ags-color.scss".text =
+    with config.lib.stylix.colors; ''
+      $colbg: #${base00}; 
+      $colbg2:  #${base02};
+      $colfg:  #${base05};
+      $colgrey:  #${base03};
+      $colcyan:  #${base0C};
+      $colgreen:  #${base0B};
+      $colorange:  #${base09};
+      $colmagenta:  #${base0E};
+      $colviole:  #${base0F};
+      $colred:  #${base08};
+      $colyellow:  #${base0A};
+    '';
 
   #
   # xdg.configFile."ags".source = ../../config/ags;
@@ -150,7 +152,7 @@
   #   configDir = ../../config/eww/eww-bar;
   # };
   # xdg.configFile."eww/color.css".text = with config.scheme; ''
-  #     @define-color colbg        #${base00}; 
+  #     @define-color colbg        #${base00};
   #     @define-color colbg2       #${base02};
   #     @define-color colfg        #${base05};
   #     @define-color colgrey      #${base03};
@@ -242,6 +244,7 @@
   # zellij
   programs.zellij = {
     enable = true;
+    enableBashIntegration = false;
   };
   # home.pointerCursor = {
   #   name = "breeze_cursors";
@@ -277,6 +280,9 @@
   #     };
   #   };
   # };
+
+  programs.gh.enable = true;
+
   programs.fastfetch = {
     enable = true;
     settings = {
@@ -285,13 +291,12 @@
       logo = {
         type = "small";
       };
-  
+
       display = {
         key.width = 4;
         separator = " ";
         size.binaryPrefix = "si";
       };
-
 
       modules = [
         {
@@ -318,7 +323,6 @@
           keyColor = "magenta";
           type = "packages";
         }
-
 
         "break"
 
@@ -348,7 +352,7 @@
         {
           key = "󰌢 ";
           type = "host";
-          keyColor ="red";
+          keyColor = "red";
         }
 
         "break"

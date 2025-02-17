@@ -8,8 +8,8 @@
 }:
 {
   # imports = [
-    # pkgs-master
-    # inputs.lobster.packages.x86_64-linux.lobster
+  # pkgs-master
+  # inputs.lobster.packages.x86_64-linux.lobster
   # ];
   services.flatpak.enable = true;
   services.gvfs.enable = true;
@@ -17,8 +17,8 @@
   services.zerotierone = {
     enable = true;
     # package = inputs.nixpkgs-master.legacyPackages.${pkgs.system}.zerotierone ;
-    package = pkgs-master.zerotierone ;
-    localConf.settings = { 
+    package = pkgs-master.zerotierone;
+    localConf.settings = {
       softwareUpdate = "disable";
     };
   };
@@ -34,7 +34,7 @@
     adb.enable = true;
     # dconf
     dconf.enable = true;
-    # java 
+    # java
     java = {
       enable = true;
     };
@@ -65,7 +65,6 @@
       binfmt = true;
     };
 
-
     #neovim
     # neovim = {
     #   enable = true;
@@ -90,7 +89,7 @@
   #         governor = "performance";
   #         turbo = "on";
   #       };
-  
+
   #       battery = {
   #         governor = "schedutil";
   #         turbo = "auto";
@@ -223,7 +222,6 @@
     figlet
     # firefox-bin
     firefox
-    inputs.quickemu.packages.${pkgs.stdenv.hostPlatform.system}.quickemu
     # firefox-wayland
     # inputs.firefox-nightly.packages.${pkgs.system}.firefox-beta-bin
     # inputs.firefox.packages.${pkgs.system}.firefox-nightly-bin
@@ -275,7 +273,7 @@
     goverlay
     gsmartcontrol
     gparted
-    gpt4all
+    pkgs-master.gpt4all
     gtk-layer-shell
     gtklock
     # haruna
@@ -293,6 +291,8 @@
     inxi
     inotify-tools
     inputs.lobster.packages.x86_64-linux.lobster
+    inputs.zen-browser.packages."${system}".default
+    inputs.quickemu.packages.${pkgs.stdenv.hostPlatform.system}.quickemu
     jq
     #python3Packages.ipython
     # python3Packages.pyngrok
@@ -316,6 +316,7 @@
     libva-utils
     libsixel
     libfaketime
+    libepoxy
     linuxPackages.cpupower
     # lxqt.pcmanfm-qt
     # linuxPackages.systemtap
@@ -328,8 +329,14 @@
     libsForQt5.qtstyleplugin-kvantum
     lsd
     lshw
-    lutris-unwrapped
+    #lutris-unwrapped
     lxappearance
+    (lutris.override {
+      extraLibraries = pkgs: [
+        xz
+        freetype
+      ];
+    })
     pkgs-master.lxsession
     man
     mangohud
@@ -463,6 +470,7 @@
     spot
     starship
     steam-run
+    steamtinkerlaunch
     stremio
     s-tui
     surf
@@ -485,11 +493,13 @@
     tmux
     tofi
     tor-browser-bundle-bin
+    transmission_4
     # toolbox
     trashy
     trayer
     tree
     unrar
+    umu-launcher
     unzip
     usbutils
     uutils-coreutils
@@ -561,6 +571,7 @@
     xorg.xmodmap
     xorg.xhost
     xorg.xwininfo
+    xorg.xinit
     zathura
     # zed-editor
     zenity
@@ -759,6 +770,7 @@
     glew110
     libdrm
     libidn
+    libepoxy
     tbb
     zlib
   ];
