@@ -8,7 +8,6 @@
   - [[#shift-theme-variables-to-customel-make-sure-to-create-it-if-it-does-not-exist][shift theme variables to ~custom.el~, make sure to create it if it does not exist]]
   - [[#emacs-startup-performance][emacs startup performance]]
 - [[#initialize-package-sources][Initialize package sources]]
-  - [[#packageel][Package.el]]
   - [[#elpacael][elpaca.el]]
   - [[#enable-native-comp-for-packages][enable native comp for packages]]
   - [[#setting-up-paths][Setting up paths]]
@@ -40,7 +39,6 @@
   - [[#magit][magit]]
   - [[#some-indentation-settings][Some indentation settings]]
   - [[#y-for-yes][y for yes]]
-  - [[#centaur-tabs][Centaur tabs]]
 - [[#hook-to-tangle-on-save][Hook to tangle on save]]
 - [[#reverse-a-string][reverse a string]]
 - [[#org-mode][Org mode:]]
@@ -71,7 +69,6 @@
   - [[#minimap][Minimap]]
   - [[#mentor-torrent-client][Mentor Torrent client]]
   - [[#selectrical-mode][selectrical mode]]
-  - [[#telega][telega]]
   - [[#emacs-pdf-tools][emacs pdf tools]]
   - [[#csv-mode][csv mode]]
   - [[#mu4e][mu4e]]
@@ -79,14 +76,12 @@
   - [[#treemacs][treemacs]]
   - [[#neotree][neotree]]
   - [[#dired][dired]]
-  - [[#elcord][elcord]]
   - [[#shackle][Shackle]]
   - [[#pacman][pacman]]
   - [[#popperel-todo][popper.el TODO]]
   - [[#erc-server-settings][ERC server settings]]
   - [[#elfeed-rss-reader][elfeed RSS reader]]
   - [[#multi-cursor][Multi cursor]]
-  - [[#ement-el-matrix-client][ement el matrix client]]
   - [[#markdown-mode][Markdown mode]]
 - [[#language-and-completion-support][Language and completion support]]
   - [[#completion-engines][completion engines:]]
@@ -140,28 +135,6 @@ touch ~/.emacs.d/custom.el
 #+end_src
 
 * Initialize package sources
-** Package.el
-#+begin_src emacs-lisp :tangle no
-
-;; Initialize package sources
-(require 'package)
-
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ("elpa" . "https://elpa.gnu.org/packages/")))
-
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
-
-;; Initialize use-package on non-Linux platforms
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-
-(setq use-package-always-ensure t)
-
-#+end_src
-
 ** elpaca.el
 https://github.com/progfolio/elpaca
 
@@ -749,16 +722,6 @@ Put backup files neatly away
 (defalias 'yes-or-no-p 'y-or-n-p)
 #+end_src
 
-** Centaur tabs
-#+begin_src emacs-lisp :tangle no
-(use-package centaur-tabs
-  :demand
-  :config
-  (centaur-tabs-mode t)
-  :bind
-  ("C-<prior>" . centaur-tabs-backward)
-  ("C-<next>" . centaur-tabs-forward))
-#+end_src
 * Hook to tangle on save
 #+begin_src emacs-lisp
 (defun tangle-all-org-on-save-h ()
@@ -990,13 +953,6 @@ https://github.com/skangas/mentor
 #+begin_src emacs-lisp
 (use-package selectric-mode :demand t)
 #+end_src
-** telega
-#+begin_src emacs-lisp
-(use-package visual-fill-column :demand t)
-(use-package telega :ensure nil
-  :commands (telega))
-;; (setq telega-use-docker t)
-#+end_src
 ** emacs pdf tools
 #+begin_src emacs-lisp
 (use-package pdf-tools :demand t)
@@ -1197,10 +1153,6 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
   (setq dired-sidebar-use-term-integration t)
   )
 #+end_src
-** elcord
-#+begin_src emacs-lisp
-(use-package elcord :demand t)
-#+end_src
 ** Shackle
 #+begin_src emacs-lisp
 (use-package shackle
@@ -1280,11 +1232,6 @@ https://github.com/karthink/popper
   (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
   (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
   )
-#+end_src
-
-** ement el matrix client
-#+begin_src emacs-lisp :tangle no 
-(use-package ement :demand t)
 #+end_src
 
 ** Markdown mode
@@ -1736,7 +1683,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+end_src
 
 *** TSX
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package tsx-mode
  :ensure (:host github :repo "orzechowskid/tsx-mode.el")
   :init

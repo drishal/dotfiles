@@ -59,7 +59,7 @@
 
       # Nvidia open source kernel module (not to be confused with the
       # independent third-party "nouveau" open source driver)
-      open = false;
+      open = true;
 
       # Ensure all GPUs stay awake even during headless mode
       # Fixes a glitch
