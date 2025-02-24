@@ -73,6 +73,7 @@ window#waybar {
     background-color: @colbg;
     padding: 3px;
     min-width: 20px;
+    /* color: @colgrey; */
     color: @colgrey;
 }
 #workspaces button.active{

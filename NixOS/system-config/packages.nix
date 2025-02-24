@@ -455,6 +455,7 @@
     redshift
     read-edid
     ripgrep
+    rquickshare
     # rnix-lsp
     rofi
     rofi-emoji

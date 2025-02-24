@@ -9,8 +9,8 @@
   stylix = {
     enable = true;
     #base16Scheme = "${config.scheme}";
-    base16Scheme = "${inputs.tt-schemes}/base24/catppuccin-mocha.yaml";
-    #base16Scheme = "${inputs.tt-schemes}/base16/everforest-dark-hard.yaml";
+    # base16Scheme = "${inputs.tt-schemes}/base24/catppuccin-mocha.yaml";
+    base16Scheme = "${inputs.tt-schemes}/base16/everforest-dark-hard.yaml";
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/everforest-dark-hard.yaml";
     # base16Scheme =  ./home-config/colors/doomone.yaml;
     cursor = {

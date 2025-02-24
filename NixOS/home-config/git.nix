@@ -1,6 +1,7 @@
 {
   config,
   inputs,
+  lib,
   pkgs,
   ...
 }:
@@ -12,7 +13,7 @@
       lfs.enable = true;
       userName = "drishal";
       userEmail = "drishalballaney@gmail.com";
-      signing.format = "openpgp";
+      signing.format = lib.mkDefault "openpgp";
       extraConfig = {
         core = {
           editor = "nvim";

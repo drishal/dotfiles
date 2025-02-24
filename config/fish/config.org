@@ -42,7 +42,7 @@ fish_add_path ~/.cargo/bin
 
 * Custom color scheme
 ** Catppuccin mocha
-#+begin_src fish 
+#+begin_src fish :tangle no 
 set fish_color_normal cdd6f4
 set fish_color_command 89b4fa
 set fish_color_param f2cdcd
@@ -138,7 +138,7 @@ set -g fish_pager_color_description $comment
 set -g fish_pager_color_selected_background --background=$selection
 #+end_src
 ** Everforest theme
-#+begin_src fish :tangle no
+#+begin_src fish
 set fish_color_normal FDF6D3
 set fish_color_command --bold C3E5A5
 set fish_color_param eebebe
