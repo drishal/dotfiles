@@ -52,32 +52,32 @@
         # cursor = '▇';
         blinking-cursor = false;
         # theme="dracula";
-        fonts = {
-          size = 18;
-          family = "FantasqueSansM Nerd Font";
-        };
-        colors = with config.lib.stylix.colors; {
-          background = "#${base00}";
-          foreground = "#${base05}";
-          cursor = "#${base0D}";
-          bright-cursor = "#${base0C}";
-          bright-black = "#${base00}";
-          bright-blue = "#${base0D}";
-          bright-cyan = "#${base0C}";
-          bright-green = "#${base0B}";
-          bright-magenta = "#${base0E}";
-          bright-red = "#${base08}";
-          bright-white = "#${base06}";
-          bright-yellow = "#${base09}";
-          black = "#${base00}";
-          blue = "#${base0D}";
-          cyan = "#${base0C}";
-          green = "#${base0B}";
-          magenta = "#${base0E}";
-          red = "#${base08}";
-          white = "#${base05}";
-          yellow = "#${base0A}";
-        };
+        # fonts = {
+        #   size = 18;
+        #   family = "FantasqueSansM Nerd Font";
+        # };
+        # colors = with config.lib.stylix.colors; {
+        #   background = "#${base00}";
+        #   foreground = "#${base05}";
+        #   cursor = "#${base0D}";
+        #   bright-cursor = "#${base0C}";
+        #   bright-black = "#${base00}";
+        #   bright-blue = "#${base0D}";
+        #   bright-cyan = "#${base0C}";
+        #   bright-green = "#${base0B}";
+        #   bright-magenta = "#${base0E}";
+        #   bright-red = "#${base08}";
+        #   bright-white = "#${base06}";
+        #   bright-yellow = "#${base09}";
+        #   black = "#${base00}";
+        #   blue = "#${base0D}";
+        #   cyan = "#${base0C}";
+        #   green = "#${base0B}";
+        #   magenta = "#${base0E}";
+        #   red = "#${base08}";
+        #   white = "#${base05}";
+        #   yellow = "#${base0A}";
+        # };
       };
     };
 
