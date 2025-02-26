@@ -55,7 +55,7 @@
     #     base0F = "${base0F}";
     #   };
     # };
-    # colorscheme = "gruvbox-material";
+    colorscheme = "gruvbox-material";
     # colorscheme = "palenight";
     opts = {
       hlsearch = false;
@@ -82,14 +82,14 @@
     extraPlugins = with pkgs.vimPlugins; [
       orgmode
       # orgmode
-      # (gruvbox-material.overrideAttrs (old: {
-      #   src = pkgs.fetchFromGitHub {
-      #     repo = "gruvbox-material";
-      #     owner = "sainnhe";
-      #     rev = "607fac66a5a4418dd9fe1c8fe7d1368099f5bf96";
-      #     sha256 = "sha256-fZInzV3cTAu94/j7hkeWxQhJbtFeuvAjeWrSG0UVv1A=";
-      #   };
-      # }))
+      (gruvbox-material.overrideAttrs (old: {
+        src = pkgs.fetchFromGitHub {
+          repo = "gruvbox-material";
+          owner = "sainnhe";
+          rev = "146f40fd42cbef30fed69b4ef51329aeeaceb909";
+          sha256 = "sha256-PbuiOl16PWr/aFDbLUJV2Ud7AuB9BLMTphViralz/S0=";
+        };
+      }))
       (pkgs.vimUtils.buildVimPlugin {
         name = "palenight";
         src = pkgs.fetchFromGitHub {

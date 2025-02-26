@@ -65,6 +65,11 @@
       binfmt = true;
     };
 
+    #droidcam
+    droidcam =  {
+      enable = true;
+    };
+
     #neovim
     # neovim = {
     #   enable = true;
