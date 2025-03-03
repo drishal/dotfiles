@@ -66,9 +66,9 @@
     };
 
     #droidcam
-    droidcam =  {
-      enable = true;
-    };
+    # droidcam =  {
+    #   enable = true;
+    # };
 
     #neovim
     # neovim = {
@@ -213,7 +213,7 @@
     # etcher
     evince
     evince
-    # easyeffects
+    easyeffects
     extundelete
     eza
     lsd
@@ -267,6 +267,7 @@
     # gnome-boxes
     cheese
     gnome-calculator
+    gnome-sound-recorder
     # gnome-sound-recorder
     # gnome-tweaks
     # gnome.nautilus

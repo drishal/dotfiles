@@ -13,12 +13,12 @@
   # boot.kernelPackages = pkgs.linuxPackages_zen;
   boot.kernelPackages = pkgs.linuxPackages_cachyos;
   # boot.kernelPackages = pkgs.linuxPackages_6_11;
-  services.scx = {
-    enable = true;
-    scheduler = "scx_lavd";
-    extraArgs = ["--performance"];
-    package = pkgs.scx.full;
-  };
+  # services.scx = {
+  #   enable = true;
+  #   scheduler = "scx_lavd";
+  #   extraArgs = ["--performance"];
+  #   package = pkgs.scx.full;
+  # };
   # by default uses rustland
   # systemd.services.scx.serviceConfig.Restart = lib.mkForce "always";
   # boot.kernelPackages = pkgs.linuxPackages_testing;
