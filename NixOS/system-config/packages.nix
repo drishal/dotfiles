@@ -138,7 +138,7 @@
         "--ignore-gpu-blocklist"
         "--enable-zero-copy"
         "--ozone-platform-hint=auto"
-        "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+        "--enable-features=VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
       ];
     })
     btop
