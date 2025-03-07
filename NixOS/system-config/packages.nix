@@ -477,6 +477,7 @@
     spot
     starship
     steam-run
+    steamcmd
     steamtinkerlaunch
     stremio
     s-tui
