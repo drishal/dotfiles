@@ -20,7 +20,7 @@
     };
     emacs = {
       enable = true;
-      package = pkgs.emacs-pgtk; # .override { withXwidgets = false; };
+      package = pkgs.emacs-git-pgtk; # .override { withXwidgets = false; };
       extraPackages =
         epkgs: with epkgs; [
           treesit-grammars.with-all-grammars

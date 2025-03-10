@@ -146,7 +146,7 @@
     ghostty = {
       enable = true;
       settings = {
-        theme = "catppuccin-mocha";
+        theme = "gruvbox-material";
       };
     };
   };

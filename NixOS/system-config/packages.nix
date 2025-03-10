@@ -521,6 +521,7 @@
         "--ignore-gpu-blocklist"
         "--enable-zero-copy"
         "--ozone-platform-hint=auto"
+        "--gpu-prefer-discrete"
         "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
       ];
     })
