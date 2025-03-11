@@ -16,12 +16,16 @@
       config = ../../emacs/config.org;
       package = pkgs.emacs-git-pgtk;
       alwaysEnsure = true;
+      alwaysTangle = true;
       extraEmacsPackages =
         epkgs: with epkgs; [
           use-package
           treesit-grammars.with-all-grammars
           vterm
         ];
+      override = final: prev: {
+        rustic = prev.rustic.overrideAttrs { ignoreCompilationError = true; };
+      };
     })
   ];
   programs = {

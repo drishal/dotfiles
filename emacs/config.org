@@ -1,4 +1,5 @@
 #+TITLE: init.el
+#+PROPERTY: header-args :tangle ~/.config/emacs/init.el
 
 * Table of contents :toc:
 - [[#emacs-startup][emacs startup]]
@@ -272,8 +273,6 @@ remove/add tangle no to whatever font you prefer
   (dashboard-setup-startup-hook)
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
   :config
-  (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
-  (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
   (setq dashboard-icon-type 'all-the-icons)
   (setq dashboard-heading-icons '((recents   . "file-text")
                                   (bookmarks . "book")
@@ -636,17 +635,17 @@ Put backup files neatly away
 
 ** magit
 #+begin_src emacs-lisp
-(use-package magit :ensure t)
-(use-package transient :ensure t)
-(setq package-install-upgrade-built-in t)
-;;fixing seq
-(defun +elpaca-unload-seq (e) "Unload seq before continuing the elpaca build, then continue to build the recipe E."
-       (and (featurep 'seq) (unload-feature 'seq t))
-       (elpaca--continue-build e))
-(elpaca `(seq :build ,(append (butlast (if (file-exists-p (expand-file-name "seq" elpaca-builds-directory))
-                                           elpaca--pre-built-steps
-                                         elpaca-build-steps))
-                              (list '+elpaca-unload-seq 'elpaca--activate-package))))
+  (use-package magit :ensure t)
+  (use-package transient :ensure t)
+  (setq package-install-upgrade-built-in t)
+  ;;fixing seq
+  ;; (defun +elpaca-unload-seq (e) "Unload seq before continuing the elpaca build, then continue to build the recipe E."
+  ;;        (and (featurep 'seq) (unload-feature 'seq t))
+  ;;        (elpaca--continue-build e))
+  ;; (elpaca `(seq :build ,(append (butlast (if (file-exists-p (expand-file-name "seq" elpaca-builds-directory))
+  ;;                                            elpaca--pre-built-steps
+  ;;                                          elpaca-build-steps))
+  ;;                               (list '+elpaca-unload-seq 'elpaca--activate-package))))
 #+end_src
 
 ** Some indentation settings
@@ -1247,12 +1246,12 @@ https://github.com/karthink/popper
         completion-category-overrides '((file (styles partial-completion)))))
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
-(use-package savehist :elpaca nil
+(use-package savehist :ensure nil
   :init
   (savehist-mode))
 
 ;; A few more useful configurations...
-(use-package emacs :elpaca nil
+(use-package emacs :ensure nil
   :init
   ;; Add prompt indicator to `completing-read-multiple'.
   ;; Alternatively try `consult-completing-read-multiple'.
@@ -1577,7 +1576,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   :config
   (provide 'upgraded-eldoc))
 (use-package eglot-booster
-  :ensure (:host github :repo "jdtsmith/eglot-booster")
+  :ensure nil
   :after eglot
   :config  (eglot-booster-mode))
 #+end_src
@@ -1899,7 +1898,7 @@ https://github.com/pwalsh/pipenv.el
 #+end_src
 
 * elaca stuff for dashboard
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle no
 (setq elpaca-after-init-time (current-time)) ;; prevents `elpaca-after-init-hook` from running later.
 (elpaca-wait)
 #+end_src
