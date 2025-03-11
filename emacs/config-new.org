@@ -1,0 +1,27 @@
+#+TITLE: init.el
+
+* Table of Contents :toc:
+- [[#startup-settings][Startup settings]]
+  - [[#create-a-customel-if-it-does-not-exist][create a custom.el if it does not exist]]
+  - [[#init-settings][init settings]]
+  - [[#move-theme-settings-to-customel][move theme settings to ~custom.el~]]
+
+* Startup settings
+** create a custom.el if it does not exist
+#+begin_src tangle no
+touch ~/.emacs.d/custom.el
+#+end_src
+** init settings
+#+begin_src emacs-lisp
+(setq package-enable-at-startup nil)
+(setenv "LSP_USE_PLISTS" "true")
+#+end_src
+** move theme settings to ~custom.el~
+#+begin_src emacs-lisp
+(let ((filepath "~/.config/emacs/custom.el"))
+  (when (not (file-exists-p filepath))
+    (write-region "" nil filepath)))
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load-file (expand-file-name "custom.el" user-emacs-directory))
+(setq gc-cons-threshold 100000000)
+#+end_src

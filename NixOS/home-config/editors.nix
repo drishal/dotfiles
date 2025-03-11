@@ -11,6 +11,19 @@
   imports = [
     ./nixvim.nix
   ];
+  home.packages = with pkgs; [
+    (pkgs.emacsWithPackagesFromUsePackage {
+      config = ../../emacs/config.org;
+      package = pkgs.emacs-git-pgtk;
+      alwaysEnsure = true;
+      extraEmacsPackages =
+        epkgs: with epkgs; [
+          use-package
+          treesit-grammars.with-all-grammars
+          vterm
+        ];
+    })
+  ];
   programs = {
     micro = {
       enable = false;
@@ -18,15 +31,25 @@
     helix = {
       enable = true;
     };
-    emacs = {
-      enable = true;
-      package = pkgs.emacs-git-pgtk; # .override { withXwidgets = false; };
-      extraPackages =
-        epkgs: with epkgs; [
-          treesit-grammars.with-all-grammars
-          vterm
-        ];
-    };
+    # emacs = {
+    #   enable = true;
+    #   # package = pkgs.emacs-git-pgtk;
+    #   package = (
+    #     pkgs.emacsWithPackagesFromUsePackage {
+    #       config = ../../emacs/config.org;
+    #       package = pkgs.emacs-git-pgtk;
+    #       alwaysEnsure = false;
+    #       extraEmacsPackages = epkgs: [
+    #         epkgs.use-package
+    #       ];
+    #     }
+    #   );
+    #   extraPackages =
+    #     epkgs: with epkgs; [
+    #       treesit-grammars.with-all-grammars
+    #       vterm
+    #     ];
+    # };
     # nvchad = {
     #   enable = true;
     #   extraPackages = with pkgs; [

@@ -1,5 +1,4 @@
 #+TITLE: init.el
-#+PROPERTY: header-args :tangle ~/.config/emacs/init.el
 
 * Table of contents :toc:
 - [[#emacs-startup][emacs startup]]
@@ -8,7 +7,6 @@
   - [[#shift-theme-variables-to-customel-make-sure-to-create-it-if-it-does-not-exist][shift theme variables to ~custom.el~, make sure to create it if it does not exist]]
   - [[#emacs-startup-performance][emacs startup performance]]
 - [[#initialize-package-sources][Initialize package sources]]
-  - [[#elpacael][elpaca.el]]
   - [[#enable-native-comp-for-packages][enable native comp for packages]]
   - [[#setting-up-paths][Setting up paths]]
 - [[#customizing-the-editor-and-appearence][Customizing the Editor and Appearence]]
@@ -104,8 +102,8 @@ touch ~/.emacs.d/custom.el
 #+end_src
 
 ** early init settings
-#+begin_src emacs-lisp :tangle ~/.config/emacs/early-init.el
-(setq package-enable-at-startup nil)
+#+begin_src emacs-lisp
+;; (setq package-enable-at-startup nil)
 (setenv "LSP_USE_PLISTS" "true")
 #+end_src
 
@@ -135,62 +133,6 @@ touch ~/.emacs.d/custom.el
 #+end_src
 
 * Initialize package sources
-** elpaca.el
-https://github.com/progfolio/elpaca
-
-#+begin_src emacs-lisp
-  (defvar elpaca-installer-version 0.10)
-  (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
-  (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
-  (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
-  (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-                                :ref nil
-                                :files (:defaults "elpaca-test.el" (:exclude "extensions"))
-                                :build (:not elpaca--activate-package)))
-  (let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
-         (build (expand-file-name "elpaca/" elpaca-builds-directory))
-         (order (cdr elpaca-order))
-         (default-directory repo))
-    (add-to-list 'load-path (if (file-exists-p build) build repo))
-    (unless (file-exists-p repo)
-      (make-directory repo t)
-      (when (< emacs-major-version 28) (require 'subr-x))
-      (condition-case-unless-debug err
-          (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
-                   ((zerop (call-process "git" nil buffer t "clone"
-                                         (plist-get order :repo) repo)))
-                   ((zerop (call-process "git" nil buffer t "checkout"
-                                         (or (plist-get order :ref) "--"))))
-                   (emacs (concat invocation-directory invocation-name))
-                   ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
-                                         "--eval" "(byte-recompile-directory \".\" 0 'force)")))
-                   ((require 'elpaca))
-                   ((elpaca-generate-autoloads "elpaca" repo)))
-              (progn (message "%s" (buffer-string)) (kill-buffer buffer))
-            (error "%s" (with-current-buffer buffer (buffer-string))))
-        ((error) (warn "%s" err) (delete-directory repo 'recursive))))
-    (unless (require 'elpaca-autoloads nil t)
-      (require 'elpaca)
-      (elpaca-generate-autoloads "elpaca" repo)
-      (load "./elpaca-autoloads")))
-  (add-hook 'after-init-hook #'elpaca-process-queues)
-  (elpaca `(,@elpaca-order))
-
-
-  ;; (setq package-enable-at-startup nil)
-  ;; Install use-package support
-  (elpaca elpaca-use-package
-    ;; Enable :elpaca use-package keyword.
-    (elpaca-use-package-mode)
-    ;; Assume :elpaca t unless otherwise specified.
-    (setq elpaca-use-package-by-default t))
-
-
-  ;; (use-package org :demand t)
-  ;; Block until current queue processed.
-  (elpaca-wait)
-#+end_src
-
 ** enable native comp for packages
 #+begin_src emacs-lisp
 (setq native-comp-deferred-compilation t)
@@ -199,7 +141,7 @@ https://github.com/progfolio/elpaca
 ** Setting up paths
 *** main path from shell
 #+begin_src emacs-lisp 
-(use-package exec-path-from-shell :demand t
+(use-package exec-path-from-shell :ensure t
   :config (when (daemonp)
             (exec-path-from-shell-initialize))
   )
@@ -228,7 +170,7 @@ setup direnv as early as possible
 *** envrc.el
 #+begin_src emacs-lisp 
 (use-package envrc
-  :demand t
+  :ensure t
   :hook (after-init . envrc-global-mode))
 #+end_src
 * Customizing the Editor and Appearence
@@ -301,7 +243,7 @@ remove/add tangle no to whatever font you prefer
 ** rainbow mode for colors
 #+begin_src emacs-lisp
 (use-package rainbow-mode
-  :demand t
+  :ensure t
   :init
   (define-globalized-minor-mode my-global-rainbow-mode rainbow-mode
     (lambda () (rainbow-mode 1)))
@@ -311,7 +253,7 @@ remove/add tangle no to whatever font you prefer
 ** Rainbow delimiters mode
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters
-  :demand t
+  :ensure t
   :init
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+end_src
@@ -325,7 +267,7 @@ remove/add tangle no to whatever font you prefer
 ** Dashboard
 #+begin_src emacs-lisp 
 (use-package dashboard
-  :demand t
+  :ensure t
   :init
   (dashboard-setup-startup-hook)
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
@@ -367,17 +309,17 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 ** Page break lines
 #+begin_src emacs-lisp
-(use-package page-break-lines :demand t)
+(use-package page-break-lines :ensure t)
 #+end_src
 ** All the icon fonts
 #+begin_src emacs-lisp
-(use-package all-the-icons :demand t)
-(use-package all-the-icons-dired :demand t
+(use-package all-the-icons :ensure t)
+(use-package all-the-icons-dired :ensure t
   :hook (dired-mode . (lambda () (all-the-icons-dired-mode t))))
 #+end_src
 ** Nerd-icons
 #+begin_src emacs-lisp
-(use-package nerd-icons :demand t
+(use-package nerd-icons :ensure t
   ;; :custom
   ;; The Nerd Font you want to use in GUI
   ;; "Symbols Nerd Font Mono" is the default and is recommended
@@ -399,7 +341,7 @@ remove/add tangle no to whatever font you prefer
 *** Doom themes
 #+begin_src emacs-lisp
 (use-package doom-themes
-  :demand t
+  :ensure t
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -441,13 +383,13 @@ remove/add tangle no to whatever font you prefer
 *** base-16
 #+begin_src emacs-lisp :tangle no
 (use-package base16-theme
-  :demand t
+  :ensure t
   :config
   (load-theme 'base16-tokyo-night-storm t))
 #+end_src
 *** rose-pine
 #+begin_src emacs-lisp :tangle no
-(use-package autothemer :demand t)
+(use-package autothemer :ensure t)
 (use-package rose-pine-theme :ensure (:host github :repo "konrad1977/pinerose-emacs")
   :init
   (load-theme 'rose-pine)
@@ -464,21 +406,21 @@ remove/add tangle no to whatever font you prefer
 *** emacs-gruvbox
 #+begin_src emacs-lisp :tangle no
 (use-package gruvbox-theme
-  :demand t
+  :ensure t
   :config
   (load-theme 'gruvbox-dark-hard)
   )
 #+end_src
 *** kanagawa
 #+begin_src emacs-lisp :tangle no
-(use-package autothemer :demand t)
+(use-package autothemer :ensure t)
 (load-theme kanagawa)
 #+end_src
 *** Other themes:
 **** Catppuccin
 #+begin_src emacs-lisp :tangle no
 (use-package catppuccin-theme
-  ;;:demand t
+  ;;:ensure t
   :ensure (:host github :repo "catppuccin/emacs")
   :init
   (setq catppuccin-flavor 'mocha) ;; or 'latte, 'macchiato, or 'mocha
@@ -499,7 +441,7 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 **** ef theme
 #+begin_src emacs-lisp 
-(use-package ef-themes :demand t
+(use-package ef-themes :ensure t
   ;; :init
   ;; (load-theme 'ef-winter)
   )
@@ -518,7 +460,7 @@ remove/add tangle no to whatever font you prefer
 **** base-16 themes
 #+begin_src emacs-lisp :tangle no
 (use-package base16-theme
-  :demand t
+  :ensure t
   :config
   (load-theme 'base16-tokyo-night-storm t)
   )
@@ -544,14 +486,14 @@ remove/add tangle no to whatever font you prefer
 *** Doom Modeline
 #+begin_src emacs-lisp
 (use-package doom-modeline
-  :demand t
+  :ensure t
   :init (doom-modeline-mode 1))
 #+end_src
 
 *** Airline
 https://github.com/AnthonyDiGirolamo/airline-themes
 #+begin_src emacs-lisp :tangle no
-(use-package airline-themes :demand t)
+(use-package airline-themes :ensure t)
 (load-theme 'airline-base16_dracula t)
 #+end_src
 
@@ -563,7 +505,7 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
-(use-package general :demand t
+(use-package general :ensure t
   :after evil
   :config
   (general-create-definer efs/leader-keys
@@ -577,7 +519,7 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
     "fde" '(lambda () (interactive) (find-file (expand-file-name "~/dotfiles/emacs/config.org")))))
 
 (use-package evil
-  :demand t
+  :ensure t
   :init
   (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
@@ -596,7 +538,7 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
   (evil-set-initial-state 'dashboard-mode 'normal))
 
 (use-package evil-collection
-  :demand t
+  :ensure t
   :after evil
   :config
   (evil-collection-init))
@@ -605,7 +547,7 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 #+end_src
 *** Evil args
 #+begin_src emacs-lisp
-(use-package evil-args :demand t
+(use-package evil-args :ensure t
   :config
   ;; bind evil-args text objects
   (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
@@ -623,11 +565,11 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 #+end_src
 *** Evil intent plus
 #+begin_src emacs-lisp
-(use-package evil-indent-plus :demand t)
+(use-package evil-indent-plus :ensure t)
 #+end_src
 *** Evil Snipe
 #+begin_src emacs-lisp
-(use-package evil-snipe :demand t
+(use-package evil-snipe :ensure t
   :init
   (evil-snipe-mode +1)
   (evil-snipe-override-mode +1)
@@ -637,7 +579,7 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 ** Undo system
 #+begin_src emacs-lisp
 (use-package undo-tree
-  :demand t
+  :ensure t
   :after evil
   :diminish
   :config
@@ -694,8 +636,8 @@ Put backup files neatly away
 
 ** magit
 #+begin_src emacs-lisp
-(use-package magit :demand t)
-(use-package transient :demand t)
+(use-package magit :ensure t)
+(use-package transient :ensure t)
 (setq package-install-upgrade-built-in t)
 ;;fixing seq
 (defun +elpaca-unload-seq (e) "Unload seq before continuing the elpaca build, then continue to build the recipe E."
@@ -742,7 +684,7 @@ Put backup files neatly away
 
 * Org mode:
 #+begin_src emacs-lisp :tangle no
-(use-package org :demand t)
+(use-package org :ensure t)
 (setq org-export-html-validation-link nil)
 #+end_src
 
@@ -773,7 +715,7 @@ Switch to org edit mode when pressing `i` insert key
 ** snippets:
 *** yas-snippet
 #+begin_src emacs-lisp
-(use-package yasnippet :demand t
+(use-package yasnippet :ensure t
   :init
   (require 'yasnippet)
   (add-to-list 'load-path (expand-file-name "~/dotfiles/emacs/snippets"))
@@ -783,13 +725,13 @@ Switch to org edit mode when pressing `i` insert key
 
 ** org tempo(snippets):
 #+begin_src emacs-lisp
-;; (use-package 'org-tempo :demand t)
+;; (use-package 'org-tempo :ensure t)
 (require 'org-tempo)
 #+end_src
 ** org modern
 https://github.com/minad/org-modern
 #+begin_src emacs-lisp
-(use-package org-modern :demand t
+(use-package org-modern :ensure t
   :config
 
   (setq
@@ -812,7 +754,7 @@ https://github.com/minad/org-modern
 #+begin_src emacs-lisp
 (use-package org-appear
   :after org
-  :demand t
+  :ensure t
   :hook (org-mode . org-appear-mode)
   :config
   (setq org-appear-autoemphasis   t
@@ -827,7 +769,7 @@ https://github.com/minad/org-modern
 #+begin_src emacs-lisp
 (use-package org-fancy-priorities
   :after (org all-the-icons)
-  :demand t
+  :ensure t
   :hook (org-mode        . org-fancy-priorities-mode)
   :hook (org-agenda-mode . org-fancy-priorities-mode)
   :config
@@ -838,7 +780,7 @@ https://github.com/minad/org-modern
 #+end_src
 ** org-toc
 #+begin_src emacs-lisp
-(use-package toc-org :demand t)
+(use-package toc-org :ensure t)
 (add-hook 'org-mode-hook #'toc-org-enable)
 #+end_src
 
@@ -849,7 +791,7 @@ https://github.com/minad/org-modern
 ** company org block
 #+begin_src emacs-lisp :tangle no
 (use-package company-org-block
-  :demand t
+  :ensure t
   :custom
   (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
   :hook ((org-mode . (lambda ()
@@ -883,7 +825,7 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 #+end_src
 ** org roam
 #+begin_src emacs-lisp :tangle no
-(use-package org-roam :demand t)
+(use-package org-roam :ensure t)
 #+end_src
 ** org export settings
 #+begin_src emacs-lisp
@@ -908,7 +850,7 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 #+end_src
 ** org present
 #+begin_src emacs-lisp
-(use-package org-present :demand t)
+(use-package org-present :ensure t)
 #+end_src
 ** Image settings
 #+begin_src emacs-lisp
@@ -917,7 +859,7 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 ** org-download
 #+begin_src emacs-lisp
 (use-package org-download
-  :demand t
+  :ensure t
   :config
   (add-hook 'dired-mode-hook 'org-download-enable)
   (add-hook 'org-mode-hook 'org-download-enable))
@@ -926,7 +868,7 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 ** vterm
 #+begin_src emacs-lisp
 (use-package vterm
-  ;;:demand t
+  ;;:ensure t
   :ensure nil 
   :config
   ;;(setq vterm-shell "/bin/zsh")
@@ -937,29 +879,29 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 ** Bongo
 https://github.com/dbrock/bongo
 #+begin_src emacs-lisp 
-(use-package bongo :demand t)
+(use-package bongo :ensure t)
 #+end_src
 ** Minimap
 #+begin_src emacs-lisp
 (use-package minimap
-  :demand t)
+  :ensure t)
 #+end_src
 ** Mentor Torrent client
 https://github.com/skangas/mentor
 #+begin_src emacs-lisp
-(use-package mentor :demand t)
+(use-package mentor :ensure t)
 #+end_src
 ** selectrical mode
 #+begin_src emacs-lisp
-(use-package selectric-mode :demand t)
+(use-package selectric-mode :ensure t)
 #+end_src
 ** emacs pdf tools
 #+begin_src emacs-lisp
-(use-package pdf-tools :demand t)
+(use-package pdf-tools :ensure t)
 #+end_src
 ** csv mode
 #+begin_src emacs-lisp
-(use-package csv-mode :demand t)
+(use-package csv-mode :ensure t)
 #+end_src
 ** mu4e
 https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-01.org
@@ -994,7 +936,7 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
 ** perspective.el
 #+begin_src emacs-lisp :tangle no
 (use-package perspective
-  :demand t
+  :ensure t
   :bind
   ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
   :custom
@@ -1005,7 +947,7 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
 ** treemacs
 #+begin_src emacs-lisp
 (use-package treemacs
-  :demand t
+  :ensure t
   :defer t
   :init
   (with-eval-after-load 'winum
@@ -1088,28 +1030,28 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
 
 (use-package treemacs-evil
   :after (treemacs evil)
-  :demand t)
+  :ensure t)
 
 (use-package treemacs-projectile
   :after (treemacs projectile)
-  :demand t)
+  :ensure t)
 
 ;; (use-package treemacs-icons-dired
 ;;   :hook (dired-mode . treemacs-icons-dired-enable-once)
-;;   :demand t)
+;;   :ensure t)
 
 (use-package treemacs-magit
   :after (treemacs magit)
-  :demand t)
+  :ensure t)
 
 (use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
   :after (treemacs persp-mode) ;;or perspective vs. persp-mode
-  :demand t
+  :ensure t
   :config (treemacs-set-scope-type 'Perspectives))
 #+end_src
 ** neotree
 #+begin_src emacs-lisp
-(use-package neotree :demand t
+(use-package neotree :ensure t
   :config
   (setq neo-smart-open t
         neo-show-hidden-files t
@@ -1156,7 +1098,7 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
 ** Shackle
 #+begin_src emacs-lisp
 (use-package shackle
-  :demand t
+  :ensure t
   ;; :if (not (bound-and-true-p disable-pkg-shackle))
   :config
   (progn
@@ -1194,7 +1136,7 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
 #+end_src
 ** pacman
 #+begin_src emacs-lisp
-(use-package pacmacs :demand t)
+(use-package pacmacs :ensure t)
 #+end_src
 ** popper.el TODO
 https://github.com/karthink/popper
@@ -1210,7 +1152,7 @@ https://github.com/karthink/popper
 
 ** elfeed RSS reader
 #+begin_src emacs-lisp
-(use-package elfeed :demand t)
+(use-package elfeed :ensure t)
 (setq elfeed-feeds
       '(
         ("https://archlinux.org/feeds/news/" Arch Linux)
@@ -1225,7 +1167,7 @@ https://github.com/karthink/popper
 
 ** Multi cursor
 #+begin_src emacs-lisp
-(use-package multiple-cursors :demand t
+(use-package multiple-cursors :ensure t
   :config
   (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
   (global-set-key (kbd "C->") 'mc/mark-next-like-this)
@@ -1244,7 +1186,7 @@ https://github.com/karthink/popper
 ** completion engines:
 *** company mode
 #+begin_src emacs-lisp
-(use-package company :demand t
+(use-package company :ensure t
   :init
   (add-hook 'after-init-hook 'global-company-mode)
   :config
@@ -1254,8 +1196,8 @@ https://github.com/karthink/popper
 #+end_src
 ** treesitter
 #+begin_src emacs-lisp :tangle no
-(use-package tree-sitter :demand t)
-(use-package tree-sitter-langs :demand t
+(use-package tree-sitter :ensure t)
+(use-package tree-sitter-langs :ensure t
   :init
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
@@ -1263,7 +1205,7 @@ https://github.com/karthink/popper
 #+end_src
 ** treesitter auto
 #+begin_src emacs-lisp
-(use-package treesit-auto :demand t
+(use-package treesit-auto :ensure t
   :custom
   (setq treesit-auto-install t)
   :config
@@ -1273,13 +1215,13 @@ https://github.com/karthink/popper
 ** emoji mode
 #+begin_src emacs-lisp
 (use-package emojify
-  :demand t
+  :ensure t
   :hook (after-init . global-emojify-mode))
 #+end_src
 ** Parentheses Completion
 #+begin_src emacs-lisp
 (use-package smartparens
-  :demand t;; install the package
+  :ensure t;; install the package
   :hook (prog-mode text-mode markdown-mode org-mode) ;; add `smartparens-mode` to these hooks
   :config
   ;; load default config
@@ -1287,18 +1229,18 @@ https://github.com/karthink/popper
 #+end_src
 ** Projectile
 #+begin_src emacs-lisp
-(use-package projectile :demand t)
+(use-package projectile :ensure t)
 #+end_src
 
 ** vertico and orderless
 #+begin_src emacs-lisp
 ;; Enable vertico
-(use-package vertico :demand t
+(use-package vertico :ensure t
   :init
   (vertico-mode)
   )
 
-(use-package orderless :demand t
+(use-package orderless :ensure t
   :init
   (setq completion-styles '(orderless)
         completion-category-defaults nil
@@ -1337,7 +1279,7 @@ https://github.com/minad/consult
 #+begin_src emacs-lisp
 ;; Example configuration for Consult
 (use-package consult
-  :demand t
+  :ensure t
   ;; Replace bindings. Lazily loaded due by `use-package'.
   :bind (;; C-c bindings (mode-specific-map)
          ("C-c h" . consult-history)
@@ -1440,7 +1382,7 @@ https://github.com/minad/consult
 *** vertico posframe
 #+begin_src emacs-lisp :tangle no
 (use-package vertico-posframe
-  :demand t
+  :ensure t
   :init
   (vertico-posframe-mode)
   :custom
@@ -1453,7 +1395,7 @@ https://github.com/minad/marginalia
 #+begin_src emacs-lisp
 ;; Enable richer annotations using the Marginalia package
 (use-package marginalia
-  :demand t
+  :ensure t
   ;; Either bind `marginalia-cycle` globally or only in the minibuffer
   :bind (("M-A" . marginalia-cycle)
          :map minibuffer-local-map
@@ -1472,14 +1414,14 @@ https://emacs-lsp.github.io/lsp-mode/
 and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 *** flycheck install
 #+begin_src emacs-lisp
-(use-package flycheck :demand t)
+(use-package flycheck :ensure t)
 #+end_src
 *** General Setup with lsp
     :PROPERTIES:
     :header-args:    :tangle no
     :END:
 #+begin_src emacs-lisp
-(use-package lsp-mode :demand t
+(use-package lsp-mode :ensure t
   :init
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
   (setq lsp-keymap-prefix "C-c l")
@@ -1512,10 +1454,10 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   :commands lsp)
 
 ;; optionally
-(use-package lsp-ui :commands lsp-ui-mode :demand t)
+(use-package lsp-ui :commands lsp-ui-mode :ensure t)
 
 ;; (setq lsp-ui-doc-enable nil)
-;;(use-package lsp-treemacs :demand t)
+;;(use-package lsp-treemacs :ensure t)
                                         ; (add-hook 'prog-mode-hook 'lsp)
 
 (setq lsp-use-plists t)
@@ -1556,7 +1498,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 **** Other lsp specific configurations
 ***** Lsp Java
 #+begin_src emacs-lisp 
-(use-package lsp-java :demand t)
+(use-package lsp-java :ensure t)
 (add-hook 'java-mode-hook (lambda ()
                             (setq c-basic-offset 4
                                   ;; tab-width 4
@@ -1590,7 +1532,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 ***** pyright
 #+begin_src emacs-lisp
 ;; (use-package lsp-pyright
-;;   :demand t
+;;   :ensure t
 ;;   :hook (python-mode . (lambda ()
 ;;                          (require 'lsp-pyright)
 ;;                          (lsp))))  ; or lsp-deferred
@@ -1601,12 +1543,12 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 ***** typescript
 #+begin_src emacs-lisp
 (use-package typescript-mode
-  :demand t)
+  :ensure t)
 #+end_src
 ***** Dap mode
 #+begin_src emacs-lisp
 (use-package dap-mode
-  :demand t
+  :ensure t
   :init
   (dap-auto-configure-mode 1)
   )
@@ -1617,7 +1559,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 *** Eglot setup
 #+begin_src emacs-lisp
 (use-package eglot
-  :demand t
+  :ensure t
   :config
   (add-to-list 'eglot-server-programs
                '(toml-ts-mode . ("taplo" "lsp" "stdio"))
@@ -1630,9 +1572,8 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   :hook
   (nix-ts-mode . eglot-ensure)
   )
-(use-package eglot-x :ensure (:host github :repo "nemethf/eglot-x"))
 (use-package eldoc
-  :demand t
+  :ensure t
   :config
   (provide 'upgraded-eldoc))
 (use-package eglot-booster
@@ -1643,19 +1584,19 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 *** breadcrumb mode
 #+begin_src emacs-lisp
-(use-package breadcrumb :demand t)
+(use-package breadcrumb :ensure t)
 #+end_src
 
 *** rust 
 #+begin_src emacs-lisp
 (use-package rust-mode
-  :demand t
+  :ensure t
   :init
   (setq rust-mode-treesitter-derive t))
 
 (use-package rustic
   :after (rust-mode)
-  :demand t
+  :ensure t
   :bind (:map rustic-mode-map
               ("M-j" . lsp-ui-imenu)
               ("M-?" . lsp-find-references)
@@ -1700,7 +1641,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 *** yaml-mode
 #+begin_src emacs-lisp
 (use-package yaml-mode
-  :demand t)
+  :ensure t)
 #+end_src
 *** python
 **** pipenv.el
@@ -1718,25 +1659,25 @@ https://github.com/pwalsh/pipenv.el
 #+end_src
 **** python mode
 #+begin_src emacs-lisp
-(use-package python-mode :demand t)
+(use-package python-mode :ensure t)
 #+end_src
 **** elpy
 #+begin_src emacs-lisp :tangle no
 (use-package elpy
-  :demand t
+  :ensure t
   :init
   (elpy-enable))
 #+end_src
 *** php
 #+begin_src emacs-lisp
 (use-package php-mode
-  :demand t)
+  :ensure t)
 #+end_src
 *** html
 #+begin_src emacs-lisp
-(use-package web-beautify :demand t)
-(use-package htmlize :demand t)
-;; (use-package js2-mode :demand t)
+(use-package web-beautify :ensure t)
+(use-package htmlize :ensure t)
+;; (use-package js2-mode :ensure t)
 ;; (add-hook 'js-mode-hook 'js2-minor-mode)
 ;; (add-hook 'js2-mode-hook 'ac-js2-mode)
 ;; (add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 2)))
@@ -1744,7 +1685,7 @@ https://github.com/pwalsh/pipenv.el
 #+end_src
 **** web mode
 #+begin_src emacs-lisp
-(use-package web-mode :demand t)
+(use-package web-mode :ensure t)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
@@ -1773,7 +1714,7 @@ https://github.com/pwalsh/pipenv.el
 ***** Tide
 #+begin_src emacs-lisp
 (use-package tide
-  :demand t
+  :ensure t
   :after (typescript-mode company flycheck)
   :hook ((typescript-mode . tide-setup)
          (typescript-mode . tide-hl-identifier-mode)
@@ -1781,7 +1722,7 @@ https://github.com/pwalsh/pipenv.el
 #+end_src
 **** Emmet mode
 #+begin_src emacs-lisp
-(use-package emmet-mode :demand t)
+(use-package emmet-mode :ensure t)
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
 (add-hook 'web-mode 'emmet-mode)
@@ -1789,15 +1730,15 @@ https://github.com/pwalsh/pipenv.el
 *** Haskell
 **** haskell mode
 #+begin_src emacs-lisp
-(use-package haskell-mode :demand t)
+(use-package haskell-mode :ensure t)
 #+end_src
 *** Fish
 #+begin_src emacs-lisp
-(use-package fish-mode :demand t)
+(use-package fish-mode :ensure t)
 #+end_src
 *** nix
 #+begin_src emacs-lisp
-(use-package nix-mode :demand t
+(use-package nix-mode :ensure t
   :mode "\\.nix\\'")
 ;; (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
 ;; (lsp-register-client
@@ -1805,11 +1746,11 @@ https://github.com/pwalsh/pipenv.el
 ;;                   :major-modes '(nix-mode)
 ;;                   :server-id 'nix))
 
-(use-package nixpkgs-fmt :demand t)
-(use-package nix-ts-mode :demand t
+(use-package nixpkgs-fmt :ensure t)
+(use-package nix-ts-mode :ensure t
  :mode "\\.nix\\'")
 ;; (use-package nix-ts-mode
-;;   :demand t
+;;   :ensure t
 ;;   :mode "\\.nix\\'")
 ;; (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
 ;; (lsp-register-client
@@ -1821,7 +1762,7 @@ https://github.com/pwalsh/pipenv.el
 *** lua
 #+begin_src emacs-lisp
 (use-package lua-mode
-  :demand t
+  :ensure t
   :mode "\\.lua$"
   :interpreter "lua"
   :config
@@ -1841,7 +1782,7 @@ https://github.com/pwalsh/pipenv.el
 
 *** rust
 #+begin_src emacs-lisp :tangle no
-(use-package rust-mode :demand t
+(use-package rust-mode :ensure t
   :init
   (setq rust-mode-treesitter-derive t)
   )
@@ -1849,7 +1790,7 @@ https://github.com/pwalsh/pipenv.el
 
 *** go-mode
 #+begin_src emacs-lisp
-(use-package go-mode :demand t)
+(use-package go-mode :ensure t)
 #+end_src
 *** C/C++ mode
 #+begin_src emacs-lisp
@@ -1893,28 +1834,28 @@ https://github.com/pwalsh/pipenv.el
 
 *** Docker Mode
 #+begin_src emacs-lisp
-(use-package dockerfile-mode :demand t)
-(use-package docker-compose-mode :demand t)
+(use-package dockerfile-mode :ensure t)
+(use-package docker-compose-mode :ensure t)
 (use-package docker
-  :demand t
+  :ensure t
   :bind ("C-c d" . docker))
 #+end_src
 
 *** zig
 #+begin_src emacs-lisp
-(use-package zig-mode :demand t)
+(use-package zig-mode :ensure t)
 (setq lsp-zig-zls-executable "~/zls/zls")
 #+end_src
 
 
 *** yuck mode
 #+begin_src emacs-lisp
-(use-package yuck-mode :demand t)
+(use-package yuck-mode :ensure t)
 #+end_src
 ** which key
 #+begin_src emacs-lisp
 (use-package which-key
-  :demand t
+  :ensure t
   :init
   (setq which-key-side-window-location 'bottom
         which-key-sort-order #'which-key-key-order-alpha
