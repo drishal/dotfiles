@@ -1576,7 +1576,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   :config
   (provide 'upgraded-eldoc))
 (use-package eglot-booster
-  :ensure nil
+  :ensure t
   :after eglot
   :config  (eglot-booster-mode))
 #+end_src
