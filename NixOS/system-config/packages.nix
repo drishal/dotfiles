@@ -108,9 +108,9 @@
     acpi
     argc
     adwaita-qt
-    aircrack-ng
     anydesk
     alacritty
+    # ayugram-desktop
     # ani-cli
     (ani-cli.overrideAttrs (old: {
       src = pkgs.fetchFromGitHub {
@@ -131,7 +131,6 @@
     bat
     bc
     bison
-    bookworm
     # brave
     (brave.override {
       commandLineArgs = [
@@ -181,7 +180,6 @@
     conky
     cpufetch
     cpu-x
-    # debootstrap
     debian-goodies
     deluge
     dejavu_fonts
@@ -244,46 +242,22 @@
     gcc
     geekbench
     # inputs.ghostty.packages.x86_64-linux.default
-    # google-chrome
-    # (google-chrome.override {
-    #   commandLineArgs = [
-    #     "--ignore-gpu-blocklist"
-    #     "--enable-gpu-rasterization"
-    #     "--enable-zero-copy"
-    #     "--force-dark-mode"
-    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
-    #     # "--disable-features=UseChromeOSDirectVideoDecoder"
-    #     "--use-vulkan"
-    #     "--ozone-platform-hint=auto"
-    #     "--enable-hardware-overlays"
-    #   ];
-    # })
     gimp
     git
     gitRepo
     glxinfo
-    # gns3-gui
-    # gns3-server
-    # gnome-boxes
     cheese
     gnome-calculator
     gnome-sound-recorder
-    # gnome-sound-recorder
-    # gnome-tweaks
-    # gnome.nautilus
-    # gnome.zenity
     gnumake
     gnupg
     ghostscript
-    # go
     goverlay
     gsmartcontrol
     gparted
     pkgs-master.gpt4all
     gtk-layer-shell
     gtklock
-    # haruna
-    haskellPackages.xmobar
     handbrake
     hdparm
     htop
@@ -312,7 +286,7 @@
     killall
     kitty
     kompose
-    kotatogram-desktop
+    # pkgs-master.kotatogram-desktop
     lbreakout2
     # linuxKernel.packages.v4l2loopback
     # linuxKernel.packages.linux_cachyos.v4l2loopback
@@ -347,6 +321,7 @@
     man
     mangohud
     materia-theme
+    # materialgram
     (materia-kde-theme.overrideAttrs (old: {
       src = pkgs.fetchFromGitHub {
         repo = "materia-kde";
@@ -457,7 +432,6 @@
     qbittorrent-nox
     # qtile-extras_git
     ranger
-    radeontop
     redshift
     read-edid
     ripgrep
@@ -487,7 +461,7 @@
     sway-contrib.grimshot
     swaylock-effects
     swaybg
-    # telegram-desktop
+    telegram-desktop
     tmate
     tetex
     #texlive.combined.scheme-medium
@@ -500,7 +474,6 @@
     tigervnc
     tmux
     tofi
-    tor-browser-bundle-bin
     transmission_4
     # toolbox
     trashy
@@ -516,16 +489,16 @@
     # virt-manager
     virtualenv
     virtiofsd
-    (vivaldi.override {
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--enable-zero-copy"
-        "--ozone-platform-hint=auto"
-        "--gpu-prefer-discrete"
-        "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
-      ];
-    })
-    vivaldi-ffmpeg-codecs
+    # (vivaldi.override {
+    #   commandLineArgs = [
+    #     "--ignore-gpu-blocklist"
+    #     "--enable-zero-copy"
+    #     "--ozone-platform-hint=auto"
+    #     "--gpu-prefer-discrete"
+    #     "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+    #   ];
+    # })
+    # vivaldi-ffmpeg-codecs
     ventoy-full
     vscode-fhs
     vscode-langservers-extracted
@@ -603,25 +576,17 @@
     # (pkgs.callPackage ../custom-packages/galaxy-buds-client/default.nix { })
     #(distrobox.overrideAttrs)
 
-    (st.overrideAttrs (oldAttrs: rec {
-      patches = [
-        # You can specify local patches
-        # ./path/to/local.diff
-        # Fetch them directly from `st.suckless.org`
-        # (fetchpatch {
-        #   url = "https://st.suckless.org/patches/rightclickpaste/st-rightclickpaste-0.8.2.diff";
-        #   sha256 = "1y4fkwn911avwk3nq2cqmgb2rynbqibgcpx7yriir0lf2x2ww1b6";
-        # })
-        # (fetchpatch {
-        #   url = "http://st.suckless.org/patches/xresources/st-xresources-20200604-9ba7ecf.diff";
-        #   sha256 = "sha256-8HV66XrTJu80H0Mwws5QL7BV6L9omUH6avFJqdDC7as=";
-        # })
-        (fetchpatch {
-          url = "http://st.suckless.org/patches/desktopentry/st-desktopentry-0.8.4.diff";
-          sha256 = "sha256-Hj2YgKHXhRplT8ojGCktygwKPdvaY9l2pteLunz1EGw=";
-        })
-      ];
-    }))
+    # (st.overrideAttrs (oldAttrs: rec {
+    #   patches = [
+    #     # You can specify local patches
+    #     # ./path/to/local.diff
+    #     # Fetch them directly from `st.suckless.org`
+    #     (fetchpatch {
+    #       url = "http://st.suckless.org/patches/desktopentry/st-desktopentry-0.8.4.diff";
+    #       sha256 = "sha256-Hj2YgKHXhRplT8ojGCktygwKPdvaY9l2pteLunz1EGw=";
+    #     })
+    #   ];
+    # }))
     # (picom.overrideAttrs (old: {
     #   src = pkgs.fetchFromGitHub {
     #     repo = "picom";

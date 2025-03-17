@@ -20,10 +20,9 @@
   inputs = {
 
     nixpkgs = {
-      url = "github:nixos/nixpkgs/5f385baff93c728400d2c4ec8c9b0745b8f9e5b6";
-      #url = "github:nixos/nixpkgs/nixos-unstable/5f385baff93c728400d2c4ec8c9b0745b8f9e5b6";
+      url = "github:nixos/nixpkgs/nixos-unstable";
     };
-    nixpkgs-master.url = "github:NixOS/nixpkgs/08f2276e8a0e3fcf6b9788615e03e930fe1d1bac";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/073edb293453d811bd2a670f8a233d95840e930f";
     # nixpkgs = { url = "github:PedroHLC/nixpkgs/pull-284487"; };
     # nixpkgs-master = {
     #   url = "github:nixos/nixpkgs/9b5ca6a80c775a62734e1fefa0d04f1b0c91c91b";
