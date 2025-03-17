@@ -361,6 +361,7 @@ remove/add tangle no to whatever font you prefer
   (doom-themes-treemacs-config)
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config)
+  (setq org-src-fontify-natively t)
 
   ;; neotree settings
   (setq doom-neotree-project-size 1
