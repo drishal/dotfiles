@@ -185,7 +185,7 @@
     dejavu_fonts
     devenv
     # dolphin
-    discord
+    discord-canary
     distrobox
     dig
     # (distrobox.overrideAttrs (old: {
