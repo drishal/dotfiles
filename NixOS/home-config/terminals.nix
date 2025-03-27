@@ -147,6 +147,10 @@
       enable = true;
       settings = {
         theme = "gruvbox-material";
+        window-padding-x = 5;
+        window-padding-y = 5;
+        cursor-style = "block";
+        cursor-style-blink = false;
       };
     };
   };

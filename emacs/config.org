@@ -571,7 +571,7 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 *** Evil Snipe
 #+begin_src emacs-lisp
 (use-package evil-snipe :ensure t
-  :init
+  :config
   (evil-snipe-mode +1)
   (evil-snipe-override-mode +1)
   )
