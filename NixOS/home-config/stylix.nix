@@ -15,6 +15,7 @@
       hyprpaper.enable = true;
       tmux.enable = false;
       rofi.enable = true;
+      ghostty.enable = false;
     };
     iconTheme = {
       enable = true;

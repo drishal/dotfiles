@@ -147,10 +147,13 @@
       enable = true;
       settings = {
         theme = "gruvbox-material";
+        font-family = "${config.stylix.fonts.monospace.name}";
+        font-size = config.stylix.fonts.sizes.terminal;
         window-padding-x = 5;
         window-padding-y = 5;
         cursor-style = "block";
         cursor-style-blink = false;
+        shell-integration-features = "no-cursor";
       };
     };
   };
