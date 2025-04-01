@@ -138,6 +138,8 @@
         update_check_interval = 0;
         window_padding_width = 5;
         confirm_os_window_close = 0;
+        cursor_blink_interval = 0;
+
       };
     };
     zellij = {

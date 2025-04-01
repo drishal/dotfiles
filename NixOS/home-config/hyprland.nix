@@ -12,7 +12,7 @@
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     settings = {
       exec-once = [
-        "lxpolkit & waybar & dunst & nm-applet --indicator &  blueman-applet & emacs --daemon & foot --server"
+        "lxpolkit & waybar & dunst & nm-applet --indicator &  blueman-applet & emacs --daemon"
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
       ];
       general = {
@@ -105,7 +105,8 @@
       # ];
       "$mainMod" = "SUPER";
       bind = [
-        "$mainMod, RETURN, exec, footclient"
+        # "$mainMod, RETURN, exec, footclient"
+        "$mainMod, RETURN, exec, kitty --single-instance"
         "$mainMod, D, exec, rofi -show drun -icon-theme Papirus -show-icons"
         "$mainMod, V, exec, pavucontrol"
         "$mainMod, T, exec, GDK_BACKEND=x11 xfce4-taskmanager"
