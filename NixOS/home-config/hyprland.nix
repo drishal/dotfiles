@@ -170,7 +170,7 @@
 
   #hyprpanel
   programs.hyprpanel = {
-    enable = true;
+    enable = false;
     overlay.enable = true;
     systemd.enable = false;
     hyprland.enable = true;
