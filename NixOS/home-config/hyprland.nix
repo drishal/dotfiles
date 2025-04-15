@@ -169,45 +169,45 @@
   };
 
   #hyprpanel
-  programs.hyprpanel = {
-    enable = false;
-    overlay.enable = true;
-    systemd.enable = false;
-    hyprland.enable = true;
-    theme = "catppuccin_mocha";
-    layout = {
-      "bar.layouts" = {
-        "*" = {
-          left = [
-            "dashboard"
-            "workspaces"
-            "windowtitle"
-          ];
-          middle = [
-            "clock"
-            "notifications"
-          ];
-          right = [
-            "volume"
-            "network"
-            "ram"
-            "cpu"
-            "power"
-            "systray"
-          ];
-        };
-      };
-    };
+  # programs.hyprpanel = {
+  #   enable = false;
+  #   overlay.enable = true;
+  #   systemd.enable = false;
+  #   hyprland.enable = true;
+  #   theme = "catppuccin_mocha";
+  #   layout = {
+  #     "bar.layouts" = {
+  #       "*" = {
+  #         left = [
+  #           "dashboard"
+  #           "workspaces"
+  #           "windowtitle"
+  #         ];
+  #         middle = [
+  #           "clock"
+  #           "notifications"
+  #         ];
+  #         right = [
+  #           "volume"
+  #           "network"
+  #           "ram"
+  #           "cpu"
+  #           "power"
+  #           "systray"
+  #         ];
+  #       };
+  #     };
+  #   };
 
-    settings = {
-      bar.launcher.icon = "";
-      bar.workspaces.show_numbered = true;
-      theme.bar.border_radius = "1.0em";
-      theme.font = {
-        name = "${config.stylix.fonts.monospace.name}";
-        size = "${builtins.toString config.stylix.fonts.sizes.terminal}px";
-      };
-    };
-  };
+  #   settings = {
+  #     bar.launcher.icon = "";
+  #     bar.workspaces.show_numbered = true;
+  #     theme.bar.border_radius = "1.0em";
+  #     theme.font = {
+  #       name = "${config.stylix.fonts.monospace.name}";
+  #       size = "${builtins.toString config.stylix.fonts.sizes.terminal}px";
+  #     };
+  #   };
+  # };
   # programs.hyprlock.enable = true;
 }
