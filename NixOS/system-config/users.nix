@@ -31,6 +31,7 @@
       "input"
       "podman"
       "docker"
+      "openrazer"
     ];
   };
   security.sudo.extraConfig = ''

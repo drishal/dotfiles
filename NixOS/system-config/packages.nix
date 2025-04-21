@@ -13,6 +13,7 @@
   # ];
   services.flatpak.enable = true;
   services.gvfs.enable = true;
+  hardware.openrazer.enable = true; 
   # inputs.nixpkgs-fix.packages.${pkgs.system}.
   services.zerotierone = {
     enable = true;
@@ -284,6 +285,7 @@
     # inputs.astal.packages.${system}.io
     keepassxc
     killall
+    pkgs-master.kdePackages.kirigami
     kitty
     kompose
     # pkgs-master.kotatogram-desktop
@@ -407,6 +409,7 @@
     poppler_utils
     powertop
     powercap
+    polychromatic
     # protonvpn-cli
     # protonvpn-gui
     procps
