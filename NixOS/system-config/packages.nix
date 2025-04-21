@@ -148,8 +148,9 @@
     bubblewrap
     cabextract
     cachix
+    chntpw
     # calibre
-    # cargo
+    cargo
     #carnix
     # chromium
     (chromium.override {
