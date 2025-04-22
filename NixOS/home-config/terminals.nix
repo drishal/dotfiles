@@ -15,6 +15,8 @@
           # font = "FantasqueSansM Nerd Font:size=14";
           dpi-aware = "no";
           pad = "15x10";
+          gamma-correct-blending = false;
+
         };
         # cursor = with config.scheme; {
         cursor = with config.lib.stylix.colors; {
