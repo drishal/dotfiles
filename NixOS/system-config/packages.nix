@@ -18,10 +18,10 @@
   services.zerotierone = {
     enable = true;
     # package = inputs.nixpkgs-master.legacyPackages.${pkgs.system}.zerotierone ;
-    package = pkgs-master.zerotierone;
-    localConf.settings = {
-      softwareUpdate = "disable";
-    };
+    # package = pkgs-master.zerotierone;
+    # localConf.settings = {
+    #   softwareUpdate = "disable";
+    # };
   };
   # services.ngrok = {
   # enable = true;
