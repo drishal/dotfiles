@@ -116,19 +116,11 @@
     };
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
 
-    # nvchad4nix = {
-    #   url = "github:nix-community/nix4nvchad";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    #   inputs.nvchad-starter.follows = "nvchad-starter";
-    # };
-    # nvchad-starter = {
-    #   url = "github:NvChad/starter";
-    #   flake = false;
-    # };
-    # nvchad-on-steroids = {  # <- here
-    #   url = "github:MOIS3Y/nvchad-on-steroids";
-    #   flake = false;
-    # };
+    nvchad4nix = {
+      url = "github:nix-community/nix4nvchad";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     umu.url = "github:Open-Wine-Components/umu-launcher?dir=packaging/nix";
     hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
   };

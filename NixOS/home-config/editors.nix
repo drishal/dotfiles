@@ -9,7 +9,7 @@
 # Editors
 {
   imports = [
-    ./nixvim.nix
+     ./nixvim.nix
   ];
   home.packages = with pkgs; [
     (pkgs.emacsWithPackagesFromUsePackage {
@@ -71,11 +71,11 @@
     #   extraPackages = with pkgs; [
     #     emmet-language-server
     #   ];
-    #   chadrcConfig= ''
+    #   chadrcConfig = ''
     #   ${builtins.readFile ../../config/nvim/nvchad/chadrc.lua}
     #   '';
     #   hm-activation = true;
-    #   backup = false;
+    #   backup = true;
     # };
   };
 }

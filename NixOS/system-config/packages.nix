@@ -503,7 +503,6 @@
     #   ];
     # })
     # vivaldi-ffmpeg-codecs
-    ventoy-full
     vscode-fhs
     vscode-langservers-extracted
     vlc
