@@ -378,7 +378,7 @@ remove/add tangle no to whatever font you prefer
 (setq doom-everforest-palette "material")
 ;; Must be used *after* the theme is loaded
 
-(load-theme 'doom-gruvbox-material t)
+(load-theme 'doom-everforest t)
 #+end_src
 *** base-16
 #+begin_src emacs-lisp :tangle no

@@ -55,7 +55,7 @@
     #     base0F = "${base0F}";
     #   };
     # };
-    colorscheme = "gruvbox-material";
+    # colorscheme = "gruvbox-material";
     # colorscheme = "palenight";
     opts = {
       hlsearch = false;
