@@ -133,14 +133,14 @@
     bc
     bison
     # brave
-    (brave.override {
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--enable-zero-copy"
-        "--ozone-platform-hint=auto"
-        "--enable-features=VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
-      ];
-    })
+    # (brave.override {
+    #   commandLineArgs = [
+    #     "--ignore-gpu-blocklist"
+    #     "--enable-zero-copy"
+    #     "--ozone-platform-hint=auto"
+    #     "--enable-features=VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+    #   ];
+    # })
     btop
     bun
     brightnessctl
@@ -187,7 +187,17 @@
     dejavu_fonts
     devenv
     # dolphin
-    discord-canary
+    # discord-canary
+    (discord-canary.overrideAttrs (_: {
+      withVencode = true;
+      # extraOptions
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--enable-zero-copy"
+        "--ozone-platform-hint=auto"
+        "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+      ];
+    }))
     distrobox
     dig
     # (distrobox.overrideAttrs (old: {
@@ -287,6 +297,7 @@
     keepassxc
     killall
     pkgs-master.kdePackages.kirigami
+    kdePackages.xwaylandvideobridge
     kitty
     kompose
     # pkgs-master.kotatogram-desktop
