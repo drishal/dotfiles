@@ -27,10 +27,10 @@
     #   enable = true;
     #   settings.background.dark = "mocha";
     # };
-    colorschemes.everforest = {
-      enable = true;
-      settings.background = "hard";
-    };
+    # colorschemes.everforest = {
+    #   enable = true;
+    #   settings.background = "hard";
+    # };
     # colorschemes.gruvbox = {
     #   enable = true;
     # };
@@ -55,7 +55,7 @@
     #     base0F = "${base0F}";
     #   };
     # };
-    # colorscheme = "gruvbox-material";
+    colorscheme = "gruvbox-material";
     # colorscheme = "palenight";
     opts = {
       hlsearch = false;
@@ -86,8 +86,8 @@
         src = pkgs.fetchFromGitHub {
           repo = "gruvbox-material";
           owner = "sainnhe";
-          rev = "146f40fd42cbef30fed69b4ef51329aeeaceb909";
-          sha256 = "sha256-PbuiOl16PWr/aFDbLUJV2Ud7AuB9BLMTphViralz/S0=";
+          rev = "f5f912fbc7cf2d45da6928b792d554f85c7aa89a";
+          sha256 = "sha256-r3a0fhRpEqrAE6QQwBV7DmGoT/YSOhDPl5Nk8evNplE=";
         };
       }))
       (pkgs.vimUtils.buildVimPlugin {
