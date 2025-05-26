@@ -70,12 +70,14 @@
         enabled = true;
         bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
         animation = [
+          # animations set 1
           "windows, 1, 5, myBezier"
           "windowsOut, 1, 5, default, popin 80%"
           "border, 1, 8, default"
           "borderangle, 1, 6, default"
           "fade, 1, 5, default"
           "workspaces, 1, 4, default"
+
         ];
       };
       dwindle = {
@@ -93,6 +95,7 @@
         "rounding 0, class:^[fF]irefox"
         "float, class:Waydroid"
         "float, class:^(Anydesk)$,title:^(anydesk)$"
+        "idleinhibit always, class:steam_app_0"
       ];
       windowrule = [
         "opacity 0.0 override, class:^(xwaylandvideobridge)$"
@@ -101,6 +104,7 @@
         "maxsize 1 1, class:^(xwaylandvideobridge)$"
         "noblur, class:^(xwaylandvideobridge)$"
         "nofocus, class:^(xwaylandvideobridge)$"
+
       ];
       # experimental = {
       #   hdr = true;

@@ -18,7 +18,8 @@
       name = "breeze_cursors";
       size = 24;
     };
-    image = ../wallpapers/warm/railtrack.jpg;
+    # image = ../wallpapers/warm/railtrack.jpg;
+    image = ../wallpapers/anime/goku.jpg;
     fonts = {
       serif = {
         package = pkgs.noto-fonts;
