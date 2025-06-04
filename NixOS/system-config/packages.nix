@@ -504,16 +504,16 @@
     # virt-manager
     virtualenv
     virtiofsd
-    # (vivaldi.override {
-    #   commandLineArgs = [
-    #     "--ignore-gpu-blocklist"
-    #     "--enable-zero-copy"
-    #     "--ozone-platform-hint=auto"
-    #     "--gpu-prefer-discrete"
-    #     "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
-    #   ];
-    # })
-    # vivaldi-ffmpeg-codecs
+    (vivaldi.override {
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--enable-zero-copy"
+        "--ozone-platform-hint=auto"
+        "--gpu-prefer-discrete"
+        "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+      ];
+    })
+    vivaldi-ffmpeg-codecs
     vscode-fhs
     vscode-langservers-extracted
     vlc
