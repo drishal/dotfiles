@@ -3,6 +3,7 @@
 #- <https://wiki.hyprland.org/Nvidia>
 {
   pkgs,
+  lib,
   config,
   ...
 }:
@@ -30,19 +31,6 @@
 
   hardware = {
     nvidia = {
-      #- <https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/os-specific/linux/nvidia-x11/default.nix>
-      # package = config.boot.kernelPackages.nvidiaPackages.stable;
-      # package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
-      #   version = "565.57.01";
-      #   sha256_64bit = "sha256-buvpTlheOF6IBPWnQVLfQUiHv4GcwhvZW3Ks0PsYLHo=";
-      #   sha256_aarch64 = "sha256-buvpTlheOF6IBPWnQVLfQUiHv4GcwhvZW3Ks0PsYLHo=";
-      #   openSha256 = "sha256-/tM3n9huz1MTE6KKtTCBglBMBGGL/GOHi5ZSUag4zXA=";
-      #   settingsSha256 = "sha256-kQsvDgnxis9ANFmwIwB7HX5MkIAcpEEAHc8IBOLdXvk=";
-      #   persistencedSha256 = "sha256-hdszsACWNqkCh8G4VBNitDT85gk9gJe1BlQ8LdrYIkg=";
-      #   patchesOpen = [
-      #     ./nvidia.patch
-      #   ];
-      # };
       package = config.boot.kernelPackages.nvidiaPackages.latest;
 
       # package = pkgs.linuxPackages_latest.nvidiaPackages.beta;
