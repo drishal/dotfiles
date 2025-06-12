@@ -13,7 +13,7 @@
   # ];
   services.flatpak.enable = true;
   services.gvfs.enable = true;
-  hardware.openrazer.enable = true; 
+  # hardware.openrazer.enable = true; 
   # inputs.nixpkgs-fix.packages.${pkgs.system}.
   services.zerotierone = {
     enable = true;
