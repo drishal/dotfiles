@@ -71,7 +71,7 @@
     # Desktop Environment
     desktopManager = {
       # plasma6.enable = true;
-      xfce.enable = true;
+      # xfce.enable = true;
       # lxqt.enable = true;
       # gnome.enable = true;
     };

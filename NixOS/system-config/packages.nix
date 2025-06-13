@@ -294,6 +294,16 @@
     # python3Packages.pygobject-stubs
     # inputs.astal.packages.${system}.astal3
     # inputs.astal.packages.${system}.io
+    (inputs.ignis.packages.${pkgs.stdenv.hostPlatform.system}.ignis.override {
+      extraPackages = [
+        # Add extra dependencies here
+        # For example:
+        pkgs.python312Packages.psutil
+        pkgs.python312Packages.jinja2
+        pkgs.python312Packages.pillow
+        pkgs.python312Packages.materialyoucolor
+      ];
+    })
     keepassxc
     killall
     pkgs-master.kdePackages.kirigami
@@ -536,7 +546,7 @@
     wlr-randr
     wdisplays
     xarchiver
-    xonotic
+    # xonotic
     yarn
     yad
     yt-dlp

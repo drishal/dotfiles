@@ -8,15 +8,18 @@
 
 {
   virtualisation = {
-    # libvert
+    # libvirt
     libvirtd = {
       enable = true;
       qemu.ovmf.enable = true;
-      # qemuOvmf = true;
       qemu.swtpm.enable = true;
+      qemu.ovmf.packages = [(pkgs.OVMF.override {
+        secureBoot = true;
+        tpmSupport = true;
+      }).fd
+      ];
       onBoot = "ignore";
       onShutdown = "shutdown";
-      # qemu.ovmf.package = pkgs.OVMFFull;
     };
 
     #docker
