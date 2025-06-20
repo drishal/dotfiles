@@ -63,9 +63,9 @@
         force_zero_scaling = true;
       };
 
-      render = {
-        explicit_sync = 1;
-      };
+      # render = {
+      #   explicit_sync = 1;
+      # };
       animations = {
         enabled = true;
         bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
