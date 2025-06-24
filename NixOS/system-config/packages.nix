@@ -153,15 +153,14 @@
     cargo
     #carnix
     # chromium
-    (chromium.override {
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--enable-zero-copy"
-        "--ozone-platform-hint=auto"
-        "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
-      ];
-    })
-
+    # (chromium.override {
+    #   commandLineArgs = [
+    #     "--ignore-gpu-blocklist"
+    #     "--enable-zero-copy"
+    #     "--ozone-platform-hint=auto"
+    #     "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+    #   ];
+    # })
     # chromium-bsu
     nemo
     nemo-with-extensions
@@ -270,7 +269,7 @@
     pkgs-master.gpt4all
     gtk-layer-shell
     gtklock
-    handbrake
+    # handbrake
     hdparm
     htop
     # hollywood
@@ -294,16 +293,16 @@
     # python3Packages.pygobject-stubs
     # inputs.astal.packages.${system}.astal3
     # inputs.astal.packages.${system}.io
-    (inputs.ignis.packages.${pkgs.stdenv.hostPlatform.system}.ignis.override {
-      extraPackages = [
-        # Add extra dependencies here
-        # For example:
-        pkgs.python312Packages.psutil
-        pkgs.python312Packages.jinja2
-        pkgs.python312Packages.pillow
-        pkgs.python312Packages.materialyoucolor
-      ];
-    })
+    # (inputs.ignis.packages.${pkgs.stdenv.hostPlatform.system}.ignis.override {
+    #   extraPackages = [
+    #     # Add extra dependencies here
+    #     # For example:
+    #     pkgs.python3Packages.psutil
+    #     pkgs.python3Packages.jinja2
+    #     pkgs.python3Packages.pillow
+    #     pkgs.python3Packages.materialyoucolor
+    #   ];
+    # })
     keepassxc
     killall
     pkgs-master.kdePackages.kirigami
@@ -514,16 +513,16 @@
     # virt-manager
     virtualenv
     virtiofsd
-    (vivaldi.override {
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--enable-zero-copy"
-        "--ozone-platform-hint=auto"
-        "--gpu-prefer-discrete"
-        "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
-      ];
-    })
-    vivaldi-ffmpeg-codecs
+    # (vivaldi.override {
+    #   commandLineArgs = [
+    #     "--ignore-gpu-blocklist"
+    #     "--enable-zero-copy"
+    #     "--ozone-platform-hint=auto"
+    #     "--gpu-prefer-discrete"
+    #     "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+    #   ];
+    # })
+    # vivaldi-ffmpeg-codecs
     vscode-fhs
     vscode-langservers-extracted
     vlc

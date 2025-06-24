@@ -35,7 +35,7 @@
 
     #waydroid
     waydroid.enable = true;
-    # lxd.enable = true;
+    lxd.enable = true;
 
     # virtualbox
     # virtualbox.host.enable = true;

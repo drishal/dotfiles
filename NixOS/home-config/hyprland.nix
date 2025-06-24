@@ -95,7 +95,6 @@
         "rounding 0, class:^[fF]irefox"
         "float, class:Waydroid"
         "float, class:^(Anydesk)$,title:^(anydesk)$"
-        "idleinhibit always, class:steam_app_0"
       ];
       windowrule = [
         "opacity 0.0 override, class:^(xwaylandvideobridge)$"

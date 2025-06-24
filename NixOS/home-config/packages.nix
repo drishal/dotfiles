@@ -66,7 +66,7 @@
     gobject-introspection
     # hyprpanel
     inputs.ags.packages.${pkgs.system}.agsFull
-    inputs.ags.packages.${pkgs.system}.astal3
+    inputs.ags.packages.${pkgs.system}.astal4
     inputs.ags.packages.${pkgs.system}.gjs
     inputs.astal.packages.${pkgs.system}.tray
     inputs.astal.packages.${pkgs.system}.hyprland
@@ -80,10 +80,35 @@
     inputs.astal.packages.${pkgs.system}.powerprofiles
     inputs.astal.packages.${pkgs.system}.wireplumber
     glib
-    (pkgs.python3.withPackages (pp: [
-      pp.pygobject3
-      pp.pygobject-stubs
+    (python3.withPackages(ps: with ps; [
+      pygobject3
+      pygobject-stubs
+
+      (inputs.ignis.packages.${pkgs.stdenv.hostPlatform.system}.ignis.override {
+        extraPackages = [
+          psutil
+          jinja2
+          pillow
+          materialyoucolor
+          pygobject3
+          pygobject-stubs
+        ];
+      })
     ]))
+
+    # (pkgs.python3.withPackages (pp: [
+    #   pp.pygobject3
+    #   pp.pygobject-stubs
+    #   (inputs.ignis.packages.${pkgs.stdenv.hostPlatform.system}.ignis.override {
+    #     extraPackages = [
+    #       # Add extra packages if needed
+    #       psutil
+    #       jinja2
+    #       pillow
+    #       materialyoucolor
+    #     ];
+    #   })
+    # ]))
   ];
 
   #nixd path
