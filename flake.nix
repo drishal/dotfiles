@@ -125,7 +125,7 @@
     };
 
     umu.url = "github:Open-Wine-Components/umu-launcher?dir=packaging/nix";
-    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
+    # hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
   };
 
   outputs =
@@ -156,7 +156,7 @@
       programsdb,
       quickemu,
       stylix,
-      hyprpanel,
+      # hyprpanel,
       tt-schemes,
       umu,
       ghostty,
@@ -217,7 +217,7 @@
             ./NixOS/home-config/home.nix
             {
               nixpkgs.overlays = [
-                inputs.hyprpanel.overlay
+                # inputs.hyprpanel.overlay
                 inputs.emacs-overlay.overlay
                 emacs-lsp-booster.overlays.default
               ];

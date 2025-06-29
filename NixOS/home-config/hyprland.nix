@@ -6,7 +6,7 @@
 }:
 
 {
-  imports = [ inputs.hyprpanel.homeManagerModules.hyprpanel ];
+  # imports = [ inputs.hyprpanel.homeManagerModules.hyprpanel ];
   wayland.windowManager.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;

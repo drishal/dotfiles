@@ -8,20 +8,25 @@
 
 {
   virtualisation = {
-    # libvirt
+    useSecureBoot = true;
     libvirtd = {
       enable = true;
-      qemu.ovmf.enable = true;
-      qemu.swtpm.enable = true;
-      qemu.ovmf.packages = [(pkgs.OVMF.override {
-        secureBoot = true;
-        tpmSupport = true;
-      }).fd
-      ];
-      onBoot = "ignore";
-      onShutdown = "shutdown";
+      qemu = {
+        package = pkgs.qemu_kvm;
+        runAsRoot = true;
+        swtpm.enable = true;
+        ovmf = {
+          enable = true;
+          packages = [
+            pkgs.OVMFFull
+            # (pkgs.OVMF.override {
+            # secureBoot = true;
+            # tpmSupport = true;
+            # }).fd
+          ];
+        };
+      };
     };
-
     #docker
     #docker.enable = true;
 
@@ -64,4 +69,19 @@
 
   users.extraGroups.vboxusers.members = [ "drishal" ];
   virtualisation.spiceUSBRedirection.enable = true;
+    environment = {
+      etc = {
+        "ovmf/edk2-x86_64-secure-code.fd" = {
+          source = "${config.virtualisation.libvirtd.qemu.package}/share/qemu/edk2-x86_64-secure-code.fd";
+        };
+
+        "ovmf/edk2-i386-vars.fd" = {
+          source = "${config.virtualisation.libvirtd.qemu.package}/share/qemu/edk2-i386-vars.fd";
+          mode = "0644";
+          user = "libvirtd";
+        };
+      };
+    };
+
+
 }
