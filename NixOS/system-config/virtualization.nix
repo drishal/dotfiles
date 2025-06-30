@@ -8,7 +8,6 @@
 
 {
   virtualisation = {
-    useSecureBoot = true;
     libvirtd = {
       enable = true;
       qemu = {

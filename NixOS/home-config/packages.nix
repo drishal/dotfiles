@@ -67,7 +67,6 @@
     # hyprpanel
     inputs.ags.packages.${pkgs.system}.agsFull
     inputs.ags.packages.${pkgs.system}.astal4
-    inputs.ags.packages.${pkgs.system}.gjs
     inputs.astal.packages.${pkgs.system}.tray
     inputs.astal.packages.${pkgs.system}.hyprland
     inputs.astal.packages.${pkgs.system}.io
