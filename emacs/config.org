@@ -1559,8 +1559,48 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 *** Eglot setup
 #+begin_src emacs-lisp
+(use-package project-rootfile :ensure t)
+(defvar lk/home-full-path (getenv "HOME"))
+
+(defun lk/project-find-root (path)
+  "Search up the PATH for known project file markers. Throws an error if found path is
+  equal to users home directory"
+  (when-let ((root
+              (if-let ((vc-root (project-try-vc default-directory)))
+                  ;; get dir from (vc Git "dir")
+                  (car (last vc-root))
+                ;; this returns #s(project-rootfile-plain "~/tmp/foobar/") struct,
+                ;; we need the :root part
+                (project-rootfile-plain--root
+                 (project-rootfile-try-detect default-directory)))))
+    (let* ((root-exp (expand-file-name root)))
+      ;; bail if detected dir is equal to home (can happen!)
+      (when (string-equal lk/home-full-path root-exp)
+        (message "Root folder is equal to HOME!")
+        (throw 'lk/invalid-project-root t))
+      ;; otherwise we're good
+      root-exp)))
+
+(use-package project
+  :ensure t
+  :after (project-rootfile)
+  :init ;
+
+  (advice-add #'project-find-regexp :override #'consult-git-grep)
+  (advice-add #'project-shell :override #'multi-vterm)
+  :bind-keymap ("C-c p" . project-prefix-map)
+
+  :config ; add custom actions when using select-project
+  (add-to-list 'project-switch-commands
+               '(magit-project-status "Magit" ?m)
+               '(consult-git-grep "Git grep" ?g))
+  (add-to-list 'project-find-functions #'project-rootfile-try-detect t))
+
+
 (use-package eglot
   :ensure t
+  :init
+  (setq project-vc-extra-root-markers '("Cargo.toml"))
   :config
   (add-to-list 'eglot-server-programs
                '(toml-ts-mode . ("taplo" "lsp" "stdio"))
@@ -1568,8 +1608,6 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
                ;; '(nix-ts-mode . ("nil"))
                )
 
-  (setq project-vc-extra-root-markers '("Cargo.toml"))
-  (add-to-list 'project-vc-extra-root-markers "tsconfig.json")
   :hook
   (nix-ts-mode . eglot-ensure)
   )
