@@ -45,9 +45,9 @@
   services.timesyncd.enable = true;
 
   # systemd settings
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=10s
-  '';
+  # systemd.extraConfig = ''
+  #   DefaultTimeoutStopSec=10s
+  # '';
 
   # cgroups support
   # systemd.enableUnifiedCgroupHierarchy = true;
@@ -207,6 +207,20 @@
             "bluez5.autoswitch-profile" = true;
           };
         };
+        pipewire = {
+            "10-fifine-mic" = {
+              match = [
+                { "node.name" = "alsa_input.usb-3142_Fifine_Microphone-00.mono-fallback"; }
+              ];
+              update-props = {
+                "audio.format" = "S16LE";
+                "audio.rate" = 48000;  # Force mic to 48 kHz only
+                "audio.channels" = 1; # Keep mono
+                "channelmix.upmix" = false;
+                "channelmix.normalize" = false;
+              };
+            };
+          };
       };
     };
     # media-session.enable = false;

@@ -13,7 +13,7 @@
   # ];
   services.flatpak.enable = true;
   services.gvfs.enable = true;
-  # hardware.openrazer.enable = true; 
+  hardware.openrazer.enable = true; 
   # inputs.nixpkgs-fix.packages.${pkgs.system}.
   services.zerotierone = {
     enable = true;
@@ -128,7 +128,7 @@
     aria
     #scrcpy
     pkgs-master.scrcpy
-    axel
+    # axel
     bat
     bc
     bison
@@ -457,10 +457,11 @@
     qbittorrent-nox
     # qtile-extras_git
     ranger
-    redshift
     read-edid
     ripgrep
     rquickshare
+    rnnoise
+    rnnoise-plugin
     # rnix-lsp
     rofi
     rofi-emoji
@@ -529,7 +530,7 @@
     vlc
     vulkan-tools
     virt-viewer
-    volumeicon
+    # volumeicon
     # waybar-hyprland
     webcamoid
     wget
@@ -695,7 +696,6 @@
     '';
   };
 
-  nixpkgs.config.permittedInsecurePackages = [ "electron-12.2.3" ];
   #fonts
   fonts = {
     enableDefaultPackages = true;

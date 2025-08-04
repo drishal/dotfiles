@@ -19,8 +19,8 @@
 
         };
         # cursor = with config.scheme; {
-        cursor = with config.lib.stylix.colors; {
-          color = "${base00} ${base06}";
+        colors = with config.lib.stylix.colors; {
+          cursor = "${base00} ${base06}";
         };
         scrollback = {
           indicator-position = "none";

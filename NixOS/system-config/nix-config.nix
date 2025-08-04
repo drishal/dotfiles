@@ -48,7 +48,7 @@
       "steam-original"
       "steam-runtime"
     ];
-  nixpkgs.config.permittedInsecurePackages = [ "openssl-1.1.1t" ];
+  nixpkgs.config.permittedInsecurePackages = [ "openssl-1.1.1t" "electron-12.2.3" "libsoup-2.74.3" ];
   hardware.enableRedistributableFirmware = true;
 
   programs.nh = {
