@@ -51,7 +51,7 @@
 
       # Ensure all GPUs stay awake even during headless mode
       # Fixes a glitch
-      nvidiaPersistenced = true;
+      nvidiaPersistenced = false;
     };
 
     # Required for Nvidia support in containers (Docker, Podman, etc.)

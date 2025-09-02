@@ -54,7 +54,7 @@
       #   enableContribAndExtras = true;
       # };
 
-      dwm.enable = true;
+      # dwm.enable = true;
 
       # leftwm.enable = true;
       # awesome = {
@@ -217,14 +217,14 @@
   #some overlays
   nixpkgs.overlays = [
     #suckless overlays
-    (final: prev: {
-      dwm = prev.dwm.overrideAttrs (old: {
-        src = ../../suckless/dwm-6.4;
-      });
-      dwmblocks = prev.dwmblocks.override (old: {
-        conf = ../../suckless/dwmblocks/blocks.def.h;
-      });
-    })
+    # (final: prev: {
+    #   dwm = prev.dwm.overrideAttrs (old: {
+    #     src = ../../suckless/dwm-6.4;
+    #   });
+    #   dwmblocks = prev.dwmblocks.override (old: {
+    #     conf = ../../suckless/dwmblocks/blocks.def.h;
+    #   });
+    # })
     #     
     # (self: super:
     #   {

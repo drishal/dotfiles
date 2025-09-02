@@ -23,17 +23,17 @@
     #   softwareUpdate = "disable";
     # };
   };
-  services.clamav = {
-    daemon.enable = false;
-    scanner.enable =  false;
-    updater.enable =  false;
-  };
-  services.ngrok = {
-    enable = true;
-    extraConfigFiles = [
-      "${inputs.private-stuff}/ngrok.txt"
-    ];
-  };
+  # services.clamav = {
+  #   daemon.enable = false;
+  #   scanner.enable =  false;
+  #   updater.enable =  false;
+  # };
+  # services.ngrok = {
+  #   enable = true;
+  #   extraConfigFiles = [
+  #     "${inputs.private-stuff}/ngrok.txt"
+  #   ];
+  # };
   # xdg.portal.enable = true;
   programs = {
     # adb
@@ -57,7 +57,7 @@
     kdeconnect.enable = true;
 
     #wireshark
-    wireshark.enable = true;
+    # wireshark.enable = true;
 
     #game mode
     gamemode.enable = true;
@@ -115,7 +115,7 @@
     argc
     adwaita-qt
     anydesk
-    alacritty
+    # alacritty
     # ayugram-desktop
     # ani-cli
     (ani-cli.overrideAttrs (old: {
@@ -126,13 +126,12 @@
         sha256 = "sha256-8M5Hwo1OwGcEdjARb1zjjmR1YxekJZ5w/ztEoq6vOJ0=";
       };
     }))
-
     appimage-run
     arandr
     # arc-theme
     aria
     #scrcpy
-    pkgs-master.scrcpy
+    scrcpy
     # axel
     bat
     bc
@@ -217,8 +216,8 @@
     #   };
     # }))
     dmg2img
-    dmenu
-    dmidecode
+    # dmenu
+    # dmidecode
     docker-compose
     dunst
     dust
@@ -229,8 +228,7 @@
     element-desktop
     ethtool
     # etcher
-    evince
-    evince
+    # evince
     easyeffects
     extundelete
     eza
@@ -275,7 +273,7 @@
     goverlay
     gsmartcontrol
     gparted
-    pkgs-master.gpt4all
+    gpt4all
     gtk-layer-shell
     gtklock
     # handbrake
@@ -315,7 +313,6 @@
     # })
     keepassxc
     killall
-    pkgs-master.kdePackages.kirigami
     kdePackages.xwaylandvideobridge
     kdePackages.ark
     kdePackages.okular
@@ -351,7 +348,7 @@
         freetype
       ];
     })
-    pkgs-master.lxsession
+    lxsession
     man
     mangohud
     materia-theme
@@ -414,14 +411,14 @@
     onefetch
     # onboard
     onlyoffice-bin
-    (orchis-theme.overrideAttrs (old: {
-      src = pkgs.fetchFromGitHub {
-        repo = "Orchis-theme";
-        owner = "vinceliuice";
-        rev = "c774328344413a7ea416da242cc50e8cc1a99caa";
-        sha256 = "sha256-COOmg7XW79iH/H+o81nfW+mrMjyii8jhmlP48lI2SGg=";
-      };
-    }))
+    # (orchis-theme.overrideAttrs (old: {
+    #   src = pkgs.fetchFromGitHub {
+    #     repo = "Orchis-theme";
+    #     owner = "vinceliuice";
+    #     rev = "c774328344413a7ea416da242cc50e8cc1a99caa";
+    #     sha256 = "sha256-COOmg7XW79iH/H+o81nfW+mrMjyii8jhmlP48lI2SGg=";
+    #   };
+    # }))
     p7zip
     pandoc
     papirus-icon-theme
@@ -431,7 +428,7 @@
     patchelf
     pciutils
     # pkgs-master.pcmanfm
-    peaclock
+    # peaclock
     pfetch
     php
     pkg-config
@@ -501,7 +498,7 @@
     tmate
     tetex
     #texlive.combined.scheme-medium
-    thinkfan
+    # thinkfan
     # thorium
     # inputs.self.packages.${pkgs.system}.freedownloadmanager
     #inputs.self.packages.${pkgs.system}.thorium
@@ -536,7 +533,7 @@
     # })
     # vivaldi-ffmpeg-codecs
     # vesktop
-    vscode-fhs
+    # vscode-fhs
     vscode-langservers-extracted
     vlc
     vulkan-tools
