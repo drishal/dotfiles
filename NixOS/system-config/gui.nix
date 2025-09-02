@@ -130,7 +130,8 @@
   # QT settings
   # environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "";
   # qt.platformTheme="qt5ct";
-  environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "kde";
+  # environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "kde";
+  qt.platformTheme = lib.mkForce "kde";
   # qt.platformTheme="qt5ct";
   # environment.variables.QT_STYLE_OVERRIDE= lib.mkForce "";
   # river 
@@ -197,7 +198,11 @@
   # lidswitch
   services.logind = {
     lidSwitch = "suspend";
-    extraConfig = "IdleAction=ignore";
+    settings =  {
+      Login = {
+        IdleAction="ignore";
+      };
+    };
   };
 
   # portal

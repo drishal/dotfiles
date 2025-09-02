@@ -23,12 +23,17 @@
     #   softwareUpdate = "disable";
     # };
   };
-  # services.ngrok = {
-  # enable = true;
-  # extraConfigFiles = [
-  #   "${inputs.private-stuff}/ngrok.txt"
-  # ];
-  # };
+  services.clamav = {
+    daemon.enable = false;
+    scanner.enable =  false;
+    updater.enable =  false;
+  };
+  services.ngrok = {
+    enable = true;
+    extraConfigFiles = [
+      "${inputs.private-stuff}/ngrok.txt"
+    ];
+  };
   # xdg.portal.enable = true;
   programs = {
     # adb
@@ -185,18 +190,22 @@
     deluge
     dejavu_fonts
     devenv
+    discord
     # dolphin
     # discord-canary
-    (discord-canary.overrideAttrs (_: {
-      withVencode = true;
-      # extraOptions
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--enable-zero-copy"
-        "--ozone-platform-hint=auto"
-        "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
-      ];
-    }))
+    # (discord.overrideAttrs (_: {
+    #   # withVencode = true;
+    #   # extraOptions
+    #   commandLineArgs = [
+    #     "--ignore-gpu-blocklist"
+    #     "--enable-zero-copy"
+    #     "--ozone-platform-hint=auto"
+    #     "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+    #   ];
+    # }))
+    # (discord.override {
+    #   withVencord = true;
+    # })
     distrobox
     dig
     # (distrobox.overrideAttrs (old: {
@@ -308,6 +317,11 @@
     killall
     pkgs-master.kdePackages.kirigami
     kdePackages.xwaylandvideobridge
+    kdePackages.ark
+    kdePackages.okular
+    kdePackages.konsole
+    kdePackages.qtstyleplugin-kvantum
+    kdePackages.spectacle
     kitty
     kompose
     # pkgs-master.kotatogram-desktop
@@ -327,10 +341,6 @@
     # linuxKernel.packages.linux.systemtap
     lm_sensors
     lolcat
-    libsForQt5.ark
-    libsForQt5.okular
-    libsForQt5.konsole
-    libsForQt5.qtstyleplugin-kvantum
     lsd
     lshw
     #lutris-unwrapped
@@ -389,6 +399,7 @@
     nixpkgs-fmt
     nmap
     nodejs
+    ngrok
     # nvtop-amd
     nvtopPackages.amd
     # nodePackages_latest.create-react-app
@@ -398,6 +409,7 @@
     ntfs3g
     obs-studio
     okteto
+    openssl
     openvpn
     onefetch
     # onboard
@@ -423,7 +435,6 @@
     pfetch
     php
     pkg-config
-    plasma5Packages.spectacle
     polybar
     podman-compose
     powershell
@@ -449,7 +460,6 @@
     #python3Packages.venvShellHook
     #$python3Packages.qtile-extras
     qpdf
-    libsForQt5.qt5ct
     # quickemu
     # (quickemu.override { qemu = qemu_full; })
     # qutebrowser
@@ -525,6 +535,7 @@
     #   ];
     # })
     # vivaldi-ffmpeg-codecs
+    # vesktop
     vscode-fhs
     vscode-langservers-extracted
     vlc

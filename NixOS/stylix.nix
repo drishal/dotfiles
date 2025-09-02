@@ -14,7 +14,7 @@
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/everforest-dark-hard.yaml";
     # base16Scheme =  ./home-config/colors/doomone.yaml;
     cursor = {
-      package = pkgs.libsForQt5.breeze-qt5;
+      package = pkgs.kdePackages.breeze;
       name = "breeze_cursors";
       size = 24;
     };

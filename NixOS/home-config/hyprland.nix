@@ -88,9 +88,9 @@
         mfact = 0.5;
         new_status = "master";
       };
-      gestures = {
-        workspace_swipe = true;
-      };
+      # gestures = {
+      #   workspace_swipe = true;
+      # };
       windowrulev2 = [
         "rounding 0, class:^[fF]irefox"
         "float, class:Waydroid"
