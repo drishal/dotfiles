@@ -590,6 +590,7 @@
     zathura
     # zed-editor
     zenity
+    zapzap
     # (pkgs.python3.withPackages (ps: [
     #   ps.pygobject3
     #   ps.pygobject-stubs
