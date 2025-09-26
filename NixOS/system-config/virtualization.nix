@@ -18,6 +18,7 @@
           enable = true;
           packages = [
             pkgs.OVMFFull
+            pkgs.edk2
             # (pkgs.OVMF.override {
             # secureBoot = true;
             # tpmSupport = true;
@@ -39,7 +40,7 @@
 
     #waydroid
     waydroid.enable = true;
-    lxd.enable = true;
+    # lxd.enable = true;
 
     # virtualbox
     # virtualbox.host.enable = true;

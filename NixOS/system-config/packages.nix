@@ -186,7 +186,7 @@
     cpufetch
     cpu-x
     debian-goodies
-    deluge
+    # deluge
     dejavu_fonts
     devenv
     discord
@@ -219,7 +219,7 @@
     # dmenu
     # dmidecode
     docker-compose
-    dunst
+    # dunst
     dust
     dwmblocks
     dwarfs
@@ -446,7 +446,6 @@
     pdfgrep
     poppler
     protonup-qt
-    prow
     ps_mem
     python3
     # python3Packages.mysql-connector

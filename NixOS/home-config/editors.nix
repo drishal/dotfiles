@@ -26,17 +26,15 @@
       override = final: prev: {
         rustic = prev.rustic.overrideAttrs { ignoreCompilationError = true; };
         eglot-booster = final.melpaBuild {
-        pname = "eglot-booster";
-        version = "0.1.0.0.20241029";
-        src = pkgs.fetchFromGitHub {
-          owner = "jdtsmith";
-          repo = "eglot-booster";
-          rev = "e6daa6bcaf4aceee29c8a5a949b43eb1b89900ed";
-          hash = "sha256-PLfaXELkdX5NZcSmR1s/kgmU16ODF8bn56nfTh9g6bs=";
+          pname = "eglot-booster";
+          version = "0.1.0.0.20240616";
+          src = pkgs.fetchFromGitHub {
+            owner = "jdtsmith";
+            repo = "eglot-booster";
+            rev = "cab7803c4f0adc7fff9da6680f90110674bb7a22";
+            hash = "sha256-xUBQrQpw+JZxcqT1fy/8C2tjKwa7sLFHXamBm45Fa4Y=";
+          };
         };
-      };
-
-
       };
     })
   ];
