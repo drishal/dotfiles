@@ -113,8 +113,7 @@
     # _9base
     acpi
     argc
-    adwaita-qt
-    anydesk
+    # anydesk
     # alacritty
     # ayugram-desktop
     # ani-cli
@@ -184,7 +183,7 @@
     cmatrix
     conky
     cpufetch
-    cpu-x
+    # cpu-x
     debian-goodies
     # deluge
     dejavu_fonts
@@ -230,7 +229,6 @@
     # etcher
     # evince
     easyeffects
-    extundelete
     eza
     lsd
     fastfetch
@@ -241,9 +239,7 @@
     ffmpeg-full
     # ff2mpv
     figlet
-    # firefox-bin
     firefox
-    # firefox-wayland
     # inputs.firefox-nightly.packages.${pkgs.system}.firefox-beta-bin
     # inputs.firefox.packages.${pkgs.system}.firefox-nightly-bin
     # firefox-wayland
@@ -274,7 +270,7 @@
     gsmartcontrol
     gparted
     gpt4all
-    gtk-layer-shell
+    # gtk-layer-shell
     gtklock
     # handbrake
     hdparm
@@ -341,27 +337,27 @@
     lsd
     lshw
     #lutris-unwrapped
-    lxappearance
-    (lutris.override {
-      extraLibraries = pkgs: [
-        xz
-        freetype
-      ];
-    })
+    # lxappearance
+    # (lutris.override {
+    #   extraLibraries = pkgs: [
+    #     xz
+    #     freetype
+    #   ];
+    # })
     lxsession
     man
     mangohud
     materia-theme
     # materialgram
-    (materia-kde-theme.overrideAttrs (old: {
-      src = pkgs.fetchFromGitHub {
-        repo = "materia-kde";
-        owner = "PapirusDevelopmentTeam";
-        rev = "6cc4c1867c78b62f01254f6e369ee71dce167a15";
-        sha256 = "sha256-tZWEVq2VYIvsQyFyMp7VVU1INbO7qikpQs4mYwghAVM=";
-      };
-    }))
-    mesa-demos
+    # (materia-kde-theme.overrideAttrs (old: {
+    #   src = pkgs.fetchFromGitHub {
+    #     repo = "materia-kde";
+    #     owner = "PapirusDevelopmentTeam";
+    #     rev = "6cc4c1867c78b62f01254f6e369ee71dce167a15";
+    #     sha256 = "sha256-tZWEVq2VYIvsQyFyMp7VVU1INbO7qikpQs4mYwghAVM=";
+    #   };
+    # }))
+    # mesa-demos
     metasploit
     # mov-cli
     # (mov-cli.overrideAttrs (old: {
@@ -445,7 +441,7 @@
     procps
     pdfgrep
     poppler
-    protonup-qt
+    # protonup-qt
     ps_mem
     python3
     # python3Packages.mysql-connector
@@ -460,14 +456,14 @@
     # (quickemu.override { qemu = qemu_full; })
     # qutebrowser
     qbittorrent
-    qbittorrent-nox
+    # qbittorrent-nox
     # qtile-extras_git
     ranger
     read-edid
     ripgrep
     rquickshare
-    rnnoise
-    rnnoise-plugin
+    # rnnoise
+    # rnnoise-plugin
     # rnix-lsp
     rofi
     rofi-emoji
