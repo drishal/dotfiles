@@ -14,7 +14,7 @@
   home.packages = with pkgs; [
     (pkgs.emacsWithPackagesFromUsePackage {
       config = ../../emacs/config.org;
-      package = pkgs.emacs-git-pgtk;
+      package = pkgs.emacs-unstable-pgtk;
       alwaysEnsure = true;
       alwaysTangle = true;
       extraEmacsPackages =

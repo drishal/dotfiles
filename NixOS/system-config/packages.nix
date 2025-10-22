@@ -269,9 +269,9 @@
     goverlay
     gsmartcontrol
     gparted
-    gpt4all
+    # gpt4all
     # gtk-layer-shell
-    gtklock
+    # gtklock
     # handbrake
     hdparm
     htop
@@ -285,7 +285,7 @@
     inxi
     icu
     inotify-tools
-    inputs.lobster.packages.x86_64-linux.lobster
+    # inputs.lobster.packages.x86_64-linux.lobster
     inputs.zen-browser.packages."${system}".default
     inputs.quickemu.packages.${pkgs.stdenv.hostPlatform.system}.quickemu
     jq
@@ -315,6 +315,7 @@
     kdePackages.konsole
     kdePackages.qtstyleplugin-kvantum
     kdePackages.spectacle
+    kdePackages.kirigami
     kitty
     kompose
     # pkgs-master.kotatogram-desktop
@@ -373,7 +374,7 @@
     mission-center
     # mongodb-compass
     mosh
-    motrix
+    # motrix
     # mplayer
     mpv
     #mullvad
@@ -461,7 +462,7 @@
     ranger
     read-edid
     ripgrep
-    rquickshare
+    # rquickshare
     # rnnoise
     # rnnoise-plugin
     # rnix-lsp
@@ -476,14 +477,13 @@
     # smplayer
     sass
     speedtest-cli
-    spot
     starship
     steam-run
     steamcmd
     steamtinkerlaunch
-    stremio
+    # stremio
     s-tui
-    surf
+    # surf
     # swaylock
     svp
     sway-contrib.grimshot
