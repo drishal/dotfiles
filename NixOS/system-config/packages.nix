@@ -309,7 +309,7 @@
     # })
     keepassxc
     killall
-    kdePackages.xwaylandvideobridge
+    # kdePackages.xwaylandvideobridge
     kdePackages.ark
     kdePackages.okular
     kdePackages.konsole
@@ -485,7 +485,6 @@
     s-tui
     # surf
     # swaylock
-    svp
     sway-contrib.grimshot
     swaylock-effects
     swaybg

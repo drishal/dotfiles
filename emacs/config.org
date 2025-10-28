@@ -7,6 +7,7 @@
   - [[#early-init-settings][early init settings]]
   - [[#shift-theme-variables-to-customel-make-sure-to-create-it-if-it-does-not-exist][shift theme variables to ~custom.el~, make sure to create it if it does not exist]]
   - [[#emacs-startup-performance][emacs startup performance]]
+  - [[#elpaca][elpaca]]
 - [[#initialize-package-sources][Initialize package sources]]
   - [[#enable-native-comp-for-packages][enable native comp for packages]]
   - [[#setting-up-paths][Setting up paths]]
@@ -104,7 +105,7 @@ touch ~/.emacs.d/custom.el
 
 ** early init settings
 #+begin_src emacs-lisp
-;; (setq package-enable-at-startup nil)
+(setq package-enable-at-startup nil)
 (setenv "LSP_USE_PLISTS" "true")
 #+end_src
 
@@ -131,6 +132,52 @@ touch ~/.emacs.d/custom.el
 	       gcs-done))
 
 (add-hook 'emacs-startup-hook #'efs/display-startup-time)
+#+end_src
+
+** elpaca
+#+begin_src emacs-lisp
+(defvar elpaca-installer-version 0.11)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                              :ref nil :depth 1 :inherit ignore
+                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+                              :build (:not elpaca--activate-package)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (when (<= emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+        (if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                  ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
+                                                  ,@(when-let* ((depth (plist-get order :depth)))
+                                                      (list (format "--depth=%d" depth) "--no-single-branch"))
+                                                  ,(plist-get order :repo) ,repo))))
+                  ((zerop (call-process "git" nil buffer t "checkout"
+                                        (or (plist-get order :ref) "--"))))
+                  (emacs (concat invocation-directory invocation-name))
+                  ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                        "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                  ((require 'elpaca))
+                  ((elpaca-generate-autoloads "elpaca" repo)))
+            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+          (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (let ((load-source-file-function nil)) (load "./elpaca-autoloads"))))
+(add-hook 'after-init-hook #'elpaca-process-queues)
+(elpaca `(,@elpaca-order))
+;; Install use-package support
+(elpaca elpaca-use-package
+  ;; Enable use-package :ensure support for Elpaca.
+  (elpaca-use-package-mode))
 #+end_src
 
 * Initialize package sources
@@ -340,7 +387,7 @@ remove/add tangle no to whatever font you prefer
 *** Doom themes
 #+begin_src emacs-lisp
 (use-package doom-themes
-  :ensure t
+  :ensure (:wait t)
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -1559,6 +1606,9 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 *** Eglot setup
 #+begin_src emacs-lisp
+(use-package flymake :ensure t)
+(use-package jsonrpc :ensure t)
+
 (use-package project-rootfile :ensure t)
 (defvar lk/home-full-path (getenv "HOME"))
 
@@ -1581,24 +1631,24 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
       ;; otherwise we're good
       root-exp)))
 
-(use-package project
-  :ensure t
-  :after (project-rootfile)
-  :init ;
+;; (use-package project
+;;   :ensure t
+;;   :after (project-rootfile)
+;;   :init ;
 
-  (advice-add #'project-find-regexp :override #'consult-git-grep)
-  (advice-add #'project-shell :override #'multi-vterm)
-  :bind-keymap ("C-c p" . project-prefix-map)
+;;   (advice-add #'project-find-regexp :override #'consult-git-grep)
+;;   (advice-add #'project-shell :override #'multi-vterm)
+;;   :bind-keymap ("C-c p" . project-prefix-map)
 
-  :config ; add custom actions when using select-project
-  (add-to-list 'project-switch-commands
-               '(magit-project-status "Magit" ?m)
-               '(consult-git-grep "Git grep" ?g))
-  (add-to-list 'project-find-functions #'project-rootfile-try-detect t))
+;;   :config ; add custom actions when using select-project
+;;   (add-to-list 'project-switch-commands
+;;                '(magit-project-status "Magit" ?m)
+;;                '(consult-git-grep "Git grep" ?g))
+;;   (add-to-list 'project-find-functions #'project-rootfile-try-detect t))
 
 
 (use-package eglot
-  :ensure t
+  :ensure (:wait t)
   :init
   (setq project-vc-extra-root-markers '("Cargo.toml"))
   :config
@@ -1615,10 +1665,15 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   :ensure t
   :config
   (provide 'upgraded-eldoc))
-(use-package eglot-booster
-  :ensure t
-  :after eglot
-  :config  (eglot-booster-mode))
+
+(elpaca (eglot-booster :host github :repo "jdtsmith/eglot-booster")
+  (require 'eglot-booster)
+  (eglot-booster-mode)
+  )
+;; (use-package eglot-booster
+;;   :ensure t
+;;   :after eglot
+;;   :config  (eglot-booster-mode))
 #+end_src
 
 *** breadcrumb mode
@@ -1813,7 +1868,8 @@ https://github.com/pwalsh/pipenv.el
 
 *** PKGBUILD
 #+begin_src emacs-lisp
-(use-package pkgbuild-mode :demand
+(use-package pkgbuild-mode
+  :ensure (:wait t)
   :init
   (require 'pkgbuild-mode)
   )
