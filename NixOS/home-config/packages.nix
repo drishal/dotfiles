@@ -62,7 +62,7 @@
     # (pkgs.nerdfonts.override {
     #   fonts = [ "FiraCode"   "Monofur" ];
     # })
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     # hyprpanel
     # inputs.ags.packages.${pkgs.system}.agsFull

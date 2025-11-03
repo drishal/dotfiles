@@ -128,7 +128,7 @@
     appimage-run
     arandr
     # arc-theme
-    aria
+    aria2
     #scrcpy
     scrcpy
     # axel
@@ -136,14 +136,14 @@
     bc
     bison
     # brave
-    # (brave.override {
-    #   commandLineArgs = [
-    #     "--ignore-gpu-blocklist"
-    #     "--enable-zero-copy"
-    #     "--ozone-platform-hint=auto"
-    #     "--enable-features=VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
-    #   ];
-    # })
+    (brave.override {
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--enable-zero-copy"
+        "--ozone-platform-hint=auto"
+        "--enable-features=VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+      ];
+    })
     btop
     bun
     brightnessctl
@@ -259,7 +259,6 @@
     gimp
     git
     gitRepo
-    glxinfo
     cheese
     gnome-calculator
     gnome-sound-recorder
@@ -309,7 +308,6 @@
     # })
     keepassxc
     killall
-    # kdePackages.xwaylandvideobridge
     kdePackages.ark
     kdePackages.okular
     kdePackages.konsole
@@ -358,7 +356,7 @@
     #     sha256 = "sha256-tZWEVq2VYIvsQyFyMp7VVU1INbO7qikpQs4mYwghAVM=";
     #   };
     # }))
-    # mesa-demos
+    mesa-demos
     metasploit
     # mov-cli
     # (mov-cli.overrideAttrs (old: {
@@ -407,7 +405,7 @@
     openvpn
     onefetch
     # onboard
-    onlyoffice-bin
+    onlyoffice-desktopeditors
     # (orchis-theme.overrideAttrs (old: {
     #   src = pkgs.fetchFromGitHub {
     #     repo = "Orchis-theme";
@@ -433,7 +431,7 @@
     podman-compose
     powershell
     #postman
-    poppler_utils
+    poppler-utils
     powertop
     powercap
     polychromatic
@@ -540,7 +538,7 @@
     widevine-cdm
     # wine
     # wineWow64Packages.staging
-    win-virtio
+    virtio-win
     wirelesstools
     # wine64
     # wireshark
