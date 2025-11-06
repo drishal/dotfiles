@@ -43,7 +43,7 @@ fish_add_path ~/.cargo/bin
 
 * Custom color scheme
 ** Catppuccin mocha
-#+begin_src fish :tangle no 
+#+begin_src fish
 set fish_color_normal cdd6f4
 set fish_color_command 89b4fa
 set fish_color_param f2cdcd
@@ -174,7 +174,7 @@ set fish_pager_color_selected_progress --bold 6e6e6e
 #+end_src
 
 ** gruvbox hard
-#+begin_src fish
+#+begin_src fish :tangle no
 set fish_color_normal D4BE98
 set fish_color_command A9B665
 set fish_color_keyword 7DAEA3
