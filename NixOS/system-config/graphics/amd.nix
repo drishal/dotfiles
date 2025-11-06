@@ -26,8 +26,8 @@
     LIBVA_DRIVER_NAME = "radeonsi";
     VDPAU_DRIVER = "radeonsi";
     # MOZ_DISABLE_RDD_SANDBOX="1";
-    # AMD_VULKAN_ICD = "RADV";
-    # VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+    AMD_VULKAN_ICD = "RADV";
+    VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
     # MOZ_ENABLE_WAYLAND="1";
   };
 
