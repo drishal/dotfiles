@@ -13,10 +13,11 @@
   programs.fish.enable = true;
   programs.zsh ={
     enable = true;
+    enableCompletion = false;
   };
   programs.xonsh.enable = true;
   users.users.drishal = {
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
     isNormalUser = true;
     extraGroups = [
       "wheel"

@@ -51,6 +51,7 @@
     };
     targets = {
       gtk.enable = true;
+      fish.enable = false;
     };
   };
 }
