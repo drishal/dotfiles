@@ -16,6 +16,7 @@
       tmux.enable = false;
       rofi.enable = true;
       ghostty.enable = false;
+      fish.enable = false;
     };
     iconTheme = {
       enable = true;
