@@ -44,9 +44,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    discord-flake = {
-      url = "github:InternetUnexplorer/discord-overlay";
-    };
+    # discord-flake = {
+    #   url = "github:InternetUnexplorer/discord-overlay";
+    # };
 
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 
