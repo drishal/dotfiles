@@ -49,34 +49,24 @@
       #aliases
       source ~/dotfiles/scripts/aliases.sh
 
-      set fish_color_normal cdd6f4
-      set fish_color_command 89b4fa
-      set fish_color_param f2cdcd
-      set fish_color_keyword f38ba8
-      set fish_color_quote a6e3a1
-      set fish_color_redirection f5c2e7
-      set fish_color_end fab387
-      set fish_color_comment 7f849c
-      set fish_color_error f38ba8
-      set fish_color_gray 6c7086
-      set fish_color_selection --background=313244
-      set fish_color_search_match --background=313244
-      set fish_color_option a6e3a1
-      set fish_color_operator f5c2e7
-      set fish_color_escape eba0ac
-      set fish_color_autosuggestion 6c7086
-      set fish_color_cancel f38ba8
-      set fish_color_cwd f9e2af
-      set fish_color_user 94e2d5
-      set fish_color_host 89b4fa
-      set fish_color_host_remote a6e3a1
-      set fish_color_status f38ba8
-      set fish_pager_color_progress 6c7086
-      set fish_pager_color_prefix f5c2e7
-      set fish_pager_color_completion cdd6f4
-      set fish_pager_color_description 6c7086
-
-
+      set fish_color_normal D4BE98
+      set fish_color_command A9B665
+      set fish_color_keyword 7DAEA3
+      set fish_color_quote 89B482
+      set fish_color_redirection E78A4E
+      set fish_color_end 7C6F64
+      set fish_color_error EA6962
+      set fish_color_param D4BE98
+      set fish_color_comment 7C6F64
+      set fish_color_selection --background=504945
+      set fish_color_search_match --background=504945
+      set fish_color_operator A9B665
+      set fish_color_escape 7DAEA3
+      set fish_color_autosuggestion 7C6F64
+      set fish_pager_color_progress 8F3F71
+      set fish_pager_color_prefix 89B482
+      set fish_pager_color_completion D4BE98
+      set fish_pager_color_description 8F3F71
     '';
     plugins = [
       # Enable a plugin (here grc for colorized command output) from nixpkgs
