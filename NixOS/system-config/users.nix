@@ -14,10 +14,11 @@
   programs.zsh ={
     enable = true;
     enableCompletion = false;
+    promptInit = "";
   };
   programs.xonsh.enable = true;
   users.users.drishal = {
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
     isNormalUser = true;
     extraGroups = [
       "wheel"

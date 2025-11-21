@@ -1,3 +1,5 @@
+#exports
+export EZA_ICON_SPACING=2
 # aliases
 alias nix-config="sudo vim /etc/nixos/configuration.nix"
 alias xon="steam-run ~/Desktop/games/Xonotic/xonotic-linux-sdl.sh"

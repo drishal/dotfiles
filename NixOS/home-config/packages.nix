@@ -112,14 +112,6 @@
 
   #nixd path
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
-  # direnv
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-    enableZshIntegration = true;
-    enableBashIntegration = true;
-  };
-
   # ags
   # programs.ags = {
   #   enable = true;
@@ -190,15 +182,16 @@
   # '';
   # xdg.configFile."eww".recursive = true;
   #lsd
-  programs.lsd = {
-    enable = true;
-    settings = {
-      icons = {
-        theme = "fancy";
-        separator = "  ";
-      };
-    };
-  };
+  # programs.lsd = {
+  #   enable = true;
+  #   enableZshIntegration = false;
+  #   settings = {
+  #     icons = {
+  #       theme = "fancy";
+  #       separator = "  ";
+  #     };
+  #   };
+  # };
 
   gtk = {
     enable = true;

@@ -111,10 +111,10 @@
     source ~/dotfiles/scripts/aliases.sh
     '';
   };
-  # programs.direnv = {
-  #   enable = true;
-  #   nix-direnv.enable = true;
-  # };
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
 
   # environment.pathsToLink = [ "/share/zsh" ];
   # programs.zsh = {
@@ -129,11 +129,60 @@
   #   '';
   #   syntaxHighlighting.enable = true;
     
-  #   oh-my-zsh = {
-  #     enable = true;
-  #     plugins = ["git" "sudo" "direnv"];
-  #   };
-  # };
+  programs.zsh = {
+    enable = true; 
+    shellAliases =  {};
+    # autosuggestion.enable = true;
+    # syntaxHighlighting.enable = true;
+    initContent = ''
+      source ~/dotfiles/scripts/aliases.sh
+      __newline_after_first_cmd=false
+      newline_after_command() {
+      if $__newline_after_first_cmd; then
+          print  # print an empty line
+      else
+          __newline_after_first_cmd=true
+      fi
+      }
+
+      add-zsh-hook precmd newline_after_command
+    '';
+    enableCompletion = true;
+    plugins = [
+      {
+        # Must be before plugins that wrap widgets, such as zsh-autosuggestions or fast-syntax-highlighting
+        name = "fzf-tab";
+        src = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
+      }
+
+    ];
+       # Prezto config
+    prezto = {
+      enable = true;
+
+      # Editor configuration
+      editor = {
+        dotExpansion = true;
+        promptContext = true;
+      };
+
+      # Modules to load
+      pmodules = [
+        "environment" # must be loaded first
+        "archive" # must come before "completion"
+        "editor" # not sure what this is
+        "git" # must come before "completion"
+        "history" # maybe not necessary? needs addl. config
+        "syntax-highlighting" # not sure if redundant
+        "history-substring-search" # must be loaded after "syntax-highlighting"
+        "autosuggestions" # must before loaded after "syntax-highlighting" and "history-substring-search"
+        "prompt" # just for themes? needs addl. config
+        "spectrum" # improves 256-color support
+        "utility" # must be loaded before "completion"
+        "completion" # must be loaded after "utility"
+      ];
+    };
+  };
   # programs.zsh.enable=true;
   # programs.zsh = {
   #   enable=true;
