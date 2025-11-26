@@ -135,6 +135,7 @@
     # autosuggestion.enable = true;
     # syntaxHighlighting.enable = true;
     initContent = ''
+      export PATH="$HOME/.local/bin:$PATH"
       source ~/dotfiles/scripts/aliases.sh
       __newline_after_first_cmd=false
       newline_after_command() {

@@ -1606,6 +1606,9 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 *** Eglot setup
 #+begin_src emacs-lisp
+(use-package jsonrpc
+  :ensure t (:wait t))
+
 (use-package flymake :ensure t)
 
 (use-package project-rootfile :ensure t)

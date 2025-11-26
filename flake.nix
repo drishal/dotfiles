@@ -125,6 +125,8 @@
     };
 
     umu.url = "github:Open-Wine-Components/umu-launcher?dir=packaging/nix";
+
+    betterfox.url = "github:HeitorAugustoLN/betterfox-nix";
     # hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
   };
 

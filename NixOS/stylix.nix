@@ -52,6 +52,7 @@
     };
     targets = {
       gtk.enable = true;
+      # firefox.enable = false;
       fish.enable = false;
     };
   };

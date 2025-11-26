@@ -10,15 +10,16 @@
 {
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
   # boot.kernelPackages = pkgs.linuxPackages_latest;
-  # boot.kernelPackages = pkgs.linuxPackages_zen;
-  boot.kernelPackages = pkgs.linuxPackages_cachyos-gcc;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
+  systemd.user.services.orca.wantedBy = lib.mkForce [];
+  # boot.kernelPackages = pkgs.linuxPackages_cachyos-gcc;
   # boot.kernelPackages = pkgs.linuxPackages_6_11;
-  services.scx = {
-    enable = true;
-    scheduler = "scx_lavd";
-    extraArgs = ["--performance"];
-    package = pkgs.scx.full;
-  };
+  # services.scx = {
+  #   enable = true;
+  #   scheduler = "scx_lavd";
+  #   extraArgs = ["--performance"];
+  #   package = pkgs.scx.full;
+  # };
   # by default uses rustland
   # systemd.services.scx.serviceConfig.Restart = lib.mkForce "always";
   # boot.kernelPackages = pkgs.linuxPackages_testing;

@@ -32,30 +32,19 @@
     "amdgpu.smu_pptable_id=0"
   ];
 
+
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/2adf1ce4-49aa-4c82-a7f5-2273006ecd1b";
-      fsType = "btrfs";
-      options = ["subvol=root" "compress=zstd:8" "noatime" "nodiratime" "ssd_spread" "discard=async" "space_cache=v2"];
-
-    };
-
-  fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/2adf1ce4-49aa-4c82-a7f5-2273006ecd1b";
-      fsType = "btrfs";
-      options = ["subvol=home" "compress=zstd:8" "noatime" "nodiratime" "ssd_spread" "discard=async" "space_cache=v2"];
-    };
-
-  fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/2adf1ce4-49aa-4c82-a7f5-2273006ecd1b";
-      fsType = "btrfs";
-      options = ["subvol=nix" "compress=zstd:8" "noatime" "nodiratime" "ssd_spread" "discard=async" "space_cache=v2"];
+    { device = "/dev/disk/by-uuid/dfe9f586-6ff5-4ec8-a459-e665323919dc";
+      fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/DA66-740E";
+    { device = "/dev/disk/by-uuid/AA53-4C0A";
       fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
+      options = [ "fmask=0077" "dmask=0077" ];
     };
+
+
 
   swapDevices = [ ];
 
@@ -82,12 +71,12 @@
     i2c-tools
   ];
   users.groups.i2c.members = [ "drishal" ];
-  services.sunshine = {
-    enable = true;
-    autoStart = false;
-    capSysAdmin = true;
-    openFirewall = true;
-  };
+  # services.sunshine = {
+  #   enable = true;
+  #   autoStart = false;
+  #   capSysAdmin = true;
+  #   openFirewall = true;
+  # };
 
   boot.kernel.sysctl = {
     "net.ipv4.ip_unprivileged_port_start" = 80;

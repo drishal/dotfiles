@@ -91,20 +91,20 @@
       # gestures = {
       #   workspace_swipe = true;
       # };
-      windowrulev2 = [
-        "rounding 0, class:^[fF]irefox"
-        "float, class:Waydroid"
-        "float, class:^(Anydesk)$,title:^(anydesk)$"
-      ];
-      windowrule = [
-        "opacity 0.0 override, class:^(xwaylandvideobridge)$"
-        "noanim, class:^(xwaylandvideobridge)$"
-        "noinitialfocus, class:^(xwaylandvideobridge)$"
-        "maxsize 1 1, class:^(xwaylandvideobridge)$"
-        "noblur, class:^(xwaylandvideobridge)$"
-        "nofocus, class:^(xwaylandvideobridge)$"
-
-      ];
+      # windowrulev2 = [
+      #   "rounding 0, class:^[fF]irefox"
+      #   "float, class:Waydroid"
+      #   "float, class:^(Anydesk)$,title:^(anydesk)$"
+      # ];
+      # windowrule = [
+      #   "opacity 0.0 override, class:^(xwaylandvideobridge)$"
+      #   "noanim, class:^(xwaylandvideobridge)$"
+      #   "noinitialfocus, class:^(xwaylandvideobridge)$"
+      #   "maxsize 1 1, class:^(xwaylandvideobridge)$"
+      #   "noblur, class:^(xwaylandvideobridge)$"
+      #   "nofocus, class:^(xwaylandvideobridge)$"
+      #
+      # ];
       # experimental = {
       #   hdr = true;
       #   wide_color_gamut = true;

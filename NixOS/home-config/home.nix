@@ -24,6 +24,7 @@
     ../stylix.nix
     ./stylix.nix
     ./hyprland.nix
+    ./betterfox.nix
     # inputs.nix-colors.homeManagerModules.default
   ];
   # Let Home Manager install and manage itself.

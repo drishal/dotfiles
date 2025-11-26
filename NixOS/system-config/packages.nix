@@ -285,6 +285,8 @@
     icu
     inotify-tools
     # inputs.lobster.packages.x86_64-linux.lobster
+    inputs.lobster.packages.x86_64-linux.lobster
+
     inputs.zen-browser.packages."${system}".default
     inputs.quickemu.packages.${pkgs.stdenv.hostPlatform.system}.quickemu
     jq
