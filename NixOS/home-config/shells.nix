@@ -104,7 +104,7 @@
     enable = true;
     enableCompletion = true;
     bashrcExtra = ''
-    if [ -x /usr/bin/ccache ]; then
+      if [ -x /usr/bin/ccache ]; then
         export USE_CCACHE=1
         export CCACHE_EXEC=/usr/bin/ccache
     fi
@@ -132,9 +132,20 @@
   programs.zsh = {
     enable = true; 
     shellAliases =  {};
+    sessionVariables = {
+      CCACHE_DIR = "${config.home.homeDirectory}/.ccache";
+      CCACHE_MAXSIZE = "100G";
+    };
+    history = {
+      path = "${config.home.homeDirectory}/.zsh_history";
+      size = 10000;   # HISTSIZE
+      save = 1000;    # SAVEHIST
+      expireDuplicatesFirst = true;
+    };
     # autosuggestion.enable = true;
     # syntaxHighlighting.enable = true;
     initContent = ''
+      autoload -U +X bashcompinit && bashcompinit
       export PATH="$HOME/.local/bin:$PATH"
       source ~/dotfiles/scripts/aliases.sh
       __newline_after_first_cmd=false
@@ -149,6 +160,7 @@
       add-zsh-hook precmd newline_after_command
     '';
     enableCompletion = true;
+    # completionInit = '' '';
     plugins = [
       {
         # Must be before plugins that wrap widgets, such as zsh-autosuggestions or fast-syntax-highlighting
@@ -157,7 +169,7 @@
       }
 
     ];
-       # Prezto config
+    # Prezto config
     prezto = {
       enable = true;
 

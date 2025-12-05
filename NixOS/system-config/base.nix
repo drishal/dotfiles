@@ -182,6 +182,10 @@
     enable = true;
     interval = "weekly";
   };
+  services.tailscale = {
+    enable = true;
+    openFirewall = true;
+  };
   services.pipewire = {
     wireplumber = {
       enable = true;
@@ -233,3 +237,4 @@
 
   networking.firewall.enable = false;
 }
+

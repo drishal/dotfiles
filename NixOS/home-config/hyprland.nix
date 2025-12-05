@@ -124,7 +124,7 @@
         "$mainMod, Q, killactive, "
         "$mainMod SHIFT, Q, exec, kill -9 $(pidof Hyprland)"
         # "$mainMod SHIFT, F, exec, firefox"
-        "$mainMod SHIFT, F, exec, zen"
+        "$mainMod SHIFT, F, exec, firefox"
         "$mainMod SHIFT, L, exec, swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 7x5 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000  --fade-in 0.2"
         "$mainMod, E, exec, nemo"
         # "$mainMod, x, exec, pkill waybar; waybar"
