@@ -241,7 +241,7 @@
         enable = true;
         settings = {
           icons_enabled = true;
-          # theme = "onedark";
+          theme = "gruvbox-material";
           component_separators = {
             left = " ";
             right = " ";

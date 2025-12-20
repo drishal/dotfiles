@@ -48,7 +48,7 @@
     #   url = "github:InternetUnexplorer/discord-overlay";
     # };
 
-    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    # chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 
     nur.url = "github:nix-community/NUR";
 
@@ -127,6 +127,9 @@
     umu.url = "github:Open-Wine-Components/umu-launcher?dir=packaging/nix";
 
     betterfox.url = "github:HeitorAugustoLN/betterfox-nix";
+
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel";
+
     # hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
   };
 
@@ -137,7 +140,7 @@
       auto-cpufreq,
       #base16,
       cachix,
-      chaotic,
+      # chaotic,
       declarative-cachix,
       # discord-flake,
       emacs-lsp-booster,
@@ -161,6 +164,7 @@
       # hyprpanel,
       tt-schemes,
       umu,
+      nix-cachyos-kernel,
       ghostty,
       ...
     }@inputs:
@@ -264,8 +268,9 @@
           commonModules = [
             {
               nixpkgs.overlays = [
-                nur.overlay
+                # nur.overlay
                 inputs.emacs-overlay.overlay
+                inputs.nix-cachyos-kernel.overlay
                 # inputs.discord-flake.overlay
                 # inputs.neovim-nightly-overlay.overlay
               ];
@@ -273,7 +278,7 @@
             ngrok.nixosModules.ngrok
             ./NixOS/system-config/configuration.nix
             auto-cpufreq.nixosModules.default
-            chaotic.nixosModules.default
+            # chaotic.nixosModules.default
             stylix.nixosModules.stylix
             #base16.nixosModule
           ];

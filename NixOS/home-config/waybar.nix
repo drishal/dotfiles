@@ -27,7 +27,7 @@
     '';
     settings = {
       mainBar = {
-        layer = "top";
+        # layer = "top";
         margin-top = 5;
         margin-left = 5;
         margin-right = 5;

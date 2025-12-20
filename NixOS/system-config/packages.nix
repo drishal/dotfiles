@@ -383,6 +383,7 @@
     ncdu
     ncurses
     neofetch
+    nicotine-plus
     # neovim-nightly
     networkmanagerapplet
     netcat-gnu

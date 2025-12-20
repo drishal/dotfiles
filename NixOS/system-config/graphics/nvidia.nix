@@ -31,7 +31,7 @@
 
   hardware = {
     nvidia = {
-      package = config.boot.kernelPackages.nvidiaPackages.latest;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
 
       # package = pkgs.linuxPackages_latest.nvidiaPackages.beta;
 

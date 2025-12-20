@@ -11,6 +11,7 @@
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
   # boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelPackages = pkgs.linuxPackages_zen;
+  # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
   systemd.user.services.orca.wantedBy = lib.mkForce [];
   # boot.kernelPackages = pkgs.linuxPackages_cachyos-gcc;
   # boot.kernelPackages = pkgs.linuxPackages_6_11;
@@ -27,8 +28,8 @@
   # kernel parameters
   boot.kernelParams = [
     "mitigations=off"
-    "clearcpuid=514"
-    "i8042.probe_defer"
+    # "clearcpuid=514"
+    # "i8042.probe_defer"
     "split_lock_detect=off"
   ];
   #"processor.max_cstate=1" "intel_idle.max_cstate=0"
