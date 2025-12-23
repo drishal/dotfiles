@@ -52,6 +52,7 @@
   };
   programs.man.generateCaches = true;
   news.display = "silent";
+  nixpkgs.config = { allowBroken = true; allowUnfree = true; };
   # scheme = "${inputs.tt-schemes}/base16/catppuccin-mocha.yaml";
   # scheme = ./colors/doompalenight.yaml;
   home.stateVersion = "25.05";

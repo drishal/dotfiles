@@ -15,14 +15,14 @@
   services.gvfs.enable = true;
   hardware.openrazer.enable = true; 
   # inputs.nixpkgs-fix.packages.${pkgs.system}.
-  services.zerotierone = {
-    enable = true;
+  # services.zerotierone = {
+    # enable = true;
     # package = inputs.nixpkgs-master.legacyPackages.${pkgs.system}.zerotierone ;
     # package = pkgs-master.zerotierone;
     # localConf.settings = {
     #   softwareUpdate = "disable";
     # };
-  };
+  # };
   # services.clamav = {
   #   daemon.enable = false;
   #   scanner.enable =  false;

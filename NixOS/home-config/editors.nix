@@ -1,4 +1,4 @@
-{
+    {
   config,
   inputs,
   pkgs,
@@ -50,8 +50,8 @@
       package = pkgs.emacs-unstable-pgtk;
       extraPackages =
         epkgs: with epkgs; [
-          treesit-grammars.with-all-grammars
-          vterm
+          # treesit-grammars.with-all-grammars
+          term
         ];
     };
     # nvchad = {
