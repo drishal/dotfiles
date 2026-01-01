@@ -153,6 +153,7 @@
     cachix
     chntpw
     # calibre
+    cider-2
     cargo
     #carnix
     # chromium
