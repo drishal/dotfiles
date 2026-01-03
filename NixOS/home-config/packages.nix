@@ -79,21 +79,23 @@
     # inputs.astal.packages.${pkgs.system}.powerprofiles
     # inputs.astal.packages.${pkgs.system}.wireplumber
     glib
-    (python3.withPackages(ps: with ps; [
-      pygobject3
-      pygobject-stubs
+    (python3.withPackages (
+      ps: with ps; [
+        pygobject3
+        pygobject-stubs
 
-      (inputs.ignis.packages.${pkgs.stdenv.hostPlatform.system}.ignis.override {
-        extraPackages = [
-          psutil
-          jinja2
-          pillow
-          materialyoucolor
-          pygobject3
-          pygobject-stubs
-        ];
-      })
-    ]))
+        (inputs.ignis.packages.${pkgs.stdenv.hostPlatform.system}.ignis.override {
+          extraPackages = [
+            psutil
+            jinja2
+            pillow
+            materialyoucolor
+            pygobject3
+            pygobject-stubs
+          ];
+        })
+      ]
+    ))
 
     # (pkgs.python3.withPackages (pp: [
     #   pp.pygobject3
@@ -300,7 +302,7 @@
 
   programs.gh.enable = true;
   services.swaync = {
-    enable  = true;
+    enable = true;
   };
 
   programs.fastfetch = {
@@ -415,4 +417,11 @@
 
     };
   };
+
+  # syncthing
+  services.syncthing = {
+    enable = true;
+    guiAddress = "0.0.0.0:8384";
+  };
+
 }
