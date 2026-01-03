@@ -10,8 +10,8 @@
 {
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
   # boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelPackages = pkgs.linuxPackages_zen;
-  # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+  # boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
   systemd.user.services.orca.wantedBy = lib.mkForce [];
   # boot.kernelPackages = pkgs.linuxPackages_cachyos-gcc;
   # boot.kernelPackages = pkgs.linuxPackages_6_11;

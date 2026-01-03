@@ -153,7 +153,7 @@
     cachix
     chntpw
     # calibre
-    cider-2
+    # cider-2
     cargo
     clementine
     #carnix
@@ -222,7 +222,7 @@
     docker-compose
     # dunst
     dust
-    dwmblocks
+    # dwmblocks
     dwarfs
     ed
     # emacs-lsp-booster
@@ -256,7 +256,7 @@
     freetype
     fuse-overlayfs
     gcc
-    geekbench
+    # geekbench
     # inputs.ghostty.packages.x86_64-linux.default
     gimp
     git
@@ -289,7 +289,7 @@
     # inputs.lobster.packages.x86_64-linux.lobster
     inputs.lobster.packages.x86_64-linux.lobster
 
-    inputs.zen-browser.packages."${system}".default
+    # inputs.zen-browser.packages."${system}".default
     inputs.quickemu.packages.${pkgs.stdenv.hostPlatform.system}.quickemu
     jq
     #python3Packages.ipython
@@ -396,7 +396,7 @@
     nixpkgs-fmt
     nmap
     nodejs
-    ngrok
+    # ngrok
     # nvtop-amd
     nvtopPackages.amd
     # nodePackages_latest.create-react-app
@@ -432,7 +432,7 @@
     pfetch
     php
     pkg-config
-    polybar
+    # polybar
     podman-compose
     powershell
     #postman
@@ -507,7 +507,7 @@
     transmission_4
     # toolbox
     trashy
-    trayer
+    # trayer
     tree
     unrar
     umu-launcher
@@ -737,6 +737,13 @@
   services.samba = {
     enable = true;
   };
+  # syncthing
+  services.syncthing = {
+    enable = true;
+    openDefaultPorts = true; # Open ports in the firewall for Syncthing. (NOTE: this will not open syncthing gui port)
+  };
+
+
 
   #nixd setting
   #nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
