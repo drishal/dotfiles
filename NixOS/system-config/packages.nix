@@ -155,6 +155,7 @@
     # calibre
     cider-2
     cargo
+    clementine
     #carnix
     # chromium
     # (chromium.override {
