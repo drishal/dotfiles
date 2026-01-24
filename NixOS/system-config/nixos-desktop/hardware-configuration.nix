@@ -15,22 +15,19 @@
   boot.kernelModules = [ "kvm-amd" "v4l2loopback"];
   # boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
   boot.kernelParams = [
-    "amdgpu.msi=0"
-    "amdgpu.aspm=0"
-    "amdgpu.runpm=0"
-    "amdgpu.bapm=0"
-    "amdgpu.vm_update_mode=0"
-    "amdgpu.exp_hw_support=1"
-    "amdgpu.sched_jobs=64"
-    "amdgpu.sched_hw_submission=4"
-    "amdgpu.lbpw=0"
-    "amdgpu.mes=1"
-    "amdgpu.mes_kiq=1"
-    "amdgpu.sched_policy=1"
-    "amdgpu.ignore_crat=1"
-    "amdgpu.no_system_mem_limit"
-    "amdgpu.smu_pptable_id=0"
+    # --- GPU Optimization ---
+    "amdgpu.aspm=0"                   # Disable PCIe power saving
+    "amdgpu.runpm=0"                  # Disable Runtime PM
+    "amdgpu.bapm=0"                   # Disable Bidirectional Application PM
+    "amdgpu.ppfeaturemask=0xffffffff" # Unlock Overclocking/Undervolting
+
+    # --- CPU & Latency Optimization ---
+    "mitigations=off"                 # Max CPU performance (Security Trade-off)
+    "cpufreq.default_governor=performance" # Force max clocks
+    "nowatchdog"                      # Disable watchdog timer
+    "split_lock_detect=off"           # Prevent slowdowns in some unoptimized games
   ];
+
 
 
   fileSystems."/" =
