@@ -69,6 +69,10 @@
     appimage = {
       enable = true;
       binfmt = true;
+      package = pkgs.appimage-run.override { extraPkgs = pkgs: with pkgs;[
+        webkitgtk_4_1
+      ]; }; 
+
     };
 
     #droidcam
@@ -339,6 +343,7 @@
     lolcat
     lsd
     lshw
+    lollypop
     #lutris-unwrapped
     # lxappearance
     # (lutris.override {

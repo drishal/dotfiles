@@ -533,9 +533,18 @@ remove/add tangle no to whatever font you prefer
 ** Modeline
 *** Doom Modeline
 #+begin_src emacs-lisp
+;; (use-package doom-modeline
+;;   :ensure t
+;;   :init (doom-modeline-mode 1))
 (use-package doom-modeline
   :ensure t
-  :init (doom-modeline-mode 1))
+  :hook (after-init . doom-modeline-mode)
+  :custom
+  (doom-modeline-height 25)
+  (doom-modeline-bar-width 3)
+  (doom-modeline-major-mode-icon t)
+  (doom-modeline-buffer-file-name-style 'truncate-except-project)
+  (doom-modeline-icon (display-graphic-p)))
 #+end_src
 
 *** Airline
@@ -914,7 +923,7 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 #+end_src
 * Tools
 ** vterm
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package vterm
   ;;:ensure t
   :ensure nil 
@@ -1417,8 +1426,8 @@ https://github.com/minad/consult
    :preview-key '(:debounce 0.2 any)
    consult-ripgrep consult-git-grep consult-grep
    consult-bookmark consult-recent-file consult-xref
-   consult--source-bookmark consult--source-recent-file
-   consult--source-project-recent-file
+   ;; consult--source-bookmark consult--source-recent-file
+   ;; consult--source-project-recent-file
    :preview-key "M-.")
 
   ;; Optionally configure the narrowing key.
@@ -1606,9 +1615,8 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 *** Eglot setup
 #+begin_src emacs-lisp
-(use-package jsonrpc
-  :ensure t (:wait t))
-
+(elpaca jsonrpc)
+;; (elpaca project)
 (use-package flymake :ensure t)
 
 (use-package project-rootfile :ensure t)
@@ -1668,10 +1676,10 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   :config
   (provide 'upgraded-eldoc))
 
-(elpaca (eglot-booster :host github :repo "jdtsmith/eglot-booster")
-  (require 'eglot-booster)
-  (eglot-booster-mode)
-  )
+;; (elpaca (eglot-booster :host github :repo "jdtsmith/eglot-booster")
+;;   (require 'eglot-booster)
+;;   (eglot-booster-mode)
+;;   )
 ;; (use-package eglot-booster
 ;;   :ensure t
 ;;   :after eglot
