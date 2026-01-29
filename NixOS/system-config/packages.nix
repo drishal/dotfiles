@@ -36,8 +36,6 @@
   # };
   # xdg.portal.enable = true;
   programs = {
-    # adb
-    adb.enable = true;
     # dconf
     dconf.enable = true;
     # java
@@ -117,6 +115,7 @@
     # _9base
     acpi
     argc
+    android-tools
     # anydesk
     # alacritty
     # ayugram-desktop
