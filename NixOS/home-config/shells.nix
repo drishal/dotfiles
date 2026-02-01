@@ -146,7 +146,7 @@
     # syntaxHighlighting.enable = true;
     initContent = ''
       autoload -U +X bashcompinit && bashcompinit
-      export PATH="$HOME/.local/bin:$PATH"
+      export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH"
       source ~/dotfiles/scripts/aliases.sh
       __newline_after_first_cmd=false
       newline_after_command() {

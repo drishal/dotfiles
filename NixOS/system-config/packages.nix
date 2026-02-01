@@ -400,6 +400,7 @@
     nixpkgs-fmt
     nmap
     nodejs
+    nerd-font-patcher
     # ngrok
     # nvtop-amd
     nvtopPackages.amd
@@ -538,6 +539,7 @@
     vscode-langservers-extracted
     vlc
     vulkan-tools
+    vulkan-loader
     virt-viewer
     # volumeicon
     # waybar-hyprland
@@ -589,7 +591,6 @@
     xorg.xwininfo
     xorg.xinit
     zathura
-    # zed-editor
     zenity
     zapzap
     # (pkgs.python3.withPackages (ps: [
@@ -714,14 +715,15 @@
       noto-fonts
       noto-fonts-cjk-sans
       nerd-fonts.fantasque-sans-mono
+      nerd-fonts.noto
     ];
-    fontconfig = {
-      defaultFonts = {
-        serif = [ "Noto Sans" ];
-        sansSerif = [ "Noto Serif" ];
-        monospace = [ "FantasqueSansM Nerd Font" ];
-      };
-    };
+    # fontconfig = {
+    #   defaultFonts = {
+    #     serif = [ "Noto Sans" ];
+    #     sansSerif = [ "Noto Serif" ];
+    #     # monospace = [ "FantasqueSansM Nerd Font" ];
+    #   };
+    # };
   };
   # programs.command-not-found.enable = true;
   # programs.nix-index =
