@@ -69,11 +69,14 @@
       # 1. Primary Monitor (Acer 4K) - Left
       # Resolution: 4K @ 160Hz | Position: 0x0 | Scale: 1.5 (Recommended for 27" 4K)
       "DP-1, 3840x2160@160, 0x0, 1.5"
+      # "DP-1, 1920x1080@320, 0x0, 1"
 
       # 2. Secondary Monitor (LG) - Right & Vertical
       # Resolution: 1080p @ 144Hz | Position: To the right of main (2560x0) | Scale: 1
       # 'transform, 1' rotates it 90 degrees (Vertical)
       "DP-2, 1920x1080@144, 2560x0, 1, transform, 1"
+      # "DP-2, 1920x1080@144, 1920x0, 1, transform, 1"
+
     ];
 
     # Workspace Bindings

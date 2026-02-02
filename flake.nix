@@ -56,9 +56,9 @@
 
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
-    hyprland.url = "github:hyprwm/Hyprland";
-    # hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1/v0.46.2";
-    #hyprland.url = "github:hyprwm/Hyprland/v0.46.2";
+    # hyprland.url = "github:hyprwm/Hyprland";
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1/v0.53.3";
+    # hyprland.url = "github:hyprwm/Hyprland/v0.53.3";
 
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay/";
@@ -270,7 +270,7 @@
               nixpkgs.overlays = [
                 # nur.overlay
                 inputs.emacs-overlay.overlay
-                inputs.nix-cachyos-kernel.overlay
+                inputs.nix-cachyos-kernel.overlays.pinned
                 # inputs.discord-flake.overlay
                 # inputs.neovim-nightly-overlay.overlay
               ];
