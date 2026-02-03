@@ -129,6 +129,8 @@
     betterfox.url = "github:HeitorAugustoLN/betterfox-nix";
 
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    aporetic.url = "github:Echinoidea/Aporetic-Nerd-Font";
+
 
     # hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
   };

@@ -24,19 +24,19 @@
     # image = ../wallpapers/darkest_hour.jpg;
     fonts = {
       serif = {
-        package = pkgs.noto-fonts;
-        name = "Noto Serif";
+        # package = pkgs.noto-fonts;
+        name = "Roboto Serif";
       };
 
       sansSerif = {
-        package = pkgs.noto-fonts;
-        name = "Noto Sans";
+        # package = pkgs.noto-fonts;
+        name = "Roboto";
       };
 
       monospace = {
         # package = pkgs.noto-fonts;
         package = pkgs.nerd-fonts.fantasque-sans-mono;
-        name = "FantasqueSansM Nerd Font";
+        name = "RecMonoCasual Nerd Font";
       };
 
       emoji = {
@@ -45,7 +45,7 @@
       };
 
       sizes = {
-        terminal = 14;
+        terminal = 12;
         applications = 10;
         desktop = 10;
       };

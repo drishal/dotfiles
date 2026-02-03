@@ -716,6 +716,17 @@
       noto-fonts-cjk-sans
       nerd-fonts.fantasque-sans-mono
       nerd-fonts.noto
+      nerd-fonts.fira-code
+      nerd-fonts.fira-mono
+      nerd-fonts.recursive-mono
+      recursive
+      literata
+      aporetic
+      inputs.aporetic.packages.${pkgs.system}.default
+      nerd-fonts.roboto-mono
+      nerd-fonts.inconsolata
+      roboto
+      roboto-serif
     ];
     # fontconfig = {
     #   defaultFonts = {
