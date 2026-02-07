@@ -25,18 +25,18 @@
     fonts = {
       serif = {
         # package = pkgs.noto-fonts;
-        name = "Roboto Serif";
+        name = "Noto Serif";
       };
 
       sansSerif = {
         # package = pkgs.noto-fonts;
-        name = "Roboto";
+        name = "Noto Sans";
       };
 
       monospace = {
         # package = pkgs.noto-fonts;
         package = pkgs.nerd-fonts.fantasque-sans-mono;
-        name = "RecMonoCasual Nerd Font";
+        name = "Iosevka Custom";
       };
 
       emoji = {
@@ -56,4 +56,4 @@
       fish.enable = false;
     };
   };
-}
+ }

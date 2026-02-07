@@ -17,8 +17,8 @@
   # boot.kernelPackages = pkgs.linuxPackages_6_11;
   services.scx = {
     enable = true;
-    scheduler = "scx_lavd";
-    extraArgs = ["--performance"];
+    scheduler = "scx_bpfland";
+    # extraArgs = ["--performance"];
     package = pkgs.scx.full;
   };
   # by default uses rustland

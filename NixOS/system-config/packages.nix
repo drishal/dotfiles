@@ -535,7 +535,7 @@
     # })
     # vivaldi-ffmpeg-codecs
     # vesktop
-    # vscode-fhs
+    vscode-fhs
     vscode-langservers-extracted
     vlc
     vulkan-tools
@@ -708,6 +708,21 @@
   };
 
   #fonts
+  # fonts.fontconfig.defaultFonts.monospace = [
+  #   "AporeticSansMonoNerdFont"
+  # ];
+
+  # fonts.fontconfig.localConf =  ''
+  #   <match target="pattern">
+  #   <test name="family">
+  #     <string>AporeticSansMonoNerdFont</string>
+  #   </test>
+  #   <edit name="weight" mode="assign">
+  #     <const>medium</const>
+  #   </edit>
+  # </match>
+  # '';
+
   fonts = {
     enableDefaultPackages = true;
     # fontDir.enable = true;
@@ -719,6 +734,7 @@
       nerd-fonts.fira-code
       nerd-fonts.fira-mono
       nerd-fonts.recursive-mono
+      nerd-fonts.jetbrains-mono
       recursive
       literata
       aporetic
@@ -727,6 +743,7 @@
       nerd-fonts.inconsolata
       roboto
       roboto-serif
+      nerd-fonts.iosevka
     ];
     # fontconfig = {
     #   defaultFonts = {

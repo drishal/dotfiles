@@ -25,6 +25,7 @@
     ./stylix.nix
     ./hyprland.nix
     ./betterfox.nix
+    ./aliases.nix
     # inputs.nix-colors.homeManagerModules.default
   ];
   # Let Home Manager install and manage itself.
@@ -45,6 +46,7 @@
     homeDirectory = "/home/drishal";
     sessionVariables = {
       EDITOR = "nvim";
+      EZA_ICON_SPACING = "2";
     };
     # language.base = "en_US.UTF-8";
     # sessionVariables.LOCALES_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";

@@ -5,6 +5,10 @@
   ...
 }:
 {
+  imports = [
+    # Import the new separated configuration
+    ./nixvim.nix
+  ];
 
   wayland.windowManager.hyprland.settings = {
     monitor = [

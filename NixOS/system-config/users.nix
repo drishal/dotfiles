@@ -11,6 +11,7 @@
     # blesh.enable = true;
   };
   programs.fish.enable = true;
+
   programs.zsh ={
     enable = true;
     enableCompletion = false;
@@ -18,7 +19,7 @@
   };
   programs.xonsh.enable = true;
   users.users.drishal = {
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
     isNormalUser = true;
     extraGroups = [
       "wheel"

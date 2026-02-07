@@ -9,6 +9,10 @@
 
   programs.fish = {
     enable = true;
+    functions = {
+      fish_prompt = "";
+      fish_right_prompt = "";
+    };
     interactiveShellInit = ''
       # paths
       fish_add_path ~/.local/bin
@@ -32,9 +36,9 @@
       set -x MANROFFOPT "-c" 
       set -x MANPAGER "sh -c 'col -bx | bat -plman'"
 
-      #direnv
-      direnv hook fish | source
-      set -x DIRENV_LOG_FORMAT ""
+      # direnv
+      # direnv hook fish | source
+      # set -x DIRENV_LOG_FORMAT ""
 
       #lutris skip 
       set -x LUTRIS_SKIP_INIT 1
@@ -47,7 +51,7 @@
       set -x MANPAGER "sh -c 'col -bx | bat -plman'"
 
       #aliases
-      source ~/dotfiles/scripts/aliases.sh
+      # source ~/dotfiles/scripts/aliases.sh
 
       set fish_color_normal D4BE98
       set fish_color_command A9B665
@@ -108,7 +112,6 @@
         export USE_CCACHE=1
         export CCACHE_EXEC=/usr/bin/ccache
     fi
-    source ~/dotfiles/scripts/aliases.sh
     '';
   };
   programs.direnv = {
@@ -147,7 +150,7 @@
     initContent = ''
       autoload -U +X bashcompinit && bashcompinit
       export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH"
-      source ~/dotfiles/scripts/aliases.sh
+      # source ~/dotfiles/scripts/aliases.sh
       __newline_after_first_cmd=false
       newline_after_command() {
       if $__newline_after_first_cmd; then
@@ -156,6 +159,8 @@
           __newline_after_first_cmd=true
       fi
       }
+
+      ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
       add-zsh-hook precmd newline_after_command
     '';
