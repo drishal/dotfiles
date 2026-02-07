@@ -1,0 +1,60 @@
+[buildPlans.IosevkaCustom]
+family = "Iosevka Custom"
+spacing = "normal"
+serifs = "sans"
+noCvSs = false
+exportGlyphNames = true
+buildTextureFeature = true
+
+
+[buildPlans.IosevkaCustom.variants]
+inherits = "ss17" 
+
+[buildPlans.IosevkaCustom.weights.Regular]
+shape = 550
+menu  = 450
+css   = 450
+
+[buildPlans.IosevkaCustom.weights.Medium]
+shape = 650
+menu  = 550
+css   = 550
+
+[buildPlans.IosevkaCustom.weights.Bold]
+shape = 750
+menu  = 700
+css   = 700
+
+
+[buildPlans.IosevkaCustom.widths.Condensed]
+shape = 500
+menu  = 3
+css   = "condensed"
+
+[buildPlans.IosevkaCustom.widths.Normal]
+shape = 550
+menu  = 5
+css   = "normal"
+
+
+# ----------------------------
+# Slopes (soft, handwritten feel)
+# ----------------------------
+[buildPlans.IosevkaCustom.slopes.Upright]
+angle = 0
+shape = "upright"
+menu  = "upright"
+css   = "normal"
+
+[buildPlans.IosevkaCustom.slopes.Italic]
+angle = 7.2
+shape = "italic"
+menu  = "italic"
+css   = "italic"
+
+[buildPlans.IosevkaCustom.slopes.Oblique]
+angle = 7.2
+shape = "oblique"
+menu  = "oblique"
+css   = "oblique"
+
