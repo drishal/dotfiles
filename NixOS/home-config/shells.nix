@@ -6,6 +6,9 @@
 }:
 {
   # lib.fakeSha256
+  imports = [
+    inputs.direnv-instant.homeModules.direnv-instant
+  ];
 
   programs.fish = {
     enable = true;
@@ -108,16 +111,17 @@
     enable = true;
     enableCompletion = true;
     bashrcExtra = ''
-      if [ -x /usr/bin/ccache ]; then
-        export USE_CCACHE=1
-        export CCACHE_EXEC=/usr/bin/ccache
-    fi
+        if [ -x /usr/bin/ccache ]; then
+          export USE_CCACHE=1
+          export CCACHE_EXEC=/usr/bin/ccache
+      fi
     '';
   };
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
   };
+  programs.direnv-instant.enable = true;
 
   # environment.pathsToLink = [ "/share/zsh" ];
   # programs.zsh = {
@@ -131,18 +135,18 @@
   #   source ~/dotfiles/scripts/aliases.sh
   #   '';
   #   syntaxHighlighting.enable = true;
-    
+
   programs.zsh = {
-    enable = true; 
-    shellAliases =  {};
+    enable = true;
+    shellAliases = { };
     sessionVariables = {
       CCACHE_DIR = "${config.home.homeDirectory}/.ccache";
       CCACHE_MAXSIZE = "100G";
     };
     history = {
       path = "${config.home.homeDirectory}/.zsh_history";
-      size = 10000;   # HISTSIZE
-      save = 1000;    # SAVEHIST
+      size = 10000; # HISTSIZE
+      save = 1000; # SAVEHIST
       expireDuplicatesFirst = true;
     };
     # autosuggestion.enable = true;

@@ -131,6 +131,7 @@
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     aporetic.url = "github:Echinoidea/Aporetic-Nerd-Font";
 
+    direnv-instant.url = "github:Mic92/direnv-instant";
 
     # hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
   };
