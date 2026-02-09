@@ -10,6 +10,10 @@
       enable = true;
       server.enable = false;
       settings = {
+        tweak = {
+          delayed-render-lower = 0;
+          delayed-render-upper=0;
+        };
         main = {
           # term = "xterm-256color";
           # font = "FantasqueSansM Nerd Font:size=14";

@@ -729,6 +729,7 @@
     packages = with pkgs; [
       noto-fonts
       noto-fonts-cjk-sans
+      noto-fonts-lgc-plus
       nerd-fonts.fantasque-sans-mono
       nerd-fonts.noto
       nerd-fonts.fira-code

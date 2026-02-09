@@ -6,6 +6,7 @@
 }:
 {
   # scheme = ./home-config/colors/doomvibrant.yaml;
+  fonts.fontconfig.enable = true;
   stylix = {
     enable = true;
     #base16Scheme = "${config.scheme}";
@@ -25,18 +26,18 @@
     fonts = {
       serif = {
         # package = pkgs.noto-fonts;
-        name = "Noto Serif";
+        name = "NotoSans Nerd Font";
       };
 
       sansSerif = {
         # package = pkgs.noto-fonts;
-        name = "Noto Sans";
+        name = "NotoSans Nerd Font";
       };
 
       monospace = {
         # package = pkgs.noto-fonts;
         package = pkgs.nerd-fonts.fantasque-sans-mono;
-        name = "Iosevka Custom";
+        name = "RecMonoCasual Nerd Font";
       };
 
       emoji = {

@@ -1023,11 +1023,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1770462705,
-        "narHash": "sha256-j/QkuEe3a3OP2YogJndozlzFN29scMq5zjkf+DYETF0=",
+        "lastModified": 1770470830,
+        "narHash": "sha256-6Nh0HrMoM7wdCpByaBDMo2fvndlrCZke2VNp69gX0G0=",
         "ref": "refs/heads/main",
-        "rev": "cfbbfb591ae5c7d11bae72effe6e08ef60ce7453",
-        "revCount": 6868,
+        "rev": "f68ac7ef7589e1536d438f7fbfb3ad987538fe0f",
+        "revCount": 6871,
         "submodules": false,
         "type": "git",
         "url": "https://github.com/hyprwm/Hyprland"
@@ -1519,11 +1519,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1770462952,
-        "narHash": "sha256-fMMXVcm1eFIQSQHlSB7WlXbWy36DAfYL+MYH8u4hM+8=",
+        "lastModified": 1770472271,
+        "narHash": "sha256-uaWZq42L41k/Tiq8vRoLskE45rqEg/QZr7ufGCTpFfQ=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "10262ffc3fa8caa8615c8627c6ecbb13561f0785",
+        "rev": "698760f66a43d2616a4d2165d62876ff5f801d7e",
         "type": "github"
       },
       "original": {
@@ -1903,11 +1903,11 @@
         "nixpkgs": "nixpkgs_16"
       },
       "locked": {
-        "lastModified": 1770461867,
-        "narHash": "sha256-N32LJmSThxE5YZnIjEKKXDzzOkULpCTGfU940HHViF8=",
+        "lastModified": 1770472971,
+        "narHash": "sha256-PhLSU151kA5J3NSOr861Pn0vLU+bRgH9oMMd48fgy2A=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "f0ef934d635100e404794b6d1087c3725b1cd648",
+        "rev": "03cae5ba19dd8192068eb8b1774c11dfda214de7",
         "type": "github"
       },
       "original": {
@@ -2006,11 +2006,11 @@
     "private-stuff": {
       "flake": false,
       "locked": {
-        "lastModified": 1770462957,
-        "narHash": "sha256-PJpM1HSU3XOZlb18pmJgGRQ64li3mCRlfkAhTo0FaV8=",
+        "lastModified": 1725173724,
+        "narHash": "sha256-becWq9xqE33xnfWxZD7MfW6fJnpnDfp2LFEw7v5w3aE=",
         "ref": "refs/heads/main",
-        "rev": "b0b4b86d5c0386a56970fdb2e218c11ec8d3bd5a",
-        "revCount": 10,
+        "rev": "34e25be06c41667039bf3189599b7023df377e32",
+        "revCount": 9,
         "type": "git",
         "url": "file:/home/drishal/.private-stuff/"
       },

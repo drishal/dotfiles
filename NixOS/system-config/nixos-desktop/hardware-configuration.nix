@@ -17,6 +17,7 @@
     "amdgpu.runpm=0"                  # Disable Runtime PM
     "amdgpu.bapm=0"                   # Disable Bidirectional Application PM
     "amdgpu.ppfeaturemask=0xffffffff" # Unlock Overclocking/Undervolting
+    "amdgpu.dcdebugmask=0x610"
 
     # --- CPU & Latency Optimization ---
     "mitigations=off"                 # Max CPU performance (Security Trade-off)

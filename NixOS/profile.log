@@ -1,0 +1,863 @@
+Time (μs)   Sum (μs)  Command
+         8       3241 > __fish_on_interactive
+         6          6 -> functions -e __fish_on_interactive
+       174       3227 -> __fish_config_interactive
+         2          2 --> function __fish_config_interactive -d "Initializations that should be performed when entering interactive mode"...
+         3          3 --> functions -e __fish_config_interactive
+         3          3 --> set -g __fish_active_key_bindings
+        48         49 --> functions -q __fish_webconfig_update_color_hook
+         1          1 ---> function __fish_webconfig_update_color_hook --on-variable __fish_webconfig_theme_notification...
+         1          8 --> if not set -q FISH_UNIT_TESTS_RUNNING...
+         2          2 ---> not set -q FISH_UNIT_TESTS_RUNNING
+         0          5 ---> if not test -d $__fish_cache_dir/generated_completions...
+         5          5 ----> not test -d $__fish_cache_dir/generated_completions
+         1         67 --> if status --is-interactive...
+         2          2 ---> status --is-interactive
+        55         55 ---> functions -q fish_greeting
+         0          0 ----> function fish_greeting...
+         4          9 ---> fish_greeting
+         0          1 ----> if not set -q fish_greeting...
+         1          1 -----> not set -q fish_greeting
+         1          2 ----> if set -q fish_private_mode...
+         1          1 -----> set -q fish_private_mode
+         2          2 ----> test -n "$fish_greeting"
+         1          2 --> if test -d /etc/init.d...
+         1          1 ---> test -d /etc/init.d
+        88        137 --> complete -c(builtin -n | string match -rv '(\.|:|source|cd|contains|count|echo|exec|fish_indent|printf|random|realpath|set|\\[|test|for)') --no-files
+        49         49 ---> builtin -n | string match -rv '(\.|:|source|cd|contains|count|echo|exec|fish_indent|printf|random|realpath|set|\\[|test|for)'
+         2          2 --> function __fish_reload_key_bindings -d "Reload key bindings when binding variable change" --on-variable fish_key_bindings...
+         3       2648 --> __fish_reload_key_bindings
+         3       2645 ---> if not set --query fish_key_bindings...
+         1          1 ----> not set --query fish_key_bindings
+         7       2640 ----> set --global fish_key_bindings fish_default_key_bindings
+         6       2633 -----> __fish_reload_key_bindings VARIABLE SET fish_key_bindings
+         1          2 ------> if not set --query fish_key_bindings...
+         1          1 -------> not set --query fish_key_bindings
+         1          6 ------> if test "$fish_key_bindings" = "$__fish_active_key_bindings" -a -n "$fish_key_bindings"...
+         5          5 -------> test "$fish_key_bindings" = "$__fish_active_key_bindings" -a -n "$fish_key_bindings"
+         1        101 ------> if not functions -q "$fish_key_bindings"...
+        98        100 -------> not functions -q "$fish_key_bindings"
+         2          2 --------> function fish_default_key_bindings -d "emacs-like key binds"...
+         2          2 ------> set -g __fish_active_key_bindings "$fish_key_bindings"
+         1          1 ------> set -g fish_bind_mode default
+        17       2447 ------> $fish_key_bindings
+         0          4 -------> if contains -- -h $argv...
+         2          2 --------> contains -- -h $argv
+         2          2 --------> contains -- --help $argv
+         1         88 -------> if not set -q argv[1]...
+         1          1 --------> not set -q argv[1]
+        82         82 --------> bind --erase --all --preset
+         1          4 --------> if test "$fish_key_bindings" != fish_default_key_bindings...
+         3          3 ---------> test "$fish_key_bindings" != fish_default_key_bindings
+         0          6 -------> if not contains -- -s $argv...
+         3          3 --------> not contains -- -s $argv
+         3          3 --------> set argv -s $argv
+       252       1691 -------> __fish_shared_key_bindings $argv
+         3          3 --------> function __fish_shared_key_bindings -d "Bindings shared between emacs and vi mode"...
+         1          6 --------> if contains -- -h $argv...
+         3          3 ---------> contains -- -h $argv
+         2          2 ---------> contains -- --help $argv
+         6          6 --------> bind --preset $argv ctrl-y yank
+         3          3 --------> bind --preset $argv alt-y yank-pop
+         3          3 --------> bind --preset $argv right forward-char
+         2          2 --------> bind --preset $argv left backward-char
+       326        508 --------> __fish_per_os_bind --preset $argv ctrl-right forward-token forward-word
+         2          2 ---------> function __fish_per_os_bind...
+         6          6 ---------> set -l macos $argv[-2]
+         3          3 ---------> set -l non_macos $argv[-1]
+         3          3 ---------> set -e argv[-2..-1]
+         4        163 ---------> for varname in macos non_macos...
+         2         87 ----------> if contains -- $$varname (bind --function-names)...
+        64         82 -----------> contains -- $$varname (bind --function-names)
+        18         18 ------------> bind --function-names
+         3          3 -----------> set $varname 'commandline -f '$$varname
+         2         72 ----------> if contains -- $$varname (bind --function-names)...
+        52         67 -----------> contains -- $$varname (bind --function-names)
+        15         15 ------------> bind --function-names
+         3          3 -----------> set $varname 'commandline -f '$$varname
+         5          5 ---------> bind $argv "if fish_in_macos_terminal; $macos; else $non_macos; end"
+         7        156 --------> __fish_per_os_bind --preset $argv ctrl-left backward-token backward-word
+         3          3 ---------> set -l macos $argv[-2]
+         2          2 ---------> set -l non_macos $argv[-1]
+         2          2 ---------> set -e argv[-2..-1]
+         3        138 ---------> for varname in macos non_macos...
+         3         72 ----------> if contains -- $$varname (bind --function-names)...
+        50         65 -----------> contains -- $$varname (bind --function-names)
+        15         15 ------------> bind --function-names
+         4          4 -----------> set $varname 'commandline -f '$$varname
+         2         63 ----------> if contains -- $$varname (bind --function-names)...
+        44         58 -----------> contains -- $$varname (bind --function-names)
+        14         14 ------------> bind --function-names
+         3          3 -----------> set $varname 'commandline -f '$$varname
+         4          4 ---------> bind $argv "if fish_in_macos_terminal; $macos; else $non_macos; end"
+         3          3 --------> bind --preset $argv pageup beginning-of-history
+         2          2 --------> bind --preset $argv pagedown end-of-history
+         2          2 --------> bind --preset $argv ctrl-x fish_clipboard_copy
+         2          2 --------> bind --preset $argv ctrl-v fish_clipboard_paste
+         2          2 --------> bind --preset $argv escape cancel
+         3          3 --------> bind --preset $argv ctrl-\[ cancel
+         3          3 --------> bind --preset $argv tab complete
+         2          2 --------> bind --preset $argv ctrl-i complete
+         2          2 --------> bind --preset $argv ctrl-s pager-toggle-search
+         2          2 --------> bind --preset $argv shift-tab complete-and-search
+         2          2 --------> bind --preset $argv shift-delete history-delete or backward-delete-char
+         2          2 --------> bind --preset $argv down down-or-search
+         2          2 --------> bind --preset $argv up up-or-search
+         2          2 --------> bind --preset $argv shift-right forward-bigword
+         2          2 --------> bind --preset $argv shift-left backward-bigword
+         2          2 --------> bind --preset $argv alt-b prevd-or-backward-word
+         1          1 --------> bind --preset $argv alt-f nextd-or-forward-word
+         4        302 --------> for alt_right in alt-right \e\[1\;9C # TODO(terminal-workaround) iTerm2 < 3.5.12...
+         5        153 ---------> __fish_per_os_bind --preset $argv $alt_right \
+                                             nextd-or-forward-word nextd-or-forward-token
+         3          3 ----------> set -l macos $argv[-2]
+         2          2 ----------> set -l non_macos $argv[-1]
+         2          2 ----------> set -e argv[-2..-1]
+         4        137 ----------> for varname in macos non_macos...
+         2         69 -----------> if contains -- $$varname (bind --function-names)...
+        49         64 ------------> contains -- $$varname (bind --function-names)
+        15         15 -------------> bind --function-names
+         3          3 ------------> set $varname 'commandline -f '$$varname
+         3         64 -----------> if contains -- $$varname (bind --function-names)...
+        47         61 ------------> contains -- $$varname (bind --function-names)
+        14         14 -------------> bind --function-names
+         4          4 ----------> bind $argv "if fish_in_macos_terminal; $macos; else $non_macos; end"
+         7        145 ---------> __fish_per_os_bind --preset $argv $alt_right \
+                                             nextd-or-forward-word nextd-or-forward-token
+         2          2 ----------> set -l macos $argv[-2]
+         2          2 ----------> set -l non_macos $argv[-1]
+         2          2 ----------> set -e argv[-2..-1]
+         3        128 ----------> for varname in macos non_macos...
+         3         65 -----------> if contains -- $$varname (bind --function-names)...
+        44         59 ------------> contains -- $$varname (bind --function-names)
+        15         15 -------------> bind --function-names
+         3          3 ------------> set $varname 'commandline -f '$$varname
+         2         60 -----------> if contains -- $$varname (bind --function-names)...
+        43         58 ------------> contains -- $$varname (bind --function-names)
+        15         15 -------------> bind --function-names
+         4          4 ----------> bind $argv "if fish_in_macos_terminal; $macos; else $non_macos; end"
+         4        295 --------> for alt_left in alt-left \e\[1\;9D # TODO(terminal-workaround) iTerm2 < 3.5.12...
+         9        150 ---------> __fish_per_os_bind --preset $argv $alt_left \
+                                             prevd-or-backward-word prevd-or-backward-token
+         2          2 ----------> set -l macos $argv[-2]
+         2          2 ----------> set -l non_macos $argv[-1]
+         2          2 ----------> set -e argv[-2..-1]
+         2        130 ----------> for varname in macos non_macos...
+         4         68 -----------> if contains -- $$varname (bind --function-names)...
+        46         61 ------------> contains -- $$varname (bind --function-names)
+        15         15 -------------> bind --function-names
+         3          3 ------------> set $varname 'commandline -f '$$varname
+         4         60 -----------> if contains -- $$varname (bind --function-names)...
+        41         56 ------------> contains -- $$varname (bind --function-names)
+        15         15 -------------> bind --function-names
+         5          5 ----------> bind $argv "if fish_in_macos_terminal; $macos; else $non_macos; end"
+         8        141 ---------> __fish_per_os_bind --preset $argv $alt_left \
+                                             prevd-or-backward-word prevd-or-backward-token
+         2          2 ----------> set -l macos $argv[-2]
+         1          1 ----------> set -l non_macos $argv[-1]
+         1          1 ----------> set -e argv[-2..-1]
+         3        125 ----------> for varname in macos non_macos...
+         4         63 -----------> if contains -- $$varname (bind --function-names)...
+        43         56 ------------> contains -- $$varname (bind --function-names)
+        13         13 -------------> bind --function-names
+         3          3 ------------> set $varname 'commandline -f '$$varname
+         1         59 -----------> if contains -- $$varname (bind --function-names)...
+        44         58 ------------> contains -- $$varname (bind --function-names)
+        14         14 -------------> bind --function-names
+         4          4 ----------> bind $argv "if fish_in_macos_terminal; $macos; else $non_macos; end"
+         2          2 --------> bind --preset $argv alt-up history-token-search-backward
+         2          2 --------> bind --preset $argv alt-down history-token-search-forward
+         3          3 --------> bind --preset $argv \e\[1\;9A history-token-search-backward
+         2          2 --------> bind --preset $argv \e\[1\;9B history-token-search-forward
+         2          2 --------> bind --preset $argv alt-. history-token-search-backward
+         3          3 --------> bind --preset $argv alt-l __fish_list_current_token
+         2          2 --------> bind --preset $argv alt-o __fish_preview_current_file
+         2          2 --------> bind --preset $argv alt-w __fish_whatis_current_token
+         3          3 --------> bind --preset $argv ctrl-l \
+                                        'status test-terminal-feature scroll-content-up && commandline -f scrollback-push' \
+                                        clear-screen
+         2          2 --------> bind --preset $argv ctrl-c clear-commandline
+         2          2 --------> bind --preset $argv ctrl-u backward-kill-line
+         2          2 --------> bind --preset $argv ctrl-k kill-line
+         2          2 --------> bind --preset $argv ctrl-w backward-kill-path-component
+         2          2 --------> bind --preset $argv end end-of-line
+         2          2 --------> bind --preset $argv home beginning-of-line
+         3          3 --------> bind --preset $argv alt-d 'if test "$(commandline; printf .)" = \n.; __fish_echo dirh; else; commandline -f kill-word; end'
+         2          2 --------> bind --preset $argv ctrl-d delete-or-exit
+         2          2 --------> bind --preset $argv alt-s 'for cmd in sudo doas please run0; if command -q $cmd; fish_commandline_prepend $cmd; break; end; end'
+         2          2 --------> bind --preset $argv f1 __fish_man_page
+         2          2 --------> bind --preset $argv alt-h __fish_man_page
+         2          2 --------> bind --preset $argv alt-p __fish_paginate
+         2          2 --------> bind --preset $argv alt-# __fish_toggle_comment_commandline
+         2          2 --------> bind --preset $argv alt-e edit_command_buffer
+         2          2 --------> bind --preset $argv alt-v edit_command_buffer
+         8         67 --------> if not set -l index (contains --index -- -M $argv)...
+         8         11 ---------> not set -l index (contains --index -- -M $argv)
+         3          3 ----------> contains --index -- -M $argv
+         3          3 ---------> bind --preset $argv "" self-insert
+         3          3 ---------> bind --preset $argv space self-insert expand-abbr
+         3          3 ---------> bind --preset $argv ";" self-insert expand-abbr
+         3          3 ---------> bind --preset $argv "|" self-insert expand-abbr
+         3          3 ---------> bind --preset $argv "&" self-insert expand-abbr
+         3          3 ---------> bind --preset $argv ">" self-insert expand-abbr
+         2          2 ---------> bind --preset $argv "<" self-insert expand-abbr
+         3          3 ---------> set -l maybe_search_field '(commandline --search-field >/dev/null && echo --search-field)'
+         4          4 ---------> bind --preset $argv shift-enter "commandline -i \n $maybe_search_field" expand-abbr
+         3          3 ---------> bind --preset $argv alt-enter "commandline -i \n $maybe_search_field" expand-abbr
+         2          2 ---------> bind --preset $argv ")" self-insert expand-abbr
+         4          4 ---------> bind --preset $argv ctrl-space 'test -n "$(commandline)" && commandline -i " " '$maybe_search_field
+         4          4 ---------> bind --preset $argv shift-space 'commandline -i " " '$maybe_search_field expand-abbr
+         2          2 ---------> bind --preset $argv enter execute
+         2          2 ---------> bind --preset $argv ctrl-j execute
+         2          2 ---------> bind --preset $argv ctrl-m execute
+         2          2 ---------> bind --preset $argv ctrl-enter execute
+         3          3 -------> bind --preset $argv right forward-char
+         3          3 -------> bind --preset $argv left backward-char
+         2          2 -------> bind --preset $argv delete delete-char
+         2          2 -------> bind --preset $argv backspace backward-delete-char
+         2          2 -------> bind --preset $argv shift-backspace backward-delete-char
+         1          1 -------> bind --preset $argv home beginning-of-line
+         1          1 -------> bind --preset $argv end end-of-line
+         1          1 -------> bind --preset $argv ctrl-a beginning-of-line
+         1          1 -------> bind --preset $argv ctrl-e end-of-line
+         2          2 -------> bind --preset $argv ctrl-h backward-delete-char
+         2          2 -------> bind --preset $argv ctrl-p up-or-search
+         2          2 -------> bind --preset $argv ctrl-n down-or-search
+         2          2 -------> bind --preset $argv ctrl-f forward-char
+         2          2 -------> bind --preset $argv ctrl-b backward-char
+         1          1 -------> bind --preset $argv ctrl-t transpose-chars
+         1          1 -------> bind --preset $argv ctrl-g cancel
+         2          2 -------> bind --preset $argv ctrl-/ undo
+         1          1 -------> bind --preset $argv ctrl-_ undo
+         2          2 -------> bind --preset $argv ctrl-z undo
+         2          2 -------> bind --preset $argv ctrl-shift-z redo
+         2          2 -------> bind --preset $argv alt-/ redo
+         2          2 -------> bind --preset $argv alt-t transpose-words
+         2          2 -------> bind --preset $argv alt-u upcase-word
+         2          2 -------> bind --preset $argv alt-c capitalize-word
+         5        129 -------> __fish_per_os_bind --preset $argv alt-backspace backward-kill-word backward-kill-token
+         2          2 --------> set -l macos $argv[-2]
+         1          1 --------> set -l non_macos $argv[-1]
+         1          1 --------> set -e argv[-2..-1]
+         3        116 --------> for varname in macos non_macos...
+         2         60 ---------> if contains -- $$varname (bind --function-names)...
+        44         56 ----------> contains -- $$varname (bind --function-names)
+        12         12 -----------> bind --function-names
+         2          2 ----------> set $varname 'commandline -f '$$varname
+         1         53 ---------> if contains -- $$varname (bind --function-names)...
+        38         49 ----------> contains -- $$varname (bind --function-names)
+        11         11 -----------> bind --function-names
+         3          3 ----------> set $varname 'commandline -f '$$varname
+         4          4 --------> bind $argv "if fish_in_macos_terminal; $macos; else $non_macos; end"
+         3        122 -------> __fish_per_os_bind --preset $argv ctrl-alt-h backward-kill-word backward-kill-token
+         2          2 --------> set -l macos $argv[-2]
+         2          2 --------> set -l non_macos $argv[-1]
+         1          1 --------> set -e argv[-2..-1]
+         2        110 --------> for varname in macos non_macos...
+         1         55 ---------> if contains -- $$varname (bind --function-names)...
+        40         52 ----------> contains -- $$varname (bind --function-names)
+        12         12 -----------> bind --function-names
+         2          2 ----------> set $varname 'commandline -f '$$varname
+         4         53 ---------> if contains -- $$varname (bind --function-names)...
+        36         47 ----------> contains -- $$varname (bind --function-names)
+        11         11 -----------> bind --function-names
+         2          2 ----------> set $varname 'commandline -f '$$varname
+         4          4 --------> bind $argv "if fish_in_macos_terminal; $macos; else $non_macos; end"
+         4        112 -------> __fish_per_os_bind --preset $argv ctrl-backspace backward-kill-token backward-kill-word
+         2          2 --------> set -l macos $argv[-2]
+         1          1 --------> set -l non_macos $argv[-1]
+         1          1 --------> set -e argv[-2..-1]
+         2        101 --------> for varname in macos non_macos...
+         1         50 ---------> if contains -- $$varname (bind --function-names)...
+        35         46 ----------> contains -- $$varname (bind --function-names)
+        11         11 -----------> bind --function-names
+         3          3 ----------> set $varname 'commandline -f '$$varname
+         2         49 ---------> if contains -- $$varname (bind --function-names)...
+        34         45 ----------> contains -- $$varname (bind --function-names)
+        11         11 -----------> bind --function-names
+         2          2 ----------> set $varname 'commandline -f '$$varname
+         3          3 --------> bind $argv "if fish_in_macos_terminal; $macos; else $non_macos; end"
+         4        113 -------> __fish_per_os_bind --preset $argv alt-delete kill-word kill-token
+         1          1 --------> set -l macos $argv[-2]
+         1          1 --------> set -l non_macos $argv[-1]
+         2          2 --------> set -e argv[-2..-1]
+         2        102 --------> for varname in macos non_macos...
+         1         49 ---------> if contains -- $$varname (bind --function-names)...
+        35         46 ----------> contains -- $$varname (bind --function-names)
+        11         11 -----------> bind --function-names
+         2          2 ----------> set $varname 'commandline -f '$$varname
+         2         51 ---------> if contains -- $$varname (bind --function-names)...
+        36         47 ----------> contains -- $$varname (bind --function-names)
+        11         11 -----------> bind --function-names
+         2          2 ----------> set $varname 'commandline -f '$$varname
+         3          3 --------> bind $argv "if fish_in_macos_terminal; $macos; else $non_macos; end"
+         4        112 -------> __fish_per_os_bind --preset $argv ctrl-delete kill-token kill-word
+         1          1 --------> set -l macos $argv[-2]
+         2          2 --------> set -l non_macos $argv[-1]
+         1          1 --------> set -e argv[-2..-1]
+         1        101 --------> for varname in macos non_macos...
+         1         52 ---------> if contains -- $$varname (bind --function-names)...
+        37         48 ----------> contains -- $$varname (bind --function-names)
+        11         11 -----------> bind --function-names
+         3          3 ----------> set $varname 'commandline -f '$$varname
+         2         48 ---------> if contains -- $$varname (bind --function-names)...
+        33         44 ----------> contains -- $$varname (bind --function-names)
+        11         11 -----------> bind --function-names
+         2          2 ----------> set $varname 'commandline -f '$$varname
+         3          3 --------> bind $argv "if fish_in_macos_terminal; $macos; else $non_macos; end"
+         3          3 -------> bind --preset $argv alt-\< beginning-of-buffer
+         2          2 -------> bind --preset $argv alt-\> end-of-buffer
+         2          2 -------> bind --preset $argv ctrl-r history-pager
+         3          3 -------> switch "$TERM"...
+         1         68 ------> if functions --query fish_user_key_bindings >/dev/null...
+        67         67 -------> functions --query fish_user_key_bindings >/dev/null
+         1          1 ----> return
+         3         35 --> if not set -q fish_handle_reflow...
+         1          1 ---> not set -q fish_handle_reflow
+         2         31 ---> if string match -rq -- '^(?:VTE\b|Konsole |WezTerm )' (status terminal)...
+        21         23 ----> string match -rq -- '^(?:VTE\b|Konsole |WezTerm )' (status terminal)
+         2          2 -----> status terminal
+         0          1 ----> ...
+         1          1 -----> set -q KONSOLE_VERSION
+         3          3 ----> string match -q -- 'alacritty*' $TERM
+         2          2 ----> set -g fish_handle_reflow 1
+         3          3 --> function __fish_winch_handler --on-signal WINCH -d "Repaint screen when window changes size"...
+         3         61 --> if not functions --query __fish_update_cwd_osc...
+        56         56 ---> not functions --query __fish_update_cwd_osc
+         2          2 ---> function __fish_update_cwd_osc --description 'Notify terminals when $PWD might have changed' \
+                                       --on-variable=PWD --on-event=fish_prompt...
+         5         33 --> __fish_update_cwd_osc
+         2          2 ---> set -l host $hostname
+         1          1 ---> if set -q KONSOLE_VERSION...
+         0          0 ----> set -q KONSOLE_VERSION
+         1          4 ---> if [ -n "$MSYSTEM" ]...
+         3          3 ----> [ -n "$MSYSTEM" ]
+         0          2 ---> if [ "$TERM" = dumb ]...
+         2          2 ----> [ "$TERM" = dumb ]
+        15         19 ---> printf \e\]7\;file://%s%s\a (string escape --style=url -- $host $PWD)
+         4          4 ----> string escape --style=url -- $host $PWD
+         6       1149 > __direnv_export_eval
+      1130       1130 -> "/nix/store/aqm6npczf3rnavcxihwvz7c8r6i6dw9q-direnv-2.37.1/bin/direnv" export fish | source
+         3         13 -> if test "$direnv_fish_mode" != "disable_arrow"...
+         8          8 --> test "$direnv_fish_mode" != "disable_arrow"
+         2          2 --> function __direnv_cd_hook --on-variable PWD...
+         7       2111 > fish_prompt
+         4          7 -> switch "$fish_key_bindings"...
+         3          3 --> set STARSHIP_KEYMAP insert
+         4          4 -> set STARSHIP_CMD_PIPESTATUS $pipestatus
+         2          2 -> set STARSHIP_CMD_STATUS $status
+         3          3 -> set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
+         3        163 -> __starship_set_job_count
+         2        160 --> if test "$__starship_fish_use_job_groups" = "false"...
+         2          2 ---> test "$__starship_fish_use_job_groups" = "false"
+        10        156 ---> set -g STARSHIP_JOBS (jobs -g 2>/dev/null | count)
+       146        146 ----> jobs -g 2>/dev/null | count
+         4       1925 -> if contains -- --final-rendering $argv...
+         3          3 --> contains -- --final-rendering $argv
+         2          2 --> test "$TRANSIENT" = "1"
+      1916       1916 --> /home/drishal/.nix-profile/bin/starship prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+         6        786 > fish_right_prompt
+         5          8 -> switch "$fish_key_bindings"...
+         3          3 --> set STARSHIP_KEYMAP insert
+         3          3 -> set STARSHIP_CMD_PIPESTATUS $pipestatus
+         2          2 -> set STARSHIP_CMD_STATUS $status
+         3          3 -> set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
+         3         44 -> __starship_set_job_count
+         0         41 --> if test "$__starship_fish_use_job_groups" = "false"...
+         3          3 ---> test "$__starship_fish_use_job_groups" = "false"
+        10         38 ---> set -g STARSHIP_JOBS (jobs -g 2>/dev/null | count)
+        28         28 ----> jobs -g 2>/dev/null | count
+         4        720 -> if contains -- --final-rendering $argv...
+         2          2 --> contains -- --final-rendering $argv
+         2          2 --> test "$RIGHT_TRANSIENT" = "1"
+       712        712 --> /home/drishal/.nix-profile/bin/starship prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+         2          2 > function fish_title...
+         6        331 > fish_title
+         2          2 -> set -l ssh
+         1          1 -> set -q SSH_TTY
+         2        322 -> if set -q argv[1]...
+         1          1 --> set -q argv[1]
+         8         10 --> set -l command (status current-command)
+         2          2 ---> status current-command
+         1          6 --> if test "$command" = fish...
+         3          3 ---> test "$command" = fish
+         2          2 ---> set command
+        14        303 --> echo -- $ssh (string sub -l 20 -- $command) (prompt_pwd -d 1 -D 1)
+         2          2 ---> string sub -l 20 -- $command
+        83        287 ---> prompt_pwd -d 1 -D 1
+         2          2 ----> function prompt_pwd --description 'short CWD for the prompt'...
+         2          2 ----> set -l options h/help d/dir-length= D/full-length-dirs=
+         9          9 ----> argparse -n prompt_pwd $options -- $argv
+         0          1 ----> if set -q _flag_help...
+         1          1 -----> set -q _flag_help
+         1          1 ----> set -q argv[1]
+         1          1 ----> set argv $PWD
+         1          1 ----> set -ql _flag_d
+         2          2 ----> set -l fish_prompt_pwd_dir_length $_flag_d
+         1          1 ----> set -q fish_prompt_pwd_dir_length
+         2          2 ----> set -l fulldirs 0
+         1          1 ----> set -ql _flag_D
+         1          1 ----> set -l fish_prompt_pwd_full_dirs $_flag_D
+         1          1 ----> set -q fish_prompt_pwd_full_dirs
+         3        179 ----> for path in $argv...
+         7         73 -----> set -l tmp (__fish_unexpand_tilde $path)
+        40         66 ------> __fish_unexpand_tilde $path
+         2          2 -------> function __fish_unexpand_tilde --description 'Replace $HOME with "~"'...
+         7         12 -------> set -l realhome (string escape --style=regex -- ~)
+         5          5 --------> string escape --style=regex -- ~
+        12         12 -------> string replace -r -- "^$realhome(\$|/)" '~$1' $argv
+         2        103 -----> if test "$fish_prompt_pwd_dir_length" -eq 0...
+         3          3 ------> test "$fish_prompt_pwd_dir_length" -eq 0
+         2          2 ------> set -l full
+         1         80 ------> if test $fish_prompt_pwd_full_dirs -gt 0...
+         2          2 -------> test $fish_prompt_pwd_full_dirs -gt 0
+         7         73 -------> set -l all (string split -m (math $fish_prompt_pwd_full_dirs - 1) -r / $tmp)
+         9         66 --------> string split -m (math $fish_prompt_pwd_full_dirs - 1) -r / $tmp
+        57         57 ---------> math $fish_prompt_pwd_full_dirs - 1
+         2          2 -------> set tmp $all[1]
+         2          2 -------> set full $all[2..]
+         7         16 ------> string join / -- (string replace -ar -- '(\.?[^/]{'"$fish_prompt_pwd_dir_length"'})[^/]*/' '$1/' $tmp) $full
+         9          9 -------> string replace -ar -- '(\.?[^/]{'"$fish_prompt_pwd_dir_length"'})[^/]*/' '$1/' $tmp
+        12         27 > __direnv_export_eval_2 ls
+         4          9 -> if set -q __direnv_export_again...
+         5          5 --> set -q __direnv_export_again
+         6          6 -> functions --erase __direnv_cd_hook
+         5        190 > fish_title ls
+         4          4 -> set -l ssh
+         2          2 -> set -q SSH_TTY
+         2        179 -> if set -q argv[1]...
+         2          2 --> set -q argv[1]
+        22        175 --> echo -- $ssh (string sub -l 20 -- $argv[1]) (prompt_pwd -d 1 -D 1)
+         7          7 ---> string sub -l 20 -- $argv[1]
+        14        146 ---> prompt_pwd -d 1 -D 1
+         3          3 ----> set -l options h/help d/dir-length= D/full-length-dirs=
+         9          9 ----> argparse -n prompt_pwd $options -- $argv
+         1          2 ----> if set -q _flag_help...
+         1          1 -----> set -q _flag_help
+         1          1 ----> set -q argv[1]
+         2          2 ----> set argv $PWD
+         1          1 ----> set -ql _flag_d
+         3          3 ----> set -l fish_prompt_pwd_dir_length $_flag_d
+         1          1 ----> set -q fish_prompt_pwd_dir_length
+         1          1 ----> set -l fulldirs 0
+         0          0 ----> set -ql _flag_D
+         1          1 ----> set -l fish_prompt_pwd_full_dirs $_flag_D
+         1          1 ----> set -q fish_prompt_pwd_full_dirs
+         5        107 ----> for path in $argv...
+         8         44 -----> set -l tmp (__fish_unexpand_tilde $path)
+         4         36 ------> __fish_unexpand_tilde $path
+         9         15 -------> set -l realhome (string escape --style=regex -- ~)
+         6          6 --------> string escape --style=regex -- ~
+        17         17 -------> string replace -r -- "^$realhome(\$|/)" '~$1' $argv
+         2         58 -----> if test "$fish_prompt_pwd_dir_length" -eq 0...
+         5          5 ------> test "$fish_prompt_pwd_dir_length" -eq 0
+         1          1 ------> set -l full
+         2         32 ------> if test $fish_prompt_pwd_full_dirs -gt 0...
+         2          2 -------> test $fish_prompt_pwd_full_dirs -gt 0
+         8         25 -------> set -l all (string split -m (math $fish_prompt_pwd_full_dirs - 1) -r / $tmp)
+         8         17 --------> string split -m (math $fish_prompt_pwd_full_dirs - 1) -r / $tmp
+         9          9 ---------> math $fish_prompt_pwd_full_dirs - 1
+         2          2 -------> set tmp $all[1]
+         1          1 -------> set full $all[2..]
+         9         18 ------> string join / -- (string replace -ar -- '(\.?[^/]{'"$fish_prompt_pwd_dir_length"'})[^/]*/' '$1/' $tmp) $full
+         9          9 -------> string replace -ar -- '(\.?[^/]{'"$fish_prompt_pwd_dir_length"'})[^/]*/' '$1/' $tmp
+        13       1059 > ls
+      1046       1046 -> eza --icons --group-directories-first $argv
+         7         14 > __starship_reset_transient ls
+         5          5 -> set -g TRANSIENT 0
+         2          2 -> set -g RIGHT_TRANSIENT 0
+         8       1064 > __direnv_export_eval
+      1031       1031 -> "/nix/store/aqm6npczf3rnavcxihwvz7c8r6i6dw9q-direnv-2.37.1/bin/direnv" export fish | source
+         5         25 -> if test "$direnv_fish_mode" != "disable_arrow"...
+         6          6 --> test "$direnv_fish_mode" != "disable_arrow"
+        14         14 --> function __direnv_cd_hook --on-variable PWD...
+         5         42 > __fish_update_cwd_osc
+         4          4 -> set -l host $hostname
+         0          1 -> if set -q KONSOLE_VERSION...
+         1          1 --> set -q KONSOLE_VERSION
+         1          3 -> if [ -n "$MSYSTEM" ]...
+         2          2 --> [ -n "$MSYSTEM" ]
+         1          3 -> if [ "$TERM" = dumb ]...
+         2          2 --> [ "$TERM" = dumb ]
+        21         26 -> printf \e\]7\;file://%s%s\a (string escape --style=url -- $host $PWD)
+         5          5 --> string escape --style=url -- $host $PWD
+         8       1945 > fish_prompt
+         5          7 -> switch "$fish_key_bindings"...
+         2          2 --> set STARSHIP_KEYMAP insert
+         3          3 -> set STARSHIP_CMD_PIPESTATUS $pipestatus
+         2          2 -> set STARSHIP_CMD_STATUS $status
+         3          3 -> set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
+         2         49 -> __starship_set_job_count
+         2         47 --> if test "$__starship_fish_use_job_groups" = "false"...
+         2          2 ---> test "$__starship_fish_use_job_groups" = "false"
+        12         43 ---> set -g STARSHIP_JOBS (jobs -g 2>/dev/null | count)
+        31         31 ----> jobs -g 2>/dev/null | count
+         5       1873 -> if contains -- --final-rendering $argv...
+         3          3 --> contains -- --final-rendering $argv
+         2          2 --> test "$TRANSIENT" = "1"
+      1863       1863 --> /home/drishal/.nix-profile/bin/starship prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+         8        889 > fish_right_prompt
+         5          8 -> switch "$fish_key_bindings"...
+         3          3 --> set STARSHIP_KEYMAP insert
+         3          3 -> set STARSHIP_CMD_PIPESTATUS $pipestatus
+         2          2 -> set STARSHIP_CMD_STATUS $status
+         3          3 -> set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
+         3         32 -> __starship_set_job_count
+         1         29 --> if test "$__starship_fish_use_job_groups" = "false"...
+         3          3 ---> test "$__starship_fish_use_job_groups" = "false"
+        10         25 ---> set -g STARSHIP_JOBS (jobs -g 2>/dev/null | count)
+        15         15 ----> jobs -g 2>/dev/null | count
+         4        833 -> if contains -- --final-rendering $argv...
+         2          2 --> contains -- --final-rendering $argv
+         2          2 --> test "$RIGHT_TRANSIENT" = "1"
+       825        825 --> /home/drishal/.nix-profile/bin/starship prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+         7        172 > fish_title
+         2          2 -> set -l ssh
+         1          1 -> set -q SSH_TTY
+         2        162 -> if set -q argv[1]...
+         1          1 --> set -q argv[1]
+         8         11 --> set -l command (status current-command)
+         3          3 ---> status current-command
+         0          5 --> if test "$command" = fish...
+         3          3 ---> test "$command" = fish
+         2          2 ---> set command
+        15        143 --> echo -- $ssh (string sub -l 20 -- $command) (prompt_pwd -d 1 -D 1)
+         3          3 ---> string sub -l 20 -- $command
+         8        125 ---> prompt_pwd -d 1 -D 1
+         2          2 ----> set -l options h/help d/dir-length= D/full-length-dirs=
+         7          7 ----> argparse -n prompt_pwd $options -- $argv
+         0          1 ----> if set -q _flag_help...
+         1          1 -----> set -q _flag_help
+         1          1 ----> set -q argv[1]
+         2          2 ----> set argv $PWD
+         1          1 ----> set -ql _flag_d
+         2          2 ----> set -l fish_prompt_pwd_dir_length $_flag_d
+         1          1 ----> set -q fish_prompt_pwd_dir_length
+         2          2 ----> set -l fulldirs 0
+         1          1 ----> set -ql _flag_D
+         2          2 ----> set -l fish_prompt_pwd_full_dirs $_flag_D
+         1          1 ----> set -q fish_prompt_pwd_full_dirs
+         4         94 ----> for path in $argv...
+         6         38 -----> set -l tmp (__fish_unexpand_tilde $path)
+         5         32 ------> __fish_unexpand_tilde $path
+        10         14 -------> set -l realhome (string escape --style=regex -- ~)
+         4          4 --------> string escape --style=regex -- ~
+        13         13 -------> string replace -r -- "^$realhome(\$|/)" '~$1' $argv
+         3         52 -----> if test "$fish_prompt_pwd_dir_length" -eq 0...
+         2          2 ------> test "$fish_prompt_pwd_dir_length" -eq 0
+         1          1 ------> set -l full
+         1         30 ------> if test $fish_prompt_pwd_full_dirs -gt 0...
+         2          2 -------> test $fish_prompt_pwd_full_dirs -gt 0
+         8         23 -------> set -l all (string split -m (math $fish_prompt_pwd_full_dirs - 1) -r / $tmp)
+         8         15 --------> string split -m (math $fish_prompt_pwd_full_dirs - 1) -r / $tmp
+         7          7 ---------> math $fish_prompt_pwd_full_dirs - 1
+         2          2 -------> set tmp $all[1]
+         2          2 -------> set full $all[2..]
+         8         16 ------> string join / -- (string replace -ar -- '(\.?[^/]{'"$fish_prompt_pwd_dir_length"'})[^/]*/' '$1/' $tmp) $full
+         8          8 -------> string replace -ar -- '(\.?[^/]{'"$fish_prompt_pwd_dir_length"'})[^/]*/' '$1/' $tmp
+        18         32 > __direnv_export_eval_2 'cd ~/dotfiles/NixOS/'
+         2          9 -> if set -q __direnv_export_again...
+         7          7 --> set -q __direnv_export_again
+         5          5 -> functions --erase __direnv_cd_hook
+         8        221 > fish_title cd\ ~/dotfiles/NixOS/
+         4          4 -> set -l ssh
+         2          2 -> set -q SSH_TTY
+         2        207 -> if set -q argv[1]...
+         2          2 --> set -q argv[1]
+        23        203 --> echo -- $ssh (string sub -l 20 -- $argv[1]) (prompt_pwd -d 1 -D 1)
+         7          7 ---> string sub -l 20 -- $argv[1]
+        14        173 ---> prompt_pwd -d 1 -D 1
+         4          4 ----> set -l options h/help d/dir-length= D/full-length-dirs=
+        10         10 ----> argparse -n prompt_pwd $options -- $argv
+         0          2 ----> if set -q _flag_help...
+         2          2 -----> set -q _flag_help
+         2          2 ----> set -q argv[1]
+         3          3 ----> set argv $PWD
+         1          1 ----> set -ql _flag_d
+         3          3 ----> set -l fish_prompt_pwd_dir_length $_flag_d
+         1          1 ----> set -q fish_prompt_pwd_dir_length
+         2          2 ----> set -l fulldirs 0
+         1          1 ----> set -ql _flag_D
+         2          2 ----> set -l fish_prompt_pwd_full_dirs $_flag_D
+         1          1 ----> set -q fish_prompt_pwd_full_dirs
+         5        127 ----> for path in $argv...
+        10         51 -----> set -l tmp (__fish_unexpand_tilde $path)
+         6         41 ------> __fish_unexpand_tilde $path
+        11         16 -------> set -l realhome (string escape --style=regex -- ~)
+         5          5 --------> string escape --style=regex -- ~
+        19         19 -------> string replace -r -- "^$realhome(\$|/)" '~$1' $argv
+         4         71 -----> if test "$fish_prompt_pwd_dir_length" -eq 0...
+         5          5 ------> test "$fish_prompt_pwd_dir_length" -eq 0
+         2          2 ------> set -l full
+         1         39 ------> if test $fish_prompt_pwd_full_dirs -gt 0...
+         3          3 -------> test $fish_prompt_pwd_full_dirs -gt 0
+        10         30 -------> set -l all (string split -m (math $fish_prompt_pwd_full_dirs - 1) -r / $tmp)
+        11         20 --------> string split -m (math $fish_prompt_pwd_full_dirs - 1) -r / $tmp
+         9          9 ---------> math $fish_prompt_pwd_full_dirs - 1
+         2          2 -------> set tmp $all[1]
+         3          3 -------> set full $all[2..]
+        10         21 ------> string join / -- (string replace -ar -- '(\.?[^/]{'"$fish_prompt_pwd_dir_length"'})[^/]*/' '$1/' $tmp) $full
+        11         11 -------> string replace -ar -- '(\.?[^/]{'"$fish_prompt_pwd_dir_length"'})[^/]*/' '$1/' $tmp
+       143        243 > cd ~/dotfiles/NixOS/
+         3          3 -> function cd --description "Change directory"...
+         2          2 -> set -l MAX_DIR_HIST 25
+         0          1 -> if set -q argv[2]...
+         1          1 --> set -q argv[2]
+         1          3 -> if status --is-command-substitution...
+         2          2 --> status --is-command-substitution
+         3          3 -> set -l previous $PWD
+         0          3 -> if test "$argv" = -...
+         3          3 --> test "$argv" = -
+        10         50 -> builtin cd $argv
+         6         40 --> __fish_update_cwd_osc VARIABLE SET PWD
+         3          3 ---> set -l host $hostname
+         0          2 ---> if set -q KONSOLE_VERSION...
+         2          2 ----> set -q KONSOLE_VERSION
+         0          3 ---> if [ -n "$MSYSTEM" ]...
+         3          3 ----> [ -n "$MSYSTEM" ]
+         0          3 ---> if [ "$TERM" = dumb ]...
+         3          3 ----> [ "$TERM" = dumb ]
+        18         23 ---> printf \e\]7\;file://%s%s\a (string escape --style=url -- $host $PWD)
+         5          5 ----> string escape --style=url -- $host $PWD
+         3          3 -> set -l cd_status $status
+         3         30 -> if test $cd_status -eq 0 -a "$PWD" != "$previous"...
+         5          5 --> test $cd_status -eq 0 -a "$PWD" != "$previous"
+         1          1 --> set -q dirprev
+         2          2 --> set -l dirprev
+         2          2 --> set -q dirprev[$MAX_DIR_HIST]
+         1          1 --> set -U -q dirprev
+         9          9 --> set -g -a dirprev $previous
+         1          1 --> set -U -q dirnext
+         2          2 --> set -e dirnext
+         1          1 --> set -U -q __fish_cd_direction
+         3          3 --> set -g __fish_cd_direction prev
+         2          2 -> return $cd_status
+         3          8 > __starship_reset_transient 'cd ~/dotfiles/NixOS/'
+         2          2 -> set -g TRANSIENT 0
+         3          3 -> set -g RIGHT_TRANSIENT 0
+         6       1179 > __direnv_export_eval
+      1161       1161 -> "/nix/store/aqm6npczf3rnavcxihwvz7c8r6i6dw9q-direnv-2.37.1/bin/direnv" export fish | source
+         4         12 -> if test "$direnv_fish_mode" != "disable_arrow"...
+         6          6 --> test "$direnv_fish_mode" != "disable_arrow"
+         2          2 --> function __direnv_cd_hook --on-variable PWD...
+         7         39 > __fish_update_cwd_osc
+         4          4 -> set -l host $hostname
+         0          2 -> if set -q KONSOLE_VERSION...
+         2          2 --> set -q KONSOLE_VERSION
+         0          2 -> if [ -n "$MSYSTEM" ]...
+         2          2 --> [ -n "$MSYSTEM" ]
+         0          2 -> if [ "$TERM" = dumb ]...
+         2          2 --> [ "$TERM" = dumb ]
+        17         22 -> printf \e\]7\;file://%s%s\a (string escape --style=url -- $host $PWD)
+         5          5 --> string escape --style=url -- $host $PWD
+         8       3246 > fish_prompt
+         4          6 -> switch "$fish_key_bindings"...
+         2          2 --> set STARSHIP_KEYMAP insert
+         2          2 -> set STARSHIP_CMD_PIPESTATUS $pipestatus
+         2          2 -> set STARSHIP_CMD_STATUS $status
+         2          2 -> set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
+         4         49 -> __starship_set_job_count
+         0         45 --> if test "$__starship_fish_use_job_groups" = "false"...
+         3          3 ---> test "$__starship_fish_use_job_groups" = "false"
+        11         42 ---> set -g STARSHIP_JOBS (jobs -g 2>/dev/null | count)
+        31         31 ----> jobs -g 2>/dev/null | count
+         6       3177 -> if contains -- --final-rendering $argv...
+         3          3 --> contains -- --final-rendering $argv
+         2          2 --> test "$TRANSIENT" = "1"
+      3166       3166 --> /home/drishal/.nix-profile/bin/starship prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+        10        856 > fish_right_prompt
+         4          8 -> switch "$fish_key_bindings"...
+         4          4 --> set STARSHIP_KEYMAP insert
+         3          3 -> set STARSHIP_CMD_PIPESTATUS $pipestatus
+         3          3 -> set STARSHIP_CMD_STATUS $status
+         3          3 -> set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
+         3         34 -> __starship_set_job_count
+         1         31 --> if test "$__starship_fish_use_job_groups" = "false"...
+         3          3 ---> test "$__starship_fish_use_job_groups" = "false"
+        11         27 ---> set -g STARSHIP_JOBS (jobs -g 2>/dev/null | count)
+        16         16 ----> jobs -g 2>/dev/null | count
+         3        795 -> if contains -- --final-rendering $argv...
+         3          3 --> contains -- --final-rendering $argv
+         3          3 --> test "$RIGHT_TRANSIENT" = "1"
+       786        786 --> /home/drishal/.nix-profile/bin/starship prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+         5        181 > fish_title
+         3          3 -> set -l ssh
+         2          2 -> set -q SSH_TTY
+         3        171 -> if set -q argv[1]...
+         1          1 --> set -q argv[1]
+        10         12 --> set -l command (status current-command)
+         2          2 ---> status current-command
+         0          5 --> if test "$command" = fish...
+         3          3 ---> test "$command" = fish
+         2          2 ---> set command
+        14        150 --> echo -- $ssh (string sub -l 20 -- $command) (prompt_pwd -d 1 -D 1)
+         3          3 ---> string sub -l 20 -- $command
+         8        133 ---> prompt_pwd -d 1 -D 1
+         3          3 ----> set -l options h/help d/dir-length= D/full-length-dirs=
+         9          9 ----> argparse -n prompt_pwd $options -- $argv
+         0          1 ----> if set -q _flag_help...
+         1          1 -----> set -q _flag_help
+         1          1 ----> set -q argv[1]
+         2          2 ----> set argv $PWD
+         1          1 ----> set -ql _flag_d
+         2          2 ----> set -l fish_prompt_pwd_dir_length $_flag_d
+         1          1 ----> set -q fish_prompt_pwd_dir_length
+         2          2 ----> set -l fulldirs 0
+         1          1 ----> set -ql _flag_D
+         2          2 ----> set -l fish_prompt_pwd_full_dirs $_flag_D
+         1          1 ----> set -q fish_prompt_pwd_full_dirs
+         3         99 ----> for path in $argv...
+         8         40 -----> set -l tmp (__fish_unexpand_tilde $path)
+         5         32 ------> __fish_unexpand_tilde $path
+         8         13 -------> set -l realhome (string escape --style=regex -- ~)
+         5          5 --------> string escape --style=regex -- ~
+        14         14 -------> string replace -r -- "^$realhome(\$|/)" '~$1' $argv
+         4         56 -----> if test "$fish_prompt_pwd_dir_length" -eq 0...
+         2          2 ------> test "$fish_prompt_pwd_dir_length" -eq 0
+         1          1 ------> set -l full
+         4         31 ------> if test $fish_prompt_pwd_full_dirs -gt 0...
+         1          1 -------> test $fish_prompt_pwd_full_dirs -gt 0
+         9         23 -------> set -l all (string split -m (math $fish_prompt_pwd_full_dirs - 1) -r / $tmp)
+         7         14 --------> string split -m (math $fish_prompt_pwd_full_dirs - 1) -r / $tmp
+         7          7 ---------> math $fish_prompt_pwd_full_dirs - 1
+         2          2 -------> set tmp $all[1]
+         1          1 -------> set full $all[2..]
+         9         18 ------> string join / -- (string replace -ar -- '(\.?[^/]{'"$fish_prompt_pwd_dir_length"'})[^/]*/' '$1/' $tmp) $full
+         9          9 -------> string replace -ar -- '(\.?[^/]{'"$fish_prompt_pwd_dir_length"'})[^/]*/' '$1/' $tmp
+        15         29 > __direnv_export_eval_2 ls
+         3          9 -> if set -q __direnv_export_again...
+         6          6 --> set -q __direnv_export_again
+         5          5 -> functions --erase __direnv_cd_hook
+         5        188 > fish_title ls
+         4          4 -> set -l ssh
+         1          1 -> set -q SSH_TTY
+         2        178 -> if set -q argv[1]...
+         1          1 --> set -q argv[1]
+        20        175 --> echo -- $ssh (string sub -l 20 -- $argv[1]) (prompt_pwd -d 1 -D 1)
+         5          5 ---> string sub -l 20 -- $argv[1]
+        10        150 ---> prompt_pwd -d 1 -D 1
+         3          3 ----> set -l options h/help d/dir-length= D/full-length-dirs=
+        10         10 ----> argparse -n prompt_pwd $options -- $argv
+         0          1 ----> if set -q _flag_help...
+         1          1 -----> set -q _flag_help
+         1          1 ----> set -q argv[1]
+         2          2 ----> set argv $PWD
+         1          1 ----> set -ql _flag_d
+         3          3 ----> set -l fish_prompt_pwd_dir_length $_flag_d
+         1          1 ----> set -q fish_prompt_pwd_dir_length
+         2          2 ----> set -l fulldirs 0
+         1          1 ----> set -ql _flag_D
+         2          2 ----> set -l fish_prompt_pwd_full_dirs $_flag_D
+         1          1 ----> set -q fish_prompt_pwd_full_dirs
+         5        112 ----> for path in $argv...
+         8         45 -----> set -l tmp (__fish_unexpand_tilde $path)
+         6         37 ------> __fish_unexpand_tilde $path
+         8         13 -------> set -l realhome (string escape --style=regex -- ~)
+         5          5 --------> string escape --style=regex -- ~
+        18         18 -------> string replace -r -- "^$realhome(\$|/)" '~$1' $argv
+         3         62 -----> if test "$fish_prompt_pwd_dir_length" -eq 0...
+         5          5 ------> test "$fish_prompt_pwd_dir_length" -eq 0
+         1          1 ------> set -l full
+         2         34 ------> if test $fish_prompt_pwd_full_dirs -gt 0...
+         2          2 -------> test $fish_prompt_pwd_full_dirs -gt 0
+         9         26 -------> set -l all (string split -m (math $fish_prompt_pwd_full_dirs - 1) -r / $tmp)
+         9         17 --------> string split -m (math $fish_prompt_pwd_full_dirs - 1) -r / $tmp
+         8          8 ---------> math $fish_prompt_pwd_full_dirs - 1
+         2          2 -------> set tmp $all[1]
+         2          2 -------> set full $all[2..]
+         9         19 ------> string join / -- (string replace -ar -- '(\.?[^/]{'"$fish_prompt_pwd_dir_length"'})[^/]*/' '$1/' $tmp) $full
+        10         10 -------> string replace -ar -- '(\.?[^/]{'"$fish_prompt_pwd_dir_length"'})[^/]*/' '$1/' $tmp
+        12        893 > ls
+       881        881 -> eza --icons --group-directories-first $argv
+         5         13 > __starship_reset_transient ls
+         5          5 -> set -g TRANSIENT 0
+         3          3 -> set -g RIGHT_TRANSIENT 0
+         7       1015 > __direnv_export_eval
+       993        993 -> "/nix/store/aqm6npczf3rnavcxihwvz7c8r6i6dw9q-direnv-2.37.1/bin/direnv" export fish | source
+         4         15 -> if test "$direnv_fish_mode" != "disable_arrow"...
+         7          7 --> test "$direnv_fish_mode" != "disable_arrow"
+         4          4 --> function __direnv_cd_hook --on-variable PWD...
+         6         51 > __fish_update_cwd_osc
+         5          5 -> set -l host $hostname
+         1          3 -> if set -q KONSOLE_VERSION...
+         2          2 --> set -q KONSOLE_VERSION
+         1          4 -> if [ -n "$MSYSTEM" ]...
+         3          3 --> [ -n "$MSYSTEM" ]
+         1          4 -> if [ "$TERM" = dumb ]...
+         3          3 --> [ "$TERM" = dumb ]
+        23         29 -> printf \e\]7\;file://%s%s\a (string escape --style=url -- $host $PWD)
+         6          6 --> string escape --style=url -- $host $PWD
+        11       3419 > fish_prompt
+         4          7 -> switch "$fish_key_bindings"...
+         3          3 --> set STARSHIP_KEYMAP insert
+         4          4 -> set STARSHIP_CMD_PIPESTATUS $pipestatus
+         2          2 -> set STARSHIP_CMD_STATUS $status
+         3          3 -> set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
+         4         57 -> __starship_set_job_count
+         1         53 --> if test "$__starship_fish_use_job_groups" = "false"...
+         3          3 ---> test "$__starship_fish_use_job_groups" = "false"
+        14         49 ---> set -g STARSHIP_JOBS (jobs -g 2>/dev/null | count)
+        35         35 ----> jobs -g 2>/dev/null | count
+         8       3335 -> if contains -- --final-rendering $argv...
+         3          3 --> contains -- --final-rendering $argv
+         2          2 --> test "$TRANSIENT" = "1"
+      3322       3322 --> /home/drishal/.nix-profile/bin/starship prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+        11        806 > fish_right_prompt
+         6         10 -> switch "$fish_key_bindings"...
+         4          4 --> set STARSHIP_KEYMAP insert
+         3          3 -> set STARSHIP_CMD_PIPESTATUS $pipestatus
+         2          2 -> set STARSHIP_CMD_STATUS $status
+         3          3 -> set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
+         4         39 -> __starship_set_job_count
+         1         35 --> if test "$__starship_fish_use_job_groups" = "false"...
+         4          4 ---> test "$__starship_fish_use_job_groups" = "false"
+        14         30 ---> set -g STARSHIP_JOBS (jobs -g 2>/dev/null | count)
+        16         16 ----> jobs -g 2>/dev/null | count
+         3        738 -> if contains -- --final-rendering $argv...
+         3          3 --> contains -- --final-rendering $argv
+         3          3 --> test "$RIGHT_TRANSIENT" = "1"
+       729        729 --> /home/drishal/.nix-profile/bin/starship prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+         6        177 > fish_title
+         2          2 -> set -l ssh
+         2          2 -> set -q SSH_TTY
+         1        167 -> if set -q argv[1]...
+         1          1 --> set -q argv[1]
+         9         11 --> set -l command (status current-command)
+         2          2 ---> status current-command
+         0          5 --> if test "$command" = fish...
+         3          3 ---> test "$command" = fish
+         2          2 ---> set command
+        15        149 --> echo -- $ssh (string sub -l 20 -- $command) (prompt_pwd -d 1 -D 1)
+         2          2 ---> string sub -l 20 -- $command
+         9        132 ---> prompt_pwd -d 1 -D 1
+         2          2 ----> set -l options h/help d/dir-length= D/full-length-dirs=
+         9          9 ----> argparse -n prompt_pwd $options -- $argv
+         1          2 ----> if set -q _flag_help...
+         1          1 -----> set -q _flag_help
+         1          1 ----> set -q argv[1]
+         2          2 ----> set argv $PWD
+         1          1 ----> set -ql _flag_d
+         2          2 ----> set -l fish_prompt_pwd_dir_length $_flag_d
+         0          0 ----> set -q fish_prompt_pwd_dir_length
+         1          1 ----> set -l fulldirs 0
+         1          1 ----> set -ql _flag_D
+         2          2 ----> set -l fish_prompt_pwd_full_dirs $_flag_D
+         1          1 ----> set -q fish_prompt_pwd_full_dirs
+         5         99 ----> for path in $argv...
+         7         41 -----> set -l tmp (__fish_unexpand_tilde $path)
+         4         34 ------> __fish_unexpand_tilde $path
+        12         16 -------> set -l realhome (string escape --style=regex -- ~)
+         4          4 --------> string escape --style=regex -- ~
+        14         14 -------> string replace -r -- "^$realhome(\$|/)" '~$1' $argv
+         3         53 -----> if test "$fish_prompt_pwd_dir_length" -eq 0...
+         2          2 ------> test "$fish_prompt_pwd_dir_length" -eq 0
+         1          1 ------> set -l full
+         3         30 ------> if test $fish_prompt_pwd_full_dirs -gt 0...
+         1          1 -------> test $fish_prompt_pwd_full_dirs -gt 0
+         7         22 -------> set -l all (string split -m (math $fish_prompt_pwd_full_dirs - 1) -r / $tmp)
+         9         15 --------> string split -m (math $fish_prompt_pwd_full_dirs - 1) -r / $tmp
+         6          6 ---------> math $fish_prompt_pwd_full_dirs - 1
+         2          2 -------> set tmp $all[1]
+         2          2 -------> set full $all[2..]
+         9         17 ------> string join / -- (string replace -ar -- '(\.?[^/]{'"$fish_prompt_pwd_dir_length"'})[^/]*/' '$1/' $tmp) $full
+         8          8 -------> string replace -ar -- '(\.?[^/]{'"$fish_prompt_pwd_dir_length"'})[^/]*/' '$1/' $tmp
