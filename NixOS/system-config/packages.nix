@@ -121,12 +121,13 @@
     # ayugram-desktop
     # ani-cli
     (ani-cli.overrideAttrs (old: {
-      src = pkgs.fetchFromGitHub {
-        repo = "ani-cli";
-        owner = "pystardust";
-        rev = "25959086230e9354cf96acc6d3a310d57f392221";
-        sha256 = "sha256-8M5Hwo1OwGcEdjARb1zjjmR1YxekJZ5w/ztEoq6vOJ0=";
-      };
+      src = inputs.ani-cli;
+      # src = pkgs.fetchFromGitHub {
+      #   repo = "ani-cli";
+      #   owner = "pystardust";
+      #   rev = "25959086230e9354cf96acc6d3a310d57f392221";
+      #   sha256 = "sha256-8M5Hwo1OwGcEdjARb1zjjmR1YxekJZ5w/ztEoq6vOJ0=";
+      # };
     }))
     appimage-run
     arandr
@@ -736,12 +737,15 @@
       nerd-fonts.fira-mono
       nerd-fonts.recursive-mono
       nerd-fonts.jetbrains-mono
+      nerd-fonts.caskaydia-cove
+      googlesans-code
       recursive
       literata
       aporetic
       inputs.aporetic.packages.${pkgs.system}.default
       nerd-fonts.roboto-mono
       nerd-fonts.inconsolata
+      nerd-fonts.comic-shanns-mono
       roboto
       roboto-serif
       nerd-fonts.iosevka

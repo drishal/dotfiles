@@ -133,6 +133,18 @@
 
     direnv-instant.url = "github:Mic92/direnv-instant";
 
+    ani-cli = {
+      url = "github:pystardust/ani-cli";
+      flake = false;
+    };
+
+    # neovim plugins 
+    gruvbox-material = {
+      url = "github:sainnhe/gruvbox-material";
+      flake = false;
+    };
+
+
     # hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
   };
 

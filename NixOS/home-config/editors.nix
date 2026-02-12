@@ -44,6 +44,9 @@
     };
     helix = {
       enable = true;
+      extraConfig = ''
+        ${builtins.readFile ../../config/helix/config.toml}
+        '';
     };
     emacs = {
       enable = true;

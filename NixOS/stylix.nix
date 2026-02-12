@@ -26,18 +26,18 @@
     fonts = {
       serif = {
         # package = pkgs.noto-fonts;
-        name = "NotoSans Nerd Font";
+        name = "Google Sans";
       };
 
       sansSerif = {
         # package = pkgs.noto-fonts;
-        name = "NotoSans Nerd Font";
+        name = "Google Sans";
       };
 
       monospace = {
         # package = pkgs.noto-fonts;
-        package = pkgs.nerd-fonts.fantasque-sans-mono;
-        name = "RecMonoCasual Nerd Font";
+        # package = pkgs.nerd-fonts.fantasque-sans-mono;
+        name = "Google Sans Code";
       };
 
       emoji = {

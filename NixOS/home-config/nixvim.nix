@@ -82,23 +82,28 @@
     extraPlugins = with pkgs.vimPlugins; [
       orgmode
       # orgmode
-      (gruvbox-material.overrideAttrs (old: {
-        src = pkgs.fetchFromGitHub {
-          repo = "gruvbox-material";
-          owner = "sainnhe";
-          rev = "4bfc6983abc249c5943a60d8eb3980a3c2ababe1";
-          sha256 = "sha256-/7h+fV/DtniC2NmXxYmQrMAMMqMogUWZ5q0uiFqAM+k=";
-        };
-      }))
+      # (gruvbox-material.overrideAttrs (old: {
+      #   src = pkgs.fetchFromGitHub {
+      #     repo = "gruvbox-material";
+      #     owner = "sainnhe";
+      #     rev = "4bfc6983abc249c5943a60d8eb3980a3c2ababe1";
+      #     sha256 = "sha256-/7h+fV/DtniC2NmXxYmQrMAMMqMogUWZ5q0uiFqAM+k=";
+      #   };
+      # }))
       (pkgs.vimUtils.buildVimPlugin {
-        name = "palenight";
-        src = pkgs.fetchFromGitHub {
-          owner = "alexmozaidze";
-          repo = "palenight.nvim";
-          rev = "43445069c058a717183458cb895b68563e91ff22";
-          sha256 = "sha256-Qa8qUC0oAByYtDoxdZEZTPBM0n6P3WOAn0uL01j0W+k=";
-        };
+        name = "gruvbox-material";
+        src = inputs.gruvbox-material;
       })
+
+      # (pkgs.vimUtils.buildVimPlugin {
+      #   name = "palenight";
+      #   src = pkgs.fetchFromGitHub {
+      #     owner = "alexmozaidze";
+      #     repo = "palenight.nvim";
+      #     rev = "43445069c058a717183458cb895b68563e91ff22";
+      #     sha256 = "sha256-Qa8qUC0oAByYtDoxdZEZTPBM0n6P3WOAn0uL01j0W+k=";
+      #   };
+      # })
     ];
     clipboard = {
       register = "unnamedplus";
