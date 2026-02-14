@@ -749,6 +749,8 @@
       roboto
       roboto-serif
       nerd-fonts.iosevka
+      nerd-fonts.symbols-only
+      # nerd-fonts.monaspace
     ];
     # fontconfig = {
     #   defaultFonts = {

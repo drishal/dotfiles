@@ -35,9 +35,8 @@
       };
 
       monospace = {
-        # package = pkgs.noto-fonts;
-        # package = pkgs.nerd-fonts.fantasque-sans-mono;
-        name = "Google Sans Code";
+        name = "FiraCode Nerd Font Med";
+        # name = "Monaspace Neon NF";
       };
 
       emoji = {
