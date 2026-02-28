@@ -35,7 +35,8 @@
       };
 
       monospace = {
-        name = "FiraCode Nerd Font Med";
+        # name = "FiraCode Nerd Font Med";
+        name = "Google Sans Code";
         # name = "Monaspace Neon NF";
       };
 

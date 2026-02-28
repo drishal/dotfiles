@@ -353,6 +353,7 @@
     #   ];
     # })
     lxsession
+    lsof
     man
     mangohud
     materia-theme
@@ -449,6 +450,7 @@
     # protonvpn-cli
     # protonvpn-gui
     procps
+
     pdfgrep
     poppler
     # protonup-qt
@@ -519,6 +521,7 @@
     umu-launcher
     unzip
     usbutils
+    upterm
     uutils-coreutils
     vim
     vdpauinfo
@@ -750,6 +753,8 @@
       roboto-serif
       nerd-fonts.iosevka
       nerd-fonts.symbols-only
+      maple-mono.Normal-NF
+      maple-mono.variable
       # nerd-fonts.monaspace
     ];
     # fontconfig = {

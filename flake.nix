@@ -56,8 +56,8 @@
 
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
-    # hyprland.url = "github:hyprwm/Hyprland";
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1/v0.53.3";
+    hyprland.url = "github:hyprwm/Hyprland";
+    # hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1/v0.53.3";
     # hyprland.url = "github:hyprwm/Hyprland/v0.53.3";
 
     emacs-overlay = {
@@ -143,7 +143,7 @@
       url = "github:sainnhe/gruvbox-material";
       flake = false;
     };
-
+    openclaw.url = "github:openclaw/nix-openclaw";
 
     # hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
   };

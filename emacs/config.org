@@ -230,7 +230,7 @@ remove/add tangle no to whatever font you prefer
 ;; (add-to-list 'default-frame-alist '(font . "FantasqueSansM Nerd Font-14.5:weight=Regular" ))
 ;; (add-to-list 'default-frame-alist '(font . "Monaspace Neon Var-12" ))
 ;; (add-to-list 'default-frame-alist '(font . "CommitMono-12" ))
-;; (add-to-list 'default-frame-alist '(font . "Maple Mono NF Medium-12" ))
+(add-to-list 'default-frame-alist '(font . "Maple Mono NF:weight=Medium" ))
 ;; (add-to-list 'default-frame-alist '(font . "AporeticSansMonoNerdFont-14:weight=medium" ))
 ;; (add-to-list 'default-frame-alist '(font . "Iosevka Custom-13:weight=regular" ))
 ;; (add-to-list 'default-frame-alist '(font . "CaskaydiaCove Nerd Font-13:weight=Regular" ))
@@ -238,7 +238,7 @@ remove/add tangle no to whatever font you prefer
 ;; (add-to-list 'default-frame-alist '(font . "RecMonoCasual Nerd Font-13:weight=medium" ))
 ;; (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-13:weight=medium" ))
 ;; (add-to-list 'default-frame-alist '(font . "AporeticSansMonoNerdFont-13:weight=medium" ))
-(add-to-list 'default-frame-alist '(font . "FiraCode Nerd Font-13:weight=medium" ))
+;; (add-to-list 'default-frame-alist '(font . "FiraCode Nerd Font-13:weight=medium" ))
 ;; (add-to-list 'default-frame-alist '(font . "CodeNewRoman Nerd Font-13:weight=medium" ))
 ;; (add-to-list 'default-frame-alist '(font . "RobotoMono Nerd Font-14:weight=medium" ))
 ;; (add-to-list 'default-frame-alist '(font . "ComicShannsMono Nerd Font-13:weight=medium" ))
@@ -253,7 +253,7 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 ** ligatures
 ***  Firacode
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle no
 (use-package ligature
   :ensure t
   :config
@@ -601,11 +601,11 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 *** everforest
 #+begin_src emacs-lisp :tangle no
-;; (use-package doom-everforest-theme :ensure (:host github :repo "Cardoso1994/doom-everforest-theme")
-;;   ;; :init
-;;   ;; (load-theme 'rose-pine)
-;;   )
-(setq doom-everforest-background  "hard")
+(use-package doom-everforest-theme :ensure (:host github :repo "Cardoso1994/doom-everforest-theme")
+  :init
+  (setq doom-everforest-background  "hard")
+  (load-theme 'doom-everforest)
+  )
 #+end_src
 *** emacs-gruvbox
 #+begin_src emacs-lisp :tangle no

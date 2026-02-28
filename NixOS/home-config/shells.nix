@@ -135,6 +135,14 @@
   #   source ~/dotfiles/scripts/aliases.sh
   #   '';
   #   syntaxHighlighting.enable = true;
+  home.sessionVariables = {
+    PLAYWRIGHT_BROWSERS_PATH = "${pkgs.playwright-driver.browsers}";
+    PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true";     # NixOS-specific: skips glibc/os checks
+    PLAYWRIGHT_HOST_PLATFORM_OVERRIDE = "ubuntu-24.04";      # helps with version compatibility
+    # Optional: if you want to force a specific browser executable
+    # PLAYWRIGHT_LAUNCH_OPTIONS_EXECUTABLE_PATH = "${pkgs.playwright-driver.browsers}/chromium-*/chrome-linux/chrome";  # adjust * to actual rev if needed
+  };
+
 
   programs.zsh = {
     enable = true;
@@ -153,7 +161,7 @@
     # syntaxHighlighting.enable = true;
     initContent = ''
       autoload -U +X bashcompinit && bashcompinit
-      export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH"
+      export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.node_modules/bin:$PATH"
       # source ~/dotfiles/scripts/aliases.sh
       __newline_after_first_cmd=false
       newline_after_command() {
