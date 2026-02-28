@@ -13,6 +13,8 @@
       libvdpau-va-gl
       libva
       libva-vdpau-driver
+      rocmPackages.clr.icd
+      rocmPackages.clr
     ];
     # For 32 bit applications
     extraPackages32 = with pkgs.driversi686Linux; [
