@@ -228,7 +228,7 @@
     # dunst
     dust
     # dwmblocks
-    dwarfs
+    # dwarfs
     ed
     # emacs-lsp-booster
     element-desktop

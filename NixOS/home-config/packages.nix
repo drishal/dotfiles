@@ -83,23 +83,20 @@
     # inputs.astal.packages.${pkgs.system}.powerprofiles
     # inputs.astal.packages.${pkgs.system}.wireplumber
     glib
-    (python3.withPackages (
-      ps: with ps; [
-        pygobject3
-        pygobject-stubs
+    # (python3.withPackages (
+    #   ps: with ps; [
 
-        (inputs.ignis.packages.${pkgs.stdenv.hostPlatform.system}.ignis.override {
-          extraPackages = [
-            psutil
-            jinja2
-            pillow
-            materialyoucolor
-            pygobject3
-            pygobject-stubs
-          ];
-        })
-      ]
-    ))
+    #     (inputs.ignis.packages.${pkgs.stdenv.hostPlatform.system}.ignis.override {
+    #       extraPackages = [
+    #         psutil
+    #         jinja2
+    #         pillow
+    #         materialyoucolor
+    #         pygobject3
+    #       ];
+    #     })
+    #   ]
+    # ))
 
     # (pkgs.python3.withPackages (pp: [
     #   pp.pygobject3
