@@ -293,9 +293,8 @@
     inotify-tools
     # inputs.lobster.packages.x86_64-linux.lobster
     inputs.lobster.packages.x86_64-linux.lobster
-
-    # inputs.zen-browser.packages."${system}".default
-    inputs.quickemu.packages.${pkgs.stdenv.hostPlatform.system}.quickemu
+    # inputs.quickemu.packages.${pkgs.stdenv.hostPlatform.system}.quickemu
+    pkgs.quickemu
     jq
     #python3Packages.ipython
     # python3Packages.pyngrok
@@ -391,7 +390,7 @@
     # neovide
     ncdu
     ncurses
-    neofetch
+    # neofetch
     nicotine-plus
     # neovim-nightly
     networkmanagerapplet
@@ -757,6 +756,7 @@
       nerd-fonts.symbols-only
       maple-mono.Normal-NF
       maple-mono.variable
+      maple-mono.NF
       # nerd-fonts.monaspace
     ];
     # fontconfig = {

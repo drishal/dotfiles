@@ -31,7 +31,7 @@
     man
     man-pages
     nixd
-    neofetch
+    # neofetch
     playwright
     playwright-driver.browsers
     playwright-driver.browsers-chromium
