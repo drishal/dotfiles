@@ -145,7 +145,10 @@
         window_padding_width = 5;
         confirm_os_window_close = 0;
         cursor_blink_interval = 0;
-
+        input_delay = 0;
+        repaint_delay = 2;
+        sync_to_monitor = false;
+        wayland_enable_ime  = false;
       };
     };
     zellij = {

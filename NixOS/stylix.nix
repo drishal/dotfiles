@@ -10,8 +10,8 @@
   stylix = {
     enable = true;
     #base16Scheme = "${config.scheme}";
-    # base16Scheme = "${inputs.tt-schemes}/base24/catppuccin-mocha.yaml";
-    base16Scheme = "${inputs.tt-schemes}/base16/gruvbox-material-dark-hard.yaml";
+    base16Scheme = "${inputs.tt-schemes}/base24/catppuccin-mocha.yaml";
+    # base16Scheme = "${inputs.tt-schemes}/base16/gruvbox-material-dark-hard.yaml";
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/everforest-dark-hard.yaml";
     # base16Scheme =  ./home-config/colors/doomone.yaml;
     cursor = {
@@ -19,10 +19,10 @@
       name = "breeze_cursors";
       size = 24;
     };
-    image = ../wallpapers/gruvbox/image2.jpg;
+    # image = ../wallpapers/gruvbox/image2.jpg;
     # image = ../wallpapers/anime/tanjiro-kamado-gruv.jpg;
     # image = ../wallpapers/anime/goku.jpg;
-    # image = ../wallpapers/darkest_hour.jpg;
+    image = ../wallpapers/darkest_hour.jpg;
     fonts = {
       serif = {
         # package = pkgs.noto-fonts;
@@ -36,7 +36,7 @@
 
       monospace = {
         # name = "FiraCode Nerd Font Med";
-        name = "Google Sans Code";
+        name = "Maple Mono NF Medium";
         # name = "Monaspace Neon NF";
       };
 
