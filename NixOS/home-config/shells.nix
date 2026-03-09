@@ -56,26 +56,32 @@
       #aliases
       # source ~/dotfiles/scripts/aliases.sh
 
-      set fish_color_normal D4BE98
-      set fish_color_command A9B665
-      set fish_color_keyword 7DAEA3
-      set fish_color_quote 89B482
-      set fish_color_redirection E78A4E
-      set fish_color_end 7C6F64
-      set fish_color_error EA6962
-      set fish_color_param D4BE98
-      set fish_color_comment 7C6F64
-      set fish_color_selection --background=504945
-      set fish_color_search_match --background=504945
-      set fish_color_operator A9B665
-      set fish_color_escape 7DAEA3
-      set fish_color_autosuggestion 7C6F64
-      set fish_pager_color_progress 8F3F71
-      set fish_pager_color_prefix 89B482
-      set fish_pager_color_completion D4BE98
-      set fish_pager_color_description 8F3F71
+      #gruvbox 
+      # set fish_color_normal D4BE98
+      # set fish_color_command A9B665
+      # set fish_color_keyword 7DAEA3
+      # set fish_color_quote 89B482
+      # set fish_color_redirection E78A4E
+      # set fish_color_end 7C6F64
+      # set fish_color_error EA6962
+      # set fish_color_param D4BE98
+      # set fish_color_comment 7C6F64
+      # set fish_color_selection --background=504945
+      # set fish_color_search_match --background=504945
+      # set fish_color_operator A9B665
+      # set fish_color_escape 7DAEA3
+      # set fish_color_autosuggestion 7C6F64
+      # set fish_pager_color_progress 8F3F71
+      # set fish_pager_color_prefix 89B482
+      # set fish_pager_color_completion D4BE98
+      # set fish_pager_color_description 8F3F71
+      fish_config theme choose "catppuccin-mocha"
     '';
     plugins = [
+      {
+        name = "catppuccin";
+        src = inputs.catppuccin-fish;   # ← directly reference the input
+      }
       # Enable a plugin (here grc for colorized command output) from nixpkgs
       # { name = "grc"; src = pkgs.fishPlugins.grc.src; }
       # Manually packaging and enable a plugin
@@ -89,10 +95,10 @@
       #   };
       # }
 
-      {
-        name = "fzf-fish";
-        src = pkgs.fishPlugins.fzf-fish.src;
-      }
+      # {
+      #   name = "fzf-fish";
+      #   src = pkgs.fishPlugins.fzf-fish.src;
+      # }
     ];
   };
 

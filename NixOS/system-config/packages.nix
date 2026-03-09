@@ -329,6 +329,7 @@
     # linuxKernel.packages.v4l2loopback
     # linuxKernel.packages.linux_cachyos.v4l2loopback
     libnotify
+    llama-cpp-vulkan
     libarchive
     libreoffice
     libva-utils
@@ -440,7 +441,7 @@
     php
     pkg-config
     # polybar
-    podman-compose
+    # podman-compose
     powershell
     #postman
     poppler-utils

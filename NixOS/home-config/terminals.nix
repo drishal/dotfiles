@@ -8,7 +8,7 @@
   programs = {
     foot = {
       enable = true;
-      server.enable = false;
+      server.enable = true;
       settings = {
         tweak = {
           delayed-render-lower = 0;

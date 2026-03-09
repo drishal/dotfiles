@@ -143,6 +143,11 @@
       url = "github:sainnhe/gruvbox-material";
       flake = false;
     };
+    catppuccin-fish = {
+      url = "github:catppuccin/fish";
+      flake = false;   # ← important, it's not a flake itself
+    };
+
     openclaw.url = "github:openclaw/nix-openclaw";
 
     # hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";

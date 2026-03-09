@@ -12,7 +12,7 @@
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     settings = {
       exec-once = [
-        "lxpolkit & waybar & swaync & nm-applet --indicator &  blueman-applet & emacs --daemon & foot --server"
+        "lxpolkit & waybar & swaync & nm-applet --indicator &  blueman-applet & emacs --daemon"
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
       ];
       general = {

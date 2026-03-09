@@ -28,15 +28,15 @@
       };
     };
     #docker
-    #docker.enable = true;
+    docker.enable = true;
 
     #podman
-    podman = {
-      enable = true;
-      dockerCompat = true;
-      dockerSocket.enable = true;
-      # defaultNetwork.dnsname.enable = true;
-    };
+    # podman = {
+    #   enable = true;
+    #   dockerCompat = true;
+    #   dockerSocket.enable = true;
+    #   defaultNetwork.dnsname.enable = true;
+    # };
 
     #waydroid
     waydroid.enable = true;

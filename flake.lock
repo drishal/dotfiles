@@ -328,6 +328,22 @@
         "type": "github"
       }
     },
+    "catppuccin-fish": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1771367516,
+        "narHash": "sha256-jn2YoybaDY2gQgqmVGi9GPeRWn/H6IHnzxi/VcihIYM=",
+        "owner": "catppuccin",
+        "repo": "fish",
+        "rev": "bc201afe737fa0c8884ffcef206217f8aac88866",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "fish",
+        "type": "github"
+      }
+    },
     "declarative-cachix": {
       "locked": {
         "lastModified": 1698062126,
@@ -2327,6 +2343,7 @@
         "auto-cpufreq": "auto-cpufreq",
         "betterfox": "betterfox",
         "cachix": "cachix",
+        "catppuccin-fish": "catppuccin-fish",
         "declarative-cachix": "declarative-cachix",
         "direnv-instant": "direnv-instant",
         "emacs-lsp-booster": "emacs-lsp-booster",
