@@ -129,6 +129,7 @@
           basedpyright.enable = true;
           dockerls.enable = true;
           nixd.enable = true;
+          jsonls.enable = true;
         };
       };
       lspkind.enable = true;
@@ -237,6 +238,21 @@
             require "luasnip".lsp_expand(args.body)
             end
           '';
+          completion = {
+            completeopt = "menu,menuone,noselect";
+          };
+
+          window = {
+            completion = {
+              border = "rounded";
+            };
+            documentation = {
+              border = "rounded";
+            };
+          };
+          experimental = {
+            ghost_text = true;
+          };
         };
       };
       cmp-nvim-lsp = {

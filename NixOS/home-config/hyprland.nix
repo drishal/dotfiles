@@ -116,7 +116,7 @@
       # ];
       "$mainMod" = "SUPER";
       bind = [
-        "$mainMod, RETURN, exec, footclient"
+        "$mainMod, RETURN, exec, kitty"
         # "$mainMod, RETURN, exec, kitty --single-instance"
         "$mainMod, D, exec, rofi -show drun -icon-theme Papirus -show-icons"
         "$mainMod, V, exec, pavucontrol"
