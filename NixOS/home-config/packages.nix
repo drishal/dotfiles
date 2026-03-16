@@ -28,8 +28,8 @@
     ispell
     glibcLocales
     lua-language-server
-    man
-    man-pages
+    # man
+    # man-pages
     nixd
     # neofetch
     playwright

@@ -229,6 +229,7 @@
   #session variables
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
+    LESS = "-g -i -M -R -S -w -X -z4";
   };
 
   zramSwap = {
