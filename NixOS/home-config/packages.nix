@@ -267,9 +267,9 @@
   # };
 
   programs.gh.enable = true;
-  services.swaync = {
-    enable = true;
-  };
+  # services.swaync = {
+  #   enable = true;
+  # };
 
   programs.fastfetch = {
     enable = true;

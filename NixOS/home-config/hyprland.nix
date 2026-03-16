@@ -7,12 +7,13 @@
 
 {
   # imports = [ inputs.hyprpanel.homeManagerModules.hyprpanel ];
+
   wayland.windowManager.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     settings = {
       exec-once = [
-        "lxpolkit & waybar & swaync & nm-applet --indicator &  blueman-applet & emacs --daemon"
+        "lxpolkit & dms run &  nm-applet --indicator &  blueman-applet & emacs --daemon"
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
       ];
       general = {
@@ -116,7 +117,7 @@
       # ];
       "$mainMod" = "SUPER";
       bind = [
-        "$mainMod, RETURN, exec, kitty"
+        "$mainMod, RETURN, exec, alacritty"
         # "$mainMod, RETURN, exec, kitty --single-instance"
         "$mainMod, D, exec, rofi -show drun -icon-theme Papirus -show-icons"
         "$mainMod, V, exec, pavucontrol"
@@ -128,7 +129,8 @@
         "$mainMod SHIFT, L, exec, swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 7x5 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000  --fade-in 0.2"
         "$mainMod, E, exec, nemo"
         # "$mainMod, x, exec, pkill waybar; waybar"
-        "$mainMod, x, exec, pkill waybar; waybar"
+        # "$mainMod, x, exec, pkill waybar; waybar"
+        "$mainMod, x, exec, pkill dms; dms run"
         "$mainMod SHIFT, X, exec, loginctl terminate-user $USER"
         "$mainMod, A, exec, emacsclient -c"
         "$mainMod, SPACE, togglefloating, "

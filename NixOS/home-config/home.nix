@@ -26,6 +26,7 @@
     ./hyprland.nix
     ./betterfox.nix
     ./aliases.nix
+    ./dms.nix
     # inputs.nix-colors.homeManagerModules.default
   ];
   # Let Home Manager install and manage itself.

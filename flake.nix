@@ -94,15 +94,11 @@
 
     #base16.url = "github:SenchoPens/base16.nix";
 
-    ngrok.url = "github:ngrok/ngrok-nix";
-
     tt-schemes = {
       url = "github:tinted-theming/schemes";
       flake = false;
     };
-    eww = {
-      url = "github:elkowar/eww";
-    };
+    
     auto-cpufreq = {
       url = "github:AdnanHodzic/auto-cpufreq";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -150,6 +146,7 @@
 
     openclaw.url = "github:openclaw/nix-openclaw";
 
+    dms.url = "github:AvengeMedia/DankMaterialShell";
     # hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
   };
 
@@ -166,14 +163,12 @@
       emacs-lsp-booster,
       # emacs-ng,
       emacs-overlay,
-      eww,
       home-manager,
       hyprland,
       nixpkgs,
       nixpkgs-master,
       nixvim,
       nix-gaming,
-      ngrok,
       # nvchad4nix,
       # nvchad-on-steroids,
       nur,
@@ -295,7 +290,6 @@
                 # inputs.neovim-nightly-overlay.overlay
               ];
             }
-            ngrok.nixosModules.ngrok
             ./NixOS/system-config/configuration.nix
             auto-cpufreq.nixosModules.default
             # chaotic.nixosModules.default
