@@ -1,203 +1,111 @@
 #!/usr/bin/env python3
+"""
+Simple zsh → fish history converter (one direction)
+- Handles common zsh extended history format
+- Skips dangerous/complex commands that usually break in fish
+- Appends to fish_history
+"""
 
-import argparse
 import os
-import sys
+import re
 import time
-import yaml
 from pathlib import Path
-from typing import List, Set
+
+def zsh_to_fish(cmd: str) -> str:
+    """Very conservative conversion — add more rules as you need"""
+    cmd = cmd.strip()
+    # && → ; and
+    cmd = re.sub(r'\s*&&\s*', ' ; and ', cmd)
+    # || → ; or
+    cmd = re.sub(r'\s*\|\|\s*', ' ; or ', cmd)
+    # ; → ; (already fine in fish)
+    return cmd
 
 
-def get_zsh_history_path() -> Path:
-    return Path(os.environ.get("HISTFILE", Path.home() / ".zsh_history"))
+def looks_safe_for_fish(cmd: str) -> bool:
+    """Very pragmatic filter — allow most real commands people use"""
+    cmd = cmd.strip()
 
+    # Skip empty
+    if not cmd:
+        return False
 
-def get_fish_history_path() -> Path:
-    return Path.home() / ".local/share/fish/fish_history"
+    # Skip lines that are clearly variable assignments only
+    if re.match(r'^\s*[A-Za-z_][A-Za-z0-9_]*=.*$', cmd):
+        if not any(c in cmd[cmd.index('='):] for c in ' ;|&('):
+            return False
 
+    # Skip lines starting with common fish-incompatible syntax
+    bad_starts = [
+        r'^\s*function\s',           # fish uses function name ... end
+        r'^\s*if\s.*\sthen$',        # different structure
+        r'^\s*for\s.*\sin\s',        # fish: for x in ...
+        r'^alias ',                  # fish alias syntax is different
+    ]
+    for pat in bad_starts:
+        if re.search(pat, cmd):
+            return False
 
-def read_zsh_history(history_file: Path) -> List[str]:
-    """Read zsh history — properly handles multiline commands and extended format"""
-    commands = []
-    current_cmd = []
-    in_entry = False
-
-    try:
-        with open(history_file, "r", encoding="utf-8", errors="ignore") as f:
-            for line in f:
-                line = line.rstrip("\n")
-
-                if line.startswith(": "):
-                    # New entry begins → save previous if any
-                    if current_cmd:
-                        commands.append("\n".join(current_cmd))
-                        current_cmd = []
-
-                    # Parse timestamp + optional duration
-                    # Examples: ": 1698765432:0;cmd" or ": 1698765432;cmd"
-                    rest = line[2:].split(";", 1)
-                    if len(rest) == 2:
-                        cmd_part = rest[1]
-                    else:
-                        cmd_part = rest[0]  # rare no-duration case
-
-                    current_cmd.append(cmd_part)
-                    in_entry = True
-                elif in_entry and line.strip():
-                    # Continuation line of multiline command
-                    current_cmd.append(line)
-                elif line.strip():
-                    # Legacy / no-timestamp line
-                    commands.append(line)
-
-        # Don't forget the last command
-        if current_cmd:
-            commands.append("\n".join(current_cmd))
-
-    except FileNotFoundError:
-        print(f"Warning: {history_file} not found", file=sys.stderr)
-
-    return commands
-
-
-def read_fish_history(history_file: Path) -> List[str]:
-    """Read fish history — more robust: skips broken entries instead of failing"""
-    commands = []
-    try:
-        with open(history_file, "r", encoding="utf-8", errors="ignore") as f:
-            data = yaml.safe_load(f)
-            if not isinstance(data, list):
-                print("Warning: fish history root is not a list", file=sys.stderr)
-                return commands
-
-            for item in data:
-                try:
-                    if isinstance(item, dict):
-                        cmd = item.get("cmd", "").strip()
-                        if cmd:
-                            commands.append(cmd)
-                except Exception:
-                    continue  # skip malformed entry
-
-    except FileNotFoundError:
-        print(f"Warning: {history_file} not found", file=sys.stderr)
-    except yaml.YAMLError as e:
-        print(f"Warning: Could not fully parse fish history: {e}", file=sys.stderr)
-        print("    → Continuing with partial/empty source set", file=sys.stderr)
-    except Exception as e:
-        print(f"Unexpected error reading fish history: {e}", file=sys.stderr)
-
-    return commands
-
-
-def normalize_command(cmd: str) -> str:
-    """Simple normalization for better deduplication"""
-    return cmd.strip()
-
-
-def get_unique_commands(source: List[str], target: List[str]) -> List[str]:
-    """Return commands from source not present in target (after normalization)"""
-    target_set: Set[str] = {normalize_command(c) for c in target}
-    unique = []
-    seen: Set[str] = set()
-
-    for cmd in source:
-        norm = normalize_command(cmd)
-        if norm not in target_set and norm not in seen:
-            unique.append(cmd)  # keep original form (with newlines if multiline)
-            seen.add(norm)
-
-    return unique
-
-
-def write_zsh_history(commands: List[str], history_file: Path, append: bool = True) -> None:
-    mode = "a" if append else "w"
-    try:
-        with open(history_file, mode, encoding="utf-8") as f:
-            for cmd in commands:
-                ts = int(time.time())
-                # Write multiline as-is (zsh supports it)
-                escaped_cmd = cmd.replace("\n", "\n")  # already correct
-                f.write(f": {ts}:0;{escaped_cmd}\n")
-    except Exception as e:
-        print(f"Error writing to {history_file}: {e}", file=sys.stderr)
-        sys.exit(1)
-
-
-def write_fish_history(commands: List[str], history_file: Path, append: bool = True) -> None:
-    existing = []
-    if append and history_file.exists():
-        try:
-            with open(history_file, "r", encoding="utf-8", errors="ignore") as f:
-                loaded = yaml.safe_load(f)
-                if isinstance(loaded, list):
-                    existing = loaded
-        except Exception as e:
-            print(f"Warning: Could not load existing fish history for append: {e}", file=sys.stderr)
-            print("    → Starting fresh instead of appending", file=sys.stderr)
-
-    new_entries = [{"cmd": cmd, "when": int(time.time())} for cmd in commands]
-
-    combined = existing + new_entries if append else new_entries
-
-    try:
-        history_file.parent.mkdir(parents=True, exist_ok=True)
-        with open(history_file, "w", encoding="utf-8") as f:
-            yaml.dump(
-                combined,
-                f,
-                default_flow_style=False,
-                allow_unicode=True,
-                sort_keys=False,
-            )
-    except Exception as e:
-        print(f"Error writing to {history_file}: {e}", file=sys.stderr)
-        sys.exit(1)
+    # Allow most common command styles
+    return True
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Port command history between zsh and fish")
-    parser.add_argument(
-        "direction",
-        choices=["zsh-to-fish", "fish-to-zsh"],
-        help="Direction of history transfer",
-    )
-    parser.add_argument(
-        "--overwrite", action="store_true", help="Overwrite destination (default: append)"
-    )
-    parser.add_argument("--zsh-history", help="Custom zsh history file path")
-    parser.add_argument("--fish-history", help="Custom fish history file path")
+    zsh_hist = Path("~/.zsh_history").expanduser()
+    fish_hist = Path("~/.local/share/fish/fish_history").expanduser()
 
-    args = parser.parse_args()
+    if not zsh_hist.is_file():
+        print("No ~/.zsh_history found")
+        return
 
-    zsh_path = Path(args.zsh_history) if args.zsh_history else get_zsh_history_path()
-    fish_path = Path(args.fish_history) if args.fish_history else get_fish_history_path()
+    fish_hist.parent.mkdir(parents=True, exist_ok=True)
 
-    append_mode = not args.overwrite
+    count = 0
+    skipped = 0
 
-    if args.direction == "zsh-to-fish":
-        source = read_zsh_history(zsh_path)
-        target = read_fish_history(fish_path)
-        to_add = get_unique_commands(source, target)
+    # We'll collect new entries and append once
+    new_entries = []
 
-        if to_add:
-            print(f"Adding {len(to_add)} unique commands to fish history")
-            write_fish_history(to_add, fish_path, append=append_mode)
-        else:
-            print("No new unique commands to add to fish")
+    with zsh_hist.open('r', encoding='utf-8', errors='replace') as f:
+        for line in f:
+            line = line.rstrip('\n')
 
-    else:  # fish-to-zsh
-        source = read_fish_history(fish_path)
-        target = read_zsh_history(zsh_path)
-        to_add = get_unique_commands(source, target)
+            # Two common zsh history formats
+            m = re.match(r'^:\s*(\d+)(?::\d+)?;\s*(.*)$', line)
+            if not m:
+                # Try without space after first :
+                m = re.match(r'^:(\d+)(?::\d+)?;\s*(.*)$', line)
 
-        if to_add:
-            print(f"Adding {len(to_add)} unique commands to zsh history")
-            write_zsh_history(to_add, zsh_path, append=append_mode)
-        else:
-            print("No new unique commands to add to zsh")
+            if not m:
+                continue
+
+            timestamp_str, command = m.groups()
+            try:
+                timestamp = int(timestamp_str)
+            except ValueError:
+                continue
+
+            command = zsh_to_fish(command)
+
+            if not looks_safe_for_fish(command):
+                skipped += 1
+                continue
+
+            new_entries.append((command, timestamp))
+            count += 1
+
+    # Append mode — safe to run multiple times (fish ignores duplicates)
+    with fish_hist.open('a', encoding='utf-8') as out:
+        for cmd, ts in new_entries:
+            out.write(f'- cmd: {cmd}\n')
+            out.write(f'   when: {ts}\n')
+
+    print(f"Done. Added {count} commands. Skipped {skipped} commands.")
+    print(f"Written to: {fish_hist}")
+
+    if count == 0:
+        print("→ Probably no lines matched the zsh history format")
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
