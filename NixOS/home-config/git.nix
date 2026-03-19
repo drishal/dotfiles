@@ -11,14 +11,14 @@
     git = {
       enable = true;
       lfs.enable = true;
-      userName = "drishal";
-      userEmail = "drishalballaney@gmail.com";
-      signing.format = lib.mkDefault "openpgp";
-      extraConfig = {
+      settings = {
+        user.name = "drishal";
+        user.email = "drishalballaney@gmail.com";
         core = {
           editor = "nvim";
         };
       };
+      signing.format = lib.mkDefault "openpgp";
     };
   };
 }

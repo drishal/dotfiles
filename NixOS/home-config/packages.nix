@@ -43,7 +43,7 @@
     starship
     # neovide
     # nixpkgs-fmt
-    nixfmt-rfc-style
+    nixfmt
     # nil
     taplo
     # papirus-icon-theme

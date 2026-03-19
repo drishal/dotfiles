@@ -9,6 +9,7 @@
   stylix = {
     targets = {
       emacs.enable = false;
+      firefox.profileNames = [ "nhkf2vcg.default" ];
       neovim.enable = false;
       nixvim.enable = false;
       helix.enable = false;
@@ -18,7 +19,7 @@
       ghostty.enable = false;
       fish.enable = false;
     };
-    iconTheme = {
+    icons = {
       enable = true;
       package = pkgs.papirus-icon-theme;
       dark = "Papirus-Dark";

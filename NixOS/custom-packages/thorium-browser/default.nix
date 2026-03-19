@@ -110,7 +110,7 @@ let
     pipewire
     udev
     wayland
-    xorg.libxcb
+    libxcb
     zlib
     snappy
     stdenv.cc.cc.lib
