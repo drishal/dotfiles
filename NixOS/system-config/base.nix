@@ -238,5 +238,10 @@
   };
 
   networking.firewall.enable = false;
+  services.udev.extraRules = ''
+    KERNEL=="hidraw*", ATTRS{idVendor}=="373b", MODE="0666"
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="373b", ATTRS{idProduct}=="10c9", MODE="0666", GROUP="plugdev", TAG+="uaccess"
+  '';
+
 }
 

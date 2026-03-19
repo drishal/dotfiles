@@ -111,6 +111,15 @@
     #     ];
     #   })
     # ]))
+    (pkgs.writers.writePython3Bin "porthistory" {
+      # Add libraries your script needs
+      libraries = with pkgs.python3Packages; [ pyyaml ];
+
+      doCheck = false;
+      # flake-utils or other extras if needed → usually not
+    } (builtins.readFile ../../scripts/porthistory.py))
+
+
   ];
 
   #nixd path

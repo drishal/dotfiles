@@ -386,6 +386,7 @@
     # motrix
     # mplayer
     mpv
+    mpvScripts.mpris
     #mullvad
     #mullvad-vpn
     # neovide
@@ -459,6 +460,7 @@
     python3
     # python3Packages.mysql-connector
     python3Packages.pip
+    playerctl
     #python3Packages.tkinter
     #python3Packages.shodan
     #python3Packages.pyqt5
