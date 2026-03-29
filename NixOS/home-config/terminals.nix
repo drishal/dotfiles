@@ -167,5 +167,17 @@
         shell-integration-features = "no-cursor";
       };
     };
+    wezterm = {
+      enable = true;
+      extraConfig =
+        ''
+        config.enable_wayland = true;
+        config.ssh_backend = "Ssh2"
+        config.front_end = "WebGpu";
+        config.enable_scroll_bar = true;
+        config.enable_tab_bar = false;
+        '';
+      
+    };
   };
 }

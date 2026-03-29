@@ -300,6 +300,7 @@
     # python3Packages.pyngrok
     # python3Packages.pygobject3
     python3Packages.python-lsp-server
+    python3Packages.uv
     # python3Packages.pygobject3
     # python3Packages.pygobject-stubs
     # inputs.astal.packages.${system}.astal3

@@ -116,8 +116,9 @@
       #   "blur, waybar"
       # ];
       "$mainMod" = "SUPER";
+      "$terminal" = "kitty";
       bind = [
-        "$mainMod, RETURN, exec, alacritty"
+        "$mainMod, RETURN, exec, $terminal"
         # "$mainMod, RETURN, exec, kitty --single-instance"
         "$mainMod, D, exec, rofi -show drun -icon-theme Papirus -show-icons"
         "$mainMod, V, exec, pavucontrol"
