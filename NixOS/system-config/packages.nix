@@ -62,7 +62,12 @@
     gamemode.enable = true;
 
     #gamescope
-    gamescope.enable = true;
+    # gamescope.enable = true;
+    gamescope = {
+      enable = true;
+      capSysNice = true;  # already probably set, but confirm
+    };
+
 
     #appimage
     appimage = {
