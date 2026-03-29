@@ -1,9 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   hyprPackage = config.wayland.windowManager.hyprland.package;
   acer4kMode = "3840x2160@160";
   acerPerfMode = "1920x1080@320";
   lgMode = "1920x1080@143.98";
+  acerMonitor = "desc:Acer Technologies XV272K V5 15391B0344201";
+  lgMonitor = "desc:LG Electronics LG ULTRAGEAR 302NTUW8G822";
   monitorStateFile = "$HOME/.local/state/hypr-monitor-profile";
   hyprMonitorToggle = pkgs.writeShellScriptBin "hypr-monitor-toggle" ''
     #!/usr/bin/env bash
@@ -12,22 +19,26 @@ let
     mkdir -p "$HOME/.local/state"
 
     current_mode="$(${hyprPackage}/bin/hyprctl monitors | ${pkgs.gawk}/bin/awk '
-      /^Monitor DP-1 / {
-        getline
-        if (match($0, /[0-9]+x[0-9]+@[0-9.]+/)) {
-          print substr($0, RSTART, RLENGTH)
+      /^Monitor / {
+        current_mode = ""
+        if (getline > 0 && match($0, /[0-9]+x[0-9]+@[0-9.]+/)) {
+          current_mode = substr($0, RSTART, RLENGTH)
         }
+        next
+      }
+      /description: Acer Technologies XV272K V5 15391B0344201$/ {
+        print current_mode
         exit
       }
     ')"
 
     if [[ "$current_mode" == "${acer4kMode}"* ]]; then
-      ${hyprPackage}/bin/hyprctl keyword monitor "DP-1, ${acerPerfMode}, 0x0, 1"
-      ${hyprPackage}/bin/hyprctl keyword monitor "DP-2, ${lgMode}, 1920x0, 1, transform, 1"
+      ${hyprPackage}/bin/hyprctl keyword monitor "${acerMonitor}, ${acerPerfMode}, 0x0, 1"
+      ${hyprPackage}/bin/hyprctl keyword monitor "${lgMonitor}, ${lgMode}, 1920x0, 1, transform, 1"
       printf '%s\n' perf > ${monitorStateFile}
     else
-      ${hyprPackage}/bin/hyprctl keyword monitor "DP-1, ${acer4kMode}, 0x0, 1.5"
-      ${hyprPackage}/bin/hyprctl keyword monitor "DP-2, ${lgMode}, 2560x0, 1, transform, 1"
+      ${hyprPackage}/bin/hyprctl keyword monitor "${acerMonitor}, ${acer4kMode}, 0x0, 1.5"
+      ${hyprPackage}/bin/hyprctl keyword monitor "${lgMonitor}, ${lgMode}, 2560x0, 1, transform, 1"
       printf '%s\n' 4k > ${monitorStateFile}
     fi
   '';
@@ -41,11 +52,11 @@ let
     fi
 
     if [[ "$profile" == "perf" ]]; then
-      ${hyprPackage}/bin/hyprctl keyword monitor "DP-1, ${acerPerfMode}, 0x0, 1"
-      ${hyprPackage}/bin/hyprctl keyword monitor "DP-2, ${lgMode}, 1920x0, 1, transform, 1"
+      ${hyprPackage}/bin/hyprctl keyword monitor "${acerMonitor}, ${acerPerfMode}, 0x0, 1"
+      ${hyprPackage}/bin/hyprctl keyword monitor "${lgMonitor}, ${lgMode}, 1920x0, 1, transform, 1"
     else
-      ${hyprPackage}/bin/hyprctl keyword monitor "DP-1, ${acer4kMode}, 0x0, 1.5"
-      ${hyprPackage}/bin/hyprctl keyword monitor "DP-2, ${lgMode}, 2560x0, 1, transform, 1"
+      ${hyprPackage}/bin/hyprctl keyword monitor "${acerMonitor}, ${acer4kMode}, 0x0, 1.5"
+      ${hyprPackage}/bin/hyprctl keyword monitor "${lgMonitor}, ${lgMode}, 2560x0, 1, transform, 1"
     fi
   '';
   hyprRestartDms = pkgs.writeShellScriptBin "hypr-restart-dms" ''
@@ -67,21 +78,21 @@ in
 
   wayland.windowManager.hyprland.settings = {
     monitor = [
-      "DP-1, ${acer4kMode}, 0x0, 1.5"
-      "DP-2, ${lgMode}, 2560x0, 1, transform, 1"
+      "${acerMonitor}, ${acer4kMode}, 0x0, 1.5"
+      "${lgMonitor}, ${lgMode}, 2560x0, 1, transform, 1"
     ];
 
     workspace = [
-      "1, monitor:DP-1"
-      "2, monitor:DP-1"
-      "3, monitor:DP-1"
-      "4, monitor:DP-1"
-      "5, monitor:DP-1"
-      "6, monitor:DP-2"
-      "7, monitor:DP-2"
-      "8, monitor:DP-2"
-      "9, monitor:DP-2"
-      "10, monitor:DP-2"
+      "1, monitor:${acerMonitor}"
+      "2, monitor:${acerMonitor}"
+      "3, monitor:${acerMonitor}"
+      "4, monitor:${acerMonitor}"
+      "5, monitor:${acerMonitor}"
+      "6, monitor:${lgMonitor}"
+      "7, monitor:${lgMonitor}"
+      "8, monitor:${lgMonitor}"
+      "9, monitor:${lgMonitor}"
+      "10, monitor:${lgMonitor}"
     ];
 
     cursor = {

@@ -15,7 +15,6 @@
     ./services.nix
     ./symlinks.nix
     ./terminals.nix
-    ./rofi.nix
     ./shells.nix
     ./file-managers.nix
     # ./colors/doompalenight.nix
