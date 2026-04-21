@@ -33,7 +33,6 @@
     nixd
     # neofetch
     playwright
-    playwright-driver.browsers
     playwright-driver.browsers-chromium
     playwright-mcp
     # nvchad

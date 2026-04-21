@@ -17,13 +17,19 @@
     "amdgpu.runpm=0"                  # Disable Runtime PM
     "amdgpu.bapm=0"                   # Disable Bidirectional Application PM
     "amdgpu.ppfeaturemask=0xffffffff" # Unlock Overclocking/Undervolting
-    "amdgpu.dcdebugmask=0x610"
 
     # --- CPU & Latency Optimization ---
     "mitigations=off"                 # Max CPU performance (Security Trade-off)
     "cpufreq.default_governor=performance" # Force max clocks
     "nowatchdog"                      # Disable watchdog timer
     "split_lock_detect=off"           # Prevent slowdowns in some unoptimized games
+    "amd_pstate=active"
+    "processor.max_cstate=1"
+    "iommu=pt"
+    "threadirqs"
+    "amdgpu.gfx_off=0"
+    "amdgpu.dcdebugmask=0x10"
+    "processor.max_cstate=1"
   ];
 
 

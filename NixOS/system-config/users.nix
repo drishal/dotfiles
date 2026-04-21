@@ -19,7 +19,7 @@
   };
   programs.xonsh.enable = true;
   users.users.drishal = {
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
     isNormalUser = true;
     extraGroups = [
       "wheel"
@@ -50,6 +50,15 @@
   # };
 
   security.pam.services.hyprlock = {};
+  security.pam.loginLimits = [
+    {
+      domain = "*";      # applies to all users
+      type = "-";        # both soft and hard limit
+      item = "memlock";
+      value = "unlimited";   # or "unlimited"
+    }
+  ];
+
   security.polkit = {
     enable = true;
     extraConfig = ''

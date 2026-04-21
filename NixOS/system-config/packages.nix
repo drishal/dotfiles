@@ -13,15 +13,23 @@
   # ];
   services.flatpak.enable = true;
   services.gvfs.enable = true;
-  hardware.openrazer.enable = true; 
+  hardware.openrazer.enable = true;
+  # services.hermes-agent = {
+  #  enable = true ;
+  #  container.enable = false ;
+  #  addToSystemPackages = true;
+  #  stateDir = "/var/lib/hermes";
+  #  workingDirectory = "/home/drishal";  # Or your preferred workspace
+  # };
+
   # inputs.nixpkgs-fix.packages.${pkgs.system}.
   # services.zerotierone = {
-    # enable = true;
-    # package = inputs.nixpkgs-master.legacyPackages.${pkgs.system}.zerotierone ;
-    # package = pkgs-master.zerotierone;
-    # localConf.settings = {
-    #   softwareUpdate = "disable";
-    # };
+  # enable = true;
+  # package = inputs.nixpkgs-master.legacyPackages.${pkgs.system}.zerotierone ;
+  # package = pkgs-master.zerotierone;
+  # localConf.settings = {
+  #   softwareUpdate = "disable";
+  # };
   # };
   # services.clamav = {
   #   daemon.enable = false;
@@ -65,17 +73,19 @@
     # gamescope.enable = true;
     gamescope = {
       enable = true;
-      capSysNice = true;  # already probably set, but confirm
+      capSysNice = true; # already probably set, but confirm
     };
-
 
     #appimage
     appimage = {
       enable = true;
       binfmt = true;
-      package = pkgs.appimage-run.override { extraPkgs = pkgs: with pkgs;[
-        webkitgtk_4_1
-      ]; }; 
+      package = pkgs.appimage-run.override {
+        extraPkgs =
+          pkgs: with pkgs; [
+            webkitgtk_4_1
+          ];
+      };
 
     };
 
@@ -247,7 +257,7 @@
     fdk_aac
     # floorp
     feh
-    fim
+    # fim
     ffmpeg-full
     # ff2mpv
     figlet
@@ -268,6 +278,7 @@
     gcc
     # geekbench
     # inputs.ghostty.packages.x86_64-linux.default
+    # inputs.hermes-agent.packages.${pkgs.system}.default   # or .hermes-agent if the output name differs
     gimp
     git
     gitRepo
@@ -276,6 +287,7 @@
     gnome-sound-recorder
     gnumake
     gnupg
+    gh
     ghostscript
     goverlay
     gsmartcontrol
@@ -335,7 +347,10 @@
     # linuxKernel.packages.v4l2loopback
     # linuxKernel.packages.linux_cachyos.v4l2loopback
     libnotify
-    llama-cpp-vulkan
+    # llama-cpp-vulkan
+    (inputs.llama-cpp.packages.${pkgs.system}.default.override {
+      useVulkan = true;
+    })
     libarchive
     libreoffice
     libva-utils
@@ -416,7 +431,7 @@
     nvtopPackages.amd
     # nodePackages_latest.create-react-app
     # nodePackages_latest.bash-language-server
-    nodePackages_latest.typescript-language-server
+    # nodePackages_latest.typescript-language-server
     noto-fonts
     ntfs3g
     obs-studio
@@ -794,7 +809,6 @@
   services.samba = {
     enable = true;
   };
-
 
   #nixd setting
   #nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];

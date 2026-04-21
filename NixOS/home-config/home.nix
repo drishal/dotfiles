@@ -47,6 +47,9 @@
     sessionVariables = {
       EDITOR = "nvim";
       EZA_ICON_SPACING = "2";
+      PLAYWRIGHT_BROWSERS_PATH = "${pkgs.playwright-driver.browsers}";
+      PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true";
+      PLAYWRIGHT_HOST_PLATFORM_OVERRIDE = "ubuntu-24.04";
     };
     # language.base = "en_US.UTF-8";
     # sessionVariables.LOCALES_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";

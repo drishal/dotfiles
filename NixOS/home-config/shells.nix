@@ -80,7 +80,7 @@
     plugins = [
       {
         name = "catppuccin";
-        src = inputs.catppuccin-fish;   # ← directly reference the input
+        src = inputs.catppuccin-fish; # ← directly reference the input
       }
       # Enable a plugin (here grc for colorized command output) from nixpkgs
       # { name = "grc"; src = pkgs.fishPlugins.grc.src; }
@@ -127,7 +127,7 @@
     enable = true;
     nix-direnv.enable = true;
   };
-  programs.direnv-instant.enable = true;
+  # programs.direnv-instant.enable = true;
 
   # environment.pathsToLink = [ "/share/zsh" ];
   # programs.zsh = {
@@ -143,12 +143,11 @@
   #   syntaxHighlighting.enable = true;
   home.sessionVariables = {
     PLAYWRIGHT_BROWSERS_PATH = "${pkgs.playwright-driver.browsers}";
-    PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true";     # NixOS-specific: skips glibc/os checks
-    PLAYWRIGHT_HOST_PLATFORM_OVERRIDE = "ubuntu-24.04";      # helps with version compatibility
+    PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true"; # NixOS-specific: skips glibc/os checks
+    PLAYWRIGHT_HOST_PLATFORM_OVERRIDE = "ubuntu-24.04"; # helps with version compatibility
     # Optional: if you want to force a specific browser executable
     # PLAYWRIGHT_LAUNCH_OPTIONS_EXECUTABLE_PATH = "${pkgs.playwright-driver.browsers}/chromium-*/chrome-linux/chrome";  # adjust * to actual rev if needed
   };
-
 
   programs.zsh = {
     enable = true;
@@ -168,6 +167,12 @@
     initContent = ''
       autoload -U +X bashcompinit && bashcompinit
       export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.node_modules/bin:$PATH"
+      export PLAYWRIGHT_BROWSERS_PATH=${pkgs.playwright-driver.browsers}
+      export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true
+      export PLAYWRIGHT_HOST_PLATFORM_OVERRIDE="ubuntu-24.04"
+      bindkey '^[[3;5~' kill-word
+      bindkey '^[^?' backward-kill-word
+      bindkey '^[[127;5u' backward-kill-word
       # source ~/dotfiles/scripts/aliases.sh
       __newline_after_first_cmd=false
       newline_after_command() {

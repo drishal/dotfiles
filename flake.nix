@@ -147,7 +147,8 @@
     openclaw.url = "github:openclaw/nix-openclaw";
 
     dms.url = "github:AvengeMedia/DankMaterialShell";
-    # hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
+    llama-cpp.url = "github:ggml-org/llama.cpp";
+    hermes-agent.url = "github:NousResearch/hermes-agent";
   };
 
   outputs =
@@ -180,6 +181,7 @@
       tt-schemes,
       umu,
       nix-cachyos-kernel,
+      hermes-agent,
       ghostty,
       ...
     }@inputs:
@@ -241,6 +243,7 @@
                 # inputs.hyprpanel.overlay
                 inputs.emacs-overlay.overlay
                 emacs-lsp-booster.overlays.default
+
               ];
             }
             # inputs.ags.homeManagerModules.default
@@ -294,6 +297,7 @@
             auto-cpufreq.nixosModules.default
             # chaotic.nixosModules.default
             stylix.nixosModules.stylix
+            hermes-agent.nixosModules.default
             #base16.nixosModule
           ];
           specialArgs = {
