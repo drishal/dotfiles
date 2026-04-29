@@ -31,6 +31,6 @@ Don't worry this readme is there just to tackle this very issue
    home-manager switch --flake ~/dotfiles
    #+end_src
 * Screenshot of my Hyprland setup
-#+CAPTION:this is a screenshot of my setup with hyprland 
+#+CAPTION:this is a screenshot of my setup with hyprland and nixos
 [[./setup.png]]
 
