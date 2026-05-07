@@ -348,7 +348,7 @@
     # linuxKernel.packages.linux_cachyos.v4l2loopback
     libnotify
     # llama-cpp-vulkan
-    (inputs.llama-cpp.packages.${pkgs.system}.default.override {
+    (inputs.llama-cpp.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
       useVulkan = true;
     })
     libarchive
@@ -595,30 +595,30 @@
     zip
     # zoom-us
     # Xfce stuff
-    (xfce.thunar.override {
+    (thunar.override {
       thunarPlugins = with pkgs; [
-        xfce.thunar-volman
-        xfce.thunar-archive-plugin
+        thunar-volman
+        thunar-archive-plugin
       ];
     })
     xclip
     xdg-ninja
-    xfce.exo
-    xfce.xfce4-clipman-plugin
-    xfce.xfce4-notifyd
-    xfce.xfce4-taskmanager
-    xfce.xfce4-whiskermenu-plugin
-    xfce.xfconf
+    xfce4-exo
+    xfce4-clipman-plugin
+    xfce4-notifyd
+    xfce4-taskmanager
+    xfce4-whiskermenu-plugin
+    xfconf
     xdotool
     ## Xorg stuff
-    xorg.xbacklight
-    xorg.xdpyinfo
-    xorg.xf86videoamdgpu
-    xorg.xkill
-    xorg.xmodmap
-    xorg.xhost
-    xorg.xwininfo
-    xorg.xinit
+    xbacklight
+    xdpyinfo
+    xf86-video-amdgpu
+    xkill
+    xmodmap
+    xhost
+    xwininfo
+    xinit
     zathura
     zenity
     zapzap
@@ -825,25 +825,25 @@
     stdenv.cc.cc.lib
 
     # from https://github.com/NixOS/nixpkgs/blob/nixos-23.05/pkgs/games/steam/fhsenv.nix#L72-L79
-    xorg.libXcomposite
-    xorg.libXtst
-    xorg.libXrandr
-    xorg.libXext
-    xorg.libX11
-    xorg.libXfixes
+    libxcomposite
+    libxtst
+    libxrandr
+    libxext
+    libx11
+    libxfixes
     libGL
     libva
 
     # from https://github.com/NixOS/nixpkgs/blob/nixos-23.05/pkgs/games/steam/fhsenv.nix#L124-L136
     fontconfig
     freetype
-    xorg.libXt
-    xorg.libXmu
+    libxt
+    libxmu
     libogg
     libvorbis
     SDL
     SDL2_image
-    glew110
+    glew_1_10
     libdrm
     libidn
     libepoxy
