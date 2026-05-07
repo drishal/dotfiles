@@ -10,7 +10,6 @@
       profiles."nhkf2vcg.default"= {
         enableAllSections = true;
         settings = {
-          fastfox.enable = true;
           smoothfox = {
             natural-smooth-scrolling-v3.enable = true;
           };

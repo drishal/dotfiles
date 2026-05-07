@@ -176,6 +176,7 @@
     # cider-2
     cargo
     clementine
+    claude-code
     #carnix
     # chromium
     # (chromium.override {
@@ -526,7 +527,7 @@
     telegram-desktop
     tmate
     tetex
-    texlive.combined.scheme-full
+    # texlive.combined.scheme-full
     #texlive.combined.scheme-medium
     # thinkfan
     # thorium
@@ -761,22 +762,22 @@
       noto-fonts-lgc-plus
       nerd-fonts.fantasque-sans-mono
       nerd-fonts.noto
-      nerd-fonts.fira-code
-      nerd-fonts.fira-mono
-      nerd-fonts.recursive-mono
-      nerd-fonts.jetbrains-mono
-      nerd-fonts.caskaydia-cove
+      # nerd-fonts.fira-code
+      # nerd-fonts.fira-mono
+      # nerd-fonts.recursive-mono
+      # nerd-fonts.jetbrains-mono
+      # nerd-fonts.caskaydia-cove
       googlesans-code
-      recursive
-      literata
+      # recursive
+      # literata
       aporetic
-      inputs.aporetic.packages.${pkgs.system}.default
-      nerd-fonts.roboto-mono
-      nerd-fonts.inconsolata
-      nerd-fonts.comic-shanns-mono
+      # inputs.aporetic.packages.${pkgs.stdenv.hostPlatform.system}.default
+      # nerd-fonts.roboto-mono
+      # nerd-fonts.inconsolata
+      # nerd-fonts.comic-shanns-mono
       roboto
       roboto-serif
-      nerd-fonts.iosevka
+      # nerd-fonts.iosevka
       nerd-fonts.symbols-only
       maple-mono.Normal-NF
       maple-mono.variable
@@ -816,7 +817,10 @@
   # chaotic bincache
   # chaotic.nyx.cache.enable = true;
   # programs.firefox.nativeMessagingHosts.ff2mpv=true;
-  programs.command-not-found.dbPath = inputs.programsdb.packages.${pkgs.system}.programs-sqlite;
+  # Use nixpkgs' built-in programs.sqlite so command-not-found and man-db
+  # consume a database that matches the active nixpkgs revision.
+  # Overriding this with flake-programs-sqlite conflicts with the module default.
+  # programs.command-not-found.dbPath = inputs.programsdb.packages.${pkgs.system}.programs-sqlite;
   programs.nix-ld.enable = true;
 
   # "minimum" amount of libraries needed for most games to run without steam-run

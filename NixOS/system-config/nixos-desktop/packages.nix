@@ -7,10 +7,10 @@
     # inputs.nix-gaming.packages.${pkgs.system}.winetricks-git
   # ];
 
-  services.ollama = {
-    enable = true;
-    package = pkgs.ollama-rocm;
-  };
+  # services.ollama = {
+  #   enable = true;
+  #   package = pkgs.ollama-rocm;
+  # };
 
 
   #postgresql
