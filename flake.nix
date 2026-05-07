@@ -248,7 +248,7 @@
             }
             # inputs.ags.homeManagerModules.default
             #base16.homeManagerModule
-            nixvim.homeManagerModules.nixvim
+            nixvim.homeModules.nixvim
             stylix.homeModules.stylix
             "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
           ];

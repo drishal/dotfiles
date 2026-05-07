@@ -105,7 +105,7 @@
           let
             session = config.services.displayManager.sessionData.desktops;
           in
-            "${pkgs.greetd.tuigreet}/bin/tuigreet -t -s ${session}/share/xsessions:${session}/share/wayland-sessions";
+            "${pkgs.tuigreet}/bin/tuigreet -t -s ${session}/share/xsessions:${session}/share/wayland-sessions";
       };
     };
   };
@@ -182,7 +182,7 @@
     # )
   ];
   # chaotic.qtile.enable = true;
-  services.gnome.tracker.enable = false;
+  services.gnome.tinysparql.enable = false;
   services.gnome.gnome-keyring.enable = true;
   environment.gnome.excludePackages = [
     pkgs.gnome-photos
@@ -197,9 +197,9 @@
 
   # lidswitch
   services.logind = {
-    lidSwitch = "suspend";
     settings =  {
       Login = {
+        HandleLidSwitch = "suspend";
         IdleAction="ignore";
       };
     };

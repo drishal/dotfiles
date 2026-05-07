@@ -158,7 +158,7 @@
   };
   services.avahi = {
     enable = true;
-    nssmdns = true;
+    nssmdns4 = true;
     openFirewall = true;
   };
 
@@ -219,7 +219,7 @@
     pulse.enable = true;
     jack.enable = false;
   };
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   # backlight
   hardware.acpilight.enable = true;
 
@@ -244,4 +244,3 @@
   '';
 
 }
-
