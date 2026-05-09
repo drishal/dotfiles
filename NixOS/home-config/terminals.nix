@@ -138,17 +138,19 @@
       };
     };
     kitty = {
+      shellIntegration.mode = "no-cursor";
       enable = true;
       settings = {
-        enable_audio_bell = false;
-        update_check_interval = 0;
-        window_padding_width = 5;
         confirm_os_window_close = 0;
         cursor_blink_interval = 0;
+        cursor_shape = "block";
+        enable_audio_bell = false;
         input_delay = 0;
         repaint_delay = 2;
         sync_to_monitor = false;
+        update_check_interval = 0;
         wayland_enable_ime  = false;
+        window_padding_width = 5;
       };
     };
     zellij = {
