@@ -10,6 +10,7 @@
   programs.nixvim = {
     enable = true;
     enableMan = true;
+    nixpkgs.config.allowUnfree = true;
     # colorschemes.onedark.enable = true;
     # colorschemes.tokyonight = {
     #   enable = true;
