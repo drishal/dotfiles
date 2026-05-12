@@ -233,7 +233,11 @@ programs.zsh = {
   enableCompletion = true;
   autosuggestion.enable = true;
   syntaxHighlighting.enable = true;
-  historySubstringSearch.enable = true;   # type prefix + Up/Down to filter history
+  historySubstringSearch = {
+    enable = true;   # type prefix + Up/Down to filter history
+    searchUpKey = [ "^[[A" "\\eOA" ];    # CSI + kitty application cursor mode
+    searchDownKey = [ "^[[B" "\\eOB" ];
+  };
 
   shellAliases = { };
 
@@ -311,11 +315,6 @@ programs.zsh = {
     bindkey '^[[1~' beginning-of-line
     bindkey '^[[4~' end-of-line
     bindkey '^[[3~' delete-char
-
-    # ---------- history substring search keys ----------
-    # the plugin is already loaded by home-manager; just bind arrows to it
-    bindkey '^[[A' history-substring-search-up
-    bindkey '^[[B' history-substring-search-down
 
     # ---------- autosuggestions ----------
     ZSH_AUTOSUGGEST_STRATEGY=(history completion)
