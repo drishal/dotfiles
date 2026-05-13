@@ -338,12 +338,13 @@ programs.zsh = {
     add-zsh-hook preexec _zsh_title_preexec
 
     # ---------- `...` -> `../..` (was: prezto editor.dotExpansion) ----------
-    _expand_dots() {
-      if [[ $LBUFFER = *.. ]]; then LBUFFER+='/..'; else LBUFFER+='.'; fi
-    }
-    zle -N _expand_dots
-    bindkey '.' _expand_dots
-    bindkey -M isearch '.' self-insert   # don't break Ctrl+R
+    # Commented out: causes character duplication with autosuggestions/completion
+    # _expand_dots() {
+    #   if [[ $LBUFFER = *.. ]]; then LBUFFER+='/..'; else LBUFFER+='.'; fi
+    # }
+    # zle -N _expand_dots
+    # bindkey '.' _expand_dots
+    # bindkey -M isearch '.' self-insert   # don't break Ctrl+R
 
     # ---------- blank line between commands (your original snippet) ----------
     __newline_after_first_cmd=false
