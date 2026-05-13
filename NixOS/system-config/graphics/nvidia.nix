@@ -8,6 +8,8 @@
   ...
 }:
 {
+  # Sway: allow running on proprietary NVIDIA driver
+  programs.sway.extraOptions = [ "--unsupported-gpu" ];
   # nvidia is the proprietary driver for Nvidia GPUs
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = [ "nvidia" ];
@@ -85,7 +87,6 @@
     NVD_BACKEND = "direct" ;
     GBM_BACKEND = "nvidia-drm";
     # Sway on NVIDIA
-    SWAY_UNSUPPORTED_GPU = "1";
     WLR_RENDERER = "vulkan";
     __GL_GSYNC_ALLOWED = "1";
     __GL_VRR_ALLOWED = "1";
