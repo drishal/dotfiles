@@ -349,9 +349,7 @@
     # linuxKernel.packages.linux_cachyos.v4l2loopback
     libnotify
     # llama-cpp-vulkan
-    (inputs.llama-cpp.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
-      useVulkan = true;
-    })
+    
     libarchive
     libreoffice
     libva-utils

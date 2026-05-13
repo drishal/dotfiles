@@ -3,15 +3,21 @@
 {
   # networking.enableIPv6  = false;
   # environment.systemPackages = with pkgs; [
-    # inputs.nix-gaming.packages.${pkgs.system}.wine-tkg
-    # inputs.nix-gaming.packages.${pkgs.system}.winetricks-git
+  # inputs.nix-gaming.packages.${pkgs.system}.wine-tkg
+  # inputs.nix-gaming.packages.${pkgs.system}.winetricks-git
   # ];
 
   # services.ollama = {
   #   enable = true;
   #   package = pkgs.ollama-rocm;
   # };
-
+  environment.systemPackages = with pkgs; [
+    (
+      inputs.llama-cpp.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+        useVulkan = true;
+      })
+  ];
+  
 
   #postgresql
   services.postgresql = {
