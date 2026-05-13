@@ -33,7 +33,6 @@
             # "music"
             "clock"
             "notificationButton"
-            "weather"
           ];
 
           rightWidgets = [
