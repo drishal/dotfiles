@@ -23,6 +23,7 @@
     ../stylix.nix
     ./stylix.nix
     ./hyprland.nix
+    ./sway.nix
     ./betterfox.nix
     ./aliases.nix
     ./dms.nix

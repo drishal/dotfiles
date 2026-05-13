@@ -25,6 +25,16 @@
     };
   };
 
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+    extraPackages = with pkgs; [
+      swaylock-effects
+      swaybg
+      sway-contrib.grimshot
+    ];
+  };
+
   services.libinput = {
     enable = true;
     # disable mouse acceleration
