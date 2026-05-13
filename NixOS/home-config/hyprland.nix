@@ -14,6 +14,7 @@
     settings = {
       exec-once = [
         "lxpolkit & dms run &  nm-applet --indicator &  blueman-applet & emacs --daemon"
+        "hyprpaper"
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
       ];
       general = {
@@ -182,6 +183,7 @@
     };
   };
 
+  services.hyprpaper.package = null;
   #hyprpanel
   # programs.hyprpanel = {
   #   enable = false;
