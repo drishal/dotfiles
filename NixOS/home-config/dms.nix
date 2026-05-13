@@ -13,6 +13,7 @@
 
     # settings = builtins.fromJSON (builtins.readFile ./dms.json);
     settings = {
+      useAutoLocation = false;
       weatherLocation = "Ahmedabad, Gujarat";
       weatherCoordinates = "22.7455391,72.2974907";
       barConfigs = [
@@ -35,7 +36,7 @@
             # "music"
             "clock"
             "notificationButton"
-            # "weather"
+            "weather"
           ];
 
           rightWidgets = [
