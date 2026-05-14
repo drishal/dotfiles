@@ -13,6 +13,8 @@
 
     # settings = builtins.fromJSON (builtins.readFile ./dms.json);
     settings = {
+      showWorkspaceIndex = true;
+
       # Disable bar hiding on fullscreen — DMS checks per-screen not per-workspace
       # on Sway, so it hides on ALL workspaces when ANY window is fullscreen
       barConfigs = [
