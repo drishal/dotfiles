@@ -3,6 +3,24 @@
 {
   environment.systemPackages = with pkgs; [
     go
+    (brave.override {
+      commandLineArgs = [
+        # Wayland
+        "--ozone-platform-hint=auto"
+        "--enable-wayland-ime"
+        # VA-API via nvidia-vaapi-driver (NVDEC backend)
+        "--ignore-gpu-blocklist"
+        "--enable-zero-copy"
+        "--enable-features=VaapiVideoDecoder,VaapiIgnoreDriverChecks"
+        "--disable-features=UseChromeOSDirectVideoDecoder"
+        # GPU rasterization
+        "--enable-gpu-rasterization"
+        "--enable-native-gpu-memory-buffers"
+        # NVIDIA Wayland
+        "--enable-features=Vulkan"
+        "--enable-hardware-overlays"
+      ];
+    })
   ];
   services.mysql = {
     enable = true;

@@ -12,12 +12,18 @@
   #   package = pkgs.ollama-rocm;
   # };
   environment.systemPackages = with pkgs; [
-    (
-      inputs.llama-cpp.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
-        useVulkan = true;
-      })
+    (inputs.llama-cpp.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+      useVulkan = true;
+    })
+    (brave.override {
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--enable-zero-copy"
+        "--ozone-platform-hint=auto"
+        "--enable-features=VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+      ];
+    })
   ];
-  
 
   #postgresql
   services.postgresql = {
@@ -34,6 +40,5 @@
       GRANT ALL PRIVILEGES ON DATABASE aiphone TO drishal;
     '';
   };
-
 
 }

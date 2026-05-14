@@ -156,14 +156,6 @@
     bc
     bison
     # brave
-    (brave.override {
-      commandLineArgs = [
-        "--ignore-gpu-blocklist"
-        "--enable-zero-copy"
-        "--ozone-platform-hint=auto"
-        "--enable-features=VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
-      ];
-    })
     btop
     bun
     brightnessctl
@@ -349,7 +341,7 @@
     # linuxKernel.packages.linux_cachyos.v4l2loopback
     libnotify
     # llama-cpp-vulkan
-    
+
     libarchive
     libreoffice
     libva-utils
