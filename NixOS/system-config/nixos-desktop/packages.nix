@@ -12,9 +12,10 @@
   #   package = pkgs.ollama-rocm;
   # };
   environment.systemPackages = with pkgs; [
-    (inputs.llama-cpp.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
-      useVulkan = true;
-    })
+    # (inputs.llama-cpp.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+    #   useVulkan = true;
+    # })
+    teams-for-linux
     (brave.override {
       commandLineArgs = [
         "--ignore-gpu-blocklist"
