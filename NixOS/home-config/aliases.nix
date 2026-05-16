@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   # 2. The Aliases (Apply to ALL shells: Fish, Zsh, Bash, etc.)
@@ -105,86 +105,18 @@
   };
   home.packages = with pkgs; [
     (pkgs.writeShellScriptBin "watch-gpu" ''
-      export PATH="${pkgs.fzf}/bin:${pkgs.bat}/bin:${pkgs.findutils}/bin:${pkgs.gnugrep}/bin:$PATH"
-
-      detect_gpu() {
-        # Check for AMD first (has amdgpu_pm_info in debugfs)
-        AMD_GPUS=$(sudo find /sys/kernel/debug/dri -maxdepth 2 -name amdgpu_pm_info 2>/dev/null | head -1)
-        if [ -n "$AMD_GPUS" ]; then
-          echo "amd"
-          return
-        fi
-
-        # Check for NVIDIA via nvidia-smi
-        if command -v nvidia-smi &>/dev/null && nvidia-smi -L &>/dev/null; then
-          echo "nvidia"
-          return
-        fi
-
-        echo "unknown"
-      }
-
-      watch_amd() {
-        GPUS=$(sudo find /sys/kernel/debug/dri -maxdepth 2 -name amdgpu_pm_info 2>/dev/null | awk -F/ '{print $(NF-1)}')
-
-        if [ -z "$GPUS" ]; then
-          echo "No AMD GPUs found in /sys/kernel/debug/dri."
-          exit 1
-        fi
-
-        SELECTED_ID=$(echo "$GPUS" | fzf \
-          --prompt="Select GPU > " \
-          --header="Found AMD GPUs at /sys/kernel/debug/dri/" \
-          --height=40% \
-          --layout=reverse \
-          --border \
-          --preview="sudo cat /sys/kernel/debug/dri/{}/amdgpu_pm_info" \
-          --preview-window=right:60%)
-
-        if [ -n "$SELECTED_ID" ]; then
-          sudo watch -n 0.5 "bat --style=plain --paging=never --color=always /sys/kernel/debug/dri/$SELECTED_ID/amdgpu_pm_info"
-        fi
-      }
-
-      watch_nvidia() {
-        GPU_COUNT=$(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null | wc -l)
-        if [ "$GPU_COUNT" -eq 0 ]; then
-          echo "No NVIDIA GPUs found."
-          exit 1
-        fi
-
-        if [ "$GPU_COUNT" -gt 1 ]; then
-          SELECTED_GPU=$(nvidia-smi --query-gpu=index,name --format=csv,noheader 2>/dev/null | fzf \
-            --prompt="Select GPU > " \
-            --header="Found NVIDIA GPUs" \
-            --height=40% \
-            --layout=reverse \
-            --border \
-            --preview="idx=\$(echo {} | cut -d, -f1 | tr -d ' '); nvidia-smi --query-gpu=index,name,utilization.gpu,utilization.memory,temperature.gpu,power.draw,clocks.current.sm,clocks.current.memory,memory.used,memory.total --format=csv -i \$idx" \
-            --preview-window=right:60% | cut -d, -f1 | tr -d ' ')
-        else
-          SELECTED_GPU=0
-        fi
-
-        watch -n 1 "nvidia-smi --query-gpu=timestamp,name,utilization.gpu,utilization.memory,temperature.gpu,power.draw,clocks.current.sm,clocks.current.memory,memory.used,memory.total,pstate --format=csv -i $SELECTED_GPU"
-      }
-
-      GPU_TYPE=$(detect_gpu)
-
-      case "$GPU_TYPE" in
-        amd)
-          echo "Detected AMD GPU"
-          watch_amd
-          ;;
-        nvidia)
-          echo "Detected NVIDIA GPU"
-          watch_nvidia
-          ;;
-        *)
-          echo "No supported GPU detected (need AMD with amdgpu or NVIDIA with nvidia-smi)."
-          exit 1
-          ;;
-      esac
+      export PATH="${pkgs.fzf}/bin:${pkgs.findutils}/bin:${pkgs.coreutils}/bin:$PATH"
+      export WATCH_GPU_BASE00="#${config.lib.stylix.colors.base00}"
+      export WATCH_GPU_BASE01="#${config.lib.stylix.colors.base01}"
+      export WATCH_GPU_BASE02="#${config.lib.stylix.colors.base02}"
+      export WATCH_GPU_BASE03="#${config.lib.stylix.colors.base03}"
+      export WATCH_GPU_BASE05="#${config.lib.stylix.colors.base05}"
+      export WATCH_GPU_BASE08="#${config.lib.stylix.colors.base08}"
+      export WATCH_GPU_BASE0A="#${config.lib.stylix.colors.base0A}"
+      export WATCH_GPU_BASE0B="#${config.lib.stylix.colors.base0B}"
+      export WATCH_GPU_BASE0C="#${config.lib.stylix.colors.base0C}"
+      export WATCH_GPU_BASE0D="#${config.lib.stylix.colors.base0D}"
+      exec ${pkgs.python3.withPackages (ps: [ ps.rich ps.textual ])}/bin/python ${../../scripts/watch-gpu.py} "$@"
     '')
   ];
 }
