@@ -22,7 +22,7 @@ in
                   return require("codecompanion.adapters").extend("openai_compatible", {
                     env = {
                       url = "${secrets.url}",
-                      api_key = "${secrets.api_key}",
+                      api_key = "OPENAI_API_KEY",
                     },
                     schema = {
                       model = {
