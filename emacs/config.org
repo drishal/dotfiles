@@ -2080,6 +2080,11 @@ https://github.com/pwalsh/pipenv.el
   )
 #+end_src
 
+*** json
+#+begin_src emacs-lisp
+(add-to-list 'auto-mode-alist '("\\.jsonc\\'" . json-ts-mode))
+#+end_src
+
 *** PKGBUILD
 #+begin_src emacs-lisp
 (use-package pkgbuild-mode
