@@ -519,6 +519,7 @@
     # surf
     # swaylock
     sway-contrib.grimshot
+    socat
     swaylock-effects
     swaybg
     telegram-desktop
