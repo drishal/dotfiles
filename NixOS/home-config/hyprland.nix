@@ -41,16 +41,8 @@
 
       decoration = {
         rounding = 7;
-        # blur = yes;
-        # blur_size = 5;
-        # blur_passes = 1;
-        # blurls = "waybar";
-        # drop_shadow = yes;
-        # shadow_range = 4;
-        # shadow_render_power = 3;
-        # col.shadow = rgba(1a1a1aee);
         blur = {
-          enabled = false;
+          enabled = true;
           new_optimizations = true;
           size = 8;
           passes = 3;
