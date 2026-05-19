@@ -43,7 +43,7 @@
           rightWidgets = [
             "clipboard"
             "cpuUsage"
-            "memUsage"
+            { widgetId = "memUsage"; showInGb = true; }
             "battery"
             "controlCenterButton"
             "systemTray"
