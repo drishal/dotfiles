@@ -14,6 +14,9 @@
     # settings = builtins.fromJSON (builtins.readFile ./dms.json);
     settings = {
       showWorkspaceIndex = true;
+      showSeconds = true;
+      clockDateFormat = "d MMM yyyy (ddd)";
+      blurEnabled = true;
 
       # Disable bar hiding on fullscreen — DMS checks per-screen not per-workspace
       # on Sway, so it hides on ALL workspaces when ANY window is fullscreen
