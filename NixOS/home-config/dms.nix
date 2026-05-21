@@ -54,5 +54,12 @@
         }
       ];
     };
+
+    # Session-level settings (stored in ~/.local/state/DankMaterialShell/session.json)
+    # Weather defaults to New York — override to Ahmedabad
+    session = {
+      weatherLocation = "Ahmedabad, India";
+      weatherCoordinates = "23.0225,72.5714";
+    };
   };
 }
