@@ -84,6 +84,7 @@
   - [[#elfeed-rss-reader][elfeed RSS reader]]
   - [[#multi-cursor][Multi cursor]]
   - [[#markdown-mode][Markdown mode]]
+  - [[#agent-shell][Agent Shell]]
 - [[#language-and-completion-support][Language and completion support]]
   - [[#completion-engines][completion engines:]]
   - [[#treesitter][treesitter]]
@@ -1441,6 +1442,13 @@ https://github.com/karthink/popper
 #+begin_src emacs-lisp
 (use-package markdown-mode
   :ensure t)
+#+end_src
+
+** Agent Shell
+#+begin_src emacs-lisp
+(use-package agent-shell
+    :ensure t
+    )
 #+end_src
 
 * Language and completion support
