@@ -99,3 +99,72 @@ wallpapers/                 ← wallpapers (used by stylix.image)
 | `nixos-desktop` | Main desktop | Custom hyprland config, extra packages |
 | `nixos-work` | Work machine | Dual monitor (DP-1 + DP-2), separate nixvim |
 | `nixos` | Laptop/generic | Minimal, no extra modules |
+
+## Commit conventions
+
+### Message format
+
+```
+scope: short description
+```
+
+or when a prefix adds clarity:
+
+```
+prefix(scope): short description
+```
+
+### When to use prefixes
+
+This is a dotfiles repo — most changes are config tweaks, not software features. Reserve prefixes for situations where they genuinely aid scanning `git log`.
+
+**`feat`** — Only for meaningful new capability: adding a new program, enabling a new service, introducing a new workflow. Does NOT apply to adding a package to an existing config, changing a setting, or minor customization.
+
+- ✅ `feat(virtualization): add libvirt and docker support`
+- ✅ `feat(hyprland): add monitor automation script`
+- ❌ `feat(emacs): add agent-shell package` — just `emacs: add agent-shell package`
+- ❌ `feat(waybar): show memory in GB` — just `waybar: show memory in GB`
+
+**`fix`** — Correcting something broken or misconfigured.
+
+- ✅ `fix(fish): correct PATH ordering for home-manager`
+- ✅ `fix(hyprland): fix monitor assignment on work machine`
+
+**`chore`** — Maintenance that doesn't change behavior: flake lock updates, dependency bumps, reformatting.
+
+- ✅ `chore: update flake.lock`
+- ✅ `chore(stylix): regenerate base24 colors`
+
+**No prefix** — The default. Use `scope: description` for config changes, package additions, setting tweaks, and most day-to-day work.
+
+- ✅ `emacs: add agent-shell package`
+- ✅ `waybar: show memory in GB`
+- ✅ `hyprland: enable blur`
+- ✅ `dms: set weather location to Ahmedabad`
+
+### Scope
+
+Use the config area or tool name as scope: `emacs`, `hyprland`, `waybar`, `fish`, `nixvim`, `dms`, `mpv`, `flake.lock`, `desktop`, `work`, etc.
+
+For machine-specific changes, use the target: `nixos-desktop:`, `nixos-work:`, `nixos:`.
+
+### Grouping changes
+
+**Single commit when:** changes are logically one action — adding a package and its config, fixing a setup across related files.
+
+- Adding a Home Manager package + its program config → one commit
+- Fixing a Hyprland keybind in both hyprland.nix and a script → one commit
+- Updating flake.lock → always one commit (even if multiple inputs change)
+
+**Separate commits when:** changes are independent and unrelated.
+
+- Adding an Emacs package AND fixing a fish alias → two commits
+- Updating waybar style AND adding a new NixOS service → two commits
+
+### General rules
+
+- **Lowercase** — descriptions are lowercase, no period at end
+- **Imperative mood** — "add package" not "added package" or "adds package"
+- **Keep it short** — if the description fits on one line, no body needed
+- **Body when needed** — use a body only for non-obvious context (why, not what); the diff already shows what changed
+- **Don't over-organize** — this is a personal dotfiles repo, not a team project; if you're spending more time on the commit message than the change, simplify
