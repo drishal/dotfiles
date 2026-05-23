@@ -316,7 +316,7 @@
     #python3Packages.ipython
     # python3Packages.pyngrok
     # python3Packages.pygobject3
-    python3Packages.python-lsp-server
+    basedpyright
     python3Packages.uv
     # python3Packages.pygobject3
     # python3Packages.pygobject-stubs

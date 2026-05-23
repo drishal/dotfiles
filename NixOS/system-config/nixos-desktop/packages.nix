@@ -12,10 +12,11 @@
   #   package = pkgs.ollama-rocm;
   # };
   environment.systemPackages = with pkgs; [
-    llama-cpp-vulkan
-    # (inputs.llama-cpp.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
-    #   useVulkan = true;
-    # })
+    # llama-cpp-vulkan
+    (inputs.llama-cpp.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+      useVulkan = true;
+      useWebUi = false;
+    })
     teams-for-linux
     (brave.override {
       commandLineArgs = [
