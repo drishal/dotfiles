@@ -301,6 +301,7 @@
     # hollywood
     hyprpaper
     hyperfine
+    himalaya
     hwinfo
     imagemagick
     imagemagick
