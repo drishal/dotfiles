@@ -1,0 +1,7 @@
+If this machine has access to a local model server (LiteLLM, Ollama, vLLM, etc.),
+install @ssweens/pi-dynamic-models for automatic model discovery:
+
+  pi install @ssweens/pi-dynamic-models
+
+Then create ~/.pi/agent/settings/pi-dynamic-models.json with your server config.
+See https://www.npmjs.com/package/@ssweens/pi-dynamic-models for details.
