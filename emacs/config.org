@@ -898,8 +898,12 @@ Put backup files neatly away
 
 ** magit
 #+begin_src emacs-lisp
-  (use-package magit :ensure t)
-  (use-package transient :ensure t)
+  (use-package magit
+    :ensure t
+    :commands (magit-status magit-dispatch magit-blame magit-log))
+  (use-package transient
+    :ensure t
+    :defer t)
   (setq package-install-upgrade-built-in t)
   ;;fixing seq
   ;; (defun +elpaca-unload-seq (e) "Unload seq before continuing the elpaca build, then continue to build the recipe E."
@@ -1141,17 +1145,22 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
 ** Bongo
 https://github.com/dbrock/bongo
 #+begin_src emacs-lisp 
-(use-package bongo :ensure t)
+(use-package bongo
+  :ensure t
+  :commands bongo)
 #+end_src
 ** Minimap
 #+begin_src emacs-lisp
 (use-package minimap
-  :ensure t)
+  :ensure t
+  :commands minimap-mode)
 #+end_src
 ** Mentor Torrent client
 https://github.com/skangas/mentor
 #+begin_src emacs-lisp
-(use-package mentor :ensure t)
+(use-package mentor
+  :ensure t
+  :commands mentor)
 #+end_src
 ** selectrical mode
 #+begin_src emacs-lisp
@@ -1159,7 +1168,9 @@ https://github.com/skangas/mentor
 #+end_src
 ** emacs pdf tools
 #+begin_src emacs-lisp
-(use-package pdf-tools :ensure t)
+(use-package pdf-tools
+  :ensure t
+  :mode ("\\.pdf\\'" . pdf-view-mode))
 #+end_src
 ** csv mode
 #+begin_src emacs-lisp
@@ -1313,7 +1324,9 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
 #+end_src
 ** neotree
 #+begin_src emacs-lisp
-(use-package neotree :ensure t
+(use-package neotree
+  :ensure t
+  :commands (neotree neotree-toggle neotree-show)
   :config
   (setq neo-smart-open t
         neo-show-hidden-files t
@@ -1414,7 +1427,9 @@ https://github.com/karthink/popper
 
 ** elfeed RSS reader
 #+begin_src emacs-lisp
-(use-package elfeed :ensure t)
+(use-package elfeed
+  :ensure t
+  :commands elfeed)
 (setq elfeed-feeds
       '(
         ("https://archlinux.org/feeds/news/" Arch Linux)
@@ -1447,8 +1462,8 @@ https://github.com/karthink/popper
 ** Agent Shell
 #+begin_src emacs-lisp
 (use-package agent-shell
-    :ensure t
-    )
+  :ensure t
+  :commands agent-shell)
 #+end_src
 
 * Language and completion support
@@ -1767,12 +1782,16 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 **** Other lsp specific configurations
 ***** Lsp Java
 #+begin_src emacs-lisp 
-(use-package lsp-java :ensure t)
+(use-package lsp-java
+  :ensure t
+  :defer t
+  :init
+  (setq lsp-java-format-on-type-enabled nil))
 (add-hook 'java-mode-hook (lambda ()
+                            (require 'lsp-java)
                             (setq c-basic-offset 4
                                   ;; tab-width 4
                                   indent-tabs-mode nil)))
-(setq lsp-java-format-on-type-enabled nil)
 #+end_src
 ***** lsp on demand
 #+begin_src emacs-lisp 
@@ -1812,15 +1831,16 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 ***** typescript
 #+begin_src emacs-lisp
 (use-package typescript-mode
-  :ensure t)
+  :ensure t
+  :mode "\\.ts\\'")
 #+end_src
 ***** Dap mode
 #+begin_src emacs-lisp
 (use-package dap-mode
   :ensure t
-  :init
-  (dap-auto-configure-mode 1)
-  )
+  :commands (dap-debug dap-hydra dap-ui-mode)
+  :config
+  (dap-auto-configure-mode 1))
 
 #+end_src
 
@@ -1907,6 +1927,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+begin_src emacs-lisp
 (use-package rust-mode
   :ensure t
+  :mode "\\.rs\\'"
   :init
   (setq rust-mode-treesitter-derive t))
 
@@ -1975,7 +1996,9 @@ https://github.com/pwalsh/pipenv.el
 #+end_src
 **** python mode
 #+begin_src emacs-lisp
-(use-package python-mode :ensure t)
+(use-package python-mode
+  :ensure t
+  :mode "\\.py\\'")
 #+end_src
 **** elpy
 #+begin_src emacs-lisp :tangle no
@@ -1987,7 +2010,8 @@ https://github.com/pwalsh/pipenv.el
 *** php
 #+begin_src emacs-lisp
 (use-package php-mode
-  :ensure t)
+  :ensure t
+  :mode "\\.php\\'")
 #+end_src
 *** html
 #+begin_src emacs-lisp
@@ -2001,31 +2025,33 @@ https://github.com/pwalsh/pipenv.el
 #+end_src
 **** web mode
 #+begin_src emacs-lisp
-(use-package web-mode :ensure t)
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
-(setq-default indent-tabs-mode nil)
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.hbs?\\'" . html-mode))
-(defun my-web-mode-hook ()
-  "Hooks for Web mode."
-  ;; (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 4)
-  (setq web-mode-enable-auto-pairing t)
-  (setq web-mode-enable-auto-closing t)
-  ;; (setq web-mode-enable-current-element-highlight t)
-  ;; (setq web-mode-enable-current-column-highlight t)
-  (setq web-mode-script-padding 2)
-  )
-(add-hook 'web-mode-hook  'my-web-mode-hook)
+(use-package web-mode
+  :ensure t
+  :mode (("\\.phtml\\'" . web-mode)
+         ("\\.tpl\\.php\\'" . web-mode)
+         ("\\.[agj]sp\\'" . web-mode)
+         ("\\.as[cp]x\\'" . web-mode)
+         ("\\.erb\\'" . web-mode)
+         ("\\.mustache\\'" . web-mode)
+         ("\\.djhtml\\'" . web-mode)
+         ("\\.html?\\'" . web-mode))
+  :init
+  (add-to-list 'auto-mode-alist '("\\.hbs?\\'" . html-mode))
+  :config
+  (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
+  (setq-default indent-tabs-mode nil)
+  (defun my-web-mode-hook ()
+    "Hooks for Web mode."
+    ;; (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-code-indent-offset 4)
+    (setq web-mode-enable-auto-pairing t)
+    (setq web-mode-enable-auto-closing t)
+    ;; (setq web-mode-enable-current-element-highlight t)
+    ;; (setq web-mode-enable-current-column-highlight t)
+    (setq web-mode-script-padding 2)
+    )
+  (add-hook 'web-mode-hook  'my-web-mode-hook))
 #+end_src
 ***** Tide
 #+begin_src emacs-lisp
@@ -2038,15 +2064,16 @@ https://github.com/pwalsh/pipenv.el
 #+end_src
 **** Emmet mode
 #+begin_src emacs-lisp
-(use-package emmet-mode :ensure t)
-(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
-(add-hook 'web-mode 'emmet-mode)
+(use-package emmet-mode
+  :ensure t
+  :hook ((sgml-mode css-mode web-mode) . emmet-mode))
 #+end_src
 *** Haskell
 **** haskell mode
 #+begin_src emacs-lisp
-(use-package haskell-mode :ensure t)
+(use-package haskell-mode
+  :ensure t
+  :mode ("\\.hs\\'" . haskell-mode))
 #+end_src
 *** Fish
 #+begin_src emacs-lisp
@@ -2112,7 +2139,9 @@ https://github.com/pwalsh/pipenv.el
 
 *** go-mode
 #+begin_src emacs-lisp
-(use-package go-mode :ensure t)
+(use-package go-mode
+  :ensure t
+  :mode "\\.go\\'")
 #+end_src
 *** C/C++ mode
 #+begin_src emacs-lisp
@@ -2156,8 +2185,14 @@ https://github.com/pwalsh/pipenv.el
 
 *** Docker Mode
 #+begin_src emacs-lisp
-(use-package dockerfile-mode :ensure t)
-(use-package docker-compose-mode :ensure t)
+(use-package dockerfile-mode
+  :ensure t
+  :mode (("Dockerfile\\'" . dockerfile-mode)
+         ("\\.dockerfile\\'" . dockerfile-mode)))
+(use-package docker-compose-mode
+  :ensure t
+  :mode (("docker-compose.*\\.ya?ml\\'" . docker-compose-mode)
+         ("compose.*\\.ya?ml\\'" . docker-compose-mode)))
 (use-package docker
   :ensure t
   :bind ("C-c d" . docker))
