@@ -197,14 +197,22 @@ Rectangle {
             flickableDirection: Flickable.HorizontalFlick
             boundsBehavior: Flickable.StopAtBounds
 
-            Text {
+            TextEdit {
                 id: codeText
-                textFormat: root._highlightedHtml ? Text.RichText : Text.PlainText
+                textFormat: root._highlightedHtml ? TextEdit.RichText : TextEdit.PlainText
                 text: root._themedHtml || root.content
                 color: Theme.surfaceText
                 font.family: "monospace"
                 font.pixelSize: Theme.fontSizeSmall
-                wrapMode: Text.NoWrap
+                wrapMode: TextEdit.NoWrap
+                readOnly: true
+                selectByMouse: true
+                selectionColor: Theme.primary
+                selectedTextColor: Theme.onPrimary
+                persistentSelection: true
+                HoverHandler {
+                    cursorShape: Qt.IBeamCursor
+                }
             }
         }
     }

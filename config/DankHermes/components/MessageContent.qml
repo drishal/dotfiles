@@ -35,7 +35,7 @@ Item {
 
                 property var seg: modelData
 
-                StyledText {
+                TextEdit {
                     id: textSeg
                     visible: parent.seg && parent.seg.type === "text"
                     anchors.left: parent.left
@@ -43,10 +43,17 @@ Item {
                     text: visible ? parent.seg.content : ""
                     color: Theme.surfaceText
                     font.pixelSize: Theme.fontSizeMedium
-                    wrapMode: Text.WordWrap
-                    textFormat: root.isStreaming ? Text.PlainText : Text.MarkdownText
-                    linkColor: Theme.primary
+                    wrapMode: TextEdit.Wrap
+                    textFormat: root.isStreaming ? TextEdit.PlainText : TextEdit.MarkdownText
+                    readOnly: true
+                    selectByMouse: true
+                    selectionColor: Theme.primary
+                    selectedTextColor: Theme.onPrimary
+                    persistentSelection: true
                     onLinkActivated: link => Qt.openUrlExternally(link)
+                    HoverHandler {
+                        cursorShape: textSeg.hoveredLink ? Qt.PointingHandCursor : Qt.IBeamCursor
+                    }
                 }
 
                 CodeBlock {

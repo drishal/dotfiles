@@ -540,14 +540,23 @@ Item {
                 color: Theme.primary
                 radius: Theme.cornerRadius
 
-                StyledText {
+                TextEdit {
                     id: userText
                     anchors.fill: parent
                     anchors.margins: Theme.spacingS
                     text: umc.msg ? umc.msg.content : ""
                     color: Theme.primaryText
                     font.pixelSize: Theme.fontSizeMedium
-                    wrapMode: Text.WordWrap
+                    wrapMode: TextEdit.Wrap
+                    textFormat: TextEdit.PlainText
+                    readOnly: true
+                    selectByMouse: true
+                    selectionColor: Theme.onPrimary
+                    selectedTextColor: Theme.primary
+                    persistentSelection: true
+                    HoverHandler {
+                        cursorShape: Qt.IBeamCursor
+                    }
                 }
             }
 
