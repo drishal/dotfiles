@@ -162,6 +162,7 @@
     openFirewall = true;
   };
 
+  services.logind.killUserProcesses = true;
   # services.logind.lidSwitch = "suspend";
   # Enable sound.
   # sound.enable = true;
