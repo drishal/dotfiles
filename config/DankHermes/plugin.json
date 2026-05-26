@@ -1,0 +1,15 @@
+{
+    "id": "dankHermes",
+    "name": "Hermes Agent",
+    "description": "Chat with Hermes AI agent from your desktop — sessions, streaming, tool calls, reasoning, and approvals",
+    "version": "0.1.0",
+    "license": "MIT",
+    "author": "Drishal Ballaney",
+    "icon": "smart_toy",
+    "component": "./DankHermes.qml",
+    "settings": "./DankHermesSettings.qml",
+    "permissions": [
+        "settings_read",
+        "settings_write"
+    ]
+}
