@@ -125,7 +125,7 @@
         # "$mainMod, x, exec, pkill waybar; waybar"
         # "$mainMod, x, exec, pkill waybar; waybar"
         "$mainMod, x, exec, pkill dms; dms run"
-        "$mainMod SHIFT, X, exec, loginctl terminate-user $USER"
+        "$mainMod SHIFT, X, exit,"
         "$mainMod, A, exec, emacsclient -c"
         "$mainMod, SPACE, togglefloating, "
         "$mainMod, F,fullscreen,"
