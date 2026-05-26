@@ -151,6 +151,7 @@
         update_check_interval = 0;
         wayland_enable_ime  = false;
         window_padding_width = 5;
+        clipboard_control = "write-clipboard write-primary read-clipboard read-primary";
       };
     };
     zellij = {
