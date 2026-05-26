@@ -21,6 +21,37 @@ Rectangle {
     // Cached chroma output (HTML with inline styles). Empty = fall back to plain.
     property string _highlightedHtml: ""
 
+    // Convert a QML color to a CSS hex string Qt RichText accepts.
+    // Theme tokens with alpha (e.g. surfaceTextMedium) come back as #aarrggbb;
+    // drop the alpha so we always emit #rrggbb.
+    function _hex(c) {
+        const s = (c !== undefined && c !== null) ? c.toString() : ""
+        if (s.length === 9 && s[0] === "#") return "#" + s.slice(3)
+        return s
+    }
+
+    // Remap chroma's monokai palette to the current DMS theme tokens so the
+    // code block follows the user's theme (and re-evaluates when it changes).
+    readonly property string _themedHtml: {
+        let html = root._highlightedHtml
+        if (!html) return ""
+        // Strip chroma's outer <pre style="..."> — we provide our own surface.
+        html = html.replace(/<pre[^>]*>/i, "<pre>")
+        const map = {
+            "#f8f8f2": _hex(Theme.surfaceText),
+            "#66d9ef": _hex(Theme.primary),
+            "#a6e22e": _hex(Theme.tertiary),
+            "#f92672": _hex(Theme.primary),
+            "#e6db74": _hex(Theme.success),
+            "#ae81ff": _hex(Theme.warning),
+            "#75715e": _hex(Theme.surfaceVariantText)
+        }
+        for (const k in map) {
+            if (map[k]) html = html.replace(new RegExp(k, "gi"), map[k])
+        }
+        return html
+    }
+
     Process {
         id: chromaProcess
         running: false
@@ -169,7 +200,7 @@ Rectangle {
             Text {
                 id: codeText
                 textFormat: root._highlightedHtml ? Text.RichText : Text.PlainText
-                text: root._highlightedHtml || root.content
+                text: root._themedHtml || root.content
                 color: Theme.surfaceText
                 font.family: "monospace"
                 font.pixelSize: Theme.fontSizeSmall

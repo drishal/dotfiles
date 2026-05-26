@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import Quickshell.Io
 import qs.Common
 import qs.Widgets
 
@@ -8,9 +9,71 @@ Item {
 
     required property var hermesService
 
-    // ── Scroll to bottom helper ────────────────────────────────
+    // Set true when this ChatArea is being rendered inside the detached
+    // FloatingWindow. The expand button toggles its icon/tooltip accordingly.
+    property bool expanded: false
+    signal expandToggled()
+
+    // ── Pasted image attachments ───────────────────────────────
+    // List of {path, name} for images pulled off the clipboard. Cleared
+    // after send. On send, each path is prepended to the message text as
+    // [Attached image: <path>] so Hermes' file/vision tools can pick it up
+    // (Hermes config has trust_recent_files: true / 600s window).
+    property var attachedImages: []
+
     function scrollToBottom() {
         Qt.callLater(() => messageListView.positionViewAtEnd())
+    }
+
+    function removeAttachment(idx) {
+        const next = attachedImages.slice()
+        next.splice(idx, 1)
+        attachedImages = next
+    }
+
+    function clearAttachments() {
+        attachedImages = []
+    }
+
+    function buildOutgoingMessage(text) {
+        if (!attachedImages.length) return text
+        let prefix = ""
+        for (const img of attachedImages) {
+            prefix += "[Attached image: " + img.path + "]\n"
+        }
+        return prefix + text
+    }
+
+    function sendCurrent(text) {
+        const payload = buildOutgoingMessage(text)
+        hermesService.sendMessage(payload)
+        clearAttachments()
+    }
+
+    Process {
+        id: imagePasteProcess
+        running: false
+        // Writes the clipboard's image/png to /tmp/dms-paste-<unix-ms>.png if
+        // present, and echoes the path on stdout. Empty stdout = clipboard had
+        // no PNG image, which is the normal case for a text-only paste.
+        command: ["sh", "-c",
+            "TS=$(date +%s%3N); P=/tmp/dms-paste-$TS.png; " +
+            "wl-paste --list-types 2>/dev/null | grep -q '^image/png$' || exit 0; " +
+            "wl-paste --type image/png > \"$P\" 2>/dev/null && [ -s \"$P\" ] && echo \"$P\""
+        ]
+        stdout: SplitParser {
+            onRead: data => {
+                const path = (data || "").trim()
+                if (!path) return
+                const name = path.split("/").pop()
+                root.attachedImages = root.attachedImages.concat([{ path: path, name: name }])
+            }
+        }
+    }
+
+    function tryPasteImage() {
+        imagePasteProcess.running = false
+        imagePasteProcess.running = true
     }
 
     Column {
@@ -24,7 +87,7 @@ Item {
         ListView {
             id: messageListView
             width: parent.width
-            height: parent.height - statusBar.height - inputRow.height
+            height: parent.height - statusBar.height - inputRow.height - attachStrip.height
             clip: true
             spacing: Theme.spacingS
             leftMargin: Theme.spacingS
@@ -198,7 +261,7 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
-                Item { width: Math.max(0, parent.width - 320); height: 1 }
+                Item { width: Math.max(0, parent.width - 360); height: 1 }
 
                 // Session ID indicator
                 StyledText {
@@ -210,6 +273,103 @@ Item {
                     font.pixelSize: Theme.fontSizeSmall
                     font.family: "monospace"
                     anchors.verticalCenter: parent.verticalCenter
+                }
+
+                Rectangle {
+                    width: 22
+                    height: 22
+                    radius: 11
+                    color: expandMouse.containsMouse ? Theme.surfaceHover : "transparent"
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    DankIcon {
+                        anchors.centerIn: parent
+                        name: root.expanded ? "close_fullscreen" : "open_in_full"
+                        size: 14
+                        color: Theme.surfaceTextMedium
+                    }
+
+                    MouseArea {
+                        id: expandMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: root.expandToggled()
+                    }
+                }
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════
+        //  ATTACHMENT STRIP
+        // ═══════════════════════════════════════════════════════
+
+        Item {
+            id: attachStrip
+            width: parent.width
+            height: root.attachedImages.length > 0 ? 64 : 0
+            visible: root.attachedImages.length > 0
+            clip: true
+
+            Behavior on height {
+                NumberAnimation { duration: 120; easing.type: Easing.OutCubic }
+            }
+
+            ListView {
+                id: attachList
+                anchors.fill: parent
+                anchors.leftMargin: Theme.spacingS
+                anchors.rightMargin: Theme.spacingS
+                anchors.topMargin: 4
+                anchors.bottomMargin: 4
+                orientation: ListView.Horizontal
+                spacing: Theme.spacingXS
+                model: root.attachedImages
+                clip: true
+                boundsBehavior: Flickable.StopAtBounds
+
+                delegate: Rectangle {
+                    width: 56
+                    height: 56
+                    radius: Math.max(4, Theme.cornerRadius / 2)
+                    color: Theme.surfaceContainerHighest
+                    border.width: 1
+                    border.color: Theme.outlineMedium
+                    clip: true
+
+                    Image {
+                        anchors.fill: parent
+                        anchors.margins: 1
+                        source: "file://" + modelData.path
+                        fillMode: Image.PreserveAspectCrop
+                        asynchronous: true
+                        cache: false
+                    }
+
+                    Rectangle {
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.margins: 2
+                        width: 16
+                        height: 16
+                        radius: 8
+                        color: removeMouse.containsMouse ? Theme.error : Qt.rgba(0, 0, 0, 0.55)
+
+                        DankIcon {
+                            anchors.centerIn: parent
+                            name: "close"
+                            size: 10
+                            color: "white"
+                        }
+
+                        MouseArea {
+                            id: removeMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: root.removeAttachment(index)
+                        }
+                    }
                 }
             }
         }
@@ -271,10 +431,18 @@ Item {
                             if ((event.key === Qt.Key_Return || event.key === Qt.Key_Enter)
                                 && !(event.modifiers & Qt.ShiftModifier)) {
                                 event.accepted = true
-                                if (chatInput.text.trim()) {
-                                    hermesService.sendMessage(chatInput.text)
+                                if (chatInput.text.trim() || root.attachedImages.length > 0) {
+                                    root.sendCurrent(chatInput.text)
                                     chatInput.text = ""
                                 }
+                            } else if (event.key === Qt.Key_V
+                                       && (event.modifiers & Qt.ControlModifier)) {
+                                // Try to pull an image off the clipboard alongside
+                                // the regular text paste. If the clipboard has only
+                                // text the process exits 0 with empty stdout and
+                                // nothing gets attached. Don't preventDefault — let
+                                // Qt's text paste run too.
+                                root.tryPasteImage()
                             }
                         }
 
@@ -336,8 +504,8 @@ Item {
                     onClicked: {
                         if (hermesService.isRunning) {
                             hermesService.stopRun()
-                        } else if (chatInput.text.trim()) {
-                            hermesService.sendMessage(chatInput.text)
+                        } else if (chatInput.text.trim() || root.attachedImages.length > 0) {
+                            root.sendCurrent(chatInput.text)
                             chatInput.text = ""
                         }
                     }

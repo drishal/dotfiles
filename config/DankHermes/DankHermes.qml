@@ -1,4 +1,5 @@
 import QtQuick
+import Quickshell
 import Quickshell.Io
 import qs.Common
 import qs.Services
@@ -152,7 +153,7 @@ PluginComponent {
         PopoutComponent {
             id: popout
 
-            property bool showSettings: false
+            property alias showSettings: popoutContent.showSettings
 
             headerText: popout.showSettings ? "Hermes Settings" : "Hermes Agent v2"
             detailsText: popout.showSettings
@@ -162,72 +163,64 @@ PluginComponent {
                     : "Disconnected")
             showCloseButton: true
 
-            Row {
+            ChatContent {
+                id: popoutContent
                 width: parent.width
                 height: 430
-                spacing: 0
-                clip: true
+                hermesService: root.hermesApi
+                apiBaseUrl: root.apiBaseUrl
+                apiKey: root.apiKey
+                hermesHome: root.hermesHome
+                selectedModel: root.selectedModel
+                expanded: false
 
-                // ── Left: Session Sidebar ──────────────────────
-                SessionSidebar {
-                    id: sessionSidebar
-                    width: 180
-                    height: parent.height
-                    hermesService: root.hermesApi
-                    currentSessionId: root.hermesApi.currentSessionId
-                    settingsActive: popout.showSettings
-
-                    onSessionSelected: (sessionId) => {
-                        popout.showSettings = false
-                        root.hermesApi.loadMessages(sessionId)
-                    }
-                    onNewChatRequested: {
-                        popout.showSettings = false
-                        root.hermesApi.newChat()
-                    }
-                    onSettingsRequested: {
-                        popout.showSettings = !popout.showSettings
-                    }
+                onSaved: (url, key, home, mdl) => {
+                    root.apiBaseUrl = url
+                    root.apiKey = key
+                    root.hermesHome = home
+                    root.selectedModel = mdl
                 }
 
-                // ── Divider ────────────────────────────────────
-                Rectangle {
-                    width: 1
-                    height: parent.height
-                    color: Theme.outlineVariant
-                }
-
-                // ── Right: Chat or Settings ────────────────────
-                Item {
-                    width: parent.width - 180 - 1
-                    height: parent.height
-
-                    ChatArea {
-                        id: chatArea
-                        anchors.fill: parent
-                        visible: !popout.showSettings
-                        hermesService: root.hermesApi
-                    }
-
-                    SettingsPanel {
-                        id: settingsPanel
-                        anchors.fill: parent
-                        visible: popout.showSettings
-                        apiBaseUrl: root.apiBaseUrl
-                        apiKey: root.apiKey
-                        hermesHome: root.hermesHome
-                        selectedModel: root.selectedModel
-
-                        onSaved: (url, key, home, mdl) => {
-                            root.apiBaseUrl = url
-                            root.apiKey = key
-                            root.hermesHome = home
-                            root.selectedModel = mdl
-                        }
-                        onClosed: popout.showSettings = false
-                    }
+                onExpandToggled: {
+                    chatWindow.visible = true
+                    root.closePopout()
                 }
             }
+        }
+    }
+
+    // ── Detached "expand" window ───────────────────────────────
+    // Real toplevel — resizable, draggable, real decorations. Shares the same
+    // HermesService instance as the popout, so messages, sessions, and settings
+    // stay in sync between the two views.
+
+    FloatingWindow {
+        id: chatWindow
+        visible: false
+        width: 1100
+        height: 760
+        title: "Hermes Agent"
+        minimumSize: Qt.size(720, 480)
+        color: Theme.surfaceContainer
+
+        ChatContent {
+            anchors.fill: parent
+            anchors.margins: Theme.spacingS
+            hermesService: root.hermesApi
+            apiBaseUrl: root.apiBaseUrl
+            apiKey: root.apiKey
+            hermesHome: root.hermesHome
+            selectedModel: root.selectedModel
+            expanded: true
+
+            onSaved: (url, key, home, mdl) => {
+                root.apiBaseUrl = url
+                root.apiKey = key
+                root.hermesHome = home
+                root.selectedModel = mdl
+            }
+
+            onExpandToggled: chatWindow.visible = false
         }
     }
 
