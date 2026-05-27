@@ -46,10 +46,10 @@
   services.xserver = {
     enable = true;
 
-    videoDrivers = [ "amdgpu" ];
-    deviceSection = ''
-      Option "DRI" "3"
-    '';
+    # videoDrivers = [ "amdgpu" ];  # moved to graphics/amd.nix (per-host)
+    # deviceSection = ''
+    #   Option "DRI" "3"
+    # '';  # X11-only, not needed on Wayland
     # window wmanagers
     windowManager = {
       # qtile = {

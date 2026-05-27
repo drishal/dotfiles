@@ -24,6 +24,9 @@
     enable32Bit = true;
   };
 
+  # video driver — moved from gui.nix to avoid conflict with nvidia on nixos-work
+  services.xserver.videoDrivers = [ "amdgpu" ];
+
   environment.sessionVariables = {
     LIBVA_DRIVER_NAME = "radeonsi";
     VDPAU_DRIVER = "radeonsi";
