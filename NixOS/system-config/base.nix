@@ -18,7 +18,7 @@
   services.scx = {
     enable = true;
     scheduler = "scx_bpfland";
-    # extraArgs = ["--performance"];
+    extraArgs = [ "-m" "performance" "-p" ];
     package = pkgs.scx.full;
   };
   # by default uses rustland
@@ -28,11 +28,27 @@
   # kernel parameters
   boot.kernelParams = [
     "mitigations=off"
+    "split_lock_detect=off"
+    "preempt=full"
+    "nowatchdog"
     # "clearcpuid=514"
     # "i8042.probe_defer"
-    "split_lock_detect=off"
   ];
   #"processor.max_cstate=1" "intel_idle.max_cstate=0"
+
+  # sysctl — tuned for large RAM + zram + btrfs NVMe
+  boot.kernel.sysctl = {
+    "vm.dirty_background_ratio" = 5;       # start writeback at ~5% RAM
+    "vm.dirty_ratio" = 10;                  # hard cap at ~10% RAM
+    "vm.swappiness" = 40;                   # let zram compress idle pages
+    "vm.compaction_proactiveness" = 0;      # no proactive compaction stalls
+    "vm.page-cluster" = 0;                  # single-page swapin (zram is RAM)
+    "net.ipv4.tcp_fastopen" = 3;            # client + server TFO
+    "net.core.somaxconn" = 8192;
+    "net.core.netdev_max_backlog" = 8192;
+    "kernel.nmi_watchdog" = 0;              # free perf counters
+    "kernel.watchdog" = 0;
+  };
   # microde
   hardware.cpu.amd.updateMicrocode = true;
 
@@ -80,9 +96,9 @@
   # power-management
   powerManagement = {
     enable = true;
-    cpuFreqGovernor = "schedutil";
+    # cpuFreqGovernor = "schedutil";
   };
-  services.power-profiles-daemon.enable = true;
+  # services.power-profiles-daemon.enable = true;
   services.acpid.enable = true;
   # services.auto-cpufreq =
   #   {
@@ -176,7 +192,7 @@
 
   services.smartd.enable = true;
 
-  services.haveged.enable = true;
+  # services.haveged.enable = true;  # obsolete on kernel 5.6+ (CRNG self-seeds)
 
   security.rtkit.enable = true;
 
