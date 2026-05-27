@@ -3,6 +3,7 @@ import Quickshell
 import Quickshell.Io
 import qs.Common
 import qs.Widgets
+import "../services/toolFormat.js" as Tf
 
 Item {
     id: root
@@ -152,57 +153,10 @@ Item {
                 }
             }
 
-            // ── Empty State ────────────────────────────────────
-            Item {
+            WelcomeDashboard {
                 visible: messageListView.count === 0
                 anchors.fill: parent
-
-                Column {
-                    anchors.centerIn: parent
-                    spacing: Theme.spacingM
-
-                    DankIcon {
-                        name: "smart_toy"
-                        size: 56
-                        color: Theme.primary
-                        opacity: 0.4
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
-                    StyledText {
-                        text: "Start a conversation with Hermes"
-                        color: Theme.surfaceText
-                        font.pixelSize: Theme.fontSizeMedium
-                        font.weight: Font.Medium
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
-                    Rectangle {
-                        visible: hermesService.connected && hermesService.currentModel
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        height: modelBadgeText.implicitHeight + Theme.spacingS * 2
-                        width: modelBadgeText.implicitWidth + Theme.spacingM * 2
-                        color: Theme.primaryBackground
-                        radius: height / 2
-
-                        StyledText {
-                            id: modelBadgeText
-                            anchors.centerIn: parent
-                            text: hermesService.currentModel
-                            color: Theme.primary
-                            font.pixelSize: Theme.fontSizeSmall
-                            font.weight: Font.Medium
-                        }
-                    }
-
-                    StyledText {
-                        visible: !hermesService.connected
-                        text: "Gateway not reachable — start it with `hermes gateway run`"
-                        color: Theme.error
-                        font.pixelSize: Theme.fontSizeSmall
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-                }
+                hermesService: root.hermesService
             }
         }
 
@@ -763,69 +717,117 @@ Item {
             readonly property string toolPreview: msg ? (msg.toolPreview || "") : ""
             readonly property string toolStatus: msg ? (msg.toolStatus || "") : ""
             readonly property real toolDuration: msg ? (msg.toolDuration || 0) : 0
-            height: toolRow.height + Theme.spacingXS
+            readonly property var _summary: Tf.summarize(toolName, toolPreview)
+            readonly property bool _hasDetail: _summary && !!_summary.detail
+            height: callCol.implicitHeight + 2
 
-            Row {
-                id: toolRow
+            Column {
+                id: callCol
                 anchors.left: parent.left
-                spacing: Theme.spacingXS
+                anchors.right: parent.right
+                anchors.leftMargin: 2
+                spacing: 1
 
-                Rectangle {
-                    width: 8
-                    height: 8
-                    radius: 4
-                    color: {
-                        if (tcc.toolStatus === "running") return Theme.tertiary
-                        if (tcc.toolStatus === "error") return Theme.error
-                        return Theme.primary
+                // Header row: dot · icon · tool · [hint chip] ......... status
+                Item {
+                    width: parent.width
+                    height: 18
+
+                    Row {
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: Theme.spacingXS
+
+                        Rectangle {
+                            width: 7
+                            height: 7
+                            radius: 3.5
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: {
+                                if (tcc.toolStatus === "running") return Theme.tertiary
+                                if (tcc.toolStatus === "error") return Theme.error
+                                return Theme.primary
+                            }
+
+                            SequentialAnimation on opacity {
+                                running: tcc.toolStatus === "running"
+                                loops: Animation.Infinite
+                                NumberAnimation { from: 1; to: 0.3; duration: 600 }
+                                NumberAnimation { from: 0.3; to: 1; duration: 600 }
+                            }
+                        }
+
+                        DankIcon {
+                            name: Tf.iconFor(tcc.toolName)
+                            size: 13
+                            color: tcc.toolStatus === "error" ? Theme.error : Theme.primary
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        StyledText {
+                            text: tcc.toolName
+                            color: Theme.surfaceText
+                            font.pixelSize: Theme.fontSizeSmall
+                            font.weight: Font.Medium
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Rectangle {
+                            visible: tcc._summary && tcc._summary.hint
+                            height: hintLabel.implicitHeight + 4
+                            width: hintLabel.implicitWidth + 10
+                            radius: height / 2
+                            color: Theme.surfaceContainerHigh
+                            border.width: 1
+                            border.color: Theme.outlineVariant
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            StyledText {
+                                id: hintLabel
+                                anchors.centerIn: parent
+                                text: tcc._summary ? (tcc._summary.hint || "") : ""
+                                color: Theme.surfaceTextMedium
+                                font.pixelSize: Theme.fontSizeSmall - 2
+                                font.weight: Font.Medium
+                            }
+                        }
                     }
-                    anchors.verticalCenter: parent.verticalCenter
 
-                    SequentialAnimation on opacity {
-                        running: tcc.toolStatus === "running"
-                        loops: Animation.Infinite
-                        NumberAnimation { from: 1; to: 0.3; duration: 600 }
-                        NumberAnimation { from: 0.3; to: 1; duration: 600 }
+                    StyledText {
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.rightMargin: 2
+                        visible: tcc.toolStatus !== ""
+                        text: {
+                            if (tcc.toolStatus === "running") return "running…"
+                            if (tcc.toolStatus === "error") return "failed"
+                            if (tcc.toolDuration > 0) {
+                                return tcc.toolDuration < 1
+                                    ? (tcc.toolDuration * 1000).toFixed(0) + "ms"
+                                    : tcc.toolDuration.toFixed(1) + "s"
+                            }
+                            return "✓"
+                        }
+                        color: tcc.toolStatus === "error" ? Theme.error : Theme.surfaceTextMedium
+                        font.pixelSize: Theme.fontSizeSmall - 1
+                        font.italic: tcc.toolStatus === "running"
                     }
                 }
 
-                DankIcon {
-                    name: "build"
-                    size: 14
-                    color: Theme.surfaceTextMedium
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
+                // Detail line — indented to align under the tool icon, wraps once
                 StyledText {
-                    text: tcc.toolName
+                    visible: tcc._hasDetail
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.leftMargin: 22
+                    anchors.rightMargin: 4
+                    text: tcc._summary ? tcc._summary.detail : ""
                     color: Theme.surfaceTextMedium
                     font.pixelSize: Theme.fontSizeSmall
-                    font.italic: true
-                    font.weight: Font.Medium
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
-                StyledText {
-                    visible: tcc.toolPreview !== ""
-                    text: tcc.toolPreview.length > 80
-                          ? tcc.toolPreview.substring(0, 80) + "…"
-                          : tcc.toolPreview
-                    color: Theme.surfaceTextMedium
-                    font.pixelSize: Theme.fontSizeSmall
-                    font.italic: true
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: Math.min(implicitWidth, root.width * 0.5)
+                    font.family: "monospace"
+                    wrapMode: Text.WrapAnywhere
+                    maximumLineCount: 2
                     elide: Text.ElideRight
-                }
-
-                StyledText {
-                    visible: tcc.toolStatus === "completed" || tcc.toolStatus === "error"
-                    text: tcc.toolDuration > 0
-                          ? (tcc.toolDuration < 1 ? (tcc.toolDuration * 1000).toFixed(0) + "ms" : tcc.toolDuration.toFixed(1) + "s")
-                          : "✓"
-                    color: tcc.toolStatus === "error" ? Theme.error : Theme.surfaceTextMedium
-                    font.pixelSize: Theme.fontSizeSmall
-                    anchors.verticalCenter: parent.verticalCenter
                 }
             }
         }
@@ -842,6 +844,7 @@ Item {
             readonly property string toolName: msg ? (msg.tool || "") : ""
             readonly property string contentText: msg ? (msg.content || "") : ""
             readonly property bool isExpanded: msg ? !!msg.expanded : false
+            readonly property var _summary: Tf.summarizeResult(toolName, contentText)
             height: trcCol.height
 
             Column {
@@ -852,45 +855,61 @@ Item {
 
                 Rectangle {
                     width: parent.width
-                    height: 22
+                    height: 20
                     color: trcHeaderMouse.containsMouse ? Theme.surfaceHover : "transparent"
-                    radius: 11
+                    radius: 10
 
                     Row {
                         anchors.left: parent.left
-                        anchors.leftMargin: Theme.spacingS
+                        anchors.leftMargin: 4
+                        anchors.right: trcStatus.left
+                        anchors.rightMargin: Theme.spacingXS
                         anchors.verticalCenter: parent.verticalCenter
                         spacing: Theme.spacingXS
 
                         DankIcon {
                             name: trc.isExpanded ? "expand_more" : "chevron_right"
-                            size: 14
+                            size: 13
                             color: Theme.surfaceTextMedium
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
                         DankIcon {
-                            name: "data_object"
+                            name: trc._summary && !trc._summary.success ? "error_outline" : "check_circle"
                             size: 12
-                            color: Theme.surfaceTextMedium
+                            color: trc._summary && !trc._summary.success ? Theme.error : Theme.primary
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
                         StyledText {
-                            text: (trc.toolName || "tool") + " output"
+                            text: trc.toolName || "tool"
                             color: Theme.surfaceTextMedium
                             font.pixelSize: Theme.fontSizeSmall - 1
-                            font.italic: true
+                            font.weight: Font.Medium
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
                         StyledText {
-                            text: " · " + trc.contentText.split("\n").length + " lines"
+                            visible: trc._summary && !!trc._summary.detail
+                            text: trc._summary ? trc._summary.detail : ""
                             color: Theme.surfaceTextMedium
                             font.pixelSize: Theme.fontSizeSmall - 1
-                            opacity: 0.7
+                            font.family: "monospace"
+                            opacity: 0.8
+                            elide: Text.ElideRight
                             anchors.verticalCenter: parent.verticalCenter
                         }
+                    }
+
+                    StyledText {
+                        id: trcStatus
+                        anchors.right: parent.right
+                        anchors.rightMargin: 6
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: trc.contentText.split("\n").length + " lines"
+                        color: Theme.surfaceTextMedium
+                        font.pixelSize: Theme.fontSizeSmall - 2
+                        opacity: 0.55
                     }
 
                     MouseArea {

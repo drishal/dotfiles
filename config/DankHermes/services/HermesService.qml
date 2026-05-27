@@ -38,6 +38,12 @@ Item {
     // ── Resolve sibling python helper scripts ──────────────────
     readonly property string _sessionsScript: Qt.resolvedUrl("load_sessions.py").toString().replace(/^file:\/\//, "")
     readonly property string _messagesScript: Qt.resolvedUrl("load_messages.py").toString().replace(/^file:\/\//, "")
+    readonly property string _welcomeScript: Qt.resolvedUrl("welcome_info.py").toString().replace(/^file:\/\//, "")
+
+    // Dashboard snapshot for the empty-chat welcome screen. Populated by
+    // loadWelcomeInfo() — kept on the service so both the popout and the
+    // detached window read the same cached blob.
+    property var welcomeInfo: ({})
 
     // ═══════════════════════════════════════════════════════════
     //  HEALTH CHECK
@@ -164,6 +170,11 @@ Item {
 
                         let msgType = role === "user" ? "user" : "assistant"
 
+                        // Emit each row in semantic order: thinking → content
+                        // → tool_calls. The content is what the assistant said
+                        // before kicking off this turn's tools, so it belongs
+                        // above the call bubbles. Tool results from the next
+                        // DB row (role="tool") naturally land after.
                         const reasoningText = m.reasoning || m.reasoning_content || ""
                         if (reasoningText && role === "assistant") {
                             _messageList.append({
@@ -175,6 +186,17 @@ Item {
                             })
                         }
 
+                        const content = m.content || ""
+                        if (content) {
+                            _messageList.append({
+                                "type": msgType,
+                                "content": content,
+                                "tool": "", "toolPreview": "", "toolStatus": "",
+                                "toolDuration": 0, "isStreaming": false,
+                                "timestamp": m.timestamp || 0
+                            })
+                        }
+
                         if (m.tool_calls && role === "assistant") {
                             try {
                                 const calls = JSON.parse(m.tool_calls)
@@ -183,25 +205,14 @@ Item {
                                         "type": "tool_call",
                                         "content": "",
                                         "tool": call.function && call.function.name ? call.function.name : (m.tool_name || "tool"),
-                                        "toolPreview": (call.function && call.function.arguments ? call.function.arguments : "").substring(0, 120),
+                                        "toolPreview": (call.function && call.function.arguments ? call.function.arguments : ""),
                                         "toolStatus": "completed",
                                         "toolDuration": 0, "isStreaming": false,
-                                        "timestamp": m.timestamp || 0
+                                        "timestamp": (m.timestamp || 0) + 0.0001
                                     })
                                 }
                             } catch (e) {}
                         }
-
-                        const content = m.content || ""
-                        if (!content && (m.tool_calls || m.tool_name)) continue
-
-                        _messageList.append({
-                            "type": msgType,
-                            "content": content,
-                            "tool": "", "toolPreview": "", "toolStatus": "",
-                            "toolDuration": 0, "isStreaming": false,
-                            "timestamp": m.timestamp || 0
-                        })
                     }
                 } catch (e) {
                     console.warn("DankHermes: message parse error:", e)
@@ -218,7 +229,9 @@ Item {
 
     function loadMessages(sessionId) {
         console.log("DankHermes: loadMessages called with sessionId:", sessionId)
+        _detachActiveRun()
         currentSessionId = sessionId
+        _messageList.clear()
         messageProcess.dbPath = hermesHome + "/state.db"
         messageProcess.sessionId = sessionId
         messageProcess.running = true
@@ -229,9 +242,26 @@ Item {
     // ═══════════════════════════════════════════════════════════
 
     function newChat() {
+        _detachActiveRun()
         currentSessionId = ""
-        currentRunId = ""
         _messageList.clear()
+    }
+
+    // Stop listening to the current run without telling the gateway to
+    // cancel it. The run keeps producing tokens server-side and will be
+    // visible the next time its session is loaded. Used when the user
+    // switches chats mid-stream — otherwise old deltas leak into the new
+    // view and `isRunning` blocks the next sendMessage.
+    function _detachActiveRun() {
+        _acceptingEvents = false
+        if (_sseProcess) {
+            try { _sseProcess.runId = "" } catch (e) {}
+            try { _sseProcess.running = false } catch (e) {}
+            try { _sseProcess.destroy() } catch (e) {}
+            _sseProcess = null
+        }
+        isRunning = false
+        currentRunId = ""
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -356,12 +386,21 @@ Item {
     // ═══════════════════════════════════════════════════════════
 
     property var _sseProcess: null
+    // Gates SSE handlers. Flipped off when the user switches chats mid-stream
+    // so any lingering deltas from the soon-to-be-destroyed Process don't
+    // pollute the freshly-loaded view.
+    property bool _acceptingEvents: false
 
     Component {
         id: sseProcessComponent
 
         Process {
+            id: sseProc
             property string eventsUrl: ""
+            // Run ID this process is listening to. When the user switches
+            // chats we set this to "" so the dying process's onExited handler
+            // knows not to touch the new chat's state.
+            property string runId: ""
 
             command: ["sh", "-c",
                 "curl -sS -N --connect-timeout 5 --max-time 300 ${HERMES_AUTH:+-H \"$HERMES_AUTH\"} \"$EVENTS_URL\""
@@ -372,15 +411,23 @@ Item {
             })
 
             stdout: SplitParser {
-                onRead: data => root._handleSSELine(data)
+                onRead: data => {
+                    if (sseProc.runId !== root.currentRunId) return
+                    root._handleSSELine(data)
+                }
             }
 
             onExited: (code, status) => {
-                root.isRunning = false
-                for (let i = _messageList.count - 1; i >= 0; i--) {
-                    if (_messageList.get(i).isStreaming) {
-                        _messageList.setProperty(i, "isStreaming", false)
-                        break
+                // Only mutate service state if this process is still the
+                // authoritative one. After a chat switch the runId is cleared
+                // and we leave the new view alone.
+                if (sseProc.runId === root.currentRunId && sseProc.runId !== "") {
+                    root.isRunning = false
+                    for (let i = _messageList.count - 1; i >= 0; i--) {
+                        if (_messageList.get(i).isStreaming) {
+                            _messageList.setProperty(i, "isStreaming", false)
+                            break
+                        }
                     }
                 }
                 destroy()
@@ -390,12 +437,15 @@ Item {
 
     function subscribeEvents(runId) {
         if (_sseProcess) {
+            try { _sseProcess.runId = "" } catch (e) {}
             _sseProcess.running = false
             try { _sseProcess.destroy() } catch (e) {}
         }
 
+        _acceptingEvents = true
         _sseProcess = sseProcessComponent.createObject(root, {
-            eventsUrl: apiBaseUrl + "/v1/runs/" + runId + "/events"
+            eventsUrl: apiBaseUrl + "/v1/runs/" + runId + "/events",
+            runId: runId
         })
         if (_sseProcess) _sseProcess.running = true
     }
@@ -403,6 +453,7 @@ Item {
     // ── SSE Line Parser ────────────────────────────────────────
 
     function _handleSSELine(line) {
+        if (!_acceptingEvents) return
         const trimmed = line.trim()
         if (!trimmed || trimmed.startsWith(":")) return
         if (!trimmed.startsWith("data: ")) return
@@ -435,19 +486,33 @@ Item {
 
     function _appendDelta(delta) {
         if (!delta) return
-        for (let i = _messageList.count - 1; i >= 0; i--) {
-            const msg = _messageList.get(i)
-            if (msg.type === "assistant" && msg.isStreaming) {
-                _messageList.setProperty(i, "content", msg.content + delta)
+        // Only continue the bubble if it's literally the last row. A tool
+        // call/result in between means the previous assistant turn is done,
+        // and the new delta belongs to a fresh round so each "Let me look
+        // that up." / "Let me search that directly." gets its own bubble
+        // sandwiched between the tool rows.
+        if (_messageList.count > 0) {
+            const lastIdx = _messageList.count - 1
+            const last = _messageList.get(lastIdx)
+            if (last.type === "assistant" && last.isStreaming) {
+                _messageList.setProperty(lastIdx, "content", last.content + delta)
                 return
             }
         }
-        // Fallback: no streaming assistant found, append new
+        // Seal any stray earlier streaming bubbles so only the new one streams.
+        for (let i = _messageList.count - 1; i >= 0; i--) {
+            if (_messageList.get(i).isStreaming) {
+                _messageList.setProperty(i, "isStreaming", false)
+            }
+        }
         _messageList.append({
             "type": "assistant", "content": delta,
             "tool": "", "toolPreview": "", "toolStatus": "",
             "toolDuration": 0, "isStreaming": true,
-            "timestamp": Date.now() / 1000
+            "timestamp": Date.now() / 1000,
+            "startedAt": Date.now() / 1000,
+            "usage": ({}),
+            "duration": 0
         })
     }
 
@@ -614,10 +679,36 @@ Item {
         }
     }
 
+    // ═══════════════════════════════════════════════════════════
+    //  WELCOME DASHBOARD INFO (python3 → CLI snapshot)
+    // ═══════════════════════════════════════════════════════════
+
+    Process {
+        id: welcomeProcess
+        running: false
+        command: ["python3", root._welcomeScript]
+        environment: ({ "HERMES_HOME": hermesHome })
+        stdout: StdioCollector {
+            onStreamFinished: {
+                try {
+                    root.welcomeInfo = JSON.parse(text)
+                } catch (e) {
+                    console.warn("DankHermes: welcome parse error:", e)
+                }
+            }
+        }
+    }
+
+    function loadWelcomeInfo() {
+        welcomeProcess.running = false
+        welcomeProcess.running = true
+    }
+
     // ── Initial load ───────────────────────────────────────────
     Component.onCompleted: {
         console.info("DankHermes: HermesService created")
         checkHealth()
         loadSessions()
+        loadWelcomeInfo()
     }
 }
