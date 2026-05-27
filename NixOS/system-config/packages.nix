@@ -806,9 +806,9 @@
   # };
 
   #samba
-  services.samba = {
-    enable = true;
-  };
+  # services.samba = {
+  #   enable = true;
+  # };
 
   #nixd setting
   #nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
