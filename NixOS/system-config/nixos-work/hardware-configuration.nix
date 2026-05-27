@@ -22,6 +22,14 @@
   #   "nouveau.debug=\"GSP=debug\""
   # ];
 
+  # nixos-work specific kernel params
+  boot.kernelParams = [ "tsc=reliable" ];
+
+  # nixos-work specific sysctl — scx_bpfland replaces CFS autogroup
+  boot.kernel.sysctl = {
+    "kernel.sched_autogroup_enabled" = 0;
+  };
+
   boot.initrd.availableKernelModules = [
     "nvme"
     "usbhid"
