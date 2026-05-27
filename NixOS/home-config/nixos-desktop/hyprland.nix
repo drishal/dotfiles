@@ -23,8 +23,12 @@ let
 
   # ─── State persistence ──────────────────────────────────────────────────
   monitorStateFile = "$HOME/.local/state/hypr-monitor-profile";
+  monitorConfFile = "$HOME/.config/hypr/monitors.conf";
 
   # ─── Profile applier ───────────────────────────────────────────────────
+  # Writes the active monitor layout to a sourced conf file so hyprctl reloads
+  # (home-manager switch, manual reloads, etc.) don't clobber it, then applies
+  # it immediately via hyprctl keyword for the live session.
   applyProfile = pkgs.writeShellScript "hypr-apply-profile-impl" ''
     #!/usr/bin/env bash
     set -eu
@@ -33,17 +37,20 @@ let
 
     case "$profile" in
       perf)
-        ${hyprPackage}/bin/hyprctl --batch "\
-          keyword monitor ${acerMonitor}, ${acerPerfMode}, 0x0, 1, ${acerPerfFlags} ; \
-          keyword monitor ${lgMonitor}, ${lgMode}, 1920x0, 1, transform, 1"
+        acer_val="${acerMonitor}, ${acerPerfMode}, 0x0, 1, ${acerPerfFlags}"
+        lg_val="${lgMonitor}, ${lgMode}, 1920x0, 1, transform, 1"
         ;;
       4k|*)
-        ${hyprPackage}/bin/hyprctl --batch "\
-          keyword monitor ${acerMonitor}, ${acer4kMode}, 0x0, 1.5, ${acer4kFlags} ; \
-          keyword monitor ${lgMonitor}, ${lgMode}, 2560x0, 1, transform, 1"
+        acer_val="${acerMonitor}, ${acer4kMode}, 0x0, 1.5, ${acer4kFlags}"
+        lg_val="${lgMonitor}, ${lgMode}, 2560x0, 1, transform, 1"
         profile="4k"
         ;;
     esac
+
+    mkdir -p "$(dirname ${monitorConfFile})"
+    printf 'monitor = %s\nmonitor = %s\n' "$acer_val" "$lg_val" > ${monitorConfFile}
+
+    ${hyprPackage}/bin/hyprctl --batch "keyword monitor $acer_val ; keyword monitor $lg_val" >/dev/null
 
     mkdir -p "$(dirname ${monitorStateFile})"
     printf '%s\n' "$profile" > ${monitorStateFile}
@@ -168,8 +175,6 @@ let
 
     pkill dms || true
     dms run
-    sleep 1
-    hypr-apply-monitor-profile
   '';
 
   # ─── Event listener: watches Hyprland's socket for monitor changes ─────
@@ -214,6 +219,19 @@ in
     pkgs.libnotify
   ];
 
+  # Seed monitors.conf with the 4k default if it doesn't exist yet, so hyprland
+  # has something to source on first boot before any profile has been applied.
+  home.activation.seedHyprMonitorsConf = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    conf="$HOME/.config/hypr/monitors.conf"
+    if [[ ! -f "$conf" ]]; then
+      mkdir -p "$(dirname "$conf")"
+      {
+        printf 'monitor = %s, %s, 0x0, 1.5, %s\n' "${acerMonitor}" "${acer4kMode}" "${acer4kFlags}"
+        printf 'monitor = %s, %s, 2560x0, 1, transform, 1\n' "${lgMonitor}" "${lgMode}"
+      } > "$conf"
+    fi
+  '';
+
   # ─── Systemd user service to run the watcher ───────────────────────────
   systemd.user.services.hypr-monitor-watcher = {
     Unit = {
@@ -233,11 +251,6 @@ in
   };
 
   wayland.windowManager.hyprland.settings = {
-    monitor = [
-      "${acerMonitor}, ${acer4kMode}, 0x0, 1.5, ${acer4kFlags}"
-      "${lgMonitor}, ${lgMode}, 2560x0, 1, transform, 1"
-    ];
-
     workspace = [
       "1, monitor:${acerMonitor}"
       "2, monitor:${acerMonitor}"
@@ -267,6 +280,7 @@ in
   };
 
   wayland.windowManager.hyprland.extraConfig = lib.mkAfter ''
+    source = ~/.config/hypr/monitors.conf
     unbind = $mainMod, x
     unbind = $mainMod SHIFT, M
     bind = $mainMod, x, exec, hypr-restart-dms
