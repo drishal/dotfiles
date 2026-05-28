@@ -12,9 +12,9 @@
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    ../graphics/nvidia.nix
+    ../common/graphics/nvidia.nix
     ./packages.nix
-    ./virtualization.nix
+    ./virtualisation.nix
   ];
 
   # boot.kernelParams = [

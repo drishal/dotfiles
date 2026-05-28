@@ -116,7 +116,7 @@
 
       doCheck = false;
       # flake-utils or other extras if needed → usually not
-    } (builtins.readFile ../../scripts/porthistory.py))
+    } (builtins.readFile ../../../../scripts/porthistory.py))
 
 
   ];

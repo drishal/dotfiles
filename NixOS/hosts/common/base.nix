@@ -13,47 +13,25 @@
   # boot.kernelPackages = pkgs.linuxPackages_zen;
   # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-zen4;
   systemd.user.services.orca.wantedBy = lib.mkForce [];
-  # boot.kernelPackages = pkgs.linuxPackages_cachyos-gcc;
-  # boot.kernelPackages = pkgs.linuxPackages_6_11;
   boot.kernelModules = [ "v4l2loopback" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
 
-  services.scx = {
-    enable = true;
-    scheduler = "scx_bpfland";
-    extraArgs = [ "-m" "performance" "-p" ];
-    package = pkgs.scx.full;
-  };
-  # by default uses rustland
-  # systemd.services.scx.serviceConfig.Restart = lib.mkForce "always";
-  # boot.kernelPackages = pkgs.linuxPackages_testing;
-
-  # kernel parameters
+  # common kernel params (host-specific params live in hosts/<host>/default.nix
+  # and hosts/common/cpu/*.nix)
   boot.kernelParams = [
-    "mitigations=off"
     "split_lock_detect=off"
     "preempt=full"
     "nowatchdog"
-    # "clearcpuid=514"
-    # "i8042.probe_defer"
   ];
-  #"processor.max_cstate=1" "intel_idle.max_cstate=0"
 
-  # sysctl — tuned for large RAM + zram + btrfs NVMe
+  # network / watchdog sysctls only — memory tunables live in hosts/common/memory.nix
   boot.kernel.sysctl = {
-    "vm.dirty_background_ratio" = 5;       # start writeback at ~5% RAM
-    "vm.dirty_ratio" = 10;                  # hard cap at ~10% RAM
-    "vm.swappiness" = 40;                   # let zram compress idle pages
-    "vm.compaction_proactiveness" = 0;      # no proactive compaction stalls
-    "vm.page-cluster" = 0;                  # single-page swapin (zram is RAM)
-    "net.ipv4.tcp_fastopen" = 3;            # client + server TFO
+    "net.ipv4.tcp_fastopen" = 3;
     "net.core.somaxconn" = 8192;
     "net.core.netdev_max_backlog" = 8192;
-    "kernel.nmi_watchdog" = 0;              # free perf counters
+    "kernel.nmi_watchdog" = 0;
     "kernel.watchdog" = 0;
   };
-  # microde
-  hardware.cpu.amd.updateMicrocode = true;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -243,11 +221,6 @@
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     LESS = "-g -i -M -R -S -w -X -z4";
-  };
-
-  zramSwap = {
-    enable = true;
-    memoryPercent = 100;
   };
 
   networking.firewall.enable = false;

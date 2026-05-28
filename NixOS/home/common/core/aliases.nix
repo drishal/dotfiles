@@ -116,7 +116,7 @@
       export WATCH_GPU_BASE0B="#${config.lib.stylix.colors.base0B}"
       export WATCH_GPU_BASE0C="#${config.lib.stylix.colors.base0C}"
       export WATCH_GPU_BASE0D="#${config.lib.stylix.colors.base0D}"
-      exec ${pkgs.python3.withPackages (ps: [ ps.rich ps.textual ])}/bin/python ${../../scripts/watch-gpu.py} "$@"
+      exec ${pkgs.python3.withPackages (ps: [ ps.rich ps.textual ])}/bin/python ${../../../../scripts/watch-gpu.py} "$@"
     '')
   ];
 }

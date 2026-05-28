@@ -23,7 +23,7 @@
       @define-color colviolet    #${base0F};
       @define-color colred       #${base08};
       @define-color colyellow    #${base0A};
-      ${builtins.readFile ../../config/waybar/style.css}
+      ${builtins.readFile ../../../../config/waybar/style.css}
     '';
     settings = {
       mainBar = {

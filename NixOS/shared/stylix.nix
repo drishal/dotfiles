@@ -22,7 +22,7 @@
     # image = ../wallpapers/gruvbox/image2.jpg;
     # image = ../wallpapers/anime/tanjiro-kamado-gruv.jpg;
     # image = ../wallpapers/anime/goku.jpg;
-    image = ../wallpapers/darkest_hour.jpg;
+    image = ../../wallpapers/darkest_hour.jpg;
     fonts = {
       serif = {
         # package = pkgs.noto-fonts;

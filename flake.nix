@@ -237,7 +237,7 @@
       homeConfigurations =
         let
           commonModules = [
-            ./NixOS/home-config/home.nix
+            ./NixOS/home/common
             {
               nixpkgs.overlays = [
                 # inputs.hyprpanel.overlay
@@ -262,7 +262,7 @@
           "${user}@nixos-desktop" = home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
             modules = commonModules ++ [
-              ./NixOS/home-config/nixos-desktop/home.nix
+              ./NixOS/home/nixos-desktop
             ];
             extraSpecialArgs = extraSpecialArgs;
           };
@@ -275,7 +275,7 @@
           "${user}@nixos-work" = home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
             modules = commonModules ++ [
-              ./NixOS/home-config/nixos-work/home.nix
+              ./NixOS/home/nixos-work
             ];
             extraSpecialArgs = extraSpecialArgs;
           };
@@ -293,7 +293,6 @@
                 # inputs.neovim-nightly-overlay.overlay
               ];
             }
-            ./NixOS/system-config/configuration.nix
             auto-cpufreq.nixosModules.default
             # chaotic.nixosModules.default
             stylix.nixosModules.stylix
@@ -309,21 +308,21 @@
           nixos-desktop = lib.nixosSystem {
             inherit system;
             modules = commonModules ++ [
-              ./NixOS/system-config/nixos-desktop/hardware-configuration.nix
+              ./NixOS/hosts/nixos-desktop
             ];
             specialArgs = specialArgs;
           };
           nixos = lib.nixosSystem {
             inherit system;
             modules = commonModules ++ [
-              ./NixOS/system-config/nixos/hardware-configuration.nix
+              ./NixOS/hosts/nixos
             ];
             specialArgs = specialArgs;
           };
           nixos-work = lib.nixosSystem {
             inherit system;
             modules = commonModules ++ [
-              ./NixOS/system-config/nixos-work/hardware-configuration.nix
+              ./NixOS/hosts/nixos-work
             ];
             specialArgs = specialArgs;
           };

@@ -1,22 +1,16 @@
-{
-  config,
-  pkgs,
-  inputs,
-  lib,
-  ...
-}:
+{ ... }:
 {
   imports = [
     ./base.nix
     ./gui.nix
-    ./nix-config.nix
+    ./nix.nix
     ./packages.nix
     ./users.nix
-    ./virtualization.nix
+    ./virtualisation.nix
     ./searx.nix
-    ../stylix.nix
-    # ./hardware-configuration.nix
+    # ./firewall.nix
     # ./tlp.nix
+    ../../shared/stylix.nix
   ];
 
   system.stateVersion = "23.05";

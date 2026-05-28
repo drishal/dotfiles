@@ -7,7 +7,7 @@
   imports =
     [
       (modulesPath + "/installer/scan/not-detected.nix")
-      ../graphics/amd.nix
+      ../common/graphics/amd.nix
     ];
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usbhid" "uas" "rtsx_pci_sdmmc" "amdgpu" ];
