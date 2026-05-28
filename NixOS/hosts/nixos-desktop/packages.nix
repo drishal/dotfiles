@@ -11,6 +11,7 @@
   #   enable = true;
   #   package = pkgs.ollama-rocm;
   # };
+  programs.gamemode.enable = true;
   environment.systemPackages = with pkgs; [
     # llama-cpp-vulkan
     (inputs.llama-cpp.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
@@ -18,6 +19,7 @@
       useWebUi = false;
     })
     teams-for-linux
+    i2c-tools
     (brave.override {
       commandLineArgs = [
         "--ignore-gpu-blocklist"

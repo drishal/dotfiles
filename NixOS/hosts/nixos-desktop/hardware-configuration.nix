@@ -3,9 +3,8 @@
 {
   imports =
     [ (modulesPath + "/installer/scan/not-detected.nix")
-      ./packages.nix
-      ../common/graphics/amd.nix
     ];
+
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = ["amdgpu"];
@@ -24,6 +23,7 @@
     "threadirqs"
     "amdgpu.gfx_off=0"
     "amdgpu.dcdebugmask=0x10"
+    "mitigations=off"
   ];
 
 
@@ -62,9 +62,7 @@
       package = pkgs.openrgb-with-all-plugins;
     };
   };
-  environment.systemPackages = with pkgs; [
-    i2c-tools
-  ];
+
   users.groups.i2c.members = [ "drishal" ];
   # services.sunshine = {
   #   enable = true;

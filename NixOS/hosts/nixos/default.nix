@@ -5,6 +5,7 @@
     ../common
     ../common/memory.nix
     ../common/storage.nix
+    ../common/graphics/amd.nix
     ./hardware-configuration.nix
   ];
 }
