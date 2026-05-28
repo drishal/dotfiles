@@ -15,6 +15,9 @@
   systemd.user.services.orca.wantedBy = lib.mkForce [];
   # boot.kernelPackages = pkgs.linuxPackages_cachyos-gcc;
   # boot.kernelPackages = pkgs.linuxPackages_6_11;
+  boot.kernelModules = [ "v4l2loopback" ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+
   services.scx = {
     enable = true;
     scheduler = "scx_bpfland";
@@ -59,7 +62,7 @@
 
   # Set your time zone.
   time.timeZone = "Asia/Kolkata";
-  services.ntp.enable = true;
+  # services.ntp.enable = true;
   services.timesyncd.enable = true;
 
   # systemd settings
@@ -88,11 +91,6 @@
     ];
   };
 
-  networking.firewall.allowedTCPPorts = [
-    22
-    8022
-    8000
-  ];
   # power-management
   powerManagement = {
     enable = true;
@@ -175,7 +173,6 @@
   services.avahi = {
     enable = true;
     nssmdns4 = true;
-    openFirewall = true;
   };
 
   services.logind.killUserProcesses = true;
@@ -202,7 +199,6 @@
   };
   services.tailscale = {
     enable = true;
-    openFirewall = true;
   };
   services.pipewire = {
     wireplumber = {

@@ -9,8 +9,7 @@
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = ["amdgpu"];
-  boot.kernelModules = [ "kvm-amd" "v4l2loopback"];
-  # boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+  boot.kernelModules = [ "kvm-amd" ];
   boot.kernelParams = [
     # --- GPU Optimization ---
     "amdgpu.aspm=0"                   # Disable PCIe power saving
@@ -19,17 +18,12 @@
     "amdgpu.ppfeaturemask=0xffffffff" # Unlock Overclocking/Undervolting
 
     # --- CPU & Latency Optimization ---
-    "mitigations=off"                 # Max CPU performance (Security Trade-off)
     "cpufreq.default_governor=performance" # Force max clocks
-    "nowatchdog"                      # Disable watchdog timer
-    "split_lock_detect=off"           # Prevent slowdowns in some unoptimized games
     "amd_pstate=active"
-    "processor.max_cstate=1"
     "iommu=pt"
     "threadirqs"
     "amdgpu.gfx_off=0"
     "amdgpu.dcdebugmask=0x10"
-    "processor.max_cstate=1"
   ];
 
 
