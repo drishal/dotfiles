@@ -118,5 +118,18 @@
       export WATCH_GPU_BASE0D="#${config.lib.stylix.colors.base0D}"
       exec ${pkgs.python3.withPackages (ps: [ ps.rich ps.textual ])}/bin/python ${../../../../scripts/watch-gpu.py} "$@"
     '')
+    (pkgs.writeShellScriptBin "devenv-envrc" ''
+      install -m 755 ${pkgs.writeText "devenv-envrc-template" ''
+        #!/usr/bin/env bash
+
+        eval "$(devenv direnvrc)"
+
+        # You can pass flags to the devenv command
+        # For example: use devenv --impure --option services.postgres.enable:bool true
+        use devenv
+      ''} .envrc
+
+      echo "created .envrc"
+    '')
   ];
 }
