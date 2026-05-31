@@ -289,6 +289,8 @@
     ghostscript
     goverlay
     gsmartcontrol
+    gpu-screen-recorder
+    gpu-screen-recorder-gtk
     gparted
     # gpt4all
     # gtk-layer-shell

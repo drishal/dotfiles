@@ -4,7 +4,7 @@
   services.jellyfin = {
     enable = true;
     # Jellyfin's default HTTP port is 8096.
-    openFirewall = false;
+    openFirewall = true;
   };
 
   # Allow Jellyfin to access ~/Movies without exposing the rest of $HOME.
