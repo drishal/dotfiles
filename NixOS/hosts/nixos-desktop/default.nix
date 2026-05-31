@@ -9,5 +9,6 @@
     ../common/graphics/amd.nix
     ./hardware-configuration.nix
     ./packages.nix
+    ./jellyfin.nix
   ];
 }

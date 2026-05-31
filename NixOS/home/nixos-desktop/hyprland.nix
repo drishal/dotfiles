@@ -21,8 +21,7 @@ let
   acer4kFlags = "bitdepth, 10, cm, srgb";
   acerPerfFlags = "bitdepth, 8, cm, srgb";
 
-  # ─── State persistence ──────────────────────────────────────────────────
-  monitorStateFile = "$HOME/.local/state/hypr-monitor-profile";
+  # ─── Generated monitor config ───────────────────────────────────────────
   monitorConfFile = "$HOME/.config/hypr/monitors.conf";
 
   # ─── Profile applier ───────────────────────────────────────────────────
@@ -51,9 +50,6 @@ let
     printf 'monitor = %s\nmonitor = %s\n' "$acer_val" "$lg_val" > ${monitorConfFile}
 
     ${hyprPackage}/bin/hyprctl --batch "keyword monitor $acer_val ; keyword monitor $lg_val" >/dev/null
-
-    mkdir -p "$(dirname ${monitorStateFile})"
-    printf '%s\n' "$profile" > ${monitorStateFile}
     sleep 0.3
   '';
 
@@ -79,17 +75,12 @@ let
     ${pkgs.libnotify}/bin/notify-send -t 4000 "Display" "$msg" || true
   '';
 
-  # ─── Boot-time profile restore ──────────────────────────────────────────
+  # ─── Boot-time profile detection ────────────────────────────────────────
   hyprApplyMonitorProfile = pkgs.writeShellScriptBin "hypr-apply-monitor-profile" ''
     #!/usr/bin/env bash
     set -eu
 
-    profile="4k"
-    if [[ -f ${monitorStateFile} ]]; then
-      profile="$(cat ${monitorStateFile})"
-    fi
-
-    ${applyProfile} "$profile"
+    ${hyprAutoDetectProfile}/bin/hypr-auto-detect-profile
   '';
 
   # ─── Auto-detect profile from monitor's advertised mode ─────────────────
@@ -128,40 +119,30 @@ let
       exit 0
     fi
 
-    # Decide target profile based on advertised native mode
-    case "$preferred" in
-      1920x1080@320*|1920x1080@319*)
-        target="perf"
-        msg="DFR On detected → applying 1080p @ 320Hz"
-        ;;
-      3840x2160*)
-        target="4k"
-        msg="DFR Off detected → applying 4K @ 160Hz"
-        ;;
-      *)
-        # Fallback for DFR-on EDIDs where the preferred mode is not first but
-        # the 320Hz performance mode is advertised.
-        if printf '%s\n' "$modes" | ${pkgs.gnugrep}/bin/grep -Eq '^1920x1080@(319|320)'; then
+    # Prefer the highest available resolution when the monitor advertises it.
+    # The Acer's DFR modes change the EDID; choosing from the current mode list
+    # avoids replaying a stale 1080p@320 profile while the OSD is in 4K mode.
+    if printf '%s\n' "$modes" | ${pkgs.gnugrep}/bin/grep -Eq '^3840x2160@'; then
+      target="4k"
+      msg="DFR Off detected → applying 4K @ 160Hz"
+    elif printf '%s\n' "$modes" | ${pkgs.gnugrep}/bin/grep -Eq '^1920x1080@(319|320)'; then
+      target="perf"
+      msg="DFR On detected → applying 1080p @ 320Hz"
+    else
+      case "$preferred" in
+        3840x2160*)
+          target="4k"
+          msg="DFR Off detected → applying 4K @ 160Hz"
+          ;;
+        1920x1080@320*|1920x1080@319*)
           target="perf"
           msg="DFR On detected → applying 1080p @ 320Hz"
-        else
-          # Unknown preferred mode — leave alone
+          ;;
+        *)
+          # Unknown mode list — leave Hyprland's highres bootstrap alone.
           exit 0
-        fi
-        ;;
-    esac
-
-    # Check what we're currently sending; skip if already correct
-    current_width="$(${hyprPackage}/bin/hyprctl -j monitors \
-      | ${pkgs.jq}/bin/jq -r \
-        --arg desc "${acerDesc}" \
-        '.[] | select(.description == $desc) | .width // empty')"
-
-    if [[ "$target" == "perf" && "$current_width" == "1920" ]]; then
-      exit 0  # already in perf mode
-    fi
-    if [[ "$target" == "4k" && "$current_width" == "3840" ]]; then
-      exit 0  # already in 4k mode
+          ;;
+      esac
     fi
 
     ${applyProfile} "$target"
@@ -219,17 +200,15 @@ in
     pkgs.libnotify
   ];
 
-  # Seed monitors.conf with the 4k default if it doesn't exist yet, so hyprland
-  # has something to source on first boot before any profile has been applied.
+  # Keep the sourced startup config EDID-safe. Exact profiles are applied after
+  # Hyprland can query the monitor's currently advertised modes.
   home.activation.seedHyprMonitorsConf = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     conf="$HOME/.config/hypr/monitors.conf"
-    if [[ ! -f "$conf" ]]; then
-      mkdir -p "$(dirname "$conf")"
-      {
-        printf 'monitor = %s, %s, 0x0, 1.5, %s\n' "${acerMonitor}" "${acer4kMode}" "${acer4kFlags}"
-        printf 'monitor = %s, %s, 2560x0, 1, transform, 1\n' "${lgMonitor}" "${lgMode}"
-      } > "$conf"
-    fi
+    mkdir -p "$(dirname "$conf")"
+    {
+      printf 'monitor = %s, highres, 0x0, auto, %s\n' "${acerMonitor}" "${acerPerfFlags}"
+      printf 'monitor = %s, preferred, auto-right, 1, transform, 1\n' "${lgMonitor}"
+    } > "$conf"
   '';
 
   # ─── Systemd user service to run the watcher ───────────────────────────
