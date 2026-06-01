@@ -1475,7 +1475,10 @@ https://github.com/karthink/popper
 * Language and completion support
 ** completion engines:
 *** company mode
-#+begin_src emacs-lisp
+Disabled in favour of corfu + cape (below). Flip this block back to
+=:tangle no= -> tangled and set the corfu block to =:tangle no= to switch
+back. (=tide= rides with company, so it returns when this is on.)
+#+begin_src emacs-lisp :tangle no
 (use-package company :ensure t
   :init
   (add-hook 'after-init-hook 'global-company-mode)
@@ -1483,6 +1486,41 @@ https://github.com/karthink/popper
   (setq company-minimum-prefix-length 1
       company-idle-delay 0.1) ;; default is 0.2
   )
+#+end_src
+*** corfu + cape
+In-buffer completion UI built on Emacs's native
+=completion-at-point-functions=, so eglot/elisp/etc. integrate directly and
+=orderless= drives matching (consistent with the minibuffer).
+#+begin_src emacs-lisp
+(use-package corfu
+  :ensure t
+  :custom
+  (corfu-auto t)                    ; auto-popup, like company
+  (corfu-auto-prefix 1)             ; was company-minimum-prefix-length 1
+  (corfu-auto-delay 0.1)            ; was company-idle-delay 0.1
+  (corfu-cycle t)                   ; cycle through candidates
+  (corfu-preselect 'prompt)         ; keep your own input preselected (RET-friendly)
+  (corfu-popupinfo-delay '(0.3 . 0.1))
+  (tab-always-indent 'complete)     ; TAB completes when not indenting
+  :init
+  (global-corfu-mode)
+  :config
+  (corfu-popupinfo-mode))           ; documentation popup beside candidate
+
+;; Extra completion sources as capfs (the equivalents of company's bundled
+;; backends: dabbrev, file paths, ...).
+(use-package cape
+  :ensure t
+  :init
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'cape-file))
+
+;; Kind icons (function/variable/...) in the popup, via nerd-icons.
+(use-package nerd-icons-corfu
+  :ensure t
+  :after corfu
+  :config
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 #+end_src
 ** treesitter
 #+begin_src emacs-lisp :tangle no
