@@ -89,6 +89,7 @@
   - [[#completion-engines][completion engines:]]
   - [[#treesitter][treesitter]]
   - [[#treesitter-auto][treesitter auto]]
+  - [[#treesitter-settings][treesitter settings]]
   - [[#emoji-mode][emoji mode]]
   - [[#parentheses-completion][Parentheses Completion]]
   - [[#projectile][Projectile]]
@@ -611,15 +612,18 @@ remove/add tangle no to whatever font you prefer
 
 (setq doom-gruvbox-material-background  "hard")  ; or hard (defaults to soft)
 (setq doom-gruvbox-dark-variant  "hard")  ; or hard (defaults to soft)
-(setq doom-tokyonight-variant "night") 
+(setq doom-tokyonight-variant "night")
+
+;; kanagawa (doom-kanagawa-theme.el) — "wave" (default dark),
+;; "dragon" (darker, muted), or "lotus" (light).
+(setq doom-kanagawa-variant "wave")
 
 ;;everforest
 (setq doom-everforest-background "hard")
 (setq doom-everforest-palette "material")
 ;; Must be used *after* the theme is loaded
 
-;; (load-theme 'doom-gruvbox-material t)
-
+(load-theme 'doom-kanagawa t)
 #+end_src
 *** base-16
 #+begin_src emacs-lisp :tangle no
@@ -659,7 +663,7 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 *** Other themes:
 **** Catppuccin
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle no
 (use-package catppuccin-theme
   :ensure t
   ;;:ensure (:host github :repo "catppuccin/emacs")
@@ -1498,6 +1502,10 @@ https://github.com/karthink/popper
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 #+end_src
+** treesitter settings
+#+begin_src emacs-lisp
+(setq treesit-font-lock-level 4)
+#+end_src
 ** emoji mode
 #+begin_src emacs-lisp
 (use-package emojify
@@ -1702,6 +1710,28 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+begin_src emacs-lisp
 (use-package flycheck :ensure t)
 #+end_src
+
+*** eldoc and flyspell configuration
+#+begin_src emacs-lisp
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            ;; Use spaces, not tabs.
+            (setq indent-tabs-mode nil)
+            ;; Keep M-TAB for `completion-at-point'
+            (define-key flyspell-mode-map "\M-\t" nil)
+            ;; Pretty-print eval'd expressions.
+            (define-key emacs-lisp-mode-map
+                        "\C-x\C-e" 'pp-eval-last-sexp)
+            ;; Recompile if .elc exists.
+            (add-hook (make-local-variable 'after-save-hook)
+                      (lambda ()
+                        (byte-force-recompile default-directory)))
+            (define-key emacs-lisp-mode-map
+                        "\r" 'reindent-then-newline-and-indent)))
+(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode) ;; Requires Ispell
+#+end_src
+
 *** General Setup with lsp
     :PROPERTIES:
     :header-args:    :tangle no
@@ -1798,26 +1828,6 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 ***** lsp on demand
 #+begin_src emacs-lisp 
 (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
-#+end_src
-***** lsp eldoc and flyspell configuration
-#+begin_src emacs-lisp
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            ;; Use spaces, not tabs.
-            (setq indent-tabs-mode nil)
-            ;; Keep M-TAB for `completion-at-point'
-            (define-key flyspell-mode-map "\M-\t" nil)
-            ;; Pretty-print eval'd expressions.
-            (define-key emacs-lisp-mode-map
-                        "\C-x\C-e" 'pp-eval-last-sexp)
-            ;; Recompile if .elc exists.
-            (add-hook (make-local-variable 'after-save-hook)
-                      (lambda ()
-                        (byte-force-recompile default-directory)))
-            (define-key emacs-lisp-mode-map
-                        "\r" 'reindent-then-newline-and-indent)))
-(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-(add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode) ;; Requires Ispell
 #+end_src
 ***** pyright
 #+begin_src emacs-lisp

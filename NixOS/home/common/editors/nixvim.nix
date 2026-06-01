@@ -24,10 +24,21 @@
     #     contrast = "hard";
     #   };
     # };
-    colorschemes.catppuccin = {
+    colorschemes.kanagawa = {
       enable = true;
-      settings.background.dark = "mocha";
+      settings = {
+        theme = "wave";              # or "dragon" / "lotus"
+        background = { dark = "wave"; light = "lotus"; };
+        transparent = false;
+        dimInactive = true;
+        commentStyle = { italic = true; };
+        keywordStyle = { italic = false; bold = true; };
+      };
     };
+    # colorschemes.catppuccin = {
+    #   enable = true;
+    #   settings.background.dark = "mocha";
+    # };
     # colorschemes.everforest = {
     #   enable = true;
     #   settings.background = "hard";
