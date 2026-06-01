@@ -42,18 +42,19 @@
   ;; Main theme colors
   (
     ;; name           default   256       16
-    (base           '("#faf4ed" "#faf4ed" "black"       ))
-    (surface        '("#fffaf3" "#fffaf3" "brightblack" ))
-    (overlay        '("#f2e9de" "#f2e9de" "brightblack" ))
+    (base           '("#faf4ed" "#faf4ed" "white"       ))
+    (surface        '("#fffaf3" "#fffaf3" "brightwhite" ))
+    (overlay        '("#f2e9de" "#f2e9de" "white"       ))
     (muted          '("#9893a5" "#9893a5" "brightblack" ))
     (subtle         '("#797593" "#797593" "brightblack" ))
-    (text           '("#575279" "#575279" "brightblack" ))
+    (text           '("#464261" "#464261" "black"       ))
     (love           '("#b4637a" "#b4637a" "red"         ))
     (gold           '("#ea9d34" "#ea9d34" "white"       ))
     (rose           '("#d7827e" "#d7827e" "white"       ))
     (pine           '("#286983" "#286983" "white"       ))
     (foam           '("#56949f" "#56949f" "white"       ))
     (iris           '("#907aa9" "#907aa9" "white"       ))
+    (leaf           '("#6d8f89" "#6d8f89" "green"       ))
     (highlightL     '("#f4ede8" "#f4ede8" "grey"        ))
     (highlightM     '("#dfdad9" "#dfdad9" "grey"        ))
     (highlightH     '("#cecacd" "#cecacd" "grey"        ))
