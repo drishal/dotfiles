@@ -173,9 +173,9 @@ Defaults to \"material\""
    (yellow      `(,gm/yellow            "#d7d787" "yellow"       ))
    (dark-yellow `(,gm/dark-yellow       "#d7d787" "yellow"       ))
    (blue        `(,gm/blue              "#83a598" "brightblue"   ))
-   (dark-blue   `(,gm/dark-blue         "#87d7d7" "blue"         ))
+   (dark-blue   `(,gm/dark-blue         "#68948a" "blue"         )) ;; dimBlue
    (magenta     `(,gm/magenta           "#d3869b" "brightmagenta"))
-   (violet      `(,gm/violet            "#a9a1e1" "magenta"      ))
+   (violet      `(,gm/violet            "#ab6c7d" "magenta"      )) ;; dimPurple
    (cyan        `(,gm/cyan              "#87d7af" "brightcyan"   ))
    (dark-cyan   `(,gm/dark-cyan         "#87d7af" "cyan"         ))
 
@@ -196,7 +196,7 @@ Defaults to \"material\""
    (methods        green)
    (operators      orange)
    (type           yellow)
-   (strings        green)
+   (strings        teal)              ;; TSString → Aqua (#89b482)
    (variables      fg) ;; @variable / @variable.parameter = Fg (treesit)
    (numbers        magenta)
    (region         base3) ;; Visual = bg3
@@ -238,22 +238,37 @@ Defaults to \"material\""
 
    (font-lock-comment-face
     :foreground comments
+    :slant 'italic                                  ;; Comment → grey1 italic
     :background (if doom-gruvbox-material-comment-bg (doom-lighten bg 0.05)))
    (font-lock-doc-face
     :inherit 'font-lock-comment-face
-    :foreground doc-comments)
+    :foreground doc-comments
+    :slant 'italic)                                 ;; SpecialComment → grey1 italic
 
    ;; Match gruvbox-material.nvim treesit groups (override doom-themes-base
    ;; defaults that derive these from keywords/operators or blend toward fg):
-   ;; @function.call / @method.call = green (TSFunctionCall -> GreenBold).
-   ((font-lock-function-call-face &override) :foreground functions)
-   ;; @property / @field / @variable.member = blue (TSProperty/TSField -> Blue).
+   ;; @function.call / @method.call = GreenBold (TSFunction → GreenBold).
+   ((font-lock-function-call-face &override) :foreground functions :weight 'bold)
+   ;; @function / @constructor = GreenBold
+   ((font-lock-function-name-face &override) :foreground functions :weight 'bold)
+   ;; @keyword / @conditional / @repeat = RedItalic (TSKeyword → RedItalic).
+   ((font-lock-keyword-face &override) :foreground keywords :slant 'italic)
+   ;; @type / @type.builtin = YellowItalic (TSType → YellowItalic).
+   ((font-lock-type-face &override) :foreground type :slant 'italic)
+   ;; @property / @field / @variable.member = blue (TSProperty/TSField → Blue).
    (font-lock-property-name-face :foreground blue)
    (font-lock-property-use-face  :inherit 'font-lock-property-name-face)
    ;; @punctuation.bracket = fg (Fg); brackets/misc inherit punctuation.
    (font-lock-punctuation-face :foreground fg)
    ;; @punctuation.delimiter = grey1 (Grey); override the punctuation inherit.
    (font-lock-delimiter-face :foreground base7)
+   ;; @variable.builtin / @constant.builtin = PurpleItalic (TSVariableBuiltin/TSConstBuiltin).
+   ;; builtin in doom maps to font-lock-builtin-face, but Neovim's TSFuncBuiltin = GreenBold
+   ;; while TSVariableBuiltin = PurpleItalic. Override builtin to add bold (GreenBold).
+   ((font-lock-builtin-face &override) :foreground builtin :weight 'bold)
+   ;; @string.escape / @string.regex = Green (TSStringEscape/TSStringRegex → Green).
+   ;; @namespace / @module = YellowItalic (TSNamespace → YellowItalic).
+   ;; These are handled via tree-sitter faces below.
 
    (mode-line
     :background modeline-bg :foreground modeline-fg
@@ -370,8 +385,39 @@ Defaults to \"material\""
    (rainbow-delimiters-unmatched-face: :foreground fg :background 'nil)
    (show-paren-match :foreground bg :background dark-red)
 
-   ;; tree sitter
-   (tree-sitter-hl-face:method.call :foreground cyan :weight 'semi-bold)
+   ;; tree sitter — match gruvbox-material.nvim TS* / @* groups exactly
+   (tree-sitter-hl-face:method.call :foreground green :weight 'bold)   ;; TSMethodCall → GreenBold
+   (tree-sitter-hl-face:function.call :foreground green :weight 'bold) ;; TSFunctionCall → GreenBold
+   (tree-sitter-hl-face:function :foreground green :weight 'bold)      ;; TSFunction → GreenBold
+   (tree-sitter-hl-face:method :foreground green :weight 'bold)        ;; TSMethod → GreenBold
+   (tree-sitter-hl-face:constructor :foreground green :weight 'bold)   ;; TSConstructor → GreenBold
+   (tree-sitter-hl-face:function.builtin :foreground green :weight 'bold) ;; TSFuncBuiltin → GreenBold
+   (tree-sitter-hl-face:keyword :foreground red :slant 'italic)        ;; TSKeyword → RedItalic
+   (tree-sitter-hl-face:conditional :foreground red :slant 'italic)    ;; TSConditional → RedItalic
+   (tree-sitter-hl-face:repeat :foreground red :slant 'italic)         ;; TSRepeat → RedItalic
+   (tree-sitter-hl-face:type :foreground yellow :slant 'italic)        ;; TSType → YellowItalic
+   (tree-sitter-hl-face:type.builtin :foreground yellow :slant 'italic) ;; TSTypeBuiltin → YellowItalic
+   (tree-sitter-hl-face:type.definition :foreground yellow :slant 'italic) ;; TSTypeDefinition → YellowItalic
+   (tree-sitter-hl-face:variable.builtin :foreground magenta :slant 'italic) ;; TSVariableBuiltin → PurpleItalic
+   (tree-sitter-hl-face:constant.builtin :foreground magenta :slant 'italic) ;; TSConstBuiltin → PurpleItalic
+   (tree-sitter-hl-face:constant.macro :foreground magenta :slant 'italic)  ;; TSConstMacro → PurpleItalic
+   (tree-sitter-hl-face:number :foreground magenta)                    ;; TSNumber → Purple
+   (tree-sitter-hl-face:float :foreground magenta)                     ;; TSFloat → Purple
+   (tree-sitter-hl-face:boolean :foreground magenta :slant 'italic)    ;; TSBoolean → PurpleItalic
+   (tree-sitter-hl-face:string :foreground teal)                       ;; TSString → Aqua
+   (tree-sitter-hl-face:string.escape :foreground green)               ;; TSStringEscape → Green
+   (tree-sitter-hl-face:string.regex :foreground green)                ;; TSStringRegex → Green
+   (tree-sitter-hl-face:field :foreground blue)                        ;; TSField → Blue
+   (tree-sitter-hl-face:property :foreground blue)                     ;; TSProperty → Blue
+   (tree-sitter-hl-face:parameter :foreground fg)                      ;; TSParameter → Fg
+   (tree-sitter-hl-face:variable :foreground fg)                       ;; TSVariable → Fg
+   (tree-sitter-hl-face:namespace :foreground yellow :slant 'italic)   ;; TSNamespace → YellowItalic
+   (tree-sitter-hl-face:operator :foreground orange)                   ;; TSOperator → Orange
+   (tree-sitter-hl-face:keyword.operator :foreground orange)           ;; TSKeywordOperator → Orange
+   (tree-sitter-hl-face:punctuation.bracket :foreground fg)            ;; TSPunctBracket → Fg
+   (tree-sitter-hl-face:punctuation.delimiter :foreground base7)       ;; TSPunctDelimiter → Grey
+   (tree-sitter-hl-face:tag :foreground orange)                        ;; TSTag → Orange
+   (tree-sitter-hl-face:label :foreground orange)                      ;; TSLabel → Orange
 
    ;; others
    (isearch :foreground bg :background yellow)
