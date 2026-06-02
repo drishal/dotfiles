@@ -111,6 +111,12 @@
     settings = {
       add_newline = false;
       line_break.disabled = true;
+      # Default nix_shell symbol is "❄️ " (U+2744 + VS16): the variation
+      # selector forces emoji presentation, which kitty draws 2 cells wide
+      # while wcwidth()/zle counts it as 1. That off-by-one corrupts every
+      # zle redraw inside a nix shell (duplicated chars, garbled editing).
+      # Use the plain snowflake (no VS16 → text presentation → 1 cell in both).
+      nix_shell.symbol = "❄ ";
     };
   };
   programs.bash = {
