@@ -181,13 +181,13 @@ Defaults to \"material\""
 
    ;; face categories -- required for all themes
    ;; Mapping mirrors gruvbox-material.nvim's treesit scheme:
-   ;; keywords=red, functions/calls=green, type=yellow, constants/builtin=aqua,
+   ;; keywords=red, functions/calls/builtin=green, type=yellow, constants=aqua,
    ;; variables/params=fg, fields/properties=blue, operators=orange,
    ;; numbers=purple, comments=grey1, brackets=fg, delimiters=grey.
    (highlight       blue)
    (vertical-bar   (doom-darken base1 0.1))
    (selection       base3)
-   (builtin         teal)
+   (builtin         green) ;; @function.builtin/@constructor = GreenBold
    (comments        (if doom-gruvbox-material-brighter-comments grey base7))
    (doc-comments    base7)
    (constants      teal)
