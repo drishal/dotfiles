@@ -49,41 +49,41 @@ Defaults to \"material\""
 ;; https://github.com/sainnhe/gruvbox-material-vscode/tree/master/src/palette
 (cond
  ((equal doom-gruvbox-material-background "hard")
-  (setq gm/bg           "#202020"       ;; bg
-        gm/bg-alt       "#2a2827"       ;; bg2
-        gm/base0        "#131414"       ;; bg1
-        gm/base1        "#2a2827"       ;; bg2
-        gm/base2        "#2e2c2b"       ;; bg3
-        gm/base3        "#131414"       ;; bg4
-        gm/base4        "#32302f"       ;; bg5
-        gm/base5        "#46403d"       ;; bg6
-        gm/base6        "#514945"       ;; bg7
-        gm/base7        "#5a524c"       ;; bg8
-        gm/base8        "#7c6f64"))     ;; grey0
- ((equal doom-gruvbox-material-background "medium")
-  (setq gm/bg           "#292828"       ;; bg
-        gm/bg-alt       "#32302f"       ;; bg2
-        gm/base0        "#1c1c1c"       ;; bg1
-        gm/base1        "#32302f"       ;; bg2
-        gm/base2        "#383432"       ;; bg3
-        gm/base3        "#3c3836"       ;; bg4
-        gm/base4        "#45403d"       ;; bg5
-        gm/base5        "#504945"       ;; bg6
-        gm/base6        "#5a524c"       ;; bg7
-        gm/base7        "#665c54"       ;; bg8
-        gm/base8        "#7c6f64"))     ;; grey0
- (t
-  (setq gm/bg           "#181919"       ;; bg
-        gm/bg-alt       "#3c3836"       ;; bg2
-        gm/base0        "#242424"       ;; bg1
-        gm/base1        "#3c3836"       ;; bg2
-        gm/base2        "#403c3a"       ;; bg3
-        gm/base3        "#45403d"       ;; bg4
+  (setq gm/bg           "#1d2021"       ;; bg0 (hard)
+        gm/bg-alt       "#282828"       ;; bg1
+        gm/base0        "#141617"       ;; bg_dim
+        gm/base1        "#1d2021"       ;; bg0
+        gm/base2        "#282828"       ;; bg1
+        gm/base3        "#3c3836"       ;; bg3
         gm/base4        "#504945"       ;; bg5
-        gm/base5        "#5a524c"       ;; bg6
-        gm/base6        "#665c54"       ;; bg7
-        gm/base7        "#7c6f64"       ;; bg8
-        gm/base8        "#7c6f64")))    ;; grey0
+        gm/base5        "#665c54"       ;; bg6
+        gm/base6        "#7c6f64"       ;; grey0
+        gm/base7        "#928374"       ;; grey1
+        gm/base8        "#a89984"))     ;; grey2
+ ((equal doom-gruvbox-material-background "medium")
+  (setq gm/bg           "#282828"       ;; bg0 (medium)
+        gm/bg-alt       "#32302f"       ;; bg1
+        gm/base0        "#1b1b1b"       ;; bg_dim
+        gm/base1        "#282828"       ;; bg0
+        gm/base2        "#32302f"       ;; bg1
+        gm/base3        "#45403d"       ;; bg3
+        gm/base4        "#5a524c"       ;; bg5
+        gm/base5        "#665c54"       ;; bg6
+        gm/base6        "#7c6f64"       ;; grey0
+        gm/base7        "#928374"       ;; grey1
+        gm/base8        "#a89984"))     ;; grey2
+ (t
+  (setq gm/bg           "#32302f"       ;; bg0 (soft)
+        gm/bg-alt       "#3c3836"       ;; bg1
+        gm/base0        "#252423"       ;; bg_dim
+        gm/base1        "#32302f"       ;; bg0
+        gm/base2        "#3c3836"       ;; bg1
+        gm/base3        "#504945"       ;; bg3
+        gm/base4        "#665c54"       ;; bg5
+        gm/base5        "#7c6f64"       ;; grey0
+        gm/base6        "#928374"       ;; grey1
+        gm/base7        "#a89984"       ;; grey2
+        gm/base8        "#a89984")))    ;; grey2
 
 (cond
  ((equal doom-gruvbox-material-palette "original")
@@ -180,23 +180,25 @@ Defaults to \"material\""
    (dark-cyan   `(,gm/dark-cyan         "#87d7af" "cyan"         ))
 
    ;; face categories -- required for all themes
+   ;; Mapping mirrors gruvbox-material.nvim's signature scheme:
+   ;; keywords=red, functions=green, type=yellow, constants/builtin=aqua,
+   ;; variables=blue, operators=orange, numbers=purple, comments=grey1.
    (highlight       blue)
    (vertical-bar   (doom-darken base1 0.1))
-   (selection       dark-blue)
-   (builtin         magenta)
-   (comments        (if doom-gruvbox-material-brighter-comments dark-cyan
-                      (doom-blend yellow base8 0.5)))
-   (doc-comments   (doom-darken (if doom-gruvbox-material-brighter-comments green green) 0.15))
-   (constants      violet)
-   (functions      cyan)
-   (keywords       (doom-darken dark-green 0.25))
-   (methods        cyan)
-   (operators      blue)
-   (type           orange)
+   (selection       base3)
+   (builtin         teal)
+   (comments        (if doom-gruvbox-material-brighter-comments grey base7))
+   (doc-comments    base7)
+   (constants      teal)
+   (functions      green)
+   (keywords       red)
+   (methods        green)
+   (operators      orange)
+   (type           yellow)
    (strings        green)
-   (variables      cyan)
+   (variables      blue)
    (numbers        magenta)
-   (region         `(,(doom-lighten (car bg-alt) 0.15) ,@(doom-lighten (cdr base1) 0.35)))
+   (region         base3) ;; Visual = bg3
    (error          red)
    (warning        yellow)
    (success        green)
@@ -359,8 +361,8 @@ Defaults to \"material\""
    (tree-sitter-hl-face:method.call :foreground cyan :weight 'semi-bold)
 
    ;; others
-   (isearch :foreground bg :background violet)
-   (selection :foreground bg-alt :background dark-orange)
+   (isearch :foreground bg :background yellow)
+   (region :background base3)
    (company-tooltip-common-selection :foreground bg-alt :background dark-blue)
   )
   ;; --- extra variables ---------------------
