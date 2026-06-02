@@ -1,0 +1,33 @@
+system: "base24"
+name: "Kanagawa"
+author: "Tommaso Laurenzi (https://github.com/rebelot/kanagawa.nvim)"
+variant: "dark"
+# base24 "wave" variant. base00-base0F are rebelot's canonical base16
+# Kanagawa palette; base10-base17 are derived from the Kanagawa Wave palette
+# and its ANSI bright terminal colors (kanagawa.nvim term table), mirroring
+# how the upstream base24 Kanagawa Dragon scheme is built.
+palette:
+  base00: "1f1f28" # Default Background          (sumiInk3)
+  base01: "16161d" # Lighter Background / Black   (sumiInk0)
+  base02: "223249" # Selection Background         (waveBlue1)
+  base03: "54546d" # Comments, Line Highlighting  (sumiInk6)
+  base04: "727169" # Dark Foreground              (fujiGray)
+  base05: "dcd7ba" # Default Foreground           (fujiWhite)
+  base06: "c8c093" # Light Foreground             (oldWhite)
+  base07: "717c7c" # Lightest Foreground          (katanaGray)
+  base08: "c34043" # red                          (autumnRed)
+  base09: "ffa066" # orange                       (surimiOrange)
+  base0A: "c0a36e" # yellow                       (boatYellow2)
+  base0B: "76946a" # green                        (autumnGreen)
+  base0C: "6a9589" # cyan                         (waveAqua1)
+  base0D: "7e9cd8" # blue                         (crystalBlue)
+  base0E: "957fb8" # magenta                      (oniViolet)
+  base0F: "d27e99" # special / brown              (sakuraPink)
+  base10: "181820" # Darker Background            (sumiInk1)
+  base11: "16161d" # Darkest Background           (sumiInk0)
+  base12: "e82424" # Bright Red                   (samuraiRed)
+  base13: "e6c384" # Bright Yellow                (carpYellow)
+  base14: "98bb6c" # Bright Green                 (springGreen)
+  base15: "7aa89f" # Bright Cyan                  (waveAqua2)
+  base16: "7fb4ca" # Bright Blue                  (springBlue)
+  base17: "938aa9" # Bright Purple                (springViolet1)

@@ -64,6 +64,7 @@
   - [[#org-present][org present]]
   - [[#image-settings][Image settings]]
   - [[#org-download][org-download]]
+  - [[#hook-to-ensure-org-mode-renders-blocks-correctly][Hook to ensure org mode renders blocks correctly]]
 - [[#tools][Tools]]
   - [[#vterm][vterm]]
   - [[#bongo][Bongo]]
@@ -87,7 +88,6 @@
   - [[#agent-shell][Agent Shell]]
 - [[#language-and-completion-support][Language and completion support]]
   - [[#completion-engines][completion engines:]]
-  - [[#treesitter][treesitter]]
   - [[#treesitter-auto][treesitter auto]]
   - [[#treesitter-settings][treesitter settings]]
   - [[#emoji-mode][emoji mode]]
@@ -110,9 +110,8 @@ touch ~/.emacs.d/custom.el
 #+begin_src emacs-lisp :tangle ~/.config/emacs/early-init.el
 (setq gc-cons-threshold most-positive-fixnum
       gc-cons-percentage 0.6)
-;; (setq package-enable-at-startup nil)
+
 (setenv "LSP_USE_PLISTS" "true")
-;; (setq gc-cons-threshold 100000000)
 #+end_src
 
 ** shift theme variables to ~custom.el~, make sure to create it if it does not exist
@@ -126,9 +125,12 @@ touch ~/.emacs.d/custom.el
 
 ** emacs startup performance
 #+begin_src emacs-lisp  
-;; The default is 800 kilobytes.  Measured in bytes.
-;; (setq gc-cons-threshold (* 50 1000 1000))
-(setq read-process-output-max (* 1024 1024)) ;; 1mb
+(setq read-process-output-max (* 100 1024 1024))
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold (* 100 1024 1024)
+                  gc-cons-percentage 0.1)))
+
 (defun efs/display-startup-time ()
   (message "Emacs loaded in %s with %d garbage collections."
 	       (format "%.2f seconds"
@@ -188,7 +190,8 @@ touch ~/.emacs.d/custom.el
 * Initialize package sources
 ** enable native comp for packages
 #+begin_src emacs-lisp
-(setq native-comp-deferred-compilation t)
+;; (setq native-comp-deferred-compilation t)
+(setq native-comp-jit-compilation  t)
 #+end_src
 
 ** Setting up paths
@@ -1136,6 +1139,19 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
   (add-hook 'dired-mode-hook 'org-download-enable)
   (add-hook 'org-mode-hook 'org-download-enable))
 #+end_src
+** Hook to ensure org mode renders blocks correctly
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook
+          (lambda ()
+            (run-with-idle-timer
+             0.5 nil
+             (lambda (buf)
+               (when (buffer-live-p buf)
+                 (with-current-buffer buf
+                   (when (derived-mode-p 'org-mode)
+                     (font-lock-ensure (point-min) (point-max))))))
+             (current-buffer))))
+#+end_src
 * Tools
 ** vterm
 #+begin_src emacs-lisp :tangle no
@@ -1522,15 +1538,6 @@ In-buffer completion UI built on Emacs's native
   :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 #+end_src
-** treesitter
-#+begin_src emacs-lisp :tangle no
-(use-package tree-sitter :ensure t)
-(use-package tree-sitter-langs :ensure t
-  :init
-  (global-tree-sitter-mode)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-  )
-#+end_src
 ** treesitter auto
 #+begin_src emacs-lisp
 (use-package treesit-auto :ensure t
@@ -1770,11 +1777,8 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode) ;; Requires Ispell
 #+end_src
 
-*** General Setup with lsp
-    :PROPERTIES:
-    :header-args:    :tangle no
-    :END:
-#+begin_src emacs-lisp
+*** LSP Mode 
+#+begin_src emacs-lisp :tangle no
 (use-package lsp-mode :ensure t
   :init
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
@@ -1817,9 +1821,31 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (setq lsp-use-plists t)
 (setq lsp-idle-delay 0.001)
 (setq lsp-enable-on-type-formatting nil)
-#+end_src
-**** emacs-lsp-booster
-#+begin_src emacs-lisp
+
+;; lsp-java
+(use-package lsp-java
+  :ensure t
+  :defer t
+  :init
+  (setq lsp-java-format-on-type-enabled nil))
+
+(add-hook 'java-mode-hook (lambda ()
+                            (require 'lsp-java)
+                            (setq c-basic-offset 4
+                                  ;; tab-width 4
+                                  indent-tabs-mode nil)))
+
+;; typescript
+(use-package typescript-mode
+  :ensure t
+  :mode "\\.ts\\'")
+
+(use-package dap-mode
+  :ensure t
+  :commands (dap-debug dap-hydra dap-ui-mode)
+  :config
+  (dap-auto-configure-mode 1))
+;; emacs-lsp-booster
 (defun lsp-booster--advice-json-parse (old-fn &rest args)
   "Try to parse bytecode instead of json."
   (or
@@ -1848,52 +1874,10 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
           (cons "emacs-lsp-booster" orig-result))
       orig-result)))
 (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
-#+end_src
-**** Other lsp specific configurations
-***** Lsp Java
-#+begin_src emacs-lisp 
-(use-package lsp-java
-  :ensure t
-  :defer t
-  :init
-  (setq lsp-java-format-on-type-enabled nil))
-(add-hook 'java-mode-hook (lambda ()
-                            (require 'lsp-java)
-                            (setq c-basic-offset 4
-                                  ;; tab-width 4
-                                  indent-tabs-mode nil)))
-#+end_src
-***** lsp on demand
-#+begin_src emacs-lisp 
+
+
 (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
 #+end_src
-***** pyright
-#+begin_src emacs-lisp
-;; (use-package lsp-pyright
-;;   :ensure t
-;;   :hook (python-mode . (lambda ()
-;;                          (require 'lsp-pyright)
-;;                          (lsp))))  ; or lsp-deferred
-(add-to-list 'eglot-server-programs
-             '((python-mode python-ts-mode)
-               "basedpyright-langserver" "--stdio"))
-#+end_src
-***** typescript
-#+begin_src emacs-lisp
-(use-package typescript-mode
-  :ensure t
-  :mode "\\.ts\\'")
-#+end_src
-***** Dap mode
-#+begin_src emacs-lisp
-(use-package dap-mode
-  :ensure t
-  :commands (dap-debug dap-hydra dap-ui-mode)
-  :config
-  (dap-auto-configure-mode 1))
-
-#+end_src
-
 
 *** Eglot setup
 #+begin_src emacs-lisp
@@ -1945,10 +1929,10 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   (setq project-vc-extra-root-markers '("Cargo.toml"))
   :config
   (add-to-list 'eglot-server-programs
-               '(toml-ts-mode . ("taplo" "lsp" "stdio"))
-               '((python-mode python-ts-mode) . ("basedpyright-langserver" "--stdio"))
-               ;; '(nix-ts-mode . ("nil"))
-               )
+               '(toml-ts-mode . ("taplo" "lsp" "stdio")))
+  (add-to-list 'eglot-server-programs
+               '((python-mode python-ts-mode) . ("basedpyright-langserver" "--stdio")))
+  ;; (add-to-list 'eglot-server-programs '(nix-ts-mode . ("nil")))
 
   :hook
   (nix-ts-mode . eglot-ensure)
@@ -2010,52 +1994,23 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
     (setq-local buffer-save-without-query t)))
 #+end_src
 
-*** TSX
-#+begin_src emacs-lisp :tangle no
-(use-package tsx-mode
- :ensure (:host github :repo "orzechowskid/tsx-mode.el")
-  :init
-  (require 'tsx-mode)
-  (add-to-list 'auto-mode-alist '("\\.[jt]s[x]?\\'" . tsx-mode))
-  )
-#+end_src
-
 *** sql
 #+begin_src emacs-lisp
 (require 'sql)
 (defalias 'sql-get-login 'ignore)
 #+end_src
+
 *** yaml-mode
 #+begin_src emacs-lisp
 (use-package yaml-mode
   :ensure t)
 #+end_src
 *** python
-**** pipenv.el
-https://github.com/pwalsh/pipenv.el
-#+begin_src emacs-lisp :tangle no
-(use-package pipenv
-  :hook (python-mode . pipenv-mode)
-  :init
-  (setq
-   pipenv-projectile-after-switch-function
-   #'pipenv-projectile-after-switch-extended)
-  (setq pipenv-keymap-prefix (kbd "C-c C-q"))
-  )
-
-#+end_src
 **** python mode
 #+begin_src emacs-lisp
 (use-package python-mode
   :ensure t
   :mode "\\.py\\'")
-#+end_src
-**** elpy
-#+begin_src emacs-lisp :tangle no
-(use-package elpy
-  :ensure t
-  :init
-  (elpy-enable))
 #+end_src
 *** php
 #+begin_src emacs-lisp
