@@ -305,6 +305,14 @@ variant. All other values default to the \"wave\" dark theme."
    (font-lock-property-use-face  :inherit 'font-lock-property-name-face)
    (font-lock-constant-face :foreground _orange)
    ((font-lock-function-name-face &override) :foreground functions)
+   ;; Match kanagawa.nvim: function/method CALLS use the full `fun' color, not
+   ;; the doom-themes-base default that blends 70% toward fg (washed-out blue).
+   ;; Keep the inherited italic slant.
+   ((font-lock-function-call-face &override) :foreground functions)
+   ;; Match kanagawa.nvim: delimiters/brackets/`::` are punct (springViolet2),
+   ;; not the doom-themes-base default that blends from `operators' (yellow).
+   ;; bracket/delimiter/misc-punctuation inherit this face.
+   (font-lock-punctuation-face :foreground _punct)
    ((font-lock-type-face &override) :foreground type)
    (hl-line :background _bg-p2)
    (cursor :background (if (equal doom-kanagawa-variant "lotus") _violet _orange))
