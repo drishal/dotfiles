@@ -180,9 +180,10 @@ Defaults to \"material\""
    (dark-cyan   `(,gm/dark-cyan         "#87d7af" "cyan"         ))
 
    ;; face categories -- required for all themes
-   ;; Mapping mirrors gruvbox-material.nvim's signature scheme:
-   ;; keywords=red, functions=green, type=yellow, constants/builtin=aqua,
-   ;; variables=blue, operators=orange, numbers=purple, comments=grey1.
+   ;; Mapping mirrors gruvbox-material.nvim's treesit scheme:
+   ;; keywords=red, functions/calls=green, type=yellow, constants/builtin=aqua,
+   ;; variables/params=fg, fields/properties=blue, operators=orange,
+   ;; numbers=purple, comments=grey1, brackets=fg, delimiters=grey.
    (highlight       blue)
    (vertical-bar   (doom-darken base1 0.1))
    (selection       base3)
@@ -196,7 +197,7 @@ Defaults to \"material\""
    (operators      orange)
    (type           yellow)
    (strings        green)
-   (variables      blue)
+   (variables      fg) ;; @variable / @variable.parameter = Fg (treesit)
    (numbers        magenta)
    (region         base3) ;; Visual = bg3
    (error          red)
@@ -241,6 +242,18 @@ Defaults to \"material\""
    (font-lock-doc-face
     :inherit 'font-lock-comment-face
     :foreground doc-comments)
+
+   ;; Match gruvbox-material.nvim treesit groups (override doom-themes-base
+   ;; defaults that derive these from keywords/operators or blend toward fg):
+   ;; @function.call / @method.call = green (TSFunctionCall -> GreenBold).
+   ((font-lock-function-call-face &override) :foreground functions)
+   ;; @property / @field / @variable.member = blue (TSProperty/TSField -> Blue).
+   (font-lock-property-name-face :foreground blue)
+   (font-lock-property-use-face  :inherit 'font-lock-property-name-face)
+   ;; @punctuation.bracket = fg (Fg); brackets/misc inherit punctuation.
+   (font-lock-punctuation-face :foreground fg)
+   ;; @punctuation.delimiter = grey1 (Grey); override the punctuation inherit.
+   (font-lock-delimiter-face :foreground base7)
 
    (mode-line
     :background modeline-bg :foreground modeline-fg
