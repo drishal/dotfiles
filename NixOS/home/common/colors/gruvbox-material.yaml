@@ -1,0 +1,36 @@
+system: "base24"
+name: "Gruvbox Material"
+author: "sainnhe (https://github.com/sainnhe/gruvbox-material)"
+variant: "dark"
+# base24 "hard dark" variant. Values are taken verbatim from sainnhe's
+# gruvbox-material palette (autoload/gruvbox_material.vim, hard dark backgrounds
+# + the dark accent set) and its UI/terminal mappings (colors/gruvbox-material.vim):
+# Comment=grey1, Visual=bg3, CursorLine=bg1, terminal accents = the plain
+# red/yellow/green/aqua/blue/purple. Gruvbox Material is deliberately muted and
+# has NO separate bright ANSI variants (color8-15 == color0-7), so base12-17
+# reuse the accent colors exactly, mirroring the theme's own terminal table.
+palette:
+  base00: "1d2021" # Default Background          (bg0, hard)
+  base01: "282828" # Lighter Background / elevated (bg1, cursorline/statusline)
+  base02: "3c3836" # Selection Background         (bg3, Visual)
+  base03: "7c6f64" # Comments, Line Highlighting  (grey0)
+  base04: "928374" # Dark Foreground              (grey1, the Comment color)
+  base05: "d4be98" # Default Foreground           (fg0)
+  base06: "ddc7a1" # Light Foreground             (fg1)
+  base07: "ebdbb2" # Lightest Foreground          (cream)
+  base08: "ea6962" # red                          (red)
+  base09: "e78a4e" # orange                       (orange)
+  base0A: "d8a657" # yellow                       (yellow)
+  base0B: "a9b665" # green                        (green)
+  base0C: "89b482" # cyan                         (aqua)
+  base0D: "7daea3" # blue                         (blue)
+  base0E: "d3869b" # magenta                      (purple)
+  base0F: "bd6f3e" # special / brown              (faded orange)
+  base10: "141617" # Darker Background            (bg_dim)
+  base11: "0d0f10" # Darkest Background           (derived, below bg_dim)
+  base12: "ea6962" # Bright Red                   (red, no separate bright)
+  base13: "d8a657" # Bright Yellow                (yellow, no separate bright)
+  base14: "a9b665" # Bright Green                 (green, no separate bright)
+  base15: "89b482" # Bright Cyan                  (aqua, no separate bright)
+  base16: "7daea3" # Bright Blue                  (blue, no separate bright)
+  base17: "d3869b" # Bright Purple                (purple, no separate bright)
