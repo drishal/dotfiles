@@ -24,17 +24,17 @@
     #     contrast = "hard";
     #   };
     # };
-    colorschemes.kanagawa = {
-      enable = true;
-      settings = {
-        theme = "wave";              # or "dragon" / "lotus"
-        background = { dark = "wave"; light = "lotus"; };
-        transparent = false;
-        dimInactive = true;
-        commentStyle = { italic = true; };
-        keywordStyle = { italic = false; bold = true; };
-      };
-    };
+    # colorschemes.kanagawa = {
+    #   enable = true;
+    #   settings = {
+    #     theme = "wave";              # or "dragon" / "lotus"
+    #     background = { dark = "wave"; light = "lotus"; };
+    #     transparent = false;
+    #     dimInactive = true;
+    #     commentStyle = { italic = true; };
+    #     keywordStyle = { italic = false; bold = true; };
+    #   };
+    # };
     # colorschemes.catppuccin = {
     #   enable = true;
     #   settings.background.dark = "mocha";

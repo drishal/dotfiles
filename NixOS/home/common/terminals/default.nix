@@ -160,7 +160,7 @@
     ghostty = {
       enable = true;
       settings = {
-        theme = "Catppuccin Mocha";
+        theme = "Gruvbox Material Dark";
         font-family = "${config.stylix.fonts.monospace.name}";
         font-size = config.stylix.fonts.sizes.terminal;
         window-padding-x = 5;

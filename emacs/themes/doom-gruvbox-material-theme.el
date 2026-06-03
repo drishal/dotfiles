@@ -1,4 +1,4 @@
-;;; doom-gruvbox-material.el --- inspired by Gruvbox material
+;;; doom-gruvbox-material.el --- inspired by Gruvbox material -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;; https://github.com/sainnhe/gruvbox-material/blob/master/autoload/gruvbox_material.vim
 (require 'doom-themes)
 
@@ -29,9 +29,9 @@ determine the exact padding."
   :group 'doom-gruvbox-material-theme
   :type '(choice integer boolean))
 
-(defcustom doom-gruvbox-material-background nil
+(defcustom doom-gruvbox-material-background "medium"
   "Choose between \"soft\", \"medium\" and \"hard\" background contrast.
-Defaults to \"soft\""
+Defaults to \"medium\", matching upstream gruvbox-material."
   :group 'doom-gruvbox-material-theme
   :type 'string)
 
@@ -56,7 +56,7 @@ Defaults to \"material\""
         gm/base2        "#282828"       ;; bg1
         gm/base3        "#3c3836"       ;; bg3
         gm/base4        "#504945"       ;; bg5
-        gm/base5        "#665c54"       ;; bg6
+        gm/base5        "#665c54"       ;; Doom base ramp (not an upstream bg role)
         gm/base6        "#7c6f64"       ;; grey0
         gm/base7        "#928374"       ;; grey1
         gm/base8        "#a89984"))     ;; grey2
@@ -68,7 +68,7 @@ Defaults to \"material\""
         gm/base2        "#32302f"       ;; bg1
         gm/base3        "#45403d"       ;; bg3
         gm/base4        "#5a524c"       ;; bg5
-        gm/base5        "#665c54"       ;; bg6
+        gm/base5        "#665c54"       ;; Doom base ramp (not an upstream bg role)
         gm/base6        "#7c6f64"       ;; grey0
         gm/base7        "#928374"       ;; grey1
         gm/base8        "#a89984"))     ;; grey2
@@ -82,67 +82,73 @@ Defaults to \"material\""
         gm/base4        "#665c54"       ;; bg5
         gm/base5        "#7c6f64"       ;; grey0
         gm/base6        "#928374"       ;; grey1
-        gm/base7        "#a89984"       ;; grey2
+        gm/base7        "#928374"       ;; grey1
         gm/base8        "#a89984")))    ;; grey2
 
 (cond
  ((equal doom-gruvbox-material-palette "original")
   (setq gm/fg           "#ebdbb2"       ;; fg
-        gm/fg-alt       "#c9b99a"       ;; fg1
+        gm/fg-alt       "#ebdbb2"       ;; fg1
         gm/red          "#fb4934"
-        gm/dark-red     "#b85651"       ;;dimRed
+        gm/dark-red     "#fb4934"       ;; upstream has no dimRed in current palette
         gm/orange       "#fe8019"
-        gm/dark-orange  "#bd6f3e"       ;;dimOrange
+        gm/dark-orange  "#fe8019"       ;; upstream has no dimOrange in current palette
         gm/green        "#b8bb26"
-        gm/dark-green   "#8f9a52"       ;;dimGreen
+        gm/dark-green   "#b8bb26"       ;; upstream has no dimGreen in current palette
         gm/teal         "#8ec07c"       ;; aqua
-        gm/dark-teal    "#72966c"       ;; dimAqua
+        gm/dark-teal    "#8ec07c"       ;; upstream has no dimAqua in current palette
         gm/yellow       "#fabd2f"
-        gm/dark-yellow  "#c18f41"       ;; dimYellow
+        gm/dark-yellow  "#fabd2f"       ;; upstream has no dimYellow in current palette
         gm/blue         "#83a598"
-        gm/dark-blue    "#68948a"       ;; dimBlue
+        gm/dark-blue    "#83a598"       ;; upstream has no dimBlue in current palette
         gm/magenta      "#d3869b"       ;; purple
-        gm/violet       "#ab6c7d"       ;; dimPurple
+        gm/violet       "#d3869b"       ;; upstream has no dimPurple in current palette
         gm/cyan         "#8ec07c"       ;; aqua
-        gm/dark-cyan    "#72966c"))     ;; dimAqua
+        gm/dark-cyan    "#8ec07c"))     ;; upstream has no dimAqua in current palette
  ((equal doom-gruvbox-material-palette "mix")
   (setq gm/fg           "#e2cca9"       ;; fg
-        gm/fg-alt       "#c5b18d"       ;; fg1
+        gm/fg-alt       "#e2cca9"       ;; fg1
         gm/red          "#f2594b"
-        gm/dark-red     "#b85651"       ;;dimRed
+        gm/dark-red     "#f2594b"       ;; upstream has no dimRed in current palette
         gm/orange       "#f28534"
-        gm/dark-orange  "#bd6f3e"       ;;dimOrange
+        gm/dark-orange  "#f28534"       ;; upstream has no dimOrange in current palette
         gm/green        "#b0b846"
-        gm/dark-green   "#8f9a52"       ;;dimGreen
+        gm/dark-green   "#b0b846"       ;; upstream has no dimGreen in current palette
         gm/teal         "#8bba7f"       ;; aqua
-        gm/dark-teal    "#72966c"       ;; dimAqua
+        gm/dark-teal    "#8bba7f"       ;; upstream has no dimAqua in current palette
         gm/yellow       "#e9b143"
-        gm/dark-yellow  "#c18f41"       ;; dimYellow
+        gm/dark-yellow  "#e9b143"       ;; upstream has no dimYellow in current palette
         gm/blue         "#80aa9e"
-        gm/dark-blue    "#68948a"       ;; dimBlue
+        gm/dark-blue    "#80aa9e"       ;; upstream has no dimBlue in current palette
         gm/magenta      "#d3869b"       ;; purple
-        gm/violet       "#ab6c7d"       ;; dimPurple
+        gm/violet       "#d3869b"       ;; upstream has no dimPurple in current palette
         gm/cyan         "#8bba7f"       ;; aqua
-        gm/dark-cyan    "#72966c"))     ;; dimAqua
+        gm/dark-cyan    "#8bba7f"))     ;; upstream has no dimAqua in current palette
  (t
   (setq gm/fg           "#d4be98"       ;; fg
         gm/fg-alt       "#ddc7a1"       ;; fg1
         gm/red          "#ea6962"
-        gm/dark-red     "#b85651"       ;; dimRed
+        gm/dark-red     "#ea6962"       ;; upstream has no dimRed in current palette
         gm/orange       "#e78a4e"
-        gm/dark-orange  "#bd6f3e"       ;; dimOrange
+        gm/dark-orange  "#e78a4e"       ;; upstream has no dimOrange in current palette
         gm/green        "#a9b665"
-        gm/dark-green   "#8f9a52"       ;; dimGreen
+        gm/dark-green   "#a9b665"       ;; upstream has no dimGreen in current palette
         gm/teal         "#89b482"       ;; aqua
-        gm/dark-teal    "#72966c"       ;; dimAqua
+        gm/dark-teal    "#89b482"       ;; upstream has no dimAqua in current palette
         gm/yellow       "#d8a657"
-        gm/dark-yellow  "#c18f41"       ;; dimYellow
+        gm/dark-yellow  "#d8a657"       ;; upstream has no dimYellow in current palette
         gm/blue         "#7daea3"
-        gm/dark-blue    "#68948a"       ;; dimBlue
+        gm/dark-blue    "#7daea3"       ;; upstream has no dimBlue in current palette
         gm/magenta      "#d3869b"       ;; purple
-        gm/violet       "#ab6c7d"       ;; dimPurple
+        gm/violet       "#d3869b"       ;; upstream has no dimPurple in current palette
         gm/cyan         "#89b482"       ;; aqua
-        gm/dark-cyan    "#72966c")))    ;; dimAqua
+        gm/dark-cyan    "#89b482")))    ;; upstream has no dimAqua in current palette
+
+;; Gruvbox Material dark greys are global across hard/medium/soft backgrounds.
+;; Keep them explicit instead of deriving semantic greys from Doom's baseN ramp.
+(setq gm/grey0 "#7c6f64"
+      gm/grey1 "#928374"
+      gm/grey2 "#a89984")
 
 (def-doom-theme doom-gruvbox-material
   "A dark theme inspired by gruvbox material"
@@ -161,7 +167,10 @@ Defaults to \"material\""
    (fg          `(,gm/fg                "#d7d7af" "brightwhite"  ))
    (fg-alt      `(,gm/fg-alt            "#b2b2b2" "white"        ))
 
-   (grey        base8)
+   (grey0       `(,gm/grey0             "#6b6b6b" "brightblack"  ))
+   (grey1       `(,gm/grey1             "#979797" "brightblack"  ))
+   (grey2       `(,gm/grey2             "#a89984" "white"        ))
+   (grey        grey1)
    (red         `(,gm/red               "#ea6962" "red"          ))
    (dark-red    `(,gm/dark-red          "#ea6962" "red"          ))
    (orange      `(,gm/orange            "#d7875f" "brightred"    ))
@@ -173,9 +182,9 @@ Defaults to \"material\""
    (yellow      `(,gm/yellow            "#d7d787" "yellow"       ))
    (dark-yellow `(,gm/dark-yellow       "#d7d787" "yellow"       ))
    (blue        `(,gm/blue              "#83a598" "brightblue"   ))
-   (dark-blue   `(,gm/dark-blue         "#68948a" "blue"         )) ;; dimBlue
+   (dark-blue   `(,gm/dark-blue         "#83a598" "blue"         ))
    (magenta     `(,gm/magenta           "#d3869b" "brightmagenta"))
-   (violet      `(,gm/violet            "#ab6c7d" "magenta"      )) ;; dimPurple
+   (violet      `(,gm/violet            "#d3869b" "magenta"      ))
    (cyan        `(,gm/cyan              "#87d7af" "brightcyan"   ))
    (dark-cyan   `(,gm/dark-cyan         "#87d7af" "cyan"         ))
 
@@ -188,8 +197,8 @@ Defaults to \"material\""
    (vertical-bar   (doom-darken base1 0.1))
    (selection       base3)
    (builtin         green) ;; @function.builtin/@constructor = GreenBold
-   (comments        (if doom-gruvbox-material-brighter-comments grey base7))
-   (doc-comments    base7)
+   (comments        (if doom-gruvbox-material-brighter-comments grey2 grey))
+   (doc-comments    grey)
    (constants      teal)
    (functions      green)
    (keywords       red)
@@ -261,7 +270,7 @@ Defaults to \"material\""
    ;; @punctuation.bracket = fg (Fg); brackets/misc inherit punctuation.
    (font-lock-punctuation-face :foreground fg)
    ;; @punctuation.delimiter = grey1 (Grey); override the punctuation inherit.
-   (font-lock-delimiter-face :foreground base7)
+   (font-lock-delimiter-face :foreground grey)
    ;; @variable.builtin / @constant.builtin = PurpleItalic (TSVariableBuiltin/TSConstBuiltin).
    ;; builtin in doom maps to font-lock-builtin-face, but Neovim's TSFuncBuiltin = GreenBold
    ;; while TSVariableBuiltin = PurpleItalic. Override builtin to add bold (GreenBold).
@@ -269,6 +278,20 @@ Defaults to \"material\""
    ;; @string.escape / @string.regex = Green (TSStringEscape/TSStringRegex → Green).
    ;; @namespace / @module = YellowItalic (TSNamespace → YellowItalic).
    ;; These are handled via tree-sitter faces below.
+
+   ;; Built-in treesit/rust-ts-mode equivalents.  rust-ts-mode maps Rust modules
+   ;; (`phnt`, `ffi`, `core`, `asm`) to `font-lock-constant-face`, while nvim
+   ;; gruvbox-material maps `@module` to TSNamespace → YellowItalic.  Variables
+   ;; stay Fg to match nvim's `@variable` / `@variable.parameter`.
+   ((font-lock-variable-name-face &override) :foreground fg) ;; @variable → Fg
+   ((font-lock-variable-use-face &override) :foreground fg)  ;; @variable → Fg
+   ((font-lock-constant-face &override) :foreground yellow)  ;; rust-ts @module → Yellow
+   ((font-lock-preprocessor-face &override) :foreground magenta) ;; PreProc/@attribute → Purple
+   ((font-lock-string-face &override) :foreground teal)      ;; @string → Aqua
+   ((font-lock-number-face &override) :foreground magenta)   ;; @number → Purple
+   ((font-lock-operator-face &override) :foreground orange)  ;; @operator → Orange
+   ((font-lock-bracket-face &override) :foreground fg)       ;; @punctuation.bracket → Fg
+   ((font-lock-warning-face &override) :foreground warning :weight 'bold)
 
    (mode-line
     :background modeline-bg :foreground modeline-fg
@@ -382,8 +405,11 @@ Defaults to \"material\""
    (rainbow-delimiters-depth-2-face :foreground violet)
    (rainbow-delimiters-depth-3-face :foreground dark-cyan)
    (rainbow-delimiters-depth-4-face :foreground dark-yellow)
-   (rainbow-delimiters-unmatched-face: :foreground fg :background 'nil)
-   (show-paren-match :foreground bg :background dark-red)
+   (rainbow-delimiters-depth-5-face :foreground green)
+   (rainbow-delimiters-depth-6-face :foreground blue)
+   (rainbow-delimiters-depth-7-face :foreground magenta)
+   (rainbow-delimiters-unmatched-face :foreground red :background nil)
+   (show-paren-match :background base3)                       ;; MatchParen → bg4/bg3
 
    ;; tree sitter — match gruvbox-material.nvim TS* / @* groups exactly
    (tree-sitter-hl-face:method.call :foreground green :weight 'bold)   ;; TSMethodCall → GreenBold
@@ -415,14 +441,139 @@ Defaults to \"material\""
    (tree-sitter-hl-face:operator :foreground orange)                   ;; TSOperator → Orange
    (tree-sitter-hl-face:keyword.operator :foreground orange)           ;; TSKeywordOperator → Orange
    (tree-sitter-hl-face:punctuation.bracket :foreground fg)            ;; TSPunctBracket → Fg
-   (tree-sitter-hl-face:punctuation.delimiter :foreground base7)       ;; TSPunctDelimiter → Grey
+   (tree-sitter-hl-face:punctuation.delimiter :foreground grey)        ;; TSPunctDelimiter → Grey
    (tree-sitter-hl-face:tag :foreground orange)                        ;; TSTag → Orange
    (tree-sitter-hl-face:label :foreground orange)                      ;; TSLabel → Orange
+   ;; --- missing captures matched to upstream nvim-treesitter ---
+   ;; @attribute → Purple  (fixes #![...] Rust attr blocks being green)
+   (tree-sitter-hl-face:attribute :foreground magenta)                 ;; @attribute → Purple
+   ;; @keyword.directive/@keyword.directive.define → Purple  (sets the #! token)
+   (tree-sitter-hl-face:preproc :foreground magenta)                   ;; @keyword.directive → Purple
+   (tree-sitter-hl-face:define :foreground magenta)                    ;; @keyword.directive.define → Purple
+   ;; @include → Red  (use, mod, extern crate)
+   (tree-sitter-hl-face:include :foreground red)                       ;; @include → Red
+   (tree-sitter-hl-face:keyword.import :foreground red)                ;; @keyword.import → Red
+   ;; @keyword.function → RedItalic  (fn, async fn)
+   (tree-sitter-hl-face:keyword.function :foreground red :slant 'italic) ;; @keyword.function → RedItalic
+   ;; @keyword.return → Red
+   (tree-sitter-hl-face:keyword.return :foreground red)                ;; @keyword.return → Red
+   ;; @exception → RedItalic
+   (tree-sitter-hl-face:exception :foreground red :slant 'italic)      ;; @exception → RedItalic
+   ;; @function.macro → GreenBold  (macro_rules!, assert!, etc.)
+   (tree-sitter-hl-face:function.macro :foreground green :weight 'bold) ;; @function.macro → GreenBold
+   ;; @constant → Fg  (unset would fall through to (constants teal))
+   (tree-sitter-hl-face:constant :foreground fg)                       ;; @constant → Fg
+   ;; @storageclass / @storageclass.lifetime → Orange
+   (tree-sitter-hl-face:storageclass :foreground orange)               ;; @storageclass → Orange
+   (tree-sitter-hl-face:storageclass.lifetime :foreground orange)      ;; @storageclass.lifetime → Orange
+   (tree-sitter-hl-face:keyword.storage :foreground orange)            ;; @keyword.storage → Orange
+   ;; @type.qualifier → Orange  (const, mut in type positions)
+   (tree-sitter-hl-face:type.qualifier :foreground orange)             ;; @type.qualifier → Orange
+   ;; @punctuation.special → Blue  (::, =>, etc.)
+   (tree-sitter-hl-face:punctuation.special :foreground blue)          ;; @punctuation.special → Blue
+   ;; @annotation → Purple  (decorators, derives)
+   (tree-sitter-hl-face:annotation :foreground magenta)                ;; @annotation → Purple
+   ;; @character → Aqua  (char literals)
+   (tree-sitter-hl-face:character :foreground teal)                    ;; @character → Aqua
+   ;; @symbol → Fg
+   (tree-sitter-hl-face:symbol :foreground fg)                         ;; @symbol → Fg
+   ;; @variable.member → Blue; @variable.parameter → Fg
+   (tree-sitter-hl-face:variable.member :foreground blue)              ;; @variable.member → Blue
+   (tree-sitter-hl-face:variable.parameter :foreground fg)             ;; @variable.parameter → Fg
+   ;; @tag.attribute / @tag.delimiter → Green  (HTML/JSX)
+   (tree-sitter-hl-face:tag.attribute :foreground green)               ;; @tag.attribute → Green
+   (tree-sitter-hl-face:tag.delimiter :foreground green)               ;; @tag.delimiter → Green
+   ;; @comment → grey1 (handled by font-lock-comment-face, but explicit for ts)
+   (tree-sitter-hl-face:comment :foreground grey)                      ;; @comment → Grey
+   ;; @todo → blue bold (TODO/FIXME in comments)
+   (tree-sitter-hl-face:todo :foreground blue :weight 'bold)           ;; @todo → BlueBold
+   ;; @error → red (syntax errors)
+   (tree-sitter-hl-face:error :foreground red)                         ;; @error → Red
+   ;; @title → orange bold (markdown headings)
+   (tree-sitter-hl-face:title :foreground orange :weight 'bold)        ;; @title → OrangeBold
+   ;; @text → fg (plain text in markup)
+   (tree-sitter-hl-face:text :foreground fg)                           ;; @text → Fg
+   (tree-sitter-hl-face:text.literal :foreground green)                ;; @text.literal → TSLiteral → String
+   (tree-sitter-hl-face:text.reference :foreground teal)               ;; @text.reference → Constant → Aqua
+   (tree-sitter-hl-face:text.danger :foreground bg :background red :weight 'bold) ;; @text.danger → TSDanger
+   (tree-sitter-hl-face:text.warning :foreground bg :background yellow :weight 'bold) ;; @text.warning → TSWarning
+   (tree-sitter-hl-face:text.note :foreground bg :background green :weight 'bold) ;; @text.note → TSNote
+   (tree-sitter-hl-face:text.uri :foreground blue :underline t)        ;; @text.uri → TSURI
+   (tree-sitter-hl-face:markup.raw :foreground green)                  ;; @markup.raw → TSLiteral
+   (tree-sitter-hl-face:markup.link :foreground teal)                  ;; @markup.link → TSTextReference
+   (tree-sitter-hl-face:markup.link.url :foreground blue :underline t) ;; @markup.link.url → TSURI
+   (tree-sitter-hl-face:markup.quote :foreground grey)                 ;; @markup.quote → Grey
+   (tree-sitter-hl-face:markup.list :foreground blue)                  ;; @markup.list → TSPunctSpecial
+   ;; @parameter.reference → fg (i.e. &param)
+   (tree-sitter-hl-face:parameter.reference :foreground fg)            ;; @parameter.reference → Fg
+   ;; @strike → grey (strikethrough)
+   (tree-sitter-hl-face:strike :foreground grey)                       ;; @strike → Grey
+
+   ;; LSP semantic-token captures from upstream @lsp.type.* links.
+   (tree-sitter-hl-face:lsp.type.class :foreground yellow :slant 'italic)
+   (tree-sitter-hl-face:lsp.type.comment :foreground grey :slant 'italic)
+   (tree-sitter-hl-face:lsp.type.decorator :foreground green :weight 'bold)
+   (tree-sitter-hl-face:lsp.type.enum :foreground yellow :slant 'italic)
+   (tree-sitter-hl-face:lsp.type.enumMember :foreground blue)
+   (tree-sitter-hl-face:lsp.type.events :foreground orange)
+   (tree-sitter-hl-face:lsp.type.function :foreground green :weight 'bold)
+   (tree-sitter-hl-face:lsp.type.interface :foreground yellow :slant 'italic)
+   (tree-sitter-hl-face:lsp.type.keyword :foreground red :slant 'italic)
+   (tree-sitter-hl-face:lsp.type.macro :foreground magenta :slant 'italic)
+   (tree-sitter-hl-face:lsp.type.method :foreground green :weight 'bold)
+   (tree-sitter-hl-face:lsp.type.modifier :foreground orange)
+   (tree-sitter-hl-face:lsp.type.namespace :foreground yellow :slant 'italic)
+   (tree-sitter-hl-face:lsp.type.number :foreground magenta)
+   (tree-sitter-hl-face:lsp.type.operator :foreground orange)
+   (tree-sitter-hl-face:lsp.type.parameter :foreground fg)
+   (tree-sitter-hl-face:lsp.type.property :foreground blue)
+   (tree-sitter-hl-face:lsp.type.regexp :foreground green)
+   (tree-sitter-hl-face:lsp.type.string :foreground teal)
+   (tree-sitter-hl-face:lsp.type.struct :foreground yellow :slant 'italic)
+   (tree-sitter-hl-face:lsp.type.type :foreground yellow :slant 'italic)
+   (tree-sitter-hl-face:lsp.type.typeParameter :foreground yellow :slant 'italic)
+   (tree-sitter-hl-face:lsp.type.variable :foreground fg)
+
+   ;; Diagnostics / spellcheck / completion UI equivalents.
+   (flymake-error :underline `(:style wave :color ,red))
+   (flymake-warning :underline `(:style wave :color ,yellow))
+   (flymake-note :underline `(:style wave :color ,blue))
+   (flycheck-error :underline `(:style wave :color ,red))
+   (flycheck-warning :underline `(:style wave :color ,yellow))
+   (flycheck-info :underline `(:style wave :color ,blue))
+   (eglot-diagnostic-tag-unnecessary-face :foreground grey)
+   (eglot-diagnostic-tag-deprecated-face :strike-through t)
+   (flyspell-incorrect :underline `(:style wave :color ,red))
+   (flyspell-duplicate :underline `(:style wave :color ,yellow))
+   (company-tooltip :foreground fg-alt :background base3)
+   ;; Upstream PmenuSel defaults to grey2, but that is too bright/tan in Emacs
+   ;; minibuffer completion. Use the darker Visual/selection bg instead.
+   (company-tooltip-selection :foreground fg :background base3)
+   (company-tooltip-common :foreground green :weight 'bold)
+   (company-tooltip-common-selection :foreground green :background base3 :weight 'bold)
+   (company-tooltip-annotation :foreground grey2)
+   (corfu-default :foreground fg-alt :background base3)
+   (corfu-current :foreground fg :background base3)
+   (corfu-annotations :foreground grey2)
+   (vertico-current :foreground fg :background base3)
+   (consult-preview-match :foreground bg :background yellow)
+   (orderless-match-face-0 :foreground green :weight 'bold)
+   (orderless-match-face-1 :foreground yellow :weight 'bold)
+   (orderless-match-face-2 :foreground blue :weight 'bold)
+   (orderless-match-face-3 :foreground magenta :weight 'bold)
 
    ;; others
    (isearch :foreground bg :background yellow)
+   (lazy-highlight :foreground bg :background orange)
    (region :background base3)
-   (company-tooltip-common-selection :foreground bg-alt :background dark-blue)
+
+   ;; Markdown headings mirror upstream markdownH1-H6.
+   (markdown-header-face-1 :foreground red :weight 'bold)
+   (markdown-header-face-2 :foreground orange :weight 'bold)
+   (markdown-header-face-3 :foreground yellow :weight 'bold)
+   (markdown-header-face-4 :foreground green :weight 'bold)
+   (markdown-header-face-5 :foreground blue :weight 'bold)
+   (markdown-header-face-6 :foreground magenta :weight 'bold)
   )
   ;; --- extra variables ---------------------
   ()
