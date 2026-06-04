@@ -102,20 +102,6 @@ local servers = {
   jsonls = {},
 }
 
-local mason_packages = {
-  "typescript-language-server",
-  "rust-analyzer",
-  "gopls",
-  "lua-language-server",
-  "basedpyright",
-  "dockerfile-language-server",
-  "nixd",
-  "json-lsp",
-  "stylua",
-  "shfmt",
-  "prettierd",
-}
-
 require("lazy").setup({
   {
     "sainnhe/gruvbox-material",
@@ -232,19 +218,17 @@ require("lazy").setup({
     "williamboman/mason.nvim",
     build = ":MasonUpdate",
     opts = {},
+    keys = {
+      { "<leader>cm", "<cmd>Mason<CR>", desc = "Open Mason" },
+    },
   },
   {
     "williamboman/mason-lspconfig.nvim",
     dependencies = { "williamboman/mason.nvim" },
     opts = {
-      ensure_installed = vim.tbl_keys(servers),
-      automatic_installation = true,
+      ensure_installed = {},
+      automatic_installation = false,
     },
-  },
-  {
-    "WhoIsSethDaniel/mason-tool-installer.nvim",
-    dependencies = { "williamboman/mason.nvim" },
-    opts = { ensure_installed = mason_packages },
   },
   {
     "neovim/nvim-lspconfig",
