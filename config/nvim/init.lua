@@ -225,10 +225,6 @@ require("lazy").setup({
   {
     "williamboman/mason-lspconfig.nvim",
     dependencies = { "williamboman/mason.nvim" },
-    opts = {
-      ensure_installed = {},
-      automatic_installation = false,
-    },
   },
   {
     "neovim/nvim-lspconfig",
@@ -274,15 +270,37 @@ require("lazy").setup({
         end,
       })
 
-      local lspconfig = require("lspconfig")
       local mason_lspconfig = require("mason-lspconfig")
-      mason_lspconfig.setup_handlers({
-        function(server_name)
-          local server = servers[server_name] or {}
-          server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-          lspconfig[server_name].setup(server)
-        end,
-      })
+      local function setup_server(server_name)
+        local server = vim.deepcopy(servers[server_name] or {})
+        server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+
+        if vim.lsp.config then
+          vim.lsp.config(server_name, server)
+        else
+          require("lspconfig")[server_name].setup(server)
+        end
+      end
+
+      if mason_lspconfig.setup_handlers then
+        mason_lspconfig.setup({
+          ensure_installed = {},
+          automatic_installation = false,
+        })
+        mason_lspconfig.setup_handlers({
+          function(server_name)
+            setup_server(server_name)
+          end,
+        })
+      else
+        for server_name, _ in pairs(servers) do
+          setup_server(server_name)
+        end
+        mason_lspconfig.setup({
+          ensure_installed = {},
+          automatic_enable = vim.tbl_keys(servers),
+        })
+      end
     end,
   },
   {
