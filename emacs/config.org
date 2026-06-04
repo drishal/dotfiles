@@ -2059,7 +2059,7 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
   (add-hook 'web-mode-hook  'my-web-mode-hook))
 #+end_src
 ***** Tide
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package tide
   :ensure t
   :after (typescript-mode company flycheck)
@@ -2206,7 +2206,6 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 *** zig
 #+begin_src emacs-lisp
 (use-package zig-mode :ensure t)
-(setq lsp-zig-zls-executable "~/zls/zls")
 #+end_src
 
 
