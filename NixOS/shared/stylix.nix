@@ -58,6 +58,7 @@
       gtk.enable = true;
       # firefox.enable = false;
       fish.enable = false;
+      kmscon.enable = false; # broken with nixpkgs-unstable (stylix#2334)
     };
   };
  }
