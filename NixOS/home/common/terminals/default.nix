@@ -160,9 +160,9 @@
     ghostty = {
       enable = true;
       settings = {
-        theme = "Gruvbox Material Dark";
-        font-family = "${config.stylix.fonts.monospace.name}";
-        font-size = config.stylix.fonts.sizes.terminal;
+        # theme = "Gruvbox Material Dark";
+        # font-family = "${config.stylix.fonts.monospace.name}";
+        # font-size = config.stylix.fonts.sizes.terminal;
         window-padding-x = 5;
         window-padding-y = 5;
         cursor-style = "block";

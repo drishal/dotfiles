@@ -56,32 +56,53 @@
       #aliases
       # source ~/dotfiles/scripts/aliases.sh
 
-      #gruvbox 
-      # set fish_color_normal D4BE98
-      # set fish_color_command A9B665
-      # set fish_color_keyword 7DAEA3
-      # set fish_color_quote 89B482
-      # set fish_color_redirection E78A4E
-      # set fish_color_end 7C6F64
-      # set fish_color_error EA6962
-      # set fish_color_param D4BE98
-      # set fish_color_comment 7C6F64
-      # set fish_color_selection --background=504945
-      # set fish_color_search_match --background=504945
-      # set fish_color_operator A9B665
-      # set fish_color_escape 7DAEA3
-      # set fish_color_autosuggestion 7C6F64
-      # set fish_pager_color_progress 8F3F71
-      # set fish_pager_color_prefix 89B482
-      # set fish_pager_color_completion D4BE98
-      # set fish_pager_color_description 8F3F71
-      fish_config theme choose "catppuccin-mocha"
+      # Syntax-highlighting colors driven by the active stylix scheme.
+      # Replaces stylix.targets.fish (base16-fish), which mapped colors to
+      # ANSI palette *names* and persisted them as mutable universal vars +
+      # reprogrammed the terminal palette on every shell start. Here we use
+      # the scheme's real hex values, set globally (re-applied each shell,
+      # never persisted to fish_variables).
+
+      # Drop any stale universal color vars left by base16-fish so they can't
+      # shadow the globals below.
+      for c in normal command keyword quote redirection end error param \
+               comment operator escape autosuggestion selection search_match \
+               cwd cwd_root user host
+          set -eU fish_color_$c 2>/dev/null
+      end
+      for c in progress prefix completion description
+          set -eU fish_pager_color_$c 2>/dev/null
+      end
+
+      set -g fish_color_normal        ${config.lib.stylix.colors.base05}
+      set -g fish_color_command       ${config.lib.stylix.colors.base0B}
+      set -g fish_color_keyword       ${config.lib.stylix.colors.base0D}
+      set -g fish_color_quote         ${config.lib.stylix.colors.base0C}
+      set -g fish_color_redirection   ${config.lib.stylix.colors.base09}
+      set -g fish_color_end           ${config.lib.stylix.colors.base03}
+      set -g fish_color_error         ${config.lib.stylix.colors.base08}
+      set -g fish_color_param         ${config.lib.stylix.colors.base05}
+      set -g fish_color_comment       ${config.lib.stylix.colors.base03}
+      set -g fish_color_operator      ${config.lib.stylix.colors.base0B}
+      set -g fish_color_escape        ${config.lib.stylix.colors.base0D}
+      set -g fish_color_autosuggestion ${config.lib.stylix.colors.base03}
+      set -g fish_color_selection     ${config.lib.stylix.colors.base05} --bold --background=${config.lib.stylix.colors.base02}
+      set -g fish_color_search_match  --background=${config.lib.stylix.colors.base02}
+      set -g fish_color_cwd           ${config.lib.stylix.colors.base0B}
+      set -g fish_color_cwd_root      ${config.lib.stylix.colors.base08}
+      set -g fish_color_user          ${config.lib.stylix.colors.base0B}
+      set -g fish_color_host          ${config.lib.stylix.colors.base05}
+
+      set -g fish_pager_color_progress    ${config.lib.stylix.colors.base0E}
+      set -g fish_pager_color_prefix      ${config.lib.stylix.colors.base0C}
+      set -g fish_pager_color_completion  ${config.lib.stylix.colors.base05}
+      set -g fish_pager_color_description ${config.lib.stylix.colors.base0E}
     '';
     plugins = [
-      {
-        name = "catppuccin";
-        src = inputs.catppuccin-fish; # ← directly reference the input
-      }
+      # {
+      #   name = "catppuccin";
+      #   src = inputs.catppuccin-fish; # ← directly reference the input
+      # }
       # Enable a plugin (here grc for colorized command output) from nixpkgs
       # { name = "grc"; src = pkgs.fishPlugins.grc.src; }
       # Manually packaging and enable a plugin

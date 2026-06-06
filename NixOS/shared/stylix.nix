@@ -57,8 +57,7 @@
     targets = {
       gtk.enable = true;
       # firefox.enable = false;
-      fish.enable = false;
-      kmscon.enable = false; # broken with nixpkgs-unstable (stylix#2334)
+      fish.enable = false; # we set fish colors by hex via config.lib.stylix.colors in shells.nix
     };
   };
  }
