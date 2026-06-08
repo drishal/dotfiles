@@ -504,9 +504,22 @@ remove/add tangle no to whatever font you prefer
 ** smooth scrolling
 #+begin_src emacs-lisp 
 (pixel-scroll-precision-mode 1)
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
-(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
-(setq scroll-step 1) 
+(setq scroll-conservatively 101
+      scroll-margin 0
+      auto-window-vscroll nil
+      mouse-wheel-scroll-amount '(1 ((shift) . 1))
+      mouse-wheel-follow-mouse 't
+      mouse-wheel-progressive-speed nil
+      pixel-scroll-precision-interpolate-mice t    ; smooth scroll for wheel mice
+      pixel-scroll-precision-interpolate-page t)   ; smooth PgUp/PgDn
+(use-package ultra-scroll
+  :ensure t
+  :init
+  (setq scroll-conservatively 101    ; never recenter point
+        scroll-margin 0               ; MUST be 0 with ultra-scroll
+        auto-window-vscroll nil)      ; reduces jumpiness on keyboard repeat
+  :config
+  (ultra-scroll-mode 1))
 #+end_src
 ** Dashboard
 #+begin_src emacs-lisp 
