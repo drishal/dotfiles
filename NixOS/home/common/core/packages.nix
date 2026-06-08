@@ -278,6 +278,13 @@
   # services.swaync = {
   #   enable = true;
   # };
+  programs.eza = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+  programs.dircolors = {
+    enable = true;
+  };
 
   programs.fastfetch = {
     enable = true;
