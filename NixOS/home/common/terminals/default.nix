@@ -138,7 +138,7 @@
       };
     };
     kitty = {
-      shellIntegration.mode = "no-cursor";
+      shellIntegration.mode = "no-cursor no-cwd no-prompt-mark";
       enable = true;
       settings = {
         confirm_os_window_close = 0;
@@ -147,7 +147,7 @@
         enable_audio_bell = false;
         input_delay = 0;
         repaint_delay = 2;
-        sync_to_monitor = false;
+        sync_to_monitor = true;
         update_check_interval = 0;
         wayland_enable_ime  = false;
         window_padding_width = 5;
