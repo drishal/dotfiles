@@ -10,11 +10,15 @@
     completion.enable = true;
     # blesh.enable = true;
   };
-  programs.fish.enable = true;
+  programs.fish = {
+    enable = true;
+    # vendor.completions.enable = false;
+  };
 
   programs.zsh ={
     enable = true;
-    enableCompletion = false;
+    enableCompletion = true;
+    enableGlobalCompInit = false;
     promptInit = "";
   };
   programs.xonsh.enable = true;
