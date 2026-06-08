@@ -1,24 +1,37 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-    ];
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
-
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
-  boot.initrd.kernelModules = ["amdgpu"];
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "xhci_pci"
+    "ahci"
+    "usb_storage"
+    "usbhid"
+    "sd_mod"
+  ];
+  boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.kernelParams = [
     # --- GPU Optimization ---
-    "amdgpu.aspm=0"                   # Disable PCIe power saving
-    "amdgpu.runpm=0"                  # Disable Runtime PM
-    "amdgpu.bapm=0"                   # Disable Bidirectional Application PM
+    "amdgpu.aspm=0" # Disable PCIe power saving
+    "amdgpu.runpm=0" # Disable Runtime PM
+    "amdgpu.bapm=0" # Disable Bidirectional Application PM
     "amdgpu.ppfeaturemask=0xffffffff" # Unlock Overclocking/Undervolting
 
     # --- CPU & Latency Optimization ---
     "cpufreq.default_governor=performance" # Force max clocks
     "amd_pstate=active"
+    "processor.max_cstate=2" # Cap at C2 (18µs wake) — eliminates shell stutter from scx_lavd C3 wake latency (350µs)
     "iommu=pt"
     "threadirqs"
     "amdgpu.gfx_off=0"
@@ -26,20 +39,19 @@
     "mitigations=off"
   ];
 
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/dfe9f586-6ff5-4ec8-a459-e665323919dc";
+    fsType = "ext4";
+  };
 
-
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/dfe9f586-6ff5-4ec8-a459-e665323919dc";
-      fsType = "ext4";
-    };
-
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/AA53-4C0A";
-      fsType = "vfat";
-      options = [ "fmask=0077" "dmask=0077" ];
-    };
-
-
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/AA53-4C0A";
+    fsType = "vfat";
+    options = [
+      "fmask=0077"
+      "dmask=0077"
+    ];
+  };
 
   swapDevices = [ ];
 
