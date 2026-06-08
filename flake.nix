@@ -1,12 +1,5 @@
 {
   description = "Configuration for my system";
-  # nixConfig.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
-  # nixConfig.substituters = [ "https://aseipp-nix-cache.freetls.fastly.net" ];
-  # nixConfig.extra-substituters = [ "https://contamination.cachix.org" "https://nix-community.cachix.org" ];
-  # nixConfig.extra-trusted-public-keys = [ "contamination.cachix.org-1:KmdW5xVF8ccKEb9tvK6qtEMW+lGa83seGgFyBOkeM/4=" "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
-  # nixConfig.trusted-users=["root" "drishal"];
-  # nixConfig.extra-substituters = [ "https://nix-community.cachix.org" ];
-  # nixConfig.extra-trusted-public-keys = [  "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="];
   nixConfig = {
     extra-substituters = [
       "https://nix-community.cachix.org"
@@ -18,17 +11,11 @@
     ];
   };
   inputs = {
-
     nixpkgs = {
       url = "github:nixos/nixpkgs/nixos-unstable";
     };
-    nixpkgs-master.url = "github:NixOS/nixpkgs/9b7a014c9083e9d625b8300313f13b20d4043dca";
-    # nixpkgs = { url = "github:PedroHLC/nixpkgs/pull-284487"; };
-    # nixpkgs-master = {
-    #   url = "github:nixos/nixpkgs/9b5ca6a80c775a62734e1fefa0d04f1b0c91c91b";
-    # };
 
-    # nixpkgs-master.url = "github:NixOS/nixpkgs/master";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/9b7a014c9083e9d625b8300313f13b20d4043dca";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -37,18 +24,10 @@
 
     nixvim = {
       url = "github:nix-community/nixvim";
-      # inputs.nixpkgs.follows = "nixpkgs";
-    };
-    ignis = {
-      url = "github:ignis-sh/ignis";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    # discord-flake = {
-    #   url = "github:InternetUnexplorer/discord-overlay";
-    # };
 
-    # chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 
     nur.url = "github:nix-community/NUR";
 
@@ -57,14 +36,11 @@
     declarative-cachix.url = "github:jonascarpay/declarative-cachix";
 
     hyprland.url = "github:hyprwm/Hyprland";
-    # hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1/v0.53.3";
-    # hyprland.url = "github:hyprwm/Hyprland/v0.53.3";
 
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay/";
     };
     emacs-lsp-booster.url = "github:slotThe/emacs-lsp-booster-flake";
-    # emacs-ng.url = "github:emacs-ng/emacs-ng";
 
     programsdb = {
       url = "github:wamserma/flake-programs-sqlite";
@@ -80,29 +56,13 @@
       flake = false;
     };
 
-    # ags.url = "github:Aylur/ags";
-    astal = {
-      url = "github:aylur/astal";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    ags = {
-      url = "github:aylur/ags";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     lobster.url = "github:justchokingaround/lobster";
-
-    #base16.url = "github:SenchoPens/base16.nix";
 
     tt-schemes = {
       url = "github:tinted-theming/schemes";
       flake = false;
     };
 
-    auto-cpufreq = {
-      url = "github:AdnanHodzic/auto-cpufreq";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     stylix = {
       url = "github:nix-community/stylix/";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -130,9 +90,6 @@
 
     betterfox.url = "github:HeitorAugustoLN/betterfox-nix";
 
-    # nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
-    aporetic.url = "github:Echinoidea/Aporetic-Nerd-Font";
-
     direnv-instant.url = "github:Mic92/direnv-instant";
 
     ani-cli = {
@@ -145,30 +102,17 @@
       url = "github:sainnhe/gruvbox-material";
       flake = false;
     };
-    catppuccin-fish = {
-      url = "github:catppuccin/fish";
-      flake = false; # ← important, it's not a flake itself
-    };
-
-    openclaw.url = "github:openclaw/nix-openclaw";
 
     dms.url = "github:AvengeMedia/DankMaterialShell";
     llama-cpp.url = "github:ggml-org/llama.cpp";
-    hermes-agent.url = "github:NousResearch/hermes-agent";
   };
 
   outputs =
     {
-      ags,
-      astal,
-      auto-cpufreq,
-      #base16,
       cachix,
-      # chaotic,
+      chaotic,
       declarative-cachix,
-      # discord-flake,
       emacs-lsp-booster,
-      # emacs-ng,
       emacs-overlay,
       home-manager,
       hyprland,
@@ -176,17 +120,13 @@
       nixpkgs-master,
       nixvim,
       nix-gaming,
-      # nvchad4nix,
-      # nvchad-on-steroids,
       nur,
       private-stuff,
       programsdb,
       quickemu,
       stylix,
-      # hyprpanel,
       tt-schemes,
       umu,
-      hermes-agent,
       ghostty,
       ...
     }@inputs:
@@ -211,35 +151,7 @@
 
     in
     {
-      # homeConfigurations."drisha" = home-manager.lib.homeManagerConfiguration {
-      #   inherit pkgs;
-      #   extraSpecialArgs = {
-      #     inherit inputs;
-      #     # inherit pkgs-master;
-      #   };
-      #   modules = [
-      #     ./NixOS/home-config/home.nix
-      #     {
-      #       nixpkgs.overlays = [
-      #         inputs.emacs-overlay.overlay
-      #         inputs.hyprpanel.overlay
-      #         emacs-lsp-booster.overlays.default
-      #       ];
-      #     }
-      #     # inputs.ags.homeManagerModules.default
-      #     #base16.homeManagerModule
-      #     nixvim.homeManagerModules.nixvim
-      #     stylix.homeManagerModules.stylix
-      #     "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
-      #     {
-      #       home = {
-      #         username = "drishal";
-      #         homeDirectory = "/home/drishal";
-      #       };
-      #     }
-      #   ];
-      # };
-      homeConfigurations =
+       homeConfigurations =
         let
           commonModules = [
             ./NixOS/home/common
@@ -251,11 +163,9 @@
 
               ];
             }
-            # inputs.ags.homeManagerModules.default
-            #base16.homeManagerModule
             nixvim.homeModules.nixvim
             stylix.homeModules.stylix
-            "${private-stuff}/hm-email.nix" # sorry, I cannot reveal email settings and stuff as they are private (dont forget to delete this line)
+            "${private-stuff}/hm-email.nix"
           ];
           extraSpecialArgs = {
             inherit system;
@@ -291,16 +201,14 @@
           commonModules = [
             {
               nixpkgs.overlays = [
-                # nur.overlay
                 inputs.emacs-overlay.overlay
-                # inputs.discord-flake.overlay
-                # inputs.neovim-nightly-overlay.overlay
               ];
             }
-            auto-cpufreq.nixosModules.default
             # chaotic.nixosModules.default
             stylix.nixosModules.stylix
-            hermes-agent.nixosModules.default
+            chaotic.nixosModules.nyx-cache
+            chaotic.nixosModules.nyx-overlay
+            chaotic.nixosModules.nyx-registry
             #base16.nixosModule
           ];
           specialArgs = {
@@ -331,59 +239,6 @@
             specialArgs = specialArgs;
           };
         };
-      # packages.${system}.default = pkgs.stdenv.mkDerivation {
-      #   inherit name;
-      #   src = ./config/ags;
-
-      #   nativeBuildInputs = with pkgs; [
-      #     wrapGAppsHook
-      #     gobject-introspection
-      #   ];
-
-      #   buildInputs = [
-      #     (pkgs.python3.withPackages (ps: [
-      #       # any other python package
-      #     ps.pygobject3
-      #     ]))
-      #     astal.packages.${system}.io
-      #     astal.packages.${system}.astal3
-      #     # any other gi lib
-      #   ];
-
-      #   # you shouldn't really copy the whole src to $out/bin
-      #   # but for now it works
-      #   installPhase = ''
-      #   mkdir -p $out/bin
-      #   cp * $out/bin
-      #   chmod +x $out/bin/${name}
-      # '';
-      # };
-      # devShell.x86_64-linux = nixpkgs.legacyPackages.${system}.mkShell {
-      #   buildInputs = with astal.packages.${system}; [
-      #     astal3
-      #     io
-      #   ];
-      #   nativeBuildInputs = [
-      #     ags.packages.${system}.default
-      #     pkgs.wrapGAppsHook
-      #   pkgs.gobject-introspection
-      #   ];
-      # };
-      # nixosConfigurations = {
-      #   nixos = lib.nixosSystem {
-      #     inherit system;
-      #     modules = [
-      #       # { nixpkgs.overlays = [ emacs-overlay.overlay ];}
-      #       { nixpkgs.overlays = [ nur.overlay inputs.emacs-overlay.overlay inputs.discord-flake.overlay]; }
-      #       # hyprland.nixosModules.default
-      #       ./NixOS/system-config/hardware-configuration/hardware-configuration-laptop.nix
-      #       ./NixOS/system-config/configuration.nix
-      #       chaotic.nixosModules.default
-      #       # { programs.hyprland.enable = true; }
-      #     ];
-      #     specialArgs = { inherit inputs; };
-      #   };
-      # };
       # packages."x86_64-linux".thorium = pkgs.callPackage ./NixOS/custom-packages/thorium-browser/default.nix {};
       # packages."x86_64-linux".qtile= pkgs.callPackage ./NixOS/custom-packages/qtile/default.nix {};
       # packages."x86_64-linux".freedownloadmanager= pkgs.callPackage ./NixOS/custom-packages/free-download-manager/default.nix {};
