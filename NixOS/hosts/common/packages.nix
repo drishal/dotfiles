@@ -7,52 +7,22 @@
   ...
 }:
 {
-  # imports = [
-  # pkgs-master
-  # inputs.lobster.packages.x86_64-linux.lobster
-  # ];
   services.flatpak.enable = true;
   services.gvfs.enable = true;
   hardware.openrazer.enable = true;
-  # services.hermes-agent = {
-  #  enable = true ;
-  #  container.enable = false ;
-  #  addToSystemPackages = true;
-  #  stateDir = "/var/lib/hermes";
-  #  workingDirectory = "/home/drishal";  # Or your preferred workspace
-  # };
-
-  # inputs.nixpkgs-fix.packages.${pkgs.system}.
-  # services.zerotierone = {
-  # enable = true;
-  # package = inputs.nixpkgs-master.legacyPackages.${pkgs.system}.zerotierone ;
-  # package = pkgs-master.zerotierone;
-  # localConf.settings = {
-  #   softwareUpdate = "disable";
-  # };
-  # };
-  # services.clamav = {
-  #   daemon.enable = false;
-  #   scanner.enable =  false;
-  #   updater.enable =  false;
-  # };
-  # services.ngrok = {
-  #   enable = true;
-  #   extraConfigFiles = [
-  #     "${inputs.private-stuff}/ngrok.txt"
-  #   ];
-  # };
-  # xdg.portal.enable = true;
 
   programs = {
     # dconf
     dconf.enable = true;
+
     # java
     java = {
       enable = true;
     };
+
     # nm-applet
     nm-applet.enable = true;
+
     #steams
     steam = {
       enable = true;
@@ -61,14 +31,10 @@
     #kde connect
     kdeconnect.enable = true;
 
-    #wireshark
-    # wireshark.enable = true;
-
     #game mode
     gamemode.enable = true;
 
     #gamescope
-    # gamescope.enable = true;
     gamescope = {
       enable = true;
       capSysNice = true; # already probably set, but confirm
@@ -84,72 +50,21 @@
             webkitgtk_4_1
           ];
       };
-
     };
-
-    #droidcam
-    # droidcam =  {
-    #   enable = true;
-    # };
-
-    #neovim
-    # neovim = {
-    #   enable = true;
-    #   package = pkgs.neovim-nightly;
-    #   configure = {
-    #     packages.myVimPackage = with pkgs; {
-    #       start = [ lua-language-server ];
-    #     };
-    #   };
-    # };
-
-    # systemtap
-    # systemtap.enable=true;
   };
 
-  #autocpufreq
-  # services.auto-cpufreq =
-  #   {
-  #     enable = true;
-  #     settings = {
-  #       charger = {
-  #         governor = "performance";
-  #         turbo = "on";
-  #       };
-
-  #       battery = {
-  #         governor = "schedutil";
-  #         turbo = "auto";
-  #       };
-  #     };
-  #   };
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
     # _9base
     acpi
     argc
     android-tools
-    # anydesk
-    # alacritty
-    # ayugram-desktop
-    # ani-cli
     (ani-cli.overrideAttrs (old: {
       src = inputs.ani-cli;
-      # src = pkgs.fetchFromGitHub {
-      #   repo = "ani-cli";
-      #   owner = "pystardust";
-      #   rev = "25959086230e9354cf96acc6d3a310d57f392221";
-      #   sha256 = "sha256-8M5Hwo1OwGcEdjARb1zjjmR1YxekJZ5w/ztEoq6vOJ0=";
-      # };
     }))
     appimage-run
     arandr
-    # arc-theme
     aria2
-    #scrcpy
     scrcpy
-    # axel
     bat
     bc
     bison
@@ -169,25 +84,11 @@
     cabextract
     cachix
     chntpw
-    # calibre
-    # cider-2
     cargo
     clementine
     claude-code
-    #carnix
-    # chromium
-    # (chromium.override {
-    #   commandLineArgs = [
-    #     "--ignore-gpu-blocklist"
-    #     "--enable-zero-copy"
-    #     "--ozone-platform-hint=auto"
-    #     "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
-    #   ];
-    # })
-    # chromium-bsu
     nemo
     nemo-with-extensions
-    # clang
     clang-tools
     cloudflare-warp
     # (cloudflare-warp.overrideAttrs(_: {buildInputs=[pkgs.dbus pkgs.stdenv.cc.cc.lib];}))
@@ -209,61 +110,25 @@
     dejavu_fonts
     devenv
     discord
-    # dolphin
-    # discord-canary
-    # (discord.overrideAttrs (_: {
-    #   # withVencode = true;
-    #   # extraOptions
-    #   commandLineArgs = [
-    #     "--ignore-gpu-blocklist"
-    #     "--enable-zero-copy"
-    #     "--ozone-platform-hint=auto"
-    #     "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
-    #   ];
-    # }))
-    # (discord.override {
-    #   withVencord = true;
-    # })
     distrobox
     dig
-    # (distrobox.overrideAttrs (old: {
-    #   src = pkgs.fetchFromGitHub {
-    #     repo = "distrobox";
-    #     owner = "89luca89";
-    #     rev = "3435f4d27070a99668bfa29a3e508db4ecc09009";
-    #     sha256 = "sha256-UWrXpb20IHcwadPpwbhSjvOP1MBXic5ay+nP+OEVQE4=";
-    #   };
-    # }))
-    dmg2img
-    # dmenu
-    # dmidecode
+       dmg2img
     docker-compose
-    # dunst
     dust
-    # dwmblocks
-    # dwarfs
     ed
-    # emacs-lsp-booster
     element-desktop
     ethtool
-    # etcher
-    # evince
     easyeffects
     eza
     lsd
     fastfetch
     fdk_aac
-    # floorp
     feh
-    # fim
     ffmpeg-full
     # ff2mpv
     figlet
     firefox
     # inputs.firefox-nightly.packages.${pkgs.system}.firefox-beta-bin
-    # inputs.firefox.packages.${pkgs.system}.firefox-nightly-bin
-    # firefox-wayland
-    # firefox-devedition-bin
     findutils
     file
     # fish
@@ -276,7 +141,6 @@
     gcc
     # geekbench
     # inputs.ghostty.packages.x86_64-linux.default
-    # inputs.hermes-agent.packages.${pkgs.system}.default   # or .hermes-agent if the output name differs
     gimp
     git
     gitRepo
@@ -292,10 +156,6 @@
     gpu-screen-recorder
     gpu-screen-recorder-gtk
     gparted
-    # gpt4all
-    # gtk-layer-shell
-    # gtklock
-    # handbrake
     hdparm
     htop
     # hollywood
@@ -343,13 +203,10 @@
     kdePackages.kirigami
     kitty
     kompose
-    # pkgs-master.kotatogram-desktop
     lbreakout2
     # linuxKernel.packages.v4l2loopback
     # linuxKernel.packages.linux_cachyos.v4l2loopback
     libnotify
-    # llama-cpp-vulkan
-
     libarchive
     libreoffice
     libva-utils
@@ -357,36 +214,16 @@
     libfaketime
     libepoxy
     linuxPackages.cpupower
-    # lxqt.pcmanfm-qt
-    # linuxPackages.systemtap
-    # linuxKernel.packages.linux.systemtap
     lm_sensors
     lolcat
     lsd
     lshw
     lollypop
-    #lutris-unwrapped
-    # lxappearance
-    # (lutris.override {
-    #   extraLibraries = pkgs: [
-    #     xz
-    #     freetype
-    #   ];
-    # })
     lxsession
     lsof
     man
     mangohud
     materia-theme
-    # materialgram
-    # (materia-kde-theme.overrideAttrs (old: {
-    #   src = pkgs.fetchFromGitHub {
-    #     repo = "materia-kde";
-    #     owner = "PapirusDevelopmentTeam";
-    #     rev = "6cc4c1867c78b62f01254f6e369ee71dce167a15";
-    #     sha256 = "sha256-tZWEVq2VYIvsQyFyMp7VVU1INbO7qikpQs4mYwghAVM=";
-    #   };
-    # }))
     mesa-demos
     metasploit
     # mov-cli
@@ -401,20 +238,12 @@
     # }))
     mlocate
     mission-center
-    # mongodb-compass
     mosh
-    # motrix
-    # mplayer
     mpv
     mpvScripts.mpris
-    #mullvad
-    #mullvad-vpn
-    # neovide
     ncdu
     ncurses
-    # neofetch
     nicotine-plus
-    # neovim-nightly
     networkmanagerapplet
     netcat-gnu
     # nil
@@ -425,12 +254,7 @@
     nmap
     nodejs
     nerd-font-patcher
-    # ngrok
-    # nvtop-amd
     nvtopPackages.amd
-    # nodePackages_latest.create-react-app
-    # nodePackages_latest.bash-language-server
-    # nodePackages_latest.typescript-language-server
     noto-fonts
     ntfs3g
     obs-studio
@@ -438,73 +262,36 @@
     openssl
     openvpn
     onefetch
-    # onboard
     onlyoffice-desktopeditors
-    # (orchis-theme.overrideAttrs (old: {
-    #   src = pkgs.fetchFromGitHub {
-    #     repo = "Orchis-theme";
-    #     owner = "vinceliuice";
-    #     rev = "c774328344413a7ea416da242cc50e8cc1a99caa";
-    #     sha256 = "sha256-COOmg7XW79iH/H+o81nfW+mrMjyii8jhmlP48lI2SGg=";
-    #   };
-    # }))
     p7zip
     pandoc
     papirus-icon-theme
     pass
     pavucontrol
-    # pwvucontrol
     patchelf
     pciutils
-    # pkgs-master.pcmanfm
-    # peaclock
     pfetch
     php
     pkg-config
-    # polybar
-    # podman-compose
     powershell
-    #postman
     poppler-utils
     powertop
     powercap
     polychromatic
-    # protonvpn-cli
-    # protonvpn-gui
     procps
-
     pdfgrep
     poppler
-    # protonup-qt
     ps_mem
     python3
-    # python3Packages.mysql-connector
     python3Packages.pip
     playerctl
-    #python3Packages.tkinter
-    #python3Packages.shodan
-    #python3Packages.pyqt5
-    #python3Packages.venvShellHook
-    #$python3Packages.qtile-extras
     qpdf
-    # quickemu
-    # (quickemu.override { qemu = qemu_full; })
-    # qutebrowser
     qbittorrent
-    # qbittorrent-nox
-    # qtile-extras_git
     ranger
     read-edid
     ripgrep
-    # rquickshare
-    # rnnoise
-    # rnnoise-plugin
-    # rnix-lsp
     rofi
     rofi-emoji
-    # rustc
-    # rustup
-    # rust-analyzer
     simplescreenrecorder
     # sony-headphones-client
     # scx
@@ -515,10 +302,7 @@
     steam-run
     steamcmd
     steamtinkerlaunch
-    # stremio
     s-tui
-    # surf
-    # swaylock
     sway-contrib.grimshot
     socat
     swaylock-effects
@@ -528,12 +312,10 @@
     tetex
     # texlive.combined.scheme-full
     #texlive.combined.scheme-medium
-    # thinkfan
     # thorium
     # inputs.self.packages.${pkgs.system}.freedownloadmanager
     #inputs.self.packages.${pkgs.system}.thorium
     # inputs.astal.packages.${pkgs.stdenv.hostPlatform.system}.astal
-
     tigervnc
     tmux
     tofi
@@ -553,17 +335,6 @@
     # virt-manager
     virtualenv
     virtiofsd
-    # (vivaldi.override {
-    #   commandLineArgs = [
-    #     "--ignore-gpu-blocklist"
-    #     "--enable-zero-copy"
-    #     "--ozone-platform-hint=auto"
-    #     "--gpu-prefer-discrete"
-    #     "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
-    #   ];
-    # })
-    # vivaldi-ffmpeg-codecs
-    # vesktop
     vscode-fhs
     vscode-langservers-extracted
     vlc
@@ -587,14 +358,10 @@
     wlr-randr
     wdisplays
     xarchiver
-    # xonotic
     yarn
     yad
     yt-dlp
-    # ytfzf
     zip
-    # zoom-us
-    # Xfce stuff
     (thunar.override {
       thunarPlugins = with pkgs; [
         thunar-volman
@@ -627,95 +394,8 @@
     #   ps.pygobject-stubs
     #   inputs.astal.packages.${pkgs.stdenv.hostPlatform.system}.astal3
     # ]))
-    # inputs.emacs-ng.packages.x86_64-linux.default
-    # python39Packages.numpy python39Packages.pandas
-    # ((emacsPackagesFor emacs-pgtk).emacsWithPackages (
-    #   epkgs: with epkgs; [
-    #     treesit-grammars.with-all-grammars
-    #     vterm
-    #     dockerfile-language-server-nodejs
-    #     # telega
-    #   ]
-    # ))
-    # (pkgs.callPackage ../packages/batdistrack/default.nix { })
-    # (pkgs.callPackage ../custom-packages/galaxy-buds-client/default.nix { })
-    #(distrobox.overrideAttrs)
-
-    # (st.overrideAttrs (oldAttrs: rec {
-    #   patches = [
-    #     # You can specify local patches
-    #     # ./path/to/local.diff
-    #     # Fetch them directly from `st.suckless.org`
-    #     (fetchpatch {
-    #       url = "http://st.suckless.org/patches/desktopentry/st-desktopentry-0.8.4.diff";
-    #       sha256 = "sha256-Hj2YgKHXhRplT8ojGCktygwKPdvaY9l2pteLunz1EGw=";
-    #     })
-    #   ];
-    # }))
-    # (picom.overrideAttrs (old: {
-    #   src = pkgs.fetchFromGitHub {
-    #     repo = "picom";
-    #     owner = "yshui";
-    #     rev = "cee12875625465292bc11bf09dc8ab117cae75f4";
-    #     sha256 = "sha256-lVwBwOvzn4ro1jInRuNvn1vQuwUHUp4MYrDaFRmW9pc=";
-    #   };
-    #   buildInputs = old.buildInputs ++ [ pkgs.pcre2 ];
-    # }))
-    # (tlp.overrideAttrs (old: {
-    #   src = pkgs.fetchFromGitHub {
-    #     repo = "linrunner";
-    #     owner = "TLP";
-    #     rev = "e9d49c30b0f074eaa91a3853182da7cf67ca8ab7";
-    #     sha256 = "sha256-LVWBWOVZN4RO1JINRUNVN1VQUWUHUP4MYRDAFRMW9PC=";
-    #   };
-    # }))
-    # (discord.overrideAttrs (_: {
-    #   # extraOptions
-    #   commandLineArgs = [
-    #     "--ignore-gpu-blocklist"
-    #     "--enable-gpu-rasterization"
-    #     "--enable-zero-copy"
-    #     "--force-dark-mode"
-    #     "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder"
-    #     "--disable-features=UseChromeOSDirectVideoDecoder"
-    #     "--use-vulkan"
-    #     "--ozone-platform-hint=auto"
-    #     "--enable-hardware-overlays"
-    #   ];
-    # }))
-    # river
-    # (river.overrideAttrs (prevAttrs: rec {
-    #   postInstall =
-    #     let
-    #       riverSession = ''
-    #         [Desktop Entry]
-    #         Name=River
-    #         Comment=Dynamic Wayland compositor
-    #         Exec=river
-    #         Type=Application
-    #       '';
-    #     in
-    #     ''
-    #       mkdir -p $out/share/wayland-sessions
-    #       echo "${riverSession}" > $out/share/wayland-sessions/river.desktop
-    #     '';
-    #   passthru.providedSessions = [ "river" ];
-    # }))
   ];
 
-  # powerManagement = {
-  #   powerDownCommands = ''
-  #     ${pkgs.batdistrack}/bin/batdistrack
-  #   '';
-  # };
-
-  # # nixpkgs.overlays = [
-  #   # batdistrack
-  #   (self: super: {
-  #     batdistrack = super.callPackage ../extra-packages/batdistrack/default.nix { };
-  #   })
-  # ];
-  # services.teamviewer.enable = true;
   systemd.packages = with pkgs; [
     # (cloudflare-warp.overrideAttrs(_: {buildInputs=[pkgs.dbus pkgs.stdenv.cc.cc.lib];}))
     cloudflare-warp
@@ -736,22 +416,6 @@
     '';
   };
 
-  #fonts
-  # fonts.fontconfig.defaultFonts.monospace = [
-  #   "AporeticSansMonoNerdFont"
-  # ];
-
-  # fonts.fontconfig.localConf =  ''
-  #   <match target="pattern">
-  #   <test name="family">
-  #     <string>AporeticSansMonoNerdFont</string>
-  #   </test>
-  #   <edit name="weight" mode="assign">
-  #     <const>medium</const>
-  #   </edit>
-  # </match>
-  # '';
-
   fonts = {
     enableDefaultPackages = true;
     # fontDir.enable = true;
@@ -761,36 +425,16 @@
       noto-fonts-lgc-plus
       nerd-fonts.fantasque-sans-mono
       nerd-fonts.noto
-      # nerd-fonts.fira-code
-      # nerd-fonts.fira-mono
-      # nerd-fonts.recursive-mono
-      # nerd-fonts.jetbrains-mono
-      # nerd-fonts.caskaydia-cove
       googlesans-code
-      # recursive
-      # literata
-      aporetic
-      # inputs.aporetic.packages.${pkgs.stdenv.hostPlatform.system}.default
-      # nerd-fonts.roboto-mono
-      # nerd-fonts.inconsolata
-      # nerd-fonts.comic-shanns-mono
       roboto
       roboto-serif
-      # nerd-fonts.iosevka
       nerd-fonts.symbols-only
       maple-mono.Normal-NF
       maple-mono.variable
       maple-mono.NF
-      # nerd-fonts.monaspace
     ];
-    # fontconfig = {
-    #   defaultFonts = {
-    #     serif = [ "Noto Sans" ];
-    #     sansSerif = [ "Noto Serif" ];
-    #     # monospace = [ "FantasqueSansM Nerd Font" ];
-    #   };
-    # };
   };
+  # command not found and nix-index setup:
   # programs.command-not-found.enable = true;
   # programs.nix-index =
   #   {
@@ -799,26 +443,8 @@
   #     enableBashIntegration = true;
   #     enableZshIntegration = true;
   #   };
-  # # mullvad
-  # services.mullvad-vpn = {
-  #   enable = true;
-  #   package = pkgs.mullvad-vpn;
-  # };
-
-  #samba
-  # services.samba = {
-  #   enable = true;
-  # };
-
-  #nixd setting
-  #nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
-
-  # chaotic bincache
-  # chaotic.nyx.cache.enable = true;
   # programs.firefox.nativeMessagingHosts.ff2mpv=true;
-  # Use nixpkgs' built-in programs.sqlite so command-not-found and man-db
-  # consume a database that matches the active nixpkgs revision.
-  # Overriding this with flake-programs-sqlite conflicts with the module default.
+  # Use nixpkgs' built-in programs.sqlite so command-not-found and man-db consume a database that matches the active nixpkgs revision. Overriding this with flake-programs-sqlite conflicts with the module default.
   # programs.command-not-found.dbPath = inputs.programsdb.packages.${pkgs.system}.programs-sqlite;
   programs.nix-ld.enable = true;
 

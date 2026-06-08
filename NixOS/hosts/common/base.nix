@@ -9,9 +9,6 @@
 # base system configuration
 {
   boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
-  # boot.kernelPackages = pkgs.linuxPackages_zen;
-  # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-zen4;
   systemd.user.services.orca.wantedBy = lib.mkForce [];
   boot.kernelModules = [ "v4l2loopback" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
@@ -44,9 +41,7 @@
   services.timesyncd.enable = true;
 
   # systemd settings
-  # systemd.extraConfig = ''
-  #   DefaultTimeoutStopSec=10s
-  # '';
+  systemd.settings.Manager.DefaultTimeoutStopSec = "30s";
 
   # cgroups support
   # systemd.enableUnifiedCgroupHierarchy = true;
@@ -76,20 +71,6 @@
   };
   # services.power-profiles-daemon.enable = true;
   services.acpid.enable = true;
-  # services.auto-cpufreq =
-  #   {
-  #     enable=true;
-  #     settings = {
-  #       charger = {
-  #         governor = "performance";
-  #         turbo = "always";
-  #       };
-  #       battery={
-  #         governor = "schedutil";
-  #         turbo = "auto";
-  #       };
-  #     };
-  #   };
 
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
@@ -97,18 +78,6 @@
     keyMap = "us";
   };
 
-  # Networking
-  #openvpn
-  # programs.openvpn3.enable = true;
-  # services.resolved = {
-  #   enable = true;
-  #   dnssec = "true";
-  #   domains = [ "~." ];
-  #   fallbackDns = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
-  #   extraConfig = ''
-  #   DNSOverTLS=yes
-  #   '';
-  # };
   networking = {
     networkmanager = {
       enable = true;

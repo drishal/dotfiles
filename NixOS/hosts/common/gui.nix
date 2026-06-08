@@ -37,60 +37,11 @@
 
   services.libinput = {
     enable = true;
-    # disable mouse acceleration
-    #mouse.accelProfile = "flat";
-    # mouse.accelSpeed = "0.5";
     touchpad.accelSpeed = "0.4";
     mouse.middleEmulation = false;
   };
   services.xserver = {
     enable = true;
-
-    # videoDrivers = [ "amdgpu" ];  # moved to graphics/amd.nix (per-host)
-    # deviceSection = ''
-    #   Option "DRI" "3"
-    # '';  # X11-only, not needed on Wayland
-    # window wmanagers
-    windowManager = {
-      # qtile = {
-      #   enable = true;
-      #   # backend = "wayland";
-      #   package = pkgs.qtile-module_git;
-      #   extraPackages = _: [ pkgs.qtile-extras_git ];
-      # };
-
-      # xmonad = {
-      #   enable = true;
-      #   enableContribAndExtras = true;
-      # };
-
-      # dwm.enable = true;
-
-      # leftwm.enable = true;
-      # awesome = {
-      #   enable = true;
-      #   luaModules = with pkgs.luaPackages; [
-      #     luarocks # is the package manager for Lua modules
-      #     luadbi-mysql # Database abstraction layer
-      #   ];
-
-      # };
-      # awesome.enable = true;
-    };
-
-    # Desktop Environment
-    desktopManager = {
-      # plasma6.enable = true;
-      # xfce.enable = true;
-      # lxqt.enable = true;
-      # gnome.enable = true;
-    };
-    # displayManager.lightdm.enable = false;
-    # displayManager.lightdm = {
-    #  enable = true;
-    #  greeter.enable = true;
-    # };
-
   };
 
   # services.greetd = {

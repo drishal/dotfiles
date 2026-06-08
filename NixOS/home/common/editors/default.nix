@@ -48,16 +48,6 @@
         ${builtins.readFile ../../../../config/helix/config.toml}
       '';
     };
-    # emacs = {
-    #   enable = true;
-    #   package = pkgs.emacs-unstable-pgtk;
-    #   extraPackages =
-    #     epkgs: with epkgs; [
-    #       vterm
-    #       # treesit-grammars.with-all-grammars
-    #     ];
-    # };
-
     zed-editor = {
       enable = true;
       extensions = [
@@ -76,33 +66,5 @@
         };
       };
     };
-    # nvchad = {
-    #   enable = true;
-    #   extraPackages = with pkgs; [
-    #     emmet-language-server
-    #   ];
-    #   chadrcConfig = ''
-    #   ${builtins.readFile ../../config/nvim/nvchad/chadrc.lua}
-    #   '';
-    #   hm-activation = true;
-    #   backup = true;
-    # };
   };
 }
-
-# Emacs: just keeping this as a reference if I decide to setup emacs via home manager in the future
-# emacs = {
-#   enable = true;
-#   package = pkgs.emacs-pgtk;
-#   extrapackages = epkgs: with epkgs; [
-#     treesit-grammars.with-all-grammars
-#     vterm
-#     telega
-#   ];
-# };
-# colorscheme =
-#   lib.concatMapAttrs (name: value: {
-#     ${name} = "#${value}";
-#   })
-# config.colorScheme.palette;
-#     config.scheme;
