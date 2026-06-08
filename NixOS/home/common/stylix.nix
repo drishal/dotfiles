@@ -14,6 +14,7 @@
       nixvim.enable = false;
       helix.enable = false;
       hyprpaper.enable = true;
+      # tmux.nix consumes config.lib.stylix.colors directly for tmux-powerkit.
       tmux.enable = false;
       rofi.enable = true;
       # ghostty.enable = false;

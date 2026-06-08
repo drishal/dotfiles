@@ -2552,6 +2552,7 @@
         "programsdb": "programsdb",
         "quickemu": "quickemu",
         "stylix": "stylix",
+        "tmux-powerkit": "tmux-powerkit",
         "tt-schemes": "tt-schemes",
         "umu": "umu",
         "zen-browser": "zen-browser"
@@ -2788,6 +2789,26 @@
       "original": {
         "owner": "tinted-theming",
         "repo": "base16-zed",
+        "type": "github"
+      }
+    },
+    "tmux-powerkit": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1779250738,
+        "narHash": "sha256-eliSL6FOZbFV0J4vqjd4DBblhMv/0fHC+/i0KdgaGzM=",
+        "owner": "fabioluciano",
+        "repo": "tmux-powerkit",
+        "rev": "480d3d7091a5dcdd28b88b13d66fec35aab463c8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fabioluciano",
+        "repo": "tmux-powerkit",
         "type": "github"
       }
     },

@@ -15,7 +15,7 @@
     ./core/symlinks.nix
     ./core/shells.nix
     ./core/aliases.nix
-    # ./core/tmux.nix
+    ./core/tmux.nix
 
     ./desktop/rofi.nix
     ./desktop/file-managers.nix
