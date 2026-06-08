@@ -130,7 +130,7 @@
 
     betterfox.url = "github:HeitorAugustoLN/betterfox-nix";
 
-    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    # nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     aporetic.url = "github:Echinoidea/Aporetic-Nerd-Font";
 
     direnv-instant.url = "github:Mic92/direnv-instant";
@@ -186,7 +186,6 @@
       # hyprpanel,
       tt-schemes,
       umu,
-      nix-cachyos-kernel,
       hermes-agent,
       ghostty,
       ...
@@ -294,7 +293,6 @@
               nixpkgs.overlays = [
                 # nur.overlay
                 inputs.emacs-overlay.overlay
-                inputs.nix-cachyos-kernel.overlays.pinned
                 # inputs.discord-flake.overlay
                 # inputs.neovim-nightly-overlay.overlay
               ];
