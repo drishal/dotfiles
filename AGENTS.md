@@ -4,6 +4,8 @@
 
 NixOS system + Home Manager user configuration managed via a single flake at `~/dotfiles`. Three machine targets: `nixos-desktop`, `nixos-work`, `nixos` (template baseline). System is `x86_64-linux`, username `drishal`.
 
+When making changes that affect repo structure, imports, modules, flake inputs, or machine targets, update this file to keep it accurate. Stale docs are worse than no docs.
+
 ## Apply changes
 
 ```bash
@@ -34,13 +36,14 @@ flake.nix / flake.lock       ← top-level flake (inputs, outputs, overlays)
 NixOS/
   hosts/                     ← NixOS system modules
     common/                  ← shared across all hosts
-      default.nix            ← imports base/gui/nix/packages/users/virt/searx + shared/stylix
+      default.nix            ← imports base/gui/nix/packages/users/virt/searx + shared/stylix (firewall, tlp commented out)
       base.nix               ← boot, networking, pipewire, bluetooth, tailscale, kernel pkg
       gui.nix                ← display server, Hyprland, input, fonts
       nix.nix                ← nix daemon settings
       packages.nix           ← system-level packages
       users.nix              ← user accounts
       virtualisation.nix     ← libvirt, docker
+      jellyfin.nix           ← opt-in: jellyfin media server
       firewall.nix, searx.nix, tlp.nix
       memory.nix             ← opt-in: dirty_bytes 4G / bg 64M, zram, swappiness
       storage.nix            ← opt-in: NVMe sched=none, HDD bfq, nr_requests=2048
@@ -57,7 +60,7 @@ NixOS/
       default.nix            ← imports common + memory + storage + amd graphics
       hardware-configuration.nix
     nixos-desktop/           ← main desktop (Ryzen 7900X + RX 6800)
-      default.nix            ← common + memory + storage + amd-pstate + lavd + amd graphics + packages
+      default.nix            ← common + memory + storage + amd-pstate + lavd + amd graphics + packages + jellyfin
       hardware-configuration.nix
       packages.nix           ← desktop-only packages
     nixos-work/              ← work workstation (Xeon W-2295 + T400 nvidia)
@@ -67,13 +70,14 @@ NixOS/
       virtualisation.nix
   home/                      ← Home Manager modules
     common/
-      default.nix            ← imports all below + sessionVariables, username, stateVersion
+      default.nix            ← imports individual core/desktop/editors/terminals files + shells + stylix
       stylix.nix             ← HM-level stylix overrides
-      core/                  ← packages, shells (fish), aliases, git, services, symlinks, tmux
-      desktop/               ← hyprland, sway, waybar, rofi, dms, file-managers, icons (lf)
-      editors/               ← default.nix (emacs+helix+zed), nixvim.nix
-      terminals/             ← kitty, ghostty, alacritty
-      browsers/              ← default.nix (chromium/brave), betterfox.nix (firefox+betterfox)
+      core/                  ← packages.nix, git.nix, tmux.nix, fastfetch.nix
+      shells/                ← default.nix, fish.nix, zsh.nix, aliases.nix (shell-agnostic aliases + PATH + env)
+      desktop/               ← hyprland, sway, waybar, rofi, dms, file-managers, icons
+      editors/               ← default.nix, emacs.nix, nixvim.nix
+      terminals/             ← default.nix (kitty, ghostty, alacritty via single module)
+      browsers/              ← default.nix, betterfox.nix (firefox+betterfox; only betterfox imported)
       media/                 ← mpv.nix
       colors/                ← doom* palette yamls (legacy, unused by stylix)
     nixos-desktop/           ← desktop-only HM overrides (hyprland monitor, sway)
@@ -96,9 +100,8 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 ## Module organization conventions
 
 - **`hosts/<host>/default.nix` is the orchestrator** — it imports `../common`, then opt-in modules (memory, storage, cpu/*, scheduler/*, graphics/*), then `./hardware-configuration.nix`, then per-host `packages.nix` / extras.
-- **`hardware-configuration.nix` is auto-generated content only** — filesystems, kernel modules, hostPlatform, microcode. Do NOT add `imports = [ ./packages.nix ];` or graphics imports here; they belong in `default.nix`.
+- **`home/common/default.nix` is the orchestrator** — imports individual files from `core/`, `desktop/`, `editors/`, `terminals/`, plus `shells/default.nix`, `browsers/betterfox.nix`, and both stylix modules. Does NOT import whole `core/`, `browsers/`, or `media/` directories.
 - **Per-host tunings are opt-in** — `memory.nix`, `storage.nix`, `cpu/*-pstate.nix`, `scheduler/*.nix` are NOT imported by `common/default.nix`. Each host's `default.nix` picks what applies. Lets `nixos` (template) stay minimal.
-- **`home/common/default.nix` is the orchestrator** — imports all `core/desktop/editors/terminals/browsers/media` subtrees + `stylix.nix` + `../../shared/stylix.nix`.
 - **Per-host home overrides** live in `home/<host>/default.nix` and stack on top via flake module composition.
 
 ## Critical gotchas
@@ -109,7 +112,7 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 - **Some `:tangle no` blocks intentionally skipped** — alternative fonts/ligatures/themes, the elpaca bootstrap, and the lsp-mode fallback stack. Don't tangle them blindly.
 - **Some config/ files are .org** — `config/fish/config.org`, `config/hyprland/hyprland.org`, etc. need `org-babel-tangle` to produce their output. The legacy `scripts/home-setup.sh` does this; Home Manager handles most now.
 - **Symlink loop** — `config/leftwm/onedark/onedark` is a self-referencing symlink. Don't traverse it.
-- **Symlinks are legacy** — `home/common/core/symlinks.nix` is almost entirely commented out. Prefer Home Manager `programs.*` and `home.file.*` over manual symlinks.
+- **Aliases live in shells/** — `home/common/shells/aliases.nix` defines `home.shellAliases` (applied to all shells by HM). Shell-specific config is in `zsh.nix` / `fish.nix`.
 - **suckless tools** — dwm, st, dwmblocks are compiled with `sudo make clean install`, not managed by Nix. Config changes require recompilation.
 - **Kernel** — Uses `pkgs.linuxPackages_xanmod_latest` (xanmod), not standard nixpkgs.
 - **mitigations=off on nixos-desktop only** — `nixos-work` keeps CPU mitigations ON (Cascade Lake has MDS/L1TF/Zombieload). Don't promote `mitigations=off` to common.
@@ -121,17 +124,34 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 | Input | Purpose |
 |-------|---------|
 | `nixpkgs` | `nixos-unstable` channel |
+| `nixpkgs-master` | Pinned specific nixpkgs commit for select packages |
 | `home-manager` | User environment management |
 | `hyprland` | Hyprland WM (built from source) |
 | `emacs-overlay` | Latest Emacs + packages |
 | `emacs-lsp-booster` | Faster LSP over JSON-RPC (for eglot) |
 | `stylix` | System-wide theming |
 | `nixvim` | Declarative Neovim |
-| `private-stuff` | Local private config (email, substituter token) |
-| `nix-cachyos-kernel` | CachyOS kernel overlay (currently unused in active config) |
-| `astal` / `ags` / `dms` | Desktop widgets / shells |
+| `private-stuff` | Local private config (email, substituter token); must exist locally |
+| `chaotic` | Chaotic-Nyx overlay (cachix, kernel patches) |
+| `nur` | Nix User Repository |
+| `cachix` / `declarative-cachix` | Cachix deployment |
+| `nix-gaming` | Gaming-focused nix packages (gamescope, etc.) |
 | `betterfox` | Firefox user.js hardening |
-| `auto-cpufreq` | CPU frequency daemon (currently commented out) |
+| `ghostty` | Ghostty terminal emulator (built from source) |
+| `dms` | Dank Material Shell (KDE Plasma widget) |
+| `umu` | Unified Middleware for Users (Windows game launcher) |
+| `zen-browser` | Zen Browser flake |
+| `tt-schemes` | Tinted Theming color schemes (base16) |
+| `programsdb` | Flake programs SQLite database |
+| `quickemu` | Quick VM creation |
+| `lobster` | Terminal anime streaming |
+| `tmux-powerkit` | Tmux status bar plugin |
+| `nvchad4nix` | NvChad Neovim config for Nix |
+| `neovim-nightly-overlay` | Neovim nightly builds |
+| `direnv-instant` | Instant direnv evaluation |
+| `ani-cli` | Terminal anime streaming CLI |
+| `gruvbox-material` | Gruvbox Material theme (flake=false, for nvim) |
+| `llama-cpp` | LLaMA.cpp inference engine |
 
 ## Target machines
 
