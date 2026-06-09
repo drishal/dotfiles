@@ -11,7 +11,6 @@
     ./terminals
     ./core/git.nix
     ./core/packages.nix
-    ./core/aliases.nix
     ./core/tmux.nix
     ./core/fastfetch.nix
 

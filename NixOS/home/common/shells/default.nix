@@ -10,6 +10,7 @@
     inputs.direnv-instant.homeModules.direnv-instant
     ./zsh.nix
     ./fish.nix
+    ./aliases.nix
   ];
 
   programs.nushell = {
