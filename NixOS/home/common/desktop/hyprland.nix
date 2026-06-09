@@ -13,7 +13,7 @@
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     settings = {
       exec-once = [
-        "lxpolkit & dms run &  nm-applet --indicator &  blueman-applet & emacs --daemon"
+        "lxpolkit & dms run &  nm-applet --indicator &  blueman-applet"
         "hyprpaper"
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
       ];

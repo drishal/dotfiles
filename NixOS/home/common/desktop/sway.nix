@@ -69,7 +69,7 @@ in
 
       # --- Startup (from hyprland exec-once) ---
       startup = [
-        { command = "lxpolkit & dms run & nm-applet --indicator & blueman-applet & emacs --daemon"; }
+        { command = "lxpolkit & dms run & nm-applet --indicator & blueman-applet"; }
         { command = "swaybg -i ${config.stylix.image} -m fill"; }
         { command = "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"; }
       ];
