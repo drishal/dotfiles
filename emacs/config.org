@@ -64,7 +64,6 @@
   - [[#org-present][org present]]
   - [[#image-settings][Image settings]]
   - [[#org-download][org-download]]
-  - [[#hook-to-ensure-org-mode-renders-blocks-correctly][Hook to ensure org mode renders blocks correctly]]
 - [[#tools][Tools]]
   - [[#vterm][vterm]]
   - [[#bongo][Bongo]]
@@ -642,6 +641,17 @@ remove/add tangle no to whatever font you prefer
 (setq doom-everforest-palette "material")
 ;; Must be used *after* the theme is loaded
 
+;; Work around doom-themes#875: on Emacs 31 `gnus-group-news-low' inherits
+;; `gnus-group-news-low-empty' (upstream change 23d8633), while doom-themes
+;; makes `gnus-group-news-low-empty' inherit `gnus-group-news-low' -> a
+;; circular :inherit that makes realizing a new frame fail with "Face
+;; inheritance results in inheritance cycle", so `emacsclient -c' hangs. Repoint
+;; the empty face at a non-cyclic base before the theme is built. Drop this once
+;; doom-themes ships a real fix. Workaround from doom-themes#875 (@haselwarter).
+(with-eval-after-load 'doom-themes
+  (setcdr (assoc 'gnus-group-news-low-empty doom-themes-base-faces)
+          '(:inherit 'gnus-group-mail-1-empty :weight 'normal)))
+
 (load-theme 'doom-gruvbox-material t)
 #+end_src
 *** base-16
@@ -1154,19 +1164,6 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
   :config
   (add-hook 'dired-mode-hook 'org-download-enable)
   (add-hook 'org-mode-hook 'org-download-enable))
-#+end_src
-** Hook to ensure org mode renders blocks correctly
-#+begin_src emacs-lisp
-(add-hook 'org-mode-hook
-          (lambda ()
-            (run-with-idle-timer
-             0.5 nil
-             (lambda (buf)
-               (when (buffer-live-p buf)
-                 (with-current-buffer buf
-                   (when (derived-mode-p 'org-mode)
-                     (font-lock-ensure (point-min) (point-max))))))
-             (current-buffer))))
 #+end_src
 * Tools
 ** vterm
