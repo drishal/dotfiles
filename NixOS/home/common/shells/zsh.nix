@@ -1,6 +1,7 @@
 {
   config,
   inputs,
+  lib,
   pkgs,
   ...
 }:
@@ -14,12 +15,110 @@ let
           'builtin compadd "''${args[@]:--Q}" -Q -- "''${v[word]//\\\\/\\}"'
     '';
   });
+
+  # ---- fast-syntax-highlighting theme driven by the stylix base16 palette ----
+  # Mirrors F-Sy-H's bundled themes/base16.ini, translating each ANSI index it
+  # uses to the corresponding stylix base color. Standard base16 ANSI mapping:
+  #   1→base08 2→base0B 3→base0A 4→base0D 5→base0E 6→base0C
+  #   8→base03 9→base09 10→base01 11→base02 12→base04 14→base0F
+  c = config.lib.stylix.colors;
+  fshStyles = {
+    # [base]
+    "default" = "none";
+    "unknown-token" = "fg=#${c.base08},bold";
+    "commandseparator" = "none";
+    "redirection" = "none";
+    "here-string-tri" = "fg=#${c.base0F}";
+    "here-string-text" = "bg=#${c.base02}";
+    "here-string-var" = "fg=#${c.base08},bg=#${c.base02}";
+    "exec-descriptor" = "fg=#${c.base09},bold";
+    "comment" = "fg=#${c.base03}";
+    "correct-subtle" = "fg=#${c.base04}";
+    "incorrect-subtle" = "fg=#${c.base08}";
+    "subtle-separator" = "fg=#${c.base04}";
+    "subtle-bg" = "bg=#${c.base01}";
+    # [command-point]
+    "reserved-word" = "fg=#${c.base0E}";
+    "subcommand" = "fg=#${c.base0C}";
+    "alias" = "fg=#${c.base0D}";
+    "suffix-alias" = "fg=#${c.base0D}";
+    "global-alias" = "fg=#${c.base0D},bg=#${c.base02}";
+    "builtin" = "fg=#${c.base0D}";
+    "function" = "fg=#${c.base0D}";
+    "command" = "fg=#${c.base0D}";
+    "precommand" = "fg=#${c.base0C}";
+    "hashed-command" = "fg=#${c.base0D}";
+    "single-sq-bracket" = "fg=#${c.base0D}";
+    "double-sq-bracket" = "fg=#${c.base0D}";
+    "double-paren" = "fg=#${c.base0E}";
+    # [paths]
+    "path" = "fg=#${c.base09}";
+    "path_pathseparator" = "none";
+    "path-to-dir" = "fg=#${c.base09},underline";
+    "globbing" = "fg=#${c.base0C}";
+    "globbing-ext" = "fg=#${c.base0C},bold";
+    # [brackets]
+    "paired-bracket" = "bg=#${c.base03}";
+    "bracket-level-1" = "fg=#${c.base0A},bold";
+    "bracket-level-2" = "fg=#${c.base0C},bold";
+    "bracket-level-3" = "fg=#${c.base0B},bold";
+    # [arguments]
+    "single-hyphen-option" = "fg=#${c.base0A}";
+    "double-hyphen-option" = "fg=#${c.base0A}";
+    "back-quoted-argument" = "none";
+    "single-quoted-argument" = "fg=#${c.base0B}";
+    "double-quoted-argument" = "fg=#${c.base0B}";
+    "dollar-quoted-argument" = "fg=#${c.base0B}";
+    # [in-string]
+    "back-dollar-quoted-argument" = "fg=#${c.base0C}";
+    "back-or-dollar-double-quoted-argument" = "fg=#${c.base08}";
+    # [other]
+    "variable" = "fg=#${c.base08}";
+    "assign" = "none";
+    "assign-array-bracket" = "fg=#${c.base0E}";
+    "history-expansion" = "fg=#${c.base0C},bold";
+    # [math]
+    "mathvar" = "fg=#${c.base08}";
+    "mathnum" = "fg=#${c.base09}";
+    "matherr" = "fg=#${c.base08},bold";
+    # [for-loop]
+    "for-loop-variable" = "fg=#${c.base08}";
+    "for-loop-number" = "fg=#${c.base09}";
+    "for-loop-operator" = "none";
+    "for-loop-separator" = "none";
+    # [case]
+    "case-input" = "fg=#${c.base08}";
+    "case-parentheses" = "fg=#${c.base0E}";
+    "case-condition" = "bg=#${c.base01}";
+  };
+  fshStyleLines = lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (k: v: "FAST_HIGHLIGHT_STYLES[${k}]=${lib.escapeShellArg v}") fshStyles
+  );
 in
 {
 
   programs.zsh = {
     enable = true;
     enableCompletion = true;
+
+    # emacs keybindings (was: `bindkey -e` in initContent).
+    defaultKeymap = "emacs";
+
+    # Shell options (was: raw `setopt` lines in initContent).
+    # setOptions emits one `setopt <opt>` each; prefix NO_ to unset.
+    setOptions = [
+      "AUTO_CD" # `foo/` cd's into foo
+      "AUTO_PUSHD" # cd pushes onto dir stack (then `cd -<TAB>`)
+      "PUSHD_IGNORE_DUPS"
+      "PUSHD_SILENT"
+      "EXTENDED_GLOB"
+      "INTERACTIVE_COMMENTS" # `# comments` work interactively
+      "LONG_LIST_JOBS"
+      "NO_BEEP"
+      "HIST_REDUCE_BLANKS"
+      "HIST_VERIFY" # don't auto-exec on `!!`, show first
+    ];
+
     completionInit = ''
       autoload -Uz compinit
 
@@ -71,8 +170,19 @@ in
         zcompile "$zcompdump"
       fi
     '';
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
+    autosuggestion = {
+      enable = true;
+      # was: ZSH_AUTOSUGGEST_STRATEGY=(history completion) in initContent
+      strategy = [
+        "history"
+        "completion"
+      ];
+    };
+    # Syntax highlighting: using fast-syntax-highlighting (F-Sy-H) instead of
+    # the HM-native zsh-syntax-highlighting. F-Sy-H is faster on long lines and
+    # highlights more (paths, args, variables, brackets, per-command chroma).
+    # Sourced at the END of initContent (must load after autosuggestions).
+    # syntaxHighlighting.enable = true;
     historySubstringSearch = {
       enable = true; # type prefix + Up/Down to filter history
       searchUpKey = [
@@ -120,23 +230,11 @@ in
       unset FZF_TAB_MODULE_VERSION 2>/dev/null
       source "$FZF_TAB_HOME"/lib/zsh-ls-colors/ls-colors.zsh fzf-tab-lscolors
 
-      # ---------- shell options (was: prezto environment/history) ----------
-      setopt AUTO_CD                 # `foo/` cd's into foo
-      setopt AUTO_PUSHD              # cd pushes onto dir stack (then `cd -<TAB>`)
-      setopt PUSHD_IGNORE_DUPS
-      setopt PUSHD_SILENT
-      setopt EXTENDED_GLOB
-      setopt INTERACTIVE_COMMENTS    # `# comments` work interactively
-      setopt LONG_LIST_JOBS
-      setopt NO_BEEP
-      # HIST_IGNORE_ALL_DUPS / SHARE_HISTORY are set via programs.zsh.history
-      # (ignoreAllDups / share); SHARE_HISTORY already implies incremental append.
-      setopt HIST_REDUCE_BLANKS
-      setopt HIST_VERIFY             # don't auto-exec on `!!`, show first
+      # Shell options moved to programs.zsh.setOptions (native).
+      # emacs keymap moved to programs.zsh.defaultKeymap (native).
+      # HIST_IGNORE_ALL_DUPS / SHARE_HISTORY come from programs.zsh.history.
 
       # ---------- key bindings (was: prezto editor) ----------
-      bindkey -e  # emacs mode
-
       # Treat / . _ - as word boundaries (more fish-like word jumps)
       autoload -Uz select-word-style
       select-word-style bash
@@ -162,7 +260,7 @@ in
       bindkey '^[[3~' delete-char
 
       # ---------- autosuggestions ----------
-      ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+      # Strategy moved to programs.zsh.autosuggestion.strategy (native).
       # Right arrow / End already accept. Add Ctrl+Space if you like:
       # bindkey '^ ' autosuggest-accept
 
@@ -222,6 +320,24 @@ in
         fi
       }
       add-zsh-hook precmd _newline_after_command
+
+      # ---------- syntax highlighting (MUST be last) ----------
+      # F-Sy-H wraps ZLE widgets, so it has to be sourced after compinit,
+      # autosuggestions, and all custom `zle -N` widgets above.
+
+      # F-Sy-H curl/wget-fetches a "secondary theme" from GitHub on first run if
+      # $FAST_WORK_DIR/secondary_theme.zsh is missing. Pre-create it (empty) so
+      # no network call ever happens — keeps startup offline/reproducible.
+      export FAST_WORK_DIR="''${XDG_CACHE_HOME:-$HOME/.cache}/fast-syntax-highlighting"
+      [[ -d $FAST_WORK_DIR ]] || mkdir -p "$FAST_WORK_DIR"
+      [[ -e $FAST_WORK_DIR/secondary_theme.zsh ]] || : > "$FAST_WORK_DIR/secondary_theme.zsh"
+
+      source ${pkgs.zsh-fast-syntax-highlighting}/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+
+      # Theme from the stylix base16 palette (see fshStyles in the let block).
+      # Applied after sourcing so these win over F-Sy-H's :=-defaults.
+      typeset -gA FAST_HIGHLIGHT_STYLES
+      ${fshStyleLines}
     '';
   };
 }
