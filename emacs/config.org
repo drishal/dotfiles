@@ -531,12 +531,9 @@ remove/add tangle no to whatever font you prefer
   (dashboard-setup-startup-hook)
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
   :config
-  (setq dashboard-icon-type 'all-the-icons)
-  (setq dashboard-heading-icons '((recents   . "file-text")
-                                  (bookmarks . "book")
-                                  (agenda    . "calendar")
-                                  (projects  . "rocket")
-                                  (registers . "database")))
+  (setq dashboard-icon-type 'nerd-icons)
+  ;; heading icons use dashboard's built-in nerd-icons octicon defaults
+  ;; (history/bookmark/calendar/rocket/database)
   (setq dashboard-set-heading-icons t)
   ;; Content is not centered by default. To center, set
   (setq dashboard-set-file-icons t)
@@ -570,9 +567,8 @@ remove/add tangle no to whatever font you prefer
 #+end_src
 ** All the icon fonts
 #+begin_src emacs-lisp
-(use-package all-the-icons :ensure t)
-(use-package all-the-icons-dired :ensure t
-  :hook (dired-mode . (lambda () (all-the-icons-dired-mode t))))
+(use-package nerd-icons-dired :ensure t
+  :hook (dired-mode . nerd-icons-dired-mode))
 #+end_src
 ** Nerd-icons
 #+begin_src emacs-lisp
@@ -583,6 +579,11 @@ remove/add tangle no to whatever font you prefer
   ;; but you can use any other Nerd Font if you want
   ;; (nerd-icons-font-family "Symbols Nerd Font Mono")
   )
+
+;; icons in ibuffer (file-type + size/mode columns)
+(use-package nerd-icons-ibuffer
+  :ensure t
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
 #+end_src
 ** no blinking cursor
 #+begin_src emacs-lisp
@@ -611,7 +612,7 @@ remove/add tangle no to whatever font you prefer
    ;; )
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  ;; Enable custom neotree theme (uses nerd-icons)
   (doom-themes-neotree-config)
   ;; or for treemacs users
   (setq doom-themes-treemacs-theme "doom-colors") ; use "doom-colors" for less minimal icon theme
@@ -1058,14 +1059,14 @@ https://github.com/minad/org-modern
 ** org-fancy-prioritie
 #+begin_src emacs-lisp
 (use-package org-fancy-priorities
-  :after (org all-the-icons)
+  :after (org nerd-icons)
   :ensure t
   :hook (org-mode        . org-fancy-priorities-mode)
   :hook (org-agenda-mode . org-fancy-priorities-mode)
   :config
-  (setq org-fancy-priorities-list `(,(all-the-icons-faicon "flag"     :height 1.1 :v-adjust 0.0)
-                                    ,(all-the-icons-faicon "arrow-up" :height 1.1 :v-adjust 0.0)
-                                    ,(all-the-icons-faicon "square"   :height 1.1 :v-adjust 0.0))))
+  (setq org-fancy-priorities-list `(,(nerd-icons-faicon "nf-fa-flag"     :height 1.1 :v-adjust 0.0)
+                                    ,(nerd-icons-faicon "nf-fa-arrow_up" :height 1.1 :v-adjust 0.0)
+                                    ,(nerd-icons-faicon "nf-fa-square"   :height 1.1 :v-adjust 0.0))))
 
 #+end_src
 ** org-toc
@@ -1761,6 +1762,18 @@ https://github.com/minad/marginalia
   ;; Must be in the :init section of use-package such that the mode gets
   ;; enabled right away. Note that this forces loading the package.
   (marginalia-mode))
+#+end_src
+
+** nerd-icons completion
+#+begin_src emacs-lisp
+;; icons in the minibuffer (files, buffers, commands, ...).
+;; The marginalia hook re-applies icons whenever marginalia toggles.
+(use-package nerd-icons-completion
+  :ensure t
+  :after marginalia
+  :config
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
 #+end_src
 
 ** languages and lsp-mode
