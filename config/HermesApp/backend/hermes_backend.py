@@ -9,7 +9,9 @@ emitted signals into the ListModels the views bind to.
 from __future__ import annotations
 
 import json
+import logging
 import os
+import queue as _queue
 import re
 import threading
 import time
@@ -24,6 +26,8 @@ from PySide6.QtCore import (
 )
 
 from . import db, welcome
+
+log = logging.getLogger(__name__)
 
 SETTINGS_PATH = os.path.expanduser("~/.config/HermesApp/settings.json")
 DEFAULTS = {
@@ -82,6 +86,14 @@ class HermesBackend(QObject):
         # SSE gating
         self._accepting = False
         self._sseStop = threading.Event()
+
+        # GUI thread safety: daemon threads emit signals through this queue
+        # so that ListModel mutations always happen on the main thread.
+        self._gui_queue: _queue.Queue = _queue.Queue()
+        self._gui_timer = QTimer(self)
+        self._gui_timer.setInterval(16)  # ~60 fps
+        self._gui_timer.timeout.connect(self._drain_gui_queue)
+        self._gui_timer.start()
 
         self._client = httpx.Client(timeout=httpx.Timeout(10.0, read=None))
 
@@ -168,6 +180,30 @@ class HermesBackend(QObject):
         threading.Thread(target=fn, daemon=True).start()
 
     # ───────────────────────────────────────────────────────────
+    #  GUI-thread marshal
+    # ───────────────────────────────────────────────────────────
+    def _gui(self, fn) -> None:
+        """Schedule *fn* to run on the GUI thread.  Thread-safe.
+
+        Use this whenever a signal must be emitted from a daemon thread
+        (e.g. the SSE reader) so that the corresponding QML slot — which
+        mutates a ListModel — always runs on the main thread.
+        """
+        self._gui_queue.put(fn)
+
+    def _drain_gui_queue(self) -> None:
+        """Process pending GUI updates (runs on the main thread via QTimer)."""
+        for _ in range(64):
+            try:
+                fn = self._gui_queue.get_nowait()
+            except _queue.Empty:
+                break
+            try:
+                fn()
+            except Exception:
+                log.exception("GUI queue callback failed")
+
+    # ───────────────────────────────────────────────────────────
     #  Health
     # ───────────────────────────────────────────────────────────
     @Slot()
@@ -197,7 +233,7 @@ class HermesBackend(QObject):
                 rows = db.load_sessions(self._db_path())
             except Exception:
                 rows = []
-            self.sessionsReset.emit(rows)
+            self._gui(lambda r=rows: self.sessionsReset.emit(r))
 
         self._spawn(work)
 
@@ -216,7 +252,7 @@ class HermesBackend(QObject):
                 rows = []
             with self._lock:
                 self._messages = list(rows)
-            self.messagesReset.emit(rows)
+            self._gui(lambda r=rows: self.messagesReset.emit(r))
 
         self._spawn(work)
 
@@ -328,7 +364,7 @@ class HermesBackend(QObject):
 
         self._set_current_run(run_id)
         self._set_running(True)
-        self.runStarted.emit()
+        self._gui(self.runStarted.emit)
         self._stream_events(run_id)
 
     def _conversation_history(self) -> list[dict]:
@@ -356,48 +392,113 @@ class HermesBackend(QObject):
             with self._client.stream(
                 "GET", url, headers=self._headers(), timeout=httpx.Timeout(5.0, read=300.0)
             ) as resp:
+                if resp.status_code != 200:
+                    body = resp.text[:500]
+                    log.error("SSE endpoint returned %s: %s", resp.status_code, body)
+                    self._gui(lambda: self._fail_pending(f"SSE endpoint returned {resp.status_code}"))
+                    return
+                current_event = ""  # Track SSE event name across lines
                 for line in resp.iter_lines():
                     if self._sseStop.is_set() or run_id != self._currentRunId:
                         return
-                    self._handle_sse_line(line)
-        except Exception:
-            pass
+                    current_event = self._handle_sse_line(line, current_event)
+        except httpx.ReadTimeout:
+            log.warning("SSE read timeout for run %s", run_id)
+        except Exception as exc:
+            log.exception("SSE stream error for run %s", run_id)
         finally:
             # Stream ended without an explicit terminal event — seal the bubble.
             if run_id == self._currentRunId and run_id:
-                self._set_running(False)
-                self._seal_streaming()
+                self._gui(lambda: self._set_running(False))
+                self._gui(lambda: self._seal_streaming())
 
-    def _handle_sse_line(self, line: str) -> None:
+    def _handle_sse_line(self, line: str, current_event: str) -> str:
+        """Parse one SSE line.  Returns the current event name (stateful).
+
+        The Hermes /v1/runs endpoint sends ``data: {json}\\n\\n`` frames
+        where the JSON payload itself contains an ``"event"`` key.
+        The /api/chat/stream endpoint uses named ``event:`` lines instead.
+        We handle both formats.
+        """
         if not self._accepting:
-            return
+            return current_event
         line = (line or "").strip()
-        if not line or line.startswith(":") or not line.startswith("data: "):
-            return
-        try:
-            event = json.loads(line[6:])
-        except ValueError:
-            return
-        self._handle_event(event)
+        if not line or line.startswith(":"):
+            return current_event
+        # Named-event line: "event: <name>"
+        if line.startswith("event: "):
+            return line[7:].strip()
+        # Data line: "data: <json>"
+        if line.startswith("data: "):
+            try:
+                payload = json.loads(line[6:])
+            except ValueError:
+                log.warning("SSE: invalid JSON in data line: %s", line[:120])
+                return current_event
+            # Resolve event name: prefer named SSE event, fall back to
+            # the "event" key embedded in the JSON payload.
+            event_name = current_event or payload.get("event", "")
+            if event_name:
+                self._handle_event(event_name, payload)
+            else:
+                log.warning("SSE: data line with no event name: %s", line[:120])
+            return ""  # Reset — each data frame is self-contained
+        return current_event
 
-    def _handle_event(self, event: dict) -> None:
-        t = event.get("event")
-        if t == "message.delta":
-            self._append_delta(event.get("delta") or "")
-        elif t == "reasoning.available":
-            self._add_thinking(event.get("text") or "Thinking...")
-        elif t == "tool.started":
-            self._add_tool_call(event.get("tool") or "tool", event.get("preview") or "", "running")
-        elif t == "tool.completed":
-            self._complete_tool_call(event.get("tool") or "", event.get("duration") or 0, bool(event.get("error")))
-        elif t == "approval.request":
-            self._add_approval(event)
-        elif t == "run.completed":
-            self._finalize_run(event)
-        elif t == "run.failed":
-            self._fail_run(event.get("error") or "Run failed")
-        elif t == "run.cancelled":
+    def _handle_event(self, event_name: str, data: dict) -> None:
+        # ── Streaming text ──────────────────────────────────────
+        # /v1/runs sends "message.delta" with {"delta": "..."}
+        # /api/chat/stream sends "assistant.delta" with {"delta": "..."}
+        if event_name in ("message.delta", "assistant.delta"):
+            self._append_delta(data.get("delta") or "")
+
+        # ── Reasoning / thinking ────────────────────────────────
+        # /v1/runs sends "reasoning.available" with {"text": "..."}
+        # /api/chat/stream sends "tool.progress" with {"tool_name": "_thinking", "delta": "..."}
+        elif event_name == "reasoning.available":
+            self._add_thinking(data.get("text") or "Thinking…")
+        elif event_name == "tool.progress" and data.get("tool_name") == "_thinking":
+            self._add_thinking(data.get("delta") or "Thinking…")
+
+        # ── Tool calls ──────────────────────────────────────────
+        elif event_name == "tool.started":
+            self._add_tool_call(
+                data.get("tool") or data.get("tool_name") or "tool",
+                data.get("preview") or "",
+                "running",
+            )
+        elif event_name == "tool.completed":
+            self._complete_tool_call(
+                data.get("tool") or data.get("tool_name") or "",
+                data.get("duration") or 0,
+                bool(data.get("error") or data.get("is_error")),
+            )
+        elif event_name == "tool.failed":
+            self._complete_tool_call(
+                data.get("tool") or data.get("tool_name") or "",
+                data.get("duration") or 0,
+                True,
+            )
+
+        # ── Approval ────────────────────────────────────────────
+        elif event_name == "approval.request":
+            self._add_approval(data)
+
+        # ── Run lifecycle ───────────────────────────────────────
+        elif event_name == "run.completed":
+            self._finalize_run(data)
+        elif event_name in ("run.failed", "error"):
+            self._fail_run(data.get("error") or data.get("message") or "Run failed")
+        elif event_name == "run.cancelled":
             self._cancel_run()
+
+        # ── Terminal / informational (no UI action needed) ──────
+        elif event_name in ("done", "stream_end", "run.started",
+                            "message.started", "assistant.completed"):
+            pass
+
+        else:
+            log.debug("SSE: unhandled event %s", event_name)
 
     # ── Event handlers (mutate self._messages, emit row ops) ───
     def _append_delta(self, delta: str) -> None:
@@ -409,12 +510,13 @@ class HermesBackend(QObject):
                 last = self._messages[idx]
                 if last["type"] == "assistant" and last.get("isStreaming"):
                     last["content"] += delta
-                    self.messageUpdated.emit(idx, {"content": last["content"]})
+                    content = last["content"]  # snapshot for closure
+                    self._gui(lambda i=idx, c=content: self.messageUpdated.emit(i, {"content": c}))
                     return
             for i in range(len(self._messages) - 1, -1, -1):
                 if self._messages[i].get("isStreaming"):
                     self._messages[i]["isStreaming"] = False
-                    self.messageUpdated.emit(i, {"isStreaming": False})
+                    self._gui(lambda i=i: self.messageUpdated.emit(i, {"isStreaming": False}))
         self._append(
             db._row(
                 "assistant",
@@ -456,7 +558,8 @@ class HermesBackend(QObject):
                 if m["type"] == "tool_call" and m["tool"] == tool and m["toolStatus"] == "running":
                     m["toolStatus"] = "error" if error else "completed"
                     m["toolDuration"] = duration
-                    self.messageUpdated.emit(i, {"toolStatus": m["toolStatus"], "toolDuration": duration})
+                    status = m["toolStatus"]
+                    self._gui(lambda i=i, s=status, d=duration: self.messageUpdated.emit(i, {"toolStatus": s, "toolDuration": d}))
                     return
 
     def _add_approval(self, event: dict) -> None:
@@ -479,21 +582,21 @@ class HermesBackend(QObject):
                     if event.get("usage"):
                         m["usage"] = event["usage"]
                         props["usage"] = event["usage"]
-                    self.messageUpdated.emit(i, props)
+                    self._gui(lambda i=i, p=props: self.messageUpdated.emit(i, p))
                     break
         if event.get("usage"):
             self._set_last_usage(event["usage"])
         if not self._currentSessionId and self._currentRunId:
             self._fetch_run_session_id(self._currentRunId)
         self._set_running(False)
-        self.runCompleted.emit(event.get("output") or "")
+        self._gui(lambda o=event.get("output") or "": self.runCompleted.emit(o))
         self.loadSessions()
 
     def _fail_run(self, error: str) -> None:
         self._seal_streaming(content="Error: " + error)
         self._set_running(False)
         self._set_last_error(error)
-        self.runFailed.emit(error)
+        self._gui(lambda e=error: self.runFailed.emit(e))
 
     def _cancel_run(self) -> None:
         self._seal_streaming()
@@ -508,7 +611,7 @@ class HermesBackend(QObject):
                     if content is not None:
                         self._messages[i]["content"] = content
                         props["content"] = content
-                    self.messageUpdated.emit(i, props)
+                    self._gui(lambda i=i, p=props: self.messageUpdated.emit(i, p))
                     break
 
     def _fail_pending(self, msg: str) -> None:
@@ -519,14 +622,15 @@ class HermesBackend(QObject):
                 if m["type"] == "assistant" and m.get("isStreaming"):
                     m["content"] = "Error: " + msg
                     m["isStreaming"] = False
-                    self.messageUpdated.emit(i, {"content": m["content"], "isStreaming": False})
+                    c = m["content"]
+                    self._gui(lambda i=i, c=c: self.messageUpdated.emit(i, {"content": c, "isStreaming": False}))
                     sealed = True
                     break
         if not sealed:
             self._append(db._row("assistant", content="Error: " + msg, timestamp=time.time()))
         self._set_running(False)
         self._set_last_error(msg)
-        self.runFailed.emit(msg)
+        self._gui(lambda m=msg: self.runFailed.emit(m))
 
     # ── Run session-id fetch ───────────────────────────────────
     def _fetch_run_session_id(self, run_id: str) -> None:
@@ -611,47 +715,48 @@ class HermesBackend(QObject):
     def _append(self, row: dict) -> None:
         with self._lock:
             self._messages.append(row)
-        self.messageAppended.emit(row)
+        self._gui(lambda r=row: self.messageAppended.emit(r))
 
     # ───────────────────────────────────────────────────────────
-    #  Property setters (thread-safe-ish: only emit on change)
+    #  Property setters (all go through _gui so daemon threads
+    #  never emit directly into the QML event loop)
     # ───────────────────────────────────────────────────────────
     def _set_connected(self, v: bool):
         if v != self._connected:
             self._connected = v
-            self.connectedChanged.emit()
+            self._gui(self.connectedChanged.emit)
 
     def _set_current_session(self, v: str):
         if v != self._currentSessionId:
             self._currentSessionId = v
-            self.currentSessionIdChanged.emit()
+            self._gui(self.currentSessionIdChanged.emit)
 
     def _set_current_model(self, v: str):
         if v != self._currentModel:
             self._currentModel = v
-            self.currentModelChanged.emit()
+            self._gui(self.currentModelChanged.emit)
 
     def _set_running(self, v: bool):
         if v != self._isRunning:
             self._isRunning = v
-            self.isRunningChanged.emit()
+            self._gui(self.isRunningChanged.emit)
 
     def _set_current_run(self, v: str):
         if v != self._currentRunId:
             self._currentRunId = v
-            self.currentRunIdChanged.emit()
+            self._gui(self.currentRunIdChanged.emit)
 
     def _set_last_usage(self, v: dict):
         self._lastUsage = v
-        self.lastUsageChanged.emit()
+        self._gui(self.lastUsageChanged.emit)
 
     def _set_last_error(self, v: str):
         self._lastError = v
-        self.lastErrorChanged.emit()
+        self._gui(self.lastErrorChanged.emit)
 
     def _set_welcome(self, v: dict):
         self._welcomeInfo = v
-        self.welcomeInfoChanged.emit()
+        self._gui(self.welcomeInfoChanged.emit)
 
     # ───────────────────────────────────────────────────────────
     #  Qt Properties
