@@ -1,5 +1,4 @@
 import QtQuick
-import Quickshell.Io
 import qs.Common
 import qs.Widgets
 
@@ -52,30 +51,14 @@ Rectangle {
         return html
     }
 
-    Process {
-        id: chromaProcess
-        running: false
-        property string code: ""
-        property string lang: ""
-        command: ["sh", "-c", "printf '%s' \"$CODE\" | dms chroma -l \"$LANG\" --inline 2>/dev/null"]
-        environment: ({ "CODE": code, "LANG": lang || "text" })
-        stdout: StdioCollector {
-            onStreamFinished: {
-                if (text && text.length > 0) {
-                    root._highlightedHtml = text
-                }
-            }
-        }
-    }
-
     function refreshHighlight() {
         if (!root.complete || !root.content) {
             root._highlightedHtml = ""
             return
         }
-        chromaProcess.code = root.content
-        chromaProcess.lang = root.language || "text"
-        chromaProcess.running = true
+        // Synchronous, in-process Pygments — returns monokai HTML the theme
+        // remap below recolors. Empty string falls back to plain text.
+        root._highlightedHtml = Platform.highlightHtml(root.content, root.language || "text")
     }
 
     onContentChanged: refreshHighlight()
@@ -83,22 +66,14 @@ Rectangle {
     onCompleteChanged: refreshHighlight()
     Component.onCompleted: refreshHighlight()
 
-    Process {
+    // Stand-in for the old copy Process. Qt clipboard, no `dms` dependency.
+    QtObject {
         id: copyProcess
-        running: false
-        property string toCopy: ""
         property bool justCopied: false
-        command: ["sh", "-c", "printf '%s' \"$CONTENT\" | dms clipboard copy"]
-        environment: ({ "CONTENT": toCopy })
-        onExited: (code, status) => {
-            if (code === 0) {
-                justCopied = true
-                copyTimer.restart()
-            }
-        }
         function copy(s) {
-            toCopy = s
-            running = true
+            Platform.copyToClipboard(s)
+            justCopied = true
+            copyTimer.restart()
         }
     }
 

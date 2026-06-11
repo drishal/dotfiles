@@ -19,7 +19,7 @@ Item {
 
     FontLoader {
         id: materialSymbolsFont
-        source: Qt.resolvedUrl("../assets/fonts/MaterialSymbolsRounded.ttf")
+        source: Qt.resolvedUrl("../../assets/fonts/MaterialSymbolsRounded.ttf")
     }
 
     Text {

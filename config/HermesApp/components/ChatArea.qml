@@ -1,6 +1,4 @@
 import QtQuick
-import Quickshell
-import Quickshell.Io
 import qs.Common
 import qs.Widgets
 import "../services/toolFormat.js" as Tf
@@ -51,30 +49,13 @@ Item {
         clearAttachments()
     }
 
-    Process {
-        id: imagePasteProcess
-        running: false
-        // Writes the clipboard's image/png to /tmp/dms-paste-<unix-ms>.png if
-        // present, and echoes the path on stdout. Empty stdout = clipboard had
-        // no PNG image, which is the normal case for a text-only paste.
-        command: ["sh", "-c",
-            "TS=$(date +%s%3N); P=/tmp/dms-paste-$TS.png; " +
-            "wl-paste --list-types 2>/dev/null | grep -q '^image/png$' || exit 0; " +
-            "wl-paste --type image/png > \"$P\" 2>/dev/null && [ -s \"$P\" ] && echo \"$P\""
-        ]
-        stdout: SplitParser {
-            onRead: data => {
-                const path = (data || "").trim()
-                if (!path) return
-                const name = path.split("/").pop()
-                root.attachedImages = root.attachedImages.concat([{ path: path, name: name }])
-            }
-        }
-    }
-
     function tryPasteImage() {
-        imagePasteProcess.running = false
-        imagePasteProcess.running = true
+        // Pulls a PNG off the Qt clipboard into /tmp and returns its path, or
+        // "" when the clipboard holds no image (the normal text-paste case).
+        const path = Platform.pasteImage()
+        if (!path) return
+        const name = path.split("/").pop()
+        root.attachedImages = root.attachedImages.concat([{ path: path, name: name }])
     }
 
     Column {

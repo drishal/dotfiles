@@ -1,0 +1,3 @@
+module qs.Widgets
+DankIcon 1.0 DankIcon.qml
+StyledText 1.0 StyledText.qml
