@@ -39,10 +39,12 @@ def load_stylix_colors():
 
 
 def main() -> int:
-    # Ctrl-C from a terminal should quit cleanly.
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
-
     app = QApplication(sys.argv)
+    # Terminate cleanly on Ctrl-C and on SIGTERM (what `kill`/`timeout` send).
+    # Set after QApplication so these win over any handler Qt installs —
+    # otherwise the process lingers and the single-instance guard stays stuck.
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    signal.signal(signal.SIGTERM, signal.SIG_DFL)
     app.setApplicationName("Hermes Agent")
     app.setDesktopFileName("hermes-app")
     # Window-close quits even though a tray icon keeps an event source alive.
