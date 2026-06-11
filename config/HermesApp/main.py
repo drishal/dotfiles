@@ -9,6 +9,7 @@ Run:  python3 main.py     (with PySide6 + httpx + pygments on the path)
 """
 from __future__ import annotations
 
+import json
 import os
 import signal
 import sys
@@ -23,6 +24,18 @@ from backend.tray import Tray, make_icon
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 FONT_PATH = os.path.join(APP_DIR, "assets", "fonts", "MaterialSymbolsRounded.ttf")
+COLORS_PATH = os.path.expanduser("~/.config/HermesApp/colors.json")
+
+
+def load_stylix_colors():
+    """The home-manager module generates this from the active stylix scheme.
+    Absent (e.g. running standalone) → None, and Theme keeps its gruvbox
+    defaults."""
+    try:
+        with open(COLORS_PATH) as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return None
 
 
 def main() -> int:
@@ -47,6 +60,7 @@ def main() -> int:
     engine.addImportPath(APP_DIR)
 
     ctx = engine.rootContext()
+    ctx.setContextProperty("stylixColors", load_stylix_colors())
     ctx.setContextProperty("hermesBackend", backend)
     ctx.setContextProperty("Platform", platform)
 

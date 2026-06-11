@@ -43,6 +43,28 @@ in
 {
   home.packages = [ hermes-app ];
 
+  # Derive the app palette from the active stylix scheme. Theme.qml reads this
+  # at startup (base24 slots → its token surface), falling back to its bundled
+  # gruvbox defaults when the file is absent. Refreshes on home-manager switch.
+  xdg.configFile."HermesApp/colors.json".text =
+    let
+      c = config.lib.stylix.colors;
+    in
+    builtins.toJSON {
+      base00 = "#${c.base00}";
+      base01 = "#${c.base01}";
+      base02 = "#${c.base02}";
+      base03 = "#${c.base03}";
+      base04 = "#${c.base04}";
+      base05 = "#${c.base05}";
+      base08 = "#${c.base08}";
+      base0A = "#${c.base0A}";
+      base0B = "#${c.base0B}";
+      base0C = "#${c.base0C}";
+      base0D = "#${c.base0D}";
+      base0E = "#${c.base0E}";
+    };
+
   xdg.desktopEntries.hermes-app = {
     name = "Hermes Agent";
     comment = "Hermes coding agent chat";
