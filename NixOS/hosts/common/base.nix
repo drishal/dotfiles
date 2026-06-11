@@ -82,7 +82,7 @@
     networkmanager = {
       enable = true;
       wifi.backend = "iwd";
-      # dns = "systemd-resolved";
+      dns = "systemd-resolved";
       wifi.macAddress = "random";
     };
     # wireless.enable = true;
@@ -143,6 +143,20 @@
   services.fstrim = {
     enable = true;
     interval = "weekly";
+  };
+  # Local DNS cache (resolved). With Tailscale DNS enabled (CorpDNS) the real
+  # upstream is whatever the tailnet pushes — currently NextDNS over DoH via the
+  # 100.100.100.100 MagicDNS stub, NOT the Cloudflare servers below (those are only
+  # the fallback resolved uses when Tailscale DNS is off). resolved caches in front
+  # of that path so repeat lookups skip the network round-trip, and gives Tailscale
+  # the split-DNS integration it prefers (MagicDNS for *.ts.net, system DNS for the
+  # rest) instead of rewriting resolv.conf directly. Opportunistic DoT only applies
+  # to resolved's own direct upstreams (the fallback path) and degrades to plaintext
+  # if unavailable. DNSSEC off to avoid breaking captive portals.
+  services.resolved = {
+    enable = true;
+    dnssec = "false";
+    dnsovertls = "opportunistic";
   };
   services.tailscale = {
     enable = true;
