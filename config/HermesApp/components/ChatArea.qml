@@ -1135,129 +1135,171 @@ Item {
             readonly property var msg: parent ? parent.msg : null
             readonly property string contentText: msg ? (msg.content || "") : ""
             readonly property string toolStatus: msg ? (msg.toolStatus || "") : ""
-            height: approvalCol.height + Theme.spacingS
+            readonly property bool resolved: toolStatus !== ""
+            readonly property bool denied: toolStatus === "deny"
+            readonly property color accent: resolved ? (denied ? Theme.error : Theme.primary) : Theme.tertiary
+            height: approvalCard.height + Theme.spacingS
 
-            Column {
-                id: approvalCol
+            Rectangle {
+                id: approvalCard
                 anchors.left: parent.left
-                width: parent.width
-                spacing: Theme.spacingXS
+                anchors.right: parent.right
+                anchors.rightMargin: parent.width * 0.06
+                height: approvalCol.implicitHeight + Theme.spacingM * 2
+                radius: Theme.cornerRadius
+                color: Theme.surfaceContainerHigh
+                border.width: 1
+                border.color: apc.accent
+                Behavior on border.color { ColorAnimation { duration: 220 } }
 
-                Row {
-                    spacing: Theme.spacingXS
-
-                    DankIcon {
-                        name: "shield"
-                        size: 16
-                        color: Theme.tertiary
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-
-                    StyledText {
-                        text: "Approval Required"
-                        color: Theme.tertiary
-                        font.pixelSize: Theme.fontSizeSmall
-                        font.weight: Font.Medium
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                }
-
+                // Attention accent bar down the left edge.
                 Rectangle {
-                    width: parent.width
-                    height: approvalContent.implicitHeight + Theme.spacingS * 2
-                    color: Theme.surfaceVariantAlpha
-                    radius: Theme.cornerRadius
-
-                    StyledText {
-                        id: approvalContent
-                        anchors.fill: parent
-                        anchors.margins: Theme.spacingS
-                        text: apc.contentText
-                        color: Theme.surfaceText
-                        font.pixelSize: Theme.fontSizeSmall
-                        font.family: "monospace"
-                        wrapMode: Text.WordWrap
-                    }
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.margins: 1
+                    width: 3
+                    radius: 1.5
+                    color: apc.accent
+                    Behavior on color { ColorAnimation { duration: 220 } }
                 }
 
-                Row {
-                    visible: apc.toolStatus === ""
-                    spacing: Theme.spacingXS
+                Column {
+                    id: approvalCol
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.leftMargin: Theme.spacingM
+                    anchors.rightMargin: Theme.spacingM
+                    anchors.topMargin: Theme.spacingM
+                    spacing: Theme.spacingS
 
-                    Rectangle {
-                        width: approveBtnText.implicitWidth + Theme.spacingM * 2
-                        height: 28
-                        color: Theme.primary
-                        radius: Math.max(4, Theme.cornerRadius / 2)
+                    Row {
+                        spacing: Theme.spacingXS
+
+                        DankIcon {
+                            name: apc.resolved ? (apc.denied ? "block" : "verified_user") : "admin_panel_settings"
+                            size: 16
+                            color: apc.accent
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
 
                         StyledText {
-                            id: approveBtnText
-                            anchors.centerIn: parent
-                            text: "Allow Once"
-                            color: Theme.onPrimary
+                            text: "Permission required"
+                            color: apc.accent
                             font.pixelSize: Theme.fontSizeSmall
                             font.weight: Font.Medium
-                        }
-
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: hermesService.resolveApproval("once")
+                            anchors.verticalCenter: parent.verticalCenter
                         }
                     }
 
-                    Rectangle {
-                        width: sessionBtnText.implicitWidth + Theme.spacingM * 2
-                        height: 28
-                        color: Theme.surfaceVariantAlpha
-                        radius: Math.max(4, Theme.cornerRadius / 2)
+                    // Highlighted, copyable command preview.
+                    CodeBlock {
+                        width: parent.width
+                        content: apc.contentText
+                        language: "bash"
+                        complete: true
+                    }
+
+                    // Action buttons.
+                    Row {
+                        visible: !apc.resolved
+                        spacing: Theme.spacingXS
+
+                        Rectangle {
+                            width: allowOnceRow.implicitWidth + Theme.spacingM * 2
+                            height: 30
+                            radius: Math.max(4, Theme.cornerRadius / 2)
+                            color: allowOnceMouse.containsMouse ? Theme.primaryPressed : Theme.primary
+                            Behavior on color { ColorAnimation { duration: 120 } }
+
+                            Row {
+                                id: allowOnceRow
+                                anchors.centerIn: parent
+                                spacing: 4
+                                DankIcon { name: "check"; size: 14; color: Theme.onPrimary; anchors.verticalCenter: parent.verticalCenter }
+                                StyledText { text: "Allow once"; color: Theme.onPrimary; font.pixelSize: Theme.fontSizeSmall; font.weight: Font.Medium; anchors.verticalCenter: parent.verticalCenter }
+                            }
+
+                            MouseArea {
+                                id: allowOnceMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: hermesService.resolveApproval("once")
+                            }
+                        }
+
+                        Rectangle {
+                            width: allowSessionRow.implicitWidth + Theme.spacingM * 2
+                            height: 30
+                            radius: Math.max(4, Theme.cornerRadius / 2)
+                            color: allowSessionMouse.containsMouse ? Theme.surfaceHover : Theme.surfaceVariantAlpha
+                            Behavior on color { ColorAnimation { duration: 120 } }
+
+                            Row {
+                                id: allowSessionRow
+                                anchors.centerIn: parent
+                                spacing: 4
+                                DankIcon { name: "schedule"; size: 14; color: Theme.surfaceText; anchors.verticalCenter: parent.verticalCenter }
+                                StyledText { text: "Allow session"; color: Theme.surfaceText; font.pixelSize: Theme.fontSizeSmall; anchors.verticalCenter: parent.verticalCenter }
+                            }
+
+                            MouseArea {
+                                id: allowSessionMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: hermesService.resolveApproval("session")
+                            }
+                        }
+
+                        Rectangle {
+                            width: denyRow.implicitWidth + Theme.spacingM * 2
+                            height: 30
+                            radius: Math.max(4, Theme.cornerRadius / 2)
+                            color: denyMouse.containsMouse ? Theme.error : Theme.errorPressed
+                            Behavior on color { ColorAnimation { duration: 120 } }
+
+                            Row {
+                                id: denyRow
+                                anchors.centerIn: parent
+                                spacing: 4
+                                DankIcon { name: "block"; size: 14; color: denyMouse.containsMouse ? Theme.onPrimary : Theme.error; anchors.verticalCenter: parent.verticalCenter }
+                                StyledText { text: "Deny"; color: denyMouse.containsMouse ? Theme.onPrimary : Theme.error; font.pixelSize: Theme.fontSizeSmall; anchors.verticalCenter: parent.verticalCenter }
+                            }
+
+                            MouseArea {
+                                id: denyMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: hermesService.resolveApproval("deny")
+                            }
+                        }
+                    }
+
+                    // Resolved status.
+                    Row {
+                        visible: apc.resolved
+                        spacing: Theme.spacingXS
+
+                        DankIcon {
+                            name: apc.denied ? "cancel" : "check_circle"
+                            size: 14
+                            color: apc.accent
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
 
                         StyledText {
-                            id: sessionBtnText
-                            anchors.centerIn: parent
-                            text: "Allow Session"
-                            color: Theme.surfaceText
+                            text: apc.toolStatus === "once" || apc.toolStatus === "session"
+                                  ? "Approved (" + apc.toolStatus + ")"
+                                  : apc.toolStatus === "always" ? "Always approved" : "Denied"
+                            color: apc.accent
                             font.pixelSize: Theme.fontSizeSmall
-                        }
-
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: hermesService.resolveApproval("session")
+                            anchors.verticalCenter: parent.verticalCenter
                         }
                     }
-
-                    Rectangle {
-                        width: denyBtnText.implicitWidth + Theme.spacingM * 2
-                        height: 28
-                        color: Theme.errorPressed
-                        radius: Math.max(4, Theme.cornerRadius / 2)
-
-                        StyledText {
-                            id: denyBtnText
-                            anchors.centerIn: parent
-                            text: "Deny"
-                            color: Theme.surfaceText
-                            font.pixelSize: Theme.fontSizeSmall
-                        }
-
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: hermesService.resolveApproval("deny")
-                        }
-                    }
-                }
-
-                StyledText {
-                    visible: apc.toolStatus !== ""
-                    text: apc.toolStatus === "once" || apc.toolStatus === "session"
-                          ? "✓ Approved (" + apc.toolStatus + ")"
-                          : apc.toolStatus === "always"
-                            ? "✓ Always approved"
-                            : "✗ Denied"
-                    color: (apc.toolStatus === "deny") ? Theme.error : Theme.primary
-                    font.pixelSize: Theme.fontSizeSmall
                 }
             }
         }

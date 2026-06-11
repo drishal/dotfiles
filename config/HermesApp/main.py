@@ -14,22 +14,29 @@ import signal
 import sys
 
 from PySide6.QtCore import QUrl
-from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
+from PySide6.QtWidgets import QApplication
 
 from backend.hermes_backend import HermesBackend
 from backend.platform_bridge import Platform
+from backend.tray import Tray, make_icon
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
+FONT_PATH = os.path.join(APP_DIR, "assets", "fonts", "MaterialSymbolsRounded.ttf")
 
 
 def main() -> int:
     # Ctrl-C from a terminal should quit cleanly.
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-    app = QGuiApplication(sys.argv)
+    app = QApplication(sys.argv)
     app.setApplicationName("Hermes Agent")
     app.setDesktopFileName("hermes-app")
+    # Window-close quits even though a tray icon keeps an event source alive.
+    app.setQuitOnLastWindowClosed(True)
+
+    icon = make_icon(FONT_PATH)
+    app.setWindowIcon(icon)
 
     backend = HermesBackend()
     platform = Platform()
@@ -47,6 +54,9 @@ def main() -> int:
     if not engine.rootObjects():
         print("Failed to load QML", file=sys.stderr)
         return 1
+
+    window = engine.rootObjects()[0]
+    tray = Tray(app, window, backend, icon)  # noqa: F841 — kept alive by ref
 
     # Initial data loads now that QML signal handlers are connected.
     backend.start()
