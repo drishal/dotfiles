@@ -1,0 +1,7 @@
+# Python bytecode from helper scripts
+__pycache__/
+*.pyc
+
+# Stray literal "~" tree created when a process runs with this dir as cwd
+# and an unexpanded ~ path
+/~/

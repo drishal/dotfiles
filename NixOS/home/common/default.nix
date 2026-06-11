@@ -20,6 +20,7 @@
     ./desktop/hyprland.nix
     ./desktop/sway.nix
     ./desktop/dms.nix
+    ./desktop/hermes-app.nix
 
     ./browsers/betterfox.nix
 
