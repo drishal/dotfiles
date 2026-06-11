@@ -58,7 +58,9 @@ Item {
 
             ChatArea {
                 anchors.fill: parent
-                visible: !root.showSettings
+                opacity: root.showSettings ? 0 : 1
+                visible: opacity > 0
+                Behavior on opacity { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
                 hermesService: root.hermesService
                 expanded: root.expanded
                 onExpandToggled: root.expandToggled()
@@ -66,7 +68,14 @@ Item {
 
             SettingsPanel {
                 anchors.fill: parent
-                visible: root.showSettings
+                opacity: root.showSettings ? 1 : 0
+                visible: opacity > 0
+                // Slide in from the right as it fades.
+                transform: Translate {
+                    x: root.showSettings ? 0 : 24
+                    Behavior on x { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+                }
+                Behavior on opacity { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
                 apiBaseUrl: root.apiBaseUrl
                 apiKey: root.apiKey
                 hermesHome: root.hermesHome

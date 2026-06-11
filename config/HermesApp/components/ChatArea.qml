@@ -21,6 +21,7 @@ Item {
     property var attachedImages: []
 
     function scrollToBottom() {
+        messageListView.autoFollow = true
         Qt.callLater(() => messageListView.positionViewAtEnd())
     }
 
@@ -47,6 +48,7 @@ Item {
         const payload = buildOutgoingMessage(text)
         hermesService.sendMessage(payload)
         clearAttachments()
+        messageListView.autoFollow = true
     }
 
     function tryPasteImage() {
@@ -80,7 +82,24 @@ Item {
             model: hermesService.messageList
             boundsBehavior: Flickable.StopAtBounds
 
-            onCountChanged: root.scrollToBottom()
+            // Pin to the newest content while the user is reading near the
+            // bottom; release the pin when they scroll up to read back, so
+            // streaming tokens follow smoothly without yanking the view.
+            property bool autoFollow: true
+            onCountChanged: if (autoFollow) Qt.callLater(() => positionViewAtEnd())
+            onContentHeightChanged: if (autoFollow) positionViewAtEnd()
+            onMovementEnded: autoFollow = atYEnd
+            onFlickEnded: autoFollow = atYEnd
+
+            // New rows fade + pop in; neighbours shifted by the insert glide
+            // into place instead of snapping.
+            add: Transition {
+                NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 220; easing.type: Easing.OutCubic }
+                NumberAnimation { property: "scale"; from: 0.95; to: 1; duration: 240; easing.type: Easing.OutBack }
+            }
+            displaced: Transition {
+                NumberAnimation { properties: "x,y"; duration: 180; easing.type: Easing.OutCubic }
+            }
 
             // Scroll-to-bottom button
             Rectangle {
@@ -164,6 +183,8 @@ Item {
                     radius: 4
                     color: hermesService.connected ? Theme.primary : Theme.error
                     anchors.verticalCenter: parent.verticalCenter
+
+                    Behavior on color { ColorAnimation { duration: 300 } }
 
                     SequentialAnimation on opacity {
                         running: hermesService.isRunning
@@ -408,6 +429,31 @@ Item {
                     return Theme.surfaceVariant
                 }
 
+                Behavior on color { ColorAnimation { duration: 160 } }
+
+                // Expanding "ping" ring while a run is active.
+                Rectangle {
+                    anchors.centerIn: parent
+                    width: parent.width
+                    height: parent.height
+                    radius: height / 2
+                    color: "transparent"
+                    border.width: 2
+                    border.color: Theme.error
+                    visible: hermesService.isRunning
+                    z: -1
+                    SequentialAnimation on opacity {
+                        running: hermesService.isRunning
+                        loops: Animation.Infinite
+                        NumberAnimation { from: 0.55; to: 0; duration: 1000; easing.type: Easing.OutCubic }
+                    }
+                    SequentialAnimation on scale {
+                        running: hermesService.isRunning
+                        loops: Animation.Infinite
+                        NumberAnimation { from: 0.85; to: 1.5; duration: 1000; easing.type: Easing.OutCubic }
+                    }
+                }
+
                 Row {
                     anchors.centerIn: parent
                     spacing: 4
@@ -554,6 +600,21 @@ Item {
                         visible: amc.streaming && !amc.hasContent
                         spacing: Theme.spacingXS
                         anchors.left: parent.left
+
+                        // Whole row breathes while we wait for the first token.
+                        SequentialAnimation on opacity {
+                            running: thinkingIndicator.visible
+                            loops: Animation.Infinite
+                            NumberAnimation { from: 0.5; to: 1; duration: 750; easing.type: Easing.InOutSine }
+                            NumberAnimation { from: 1; to: 0.5; duration: 750; easing.type: Easing.InOutSine }
+                        }
+
+                        DankIcon {
+                            name: "auto_awesome"
+                            size: 14
+                            color: Theme.primary
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
 
                         StyledText {
                             text: "Hermes is thinking…"
@@ -702,6 +763,17 @@ Item {
             readonly property bool _hasDetail: _summary && !!_summary.detail
             height: callCol.implicitHeight + 2
 
+            // Pop the status dot when the call resolves (success or failure).
+            onToolStatusChanged: {
+                if (toolStatus === "completed" || toolStatus === "error")
+                    statusPop.restart()
+            }
+            SequentialAnimation {
+                id: statusPop
+                NumberAnimation { target: statusDot; property: "scale"; from: 1; to: 1.8; duration: 110; easing.type: Easing.OutCubic }
+                NumberAnimation { target: statusDot; property: "scale"; from: 1.8; to: 1; duration: 230; easing.type: Easing.OutBack }
+            }
+
             Column {
                 id: callCol
                 anchors.left: parent.left
@@ -720,6 +792,7 @@ Item {
                         spacing: Theme.spacingXS
 
                         Rectangle {
+                            id: statusDot
                             width: 7
                             height: 7
                             radius: 3.5
@@ -729,6 +802,8 @@ Item {
                                 if (tcc.toolStatus === "error") return Theme.error
                                 return Theme.primary
                             }
+
+                            Behavior on color { ColorAnimation { duration: 220 } }
 
                             SequentialAnimation on opacity {
                                 running: tcc.toolStatus === "running"

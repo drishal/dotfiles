@@ -75,6 +75,7 @@ Item {
             height: 36
             color: newChatMouse.containsMouse ? Theme.primaryPressed : Theme.primaryBackground
             radius: Math.max(4, Theme.cornerRadius / 2)
+            Behavior on color { ColorAnimation { duration: 150 } }
 
             Row {
                 anchors.fill: parent
@@ -207,6 +208,7 @@ Item {
                    ? Theme.primarySelected
                    : (settingsMouse.containsMouse ? Theme.surfaceHover : "transparent")
             radius: Math.max(4, Theme.cornerRadius / 2)
+            Behavior on color { ColorAnimation { duration: 150 } }
 
             Row {
                 anchors.centerIn: parent
@@ -283,14 +285,31 @@ Item {
             }
 
             delegate: Rectangle {
+                id: sessionDelegate
                 width: sessionListView.width
                 height: sessionItemCol.height + Theme.spacingS * 2
+                readonly property bool _selected: model.sessionId === root.currentSessionId && !root.settingsActive
                 color: {
-                    if (model.sessionId === root.currentSessionId && !root.settingsActive) return Theme.primarySelected
+                    if (_selected) return Theme.primarySelected
                     if (sessionMouse.containsMouse) return Theme.surfaceHover
                     return "transparent"
                 }
                 radius: Math.max(4, Theme.cornerRadius / 2)
+
+                Behavior on color { ColorAnimation { duration: 150 } }
+
+                // Accent bar marks the active session.
+                Rectangle {
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.leftMargin: 1
+                    width: 3
+                    height: parent.height * 0.55
+                    radius: 1.5
+                    color: Theme.primary
+                    opacity: sessionDelegate._selected ? 1 : 0
+                    Behavior on opacity { NumberAnimation { duration: 180 } }
+                }
 
                 Column {
                     id: sessionItemCol
