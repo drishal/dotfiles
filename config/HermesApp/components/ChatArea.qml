@@ -111,8 +111,21 @@ Item {
             // bottom; release the pin when they scroll up to read back, so
             // streaming tokens follow smoothly without yanking the view.
             property bool autoFollow: true
-            onCountChanged: if (autoFollow) Qt.callLater(() => positionViewAtEnd())
-            onContentHeightChanged: if (autoFollow) positionViewAtEnd()
+            property bool _pinning: false
+            // Coalesced, re-entrancy-guarded pin. Calling positionViewAtEnd()
+            // instantiates bottom delegates, which changes contentHeight — so
+            // doing it directly from onContentHeightChanged loops forever (CPU
+            // pegs, UI freezes) when variable-height rows like code blocks load.
+            function _pinBottom() {
+                if (!autoFollow || _pinning) return
+                _pinning = true
+                positionViewAtEnd()
+                _pinning = false
+            }
+            onCountChanged: if (autoFollow) Qt.callLater(_pinBottom)
+            // Follow growing content only while a reply is streaming (monotonic,
+            // stable); a session load just pins once via onCountChanged.
+            onContentHeightChanged: if (autoFollow && hermesService.isRunning) Qt.callLater(_pinBottom)
             onMovementEnded: autoFollow = atYEnd
             onFlickEnded: autoFollow = atYEnd
 

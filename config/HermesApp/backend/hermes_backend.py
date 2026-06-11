@@ -164,6 +164,7 @@ class HermesBackend(QObject):
     # ───────────────────────────────────────────────────────────
     @staticmethod
     def _spawn(fn) -> None:
+        # Daemon threads so a blocked SSE read can never hold up process exit.
         threading.Thread(target=fn, daemon=True).start()
 
     # ───────────────────────────────────────────────────────────
