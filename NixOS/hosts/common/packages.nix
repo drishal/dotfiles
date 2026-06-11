@@ -109,7 +109,7 @@
     # deluge
     dejavu_fonts
     devenv
-    discord
+    vesktop
     distrobox
     dig
        dmg2img
@@ -290,6 +290,7 @@
     read-edid
     ripgrep
     rofi
+    rquickshare
     rofi-emoji
     simplescreenrecorder
     # sony-headphones-client
