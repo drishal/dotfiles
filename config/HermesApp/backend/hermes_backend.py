@@ -428,6 +428,20 @@ class HermesBackend(QObject):
         )
 
     def _add_thinking(self, text: str) -> None:
+        # Provider quirk: some models (M3/GLM-style) echo each just-streamed
+        # segment back through the reasoning channel, so reasoning.available
+        # arrives carrying text we already rendered as visible content. Drop the
+        # echo — otherwise every assistant message gets a duplicate "thinking"
+        # row. Genuine reasoning (text that wasn't shown as content) still shows.
+        norm = " ".join((text or "").split())
+        if norm:
+            with self._lock:
+                for m in reversed(self._messages):
+                    if m["type"] == "assistant" and m.get("content"):
+                        c = " ".join(m["content"].split())
+                        if c == norm or c.startswith(norm) or norm.startswith(c):
+                            return
+                        break
         self._append(db._row("thinking", content=text, timestamp=time.time()))
 
     def _add_tool_call(self, tool: str, preview: str, status: str) -> None:
