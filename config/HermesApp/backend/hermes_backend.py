@@ -227,6 +227,33 @@ class HermesBackend(QObject):
             self._messages = []
         self.messagesReset.emit([])
 
+    @Slot(int)
+    def truncateTo(self, row: int) -> None:
+        """Drop every row from `row` onward. Used by edit-and-resend: the user
+        message is removed and its text loaded back into the input."""
+        if self._isRunning:
+            return
+        with self._lock:
+            if row < 0 or row > len(self._messages):
+                return
+            self._messages = self._messages[:row]
+            snapshot = list(self._messages)
+        self.messagesReset.emit(snapshot)
+
+    @Slot(int, str)
+    def resendFrom(self, row: int, text: str) -> None:
+        """Truncate to before `row`, then send `text` as a fresh turn. Powers
+        retry (resend the preceding user message) from the message actions."""
+        if self._isRunning or not text.strip():
+            return
+        with self._lock:
+            if row < 0 or row > len(self._messages):
+                return
+            self._messages = self._messages[:row]
+            snapshot = list(self._messages)
+        self.messagesReset.emit(snapshot)
+        self.sendMessage(text)
+
     def _db_path(self) -> str:
         return os.path.join(os.path.expanduser(self._hermesHome), "state.db")
 

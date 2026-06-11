@@ -86,4 +86,40 @@ Item {
             }
         }
     }
+
+    // ── Global shortcuts ───────────────────────────────────────
+    Shortcut {
+        sequence: "Ctrl+K"
+        context: Qt.ApplicationShortcut
+        onActivated: palette.show()
+    }
+    Shortcut {
+        sequence: "Ctrl+N"
+        context: Qt.ApplicationShortcut
+        onActivated: { root.showSettings = false; root.hermesService.newChat() }
+    }
+    Shortcut {
+        sequence: "Ctrl+,"
+        context: Qt.ApplicationShortcut
+        onActivated: root.showSettings = !root.showSettings
+    }
+    Shortcut {
+        sequences: ["Ctrl+W"]
+        context: Qt.ApplicationShortcut
+        onActivated: Qt.quit()
+    }
+
+    // ── Command palette overlay ────────────────────────────────
+    CommandPalette {
+        id: palette
+        objectName: "commandPalette"
+        anchors.fill: parent
+        z: 100
+        hermesService: root.hermesService
+
+        onRequestNewChat: { root.showSettings = false; root.hermesService.newChat() }
+        onRequestSettings: root.showSettings = true
+        onRequestStop: root.hermesService.stopRun()
+        onSessionChosen: (sid) => { root.showSettings = false; root.hermesService.loadMessages(sid) }
+    }
 }

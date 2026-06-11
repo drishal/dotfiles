@@ -51,6 +51,31 @@ Item {
         messageListView.autoFollow = true
     }
 
+    // Retry: resend the user message that preceded this assistant reply,
+    // dropping everything from that point so a fresh response streams in.
+    function retryMessage(assistantIndex) {
+        if (hermesService.isRunning) return
+        const ml = hermesService.messageList
+        for (let i = assistantIndex - 1; i >= 0; i--) {
+            if (ml.get(i).type === "user") {
+                hermesService.resendFrom(i, ml.get(i).content)
+                messageListView.autoFollow = true
+                return
+            }
+        }
+    }
+
+    // Edit: pull a user message back into the input and truncate the
+    // conversation to before it, so the next send resumes from there.
+    function editMessage(userIndex, text) {
+        if (hermesService.isRunning) return
+        hermesService.truncateTo(userIndex)
+        chatInput.text = text
+        chatInput.forceActiveFocus()
+        chatInput.cursorPosition = text.length
+        messageListView.autoFollow = true
+    }
+
     function tryPasteImage() {
         // Pulls a PNG off the Qt clipboard into /tmp and returns its path, or
         // "" when the clipboard holds no image (the normal text-paste case).
@@ -137,8 +162,9 @@ Item {
                     width: parent.width
                     // Capture row data here — Components are declared outside the
                     // delegate, so they don't inherit the delegate's `model` context.
-                    // Each loaded item reaches the row via `parent.msg`.
+                    // Each loaded item reaches the row via `parent.msg` / `parent.msgIndex`.
                     property var msg: model
+                    property int msgIndex: index
                     sourceComponent: {
                         switch (msg ? msg.type : "") {
                         case "user":        return userMsgComponent
@@ -511,7 +537,58 @@ Item {
             id: umc
             width: parent.width
             readonly property var msg: parent ? parent.msg : null
+            readonly property int rowIndex: parent ? parent.msgIndex : -1
+            readonly property string contentText: msg ? (msg.content || "") : ""
             height: userBubble.height + (msgTime.visible ? 16 : 0)
+
+            HoverHandler { id: umcHover }
+
+            // Hover toolbar in the empty space left of the user bubble: copy / edit.
+            Rectangle {
+                anchors.right: userBubble.left
+                anchors.top: userBubble.top
+                anchors.rightMargin: Theme.spacingXS
+                width: umcActions.width + 6
+                height: 22
+                radius: 11
+                color: Theme.surfaceContainerHighest
+                border.width: 1
+                border.color: Theme.outlineVariant
+                opacity: (umcHover.hovered && !hermesService.isRunning) ? 1 : 0
+                visible: opacity > 0
+                Behavior on opacity { NumberAnimation { duration: 120 } }
+
+                Row {
+                    id: umcActions
+                    anchors.centerIn: parent
+                    spacing: 0
+
+                    Rectangle {
+                        width: 24; height: 18; radius: 6
+                        color: copyUserMouse.containsMouse ? Theme.surfaceHover : "transparent"
+                        DankIcon { anchors.centerIn: parent; name: "content_copy"; size: 13; color: Theme.surfaceTextMedium }
+                        MouseArea {
+                            id: copyUserMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: Platform.copyToClipboard(umc.contentText)
+                        }
+                    }
+                    Rectangle {
+                        width: 24; height: 18; radius: 6
+                        color: editUserMouse.containsMouse ? Theme.surfaceHover : "transparent"
+                        DankIcon { anchors.centerIn: parent; name: "edit"; size: 13; color: Theme.surfaceTextMedium }
+                        MouseArea {
+                            id: editUserMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: root.editMessage(umc.rowIndex, umc.contentText)
+                        }
+                    }
+                }
+            }
 
             Rectangle {
                 id: userBubble
@@ -565,6 +642,7 @@ Item {
             id: amc
             width: parent.width
             readonly property var msg: parent ? parent.msg : null
+            readonly property int rowIndex: parent ? parent.msgIndex : -1
             readonly property bool streaming: msg ? !!msg.isStreaming : false
             readonly property string contentText: msg ? (msg.content || "") : ""
             readonly property bool hasContent: contentText.length > 0
@@ -651,6 +729,56 @@ Item {
                             loops: Animation.Infinite
                             NumberAnimation { from: 1; to: 0; duration: 500 }
                             NumberAnimation { from: 0; to: 1; duration: 500 }
+                        }
+                    }
+                }
+            }
+
+            HoverHandler { id: amcHover }
+
+            // Hover toolbar: copy / retry.
+            Rectangle {
+                anchors.right: assistantBubble.right
+                anchors.top: assistantBubble.top
+                anchors.margins: 4
+                width: amcActions.width + 6
+                height: 22
+                radius: 11
+                color: Theme.surfaceContainerHighest
+                border.width: 1
+                border.color: Theme.outlineVariant
+                opacity: (amcHover.hovered && !amc.streaming && amc.hasContent) ? 1 : 0
+                visible: opacity > 0
+                Behavior on opacity { NumberAnimation { duration: 120 } }
+
+                Row {
+                    id: amcActions
+                    anchors.centerIn: parent
+                    spacing: 0
+
+                    Rectangle {
+                        width: 24; height: 18; radius: 6
+                        color: copyAsstMouse.containsMouse ? Theme.surfaceHover : "transparent"
+                        DankIcon { anchors.centerIn: parent; name: "content_copy"; size: 13; color: Theme.surfaceTextMedium }
+                        MouseArea {
+                            id: copyAsstMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: Platform.copyToClipboard(amc.contentText)
+                        }
+                    }
+                    Rectangle {
+                        width: 24; height: 18; radius: 6
+                        opacity: hermesService.isRunning ? 0.4 : 1
+                        color: retryAsstMouse.containsMouse ? Theme.surfaceHover : "transparent"
+                        DankIcon { anchors.centerIn: parent; name: "refresh"; size: 13; color: Theme.surfaceTextMedium }
+                        MouseArea {
+                            id: retryAsstMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: root.retryMessage(amc.rowIndex)
                         }
                     }
                 }

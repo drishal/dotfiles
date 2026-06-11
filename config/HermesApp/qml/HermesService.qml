@@ -43,6 +43,8 @@ Item {
     function sendMessage(text) { if (backend) backend.sendMessage(text) }
     function stopRun() { if (backend) backend.stopRun() }
     function resolveApproval(choice) { if (backend) backend.resolveApproval(choice) }
+    function truncateTo(row) { if (backend) backend.truncateTo(row) }
+    function resendFrom(row, text) { if (backend) backend.resendFrom(row, text) }
 
     Connections {
         target: root.backend
