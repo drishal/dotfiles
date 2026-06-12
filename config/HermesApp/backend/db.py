@@ -140,6 +140,11 @@ def _row(msg_type: str, **kw) -> dict:
         "toolDuration": 0,
         "isStreaming": False,
         "timestamp": 0,
+        # Disclosure state for the collapsible cards (thinking / tool_call /
+        # tool_result). Must exist as a role from creation — toggling it via
+        # ListModel.setProperty only re-evaluates delegate bindings for roles
+        # that were present when the row was appended.
+        "expanded": False,
     }
     row.update(kw)
     return row

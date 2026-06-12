@@ -912,6 +912,14 @@ Item {
             readonly property int rowIndex: parent ? parent.msgIndex : -1
             readonly property string contentText: msg ? (msg.content || "") : ""
             readonly property bool isExpanded: msg ? !!msg.expanded : false
+            // The reasoning is streaming in right now: this is the newest row
+            // and a run is active. Auto-open so the trace is visible live (the
+            // webui shows reasoning as it streams), without forcing the
+            // persisted `expanded` state. Once the answer starts (a newer row
+            // appears) or the run ends, it falls back to the user's choice.
+            readonly property bool isLive: hermesService.isRunning
+                                           && rowIndex === hermesService.messageList.count - 1
+            readonly property bool showBody: isExpanded || isLive
             height: thinkCard.height + 2
 
             function toggleExpanded() {
@@ -924,7 +932,7 @@ Item {
                 id: thinkCard
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: 26 + (tmc.isExpanded ? thinkBody.height : 0)
+                height: 26 + (tmc.showBody ? thinkBody.height : 0)
                 radius: Math.max(6, Theme.cornerRadius / 2)
                 color: Qt.rgba(Theme.primary.r, Theme.primary.g, Theme.primary.b, 0.06)
                 border.width: 1
@@ -961,14 +969,23 @@ Item {
                     }
 
                     StyledText {
+                        id: thinkLabel
                         anchors.left: thinkBulb.right
                         anchors.leftMargin: Theme.spacingXS
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "Thinking"
+                        text: tmc.isLive ? "Thinking…" : "Thinking"
                         color: Theme.primary
                         opacity: thinkMouse.containsMouse ? 1 : 0.85
                         font.pixelSize: Theme.fontSizeSmall
                         font.weight: Font.DemiBold
+
+                        // Gentle pulse while the reasoning streams.
+                        SequentialAnimation on opacity {
+                            running: tmc.isLive
+                            loops: Animation.Infinite
+                            NumberAnimation { from: 0.55; to: 1; duration: 700; easing.type: Easing.InOutSine }
+                            NumberAnimation { from: 1; to: 0.55; duration: 700; easing.type: Easing.InOutSine }
+                        }
                     }
 
                     DankIcon {
@@ -980,7 +997,7 @@ Item {
                         size: 13
                         color: Theme.primary
                         opacity: 0.7
-                        rotation: tmc.isExpanded ? 90 : 0
+                        rotation: tmc.showBody ? 90 : 0
                         Behavior on rotation { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
                     }
 
@@ -1015,7 +1032,7 @@ Item {
 
                 Item {
                     id: thinkBody
-                    visible: tmc.isExpanded
+                    visible: tmc.showBody
                     anchors.top: thinkHeader.bottom
                     anchors.left: parent.left
                     anchors.right: parent.right
@@ -1030,6 +1047,7 @@ Item {
                     }
 
                     Flickable {
+                        id: thinkFlick
                         anchors.fill: parent
                         anchors.leftMargin: Theme.spacingS
                         anchors.rightMargin: Theme.spacingS
@@ -1041,6 +1059,9 @@ Item {
                         flickableDirection: Flickable.VerticalFlick
                         interactive: contentHeight > height
                         boundsBehavior: Flickable.StopAtBounds
+
+                        // Keep the newest reasoning in view while it streams.
+                        onContentHeightChanged: if (tmc.isLive) contentY = Math.max(0, contentHeight - height)
 
                         TextEdit {
                             id: thinkText
