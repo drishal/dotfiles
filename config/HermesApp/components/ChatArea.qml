@@ -162,18 +162,20 @@ Item {
                 }
             }
 
-            // New rows fade + pop in; neighbours shifted by the insert glide
-            // into place instead of snapping. Disabled during session loads —
-            // animating dozens of variable-height rows at once leaves stale
-            // row positions (rows overlap until a relayout).
+            // New rows fade in — but ONLY during a live run. Two traps avoided:
+            //  • `bulkLoading` is too short-lived to gate on: ListView creates
+            //    delegates lazily, after the append loop (and the flag) have
+            //    finished, so the transition still fired on session loads. An
+            //    in-flight add transition desyncs a row whose height then
+            //    settles async (markdown/table re-measure) → rows overlap, and
+            //    ListView never corrects it. Gating on isRunning keeps loads
+            //    completely static.
+            //  • No `displaced` transition at all — animating neighbour y has
+            //    the same settle-desync problem. Neighbours snap to final y.
             add: Transition {
-                enabled: !root.hermesService.bulkLoading
+                enabled: root.hermesService.isRunning && !root.hermesService.bulkLoading
                 NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 220; easing.type: Easing.OutCubic }
                 NumberAnimation { property: "scale"; from: 0.95; to: 1; duration: 240; easing.type: Easing.OutBack }
-            }
-            displaced: Transition {
-                enabled: !root.hermesService.bulkLoading
-                NumberAnimation { properties: "x,y"; duration: 180; easing.type: Easing.OutCubic }
             }
 
             // Scroll-to-bottom button
