@@ -68,7 +68,8 @@ Item {
         x: root._colX(col)
         width: root._colWidth(col)
 
-        StyledText {
+        // TextEdit (not Text) so cell contents are selectable/copyable.
+        TextEdit {
             id: cellText
             anchors.fill: parent
             anchors.topMargin: root.cellPad
@@ -80,10 +81,18 @@ Item {
             color: Theme.surfaceText
             font.pixelSize: Theme.fontSizeSmall
             font.weight: cell.header ? Font.Bold : Font.Normal
-            wrapMode: Text.WordWrap
+            wrapMode: TextEdit.WordWrap
             horizontalAlignment: root._hAlign(cell.col)
-            verticalAlignment: Text.AlignVCenter
-            textFormat: cell.header ? Text.PlainText : Text.MarkdownText
+            verticalAlignment: TextEdit.AlignVCenter
+            textFormat: cell.header ? TextEdit.PlainText : TextEdit.MarkdownText
+            readOnly: true
+            selectByMouse: true
+            selectionColor: Theme.primary
+            selectedTextColor: Theme.onPrimary
+            persistentSelection: true
+            HoverHandler {
+                cursorShape: Qt.IBeamCursor
+            }
         }
     }
 
