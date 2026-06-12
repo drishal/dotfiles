@@ -1242,31 +1242,31 @@ Item {
                         }
                     }
 
-                // Expanded: the full arguments, selectable.
+                // Expanded: the arguments as a neat tree.
                 Item {
                     id: argsBox
                     visible: tcc.isExpanded
                     anchors.top: callHeader.bottom
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    height: argsText.implicitHeight + Theme.spacingS
+                    height: Math.min(argsJson.height, 320) + Theme.spacingS
 
-                    TextEdit {
-                        id: argsText
-                        anchors.left: parent.left
-                        anchors.right: parent.right
+                    Flickable {
+                        anchors.fill: parent
                         anchors.leftMargin: Theme.spacingS + 22
                         anchors.rightMargin: Theme.spacingS
-                        text: tcc.isExpanded ? tcc.toolPreview : ""
-                        color: Theme.surfaceTextMedium
-                        font.pixelSize: Theme.fontSizeSmall
-                        font.family: "monospace"
-                        wrapMode: TextEdit.Wrap
-                        textFormat: TextEdit.PlainText
-                        readOnly: true
-                        selectByMouse: true
-                        selectionColor: Theme.primary
-                        selectedTextColor: Theme.onPrimary
+                        contentWidth: width
+                        contentHeight: argsJson.height
+                        clip: true
+                        flickableDirection: Flickable.VerticalFlick
+                        interactive: contentHeight > height
+                        boundsBehavior: Flickable.StopAtBounds
+
+                        JsonView {
+                            id: argsJson
+                            width: parent.width
+                            content: tcc.isExpanded ? tcc.toolPreview : ""
+                        }
                     }
                 }
             }
@@ -1384,17 +1384,28 @@ Item {
                     anchors.top: resHeader.bottom
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    height: resultBlock.height + Theme.spacingS
+                    // Cap very large payloads (e.g. web_search's 40+ lines) and
+                    // let the body scroll, like the old CodeBlock did.
+                    height: Math.min(resultJson.height, 320) + Theme.spacingS
 
-                    CodeBlock {
-                        id: resultBlock
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.leftMargin: Theme.spacingS
+                    Flickable {
+                        anchors.fill: parent
+                        anchors.leftMargin: Theme.spacingS + 22
                         anchors.rightMargin: Theme.spacingS
-                        content: trc.isExpanded ? trc.contentText : ""
-                        language: "json"
-                        complete: true
+                        anchors.topMargin: Theme.spacingXS
+                        contentWidth: width
+                        contentHeight: resultJson.height
+                        clip: true
+                        flickableDirection: Flickable.VerticalFlick
+                        interactive: contentHeight > height
+                        boundsBehavior: Flickable.StopAtBounds
+
+                        JsonView {
+                            id: resultJson
+                            width: parent.width
+                            content: trc.isExpanded ? trc.contentText : ""
+                            sourceAccent: trc.success ? Theme.primary : Theme.error
+                        }
                     }
                 }
             }
