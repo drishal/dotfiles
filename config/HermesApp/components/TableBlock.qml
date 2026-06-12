@@ -2,15 +2,17 @@ import QtQuick
 import qs.Common
 import qs.Widgets
 
-// A properly padded, bordered table. Replaces Qt MarkdownText's cramped table
-// rendering (which also mis-reports its height and overlaps following rows).
+// A properly padded table in the Claude style — transparent background,
+// horizontal rules only, no zebra or column borders. Replaces Qt
+// MarkdownText's cramped table rendering (which also mis-reports its height
+// and overlaps following rows).
 //
 // Driven by a parsed segment:
 //   headers : [string]
 //   align   : ["left"|"right"|"center"]
 //   rows    : [[string]]
 //   weights : [int]   relative column widths (longest cell per column)
-Rectangle {
+Item {
     id: root
 
     property var headers: []
@@ -21,20 +23,14 @@ Rectangle {
     readonly property int cols: headers ? headers.length : 0
     readonly property int cellPad: Theme.spacingS
 
-    color: Theme.surfaceContainerHighest
-    radius: Math.max(4, Theme.cornerRadius / 2)
-    border.width: 1
-    border.color: Theme.outlineVariant
-    clip: true
-
-    implicitHeight: grid.implicitHeight + 2 * border.width
+    implicitHeight: grid.implicitHeight
     height: implicitHeight
 
-    // Distribute the inner width across columns by weight, handing any rounding
+    // Distribute the width across columns by weight, handing any rounding
     // remainder to the last column so cells tile exactly with no sub-pixel gaps.
     function _colWidth(idx) {
         if (cols <= 0) return 0
-        const inner = width - 2 * border.width
+        const inner = width
         let total = 0
         for (let c = 0; c < cols; c++) total += (weights && weights[c] ? weights[c] : 1)
         if (total <= 0) total = cols
@@ -75,7 +71,11 @@ Rectangle {
         StyledText {
             id: cellText
             anchors.fill: parent
-            anchors.margins: root.cellPad
+            anchors.topMargin: root.cellPad
+            anchors.bottomMargin: root.cellPad
+            // Flush left edge for the first column, like body text.
+            anchors.leftMargin: cell.col === 0 ? 0 : root.cellPad
+            anchors.rightMargin: cell.col === root.cols - 1 ? 0 : root.cellPad
             text: cell.value
             color: Theme.surfaceText
             font.pixelSize: Theme.fontSizeSmall
@@ -85,16 +85,6 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             textFormat: cell.header ? Text.PlainText : Text.MarkdownText
         }
-
-        // Column separator on the right edge (skip the last column).
-        Rectangle {
-            visible: cell.col < root.cols - 1
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            width: 1
-            color: Theme.outlineVariant
-        }
     }
 
     Column {
@@ -102,7 +92,6 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.margins: root.border.width
         spacing: 0
 
         // ── Header row ──────────────────────────────────────────
@@ -110,9 +99,13 @@ Rectangle {
             width: parent.width
             height: headerRepeater.maxH
 
+            // Rule under the header, slightly stronger than the row rules.
             Rectangle {
-                anchors.fill: parent
-                color: Theme.surfaceContainerHigh
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: 1
+                color: Theme.outlineMedium
             }
 
             Repeater {
@@ -150,30 +143,19 @@ Rectangle {
                 property var cells: root.rows[index]
                 height: rowRepeater.maxH + 1
 
-                // Row top border (grid line).
+                // Rule under each row.
                 Rectangle {
-                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
                     anchors.left: parent.left
                     anchors.right: parent.right
                     height: 1
                     color: Theme.outlineVariant
                 }
 
-                // Zebra striping for readability.
-                Rectangle {
-                    anchors.fill: parent
-                    anchors.topMargin: 1
-                    color: (bodyRow.rIndex % 2 === 0)
-                           ? "transparent"
-                           : Qt.rgba(Theme.surfaceText.r, Theme.surfaceText.g,
-                                     Theme.surfaceText.b, 0.03)
-                }
-
                 Item {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.top: parent.top
-                    anchors.topMargin: 1
                     height: rowRepeater.maxH
 
                     Repeater {
