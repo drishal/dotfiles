@@ -119,6 +119,7 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 - **mitigations=off on nixos-desktop only** — `nixos-work` keeps CPU mitigations ON (Cascade Lake has MDS/L1TF/Zombieload). Don't promote `mitigations=off` to common.
 - **scx scheduler split** — desktop uses `scx_lavd` (gaming), work uses `scx_bpfland` (throughput). The scheduler is NOT in common.
 - **GPU drivers per host** — `amd.nix` for desktop/template, `nvidia.nix` for work (T400). Both live in `hosts/common/graphics/` but only one is imported per host.
+- **hermes-app is an external repo** — the `hermes-app.nix` HM module (`home/common/desktop/`) wraps a PySide6 app that lives at `~/Desktop/git-stuff/hermes-app` (github.com/drishal/hermes-app), NOT in this tree. The wrapper points `appRoot` at that working tree so edits take effect on next launch; the module still generates `~/.config/HermesApp/colors.json` from stylix. Clone the repo there or the `hermes-app` command won't launch (the build still succeeds).
 
 ## Flake inputs worth knowing
 

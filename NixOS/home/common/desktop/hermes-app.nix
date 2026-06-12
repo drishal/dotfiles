@@ -7,18 +7,20 @@
 
 # Standalone Hermes desktop app.
 #
-# A PySide6 (Qt Quick) program living at config/HermesApp/. The UI is QML; the
-# backend is in-process Python (httpx for HTTP/SSE, sqlite3 for the DB), so
-# there's no Quickshell, no curl/python3 subprocesses, and no DMS dependency.
-# This module exposes it as a launchable `hermes-app` command + desktop entry.
+# A PySide6 (Qt Quick) program. The UI is QML; the backend is in-process Python
+# (httpx for HTTP/SSE, sqlite3 for the DB), so there's no Quickshell, no
+# curl/python3 subprocesses, and no DMS dependency. This module exposes it as a
+# launchable `hermes-app` command + desktop entry.
 #
-# main.py is referenced from the live repo checkout (~/dotfiles), so QML/Python
-# tweaks take effect on next launch without a home-manager rebuild.
+# The app lives in its own repo (github.com/drishal/hermes-app), checked out at
+# ~/Desktop/git-stuff/hermes-app. main.py is referenced from that live working
+# tree, so QML/Python tweaks take effect on next launch without a home-manager
+# rebuild. Clone it there, or adjust appRoot below.
 #
 # The welcome dashboard shells out to the `hermes` CLI, which is expected on the
 # user's PATH (inherited); everything else is self-contained in the python env.
 let
-  appRoot = "${config.home.homeDirectory}/dotfiles/config/HermesApp";
+  appRoot = "${config.home.homeDirectory}/Desktop/git-stuff/hermes-app";
 
   pyEnv = pkgs.python3.withPackages (
     ps: with ps; [
