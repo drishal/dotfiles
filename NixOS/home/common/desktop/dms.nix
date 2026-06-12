@@ -14,29 +14,29 @@
     python3
   ];
 
-  home.file.".config/DankMaterialShell/plugins/DankHermes".source =
-    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/DankHermes";
+  # home.file.".config/DankMaterialShell/plugins/DankHermes".source =
+    # config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/DankHermes";
 
   # Merge instead of owning the file: DMS stores all plugin runtime settings here.
-  home.activation.enableDankHermesPlugin = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    ${pkgs.python3}/bin/python3 - <<'PY'
-    import json
-    import os
-    from pathlib import Path
+  # home.activation.enableDankHermesPlugin = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  #   ${pkgs.python3}/bin/python3 - <<'PY'
+  #   import json
+  #   import os
+  #   from pathlib import Path
 
-    path = Path(os.path.expanduser("~/.config/DankMaterialShell/plugin_settings.json"))
-    path.parent.mkdir(parents=True, exist_ok=True)
-    try:
-        data = json.loads(path.read_text()) if path.exists() else {}
-    except Exception:
-        data = {}
-    plugin = data.setdefault("dankHermes", {})
-    plugin["enabled"] = True
-    plugin.setdefault("apiBaseUrl", "http://127.0.0.1:8642")
-    plugin.setdefault("hermesHome", "~/.hermes")
-    path.write_text(json.dumps(data, indent=2) + "\n")
-    PY
-  '';
+  #   path = Path(os.path.expanduser("~/.config/DankMaterialShell/plugin_settings.json"))
+  #   path.parent.mkdir(parents=True, exist_ok=True)
+  #   try:
+  #       data = json.loads(path.read_text()) if path.exists() else {}
+  #   except Exception:
+  #       data = {}
+  #   plugin = data.setdefault("dankHermes", {})
+  #   plugin["enabled"] = True
+  #   plugin.setdefault("apiBaseUrl", "http://127.0.0.1:8642")
+  #   plugin.setdefault("hermesHome", "~/.hermes")
+  #   path.write_text(json.dumps(data, indent=2) + "\n")
+  #   PY
+  # '';
 
   programs.dank-material-shell = {
     enable = true;
@@ -81,7 +81,6 @@
             "battery"
             "controlCenterButton"
             "powerMenuButton"
-            "dankHermes"
             "systemTray"
           ];
         }
