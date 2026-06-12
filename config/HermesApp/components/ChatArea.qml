@@ -144,11 +144,20 @@ Item {
             // After a session load, delegate heights have just settled (rich
             // text, tables) — relayout once and pin to the latest message,
             // same as what a manual window resize was fixing by accident.
+            // Run completion gets the same treatment: the streamed reply
+            // re-segments from plain text into markdown/tables/code blocks,
+            // so row heights jump and cached positions go stale.
             Connections {
                 target: root.hermesService
                 ignoreUnknownSignals: true
                 function onMessagesLoaded() {
                     messageListView.autoFollow = true
+                    Qt.callLater(messageListView._resettle)
+                }
+                function onRunCompleted(output) {
+                    Qt.callLater(messageListView._resettle)
+                }
+                function onRunFailed(error) {
                     Qt.callLater(messageListView._resettle)
                 }
             }
@@ -198,6 +207,11 @@ Item {
                 objectName: "msgRow"
                 width: messageListView.width - messageListView.leftMargin - messageListView.rightMargin
                 height: contentLoader.height + Theme.spacingXS
+                // Row heights settle asynchronously (MessageContent stacks its
+                // segments via a coalesced relayout), so any late growth must
+                // reposition the rows below — otherwise they overlap. Coalesced:
+                // many rows changing in one turn still cost one forceLayout.
+                onHeightChanged: Qt.callLater(messageListView._resettle)
 
                 Loader {
                     id: contentLoader

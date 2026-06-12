@@ -7,6 +7,9 @@ import qs.Widgets
 // MarkdownText's cramped table rendering (which also mis-reports its height
 // and overlaps following rows).
 //
+// Rows are stacked manually (relayout() assigns y positions) — see
+// MessageContent for why positioners can't be trusted in this chain.
+//
 // Driven by a parsed segment:
 //   headers : [string]
 //   align   : ["left"|"right"|"center"]
@@ -23,8 +26,22 @@ Item {
     readonly property int cols: headers ? headers.length : 0
     readonly property int cellPad: Theme.spacingS
 
-    implicitHeight: grid.implicitHeight
+    property real _stackedHeight: 0
+    implicitHeight: _stackedHeight
     height: implicitHeight
+
+    function _relayout() {
+        let y = headerRow.height
+        for (let k = 0; k < bodyRepeater.count; k++) {
+            const it = bodyRepeater.itemAt(k)
+            if (!it) continue
+            it.y = y
+            y += it.height
+        }
+        root._stackedHeight = y
+    }
+
+    onWidthChanged: Qt.callLater(_relayout)
 
     // Distribute the width across columns by weight, handing any rounding
     // remainder to the last column so cells tile exactly with no sub-pixel gaps.
@@ -96,96 +113,96 @@ Item {
         }
     }
 
-    Column {
-        id: grid
+    // ── Header row ──────────────────────────────────────────────
+    Item {
+        id: headerRow
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.top: parent.top
-        spacing: 0
+        y: 0
+        height: headerRepeater.maxH
+        onHeightChanged: Qt.callLater(root._relayout)
 
-        // ── Header row ──────────────────────────────────────────
-        Item {
-            width: parent.width
-            height: headerRepeater.maxH
+        // Rule under the header, slightly stronger than the row rules.
+        Rectangle {
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: 1
+            color: Theme.outlineMedium
+        }
 
-            // Rule under the header, slightly stronger than the row rules.
+        Repeater {
+            id: headerRepeater
+            model: root.cols
+            // Tallest cell drives the shared row height.
+            property real maxH: 0
+            function recompute() {
+                let m = 0
+                for (let k = 0; k < count; k++) {
+                    const it = itemAt(k)
+                    if (it && it.cellImplicit > m) m = it.cellImplicit
+                }
+                maxH = m
+            }
+            onItemAdded: recompute()
+            delegate: Cell {
+                col: index
+                header: true
+                value: (root.headers && root.headers[index]) || ""
+                height: headerRepeater.maxH
+                onCellImplicitChanged: headerRepeater.recompute()
+            }
+        }
+    }
+
+    // ── Body rows ───────────────────────────────────────────────
+    Repeater {
+        id: bodyRepeater
+        model: root.rows ? root.rows.length : 0
+        onItemAdded: Qt.callLater(root._relayout)
+        onItemRemoved: Qt.callLater(root._relayout)
+
+        delegate: Item {
+            id: bodyRow
+            anchors.left: parent.left
+            anchors.right: parent.right
+            property var cells: root.rows[index]
+            height: rowRepeater.maxH + 1
+            onHeightChanged: Qt.callLater(root._relayout)
+
+            // Rule under each row.
             Rectangle {
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: 1
-                color: Theme.outlineMedium
+                color: Theme.outlineVariant
             }
 
-            Repeater {
-                id: headerRepeater
-                model: root.cols
-                // Tallest cell drives the shared row height.
-                property real maxH: 0
-                function recompute() {
-                    let m = 0
-                    for (let k = 0; k < count; k++) {
-                        const it = itemAt(k)
-                        if (it && it.cellImplicit > m) m = it.cellImplicit
+            Item {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
+                height: rowRepeater.maxH
+
+                Repeater {
+                    id: rowRepeater
+                    model: root.cols
+                    property real maxH: 0
+                    function recompute() {
+                        let m = 0
+                        for (let k = 0; k < count; k++) {
+                            const it = itemAt(k)
+                            if (it && it.cellImplicit > m) m = it.cellImplicit
+                        }
+                        maxH = m
                     }
-                    maxH = m
-                }
-                onItemAdded: recompute()
-                delegate: Cell {
-                    col: index
-                    header: true
-                    value: (root.headers && root.headers[index]) || ""
-                    height: headerRepeater.maxH
-                    onCellImplicitChanged: headerRepeater.recompute()
-                }
-            }
-        }
-
-        // ── Body rows ───────────────────────────────────────────
-        Repeater {
-            model: root.rows ? root.rows.length : 0
-
-            delegate: Item {
-                id: bodyRow
-                width: grid.width
-                property int rIndex: index
-                property var cells: root.rows[index]
-                height: rowRepeater.maxH + 1
-
-                // Rule under each row.
-                Rectangle {
-                    anchors.bottom: parent.bottom
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    height: 1
-                    color: Theme.outlineVariant
-                }
-
-                Item {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    height: rowRepeater.maxH
-
-                    Repeater {
-                        id: rowRepeater
-                        model: root.cols
-                        property real maxH: 0
-                        function recompute() {
-                            let m = 0
-                            for (let k = 0; k < count; k++) {
-                                const it = itemAt(k)
-                                if (it && it.cellImplicit > m) m = it.cellImplicit
-                            }
-                            maxH = m
-                        }
-                        onItemAdded: recompute()
-                        delegate: Cell {
-                            col: index
-                            value: (bodyRow.cells && bodyRow.cells[index]) || ""
-                            height: rowRepeater.maxH
-                            onCellImplicitChanged: rowRepeater.recompute()
-                        }
+                    onItemAdded: recompute()
+                    delegate: Cell {
+                        col: index
+                        value: (bodyRow.cells && bodyRow.cells[index]) || ""
+                        height: rowRepeater.maxH
+                        onCellImplicitChanged: rowRepeater.recompute()
                     }
                 }
             }

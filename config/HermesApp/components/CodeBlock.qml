@@ -9,7 +9,9 @@ Rectangle {
     property string language: ""
     property bool complete: true
 
-    implicitHeight: contentCol.implicitHeight + Theme.spacingS * 2
+    // Static anchor chain (header → rule → code), no positioner — positioners
+    // misbehave inside the message delegate's Loader chain (see MessageContent).
+    implicitHeight: headerRowItem.height + 5 + 4 + codeFlick.height + Theme.spacingS * 2
     height: implicitHeight
     color: Theme.surfaceContainerHighest
     radius: Math.max(4, Theme.cornerRadius / 2)
@@ -83,18 +85,21 @@ Rectangle {
         onTriggered: copyProcess.justCopied = false
     }
 
-    Column {
+    Item {
         id: contentCol
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
+        anchors.bottom: parent.bottom
         anchors.leftMargin: Theme.spacingS
         anchors.rightMargin: Theme.spacingS
         anchors.topMargin: Theme.spacingS
-        spacing: 4
 
         Item {
-            width: parent.width
+            id: headerRowItem
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
             height: 18
 
             StyledText {
@@ -158,13 +163,21 @@ Rectangle {
         }
 
         Rectangle {
-            width: parent.width
+            id: headerRule
+            anchors.top: headerRowItem.bottom
+            anchors.topMargin: 4
+            anchors.left: parent.left
+            anchors.right: parent.right
             height: 1
             color: Theme.outlineVariant
         }
 
         Flickable {
-            width: parent.width
+            id: codeFlick
+            anchors.top: headerRule.bottom
+            anchors.topMargin: 4
+            anchors.left: parent.left
+            anchors.right: parent.right
             height: codeText.implicitHeight
             contentWidth: Math.max(codeText.implicitWidth + Theme.spacingS * 2, width)
             contentHeight: codeText.implicitHeight
