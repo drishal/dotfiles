@@ -552,7 +552,7 @@ Item {
             readonly property var msg: parent ? parent.msg : null
             readonly property int rowIndex: parent ? parent.msgIndex : -1
             readonly property string contentText: msg ? (msg.content || "") : ""
-            height: userBubble.height + (msgTime.visible ? 16 : 0)
+            height: userBubble.height + (msgTime.visible ? msgTime.implicitHeight + 4 : 0) + 2
 
             HoverHandler { id: umcHover }
 
@@ -664,7 +664,10 @@ Item {
             readonly property int msgInTokens: msg && msg.usage ? (msg.usage.input_tokens || 0) : 0
             readonly property int msgOutTokens: msg && msg.usage ? (msg.usage.output_tokens || 0) : 0
             readonly property bool hasStats: !streaming && (msgDuration > 0 || msgTotalTokens > 0)
-            height: assistantBubble.height + (msgTime.visible ? 16 : 0) + (statsRow.visible ? statsRow.height + 2 : 0)
+            height: assistantBubble.height
+                    + (msgTime.visible ? msgTime.implicitHeight + 2 : 0)
+                    + (statsRow.visible ? statsRow.implicitHeight + 1 : 0)
+                    + 2
 
             Rectangle {
                 id: assistantBubble

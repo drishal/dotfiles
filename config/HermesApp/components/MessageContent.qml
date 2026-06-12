@@ -31,7 +31,8 @@ Item {
             delegate: Item {
                 width: layout.width
                 height: Math.max(textSeg.visible ? textSeg.implicitHeight : 0,
-                                 codeSeg.visible ? codeSeg.height : 0)
+                                 codeSeg.visible ? codeSeg.height : 0,
+                                 tableSeg.visible ? tableSeg.height : 0)
 
                 property var seg: modelData
 
@@ -64,6 +65,17 @@ Item {
                     content: visible ? parent.seg.content : ""
                     language: visible ? parent.seg.language : ""
                     complete: visible ? !!parent.seg.complete : true
+                }
+
+                TableBlock {
+                    id: tableSeg
+                    visible: parent.seg && parent.seg.type === "table"
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    headers: visible ? parent.seg.headers : []
+                    align: visible ? parent.seg.align : []
+                    rows: visible ? parent.seg.rows : []
+                    weights: visible ? parent.seg.weights : []
                 }
             }
         }
