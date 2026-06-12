@@ -880,7 +880,12 @@ Item {
         }
     }
 
-    // ── Thinking Message ───────────────────────────────────────
+    // ── Thinking (collapsible reasoning card, webui-style) ─────
+    // Mirrors hermes-webui's thinking card: a primary-tinted disclosure row
+    // with a lightbulb + "Thinking" label, copy button and rotating chevron;
+    // the body holds the full reasoning trace in small muted monospace,
+    // scrollable past ~260px. Collapsed by default, including while the
+    // reasoning is still streaming into it.
     Component {
         id: thinkingMsgComponent
 
@@ -888,31 +893,157 @@ Item {
             id: tmc
             width: parent.width
             readonly property var msg: parent ? parent.msg : null
+            readonly property int rowIndex: parent ? parent.msgIndex : -1
             readonly property string contentText: msg ? (msg.content || "") : ""
-            height: thinkingRow.height + Theme.spacingXS
+            readonly property bool isExpanded: msg ? !!msg.expanded : false
+            height: thinkCard.height + 2
 
-            Row {
-                id: thinkingRow
+            function toggleExpanded() {
+                const ml = hermesService.messageList
+                if (rowIndex >= 0 && rowIndex < ml.count)
+                    ml.setProperty(rowIndex, "expanded", !isExpanded)
+            }
+
+            Rectangle {
+                id: thinkCard
                 anchors.left: parent.left
-                spacing: Theme.spacingXS
+                anchors.right: parent.right
+                height: 26 + (tmc.isExpanded ? thinkBody.height : 0)
+                radius: Math.max(6, Theme.cornerRadius / 2)
+                color: Qt.rgba(Theme.primary.r, Theme.primary.g, Theme.primary.b, 0.06)
+                border.width: 1
+                border.color: thinkMouse.containsMouse
+                    ? Qt.rgba(Theme.primary.r, Theme.primary.g, Theme.primary.b, 0.35)
+                    : Qt.rgba(Theme.primary.r, Theme.primary.g, Theme.primary.b, 0.16)
+                Behavior on border.color { ColorAnimation { duration: 120 } }
+                Behavior on height { NumberAnimation { duration: 140; easing.type: Easing.OutCubic } }
 
-                DankIcon {
-                    name: "psychology"
-                    size: 14
-                    color: Theme.surfaceTextMedium
-                    opacity: 0.6
-                    anchors.verticalCenter: parent.verticalCenter
+                Item {
+                    id: thinkHeader
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height: 26
+
+                    MouseArea {
+                        id: thinkMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: tmc.toggleExpanded()
+                    }
+
+                    DankIcon {
+                        id: thinkBulb
+                        anchors.left: parent.left
+                        anchors.leftMargin: Theme.spacingS
+                        anchors.verticalCenter: parent.verticalCenter
+                        name: "lightbulb"
+                        size: 13
+                        color: Theme.primary
+                        opacity: 0.7
+                    }
+
+                    StyledText {
+                        anchors.left: thinkBulb.right
+                        anchors.leftMargin: Theme.spacingXS
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "Thinking"
+                        color: Theme.primary
+                        opacity: thinkMouse.containsMouse ? 1 : 0.85
+                        font.pixelSize: Theme.fontSizeSmall
+                        font.weight: Font.DemiBold
+                    }
+
+                    DankIcon {
+                        id: thinkChevron
+                        anchors.right: parent.right
+                        anchors.rightMargin: Theme.spacingS
+                        anchors.verticalCenter: parent.verticalCenter
+                        name: "chevron_right"
+                        size: 13
+                        color: Theme.primary
+                        opacity: 0.7
+                        rotation: tmc.isExpanded ? 90 : 0
+                        Behavior on rotation { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
+                    }
+
+                    // Copy the full trace (declared after thinkMouse so it
+                    // stays on top and clickable).
+                    Rectangle {
+                        anchors.right: thinkChevron.left
+                        anchors.rightMargin: Theme.spacingXS
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 20
+                        height: 18
+                        radius: 6
+                        color: thinkCopyMouse.containsMouse ? Theme.surfaceHover : "transparent"
+
+                        DankIcon {
+                            anchors.centerIn: parent
+                            name: "content_copy"
+                            size: 11
+                            color: Theme.primary
+                            opacity: 0.8
+                        }
+
+                        MouseArea {
+                            id: thinkCopyMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: Platform.copyToClipboard(tmc.contentText)
+                        }
+                    }
                 }
 
-                StyledText {
-                    text: tmc.contentText.length > 200
-                          ? tmc.contentText.substring(0, 200) + "…"
-                          : tmc.contentText
-                    color: Theme.surfaceTextMedium
-                    font.pixelSize: Theme.fontSizeSmall
-                    font.italic: true
-                    wrapMode: Text.WordWrap
-                    width: root.width - 50
+                Item {
+                    id: thinkBody
+                    visible: tmc.isExpanded
+                    anchors.top: thinkHeader.bottom
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height: Math.min(thinkText.implicitHeight + Theme.spacingS, 260)
+
+                    Rectangle {
+                        anchors.top: parent.top
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        height: 1
+                        color: Qt.rgba(Theme.primary.r, Theme.primary.g, Theme.primary.b, 0.16)
+                    }
+
+                    Flickable {
+                        anchors.fill: parent
+                        anchors.leftMargin: Theme.spacingS
+                        anchors.rightMargin: Theme.spacingS
+                        anchors.topMargin: Theme.spacingXS
+                        anchors.bottomMargin: Theme.spacingXS
+                        contentWidth: width
+                        contentHeight: thinkText.implicitHeight
+                        clip: true
+                        flickableDirection: Flickable.VerticalFlick
+                        interactive: contentHeight > height
+                        boundsBehavior: Flickable.StopAtBounds
+
+                        TextEdit {
+                            id: thinkText
+                            width: parent.width
+                            text: tmc.contentText
+                            color: Theme.surfaceTextMedium
+                            font.pixelSize: Theme.fontSizeSmall - 1
+                            font.family: "monospace"
+                            wrapMode: TextEdit.Wrap
+                            textFormat: TextEdit.PlainText
+                            readOnly: true
+                            selectByMouse: true
+                            selectionColor: Theme.primary
+                            selectedTextColor: Theme.onPrimary
+                            HoverHandler {
+                                cursorShape: Qt.IBeamCursor
+                            }
+                        }
+                    }
                 }
             }
         }

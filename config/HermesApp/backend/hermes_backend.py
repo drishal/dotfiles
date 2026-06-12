@@ -456,9 +456,9 @@ class HermesBackend(QObject):
         # /v1/runs sends "reasoning.available" with {"text": "..."}
         # /api/chat/stream sends "tool.progress" with {"tool_name": "_thinking", "delta": "..."}
         elif event_name == "reasoning.available":
-            self._add_thinking(data.get("text") or "Thinking…")
+            self._add_thinking(data.get("text") or "")
         elif event_name == "tool.progress" and data.get("tool_name") == "_thinking":
-            self._add_thinking(data.get("delta") or "Thinking…")
+            self._add_thinking(data.get("delta") or "", delta=True)
 
         # ── Tool calls ──────────────────────────────────────────
         elif event_name == "tool.started":
@@ -529,13 +529,15 @@ class HermesBackend(QObject):
             )
         )
 
-    def _add_thinking(self, text: str) -> None:
+    def _add_thinking(self, text: str, delta: bool = False) -> None:
+        if not text:
+            return
         # Provider quirk: some models (M3/GLM-style) echo each just-streamed
         # segment back through the reasoning channel, so reasoning.available
         # arrives carrying text we already rendered as visible content. Drop the
         # echo — otherwise every assistant message gets a duplicate "thinking"
         # row. Genuine reasoning (text that wasn't shown as content) still shows.
-        norm = " ".join((text or "").split())
+        norm = " ".join(text.split())
         if norm:
             with self._lock:
                 for m in reversed(self._messages):
@@ -544,6 +546,20 @@ class HermesBackend(QObject):
                         if c == norm or c.startswith(norm) or norm.startswith(c):
                             return
                         break
+        # Accumulate a contiguous reasoning stream into one row (one card),
+        # the same way the webui grows a single live thinking card. A new row
+        # starts only after something else (content, a tool call) interleaves.
+        # reasoning.available carries discrete paragraphs (join with a blank
+        # line); the _thinking tool.progress path streams raw deltas.
+        with self._lock:
+            if self._messages and self._messages[-1]["type"] == "thinking":
+                idx = len(self._messages) - 1
+                m = self._messages[idx]
+                sep = "" if delta or not m["content"] else "\n\n"
+                m["content"] += sep + text
+                content = m["content"]
+                self._gui(lambda i=idx, c=content: self.messageUpdated.emit(i, {"content": c}))
+                return
         self._append(db._row("thinking", content=text, timestamp=time.time()))
 
     def _add_tool_call(self, tool: str, preview: str, status: str) -> None:
