@@ -129,13 +129,41 @@ Item {
             onMovementEnded: autoFollow = atYEnd
             onFlickEnded: autoFollow = atYEnd
 
+            // A window resize re-wraps every delegate (text reflows, tables
+            // re-measure) and ListView's cached row positions go stale — rows
+            // overlap until something forces a relayout. Coalesce one
+            // forceLayout() per event-loop turn (so a continuous drag stays
+            // tidy frame to frame), then restore the bottom pin.
+            function _resettle() {
+                forceLayout()
+                if (autoFollow) _pinBottom()
+            }
+            onWidthChanged: Qt.callLater(_resettle)
+            onHeightChanged: Qt.callLater(_resettle)
+
+            // After a session load, delegate heights have just settled (rich
+            // text, tables) — relayout once and pin to the latest message,
+            // same as what a manual window resize was fixing by accident.
+            Connections {
+                target: root.hermesService
+                ignoreUnknownSignals: true
+                function onMessagesLoaded() {
+                    messageListView.autoFollow = true
+                    Qt.callLater(messageListView._resettle)
+                }
+            }
+
             // New rows fade + pop in; neighbours shifted by the insert glide
-            // into place instead of snapping.
+            // into place instead of snapping. Disabled during session loads —
+            // animating dozens of variable-height rows at once leaves stale
+            // row positions (rows overlap until a relayout).
             add: Transition {
+                enabled: !root.hermesService.bulkLoading
                 NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 220; easing.type: Easing.OutCubic }
                 NumberAnimation { property: "scale"; from: 0.95; to: 1; duration: 240; easing.type: Easing.OutBack }
             }
             displaced: Transition {
+                enabled: !root.hermesService.bulkLoading
                 NumberAnimation { properties: "x,y"; duration: 180; easing.type: Easing.OutCubic }
             }
 
@@ -167,6 +195,7 @@ Item {
             }
 
             delegate: Item {
+                objectName: "msgRow"
                 width: messageListView.width - messageListView.leftMargin - messageListView.rightMargin
                 height: contentLoader.height + Theme.spacingXS
 

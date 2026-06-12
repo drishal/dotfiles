@@ -35,6 +35,15 @@ Item {
     signal runStarted()
     signal runCompleted(string output)
     signal runFailed(string error)
+    // Fired after a session load finishes repopulating messageList, so the
+    // chat view can relayout/pin once instead of reacting per appended row.
+    signal messagesLoaded()
+
+    // True while onMessagesReset is repopulating the model. Views use this to
+    // skip per-row insert animations — animating dozens of variable-height
+    // rows at once leaves ListView with stale row positions (visible overlap
+    // until something forces a relayout).
+    property bool bulkLoading: false
 
     // ── Methods the views call (forward to backend) ────────────
     function loadSessions() { if (backend) backend.loadSessions() }
@@ -55,9 +64,12 @@ Item {
                 _sessionList.append(list[i])
         }
         function onMessagesReset(list) {
+            root.bulkLoading = true
             _messageList.clear()
             for (let i = 0; i < list.length; i++)
                 _messageList.append(list[i])
+            root.bulkLoading = false
+            root.messagesLoaded()
         }
         function onMessageAppended(msg) {
             _messageList.append(msg)
