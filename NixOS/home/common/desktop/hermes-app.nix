@@ -27,6 +27,7 @@ let
       pyside6
       httpx
       pygments
+      pyyaml
     ]
   );
 
