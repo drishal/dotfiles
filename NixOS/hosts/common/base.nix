@@ -9,7 +9,7 @@
 # base system configuration
 {
   boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
-  systemd.user.services.orca.wantedBy = lib.mkForce [];
+  systemd.user.services.orca.wantedBy = lib.mkForce [ ];
   boot.kernelModules = [ "v4l2loopback" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
 
@@ -21,13 +21,15 @@
     "nowatchdog"
   ];
 
-  # network / watchdog sysctls only — memory tunables live in hosts/common/memory.nix
+  # network / watchdog / inotify sysctls — memory tunables live in hosts/common/memory.nix
   boot.kernel.sysctl = {
     "net.ipv4.tcp_fastopen" = 3;
     "net.core.somaxconn" = 8192;
     "net.core.netdev_max_backlog" = 8192;
     "kernel.nmi_watchdog" = 0;
     "kernel.watchdog" = 0;
+    "fs.inotify.max_user_watches" = 1048576; # 1M — desktop/gaming workloads exhaust the default 524288
+    "fs.inotify.max_user_instances" = 1024; # default 128; quickshell alone opens 14
   };
 
   # Use the systemd-boot EFI boot loader.
@@ -171,19 +173,19 @@
           };
         };
         pipewire = {
-            "10-fifine-mic" = {
-              match = [
-                { "node.name" = "alsa_input.usb-3142_Fifine_Microphone-00.mono-fallback"; }
-              ];
-              update-props = {
-                "audio.format" = "S16LE";
-                "audio.rate" = 48000;  # Force mic to 48 kHz only
-                "audio.channels" = 1; # Keep mono
-                "channelmix.upmix" = false;
-                "channelmix.normalize" = false;
-              };
+          "10-fifine-mic" = {
+            match = [
+              { "node.name" = "alsa_input.usb-3142_Fifine_Microphone-00.mono-fallback"; }
+            ];
+            update-props = {
+              "audio.format" = "S16LE";
+              "audio.rate" = 48000; # Force mic to 48 kHz only
+              "audio.channels" = 1; # Keep mono
+              "channelmix.upmix" = false;
+              "channelmix.normalize" = false;
             };
           };
+        };
       };
     };
     # media-session.enable = false;
