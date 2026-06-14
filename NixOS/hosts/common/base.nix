@@ -8,7 +8,7 @@
 
 # base system configuration
 {
-  boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
+  boot.kernelPackages = pkgs.linuxPackages_cachyos;
   systemd.user.services.orca.wantedBy = lib.mkForce [ ];
   boot.kernelModules = [ "v4l2loopback" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
