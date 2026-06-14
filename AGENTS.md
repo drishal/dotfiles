@@ -136,7 +136,7 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 | `private-stuff` | Local private config (email, substituter token); must exist locally |
 | `chaotic` | Chaotic-Nyx overlay (cachix, kernel patches) |
 | `nur` | Nix User Repository |
-| `cachix` / `declarative-cachix` | Cachix deployment |
+| `cachix` | Cachix CLI (for ad-hoc `cachix use` / `cachix push`) |
 | `nix-gaming` | Gaming-focused nix packages (gamescope, etc.) |
 | `betterfox` | Firefox user.js hardening |
 | `ghostty` | Ghostty terminal emulator (built from source) |

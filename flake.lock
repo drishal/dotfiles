@@ -220,21 +220,6 @@
         "type": "github"
       }
     },
-    "declarative-cachix": {
-      "locked": {
-        "lastModified": 1698062126,
-        "narHash": "sha256-JtL+IM2Vrlfwny2DtD/o1Ot6kWPq3cEFiEKNzWO0ZsY=",
-        "owner": "jonascarpay",
-        "repo": "declarative-cachix",
-        "rev": "800c308a85b964eb3447a3cb07e8190fb74dcf59",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jonascarpay",
-        "repo": "declarative-cachix",
-        "type": "github"
-      }
-    },
     "devenv": {
       "inputs": {
         "cachix": "cachix_2",
@@ -1032,11 +1017,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1781454286,
-        "narHash": "sha256-Qq9QeiRKUelkORkn16EO3bspbxMNFK3BHAGZo2xFIq0=",
+        "lastModified": 1781462409,
+        "narHash": "sha256-YJ7lWxGXD789bZFzOhwYk8bcwaiYgyq68OWs/HUuzjA=",
         "owner": "hyprwm",
         "repo": "Hyprland",
-        "rev": "dd09b617e30529ee77f12a92ccd081f3391a7c20",
+        "rev": "e5c721f29ae035881aef1620b2d714da97067883",
         "type": "github"
       },
       "original": {
@@ -1321,11 +1306,11 @@
         "nixpkgs": "nixpkgs_9"
       },
       "locked": {
-        "lastModified": 1781458418,
-        "narHash": "sha256-QH/pA0U09ZdWP96+EC3ywTGRDZ14WnHEtMPXJ/cZSM0=",
+        "lastModified": 1781462536,
+        "narHash": "sha256-0y1EIZ0pVclGSY00JwCMZ8HCB2zfzycZ6/XJyyg06YY=",
         "owner": "ggml-org",
         "repo": "llama.cpp",
-        "rev": "8edaca9034bd6dbe729895315b922bdd90d9766b",
+        "rev": "5f04dc7ac3f40271f60105574be0f617887195bb",
         "type": "github"
       },
       "original": {
@@ -1885,11 +1870,11 @@
         "nixpkgs": "nixpkgs_15"
       },
       "locked": {
-        "lastModified": 1781460049,
-        "narHash": "sha256-RUSYolQU1rFn32HgtrmuuljC/PdrDGWIU94IuH4DLvI=",
+        "lastModified": 1781462154,
+        "narHash": "sha256-XaH5oZoNnlDNxKK2pTzKgmv+yV09LMZj66uzzVmCQzM=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "e2d0640957421df51be9d1712468261d01cda0c4",
+        "rev": "6907a40739599e0e94d4bc4a3a8dc80287d3a207",
         "type": "github"
       },
       "original": {
@@ -2047,7 +2032,6 @@
         "betterfox": "betterfox",
         "cachix": "cachix",
         "chaotic": "chaotic",
-        "declarative-cachix": "declarative-cachix",
         "direnv-instant": "direnv-instant",
         "dms": "dms",
         "emacs-lsp-booster": "emacs-lsp-booster",

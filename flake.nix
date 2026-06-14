@@ -33,8 +33,6 @@
 
     cachix.url = "github:cachix/cachix";
 
-    declarative-cachix.url = "github:jonascarpay/declarative-cachix";
-
     hyprland.url = "github:hyprwm/Hyprland";
 
     emacs-overlay = {
@@ -110,7 +108,6 @@
   outputs =
     {
       chaotic,
-      declarative-cachix,
       emacs-lsp-booster,
       emacs-overlay,
       home-manager,
