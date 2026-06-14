@@ -449,18 +449,44 @@
   # programs.command-not-found.dbPath = inputs.programsdb.packages.${pkgs.system}.programs-sqlite;
   programs.nix-ld.enable = true;
 
-  # "minimum" amount of libraries needed for most games to run without steam-run
+  # Libraries for non-Nix dynamically linked binaries (AppImages, Electron apps, games).
+  # nix-ld intercepts the ELF interpreter and sets LD_LIBRARY_PATH from these.
   programs.nix-ld.libraries = with pkgs; [
-    # common requirement for several games
+    # ── Core (needed by almost everything) ──
     stdenv.cc.cc.lib
+    zlib
 
-    # from https://github.com/NixOS/nixpkgs/blob/nixos-23.05/pkgs/games/steam/fhsenv.nix#L72-L79
+    # ── Electron / Chrome / Chromium ──
+    glib.out
+    nss.out
+    nspr
+    atk.out
+    at-spi2-atk.out
+    cups.lib
+    dbus.lib
+    libxkbcommon
+    pango.out
+    cairo.out
+    expat
+    alsa-lib
+    mesa.out
+    libgbm
+    gtk3.out
+    gdk-pixbuf.out
+    libudev-zero.out
+
+    # ── X11 ──
     libxcomposite
+    libxdamage
     libxtst
     libxrandr
     libxext
     libx11
     libxfixes
+    libxcb.out
+
+    # ── Games / Steam ──
+    # from https://github.com/NixOS/nixpkgs/blob/nixos-23.05/pkgs/games/steam/fhsenv.nix#L72-L79
     libGL
     libva
 
@@ -478,6 +504,5 @@
     libidn
     libepoxy
     tbb
-    zlib
   ];
 }
