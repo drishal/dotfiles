@@ -109,7 +109,6 @@
 
   outputs =
     {
-      cachix,
       chaotic,
       declarative-cachix,
       emacs-lsp-booster,
