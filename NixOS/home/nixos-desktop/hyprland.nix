@@ -5,6 +5,8 @@
   ...
 }:
 let
+  inherit (lib.generators) mkLuaInline;
+
   hyprPackage = config.wayland.windowManager.hyprland.package;
 
   # ─── Monitor identifiers ────────────────────────────────────────────────
@@ -17,17 +19,20 @@ let
   acerPerfMode = "1920x1080@320";
   lgMode = "1920x1080@143.98";
 
-  # ─── Color/HDR flags ────────────────────────────────────────────────────
+  # ─── Color/HDR flags (hyprlang form, for live `hyprctl keyword`) ─────────
   acer4kFlags = "bitdepth, 10, cm, srgb";
   acerPerfFlags = "bitdepth, 8, cm, srgb";
 
   # ─── Generated monitor config ───────────────────────────────────────────
-  monitorConfFile = "$HOME/.config/hypr/monitors.conf";
+  # Under the Lua config the persisted layout is a Lua fragment dofile()'d by
+  # hyprland.lua (see extraConfig below) so reloads don't clobber it.
+  monitorLuaFile = "$HOME/.config/hypr/monitors.lua";
 
   # ─── Profile applier ───────────────────────────────────────────────────
-  # Writes the active monitor layout to a sourced conf file so hyprctl reloads
-  # (home-manager switch, manual reloads, etc.) don't clobber it, then applies
-  # it immediately via hyprctl keyword for the live session.
+  # Writes the active monitor layout to a dofile()'d Lua fragment so hyprctl
+  # reloads (home-manager switch, manual reloads, etc.) don't clobber it, then
+  # applies it immediately via `hyprctl keyword` (runtime IPC, still hyprlang)
+  # for the live session.
   applyProfile = pkgs.writeShellScript "hypr-apply-profile-impl" ''
     #!/usr/bin/env bash
     set -eu
@@ -36,20 +41,24 @@ let
 
     case "$profile" in
       perf)
-        acer_val="${acerMonitor}, ${acerPerfMode}, 0x0, 1, ${acerPerfFlags}"
-        lg_val="${lgMonitor}, ${lgMode}, 1920x0, 1, transform, 1"
+        acer_live="${acerMonitor}, ${acerPerfMode}, 0x0, 1, ${acerPerfFlags}"
+        lg_live="${lgMonitor}, ${lgMode}, 1920x0, 1, transform, 1"
+        acer_lua='hl.monitor({ output = "${acerMonitor}", mode = "${acerPerfMode}", position = "0x0", scale = 1, bitdepth = 8, cm = "srgb" })'
+        lg_lua='hl.monitor({ output = "${lgMonitor}", mode = "${lgMode}", position = "1920x0", scale = 1, transform = 1 })'
         ;;
       4k|*)
-        acer_val="${acerMonitor}, ${acer4kMode}, 0x0, 1.5, ${acer4kFlags}"
-        lg_val="${lgMonitor}, ${lgMode}, 2560x0, 1, transform, 1"
+        acer_live="${acerMonitor}, ${acer4kMode}, 0x0, 1.5, ${acer4kFlags}"
+        lg_live="${lgMonitor}, ${lgMode}, 2560x0, 1, transform, 1"
+        acer_lua='hl.monitor({ output = "${acerMonitor}", mode = "${acer4kMode}", position = "0x0", scale = 1.5, bitdepth = 10, cm = "srgb" })'
+        lg_lua='hl.monitor({ output = "${lgMonitor}", mode = "${lgMode}", position = "2560x0", scale = 1, transform = 1 })'
         profile="4k"
         ;;
     esac
 
-    mkdir -p "$(dirname ${monitorConfFile})"
-    printf 'monitor = %s\nmonitor = %s\n' "$acer_val" "$lg_val" > ${monitorConfFile}
+    mkdir -p "$(dirname ${monitorLuaFile})"
+    printf '%s\n%s\n' "$acer_lua" "$lg_lua" > ${monitorLuaFile}
 
-    ${hyprPackage}/bin/hyprctl --batch "keyword monitor $acer_val ; keyword monitor $lg_val" >/dev/null
+    ${hyprPackage}/bin/hyprctl --batch "keyword monitor $acer_live ; keyword monitor $lg_live" >/dev/null
     sleep 0.3
   '';
 
@@ -149,7 +158,7 @@ let
     ${pkgs.libnotify}/bin/notify-send -t 3000 "Display" "$msg" || true
   '';
 
-  # ─── Restart status bar and reapply monitor profile ────────────────────
+  # ─── Restart status bar ─────────────────────────────────────────────────
   hyprRestartDms = pkgs.writeShellScriptBin "hypr-restart-dms" ''
     #!/usr/bin/env bash
     set -eu
@@ -200,14 +209,14 @@ in
     pkgs.libnotify
   ];
 
-  # Keep the sourced startup config EDID-safe. Exact profiles are applied after
-  # Hyprland can query the monitor's currently advertised modes.
+  # Keep the dofile()'d startup fragment EDID-safe. Exact profiles are applied
+  # after Hyprland can query the monitor's currently advertised modes.
   home.activation.seedHyprMonitorsConf = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    conf="$HOME/.config/hypr/monitors.conf"
+    conf="$HOME/.config/hypr/monitors.lua"
     mkdir -p "$(dirname "$conf")"
     {
-      printf 'monitor = %s, highres, 0x0, auto, %s\n' "${acerMonitor}" "${acerPerfFlags}"
-      printf 'monitor = %s, preferred, auto-right, 1, transform, 1\n' "${lgMonitor}"
+      printf 'hl.monitor({ output = "%s", mode = "highres", position = "0x0", scale = "auto", bitdepth = 8, cm = "srgb" })\n' "${acerMonitor}"
+      printf 'hl.monitor({ output = "%s", mode = "preferred", position = "auto-right", scale = 1, transform = 1 })\n' "${lgMonitor}"
     } > "$conf"
   '';
 
@@ -230,39 +239,54 @@ in
   };
 
   wayland.windowManager.hyprland.settings = {
-    workspace = [
-      "1, monitor:${acerMonitor}"
-      "2, monitor:${acerMonitor}"
-      "3, monitor:${acerMonitor}"
-      "4, monitor:${acerMonitor}"
-      "5, monitor:${acerMonitor}"
-      "6, monitor:${lgMonitor}"
-      "7, monitor:${lgMonitor}"
-      "8, monitor:${lgMonitor}"
-      "9, monitor:${lgMonitor}"
-      "10, monitor:${lgMonitor}"
-    ];
-
-    cursor = {
-      no_hardware_cursors = true;
+    config = {
+      cursor = {
+        no_hardware_cursors = true;
+      };
+      render = {
+        cm_auto_hdr = 2;
+        direct_scanout = 1;
+        send_content_type = true;
+      };
     };
 
-    render = {
-      cm_auto_hdr = 2;
-      direct_scanout = 1;
-      send_content_type = true;
-    };
+    workspace_rule =
+      map (i: {
+        workspace = toString i;
+        monitor = acerMonitor;
+      }) (lib.range 1 5)
+      ++ map (i: {
+        workspace = toString i;
+        monitor = lgMonitor;
+      }) (lib.range 6 10);
 
-    exec-once = [
-      "hypr-apply-monitor-profile"
+    on = [
+      {
+        _args = [
+          "hyprland.start"
+          (mkLuaInline ''
+            function()
+              hl.exec_cmd("hypr-apply-monitor-profile")
+            end'')
+        ];
+      }
     ];
   };
 
+  # Appended raw to hyprland.lua: load the persisted monitor layout on every
+  # (re)load, and override SUPER+SHIFT+M from the common "layout master" bind to
+  # the DFR display toggle.
   wayland.windowManager.hyprland.extraConfig = lib.mkAfter ''
-    source = ~/.config/hypr/monitors.conf
-    unbind = $mainMod, x
-    unbind = $mainMod SHIFT, M
-    bind = $mainMod, x, exec, hypr-restart-dms
-    bind = $mainMod SHIFT, M, exec, hypr-monitor-toggle
+    do
+      local hm_mon = os.getenv("HOME") .. "/.config/hypr/monitors.lua"
+      local f = io.open(hm_mon)
+      if f then
+        f:close()
+        dofile(hm_mon)
+      end
+    end
+
+    hl.unbind("SUPER + SHIFT + M")
+    hl.bind("SUPER + SHIFT + M", hl.dsp.exec_cmd("hypr-monitor-toggle"))
   '';
 }
