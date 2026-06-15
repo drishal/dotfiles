@@ -70,9 +70,20 @@
       '';
   };
 
+  home.packages = [ pkgs.dragon-drop ];
+
   programs.yazi = {
     enable = true;
     shellWrapperName = "yy";
+    keymap = {
+      mgr.prepend_keymap = [
+        {
+          on = [ "d" "o" ];
+          run = ''shell --block -- ${pkgs.dragon-drop}/bin/xdragon -a -x "$@"'';
+          desc = "Drag and drop via dragon";
+        }
+      ];
+    };
     settings = {
       manager = {
         show_hidden = false;
