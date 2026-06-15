@@ -1,0 +1,30 @@
+// Color tokens.
+//
+// Values are GTK *named-color expressions* (e.g. "@accent"), not real colors.
+// They are injected at runtime from Stylix via ~/.config/ags-stylix.css (or the
+// bundled theme.css fallback). We keep them as strings and emit them with #{}
+// interpolation so dart-sass never tries to evaluate them as colors — the
+// compiled CSS keeps the @name reference, which lets the bar hot-swap palettes.
+
+$bg: "@bg";
+$bg-alt: "@bgAlt";
+$surface: "@surface";
+$muted: "@muted";
+$fg: "@fg";
+$fg-dim: "@fgDim";
+$accent: "@accent";
+$accent2: "@accent2";
+$good: "@good";
+$warn: "@warn";
+$err: "@err";
+$orange: "@orange";
+
+// Pre-composed translucent tokens. alpha()/mix() are GTK CSS functions, so they
+// are also kept as raw strings to avoid dart-sass evaluating them.
+$module-bg: "alpha(@bgAlt, 0.86)";
+$module-border: "alpha(@surface, 0.55)";
+$module-hover: "alpha(@surface, 0.7)";
+$accent-soft: "alpha(@accent, 0.16)";
+$accent2-soft: "alpha(@accent2, 0.16)";
+$popover-bg: "alpha(@bg, 0.97)";
+$shadow: "alpha(black, 0.38)";

@@ -103,6 +103,11 @@
 
     dms.url = "github:AvengeMedia/DankMaterialShell";
     llama-cpp.url = "github:ggml-org/llama.cpp";
+
+    ags = {
+      url = "github:aylur/ags";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

@@ -1,0 +1,431 @@
+@use "colors" as *;
+
+// ---------------------------------------------------------------------------
+// Globals
+// ---------------------------------------------------------------------------
+
+$radius: 14px;
+$radius-sm: 10px;
+$gap: 8px;
+
+* {
+  // Monospace + Nerd Font so glyphs and numbers stay aligned. Stylix themes
+  // GTK app fonts to a sans, which lacks Nerd glyphs, so pin it here.
+  font-family: "Maple Mono NF", "Symbols Nerd Font", monospace;
+  font-size: 13px;
+}
+
+// Top-level layer-shell surface — fully transparent, the modules float on it.
+window.Bar {
+  background: transparent;
+  color: #{$fg};
+}
+
+.bar-inner {
+  // The floating gap around the whole bar.
+  margin: 6px 10px 2px 10px;
+}
+
+// ---------------------------------------------------------------------------
+// Generic module pill
+// ---------------------------------------------------------------------------
+
+@mixin pill {
+  background-color: #{$module-bg};
+  border: 1px solid #{$module-border};
+  border-radius: $radius;
+  box-shadow: 0 2px 6px #{$shadow};
+  padding: 2px 10px;
+  transition: background-color 200ms ease, border-color 200ms ease;
+}
+
+.module {
+  @include pill;
+  min-height: 26px;
+}
+
+button,
+menubutton,
+menubutton > button {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  color: #{$fg};
+}
+
+.icon {
+  font-size: 14px;
+}
+
+.nerd {
+  font-family: "Maple Mono NF", "Symbols Nerd Font", monospace;
+}
+
+.dim {
+  color: #{$fg-dim};
+}
+
+// ---------------------------------------------------------------------------
+// Launcher
+// ---------------------------------------------------------------------------
+
+.launcher {
+  @include pill;
+  padding: 0 12px;
+  min-height: 26px;
+
+  label {
+    color: #{$accent};
+    font-size: 17px;
+  }
+
+  &:hover {
+    background-color: #{$accent-soft};
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Workspaces
+// ---------------------------------------------------------------------------
+
+.workspaces {
+  @include pill;
+  padding: 2px 6px;
+
+  button {
+    min-width: 22px;
+    min-height: 20px;
+    margin: 0 2px;
+    border-radius: $radius-sm;
+    color: #{$fg-dim};
+    transition: all 180ms ease;
+
+    &:hover {
+      background-color: #{$module-hover};
+      color: #{$fg};
+    }
+  }
+
+  .ws-occupied {
+    color: #{$fg};
+  }
+
+  .ws-focused {
+    background-color: #{$accent};
+    color: #{$bg};
+    min-width: 30px;
+    box-shadow: 0 0 6px #{$accent-soft};
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Focused window
+// ---------------------------------------------------------------------------
+
+.focused-window {
+  @include pill;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  padding: 2px 8px;
+  color: #{$fg-dim};
+
+  .fw-icon {
+    color: #{$accent2};
+    font-size: 13px;
+  }
+
+  .fw-title {
+    color: #{$fg};
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Clock
+// ---------------------------------------------------------------------------
+
+.clock {
+  @include pill;
+  padding: 2px 14px;
+
+  .date {
+    color: #{$fg-dim};
+  }
+
+  .time {
+    color: #{$accent};
+    font-weight: bold;
+  }
+
+  &:hover {
+    border-color: #{$accent};
+  }
+}
+
+// ---------------------------------------------------------------------------
+// System info (cpu / mem)
+// ---------------------------------------------------------------------------
+
+.sysinfo {
+  .icon {
+    color: #{$accent2};
+  }
+
+  .si-warn {
+    color: #{$warn};
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Battery
+// ---------------------------------------------------------------------------
+
+.battery {
+  image {
+    color: #{$good};
+  }
+
+  &.bat-low image,
+  &.bat-low label {
+    color: #{$err};
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Notifications
+// ---------------------------------------------------------------------------
+
+.notifications {
+  .icon {
+    color: #{$accent};
+  }
+}
+
+.notif-popover {
+  padding: 10px;
+  min-width: 320px;
+
+  .notif-header label {
+    font-weight: bold;
+    color: #{$fg};
+  }
+
+  .notif-item {
+    background-color: #{$module-bg};
+    border: 1px solid #{$module-border};
+    border-radius: $radius-sm;
+    padding: 8px 10px;
+    margin-top: 6px;
+
+    .notif-app {
+      color: #{$accent};
+      font-size: 11px;
+    }
+
+    .notif-summary {
+      font-weight: bold;
+      color: #{$fg};
+    }
+
+    .notif-body {
+      color: #{$fg-dim};
+      font-size: 12px;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Quick settings / control center
+// ---------------------------------------------------------------------------
+
+.controlcenter {
+  .icon {
+    color: #{$accent};
+  }
+}
+
+.qs-popover {
+  padding: 12px;
+  min-width: 300px;
+
+  .qs-title {
+    font-weight: bold;
+    color: #{$fg-dim};
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  .qs-row {
+    margin-bottom: 10px;
+
+    image {
+      color: #{$accent};
+    }
+  }
+
+  scale {
+    min-width: 180px;
+
+    trough {
+      background-color: #{$surface};
+      border-radius: 999px;
+      min-height: 6px;
+    }
+
+    highlight {
+      background-color: #{$accent};
+      border-radius: 999px;
+      min-height: 6px;
+    }
+
+    slider {
+      background-color: #{$fg};
+      border-radius: 999px;
+      min-width: 14px;
+      min-height: 14px;
+    }
+  }
+
+  .qs-actions button {
+    background-color: #{$module-bg};
+    border: 1px solid #{$module-border};
+    border-radius: $radius-sm;
+    padding: 8px;
+    margin: 3px;
+
+    &:hover {
+      background-color: #{$accent-soft};
+    }
+  }
+
+  .qs-profile button {
+    padding: 6px 10px;
+    border-radius: $radius-sm;
+
+    &:hover {
+      background-color: #{$module-hover};
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Power menu
+// ---------------------------------------------------------------------------
+
+.powermenu {
+  label {
+    color: #{$err};
+    font-size: 15px;
+  }
+
+  &:hover label {
+    color: #{$fg};
+  }
+}
+
+.power-popover {
+  padding: 10px;
+
+  button {
+    padding: 10px 14px;
+    margin: 3px;
+    border-radius: $radius-sm;
+    color: #{$fg};
+
+    &:hover {
+      background-color: #{$accent-soft};
+    }
+
+    .pm-icon {
+      font-size: 18px;
+      color: #{$accent};
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Clipboard
+// ---------------------------------------------------------------------------
+
+.clipboard {
+  .icon {
+    color: #{$accent2};
+  }
+
+  &:hover .icon {
+    color: #{$fg};
+  }
+}
+
+// ---------------------------------------------------------------------------
+// System tray
+// ---------------------------------------------------------------------------
+
+.tray {
+  .tray-item {
+    padding: 0 4px;
+    border-radius: $radius-sm;
+
+    &:hover {
+      background-color: #{$module-hover};
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Popovers (shared chrome)
+// ---------------------------------------------------------------------------
+
+popover,
+popover > contents,
+popover.background > contents {
+  background-color: #{$popover-bg};
+  border: 1px solid #{$module-border};
+  border-radius: $radius;
+  box-shadow: 0 6px 18px #{$shadow};
+  padding: 4px;
+  color: #{$fg};
+}
+
+window.ags-window {
+  background: transparent;
+  color: #{$fg};
+}
+
+.ags-window-content {
+  background-color: #{$popover-bg};
+  border: 1px solid #{$module-border};
+  border-radius: $radius;
+  box-shadow: 0 6px 18px #{$shadow};
+  padding: 4px;
+  margin: 3.5rem 10px 0 10px;
+
+  &.power-popover {
+    padding: 8px;
+  }
+}
+
+.ags-calendar-window .ags-window-content {
+  margin-top: 3.5rem;
+}
+
+.ags-notifications-window .ags-window-content,
+.ags-quicksettings-window .ags-window-content,
+.ags-powermenu-window .ags-window-content {
+  margin-top: 3.5rem;
+  margin-right: 10px;
+  margin-left: auto;
+  min-width: 280px;
+}
+
+calendar {
+  padding: 6px;
+
+  &:selected {
+    background-color: #{$accent};
+    color: #{$bg};
+    border-radius: 6px;
+  }
+}

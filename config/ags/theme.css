@@ -1,0 +1,42 @@
+/*
+ * Fallback palette (gruvbox-material hard dark).
+ *
+ * At runtime app.tsx prefers ~/.config/ags-stylix.css, which Home Manager
+ * generates from the live Stylix base16 scheme. This file only kicks in when
+ * the bar is run straight from the repo without Home Manager (e.g. `ags run`).
+ *
+ * Every color the stylesheet references is a GTK named color defined here, so
+ * the whole bar re-themes by swapping these @define-color values — no SCSS
+ * recompile needed.
+ */
+
+@define-color base00 #1d2021;
+@define-color base01 #282828;
+@define-color base02 #3c3836;
+@define-color base03 #7c6f64;
+@define-color base04 #928374;
+@define-color base05 #d4be98;
+@define-color base06 #ddc7a1;
+@define-color base07 #ebdbb2;
+@define-color base08 #ea6962;
+@define-color base09 #e78a4e;
+@define-color base0A #d8a657;
+@define-color base0B #a9b665;
+@define-color base0C #89b482;
+@define-color base0D #7daea3;
+@define-color base0E #d3869b;
+@define-color base0F #bd6f3e;
+
+/* semantic tokens used by style/_colors.scss */
+@define-color bg      #1d2021;
+@define-color bgAlt   #282828;
+@define-color surface #3c3836;
+@define-color muted   #928374;
+@define-color fg      #d4be98;
+@define-color fgDim   #928374;
+@define-color accent  #7daea3;
+@define-color accent2 #d3869b;
+@define-color good    #a9b665;
+@define-color warn    #d8a657;
+@define-color err     #ea6962;
+@define-color orange  #e78a4e;
