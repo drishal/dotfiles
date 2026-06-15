@@ -1,5 +1,23 @@
 { pkgs, config, ... }:
 
+let
+  # Toggle a floating watch-sync popup (bound to W in yazi). watch-sync shows
+  # the live kernel disk write-back queue, so after a paste you can confirm the
+  # data has actually flushed to the device, not just landed in page cache
+  # (with dirty_bytes=4G a copy "finishes" into cache near-instantly).
+  # pgrep/pkill keyed on the kitty --class makes it a WM-agnostic toggle and a
+  # no-op-safe re-press; watch-sync only reads /proc/meminfo so closing and
+  # reopening loses no state.
+  watchSyncPopup = pkgs.writeShellScriptBin "watch-sync-popup" ''
+    set -eu
+    marker="watch-sync-float"
+    if ${pkgs.procps}/bin/pgrep -f "$marker" >/dev/null 2>&1; then
+      ${pkgs.procps}/bin/pkill -f "$marker" || true
+    else
+      ${pkgs.kitty}/bin/kitty --class "$marker" -e watch-sync >/dev/null 2>&1 &
+    fi
+  '';
+in
 {
   xdg.configFile."lf/icons".source = ./icons;
 
@@ -81,6 +99,11 @@
           on = [ "d" "o" ];
           run = ''shell --block -- ${pkgs.dragon-drop}/bin/xdragon -a -x "$@"'';
           desc = "Drag and drop via dragon";
+        }
+        {
+          on = "W";
+          run = ''shell --orphan -- ${watchSyncPopup}/bin/watch-sync-popup'';
+          desc = "Toggle watch-sync (disk write-back) popup";
         }
       ];
     };

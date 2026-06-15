@@ -164,6 +164,19 @@ in
         }
       ];
 
+      # Float, size and center the yazi watch-sync popup (toggled with W in yazi).
+      window_rule = [
+        {
+          name = "watch-sync-float";
+          match = {
+            class = "watch-sync-float";
+          };
+          float = true;
+          size = "900 460";
+          center = true;
+        }
+      ];
+
       bind =
         [
           (bind (combo "RETURN") (mkLuaInline "hl.dsp.exec_cmd(terminal)"))
