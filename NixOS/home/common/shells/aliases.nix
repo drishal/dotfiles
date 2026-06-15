@@ -70,7 +70,6 @@
     wine64 = "env WINEARCH=win64 WINEPREFIX='/home/drishal/.wine64' wine64";
 
     # --- Tools ---
-    watch-sync = "watch -d grep -e Dirty: -e Writeback: /proc/meminfo";
     # watch-amd-gpu = "sudo watch -n 0.5 bat /sys/kernel/debug/dri/0/amdgpu_pm_info";
     youtube-dl = "yt-dlp";
     yt-dlp-mp3 = "yt-dlp --no-playlist -x --audio-format=mp3 -f bestaudio";
@@ -104,6 +103,19 @@
     arch = "OVERFS_MODE=1 /home/drishal/Desktop/iso/arch/runimage.superlite --run-shell";
   };
   home.packages = with pkgs; [
+    (pkgs.writeShellScriptBin "watch-sync" ''
+      export WATCH_SYNC_BASE00="#${config.lib.stylix.colors.base00}"
+      export WATCH_SYNC_BASE01="#${config.lib.stylix.colors.base01}"
+      export WATCH_SYNC_BASE02="#${config.lib.stylix.colors.base02}"
+      export WATCH_SYNC_BASE03="#${config.lib.stylix.colors.base03}"
+      export WATCH_SYNC_BASE05="#${config.lib.stylix.colors.base05}"
+      export WATCH_SYNC_BASE08="#${config.lib.stylix.colors.base08}"
+      export WATCH_SYNC_BASE0A="#${config.lib.stylix.colors.base0A}"
+      export WATCH_SYNC_BASE0B="#${config.lib.stylix.colors.base0B}"
+      export WATCH_SYNC_BASE0C="#${config.lib.stylix.colors.base0C}"
+      export WATCH_SYNC_BASE0D="#${config.lib.stylix.colors.base0D}"
+      exec ${pkgs.python3.withPackages (ps: [ ps.rich ps.textual ])}/bin/python ${../../../../scripts/watch-sync.py} "$@"
+    '')
     (pkgs.writeShellScriptBin "watch-gpu" ''
       export PATH="${pkgs.fzf}/bin:${pkgs.findutils}/bin:${pkgs.coreutils}/bin:$PATH"
       export WATCH_GPU_BASE00="#${config.lib.stylix.colors.base00}"
