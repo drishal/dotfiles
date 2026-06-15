@@ -25,6 +25,48 @@ from textual.widgets import Footer, Header, Static
 
 AMD_DEBUG_ROOT = Path("/sys/kernel/debug/dri")
 
+# Fields pulled from a single nvidia-smi call. Order matters: parsed by zip.
+NVIDIA_QUERY_FIELDS = (
+    "timestamp",
+    "name",
+    "pstate",
+    "temperature.gpu",
+    "fan.speed",
+    "utilization.gpu",
+    "utilization.memory",
+    "utilization.encoder",
+    "utilization.decoder",
+    "memory.used",
+    "memory.total",
+    "power.draw",
+    "power.limit",
+    "clocks.current.sm",
+    "clocks.max.sm",
+    "clocks.current.memory",
+    "clocks.max.memory",
+    "pcie.link.gen.current",
+    "pcie.link.gen.max",
+    "pcie.link.width.current",
+    "clocks_throttle_reasons.active",
+)
+
+# clocks_throttle_reasons.active is the only field that newer drivers rename
+# (to clocks_event_reasons.active), which would fail the whole query — fall
+# back to everything-but-throttle if the full query is rejected.
+NVIDIA_QUERY_FIELDS_BASE = NVIDIA_QUERY_FIELDS[:-1]
+
+# NVML throttle/event reason bits. GpuIdle (0x1) and ApplicationsClocksSetting
+# are intentionally omitted: they are normal states, not throttling.
+THROTTLE_FLAGS = (
+    (0x0000000000000004, "sw power cap"),
+    (0x0000000000000008, "hw slowdown"),
+    (0x0000000000000010, "sync boost"),
+    (0x0000000000000020, "sw thermal"),
+    (0x0000000000000040, "hw thermal"),
+    (0x0000000000000080, "power brake"),
+    (0x0000000000000100, "display clock"),
+)
+
 
 @dataclass(frozen=True)
 class GpuOption:
@@ -223,6 +265,26 @@ def parse_percent(value: str) -> float | None:
         return None
     return float(match.group(1))
 
+
+def parse_optional_float(value: str) -> float | None:
+    """Parse a number from an nvidia-smi field, treating N/A / [N/A] as missing."""
+    value = value.strip()
+    if not value or value.upper().lstrip("[").startswith("N/A"):
+        return None
+    match = re.search(r"-?\d+(?:\.\d+)?", value)
+    return float(match.group()) if match else None
+
+
+def decode_throttle(value: str) -> str | None:
+    """Turn the active-throttle-reasons bitmask into a short human string."""
+    value = value.strip()
+    try:
+        mask = int(value, 16) if value.lower().startswith("0x") else int(value)
+    except ValueError:
+        return None
+    reasons = [label for bit, label in THROTTLE_FLAGS if mask & bit]
+    return ", ".join(reasons) if reasons else None
+
 def format_bytes(value: int) -> str:
     units = ("B", "KiB", "MiB", "GiB", "TiB")
     amount = float(value)
@@ -325,45 +387,107 @@ def parse_amd_snapshot(gpu: GpuOption, raw: str) -> Snapshot:
     )
 
 
-def nvidia_snapshot(gpu: GpuOption) -> Snapshot:
+def query_nvidia(gpu_id: str, fields: Sequence[str]) -> dict[str, str]:
     output = run(
         [
             "nvidia-smi",
-            "--query-gpu=timestamp,name,utilization.gpu,utilization.memory,temperature.gpu,power.draw,clocks.current.sm,clocks.current.memory,memory.used,memory.total,pstate",
+            f"--query-gpu={','.join(fields)}",
             "--format=csv,noheader,nounits",
             "-i",
-            gpu.identifier,
+            gpu_id,
         ],
         timeout=3.0,
     )
     row = next((line for line in output.splitlines() if line.strip()), "")
-    fields = [field.strip() for field in row.split(",")]
-    if len(fields) != 11:
+    values = [field.strip() for field in row.split(",")]
+    if len(values) != len(fields):
         raise GpuError("Unexpected nvidia-smi output.")
+    return dict(zip(fields, values))
 
-    timestamp, name, gpu_util, mem_util, temp, power, sm_clock, mem_clock, mem_used, mem_total, pstate = fields
-    memory_percent = None
+
+def ratio_percent(numerator: float | None, denominator: float | None) -> float | None:
+    if numerator is None or not denominator or denominator <= 0:
+        return None
+    return (numerator / denominator) * 100.0
+
+
+def nvidia_snapshot(gpu: GpuOption) -> Snapshot:
     try:
-        used = float(mem_used)
-        total = float(mem_total)
-        memory_percent = (used / total) * 100 if total > 0 else None
-    except ValueError:
-        pass
+        data = query_nvidia(gpu.identifier, NVIDIA_QUERY_FIELDS)
+    except GpuError:
+        # Older/newer driver rejected the throttle field; retry without it.
+        data = query_nvidia(gpu.identifier, NVIDIA_QUERY_FIELDS_BASE)
 
+    metrics: list[Metric] = [
+        Metric("P-state", data["pstate"]),
+        Metric("Temperature", f"{data['temperature.gpu']} °C"),
+    ]
+
+    # The bar already prints the percentage, so leave the value blank for
+    # pure-percentage metrics to avoid showing the number twice.
+    fan = parse_optional_float(data["fan.speed"])
+    if fan is not None:
+        metrics.append(Metric("Fan", "", fan))
+
+    metrics.append(Metric("GPU load", "", parse_optional_float(data["utilization.gpu"])))
+    metrics.append(Metric("Memory load", "", parse_optional_float(data["utilization.memory"])))
+
+    dec = parse_optional_float(data["utilization.decoder"])
+    if dec is not None:
+        metrics.append(Metric("NVDEC decode", "", dec))
+    enc = parse_optional_float(data["utilization.encoder"])
+    if enc is not None:
+        metrics.append(Metric("NVENC encode", "", enc))
+
+    used = parse_optional_float(data["memory.used"])
+    total = parse_optional_float(data["memory.total"])
+    metrics.append(
+        Metric("VRAM usage", f"{data['memory.used']} / {data['memory.total']} MiB", ratio_percent(used, total))
+    )
+
+    # Power.draw is N/A on some cards (e.g. T400); show what is available.
+    draw = parse_optional_float(data["power.draw"])
+    limit = parse_optional_float(data["power.limit"])
+    if draw is not None and limit:
+        metrics.append(Metric("Power", f"{draw:.1f} / {limit:.0f} W", ratio_percent(draw, limit)))
+    elif draw is not None:
+        metrics.append(Metric("Power", f"{draw:.1f} W"))
+    elif limit is not None:
+        metrics.append(Metric("Power limit", f"{limit:.0f} W"))
+
+    sm_cur = parse_optional_float(data["clocks.current.sm"])
+    sm_max = parse_optional_float(data["clocks.max.sm"])
+    if sm_cur is not None and sm_max:
+        metrics.append(Metric("Core clock", f"{sm_cur:.0f} / {sm_max:.0f} MHz", ratio_percent(sm_cur, sm_max)))
+    else:
+        metrics.append(Metric("Core clock", f"{data['clocks.current.sm']} MHz"))
+
+    mc_cur = parse_optional_float(data["clocks.current.memory"])
+    mc_max = parse_optional_float(data["clocks.max.memory"])
+    if mc_cur is not None and mc_max:
+        metrics.append(Metric("Memory clock", f"{mc_cur:.0f} / {mc_max:.0f} MHz", ratio_percent(mc_cur, mc_max)))
+    else:
+        metrics.append(Metric("Memory clock", f"{data['clocks.current.memory']} MHz"))
+
+    pcie_gen = data["pcie.link.gen.current"]
+    if pcie_gen and pcie_gen.upper() != "N/A":
+        metrics.append(
+            Metric(
+                "PCIe link",
+                f"Gen{pcie_gen}/{data['pcie.link.gen.max']} x{data['pcie.link.width.current']}",
+            )
+        )
+
+    throttle = decode_throttle(data.get("clocks_throttle_reasons.active", ""))
+    if throttle:
+        metrics.append(Metric("Throttle", throttle))
+
+    name = data["name"]
+    title = name if name.upper().startswith("NVIDIA") else f"NVIDIA {name}"
     return Snapshot(
-        title=f"watch-gpu • NVIDIA card {gpu.identifier}",
-        subtitle=timestamp,
-        metrics=(
-            Metric("Name", name),
-            Metric("P-state", pstate),
-            Metric("Temperature", f"{temp} °C"),
-            Metric("GPU load", f"{gpu_util}%", parse_percent(gpu_util)),
-            Metric("Memory load", f"{mem_util}%", parse_percent(mem_util)),
-            Metric("VRAM usage", f"{mem_used} / {mem_total} MiB", memory_percent),
-            Metric("Power draw", f"{power} W"),
-            Metric("Core clock", f"{sm_clock} MHz"),
-            Metric("Memory clock", f"{mem_clock} MHz"),
-        ),
+        title=f"watch-gpu • {title}",
+        subtitle=data["timestamp"],
+        metrics=tuple(metrics),
     )
 
 
