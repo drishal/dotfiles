@@ -7,7 +7,6 @@
 {
   imports = [
     # Import the new separated configuration
-    ./nixvim.nix
     ./hyprland.nix
     ./sway.nix
   ];
