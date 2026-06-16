@@ -1,0 +1,283 @@
+;; ════════════════════════════════════════════════════════════════════════
+;;  eww — control center / dashboard
+;;
+;;  Layout mirrors the DankMaterialShell control center: a profile header,
+;;  volume + brightness sliders, a 2×2 grid of quick-toggle tiles, two big
+;;  mode toggles, then a system-stats strip and a media player.
+;;
+;;  Colours come from colors.scss, which Home Manager regenerates from the
+;;  live Stylix palette on every switch (see home/common/desktop/eww.nix).
+;;  Everything else here is an out-of-store symlink to the repo, so edits
+;;  take effect on the next `eww reload` without a rebuild.
+;; ════════════════════════════════════════════════════════════════════════
+
+;; ─── polls & listeners ──────────────────────────────────────────────────
+
+(defpoll uptime    :interval "30s" :initial "up …"      `uptime -p`)
+(defpoll stats     :interval "3s"  :initial `{"cpu":0,"mem":0,"disk":0}`          `scripts/stats.sh`)
+(defpoll netinfo   :interval "5s"  :initial `{"up":false,"label":"…","type":"none"}` `scripts/net.sh`)
+(defpoll btinfo    :interval "5s"  :initial `{"on":false,"label":"…"}`              `scripts/bluetooth.sh`)
+
+(defpoll volume    :interval "1s"  :initial "0"         `scripts/volume.sh get`)
+(defpoll muted     :interval "1s"  :initial "false"     `scripts/volume.sh muted`)
+(defpoll sinkname  :interval "5s"  :initial "Output"    `scripts/volume.sh sink`)
+(defpoll micmuted  :interval "1s"  :initial "false"     `scripts/volume.sh mic-muted`)
+
+(defpoll bright    :interval "1s"  :initial "0"         `scripts/brightness.sh get`)
+
+(deflisten music :initial `{"status":"Stopped","title":"","artist":""}` `scripts/music.sh`)
+
+;; ─── bar sources ────────────────────────────────────────────────────────
+
+(defpoll   clockdate :interval "30s" :initial ""   `date '+%-d %b %Y (%a)'`)
+(defpoll   notif     :interval "3s"  :initial `{"count":0,"dnd":false}` `scripts/notif.sh`)
+(defpoll   battery   :interval "10s" :initial `{"present":false,"perc":0,"status":"NA","charging":false}` `scripts/battery.sh`)
+(deflisten workspaces :initial "[]"  `scripts/workspaces.sh`)
+(deflisten wintitle   :initial ""    `scripts/window-title.sh`)
+
+;; ─── local state (toggles that have no system source of truth) ──────────
+
+(defvar nightmode false)
+(defvar darkmode  true)
+
+;; ════════════════════════════════════════════════════════════════════════
+;;  building blocks
+;; ════════════════════════════════════════════════════════════════════════
+
+;; profile header — avatar, name, uptime, and a row of action buttons
+(defwidget header []
+  (box :class "header card" :space-evenly false
+    (box :class "avatar" :valign "center")
+    (box :orientation "v" :class "header-text" :space-evenly false :hexpand true :valign "center"
+      (label :class "header-name" :halign "start" :text "drishal")
+      (label :class "header-sub"  :halign "start" :limit-width 28 :text uptime))
+    (box :class "header-actions" :space-evenly false :valign "center"
+      (button :class "iconbtn" :tooltip "Lock"     :onclick "loginctl lock-session" "")
+      (button :class "iconbtn" :tooltip "Power off" :onclick "systemctl poweroff"    "")
+      (button :class "iconbtn" :tooltip "Settings"  :onclick "scripts/settings.sh"   "")
+      (button :class "iconbtn" :tooltip "Edit"      :onclick "eww reload"            ""))))
+
+;; a horizontal slider row — icon, scale, trailing dot button
+(defwidget sliderrow [icon class value onchange ?tail ?tailtip ?tailclick]
+  (box :class "sliderrow card" :space-evenly false :valign "center"
+    (label :class "slider-icon ${class}" :text icon)
+    (scale :class "slider ${class}" :hexpand true :valign "center"
+           :min 0 :max 100 :value value
+           :onchange onchange)
+    (button :class "slider-tail ${class}"
+            :visible {tail ?: false}
+            :tooltip {tailtip ?: ""}
+            :onclick {tailclick ?: ""} "")))
+
+;; a quick-settings toggle tile (network, bluetooth, …)
+(defwidget tile [icon title subtitle active onclick ?onright]
+  (eventbox :class "tile-evt"
+    (button :class "tile card ${active ? "tile-on" : ""}"
+            :onclick onclick
+            :onrightclick {onright ?: onclick}
+      (box :space-evenly false :valign "center"
+        (box :class "tile-icon" :valign "center"
+          (label :class "tile-glyph" :text icon))
+        (box :orientation "v" :hexpand true :space-evenly false :valign "center"
+          (label :class "tile-title" :halign "start" :limit-width 16 :text title)
+          (label :class "tile-sub"   :halign "start" :limit-width 18 :text subtitle))))))
+
+;; a big mode toggle (Night Mode / Dark Mode)
+(defwidget modetoggle [icon title active onclick]
+  (button :class "mode card ${active ? "mode-on" : ""}" :hexpand true :onclick onclick
+    (box :space-evenly false :valign "center" :halign "center"
+      (label :class "mode-glyph" :text icon)
+      (label :class "mode-title" :text title))))
+
+;; a compact system-stat readout with a mini progress bar
+(defwidget stat [icon label value]
+  (box :orientation "v" :class "stat" :space-evenly false :hexpand true
+    (box :space-evenly false :valign "center"
+      (label :class "stat-icon" :text icon)
+      (label :class "stat-label" :halign "start" :hexpand true :text label)
+      (label :class "stat-value" :halign "end" :text "${value}%"))
+    (progress :class "stat-bar" :value value :orientation "h")))
+
+;; ════════════════════════════════════════════════════════════════════════
+;;  composed sections
+;; ════════════════════════════════════════════════════════════════════════
+
+(defwidget sliders []
+  (box :orientation "v" :space-evenly false
+    (sliderrow :icon {muted == "true" ? "" : ""} :class "vol"
+               :value volume
+               :onchange "scripts/volume.sh set {}"
+               :tail true :tailtip "Mute" :tailclick "scripts/volume.sh toggle")
+    (sliderrow :icon "" :class "bri"
+               :value bright
+               :onchange "scripts/brightness.sh set {}")))
+
+(defwidget tiles []
+  (box :orientation "v" :space-evenly false :class "tilegrid"
+    (box :space-evenly true :class "tilerow"
+      (tile :icon ""
+            :title "Network"
+            :subtitle {jq(netinfo, ".label // \"…\"", "r")}
+            :active   {jq(netinfo, ".up // false")}
+            :onclick "scripts/net.sh menu")
+      (tile :icon ""
+            :title "Bluetooth"
+            :subtitle {jq(btinfo, ".label // \"…\"", "r")}
+            :active   {jq(btinfo, ".on // false")}
+            :onclick "scripts/bluetooth.sh toggle"))
+    (box :space-evenly true :class "tilerow"
+      (tile :icon ""
+            :title sinkname
+            :subtitle "${volume}%"
+            :active   {muted != "true"}
+            :onclick "scripts/volume.sh toggle")
+      (tile :icon {micmuted == "true" ? "" : ""}
+            :title "Microphone"
+            :subtitle {micmuted == "true" ? "Muted" : "Active"}
+            :active   {micmuted != "true"}
+            :onclick "scripts/volume.sh mic-toggle"))))
+
+(defwidget modes []
+  (box :space-evenly true :class "moderow"
+    (modetoggle :icon "" :title "Night Mode" :active nightmode
+                :onclick "${EWW_CMD} update nightmode=${!nightmode}; scripts/nightmode.sh ${!nightmode}")
+    (modetoggle :icon "" :title "Dark Mode" :active darkmode
+                :onclick "${EWW_CMD} update darkmode=${!darkmode}")))
+
+(defwidget sysrow []
+  (box :class "card sysrow" :space-evenly true
+    (stat :icon "" :label "CPU" :value {jq(stats, ".cpu // 0")})
+    (box :class "sys-sep")
+    (stat :icon "" :label "RAM" :value {jq(stats, ".mem // 0")})
+    (box :class "sys-sep")
+    (stat :icon "" :label "Disk" :value {jq(stats, ".disk // 0")})))
+
+(defwidget player []
+  (box :class "card player ${jq(music, ".status // \"\"", "r") == "Playing" ? "playing" : ""}"
+       :space-evenly false :visible {jq(music, ".title // \"\"", "r") != ""}
+    (box :class "player-art" :valign "center")
+    (box :orientation "v" :hexpand true :space-evenly false :valign "center"
+      (label :class "player-title"  :halign "start" :limit-width 24 :text {jq(music, ".title // \"\"", "r")})
+      (label :class "player-artist" :halign "start" :limit-width 24 :text {jq(music, ".artist // \"\"", "r")}))
+    (box :class "player-ctl" :space-evenly false :valign "center"
+      (button :class "iconbtn" :onclick "playerctl previous" "")
+      (button :class "iconbtn play" :onclick "playerctl play-pause"
+              {jq(music, ".status // \"\"", "r") == "Playing" ? "" : ""})
+      (button :class "iconbtn" :onclick "playerctl next" ""))))
+
+;; ════════════════════════════════════════════════════════════════════════
+;;  window
+;; ════════════════════════════════════════════════════════════════════════
+
+(defwidget dashboard []
+  (box :class "dashboard" :orientation "v" :space-evenly false
+    (header)
+    (sliders)
+    (tiles)
+    (modes)
+    (sysrow)
+    (player)))
+
+(defwindow dashboard
+  :monitor 0
+  :stacking "overlay"
+  :geometry (geometry :x "16px" :y "32px"
+                      :width "560px"
+                      :anchor "top right")
+  (dashboard))
+
+;; ════════════════════════════════════════════════════════════════════════
+;;  top bar — floating island (Saimoomedits style), Stylix-coloured
+;;  left:   launcher · workspaces (numbers) · app name
+;;  center: clock (d MMM yyyy (ddd)) | notifications
+;;  right:  battery · network · memory · cpu · control center · tray · power
+;; ════════════════════════════════════════════════════════════════════════
+
+(defwidget sep []
+  (label :class "sep" :text "|"))
+
+;; ── left ────────────────────────────────────────────────────────────────
+(defwidget bar-workspaces []
+  (box :class "workspaces" :space-evenly false :valign "center"
+    (for ws in workspaces
+      (button :class "ws ${ws.active ? "ws-active" : ""} ${ws.windows > 0 ? "ws-busy" : ""}"
+              :onclick "hyprctl dispatch workspace ${ws.id}" "${ws.id}"))))
+
+(defwidget bar-left []
+  (box :class "left_modules" :halign "start" :space-evenly false :valign "center"
+    (button :class "launcher" :tooltip "Apps" :onclick "rofi -show drun & disown" "")
+    (bar-workspaces)
+    (label :class "appname" :limit-width 32 :visible {wintitle != ""} :text wintitle)))
+
+;; ── center ──────────────────────────────────────────────────────────────
+(defwidget bar-center []
+  (box :class "center_modules" :halign "center" :space-evenly false :valign "center" :spacing 6
+    (button :class "clock" :onclick "eww open --toggle dashboard"
+      (box :space-evenly false :valign "center" :spacing 8
+        (label :class "clock-ico" :text "")
+        (label :class "clock-txt" :text clockdate)))
+    (sep)
+    (button :class "notif ${jq(notif, ".count // 0") > 0 ? "has-notif" : ""}"
+            :tooltip "Notifications" :onclick "scripts/notif.sh toggle"
+            :onrightclick "scripts/notif.sh dnd"
+      (box :space-evenly false :valign "center" :spacing 6
+        (label :class "notif-ico" :text {jq(notif, ".dnd // false") ? "" : ""})
+        (label :class "notif-txt" :visible {jq(notif, ".count // 0") > 0}
+               :text "${jq(notif, ".count // 0")}")))))
+
+;; ── right ───────────────────────────────────────────────────────────────
+
+;; circular-progress module: ring driven by `value`, glyph in the centre,
+;; optional `tail` label beside it (Saimoomedits signature look)
+(defwidget ring [value class icon ?tail ?tip ?onclick]
+  (box :class "ringmod" :space-evenly false :valign "center" :tooltip {tip ?: ""}
+    (circular-progress :class "ring ${class}" :value value :thickness 3
+                       :start-at 75 :clockwise true
+      (button :class "ring-icon" :onclick {onclick ?: ""} icon))
+    (label :class "ring-text ${class}" :visible {(tail ?: "") != ""} :text {tail ?: ""})))
+
+(defwidget bar-battery []
+  (box :class "ringmod battery" :visible {jq(battery, ".present // false")}
+       :space-evenly false :valign "center" :tooltip {jq(battery, ".status // \"\"", "r")}
+    (circular-progress :class "ring bat" :value {jq(battery, ".perc // 0")}
+                       :thickness 3 :start-at 75 :clockwise true
+      (label :class "ring-icon" :text {jq(battery, ".charging // false") ? "" : ""}))
+    (label :class "ring-text bat" :text "${jq(battery, ".perc // 0")}%")))
+
+(defwidget bar-net []
+  (button :class "net" :tooltip {jq(netinfo, ".label // \"\"", "r")}
+          :onclick "scripts/net.sh menu"
+    (box :space-evenly false :valign "center" :spacing 6
+      (label :class "net-icon" :text {jq(netinfo, ".type // \"\"", "r") == "wifi" ? "" : ""})
+      (label :class "net-text" :text {jq(netinfo, ".label // \"\"", "r")}))))
+
+(defwidget bar-right []
+  (box :class "right_modules" :halign "end" :space-evenly false :valign "center"
+    (bar-battery)
+    (bar-net)
+    (sep)
+    (ring :class "mem" :value {jq(stats, ".mem // 0")} :icon ""
+          :tail {jq(stats, ".memused // \"\"", "r")}
+          :tip "RAM ${jq(stats, ".memused // \"\"", "r")} / ${jq(stats, ".memtot // \"\"", "r")}")
+    (ring :class "cpu" :value {jq(stats, ".cpu // 0")} :icon ""
+          :tail "${jq(stats, ".cpu // 0")}%" :tip "CPU")
+    (sep)
+    (button :class "ctrl" :tooltip "Control center"
+            :onclick "eww open --toggle dashboard" "")
+    (systray :class "tray" :spacing 14 :icon-size 16 :prepend-new false)
+    (button :class "power" :tooltip "Power"
+            :onclick "scripts/powermenu.sh & disown" "")))
+
+;; ── window ──────────────────────────────────────────────────────────────
+(defwidget bar []
+  (centerbox :class "bar"
+    (bar-left)
+    (bar-center)
+    (bar-right)))
+
+(defwindow bar
+  :monitor 0
+  :stacking "fg"
+  :exclusive true
+  :geometry (geometry :x "0%" :y "8px" :width "99%" :height "34px" :anchor "top center")
+  (bar))
