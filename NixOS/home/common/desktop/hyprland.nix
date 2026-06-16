@@ -53,6 +53,10 @@ in
                 hl.exec_cmd("lxpolkit & dms run &  nm-applet --indicator &  blueman-applet")
                 hl.exec_cmd("hyprpaper")
                 hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+                -- cliphist storer daemons: capture both text and image copies so
+                -- the rofi (ags) and wofi clipboard menus have history to show.
+                hl.exec_cmd("wl-paste --type text --watch cliphist store")
+                hl.exec_cmd("wl-paste --type image --watch cliphist store")
               end'')
           ];
         }
@@ -183,6 +187,9 @@ in
           # (bind (combo "RETURN") (exec "kitty --single-instance"))
           (bind (combo "D") (exec "rofi -show drun -icon-theme Papirus -show-icons"))
           (bind (combo "V") (exec "pavucontrol"))
+          # wofi clipboard history with image thumbnails (rofi stays the default
+          # launcher; this is a dedicated image-aware clipboard picker).
+          (bind (combo "SHIFT + V") (exec "${config.home.homeDirectory}/dotfiles/scripts/clipboard-wofi.sh"))
           (bind (combo "T") (exec "GDK_BACKEND=x11 xfce4-taskmanager"))
           (bind (combo "Q") (mkLuaInline "hl.dsp.window.close()"))
           (bind (combo "SHIFT + Q") (exec "kill -9 $(pidof Hyprland)"))

@@ -356,6 +356,7 @@
     # wireshark
     wofi
     wl-clipboard
+    cliphist
     wlr-randr
     wdisplays
     xarchiver
