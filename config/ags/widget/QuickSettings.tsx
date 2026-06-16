@@ -8,8 +8,8 @@ export default function QuickSettings({ gdkmonitor }: { gdkmonitor: Gdk.Monitor 
       tooltipText="Control center"
       onClicked={() => toggleWindow("quicksettings", gdkmonitor)}
     >
-      {/* nf-md-volume-high */}
-      <label class="nerd icon" label="󰕾" />
+      {/* nf-md-tune-vertical-variant */}
+      <label class="nerd icon" label="󱕂" />
     </button>
   )
 }

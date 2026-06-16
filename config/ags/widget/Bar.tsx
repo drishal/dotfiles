@@ -13,6 +13,7 @@ import Battery from "./Battery"
 import QuickSettings from "./QuickSettings"
 import PowerMenu from "./PowerMenu"
 import Tray from "./Tray"
+import Weather from "./Weather"
 
 // Widget placement mirrors the old dms.nix bar:
 //   left   → launcher · workspaces · focused window
@@ -50,6 +51,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
         </box>
 
         <box $type="end" spacing={8} halign={Gtk.Align.END}>
+          <Weather />
           <Clipboard />
           <SysInfo />
           <Battery />

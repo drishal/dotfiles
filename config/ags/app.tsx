@@ -9,6 +9,7 @@ import Calendar from "./windows/Calendar"
 import Notifications from "./windows/Notifications"
 import QuickSettings from "./windows/QuickSettings"
 import PowerMenu from "./windows/PowerMenu"
+import Osd from "./windows/Osd"
 
 /**
  * Stylix integration.
@@ -46,6 +47,7 @@ app.start({
             <Notifications gdkmonitor={monitor} />
             <QuickSettings gdkmonitor={monitor} />
             <PowerMenu gdkmonitor={monitor} />
+            <Osd gdkmonitor={monitor} />
           </This>
         )}
       </For>

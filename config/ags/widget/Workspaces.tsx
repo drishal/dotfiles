@@ -1,10 +1,16 @@
 import AstalHyprland from "gi://AstalHyprland"
+import { Gtk } from "ags/gtk4"
 import { createBinding, createComputed, For } from "ags"
-import { execAsync } from "ags/process"
 
 export default function Workspaces() {
   const hypr = AstalHyprland.get_default()
   const focused = createBinding(hypr, "focusedWorkspace")
+
+  // The Lua Hyprland config evaluates dispatch IPC as `hl.dispatch(<msg>)`, so a
+  // plain "workspace N" is invalid Lua. Send a dispatcher expression instead —
+  // `luaArg` is a bare number (absolute) or a quoted relative like '"e+1"'.
+  const focusWs = (luaArg: string) =>
+    hypr.dispatch(`hl.dsp.focus({ workspace = ${luaArg} })`, "")
 
   // Show real (non-special) workspaces, but always keep at least 1..5 visible
   // so the bar doesn't collapse on a fresh session.
@@ -18,7 +24,20 @@ export default function Workspaces() {
   })
 
   return (
-    <box class="workspaces">
+    <box
+      class="workspaces"
+      // Scroll over the pill to step through workspaces.
+      $={(self) => {
+        const scroll = new Gtk.EventControllerScroll({
+          flags: Gtk.EventControllerScrollFlags.VERTICAL,
+        })
+        scroll.connect("scroll", (_s, _dx, dy) => {
+          focusWs(dy > 0 ? '"e+1"' : '"e-1"')
+          return true
+        })
+        self.add_controller(scroll)
+      }}
+    >
       <For each={slots}>
         {(id: number) => {
           const occupied = createBinding(hypr, "workspaces")(
@@ -30,17 +49,7 @@ export default function Workspaces() {
             return ""
           })
           return (
-            <button
-              class={cls}
-              // hyprctl CLI rather than AstalHyprland.dispatch: the latter wraps
-              // the command as Lua (hl.dispatch(...)) which breaks on the
-              // Lua-based Hyprland config.
-              onClicked={() =>
-                execAsync(["hyprctl", "dispatch", "workspace", `${id}`]).catch(
-                  console.error,
-                )
-              }
-            >
+            <button class={cls} onClicked={() => focusWs(`${id}`)}>
               <label label={`${id}`} />
             </button>
           )

@@ -23,7 +23,7 @@ window.Bar {
 
 .bar-inner {
   // The floating gap around the whole bar.
-  margin: 6px 10px 2px 10px;
+  margin: 8px 14px 4px 14px;
 }
 
 // ---------------------------------------------------------------------------
@@ -34,14 +34,19 @@ window.Bar {
   background-color: #{$module-bg};
   border: 1px solid #{$module-border};
   border-radius: $radius;
-  box-shadow: 0 2px 6px #{$shadow};
-  padding: 2px 10px;
-  transition: background-color 200ms ease, border-color 200ms ease;
+  box-shadow: 0 3px 10px #{$shadow};
+  padding: 3px 13px;
+  transition: background-color 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
 }
 
 .module {
   @include pill;
-  min-height: 26px;
+  min-height: 28px;
+
+  // Subtle lift for interactive pills.
+  &:hover {
+    box-shadow: 0 4px 14px #{$shadow};
+  }
 }
 
 button,
@@ -65,6 +70,19 @@ menubutton > button {
 
 .dim {
   color: #{$fg-dim};
+}
+
+// GtkScale baseline — guarantees the trough/slider gizmos have a valid (>= 0)
+// min size. Without it GTK warns "GtkGizmo (slider) reported min height -2".
+scale {
+  trough {
+    min-height: 6px;
+  }
+
+  slider {
+    min-width: 14px;
+    min-height: 14px;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -203,35 +221,135 @@ menubutton > button {
   }
 }
 
-.notif-popover {
-  padding: 10px;
-  min-width: 320px;
+// Material notification center
+.notif-center {
+  padding: 14px;
 
-  .notif-header label {
-    font-weight: bold;
-    color: #{$fg};
+  .notif-title {
+    margin-bottom: 2px;
+
+    .notif-title-icon {
+      color: #{$accent};
+      font-size: 16px;
+    }
+
+    .notif-title-text {
+      font-weight: bold;
+      font-size: 15px;
+      color: #{$fg};
+    }
+
+    .notif-count {
+      background-color: #{$accent};
+      color: #{$bg};
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 999px;
+      padding: 0 7px;
+      margin-left: 2px;
+    }
+
+    .notif-dnd {
+      padding: 4px 8px;
+      border-radius: 999px;
+      color: #{$fg-dim};
+
+      &:hover {
+        background-color: #{$module-hover};
+        color: #{$fg};
+      }
+    }
+
+    .notif-clear {
+      padding: 4px 10px;
+      border-radius: 999px;
+      color: #{$err};
+
+      .nerd {
+        margin-right: 4px;
+      }
+
+      &:hover {
+        background-color: #{"alpha(@err, 0.16)"};
+      }
+    }
   }
 
-  .notif-item {
+  .notif-scroll {
+    min-height: 60px;
+  }
+
+  .notif-card {
     background-color: #{$module-bg};
     border: 1px solid #{$module-border};
-    border-radius: $radius-sm;
-    padding: 8px 10px;
-    margin-top: 6px;
+    border-radius: $radius;
+    padding: 10px 12px;
+    transition: background-color 150ms ease;
 
-    .notif-app {
+    &.critical {
+      border-color: #{"alpha(@err, 0.6)"};
+      background-color: #{"alpha(@err, 0.12)"};
+    }
+
+    .notif-card-icon {
       color: #{$accent};
+      -gtk-icon-size: 18px;
+    }
+
+    .notif-card-app {
+      color: #{$accent};
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .notif-card-time {
+      color: #{$fg-dim};
       font-size: 11px;
     }
 
-    .notif-summary {
+    .notif-card-close {
+      color: #{$fg-dim};
+      padding: 0 4px;
+      border-radius: 999px;
+
+      &:hover {
+        color: #{$err};
+      }
+    }
+
+    .notif-card-summary {
       font-weight: bold;
       color: #{$fg};
     }
 
-    .notif-body {
+    .notif-card-body {
       color: #{$fg-dim};
       font-size: 12px;
+    }
+
+    .notif-card-actions {
+      margin-top: 4px;
+
+      .notif-action {
+        background-color: #{$surface};
+        border-radius: $radius-sm;
+        padding: 6px;
+        color: #{$fg};
+
+        &:hover {
+          background-color: #{$accent-soft};
+          color: #{$accent};
+        }
+      }
+    }
+  }
+
+  .notif-empty {
+    padding: 24px 0;
+
+    .notif-empty-icon {
+      font-size: 30px;
+      color: #{$fg-dim};
     }
   }
 }
@@ -246,66 +364,156 @@ menubutton > button {
   }
 }
 
-.qs-popover {
-  padding: 12px;
-  min-width: 300px;
+// Material quick-settings panel
+.qs-panel {
+  padding: 14px;
 
-  .qs-title {
-    font-weight: bold;
-    color: #{$fg-dim};
-    font-size: 11px;
-    margin-bottom: 4px;
-  }
-
-  .qs-row {
-    margin-bottom: 10px;
-
-    image {
-      color: #{$accent};
-    }
-  }
-
-  scale {
-    min-width: 180px;
-
-    trough {
-      background-color: #{$surface};
-      border-radius: 999px;
-      min-height: 6px;
-    }
-
-    highlight {
-      background-color: #{$accent};
-      border-radius: 999px;
-      min-height: 6px;
-    }
-
-    slider {
-      background-color: #{$fg};
-      border-radius: 999px;
-      min-width: 14px;
-      min-height: 14px;
-    }
-  }
-
-  .qs-actions button {
+  // Filled-tonal toggle tiles
+  .qs-toggle {
     background-color: #{$module-bg};
     border: 1px solid #{$module-border};
-    border-radius: $radius-sm;
-    padding: 8px;
-    margin: 3px;
+    border-radius: $radius;
+    padding: 9px 12px;
+    transition: all 160ms ease;
 
-    &:hover {
-      background-color: #{$accent-soft};
+    .qs-toggle-icon {
+      -gtk-icon-size: 20px;
+      color: #{$fg};
+      min-width: 30px;
+      min-height: 30px;
+      background-color: #{$surface};
+      border-radius: 999px;
+      padding: 5px;
     }
-  }
 
-  .qs-profile button {
-    padding: 6px 10px;
-    border-radius: $radius-sm;
+    .qs-toggle-title {
+      font-weight: bold;
+      color: #{$fg};
+      font-size: 13px;
+    }
+
+    .qs-toggle-sub {
+      color: #{$fg-dim};
+      font-size: 11px;
+    }
 
     &:hover {
       background-color: #{$module-hover};
+    }
+
+    // Active = accent fill (Material filled tonal "on" state)
+    &.active {
+      background-color: #{$accent};
+      border-color: #{$accent};
+      box-shadow: 0 0 10px #{$accent-soft};
+
+      .qs-toggle-icon {
+        background-color: #{"alpha(@bg, 0.22)"};
+        color: #{$bg};
+      }
+
+      .qs-toggle-title {
+        color: #{$bg};
+      }
+
+      .qs-toggle-sub {
+        color: #{"alpha(@bg, 0.75)"};
+      }
+    }
+  }
+
+  // Volume / brightness sliders
+  .qs-slider {
+    background-color: #{$module-bg};
+    border: 1px solid #{$module-border};
+    border-radius: 999px;
+    padding: 6px 14px 6px 6px;
+
+    .qs-slider-icon {
+      min-width: 30px;
+      min-height: 30px;
+      border-radius: 999px;
+      background-color: #{$surface};
+      padding: 5px;
+
+      image {
+        color: #{$accent};
+      }
+
+      &:hover {
+        background-color: #{$accent-soft};
+      }
+
+      &.static image {
+        color: #{$accent2};
+      }
+    }
+
+    scale {
+      min-width: 180px;
+
+      trough {
+        background-color: #{$surface};
+        border-radius: 999px;
+        min-height: 7px;
+      }
+
+      highlight {
+        background-color: #{$accent};
+        border-radius: 999px;
+        min-height: 7px;
+      }
+
+      slider {
+        background-color: #{$fg};
+        border-radius: 999px;
+        min-width: 14px;
+        min-height: 14px;
+      }
+    }
+  }
+
+  // Footer: avatar · battery/uptime · power actions
+  .qs-footer {
+    background-color: #{$module-bg};
+    border: 1px solid #{$module-border};
+    border-radius: $radius;
+    padding: 10px 12px;
+
+    .qs-avatar {
+      -gtk-icon-size: 30px;
+      color: #{$accent};
+      background-color: #{$surface};
+      border-radius: 999px;
+      padding: 5px;
+    }
+
+    .qs-bat {
+      font-weight: bold;
+      color: #{$fg};
+    }
+
+    .qs-uptime {
+      color: #{$fg-dim};
+      font-size: 11px;
+    }
+
+    .qs-power button {
+      min-width: 34px;
+      min-height: 34px;
+      border-radius: 999px;
+      background-color: #{$surface};
+      color: #{$fg};
+
+      &:hover {
+        background-color: #{$accent-soft};
+        color: #{$accent};
+      }
+
+      &.qs-power-off:hover {
+        background-color: #{"alpha(@err, 0.18)"};
+        color: #{$err};
+      }
     }
   }
 }
@@ -400,7 +608,9 @@ window.ags-window {
   border-radius: $radius;
   box-shadow: 0 6px 18px #{$shadow};
   padding: 4px;
-  margin: 3.5rem 10px 0 10px;
+  // Popup windows use NORMAL exclusivity, so they already sit below the bar's
+  // exclusive zone — only a small gap is needed here, not the full bar height.
+  margin: 8px 10px 0 10px;
 
   &.power-popover {
     padding: 8px;
@@ -408,16 +618,22 @@ window.ags-window {
 }
 
 .ags-calendar-window .ags-window-content {
-  margin-top: 3.5rem;
+  margin-top: 8px;
 }
 
-.ags-notifications-window .ags-window-content,
-.ags-quicksettings-window .ags-window-content,
 .ags-powermenu-window .ags-window-content {
-  margin-top: 3.5rem;
+  margin-top: 8px;
   margin-right: 10px;
   margin-left: auto;
   min-width: 280px;
+}
+
+.ags-notifications-window .ags-window-content,
+.ags-quicksettings-window .ags-window-content {
+  margin-top: 8px;
+  margin-right: 10px;
+  margin-left: auto;
+  min-width: 372px;
 }
 
 calendar {
@@ -427,5 +643,64 @@ calendar {
     background-color: #{$accent};
     color: #{$bg};
     border-radius: 6px;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Weather
+// ---------------------------------------------------------------------------
+
+.weather {
+  .weather-icon {
+    color: #{$orange};
+    font-size: 15px;
+  }
+
+  .weather-temp {
+    color: #{$fg};
+  }
+}
+
+// ---------------------------------------------------------------------------
+// OSD (volume)
+// ---------------------------------------------------------------------------
+
+.ags-osd-window {
+  background: transparent;
+}
+
+.osd {
+  background-color: #{$popover-bg};
+  border: 1px solid #{$module-border};
+  border-radius: $radius;
+  box-shadow: 0 6px 18px #{$shadow};
+  padding: 10px 16px;
+  margin-bottom: 80px;
+  min-width: 240px;
+
+  .osd-icon {
+    color: #{$accent};
+    -gtk-icon-size: 20px;
+  }
+
+  .osd-level {
+    min-width: 150px;
+
+    trough {
+      background-color: #{$surface};
+      border-radius: 999px;
+      min-height: 8px;
+    }
+
+    block.filled {
+      background-color: #{$accent};
+      border-radius: 999px;
+      min-height: 8px;
+    }
+  }
+
+  .osd-text {
+    color: #{$fg};
+    font-weight: bold;
   }
 }
