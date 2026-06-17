@@ -31,15 +31,12 @@ export function createBrightness(): Brightness {
   if (!device) return { available: false, value, set: () => {} }
 
   // `brightnessctl -m i` => "amdgpu_bl1,backlight,128,50%,255"; field 4 is %.
-  const refresh = () => {
-    execAsync(["bash", "-c", "brightnessctl -m i | cut -d, -f4 | tr -d '%'"])
-      .then((out) => {
-        const n = Number(out.trim())
-        if (!isNaN(n)) setValue(n / 100)
-      })
-      .catch(() => {})
-  }
-  refresh()
+  execAsync(["bash", "-c", "brightnessctl -m i | cut -d, -f4 | tr -d '%'"])
+    .then((out) => {
+      const n = Number(out.trim())
+      if (!isNaN(n)) setValue(n / 100)
+    })
+    .catch(() => {})
 
   const set = (v: number) => {
     const pct = Math.max(0, Math.min(100, Math.round(v * 100)))

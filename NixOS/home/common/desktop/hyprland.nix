@@ -36,12 +36,15 @@ let
     "dms"    = "dms run";
     "eww"    = "end-rs daemon & ${ewwLaunch}";
     "waybar" = "waybar";
+    # ags owns its own notifications (AstalNotifd) — no separate daemon.
+    "ags"    = "ags run";
   };
 
   widgetRestart = {
     "dms"    = "pkill dms; dms run";
     "eww"    = "pkill end-rs || true; end-rs daemon & ${ewwLaunch}";
     "waybar" = "pkill waybar; waybar &";
+    "ags"    = "ags quit || true; ags run &";
   };
 
   currentWidgetStartup = widgetStartup.${config.drishal.widgets};
@@ -49,8 +52,8 @@ let
 in
 {
   options.drishal.widgets = lib.mkOption {
-    type = lib.types.enum [ "dms" "eww" "waybar" ];
-    default = "eww";
+    type = lib.types.enum [ "dms" "eww" "waybar" "ags" ];
+    default = "ags";
     description = "Which widget stack to use for bar / notifications / control-center. Switch requires logout.";
   };
 

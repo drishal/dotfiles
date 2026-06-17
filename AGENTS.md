@@ -75,7 +75,7 @@ NixOS/
       stylix.nix             ← HM-level stylix overrides
       core/                  ← packages.nix, git.nix, tmux.nix, fastfetch.nix
       shells/                ← default.nix, fish.nix, zsh.nix, aliases.nix (shell-agnostic aliases + PATH + env)
-      desktop/               ← hyprland, sway, waybar, rofi, dms, file-managers, icons
+      desktop/               ← hyprland, sway, waybar, rofi, dms, ags, eww, file-managers, icons
       editors/               ← default.nix, emacs.nix, nixvim.nix
       terminals/             ← default.nix (kitty, ghostty, alacritty via single module)
       browsers/              ← default.nix, betterfox.nix (firefox+betterfox; only betterfox imported)
@@ -118,6 +118,8 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 - **Kernel** — Uses `pkgs.linuxPackages_xanmod_latest` (xanmod), not standard nixpkgs.
 - **mitigations=off on nixos-desktop only** — `nixos-work` keeps CPU mitigations ON (Cascade Lake has MDS/L1TF/Zombieload). Don't promote `mitigations=off` to common.
 - **scx scheduler split** — desktop uses `scx_lavd` (gaming), work uses `scx_bpfland` (throughput). The scheduler is NOT in common.
+- **Widget stack is `drishal.widgets`** — an enum (`ags` | `eww` | `dms` | `waybar`, default `ags`, defined in `home/common/desktop/hyprland.nix`) picking the bar / notifications / control-center stack. Hyprland startup (`widgetStartup`) and the SUPER+X restart bind (`widgetRestart`, duplicated in `nixos-desktop/hyprland.nix`) branch on it; **switching requires logout**. `ags` and `eww` reproduce the same material design; only one notification daemon runs at a time (ags → AstalNotifd, eww → end-rs, gated in `eww.nix` on `widgets == "eww"`).
+- **ags shell is GTK4 + Astal (v3 API)** — `config/ags/` is a TypeScript/JSX shell (`app.tsx` → per-monitor `<For each={monitors}>` autodetect; `widget/Bar.tsx`, `windows/{Dashboard,NotificationCenter,NotificationPopups,PowerMenu}.tsx`). Data comes from Astal libs (Hyprland/Wp/Network/Bluetooth/Notifd/Mpris/Tray/Battery), not shell scripts. Stylix feeds it the same way eww gets colours: `ags.nix` writes `~/.config/ags-stylix.css` (`@define-color base00..0F`), `style/_colors.scss` holds those as `"@base.."` string tokens emitted via `#{}` so dart-sass keeps the named-colour reference and the palette hot-swaps. `theme.css` is the run-from-repo fallback. The config dir is an out-of-store symlink, so TS/SCSS edits land on `ags quit; ags run` without a rebuild; `ags bundle app.tsx /tmp/out.js` typecheck-compiles without launching.
 - **GPU drivers per host** — `amd.nix` for desktop/template, `nvidia.nix` for work (T400). Both live in `hosts/common/graphics/` but only one is imported per host.
 - **hermes-app is an external repo** — the `hermes-app.nix` HM module (`home/common/desktop/`) wraps a PySide6 app that lives at `~/Desktop/git-stuff/hermes-app` (github.com/drishal/hermes-app), NOT in this tree. The wrapper points `appRoot` at that working tree so edits take effect on next launch; the module still generates `~/.config/HermesApp/colors.json` from stylix. Clone the repo there or the `hermes-app` command won't launch (the build still succeeds).
 

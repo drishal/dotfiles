@@ -201,6 +201,7 @@ let
     "dms"    = "pkill dms; dms run";
     "eww"    = "pkill end-rs || true; end-rs daemon & ${ewwLaunch}";
     "waybar" = "pkill waybar; waybar &";
+    "ags"    = "ags quit || true; ags run &";
   };
 
 in

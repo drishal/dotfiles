@@ -1,54 +1,24 @@
+// ═════════════════════════════════════════════════════════════════════════
+//  ags shell styles — material control center
+//
+//  Ported from the eww design (config/eww/eww.scss) to ags/gtk4. Colours come
+//  through `_colors.scss` as GTK named-colour expressions injected at runtime
+//  from the live Stylix palette (~/.config/ags-stylix.css, see ags.nix), so
+//  swapping the Stylix scheme re-themes everything without recompiling.
+// ═════════════════════════════════════════════════════════════════════════
+
 @use "colors" as *;
 
-// ---------------------------------------------------------------------------
-// Globals
-// ---------------------------------------------------------------------------
-
-$radius: 14px;
-$radius-sm: 10px;
-$gap: 8px;
+// ─── design tokens ────────────────────────────────────────────────────────
+$radius:    18px;
+$radius-sm: 14px;
+$gap:       10px;
 
 * {
-  // Monospace + Nerd Font so glyphs and numbers stay aligned. Stylix themes
-  // GTK app fonts to a sans, which lacks Nerd glyphs, so pin it here.
-  font-family: "Maple Mono NF", "Symbols Nerd Font", monospace;
-  font-size: 13px;
+  font-family: "Google Sans", "Maple Mono NF", sans-serif;
 }
 
-// Top-level layer-shell surface — fully transparent, the modules float on it.
-window.Bar {
-  background: transparent;
-  color: #{$fg};
-}
-
-.bar-inner {
-  // The floating gap around the whole bar.
-  margin: 8px 14px 4px 14px;
-}
-
-// ---------------------------------------------------------------------------
-// Generic module pill
-// ---------------------------------------------------------------------------
-
-@mixin pill {
-  background-color: #{$module-bg};
-  border: 1px solid #{$module-border};
-  border-radius: $radius;
-  box-shadow: 0 3px 10px #{$shadow};
-  padding: 3px 13px;
-  transition: background-color 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
-}
-
-.module {
-  @include pill;
-  min-height: 28px;
-
-  // Subtle lift for interactive pills.
-  &:hover {
-    box-shadow: 0 4px 14px #{$shadow};
-  }
-}
-
+// reset interactive widgets (gtk4 gives buttons/scales chrome by default)
 button,
 menubutton,
 menubutton > button {
@@ -57,650 +27,511 @@ menubutton > button {
   box-shadow: none;
   padding: 0;
   margin: 0;
-  color: #{$fg};
+  min-height: 0;
+  min-width: 0;
 }
 
-.icon {
+// layer-shell surfaces are transparent; the rounded island/cards float on them
+window { background-color: transparent; }
+
+.card {
+  background-color: #{$card};
+  border-radius: $radius;
+  margin-bottom: $gap;
+  transition: background-color 180ms ease;
+}
+
+// ═════════════════════════════════════════════════════════════════════════
+//  control center (dashboard) — top-right popup
+// ═════════════════════════════════════════════════════════════════════════
+.dashboard {
+  background-color: #{$base00};
+  border: 1px solid #{$base02};
+  border-radius: 24px;
+  padding: 14px;
+  margin: 8px;
+  color: #{$ink};
+}
+
+// ─── header ────────────────────────────────────────────────────────────────
+.header { margin-bottom: 16px; }
+
+.userchip {
+  padding: 5px 16px 5px 5px;
+  border-radius: 999px;
+  background-color: #{$card};
+}
+.avatar {
+  min-width: 38px;
+  min-height: 38px;
+  margin-right: 10px;
+  border-radius: 999px;
+  background-color: #{$base02};
+  background-image: url("/home/drishal/.face");
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #{$accent};
+}
+.username {
   font-size: 14px;
+  font-weight: 600;
+  color: #{$ink};
 }
 
-.nerd {
-  font-family: "Maple Mono NF", "Symbols Nerd Font", monospace;
+.hbtn {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 16px;
+  min-width: 38px;
+  min-height: 38px;
+  margin-left: 8px;
+  border-radius: 999px;
+  color: #{$ink-dim};
+  background-color: #{$card};
+  transition: all 150ms ease;
+}
+.hbtn:hover { color: #{$accent}; background-color: #{$card-hi}; }
+.header-actions { margin-left: 8px; }
+
+.iconbtn {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 15px;
+  min-width: 30px;
+  min-height: 30px;
+  margin: 0 2px;
+  border-radius: 999px;
+  color: #{$ink-dim};
+  background-color: transparent;
+  transition: all 150ms ease;
+}
+.iconbtn:hover { color: #{$accent}; background-color: #{$card-hi}; }
+
+// ─── section label ──────────────────────────────────────────────────────────
+.seclabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: #{$ink-dim};
+  margin: 0 4px 10px 4px;
 }
 
-.dim {
-  color: #{$fg-dim};
+// ─── quick-toggle tiles ────────────────────────────────────────────────────
+.tilegrid { margin-bottom: 16px; }
+.tilerow  { margin-bottom: 10px; }
+.tilerow:last-child { margin-bottom: 0; }
+
+.tile {
+  background-color: #{$card};
+  border-radius: $radius-sm;
+  padding: 12px 14px;
+  transition: all 180ms ease;
+}
+.tile:hover { background-color: #{$card-hi}; }
+
+.tile-glyph {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 20px;
+  margin-right: 12px;
+  color: #{$ink};
+}
+.tile-title { font-size: 13px; font-weight: 600; color: #{$ink}; }
+.tile-sub   { font-size: 11px; color: #{$ink-dim}; }
+.tile-chev {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 16px;
+  margin-left: 6px;
+  color: #{$ink-dim};
 }
 
-// GtkScale baseline — guarantees the trough/slider gizmos have a valid (>= 0)
-// min size. Without it GTK warns "GtkGizmo (slider) reported min height -2".
-scale {
-  trough {
-    min-height: 6px;
-  }
+// active state — the whole tile fills with the accent
+.tile.tile-on { background-color: #{$accent}; }
+.tile.tile-on:hover { background-color: #{$accent}; }
+.tile.tile-on .tile-glyph,
+.tile.tile-on .tile-title,
+.tile.tile-on .tile-sub,
+.tile.tile-on .tile-chev { color: #{$accent-ink}; }
 
-  slider {
-    min-width: 14px;
-    min-height: 14px;
-  }
+// ─── sliders ─────────────────────────────────────────────────────────────
+.sliders { margin-bottom: 16px; }
+.sliderrow { padding: 2px 0; margin: 4px 0; }
+
+.slider-knob {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 17px;
+  min-width: 40px;
+  min-height: 40px;
+  margin-right: 12px;
+  border-radius: 999px;
+  color: #{$ink};
+  background-color: #{$card};
+  transition: all 150ms ease;
+}
+.slider-knob:hover { color: #{$accent}; background-color: #{$card-hi}; }
+.slider-knob.bri   { color: #{$base0A}; }
+
+.slider-arrow {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 16px;
+  min-width: 40px;
+  min-height: 40px;
+  margin-left: 12px;
+  border-radius: 999px;
+  color: #{$ink-dim};
+  background-color: #{$card};
+  transition: all 150ms ease;
+}
+.slider-arrow:hover { color: #{$accent}; background-color: #{$card-hi}; }
+
+scale.slider { margin: 0 4px; min-height: 20px; }
+scale.slider trough {
+  min-height: 8px;
+  border-radius: 999px;
+  background-color: #{$base02};
+}
+scale.slider highlight {
+  border-radius: 999px;
+  background-color: #{$accent};
+}
+scale.slider slider {
+  min-width: 16px;
+  min-height: 16px;
+  border-radius: 999px;
+  background-color: #{$base07};
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+scale.slider.bri highlight { background-color: #{$base0A}; }
+
+// ─── media player ──────────────────────────────────────────────────────────
+.player { padding: 12px 14px; margin-bottom: 14px; }
+.player-art {
+  min-width: 44px;
+  min-height: 44px;
+  margin-right: 12px;
+  border-radius: 12px;
+  background-color: #{$base02};
+  border: 1px solid #{$base02};
+}
+.player.playing .player-art { border: 1px solid #{$accent}; }
+.player-title  { font-size: 13px; font-weight: 600; color: #{$ink}; }
+.player-artist { font-size: 11px; color: #{$ink-dim}; }
+.player-ctl .iconbtn.play { font-size: 17px; color: #{$accent}; }
+
+// ═════════════════════════════════════════════════════════════════════════
+//  top bar — floating island
+// ═════════════════════════════════════════════════════════════════════════
+.bar {
+  background-color: #{$island};
+  color: #{$ink};
+  font-family: "Maple Mono NF", monospace;
+  font-size: 13px;
+  border: 1px solid #{$base02};
+  border-radius: 16px;
+  padding: 2px 12px;
+  margin: 6px 4px 0 4px;
 }
 
-// ---------------------------------------------------------------------------
-// Launcher
-// ---------------------------------------------------------------------------
+.sep { color: #{$base03}; font-size: 18px; margin: 0 8px; }
 
+// ── launcher ──────────────────────────────────────────────────────────────
 .launcher {
-  @include pill;
-  padding: 0 12px;
-  min-height: 26px;
+  font-size: 16px;
+  color: #{$base0D};
+  padding: 0 10px 0 4px;
+  margin-right: 4px;
+  transition: all 140ms ease;
+}
+.launcher:hover { color: #{$base0C}; }
 
-  label {
-    color: #{$accent};
-    font-size: 17px;
-  }
-
-  &:hover {
-    background-color: #{$accent-soft};
-  }
+// ── workspaces (numbers) ────────────────────────────────────────────────
+.workspaces { margin: 0 4px; }
+.ws {
+  font-size: 13px;
+  color: #{$base03};
+  min-width: 22px;
+  margin: 4px 2px;
+  border-radius: 8px;
+  transition: all 150ms ease;
+}
+.ws:hover     { color: #{$ink}; }
+.ws.ws-busy   { color: #{$ink-dim}; }
+.ws.ws-active {
+  color: #{$accent-ink};
+  background-color: #{$accent};
+  min-width: 30px;
 }
 
-// ---------------------------------------------------------------------------
-// Workspaces
-// ---------------------------------------------------------------------------
+// ── app name ────────────────────────────────────────────────────────────
+.appname { color: #{$ink-dim}; font-size: 13px; margin-left: 10px; }
 
-.workspaces {
-  @include pill;
-  padding: 2px 6px;
-
-  button {
-    min-width: 22px;
-    min-height: 20px;
-    margin: 0 2px;
-    border-radius: $radius-sm;
-    color: #{$fg-dim};
-    transition: all 180ms ease;
-
-    &:hover {
-      background-color: #{$module-hover};
-      color: #{$fg};
-    }
-  }
-
-  .ws-occupied {
-    color: #{$fg};
-  }
-
-  .ws-focused {
-    background-color: #{$accent};
-    color: #{$bg};
-    min-width: 30px;
-    box-shadow: 0 0 6px #{$accent-soft};
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Focused window
-// ---------------------------------------------------------------------------
-
-.focused-window {
-  @include pill;
-  background: transparent;
-  border-color: transparent;
-  box-shadow: none;
-  padding: 2px 8px;
-  color: #{$fg-dim};
-
-  .fw-icon {
-    color: #{$accent2};
-    font-size: 13px;
-  }
-
-  .fw-title {
-    color: #{$fg};
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Clock
-// ---------------------------------------------------------------------------
-
+// ── clock + notifications (center) ──────────────────────────────────────
 .clock {
-  @include pill;
-  padding: 2px 14px;
-
-  .date {
-    color: #{$fg-dim};
-  }
-
-  .time {
-    color: #{$accent};
-    font-weight: bold;
-  }
-
-  &:hover {
-    border-color: #{$accent};
-  }
+  padding: 0 10px;
+  border-radius: 10px;
+  transition: background-color 150ms ease;
+}
+.clock:hover { background-color: #{$base01}; }
+.clock-txt   { color: #{$ink}; font-weight: 600; }
+.clock-dot {
+  min-width: 7px;
+  min-height: 7px;
+  border-radius: 999px;
+  background-color: #{$base0A};
+  margin-left: 2px;
 }
 
-// ---------------------------------------------------------------------------
-// System info (cpu / mem)
-// ---------------------------------------------------------------------------
-
-.sysinfo {
-  .icon {
-    color: #{$accent2};
-  }
-
-  .si-warn {
-    color: #{$warn};
-  }
+// ── stat modules (battery / mem / cpu) ───────────────────────────────────
+.ringmod {
+  margin: 0 4px;
+  padding: 0 6px;
+  border-radius: 8px;
+  transition: background-color 150ms ease;
 }
+.ringmod:hover { background-color: #{$base01}; }
+.ring-icon { font-size: 13px; margin-right: 6px; }
+.ring-text { color: #{$ink-dim}; font-size: 12px; }
 
-// ---------------------------------------------------------------------------
-// Battery
-// ---------------------------------------------------------------------------
+.ring-icon.bat { color: #{$base0B}; }
+.ring-icon.mem { color: #{$base09}; }
+.ring-icon.cpu { color: #{$base0C}; }
+.ring-text.bat { color: #{$base0B}; }
+.ring-text.mem { color: #{$base09}; }
+.ring-text.cpu { color: #{$base0C}; }
+.ring-text.si-warn, .ring-icon.si-warn { color: #{$base08}; }
 
-.battery {
-  image {
-    color: #{$good};
-  }
-
-  &.bat-low image,
-  &.bat-low label {
-    color: #{$err};
-  }
+// ── network ──────────────────────────────────────────────────────────────
+.net {
+  padding: 0 6px;
+  margin: 0 4px;
+  border-radius: 8px;
+  transition: background-color 150ms ease;
 }
+.net:hover { background-color: #{$base01}; }
+.net-icon  { color: #{$base0D}; font-size: 14px; margin-right: 6px; }
+.net-text  { color: #{$ink-dim}; }
 
-// ---------------------------------------------------------------------------
-// Notifications
-// ---------------------------------------------------------------------------
-
-.notifications {
-  .icon {
-    color: #{$accent};
-  }
+// ── control center · tray · power ────────────────────────────────────────
+.ctrl {
+  font-size: 15px;
+  color: #{$ink-dim};
+  padding: 0 8px;
+  margin-left: 4px;
+  border-radius: 8px;
+  transition: all 150ms ease;
 }
+.ctrl:hover { color: #{$accent}; background-color: #{$base01}; }
 
-// Material notification center
-.notif-center {
-  padding: 14px;
+.tray { margin: 0 8px; }
+.tray-item { padding: 0 4px; }
 
-  .notif-title {
-    margin-bottom: 2px;
-
-    .notif-title-icon {
-      color: #{$accent};
-      font-size: 16px;
-    }
-
-    .notif-title-text {
-      font-weight: bold;
-      font-size: 15px;
-      color: #{$fg};
-    }
-
-    .notif-count {
-      background-color: #{$accent};
-      color: #{$bg};
-      font-size: 11px;
-      font-weight: bold;
-      border-radius: 999px;
-      padding: 0 7px;
-      margin-left: 2px;
-    }
-
-    .notif-dnd {
-      padding: 4px 8px;
-      border-radius: 999px;
-      color: #{$fg-dim};
-
-      &:hover {
-        background-color: #{$module-hover};
-        color: #{$fg};
-      }
-    }
-
-    .notif-clear {
-      padding: 4px 10px;
-      border-radius: 999px;
-      color: #{$err};
-
-      .nerd {
-        margin-right: 4px;
-      }
-
-      &:hover {
-        background-color: #{"alpha(@err, 0.16)"};
-      }
-    }
-  }
-
-  .notif-scroll {
-    min-height: 60px;
-  }
-
-  .notif-card {
-    background-color: #{$module-bg};
-    border: 1px solid #{$module-border};
-    border-radius: $radius;
-    padding: 10px 12px;
-    transition: background-color 150ms ease;
-
-    &.critical {
-      border-color: #{"alpha(@err, 0.6)"};
-      background-color: #{"alpha(@err, 0.12)"};
-    }
-
-    .notif-card-icon {
-      color: #{$accent};
-      -gtk-icon-size: 18px;
-    }
-
-    .notif-card-app {
-      color: #{$accent};
-      font-size: 11px;
-      font-weight: bold;
-    }
-
-    .notif-card-time {
-      color: #{$fg-dim};
-      font-size: 11px;
-    }
-
-    .notif-card-close {
-      color: #{$fg-dim};
-      padding: 0 4px;
-      border-radius: 999px;
-
-      &:hover {
-        color: #{$err};
-      }
-    }
-
-    .notif-card-summary {
-      font-weight: bold;
-      color: #{$fg};
-    }
-
-    .notif-card-body {
-      color: #{$fg-dim};
-      font-size: 12px;
-    }
-
-    .notif-card-actions {
-      margin-top: 4px;
-
-      .notif-action {
-        background-color: #{$surface};
-        border-radius: $radius-sm;
-        padding: 6px;
-        color: #{$fg};
-
-        &:hover {
-          background-color: #{$accent-soft};
-          color: #{$accent};
-        }
-      }
-    }
-  }
-
-  .notif-empty {
-    padding: 24px 0;
-
-    .notif-empty-icon {
-      font-size: 30px;
-      color: #{$fg-dim};
-    }
-  }
+.power {
+  font-size: 15px;
+  color: #{$ink-dim};
+  padding: 0 6px 0 8px;
+  border-radius: 8px;
+  transition: all 150ms ease;
 }
+.power:hover { color: #{$base08}; background-color: #{$base01}; }
 
-// ---------------------------------------------------------------------------
-// Quick settings / control center
-// ---------------------------------------------------------------------------
-
-.controlcenter {
-  .icon {
-    color: #{$accent};
-  }
-}
-
-// Material quick-settings panel
-.qs-panel {
-  padding: 14px;
-
-  // Filled-tonal toggle tiles
-  .qs-toggle {
-    background-color: #{$module-bg};
-    border: 1px solid #{$module-border};
-    border-radius: $radius;
-    padding: 9px 12px;
-    transition: all 160ms ease;
-
-    .qs-toggle-icon {
-      -gtk-icon-size: 20px;
-      color: #{$fg};
-      min-width: 30px;
-      min-height: 30px;
-      background-color: #{$surface};
-      border-radius: 999px;
-      padding: 5px;
-    }
-
-    .qs-toggle-title {
-      font-weight: bold;
-      color: #{$fg};
-      font-size: 13px;
-    }
-
-    .qs-toggle-sub {
-      color: #{$fg-dim};
-      font-size: 11px;
-    }
-
-    &:hover {
-      background-color: #{$module-hover};
-    }
-
-    // Active = accent fill (Material filled tonal "on" state)
-    &.active {
-      background-color: #{$accent};
-      border-color: #{$accent};
-      box-shadow: 0 0 10px #{$accent-soft};
-
-      .qs-toggle-icon {
-        background-color: #{"alpha(@bg, 0.22)"};
-        color: #{$bg};
-      }
-
-      .qs-toggle-title {
-        color: #{$bg};
-      }
-
-      .qs-toggle-sub {
-        color: #{"alpha(@bg, 0.75)"};
-      }
-    }
-  }
-
-  // Volume / brightness sliders
-  .qs-slider {
-    background-color: #{$module-bg};
-    border: 1px solid #{$module-border};
-    border-radius: 999px;
-    padding: 6px 14px 6px 6px;
-
-    .qs-slider-icon {
-      min-width: 30px;
-      min-height: 30px;
-      border-radius: 999px;
-      background-color: #{$surface};
-      padding: 5px;
-
-      image {
-        color: #{$accent};
-      }
-
-      &:hover {
-        background-color: #{$accent-soft};
-      }
-
-      &.static image {
-        color: #{$accent2};
-      }
-    }
-
-    scale {
-      min-width: 180px;
-
-      trough {
-        background-color: #{$surface};
-        border-radius: 999px;
-        min-height: 7px;
-      }
-
-      highlight {
-        background-color: #{$accent};
-        border-radius: 999px;
-        min-height: 7px;
-      }
-
-      slider {
-        background-color: #{$fg};
-        border-radius: 999px;
-        min-width: 14px;
-        min-height: 14px;
-      }
-    }
-  }
-
-  // Footer: avatar · battery/uptime · power actions
-  .qs-footer {
-    background-color: #{$module-bg};
-    border: 1px solid #{$module-border};
-    border-radius: $radius;
-    padding: 10px 12px;
-
-    .qs-avatar {
-      -gtk-icon-size: 30px;
-      color: #{$accent};
-      background-color: #{$surface};
-      border-radius: 999px;
-      padding: 5px;
-    }
-
-    .qs-bat {
-      font-weight: bold;
-      color: #{$fg};
-    }
-
-    .qs-uptime {
-      color: #{$fg-dim};
-      font-size: 11px;
-    }
-
-    .qs-power button {
-      min-width: 34px;
-      min-height: 34px;
-      border-radius: 999px;
-      background-color: #{$surface};
-      color: #{$fg};
-
-      &:hover {
-        background-color: #{$accent-soft};
-        color: #{$accent};
-      }
-
-      &.qs-power-off:hover {
-        background-color: #{"alpha(@err, 0.18)"};
-        color: #{$err};
-      }
-    }
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Power menu
-// ---------------------------------------------------------------------------
-
+// ═════════════════════════════════════════════════════════════════════════
+//  power menu — center popup
+// ═════════════════════════════════════════════════════════════════════════
 .powermenu {
-  label {
-    color: #{$err};
-    font-size: 15px;
-  }
+  background-color: #{$base00};
+  border: 1px solid #{$base02};
+  border-radius: 18px;
+  padding: 16px;
+}
+.pm-btn {
+  margin: 0 6px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background-color: #{$card};
+  color: #{$ink};
+  transition: all 160ms ease;
+}
+.pm-btn:hover { background-color: #{$accent}; color: #{$accent-ink}; }
+.pm-icon  { font-family: "Maple Mono NF", monospace; font-size: 26px; color: #{$accent}; }
+.pm-btn:hover .pm-icon { color: #{$accent-ink}; }
+.pm-label { font-size: 12px; margin-top: 8px; }
 
-  &:hover label {
-    color: #{$fg};
-  }
+// ═════════════════════════════════════════════════════════════════════════
+//  notification center + calendar — top-center popup
+// ═════════════════════════════════════════════════════════════════════════
+.notecenter {
+  background-color: #{$base00};
+  border: 1px solid #{$base02};
+  border-radius: 22px;
+  padding: 14px;
+  margin: 8px;
+  color: #{$ink};
+}
+.ncenter-sep {
+  min-width: 1px;
+  margin: 6px 12px;
+  background-color: #{$base02};
 }
 
-.power-popover {
-  padding: 10px;
+// ── left: notification list (GNOME-tray density) ──────────────────────────
+.notescol { min-width: 420px; }
+.nlist { padding-right: 4px; }
 
-  button {
-    padding: 10px 14px;
-    margin: 3px;
-    border-radius: $radius-sm;
-    color: #{$fg};
-
-    &:hover {
-      background-color: #{$accent-soft};
-    }
-
-    .pm-icon {
-      font-size: 18px;
-      color: #{$accent};
-    }
-  }
+.ncard {
+  background-color: #{$card};
+  border-radius: 12px;
+  padding: 9px 12px;
+  margin-bottom: 6px;
+  transition: background-color 150ms ease;
 }
+.ncard:hover { background-color: #{$card-hi}; }
 
-// ---------------------------------------------------------------------------
-// Clipboard
-// ---------------------------------------------------------------------------
-
-.clipboard {
-  .icon {
-    color: #{$accent2};
-  }
-
-  &:hover .icon {
-    color: #{$fg};
-  }
-}
-
-// ---------------------------------------------------------------------------
-// System tray
-// ---------------------------------------------------------------------------
-
-.tray {
-  .tray-item {
-    padding: 0 4px;
-    border-radius: $radius-sm;
-
-    &:hover {
-      background-color: #{$module-hover};
-    }
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Popovers (shared chrome)
-// ---------------------------------------------------------------------------
-
-popover,
-popover > contents,
-popover.background > contents {
-  background-color: #{$popover-bg};
-  border: 1px solid #{$module-border};
-  border-radius: $radius;
-  box-shadow: 0 6px 18px #{$shadow};
-  padding: 4px;
-  color: #{$fg};
-}
-
-window.ags-window {
-  background: transparent;
-  color: #{$fg};
-}
-
-.ags-window-content {
-  background-color: #{$popover-bg};
-  border: 1px solid #{$module-border};
-  border-radius: $radius;
-  box-shadow: 0 6px 18px #{$shadow};
-  padding: 4px;
-  // Popup windows use NORMAL exclusivity, so they already sit below the bar's
-  // exclusive zone — only a small gap is needed here, not the full bar height.
-  margin: 8px 10px 0 10px;
-
-  &.power-popover {
-    padding: 8px;
-  }
-}
-
-.ags-calendar-window .ags-window-content {
-  margin-top: 8px;
-}
-
-.ags-powermenu-window .ags-window-content {
-  margin-top: 8px;
+.ncard-icon {
+  min-width: 34px;
+  min-height: 34px;
   margin-right: 10px;
-  margin-left: auto;
-  min-width: 280px;
+  border-radius: 999px;
+  background-color: #{$base02};
+}
+.ncard-glyph { font-family: "Maple Mono NF", monospace; font-size: 15px; color: #{$accent}; }
+.ncard-img   { min-width: 34px; min-height: 34px; border-radius: 999px; margin-right: 10px; }
+
+.ncard-title { font-size: 13px; font-weight: 600; color: #{$ink}; }
+.ncard-time  { font-size: 11px; color: #{$ink-dim}; margin-left: 8px; }
+.ncard-body  { font-size: 12px; color: #{$ink-dim}; margin-top: 1px; }
+.ncard-close { color: #{$ink-dim}; font-family: "Maple Mono NF", monospace; padding: 0 4px; margin-left: 4px; }
+.ncard-close:hover { color: #{$base08}; }
+
+.ncard.critical { border: 1px solid #{$base08}; }
+
+.ncard-actions { margin-top: 8px; }
+.ncard-action {
+  padding: 5px 12px;
+  border-radius: 9px;
+  background-color: #{$base02};
+  color: #{$ink};
+  transition: all 150ms ease;
+}
+.ncard-action:hover { background-color: #{$accent}; color: #{$accent-ink}; }
+
+.nempty-text { color: #{$ink-dim}; font-size: 13px; }
+.nempty-icon { font-family: "Maple Mono NF", monospace; font-size: 34px; color: #{$base03}; }
+
+// ── footer: DND switch + Clear ────────────────────────────────────────────
+.nfooter { margin-top: 8px; padding: 10px 6px 2px 6px; }
+.nfoot-label { font-size: 13px; font-weight: 600; color: #{$ink}; }
+
+.dnd { margin: 0 10px; }
+.dnd-track {
+  min-width: 42px;
+  min-height: 22px;
+  border-radius: 999px;
+  padding: 3px;
+  background-color: #{$base02};
+  transition: background-color 160ms ease;
+}
+.dnd.dnd-on .dnd-track { background-color: #{$accent}; }
+.dnd-thumb {
+  min-width: 16px;
+  min-height: 16px;
+  border-radius: 999px;
+  background-color: #{$base05};
+  transition: all 160ms ease;
+}
+.dnd.dnd-on .dnd-thumb { background-color: #{$accent-ink}; }
+
+.nclear {
+  font-size: 13px;
+  color: #{$ink};
+  padding: 8px 18px;
+  border-radius: 10px;
+  background-color: #{$card};
+  transition: all 150ms ease;
+}
+.nclear:hover { background-color: #{$accent}; color: #{$accent-ink}; }
+
+// ── right: calendar ───────────────────────────────────────────────────────
+.calcol { min-width: 340px; padding: 4px 6px; }
+.cal-weekday { font-size: 14px; color: #{$ink-dim}; }
+.cal-date    { font-size: 22px; font-weight: 700; color: #{$ink}; margin-bottom: 14px; }
+
+.cal-nav { margin-bottom: 8px; }
+.cal-arrow {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 18px;
+  color: #{$ink-dim};
+  min-width: 30px;
+  min-height: 30px;
+  border-radius: 999px;
+  transition: all 150ms ease;
+}
+.cal-arrow:hover { color: #{$accent}; background-color: #{$card}; }
+.cal-title { font-size: 15px; font-weight: 600; color: #{$ink}; }
+
+.cal-head { margin-bottom: 4px; }
+.cal-dow {
+  font-size: 11px;
+  font-weight: 600;
+  color: #{$ink-dim};
+  min-width: 40px;
+  min-height: 26px;
+}
+.cal-week { margin: 1px 0; }
+.cal-day {
+  font-size: 13px;
+  color: #{$ink};
+  min-width: 40px;
+  min-height: 34px;
+  border-radius: 999px;
+  transition: all 150ms ease;
+}
+.cal-day.cal-dim   { color: #{$base03}; }
+.cal-day.cal-today {
+  background-color: #{$accent};
+  color: #{$accent-ink};
+  font-weight: 700;
 }
 
-.ags-notifications-window .ags-window-content,
-.ags-quicksettings-window .ags-window-content {
-  margin-top: 8px;
-  margin-right: 10px;
-  margin-left: auto;
-  min-width: 372px;
+// ═════════════════════════════════════════════════════════════════════════
+//  notification popups (transient, top-right) — ags notifd, replaces end-rs
+// ═════════════════════════════════════════════════════════════════════════
+.NotificationPopups { margin-top: 8px; }
+
+.Notification {
+  background-color: #{$base00};
+  border: 1px solid #{$base02};
+  border-radius: 16px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  color: #{$ink};
 }
+.Notification.critical { border: 1px solid #{$base08}; }
 
-calendar {
-  padding: 6px;
-
-  &:selected {
-    background-color: #{$accent};
-    color: #{$bg};
-    border-radius: 6px;
-  }
+.Notification .header { margin-bottom: 6px; }
+.Notification .app-icon { margin-right: 8px; }
+.Notification .app-name { font-size: 12px; font-weight: 600; color: #{$ink-dim}; }
+.Notification .time     { font-size: 11px; color: #{$ink-dim}; }
+.Notification .header button {
+  color: #{$ink-dim};
+  padding: 0 4px;
+  border-radius: 8px;
 }
+.Notification .header button:hover { color: #{$base08}; }
 
-// ---------------------------------------------------------------------------
-// Weather
-// ---------------------------------------------------------------------------
-
-.weather {
-  .weather-icon {
-    color: #{$orange};
-    font-size: 15px;
-  }
-
-  .weather-temp {
-    color: #{$fg};
-  }
+.Notification .content { margin-top: 4px; }
+.Notification .image,
+.Notification .icon-image {
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: 10px;
+  margin-right: 12px;
 }
+.Notification .summary { font-size: 13px; font-weight: 600; color: #{$ink}; }
+.Notification .body    { font-size: 12px; color: #{$ink-dim}; margin-top: 2px; }
 
-// ---------------------------------------------------------------------------
-// OSD (volume)
-// ---------------------------------------------------------------------------
-
-.ags-osd-window {
-  background: transparent;
+.Notification .actions { margin-top: 10px; }
+.Notification .actions button {
+  padding: 7px 10px;
+  margin: 0 3px;
+  border-radius: 10px;
+  background-color: #{$base02};
+  color: #{$ink};
+  transition: all 150ms ease;
 }
-
-.osd {
-  background-color: #{$popover-bg};
-  border: 1px solid #{$module-border};
-  border-radius: $radius;
-  box-shadow: 0 6px 18px #{$shadow};
-  padding: 10px 16px;
-  margin-bottom: 80px;
-  min-width: 240px;
-
-  .osd-icon {
-    color: #{$accent};
-    -gtk-icon-size: 20px;
-  }
-
-  .osd-level {
-    min-width: 150px;
-
-    trough {
-      background-color: #{$surface};
-      border-radius: 999px;
-      min-height: 8px;
-    }
-
-    block.filled {
-      background-color: #{$accent};
-      border-radius: 999px;
-      min-height: 8px;
-    }
-  }
-
-  .osd-text {
-    color: #{$fg};
-    font-weight: bold;
-  }
-}
+.Notification .actions button:hover { background-color: #{$accent}; color: #{$accent-ink}; }

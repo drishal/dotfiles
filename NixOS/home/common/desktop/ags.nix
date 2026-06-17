@@ -18,6 +18,8 @@ let
   #
   # It lives next to (not inside) ~/.config/ags because that directory is an
   # out-of-store symlink to the repo — Home Manager can't write into it.
+  # style/_colors.scss references these @base.. names through #{} interpolation,
+  # so the palette hot-swaps on a switch without recompiling the SCSS.
   stylixCss = ''
     @define-color base00 #${c.base00};
     @define-color base01 #${c.base01};
@@ -35,19 +37,6 @@ let
     @define-color base0D #${c.base0D};
     @define-color base0E #${c.base0E};
     @define-color base0F #${c.base0F};
-
-    @define-color bg      #${c.base00};
-    @define-color bgAlt   #${c.base01};
-    @define-color surface #${c.base02};
-    @define-color muted   #${c.base04};
-    @define-color fg      #${c.base05};
-    @define-color fgDim   #${c.base04};
-    @define-color accent  #${c.base0D};
-    @define-color accent2 #${c.base0E};
-    @define-color good    #${c.base0B};
-    @define-color warn    #${c.base0A};
-    @define-color err     #${c.base08};
-    @define-color orange  #${c.base09};
   '';
 in
 {
@@ -73,10 +62,15 @@ in
         powerprofiles
         apps
         bluetooth
+        mpris
       ])
       ++ (with pkgs; [
         cliphist
         wl-clipboard
+        brightnessctl # backlight slider
+        networkmanagerapplet # nm-connection-editor (network tile/module)
+        pavucontrol # audio settings (dashboard cog)
+        util-linux # rfkill (airplane tile)
       ]);
   };
 
