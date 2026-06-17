@@ -27,9 +27,34 @@ let
     ++ map (
       i: bind (combo "SHIFT + ${wsKey i}") (mkLuaInline "hl.dsp.window.move({ workspace = ${toString i} })")
     ) (lib.range 1 10);
+
+  # ─── Widget-stack helpers ──────────────────────────────────────────────
+  # Controlled by drishal.widgets — switch requires logout.
+  ewwLaunch = config.xdg.configHome + "/eww/scripts/launch.sh";
+
+  widgetStartup = {
+    "dms"    = "dms run";
+    "eww"    = "end-rs daemon & ${ewwLaunch}";
+    "waybar" = "waybar";
+  };
+
+  widgetRestart = {
+    "dms"    = "pkill dms; dms run";
+    "eww"    = "pkill end-rs || true; end-rs daemon & ${ewwLaunch}";
+    "waybar" = "pkill waybar; waybar &";
+  };
+
+  currentWidgetStartup = widgetStartup.${config.drishal.widgets};
+  currentWidgetRestart = widgetRestart.${config.drishal.widgets};
 in
 {
-  wayland.windowManager.hyprland = {
+  options.drishal.widgets = lib.mkOption {
+    type = lib.types.enum [ "dms" "eww" "waybar" ];
+    default = "eww";
+    description = "Which widget stack to use for bar / notifications / control-center. Switch requires logout.";
+  };
+
+  config.wayland.windowManager.hyprland = {
     enable = true;
     configType = "lua";
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
@@ -50,13 +75,15 @@ in
             "hyprland.start"
             (mkLuaInline ''
               function()
-                hl.exec_cmd("lxpolkit & dms run &  nm-applet --indicator &  blueman-applet")
-                hl.exec_cmd("hyprpaper")
+                -- Common autostart (always runs)
+                hl.exec_cmd("lxpolkit & nm-applet --indicator & blueman-applet & hyprpaper")
                 hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
                 -- cliphist storer daemons: capture both text and image copies so
                 -- the rofi (ags) and wofi clipboard menus have history to show.
                 hl.exec_cmd("wl-paste --type text --watch cliphist store")
                 hl.exec_cmd("wl-paste --type image --watch cliphist store")
+                -- Widget stack (bar + notifications + control-center)
+                hl.exec_cmd("${currentWidgetStartup}")
               end'')
           ];
         }
@@ -198,7 +225,7 @@ in
             exec "swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 7x5 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000  --fade-in 0.2"
           ))
           (bind (combo "E") (exec "nemo"))
-          (bind (combo "x") (exec "pkill dms; dms run"))
+          (bind (combo "x") (exec currentWidgetRestart))
           (bind (combo "SHIFT + X") (mkLuaInline "hl.dsp.exit()"))
           (bind (combo "A") (exec "emacsclient -c"))
           (bind (combo "SPACE") (mkLuaInline ''hl.dsp.window.float({ action = "toggle" })''))
@@ -245,5 +272,5 @@ in
     };
   };
 
-  services.hyprpaper.package = null;
+  config.services.hyprpaper.package = null;
 }

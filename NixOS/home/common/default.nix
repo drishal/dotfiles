@@ -1,9 +1,5 @@
-{
-  config,
-  inputs,
-  pkgs,
-  ...
-}:
+{ config, inputs, lib, pkgs, ... }:
+
 {
   imports = [
     # ./browsers

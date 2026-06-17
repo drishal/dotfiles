@@ -158,13 +158,11 @@ let
     ${pkgs.libnotify}/bin/notify-send -t 3000 "Display" "$msg" || true
   '';
 
-  # ─── Restart status bar ─────────────────────────────────────────────────
-  hyprRestartDms = pkgs.writeShellScriptBin "hypr-restart-dms" ''
+  # ─── Restart widget stack ──────────────────────────────────────────────
+  hyprRestartWidgets = pkgs.writeShellScriptBin "hypr-restart-widgets" ''
     #!/usr/bin/env bash
     set -eu
-
-    pkill dms || true
-    dms run
+    ${widgetRestart.${config.drishal.widgets}}
   '';
 
   # ─── Event listener: watches Hyprland's socket for monitor changes ─────
@@ -197,12 +195,20 @@ let
     done
   '';
 
+  # ─── Widget-stack restart helpers ─────────────────────────────────────
+  ewwLaunch = config.xdg.configHome + "/eww/scripts/launch.sh";
+  widgetRestart = {
+    "dms"    = "pkill dms; dms run";
+    "eww"    = "pkill end-rs || true; end-rs daemon & ${ewwLaunch}";
+    "waybar" = "pkill waybar; waybar &";
+  };
+
 in
 {
   home.packages = [
     hyprMonitorToggle
     hyprApplyMonitorProfile
-    hyprRestartDms
+    hyprRestartWidgets
     hyprAutoDetectProfile
     pkgs.jq
     pkgs.socat
