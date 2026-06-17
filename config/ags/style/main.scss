@@ -378,18 +378,31 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
   border-radius: 12px;
   padding: 9px 12px;
   margin-bottom: 6px;
-  transition: background-color 150ms ease;
+  transition: background-color 150ms ease, transform 350ms ease-in, opacity 350ms ease-in;
 }
 .ncard:hover { background-color: #{$card-hi}; }
+.ncard.clearing-out {
+  transform: translate(30rem, 0);
+  opacity: 0;
+}
 
-.ncard-icon {
+// Staggered slide-out: each card delays its exit based on position
+@for $i from 1 through 15 {
+  .ncard.clearing-out:nth-child(#{$i}) {
+    transition-delay: 0s, #{($i - 1) * 50}ms, #{($i - 1) * 50}ms;
+  }
+}
+
+.ncard-glyph {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 15px;
+  color: #{$accent};
   min-width: 34px;
   min-height: 34px;
   margin-right: 10px;
   border-radius: 999px;
   background-color: #{$base02};
 }
-.ncard-glyph { font-family: "Maple Mono NF", monospace; font-size: 15px; color: #{$accent}; }
 .ncard-img   { min-width: 34px; min-height: 34px; border-radius: 999px; margin-right: 10px; }
 
 .ncard-title { font-size: 13px; font-weight: 600; color: #{$ink}; }
@@ -445,6 +458,8 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
   transition: all 150ms ease;
 }
 .nclear:hover { background-color: #{$accent}; color: #{$accent-ink}; }
+.nclear.clearing { opacity: 0.5; }
+.nclear.clearing:hover { background-color: #{$card}; color: #{$ink}; }
 
 // ── right: calendar ───────────────────────────────────────────────────────
 .calcol { min-width: 340px; padding: 4px 6px; }

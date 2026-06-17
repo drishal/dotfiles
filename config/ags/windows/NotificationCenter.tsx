@@ -1,6 +1,6 @@
 import app from "ags/gtk4/app"
 import { Astal, Gtk, Gdk } from "ags/gtk4"
-import { createBinding, createState, For } from "ags"
+import { createBinding, createState, For, type Accessor } from "ags"
 import AstalNotifd from "gi://AstalNotifd"
 import GLib from "gi://GLib"
 
@@ -20,18 +20,17 @@ function visibleActions(n: AstalNotifd.Notification) {
   return n.actions.filter((a) => a.id !== "default" && (a.label?.trim() ?? "") !== "")
 }
 
-function NotifCard({ n }: { n: AstalNotifd.Notification }) {
+function NotifCard({ n, clearing }: { n: AstalNotifd.Notification, clearing: Accessor<boolean> }) {
   const hasImage = !!n.image && GLib.file_test(n.image, GLib.FileTest.EXISTS)
   const title = n.summary || n.appName || "Notification"
   const actions = visibleActions(n)
+  const base = n.urgency === AstalNotifd.Urgency.CRITICAL ? "ncard card critical" : "ncard card"
   return (
-    <box class={n.urgency === AstalNotifd.Urgency.CRITICAL ? "ncard card critical" : "ncard card"} hexpand valign={Gtk.Align.START}>
+    <box class={clearing((c) => (c ? `${base} clearing-out` : base))} hexpand valign={Gtk.Align.START}>
       {hasImage ? (
         <image class="ncard-img" valign={Gtk.Align.CENTER} halign={Gtk.Align.START} file={n.image} />
       ) : (
-        <box class="ncard-icon" valign={Gtk.Align.CENTER} halign={Gtk.Align.START}>
-          <label class="ncard-glyph" label="󰂚" halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} />
-        </box>
+        <label class="ncard-glyph" label="󰂚" xalign={0.5} halign={Gtk.Align.START} valign={Gtk.Align.CENTER} />
       )}
       <box orientation={Gtk.Orientation.VERTICAL} hexpand valign={Gtk.Align.CENTER}>
         <box valign={Gtk.Align.CENTER}>
@@ -61,6 +60,21 @@ function NotesColumn() {
   const list = createBinding(notifd, "notifications")
   const dnd = createBinding(notifd, "dontDisturb")
   const count = list((n) => n.length)
+  const [clearing, setClearing] = createState(false)
+
+  const SLIDE_MS = 350
+
+  function clearAll() {
+    if (clearing.get() || list.get().length === 0) return
+    setClearing(true)
+    const n = list.get().length
+    const total = (n - 1) * 50 + SLIDE_MS + 80
+    GLib.timeout_add(GLib.PRIORITY_DEFAULT, total, () => {
+      list.get().forEach((notif) => notif.dismiss())
+      setClearing(false)
+      return GLib.SOURCE_REMOVE
+    })
+  }
 
   return (
     <box class="notescol" orientation={Gtk.Orientation.VERTICAL}>
@@ -72,7 +86,7 @@ function NotesColumn() {
         heightRequest={520}
       >
         <box orientation={Gtk.Orientation.VERTICAL} hexpand valign={Gtk.Align.START}>
-          <For each={list}>{(n) => <NotifCard n={n} />}</For>
+          <For each={list}>{(n) => <NotifCard n={n} clearing={clearing} />}</For>
           <box
             class="nempty"
             orientation={Gtk.Orientation.VERTICAL}
@@ -100,7 +114,7 @@ function NotesColumn() {
             <box class="dnd-thumb" halign={dnd((d) => (d ? Gtk.Align.END : Gtk.Align.START))} valign={Gtk.Align.CENTER} />
           </box>
         </button>
-        <button class="nclear" onClicked={() => list.get().forEach((n) => n.dismiss())}>
+        <button class={clearing((c) => (c ? "nclear clearing" : "nclear"))} onClicked={clearAll}>
           <label label="Clear" />
         </button>
       </box>
