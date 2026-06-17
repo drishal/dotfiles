@@ -64,81 +64,55 @@
   :wm-ignore true
   (literal :content end-replies))
 
-;; ─── Notification card ────────────────────────────────────────────────
+;; ─── Notification card (Plasma-style — Stylix palette + Nerd glyphs) ───
 (defwidget end-notification[notification]
   (eventbox
     :onclick "${end-binary} close ${notification.id}"
     :valign "start"
-    :height 100
-    (
-      box
-      :class `end-default-notification-box-${notification.urgency}`
+    (box
+      :class `end-card end-card-${notification.urgency}`
       :orientation "vertical"
       :space-evenly false
+      ;; header — app icon · app name · configure · close
       (box
-        :class "end-default-notification-title-bar"
+        :class "end-header"
         :orientation "horizontal"
         :space-evenly false
-        (image
-          :path {notification.app_icon}
-          :class "end-default-notification-appicon"
-          :image-width 25
-          :image-height 25)
-        (label
-          :class "end-default-notification-appname"
-          :valign "start"
-          :hexpand true
-          :yalign 0
-          :xalign 0
-          :text {notification.application})
-        (button
-          :class "end-notification-close"
-          :valign "start"
-          :halign "end"
-          :onclick "${end-binary} close ${notification.id}"
-          "✕"))
+        :valign "center"
+        (box :class "end-appicon-box" :valign "center"
+          (image :class "end-appicon" :path {notification.app_icon}
+                 :image-width 18 :image-height 18
+                 :visible {notification.app_icon != ""})
+          (label :class "end-appicon-glyph" :text "󰂚"
+                 :visible {notification.app_icon == ""}))
+        (label :class "end-appname" :hexpand true :xalign 0 :limit-width 32
+               :text {notification.application})
+        (button :class "end-config" :valign "center"
+                :tooltip "Toggle Do Not Disturb"
+                :onclick "${end-binary} dnd toggle" "󰒓")
+        (button :class "end-close" :valign "center"
+                :onclick "${end-binary} close ${notification.id}" "󰅖"))
+      ;; body — text · app image
       (box
-        :class "end-default-notification-body-box"
+        :class "end-body"
         :orientation "horizontal"
         :space-evenly false
-        (image
-          :path {notification.icon}
-          :image-width 100
-          :image-height 100
-        )
-        (box
-          :class "end-content-box"
-          :valign "start"
-          :orientation "vertical"
-          :space-evenly "false"
-          (label
-            :class "notification-text notification-title"
-            :valign "start"
-            :yalign 0
-            :xalign 0
-            :markup {notification.summary})
-          (label
-            :class "notification-text notification-content"
-            :valign "start"
-            :yalign 0
-            :xalign 0
-            :vexpand true
-            :wrap true
-            :markup {notification.body})
-        )
-        (box
-          :class "end-notification-buttons"
-          :orientation "horizontal"
-          :space-evenly false
-          :valign "end"
-          :vexpand false
-          (for action in {notification.actions}
-            (button
-              :class "end-notification-button"
-              :onclick "${end-binary} action ${notification.id} ${action.id}"
-              :vexpand false
-              {action.text}))
-          )))))
+        (box :class "end-content" :orientation "vertical" :space-evenly false
+             :hexpand true :valign "center"
+          (label :class "end-title" :xalign 0 :yalign 0 :wrap true :limit-width 40
+                 :markup {notification.summary})
+          (label :class "end-text" :xalign 0 :yalign 0 :wrap true :limit-width 44
+                 :markup {notification.body}))
+        (image :class "end-image" :valign "start" :path {notification.icon}
+               :image-width 48 :image-height 48
+               :visible {notification.icon != ""}))
+      ;; actions — divider above, flat full-width buttons
+      (box :class "end-actions" :orientation "horizontal" :space-evenly false
+           :visible {arraylength(notification.actions) > 0}
+        (for action in {notification.actions}
+          (button :class "end-action" :hexpand true
+                  :onclick "${end-binary} action ${notification.id} ${action.id}"
+                  {action.text}))))))
 
 ;; ─── History card ─────────────────────────────────────────────────────
 (defwidget end-history[history]

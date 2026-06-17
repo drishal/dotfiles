@@ -11,37 +11,95 @@ $end-border: $base02;
 
 // ─── Notification card ──────────────────────────────────────────────────
 
-.end-default-notification-box-low {
-    background-color: $end-card;
-    padding: 12px;
-    padding-left: 8px;
-    margin: 12px;
+// ─── Notification card — Plasma-style (dark Stylix palette) ──────────────
+.end-card {
+    background-color: $base01;
+    border: 1px solid $base02;
     border-radius: $end-radius;
-    border: 1px dashed $base0D;
+    padding: 12px 14px;
+    margin: 10px 12px;
+}
+.end-card-low      { border-style: dashed; }
+.end-card-critical { border: 1px solid $base08; }
+
+.end-header { margin-bottom: 8px; }
+
+.end-appicon-box { margin-right: 8px; }
+.end-appicon-glyph {
+    font-family: 'Maple Mono NF', monospace;
+    font-size: 15px;
+    color: $base0D;
+}
+.end-appname {
+    color: $base04;
+    font-family: 'Maple Mono NF', monospace;
+    font-size: 12px;
+    font-weight: bold;
 }
 
-.end-default-notification-box-normal {
-    background-color: $end-card;
-    padding: 12px;
-    padding-left: 8px;
-    margin: 12px;
-    border-radius: $end-radius;
+// configure (toggles DND) + Plasma's red circular close
+.end-config {
+    font-family: 'Maple Mono NF', monospace;
+    font-size: 14px;
+    color: $base04;
+    min-width: 24px;
+    min-height: 24px;
+    margin-left: 4px;
+    border-radius: 999px;
+    background-color: transparent;
+    transition: all 150ms ease;
+}
+.end-config:hover { color: $base05; background-color: $base02; }
+
+.end-close {
+    font-family: 'Maple Mono NF', monospace;
+    font-size: 13px;
+    color: $base00;
+    min-width: 22px;
+    min-height: 22px;
+    margin-left: 4px;
+    border-radius: 999px;
+    background-color: $base08;
+    transition: all 150ms ease;
+}
+.end-close:hover { background-color: $base09; }
+
+.end-content { margin-right: 10px; }
+.end-title {
+    color: $base06;
+    font-family: 'Maple Mono NF', monospace;
+    font-weight: bold;
+    font-size: 15px;
+}
+.end-text {
+    color: $base04;
+    font-family: 'Maple Mono NF', monospace;
+    font-size: 12px;
+    margin-top: 2px;
 }
 
-.end-default-notification-box-critical {
-    background-color: $end-card;
-    padding: 12px;
-    padding-left: 8px;
-    margin: 12px;
-    border-radius: $end-radius;
-    border: 2px solid $base08;
+.end-image {
+    border-radius: 8px;
+    margin-left: 6px;
 }
 
-.end-default-notification-title-bar {
-    background-color: $end-card;
-    margin: 3px;
-    border-bottom: 1px solid $end-border;
+// action row — divider above, flat full-width buttons
+.end-actions {
+    margin-top: 10px;
+    border-top: 1px solid $base02;
+    padding-top: 8px;
 }
+.end-action {
+    color: $base0D;
+    font-family: 'Maple Mono NF', monospace;
+    font-size: 13px;
+    padding: 7px 10px;
+    margin: 0 3px;
+    border-radius: 8px;
+    background-color: transparent;
+    transition: all 150ms ease;
+}
+.end-action:hover { background-color: $base0D; color: $base00; }
 
 .end-default-notification-appicon {
     margin-right: 10px;
@@ -54,10 +112,6 @@ $end-border: $base02;
     font-family: 'Maple Mono NF', monospace;
     font-weight: bold;
     font-size: 15px;
-}
-
-.end-default-notification-body-box {
-    margin-top: 12px;
 }
 
 .notification-text {
@@ -91,22 +145,6 @@ $end-border: $base02;
 .end-notification-button:hover {
     background-color: $base0D;
     color: $base00;
-}
-
-.end-notification-close {
-    color: $base04;
-    font-size: 14px;
-    min-width: 22px;
-    min-height: 22px;
-    margin-left: 8px;
-    border-radius: 999px;
-    background-color: transparent;
-    transition: all 150ms ease;
-}
-
-.end-notification-close:hover {
-    color: $base00;
-    background-color: $base08;
 }
 
 .end-notification-reply {
