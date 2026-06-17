@@ -503,6 +503,124 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
   font-weight: 700;
 }
 
+// ─── weather widget (under calendar) ───────────────────────────────────────
+.wcol {
+  margin-top: 12px;
+}
+
+.weather-card {
+  background-color: #{$card};
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+// ── current conditions row ──
+.weather-current { margin-bottom: 10px; }
+
+.weather-icon {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 32px;
+  color: #{$accent};
+  margin-right: 12px;
+}
+
+.weather-temp {
+  font-size: 22px;
+  font-weight: 700;
+  color: #{$ink};
+}
+
+.weather-desc {
+  font-size: 12px;
+  color: #{$ink-dim};
+  margin-top: 1px;
+}
+
+.weather-loc {
+  font-size: 11px;
+  font-weight: 600;
+  color: #{$ink-dim};
+}
+
+.weather-feels {
+  font-size: 11px;
+  color: #{$base03};
+  margin-top: 1px;
+}
+
+// ── detail metrics row ──
+.weather-details {
+  margin: 8px 0;
+  padding: 8px 0;
+  border-top: 1px solid #{$base02};
+  border-bottom: 1px solid #{$base02};
+}
+
+.weather-metric {
+  /* GTK4 has no align-items CSS — halign set on children in TSX */
+}
+
+.weather-metric-icon {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 14px;
+  color: #{$ink-dim};
+  margin-bottom: 2px;
+}
+
+.weather-metric-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #{$ink};
+}
+
+.weather-metric-label {
+  font-size: 9px;
+  color: #{$base03};
+  margin-top: 1px;
+}
+
+// ── hourly forecast strip ──
+.weather-hourly { margin-top: 4px; }
+
+.weather-hour {
+  /* GTK4 has no align-items CSS — halign set on children in TSX */
+}
+
+.weather-hour-time {
+  font-size: 10px;
+  color: #{$base03};
+}
+
+.weather-hour-icon {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 16px;
+  color: #{$accent};
+  margin: 2px 0;
+}
+
+.weather-hour-temp {
+  font-size: 12px;
+  font-weight: 600;
+  color: #{$ink};
+}
+
+.weather-hour-precip {
+  font-size: 9px;
+  color: #{$base0C};
+}
+
+// ── loading / error states ──
+.weather-loading {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 24px;
+  color: #{$ink-dim};
+}
+
+.weather-error {
+  font-size: 12px;
+  color: #{$base08};
+}
+
 // ═════════════════════════════════════════════════════════════════════════
 //  notification popups (transient, top-right) — ags notifd, replaces end-rs
 // ═════════════════════════════════════════════════════════════════════════

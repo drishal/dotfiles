@@ -3,6 +3,13 @@ import { Astal, Gtk, Gdk } from "ags/gtk4"
 import { createBinding, createState, For, type Accessor } from "ags"
 import AstalNotifd from "gi://AstalNotifd"
 import GLib from "gi://GLib"
+import {
+  weatherState,
+  wmoInfo,
+  windDirToCompass,
+  formatHour,
+  type WeatherData,
+} from "../lib/weather"
 
 // ─── notification list ──────────────────────────────────────────────────────
 function timeLabel(unix: number): string {
@@ -122,6 +129,119 @@ function NotesColumn() {
   )
 }
 
+// ─── weather widget ────────────────────────────────────────────────────────
+// Helper: derive a string from weatherState for a given selector
+function wxBind<T>(sel: (d: WeatherData) => T): string {
+  return weatherState((s) =>
+    s.status === "ready" ? String(sel(s.data)) : "",
+  )
+}
+
+function WeatherWidget() {
+  const s = weatherState
+  const isLoading = s((st) => st.status === "loading")
+  const isError = s((st) => st.status === "error")
+  const isReady = s((st) => st.status === "ready")
+
+  // Pre-compute derived accessor strings for the "ready" state
+  const icon = s((st) =>
+    st.status === "ready"
+      ? wmoInfo(st.data.current.weatherCode, st.data.current.isDay).icon
+      : "",
+  )
+  const desc = s((st) =>
+    st.status === "ready"
+      ? wmoInfo(st.data.current.weatherCode, st.data.current.isDay).desc
+      : "",
+  )
+  const temp = wxBind((d) => `${d.current.temp}°C`)
+  const feels = wxBind((d) => `Feels ${d.current.feelsLike}°`)
+  const loc = s((st) => (st.status === "ready" ? st.data.location : ""))
+  const humidity = wxBind((d) => `${d.current.humidity}%`)
+  const windSpeed = wxBind((d) => `${d.current.windSpeed}`)
+  const windDir = wxBind((d) => `${windDirToCompass(d.current.windDir)} km/h`)
+  const uv = wxBind((d) => d.current.uvIndex.toFixed(1))
+  const precip = wxBind((d) => `${d.current.precipitation}mm`)
+
+  // Hourly forecast — bind the whole list reactively
+  const hourly = s((st) =>
+    st.status === "ready" ? st.data.hourly : [],
+  )
+
+  return (
+    <box class="wcol" orientation={Gtk.Orientation.VERTICAL} valign={Gtk.Align.END} vexpand>
+      {/* ── loading state ── */}
+      <box class="weather-card" halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} visible={isLoading}>
+        <label class="weather-loading" label="󰑤" />
+      </box>
+
+      {/* ── error state ── */}
+      <box class="weather-card" halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER} visible={isError}>
+        <label class="weather-error" label="󰅚 Weather unavailable" />
+      </box>
+
+      {/* ── ready state ── */}
+      <box class="weather-card" orientation={Gtk.Orientation.VERTICAL} visible={isReady}>
+        {/* current conditions */}
+        <box class="weather-current" valign={Gtk.Align.CENTER}>
+          <label class="weather-icon" label={icon} />
+          <box orientation={Gtk.Orientation.VERTICAL} hexpand>
+            <label class="weather-temp" halign={Gtk.Align.START} label={temp} />
+            <label class="weather-desc" halign={Gtk.Align.START} label={desc} />
+          </box>
+          <box orientation={Gtk.Orientation.VERTICAL} halign={Gtk.Align.END}>
+            <label class="weather-loc" label={loc} />
+            <label class="weather-feels" label={feels} />
+          </box>
+        </box>
+
+        {/* detail metrics */}
+        <box class="weather-details" homogeneous>
+          <box class="weather-metric" orientation={Gtk.Orientation.VERTICAL}>
+            <label class="weather-metric-icon" halign={Gtk.Align.CENTER} label="󰖎" />
+            <label class="weather-metric-val" halign={Gtk.Align.CENTER} label={humidity} />
+            <label class="weather-metric-label" halign={Gtk.Align.CENTER} label="Humidity" />
+          </box>
+          <box class="weather-metric" orientation={Gtk.Orientation.VERTICAL}>
+            <label class="weather-metric-icon" halign={Gtk.Align.CENTER} label="󰖝" />
+            <label class="weather-metric-val" halign={Gtk.Align.CENTER} label={windSpeed} />
+            <label class="weather-metric-label" halign={Gtk.Align.CENTER} label={windDir} />
+          </box>
+          <box class="weather-metric" orientation={Gtk.Orientation.VERTICAL}>
+            <label class="weather-metric-icon" halign={Gtk.Align.CENTER} label="󰓅" />
+            <label class="weather-metric-val" halign={Gtk.Align.CENTER} label={uv} />
+            <label class="weather-metric-label" halign={Gtk.Align.CENTER} label="UV Index" />
+          </box>
+          <box class="weather-metric" orientation={Gtk.Orientation.VERTICAL}>
+            <label class="weather-metric-icon" halign={Gtk.Align.CENTER} label="󰖗" />
+            <label class="weather-metric-val" halign={Gtk.Align.CENTER} label={precip} />
+            <label class="weather-metric-label" halign={Gtk.Align.CENTER} label="Rain" />
+          </box>
+        </box>
+
+        {/* hourly forecast */}
+        <box class="weather-hourly" homogeneous>
+          <For each={hourly}>
+            {(h) => {
+              const hwmo = wmoInfo(h.weatherCode, true)
+              return (
+                <box class="weather-hour" orientation={Gtk.Orientation.VERTICAL}>
+                  <label class="weather-hour-time" halign={Gtk.Align.CENTER} label={formatHour(h.time)} />
+                  <label class="weather-hour-icon" halign={Gtk.Align.CENTER} label={hwmo.icon} />
+                  <label class="weather-hour-temp" halign={Gtk.Align.CENTER} label={`${h.temp}°`} />
+                  {h.precipProb > 0 && (
+                    <label class="weather-hour-precip" halign={Gtk.Align.CENTER} label={`${h.precipProb}%`} />
+                  )}
+                </box>
+              )
+            }}
+          </For>
+        </box>
+      </box>
+    </box>
+  )
+}
+
 // ─── calendar ─────────────────────────────────────────────────────────────
 type Day = { d: number; cur: boolean; today: boolean }
 
@@ -202,6 +322,8 @@ function CalendarColumn() {
           )}
         </For>
       </box>
+
+      <WeatherWidget />
     </box>
   )
 }

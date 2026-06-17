@@ -9,6 +9,7 @@ import Dashboard from "./windows/Dashboard"
 import NotificationCenter from "./windows/NotificationCenter"
 import PowerMenu from "./windows/PowerMenu"
 import NotificationPopups from "./windows/NotificationPopups"
+import { startWeatherService } from "./lib/weather"
 
 /**
  * Stylix integration.
@@ -33,6 +34,9 @@ function stylixCss(): string {
 app.start({
   css: `${stylixCss()}\n${style}`,
   main() {
+    // Start weather polling (Open-Meteo, 15-min interval)
+    startWeatherService()
+
     // One bar + popups per monitor, reactive to hotplug (autodetect). The
     // notifd subscription behind NotificationPopups is a module-level singleton,
     // so only the windows are per-monitor, not the event handling.
