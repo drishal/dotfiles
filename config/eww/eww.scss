@@ -8,6 +8,7 @@
 // ═════════════════════════════════════════════════════════════════════════
 
 @import "colors";
+@import "end";
 
 // ─── design tokens ────────────────────────────────────────────────────────
 $radius:      18px;
@@ -26,6 +27,11 @@ $base-island: darken($base00, 2%); // floating bar — a touch below the bg
   font-family: "Google Sans", "Maple Mono NF", sans-serif;
 }
 
+// eww's GTK window is opaque by default; our rounded island/card sits inside
+// it with a margin, so the window's square corners peek out as an edge frame.
+// Make the window transparent so only the widget shows.
+window { background-color: transparent; }
+
 .dashboard {
   background-color: $base00;
   border: 1px solid $base02;
@@ -33,8 +39,6 @@ $base-island: darken($base00, 2%); // floating bar — a touch below the bg
   padding: 14px;
   margin: 6px;
   color: $ink;
-  // a subtle outer glow so it floats over the wallpaper
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
 }
 
 .card {
@@ -45,36 +49,46 @@ $base-island: darken($base00, 2%); // floating bar — a touch below the bg
 }
 
 // ─── header ────────────────────────────────────────────────────────────────
-.header {
-  padding: 14px 16px;
-}
+.header { margin-bottom: 16px; }
 
+// user chip — a rounded pill holding the avatar + name (dahliaOS style)
+.userchip {
+  padding: 5px 16px 5px 5px;
+  border-radius: 999px;
+  background-color: $card;
+}
 .avatar {
-  min-width: 52px;
-  min-height: 52px;
-  margin-right: 14px;
+  min-width: 30px;
+  min-height: 30px;
+  margin-right: 10px;
   border-radius: 999px;
   background-color: $base02;
   background-image: url("/home/drishal/.face");
   background-size: cover;
   background-position: center;
-  border: 2px solid $accent;
+  border: 1px solid $accent;
 }
-
-.header-name {
-  font-size: 17px;
+.username {
+  font-size: 14px;
   font-weight: 600;
   color: $ink;
 }
 
-.header-sub {
-  font-size: 12px;
-  color: $ink-dim;
-}
-
-.header-actions {
+// round header action buttons (settings / reload / power)
+.hbtn {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 16px;
+  min-width: 38px;
+  min-height: 38px;
   margin-left: 8px;
+  border-radius: 999px;
+  color: $ink-dim;
+  background-color: $card;
+  transition: all 150ms ease;
 }
+.hbtn:hover { color: $accent; background-color: $card-hi; }
+
+.header-actions { margin-left: 8px; }
 
 .iconbtn {
   font-family: "Maple Mono NF", monospace;
@@ -93,20 +107,43 @@ $base-island: darken($base00, 2%); // floating bar — a touch below the bg
 }
 
 // ─── sliders ─────────────────────────────────────────────────────────────
+.sliders { margin-bottom: 16px; }
 .sliderrow {
-  padding: 8px 14px;
+  padding: 2px 0;
+  margin: 4px 0;
 }
 
-.slider-icon {
+// round icon button at the head of each slider (dahliaOS style)
+.slider-knob {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 17px;
+  min-width: 40px;
+  min-height: 40px;
+  margin-right: 12px;
+  border-radius: 999px;
+  color: $ink;
+  background-color: $card;
+  transition: all 150ms ease;
+}
+.slider-knob:hover { color: $accent; background-color: $card-hi; }
+.slider-knob.bri   { color: $base0A; }
+
+// round trailing button (mute / expand)
+.slider-arrow {
   font-family: "Maple Mono NF", monospace;
   font-size: 16px;
-  min-width: 26px;
-  margin-right: 8px;
-  color: $accent;
+  min-width: 40px;
+  min-height: 40px;
+  margin-left: 12px;
+  border-radius: 999px;
+  color: $ink-dim;
+  background-color: $card;
+  transition: all 150ms ease;
 }
+.slider-arrow:hover { color: $accent; background-color: $card-hi; }
 
 scale.slider {
-  margin: 0 6px;
+  margin: 0 4px;
 }
 scale.slider trough {
   min-height: 8px;
@@ -127,119 +164,71 @@ scale.slider slider {
 scale.slider.bri trough highlight { background-color: $base0A; }  // amber for brightness
 scale.slider.bri slider           { background-color: $base07; }
 
-.slider-tail {
-  font-family: "Maple Mono NF", monospace;
-  font-size: 14px;
-  min-width: 30px;
-  min-height: 30px;
-  margin-left: 6px;
-  border-radius: 999px;
+// ─── section label ──────────────────────────────────────────────────────────
+.seclabel {
+  font-size: 13px;
+  font-weight: 600;
   color: $ink-dim;
-  background-color: transparent;
+  margin: 0 4px 10px 4px;
 }
-.slider-tail:hover { color: $accent; background-color: $card-hi; }
 
 // ─── quick-toggle tiles ────────────────────────────────────────────────────
-.tilegrid { margin-bottom: 0; }
-.tilerow  { margin-bottom: $gap; }
+.tilegrid { margin-bottom: 16px; }
+.tilerow  { margin-bottom: 10px; }
+.tilerow:last-child { margin-bottom: 0; }
 
 .tile {
   background-color: $card;
   border-radius: $radius-sm;
   padding: 12px 14px;
-  margin: 0 4px;
+  margin: 0 5px;
   transition: all 180ms ease;
 }
 .tilerow .tile:first-child { margin-left: 0; }
 .tilerow .tile:last-child  { margin-right: 0; }
 .tile:hover { background-color: $card-hi; }
 
-.tile-icon {
-  min-width: 38px;
-  min-height: 38px;
-  margin-right: 12px;
-  border-radius: 999px;
-  background-color: $base02;
-  transition: all 180ms ease;
-}
 .tile-glyph {
   font-family: "Maple Mono NF", monospace;
-  font-size: 16px;
-  color: $ink-dim;
+  font-size: 20px;
+  margin-right: 12px;
+  color: $ink;
 }
-.tile-title { font-size: 14px; font-weight: 600; color: $ink; }
+.tile-title { font-size: 13px; font-weight: 600; color: $ink; }
 .tile-sub   { font-size: 11px; color: $ink-dim; }
-
-// active state — accent fill on the icon chip
-.tile-on .tile-icon  { background-color: $accent; }
-.tile-on .tile-glyph { color: $accent-ink; }
-.tile-on .tile-title { color: $ink; }
-
-// ─── big mode toggles ──────────────────────────────────────────────────────
-.moderow { margin-bottom: $gap; }
-
-.mode {
-  background-color: $card;
-  border-radius: $radius-sm;
-  padding: 16px;
-  margin: 0 4px;
-  transition: all 180ms ease;
-}
-.moderow .mode:first-child { margin-left: 0; }
-.moderow .mode:last-child  { margin-right: 0; }
-.mode:hover { background-color: $card-hi; }
-
-.mode-glyph {
+.tile-chev {
   font-family: "Maple Mono NF", monospace;
   font-size: 16px;
-  margin-right: 10px;
+  margin-left: 6px;
   color: $ink-dim;
 }
-.mode-title { font-size: 14px; font-weight: 600; color: $ink; }
 
-.mode-on {
-  background-color: $accent;
+// active state — the whole tile fills with the accent (dahliaOS)
+.tile-on { background-color: $accent; }
+.tile-on:hover { background-color: $accent; }
+.tile-on .tile-glyph,
+.tile-on .tile-title,
+.tile-on .tile-sub,
+.tile-on .tile-chev { color: $accent-ink; }
+
+// ─── date / time chip ───────────────────────────────────────────────────────
+.datechip {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background-color: $card;
 }
-.mode-on .mode-glyph,
-.mode-on .mode-title { color: $accent-ink; }
-
-// ─── system stats ──────────────────────────────────────────────────────────
-.sysrow { padding: 12px 14px; }
-
-.stat { padding: 0 6px; }
-.stat-icon {
+.datechip-ico {
   font-family: "Maple Mono NF", monospace;
-  font-size: 13px;
-  margin-right: 6px;
+  font-size: 14px;
+  margin-right: 10px;
   color: $accent;
 }
-.stat-label { font-size: 12px; color: $ink-dim; }
-.stat-value { font-size: 12px; font-weight: 600; color: $ink; }
-
-.stat-bar {
-  margin-top: 6px;
-  min-height: 5px;
-}
-.stat-bar trough {
-  min-height: 5px;
-  border-radius: 999px;
-  background-color: $base02;
-}
-.stat-bar progress {
-  border-radius: 999px;
-  background-color: $accent;
-}
-
-.sys-sep {
-  min-width: 1px;
-  margin: 2px 4px;
-  background-color: $base02;
-}
+.datechip-txt { font-size: 13px; color: $ink; }
 
 // ─── media player ──────────────────────────────────────────────────────────
 .player {
   padding: 12px 14px;
-  margin-bottom: 0;
+  margin-bottom: 14px;
 }
 .player-art {
   min-width: 44px;
@@ -272,9 +261,11 @@ scale.slider.bri slider           { background-color: $base07; }
   border-radius: 16px;
   padding: 0 12px;
   margin: 0 4px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
 }
 .left_modules, .center_modules, .right_modules { min-width: 1px; }
+
+// invisible anchor that keeps the notif-reaper deflisten alive (see eww.yuck)
+.reaper-anchor { font-size: 0; min-width: 0; padding: 0; margin: 0; }
 
 .sep {
   color: $base03;
@@ -324,8 +315,15 @@ scale.slider.bri slider           { background-color: $base07; }
   transition: background-color 150ms ease;
 }
 .clock:hover  { background-color: $base01; }
-.clock-ico    { color: $base0E; font-size: 13px; }
 .clock-txt    { color: $ink; font-weight: 600; }
+// GNOME-style unread indicator — a small dot beside the clock
+.clock-dot {
+  min-width: 7px;
+  min-height: 7px;
+  border-radius: 999px;
+  background-color: $base0A;
+  margin-left: 2px;
+}
 
 .notif {
   padding: 0 10px;
@@ -363,7 +361,7 @@ scale.slider.bri slider           { background-color: $base07; }
   transition: background-color 150ms ease;
 }
 .net:hover { background-color: $base01; }
-.net-icon  { color: $base0D; font-size: 14px; }
+.net-icon  { color: $base0D; font-size: 14px; margin-right: 6px; }
 .net-text  { color: $ink-dim; }
 
 // ── control center · tray · power ────────────────────────────────────────
@@ -394,7 +392,6 @@ scale.slider.bri slider           { background-color: $base07; }
   border: 1px solid $base02;
   border-radius: 18px;
   padding: 16px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
 }
 .pm-btn {
   margin: 0 6px;
@@ -408,3 +405,130 @@ scale.slider.bri slider           { background-color: $base07; }
 .pm-icon  { font-family: "Maple Mono NF", monospace; font-size: 26px; color: $accent; }
 .pm-btn:hover .pm-icon { color: $accent-ink; }
 .pm-label { font-size: 12px; margin-top: 8px; }
+
+// ═════════════════════════════════════════════════════════════════════════
+//  notification center + calendar
+// ═════════════════════════════════════════════════════════════════════════
+.notecenter {
+  background-color: $base00;
+  border: 1px solid $base02;
+  border-radius: 22px;
+  padding: 14px;
+  margin: 6px;
+  color: $ink;
+}
+.ncenter-sep {
+  min-width: 1px;
+  margin: 6px 12px;
+  background-color: $base02;
+}
+
+// ── left: notification list ───────────────────────────────────────────────
+.notescol { min-width: 520px; }
+
+.nlist { padding-right: 4px; }
+
+.ncard {
+  background-color: $card;
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  transition: background-color 150ms ease;
+}
+.ncard:hover { background-color: $card-hi; }
+
+.ncard-icon {
+  min-width: 40px;
+  min-height: 40px;
+  margin-right: 12px;
+  border-radius: 999px;
+  background-color: $base02;
+}
+.ncard-glyph { font-family: "Maple Mono NF", monospace; font-size: 17px; color: $accent; }
+
+.ncard-app     { font-size: 13px; font-weight: 600; color: $ink; }
+.ncard-time    { font-size: 11px; color: $ink-dim; margin-left: 8px; }
+.ncard-summary { font-size: 12px; color: $ink; margin-top: 1px; }
+.ncard-body    { font-size: 12px; color: $ink-dim; margin-top: 2px; }
+
+.nempty-text { color: $ink-dim; font-size: 13px; }
+
+// ── footer: DND switch + Clear ────────────────────────────────────────────
+.nfooter {
+  margin-top: 8px;
+  padding: 10px 6px 2px 6px;
+}
+.nfoot-label { font-size: 13px; font-weight: 600; color: $ink; }
+
+.dnd { margin: 0 10px; }
+.dnd-track {
+  min-width: 42px;
+  min-height: 22px;
+  border-radius: 999px;
+  padding: 3px;
+  background-color: $base02;
+  transition: background-color 160ms ease;
+}
+.dnd-on .dnd-track { background-color: $accent; }
+.dnd-thumb {
+  min-width: 16px;
+  min-height: 16px;
+  border-radius: 999px;
+  background-color: $base05;
+  transition: all 160ms ease;
+}
+.dnd-on .dnd-thumb { background-color: $accent-ink; }
+
+.nclear {
+  font-size: 13px;
+  color: $ink;
+  padding: 8px 18px;
+  border-radius: 10px;
+  background-color: $card;
+  transition: all 150ms ease;
+}
+.nclear:hover { background-color: $accent; color: $accent-ink; }
+
+// ── right: calendar ───────────────────────────────────────────────────────
+.calcol { min-width: 340px; padding: 4px 6px; }
+
+.cal-weekday { font-size: 14px; color: $ink-dim; }
+.cal-date    { font-size: 22px; font-weight: 700; color: $ink; margin-bottom: 14px; }
+
+.cal-nav { margin-bottom: 8px; }
+.cal-arrow {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 18px;
+  color: $ink-dim;
+  min-width: 30px;
+  min-height: 30px;
+  border-radius: 999px;
+  transition: all 150ms ease;
+}
+.cal-arrow:hover { color: $accent; background-color: $card; }
+.cal-title { font-size: 15px; font-weight: 600; color: $ink; }
+
+.cal-head { margin-bottom: 4px; }
+.cal-dow {
+  font-size: 11px;
+  font-weight: 600;
+  color: $ink-dim;
+  min-width: 40px;
+  min-height: 26px;
+}
+
+.cal-week { margin: 1px 0; }
+.cal-day {
+  font-size: 13px;
+  color: $ink;
+  min-width: 40px;
+  min-height: 34px;
+  border-radius: 999px;
+  transition: all 150ms ease;
+}
+.cal-day.cal-dim   { color: $base03; }
+.cal-day.cal-today {
+  background-color: $accent;
+  color: $accent-ink;
+  font-weight: 700;
+}

@@ -1,0 +1,172 @@
+// ═════════════════════════════════════════════════════════════════════════
+//  end-rs styles — Stylix-themed notification daemon
+//
+//  Uses the same $baseXX tokens as eww.scss. This file is @import'ed by
+//  eww.scss after colors.scss, so $baseXX tokens are already available.
+// ═════════════════════════════════════════════════════════════════════════
+
+$end-radius: 14px;
+$end-card: $base01;
+$end-border: $base02;
+
+// ─── Notification card ──────────────────────────────────────────────────
+
+.end-default-notification-box-low {
+    background-color: $end-card;
+    padding: 12px;
+    padding-left: 8px;
+    margin: 12px;
+    border-radius: $end-radius;
+    border: 1px dashed $base0D;
+}
+
+.end-default-notification-box-normal {
+    background-color: $end-card;
+    padding: 12px;
+    padding-left: 8px;
+    margin: 12px;
+    border-radius: $end-radius;
+}
+
+.end-default-notification-box-critical {
+    background-color: $end-card;
+    padding: 12px;
+    padding-left: 8px;
+    margin: 12px;
+    border-radius: $end-radius;
+    border: 2px solid $base08;
+}
+
+.end-default-notification-title-bar {
+    background-color: $end-card;
+    margin: 3px;
+    border-bottom: 1px solid $end-border;
+}
+
+.end-default-notification-appicon {
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.end-default-notification-appname {
+    color: $base05;
+    margin-right: 12px;
+    font-family: 'Maple Mono NF', monospace;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.end-default-notification-body-box {
+    margin-top: 12px;
+}
+
+.notification-text {
+    color: $base05;
+    font-family: 'Maple Mono NF', monospace;
+}
+
+.notification-title {
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.notification-content {
+    font-size: .8em;
+}
+
+.end-notification-buttons {
+    margin-top: 12px;
+}
+
+.end-notification-button {
+    background-color: $end-card;
+    color: $base05;
+    padding: 8px;
+    border-radius: 10px;
+    margin-right: 12px;
+    border: 1px solid $end-border;
+    transition: all 150ms ease;
+}
+
+.end-notification-button:hover {
+    background-color: $base0D;
+    color: $base00;
+}
+
+.end-notification-close {
+    color: $base04;
+    font-size: 14px;
+    min-width: 22px;
+    min-height: 22px;
+    margin-left: 8px;
+    border-radius: 999px;
+    background-color: transparent;
+    transition: all 150ms ease;
+}
+
+.end-notification-close:hover {
+    color: $base00;
+    background-color: $base08;
+}
+
+.end-notification-reply {
+    background-color: $end-card;
+    color: $base05;
+    padding: 8px;
+    border-radius: 10px;
+    margin-right: 12px;
+    border: 1px solid $end-border;
+}
+
+.end-notification-reply:hover:focus {
+    background-color: $base05;
+    color: $base0D;
+    padding: 8px;
+    border-radius: 10px;
+    margin-right: 12px;
+    border: 1px solid $end-border;
+}
+
+// ─── History ────────────────────────────────────────────────────────────
+
+.end-history-frame {
+    background-color: $base00;
+    padding: 12px;
+    padding-left: 8px;
+    border-radius: $end-radius;
+}
+
+.end-history-box {
+    background-color: $end-card;
+    padding: 12px;
+    padding-left: 8px;
+    border: 1px solid $end-border;
+    border-radius: 10px;
+}
+
+.end-history-title-bar {
+    background-color: $end-card;
+    margin: 1px;
+    border-bottom: 1px solid $end-border;
+}
+
+.end-history-appicon {
+    margin-right: 5px;
+    margin-bottom: 2px;
+}
+
+.end-history-appname {
+    color: $base05;
+    margin-right: 5px;
+    font-family: 'Maple Mono NF', monospace;
+    font-weight: bold;
+    font-size: 10px;
+}
+
+.end-history-body-box {
+    margin-top: 3px;
+}
+
+.end-content-box {
+    margin-left: 12px;
+}
