@@ -337,21 +337,20 @@ scale.slider.bri slider           { background-color: $base07; }
 .notif-txt          { color: $base09; font-weight: 600; }
 .notif.has-notif .notif-ico { color: $base0A; }
 
-// ── circular-progress modules (battery / mem / cpu) ─────────────────────
-.ringmod { margin: 0 6px; }
-.ring {
-  font-size: 11px;
-  min-width: 26px;
-  min-height: 26px;
-  margin-right: 6px;
-  background-color: $base02;   // unfilled track
+// ── stat modules (battery / mem / cpu) — glyph + value, no ring ──────────
+.ringmod {
+  margin: 0 4px;
+  padding: 0 6px;
+  border-radius: 8px;
+  transition: background-color 150ms ease;
 }
-.ring-icon { font-size: 11px; }
-.ring-text { color: $ink-dim; font-size: 12px; margin-right: 2px; }
+.ringmod:hover { background-color: $base01; }
+.ring-icon { font-size: 13px; margin-right: 6px; }
+.ring-text { color: $ink-dim; font-size: 12px; }
 
-.ring.bat  { color: $base0B; } .ring.bat  .ring-icon { color: $base0B; }
-.ring.mem  { color: $base09; } .ring.mem  .ring-icon { color: $base09; }
-.ring.cpu  { color: $base0C; } .ring.cpu  .ring-icon { color: $base0C; }
+.ring-icon.bat { color: $base0B; }
+.ring-icon.mem { color: $base09; }
+.ring-icon.cpu { color: $base0C; }
 .ring-text.bat { color: $base0B; }
 .ring-text.mem { color: $base09; }
 .ring-text.cpu { color: $base0C; }

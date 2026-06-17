@@ -227,21 +227,19 @@
 
 ;; ── right ───────────────────────────────────────────────────────────────
 
-;; circular-progress module: ring driven by `value`, glyph in the centre,
-;; optional `tail` label beside it (Saimoomedits signature look)
-(defwidget ring [value class icon ?tail ?tip ?onclick]
-  (box :class "ringmod" :space-evenly false :valign "center" :tooltip {tip ?: ""}
-    (circular-progress :class "ring ${class}" :value value :thickness 3
-                       :start-at 75 :clockwise true
-      (button :class "ring-icon" :onclick {onclick ?: ""} icon))
-    (label :class "ring-text ${class}" :visible {(tail ?: "") != ""} :text {tail ?: ""})))
+;; stat module: a coloured glyph + a value label beside it.
+;; (Was a circular-progress ring, but eww 0.6.0 leaks memory redrawing those
+;; and they rendered as empty boxes here — a plain readout is lighter anyway.)
+(defwidget ring [class icon ?tail ?tip ?onclick]
+  (button :class "ringmod ${class}" :tooltip {tip ?: ""} :onclick {onclick ?: ""}
+    (box :space-evenly false :valign "center" :spacing 6
+      (label :class "ring-icon ${class}" :text icon)
+      (label :class "ring-text ${class}" :visible {(tail ?: "") != ""} :text {tail ?: ""}))))
 
 (defwidget bar-battery []
   (box :class "ringmod battery" :visible {jq(battery, ".present // false")}
        :space-evenly false :valign "center" :tooltip {jq(battery, ".status // \"\"", "r")}
-    (circular-progress :class "ring bat" :value {jq(battery, ".perc // 0")}
-                       :thickness 3 :start-at 75 :clockwise true
-      (label :class "ring-icon" :text {jq(battery, ".charging // false") ? "" : ""}))
+    (label :class "ring-icon bat" :text {jq(battery, ".charging // false") ? "" : ""})
     (label :class "ring-text bat" :text "${jq(battery, ".perc // 0")}%")))
 
 (defwidget bar-net []
@@ -256,10 +254,10 @@
     (bar-battery)
     (bar-net)
     (sep)
-    (ring :class "mem" :value {jq(stats, ".mem // 0")} :icon ""
+    (ring :class "mem" :icon ""
           :tail {jq(stats, ".memused // \"\"", "r")}
           :tip "RAM ${jq(stats, ".memused // \"\"", "r")} / ${jq(stats, ".memtot // \"\"", "r")}")
-    (ring :class "cpu" :value {jq(stats, ".cpu // 0")} :icon ""
+    (ring :class "cpu" :icon ""
           :tail "${jq(stats, ".cpu // 0")}%" :tip "CPU")
     (sep)
     (button :class "ctrl" :tooltip "Control center"
