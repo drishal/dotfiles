@@ -580,7 +580,14 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
 }
 
 // ── hourly forecast strip ──
-.weather-hourly { margin-top: 4px; }
+.weather-hourly-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #{$base03};
+  margin-top: 8px;
+  margin-bottom: 2px;
+}
+.weather-hourly { margin-top: 2px; }
 
 .weather-hour {
   /* GTK4 has no align-items CSS — halign set on children in TSX */

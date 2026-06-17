@@ -220,6 +220,7 @@ function WeatherWidget() {
         </box>
 
         {/* hourly forecast */}
+        <label class="weather-hourly-label" halign={Gtk.Align.START} label="Next 5 hours" />
         <box class="weather-hourly" homogeneous>
           <For each={hourly}>
             {(h) => {
