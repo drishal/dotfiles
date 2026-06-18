@@ -241,6 +241,8 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
 .launcher:hover { color: #{$base0C}; }
 
 // ── workspaces (numbers) ────────────────────────────────────────────────
+//  Animated pill switcher — expand + lift on hover, smooth fill on focus
+//  change. Easing inspired by material motion (spring-out cubic-bezier).
 .workspaces { margin: 0 4px; }
 .ws {
   font-size: 13px;
@@ -248,14 +250,29 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
   min-width: 22px;
   margin: 4px 2px;
   border-radius: 8px;
-  transition: all 150ms ease;
+  transition: min-width 250ms cubic-bezier(0.2, 0.9, 0.3, 1),
+              transform 250ms cubic-bezier(0.2, 0.9, 0.3, 1),
+              background-color 180ms ease,
+              color 180ms ease;
 }
-.ws:hover     { color: #{$ink}; }
+.ws:hover {
+  color: #{$ink};
+  min-width: 30px;
+  background-color: #{$base01};
+  transform: scale(1.12);
+}
 .ws.ws-busy   { color: #{$ink-dim}; }
+.ws.ws-busy:hover {
+  color: #{$ink};
+  background-color: #{$base01};
+}
 .ws.ws-active {
   color: #{$accent-ink};
   background-color: #{$accent};
   min-width: 30px;
+}
+.ws.ws-active:hover {
+  transform: scale(1.06);
 }
 
 // ── app name ────────────────────────────────────────────────────────────
