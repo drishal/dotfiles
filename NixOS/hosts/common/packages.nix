@@ -422,18 +422,20 @@
     enableDefaultPackages = true;
     # fontDir.enable = true;
     packages = with pkgs; [
+      maple-mono.NF
+      maple-mono.Normal-NF
+      maple-mono.variable
+      nerd-fonts.fantasque-sans-mono
+      nerd-fonts.monaspace
+      nerd-fonts.noto
+      nerd-fonts.symbols-only
+      nerd-fonts.recursive-mono
       noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-lgc-plus
-      nerd-fonts.fantasque-sans-mono
-      nerd-fonts.noto
-      googlesans-code
       roboto
       roboto-serif
-      nerd-fonts.symbols-only
-      maple-mono.Normal-NF
-      maple-mono.variable
-      maple-mono.NF
+      googlesans-code
     ];
   };
   # command not found and nix-index setup:

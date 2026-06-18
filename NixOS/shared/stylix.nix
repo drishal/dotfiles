@@ -39,7 +39,7 @@
 
       monospace = {
         # name = "FiraCode Nerd Font Med";
-        name = "Maple Mono NF Medium";
+        name = "RecMonoSmCasual Nerd Font";
         # name = "Monaspace Neon NF";
       };
 

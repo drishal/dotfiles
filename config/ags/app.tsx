@@ -31,8 +31,34 @@ function stylixCss(): string {
   return fallbackTheme
 }
 
+/**
+ * Stylix font bridge.
+ *
+ * GTK CSS has no font variables, so the SCSS leaves `AGS_FONT_SANS` /
+ * `AGS_FONT_MONO` sentinels in place of font-family lists (see _colors.scss).
+ * Home Manager writes the live Stylix families to ~/.config/ags-fonts.json
+ * (see ags.nix); we swap the sentinels for them here. Missing file (running
+ * straight from the repo) → bundled defaults.
+ */
+function applyFonts(css: string): string {
+  let sans = '"Google Sans", "Maple Mono NF", sans-serif'
+  let mono = '"Maple Mono NF", monospace'
+  const path = `${GLib.get_user_config_dir()}/ags-fonts.json`
+  try {
+    const [ok, bytes] = GLib.file_get_contents(path)
+    if (ok && bytes && bytes.length > 0) {
+      const fonts = JSON.parse(new TextDecoder().decode(bytes))
+      if (fonts.sans) sans = fonts.sans
+      if (fonts.mono) mono = fonts.mono
+    }
+  } catch (_e) {
+    // fall through to bundled defaults
+  }
+  return css.replaceAll("AGS_FONT_SANS", sans).replaceAll("AGS_FONT_MONO", mono)
+}
+
 app.start({
-  css: `${stylixCss()}\n${style}`,
+  css: applyFonts(`${stylixCss()}\n${style}`),
   main() {
     // Start weather polling (Open-Meteo, 15-min interval)
     startWeatherService()

@@ -15,7 +15,7 @@ $radius-sm: 14px;
 $gap:       10px;
 
 * {
-  font-family: "Google Sans", "Maple Mono NF", sans-serif;
+  font-family: #{$font-sans};
 }
 
 // reset interactive widgets (gtk4 gives buttons/scales chrome by default)
@@ -79,7 +79,7 @@ window { background-color: transparent; }
 }
 
 .hbtn {
-  font-family: "Maple Mono NF", monospace;
+  font-family: #{$font-mono};
   font-size: 16px;
   min-width: 38px;
   min-height: 38px;
@@ -93,7 +93,7 @@ window { background-color: transparent; }
 .header-actions { margin-left: 8px; }
 
 .iconbtn {
-  font-family: "Maple Mono NF", monospace;
+  font-family: #{$font-mono};
   font-size: 15px;
   min-width: 30px;
   min-height: 30px;
@@ -127,7 +127,7 @@ window { background-color: transparent; }
 .tile:hover { background-color: #{$card-hi}; }
 
 .tile-glyph {
-  font-family: "Maple Mono NF", monospace;
+  font-family: #{$font-mono};
   font-size: 20px;
   margin-right: 12px;
   color: #{$ink};
@@ -135,7 +135,7 @@ window { background-color: transparent; }
 .tile-title { font-size: 13px; font-weight: 600; color: #{$ink}; }
 .tile-sub   { font-size: 11px; color: #{$ink-dim}; }
 .tile-chev {
-  font-family: "Maple Mono NF", monospace;
+  font-family: #{$font-mono};
   font-size: 16px;
   margin-left: 6px;
   color: #{$ink-dim};
@@ -154,7 +154,7 @@ window { background-color: transparent; }
 .sliderrow { padding: 2px 0; margin: 4px 0; }
 
 .slider-knob {
-  font-family: "Maple Mono NF", monospace;
+  font-family: #{$font-mono};
   font-size: 17px;
   min-width: 40px;
   min-height: 40px;
@@ -168,7 +168,7 @@ window { background-color: transparent; }
 .slider-knob.bri   { color: #{$base0A}; }
 
 .slider-arrow {
-  font-family: "Maple Mono NF", monospace;
+  font-family: #{$font-mono};
   font-size: 16px;
   min-width: 40px;
   min-height: 40px;
@@ -220,7 +220,7 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
 .bar {
   background-color: #{$island};
   color: #{$ink};
-  font-family: "Maple Mono NF", monospace;
+  font-family: #{$font-mono};
   font-size: 13px;
   border: 1px solid #{$base02};
   border-radius: 16px;
@@ -348,7 +348,7 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
   transition: all 160ms ease;
 }
 .pm-btn:hover { background-color: #{$accent}; color: #{$accent-ink}; }
-.pm-icon  { font-family: "Maple Mono NF", monospace; font-size: 26px; color: #{$accent}; }
+.pm-icon  { font-family: #{$font-mono}; font-size: 26px; color: #{$accent}; }
 .pm-btn:hover .pm-icon { color: #{$accent-ink}; }
 .pm-label { font-size: 12px; margin-top: 8px; }
 
@@ -394,7 +394,7 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
 }
 
 .ncard-glyph {
-  font-family: "Maple Mono NF", monospace;
+  font-family: #{$font-mono};
   font-size: 15px;
   color: #{$accent};
   min-width: 34px;
@@ -408,7 +408,7 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
 .ncard-title { font-size: 13px; font-weight: 600; color: #{$ink}; }
 .ncard-time  { font-size: 11px; color: #{$ink-dim}; margin-left: 8px; }
 .ncard-body  { font-size: 12px; color: #{$ink-dim}; margin-top: 1px; }
-.ncard-close { color: #{$ink-dim}; font-family: "Maple Mono NF", monospace; padding: 0 4px; margin-left: 4px; }
+.ncard-close { color: #{$ink-dim}; font-family: #{$font-mono}; padding: 0 4px; margin-left: 4px; }
 .ncard-close:hover { color: #{$base08}; }
 
 .ncard.critical { border: 1px solid #{$base08}; }
@@ -424,7 +424,7 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
 .ncard-action:hover { background-color: #{$accent}; color: #{$accent-ink}; }
 
 .nempty-text { color: #{$ink-dim}; font-size: 13px; }
-.nempty-icon { font-family: "Maple Mono NF", monospace; font-size: 34px; color: #{$base03}; }
+.nempty-icon { font-family: #{$font-mono}; font-size: 34px; color: #{$base03}; }
 
 // ── footer: DND switch + Clear ────────────────────────────────────────────
 .nfooter { margin-top: 8px; padding: 10px 6px 2px 6px; }
@@ -468,7 +468,7 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
 
 .cal-nav { margin-bottom: 8px; }
 .cal-arrow {
-  font-family: "Maple Mono NF", monospace;
+  font-family: #{$font-mono};
   font-size: 18px;
   color: #{$ink-dim};
   min-width: 30px;
@@ -518,7 +518,7 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
 .weather-current { margin-bottom: 10px; }
 
 .weather-icon {
-  font-family: "Maple Mono NF", monospace;
+  font-family: #{$font-mono};
   font-size: 32px;
   color: #{$accent};
   margin-right: 12px;
@@ -561,7 +561,7 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
 }
 
 .weather-metric-icon {
-  font-family: "Maple Mono NF", monospace;
+  font-family: #{$font-mono};
   font-size: 14px;
   color: #{$ink-dim};
   margin-bottom: 2px;
@@ -599,7 +599,7 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
 }
 
 .weather-hour-icon {
-  font-family: "Maple Mono NF", monospace;
+  font-family: #{$font-mono};
   font-size: 16px;
   color: #{$accent};
   margin: 2px 0;
@@ -618,7 +618,7 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
 
 // ── loading / error states ──
 .weather-loading {
-  font-family: "Maple Mono NF", monospace;
+  font-family: #{$font-mono};
   font-size: 24px;
   color: #{$ink-dim};
 }

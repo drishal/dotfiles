@@ -38,6 +38,20 @@ let
     @define-color base0E #${c.base0E};
     @define-color base0F #${c.base0F};
   '';
+
+  # Stylix → AGS font bridge.
+  #
+  # GTK CSS has no font variables, so the SCSS leaves `AGS_FONT_SANS` /
+  # `AGS_FONT_MONO` sentinels (see style/_colors.scss). app.tsx reads this file
+  # at startup and swaps the sentinels for the live Stylix families, so picking
+  # a new font in shared/stylix.nix re-themes the shell on the next
+  # `ags quit; ags run` after a Home Manager switch.
+  fontSans = config.stylix.fonts.sansSerif.name;
+  fontMono = config.stylix.fonts.monospace.name;
+  fontsJson = builtins.toJSON {
+    sans = ''"${fontSans}", "${fontMono}", sans-serif'';
+    mono = ''"${fontMono}", monospace'';
+  };
 in
 {
   imports = [ inputs.ags.homeManagerModules.default ];
@@ -75,4 +89,5 @@ in
   };
 
   xdg.configFile."ags-stylix.css".text = stylixCss;
+  xdg.configFile."ags-fonts.json".text = fontsJson;
 }
