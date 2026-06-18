@@ -43,38 +43,74 @@ function Workspaces({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
     return onThis.sort((a, b) => a - b)
   })
 
+  // Index of the focused workspace within the visible slots — drives the pill.
+  // The pill travels `index × --ws-pitch` (see main.scss), so the pitch is a
+  // single source of truth in CSS and stays HiDPI-correct: no hardcoded pixel
+  // offset in the code.
+  const activeIdx = createComputed([slots, focused], (ids, fws) => {
+    if (!fws || fws.id <= 0) return -1
+    return ids.indexOf(fws.id)
+  })
+  const pillStyle = activeIdx((i) =>
+    i >= 0
+      ? `.ws-slider { transform: translateX(calc(${i} * var(--ws-pitch))); }`
+      : `.ws-slider { opacity: 0; }`,
+  )
+
   return (
-    <box
-      class="workspaces"
-      $={(self) => {
-        const scroll = new Gtk.EventControllerScroll({
-          flags: Gtk.EventControllerScrollFlags.VERTICAL,
-        })
-        scroll.connect("scroll", (_s, _dx, dy) => {
-          sh(`hyprctl dispatch 'hl.dsp.focus({ workspace = "${dy > 0 ? "e+1" : "e-1"}" })'`)
-          return true
-        })
-        self.add_controller(scroll)
-      }}
-    >
-      <For each={slots}>
-        {(id: number) => {
-          const occupied = workspaces((wss) =>
-            wss.some((w) => w.id === id && (w.monitor as any).name === connector && w.clients.length > 0),
-          )
-          const cls = createComputed([focused, occupied], (f, occ) => {
-            if (f?.id === id) return "ws ws-active"
-            if (occ) return "ws ws-busy"
-            return "ws"
+    <overlay class="ws-overlay">
+      {/* bottom layer: a track of invisible spacers (sizes the stack) with the
+          sliding accent pill painted just above them. The pill therefore sits
+          below the number labels rendered in the top layer, so it glides under
+          the numbers like a tab indicator. */}
+      <overlay>
+        <box class="ws-track">
+          <For each={slots}>
+            {(id: number) => <box class="ws" />}
+          </For>
+        </box>
+        <box
+          $type="overlay"
+          class="ws-slider"
+          halign={Gtk.Align.START}
+          valign={Gtk.Align.CENTER}
+          css={pillStyle}
+        />
+      </overlay>
+      {/* top layer: the real workspace buttons — labels paint over the pill */}
+      <box
+        $type="overlay"
+        class="workspaces"
+        halign={Gtk.Align.START}
+        $={(self) => {
+          const scroll = new Gtk.EventControllerScroll({
+            flags: Gtk.EventControllerScrollFlags.VERTICAL,
           })
-          return (
-            <button class={cls} onClicked={() => focusWs(id)}>
-              <label label={`${id}`} />
-            </button>
-          )
+          scroll.connect("scroll", (_s, _dx, dy) => {
+            sh(`hyprctl dispatch 'hl.dsp.focus({ workspace = "${dy > 0 ? "e+1" : "e-1"}" })'`)
+            return true
+          })
+          self.add_controller(scroll)
         }}
-      </For>
-    </box>
+      >
+        <For each={slots}>
+          {(id: number) => {
+            const isActive = createComputed([focused], (f) => f?.id === id)
+            const occupied = workspaces((wss) =>
+              wss.some((w) => w.id === id && (w.monitor as any).name === connector && w.clients.length > 0),
+            )
+            const cls = createComputed([isActive, occupied], (a, occ) =>
+              a ? "ws ws-active" : occ ? "ws ws-busy" : "ws",
+            )
+            return (
+              <button class={cls} onClicked={() => focusWs(id)}>
+                <label label={`${id}`} />
+              </button>
+            )
+          }}
+        </For>
+      </box>
+    </overlay>
   )
 }
 
