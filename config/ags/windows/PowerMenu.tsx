@@ -7,7 +7,7 @@ type Action = { icon: string; label: string; cmd: string }
 const actions: Action[] = [
   { icon: "󰍁", label: "Lock", cmd: "loginctl lock-session" },
   { icon: "󰒲", label: "Suspend", cmd: "systemctl suspend" },
-  { icon: "󰍃", label: "Logout", cmd: "hyprctl dispatch exit" },
+  { icon: "󰍃", label: "Logout", cmd: "hyprctl dispatch 'hl.dsp.exit()'" },
   { icon: "󰜉", label: "Reboot", cmd: "systemctl reboot" },
   { icon: "󰐥", label: "Shutdown", cmd: "systemctl poweroff" },
 ]

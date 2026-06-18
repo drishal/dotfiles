@@ -22,20 +22,25 @@ function Launcher() {
   )
 }
 
-function Workspaces() {
+function Workspaces({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
   const hypr = AstalHyprland.get_default()
   const focused = createBinding(hypr, "focusedWorkspace")
   const workspaces = createBinding(hypr, "workspaces")
 
-  const focusWs = (id: number) => sh(`hyprctl dispatch workspace ${id}`)
+  const connector = gdkmonitor.get_connector()
+  const focusWs = (id: number) => sh(`hyprctl dispatch 'hl.dsp.focus({ workspace = ${id} })'`)
 
-  // Real (non-special) workspaces, but always keep 1..5 so the bar never
-  // collapses on a fresh session.
-  const slots = createComputed([workspaces], (wss) => {
-    const ids = new Set<number>()
-    for (let i = 1; i <= 5; i++) ids.add(i)
-    for (const ws of wss) if (ws.id > 0) ids.add(ws.id)
-    return [...ids].sort((a, b) => a - b)
+  // Per-monitor workspaces: only show workspaces that have clients on THIS
+  // monitor, plus the focused one (even if empty).
+  const slots = createComputed([workspaces, focused], (wss, fws) => {
+    const onThis = wss
+      .filter((ws) => ws.id > 0 && (ws.monitor as any).name === connector && ws.clients.length > 0)
+      .map((ws) => ws.id)
+    // Always include the focused workspace
+    if (fws && fws.id > 0 && (fws.monitor as any).name === connector && !onThis.includes(fws.id)) {
+      onThis.push(fws.id)
+    }
+    return onThis.sort((a, b) => a - b)
   })
 
   return (
@@ -46,7 +51,7 @@ function Workspaces() {
           flags: Gtk.EventControllerScrollFlags.VERTICAL,
         })
         scroll.connect("scroll", (_s, _dx, dy) => {
-          sh(`hyprctl dispatch workspace ${dy > 0 ? "e+1" : "e-1"}`)
+          sh(`hyprctl dispatch 'hl.dsp.focus({ workspace = "${dy > 0 ? "e+1" : "e-1"}" })'`)
           return true
         })
         self.add_controller(scroll)
@@ -55,7 +60,7 @@ function Workspaces() {
       <For each={slots}>
         {(id: number) => {
           const occupied = workspaces((wss) =>
-            wss.some((w) => w.id === id && w.clients.length > 0),
+            wss.some((w) => w.id === id && (w.monitor as any).name === connector && w.clients.length > 0),
           )
           const cls = createComputed([focused, occupied], (f, occ) => {
             if (f?.id === id) return "ws ws-active"
@@ -210,7 +215,7 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
       <centerbox class="bar">
         <box $type="start" halign={Gtk.Align.START} valign={Gtk.Align.CENTER}>
           <Launcher />
-          <Workspaces />
+          <Workspaces gdkmonitor={gdkmonitor} />
           <AppName />
         </box>
 
