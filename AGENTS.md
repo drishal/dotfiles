@@ -101,7 +101,7 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 ## Module organization conventions
 
 - **`hosts/<host>/default.nix` is the orchestrator** — it imports `../common`, then opt-in modules (memory, storage, cpu/*, scheduler/*, graphics/*), then `./hardware-configuration.nix`, then per-host `packages.nix` / extras.
-- **`home/common/default.nix` is the orchestrator** — imports individual files from `core/`, `desktop/`, `editors/`, `terminals/`, plus `shells/default.nix`, `browsers/betterfox.nix`, and both stylix modules. Does NOT import whole `core/`, `browsers/`, or `media/` directories.
+- **`home/common/default.nix` is the orchestrator** — imports individual files from `core/`, `desktop/`, `editors/`, `terminals/`, plus `shells/default.nix`, `browsers/betterfox.nix`, `media/mpv.nix`, and both stylix modules. Does NOT import whole `core/`, `browsers/`, or `media/` directories.
 - **Per-host tunings are opt-in** — `memory.nix`, `storage.nix`, `cpu/*-pstate.nix`, `scheduler/*.nix` are NOT imported by `common/default.nix`. Each host's `default.nix` picks what applies. Lets `nixos` (template) stay minimal.
 - **Per-host home overrides** live in `home/<host>/default.nix` and stack on top via flake module composition.
 

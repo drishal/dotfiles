@@ -239,7 +239,6 @@
     mission-center
     mosh
     mpv
-    mpvScripts.mpris
     ncdu
     ncurses
     nicotine-plus

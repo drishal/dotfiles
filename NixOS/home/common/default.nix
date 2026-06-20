@@ -21,6 +21,7 @@
     ./desktop/hermes-app.nix
 
     ./browsers/betterfox.nix
+    ./media/mpv.nix
 
     ../../shared/stylix.nix
     ./stylix.nix

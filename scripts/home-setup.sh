@@ -43,8 +43,7 @@ ln -sf ~/dotfiles/config/leftwm/onedark/ /home/drishal/.config/leftwm/themes/cur
 mkdir -p ~/.config/nvim/
 # ln -sf ~/dotfiles/config/nvim/pre-init.vim ~/.config/nvim/init.vim
 
-# mpv
-ln -sf ~/dotfiles/config/mpv/mpv.conf ~/.config/mpv/mpv.conf
+# mpv — now managed by Home Manager (home/common/media/mpv.nix)
 
 
 # tangle

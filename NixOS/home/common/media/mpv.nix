@@ -1,57 +1,52 @@
+{ pkgs, ... }:
 {
-  config,
-  inputs,
-  pkgs,
-  ...
-}:
-{
-  programs = {
-    mpv = {
-      enable = true;
-      config = {
-        # --- Renderer: libplacebo-based gpu-next on native Vulkan/RADV ---
-        vo = "gpu-next";
-        gpu-api = "vulkan";
-        gpu-context = "waylandvk";
+  programs.mpv = {
+    enable = true;
 
-        # HW decode: vaapi is the reliable native path on RDNA2 (VCN3).
-        # (hwdec=vulkan also works but needs RADV_PERFTEST=video_decode set,
-        #  since RADV Vulkan-Video is off-by-default until RDNA3.)
-        hwdec = "vaapi";
+    # Expose mpv on the MPRIS D-Bus interface so the ags media-player indicator
+    # (AstalMpris) picks it up like any other player. HM symlinks the script
+    # into mpv's scripts dir, so no manual `script=` path is needed.
+    scripts = [ pkgs.mpvScripts.mpris ];
 
-        # High-quality scaling profile (ewa_lanczossharp + HDR tone-mapping).
-        # Trivial load for a 6800 XT.
-        profile = "high-quality";
-        cscale = "ewa_lanczos"; # better chroma upscaling
-        dscale = "mitchell"; # clean downscaling for 1440p->display
-        dither-depth = "auto";
-        deband = true; # kill gradient banding
+    config = {
+      # ---- Video renderer ----
+      vo = "gpu-next";
+      gpu-api = "vulkan";
+      hwdec = "auto-safe";
 
-        # HDR passthrough to display (gpu-next handles tone-mapping otherwise)
-        target-colorspace-hint = true;
+      # ---- Output / dither ----
+      # XV272K V5 is 10-bit; let mpv pick the dither depth.
+      dither-depth = "auto";
 
-        # Smooth presentation
-        video-sync = "display-resample";
-        # interpolation = true;  # enable for motion smoothing (adds slight blur)
+      # ---- HDR / color management ----
+      # Hints Hyprland to switch the monitor to HDR for HDR content.
+      target-colorspace-hint = true;
+      # DisplayHDR 400 panel — real peak brightness, not the spec sheet.
+      target-peak = 400;
+      # IPS contrast is ~1000:1.
+      target-contrast = 1000;
 
-        # Generous demuxer cache for network/YouTube playback
-        cache = true;
-        demuxer-max-bytes = "150MiB";
-        demuxer-max-back-bytes = "75MiB";
+      # ---- Scalers (RX 6800 handles these easily) ----
+      scale = "ewa_lanczossharp";
+      cscale = "ewa_lanczossharp";
+      dscale = "mitchell";
+      scale-antiring = 0.7;
+      cscale-antiring = 0.7;
 
-        # --- Audio ---
-        ao = "pipewire";
-        volume = 70;
-        volume-max = 130;
+      # ---- Debanding ----
+      # Off unless banding shows; modern content rarely needs it.
+      deband = false;
 
-        # --- Subtitles ---
-        sub-auto = "fuzzy";
-        slang = "en";
+      # ---- YouTube ----
+      ytdl-format = "bestvideo[height<=?1440]+bestaudio/best";
+      script-opts = "ytdl_hook-ytdl_path=yt-dlp";
+      ytdl-raw-options = "cookies=/home/drishal/Downloads/cookies.txt";
 
-        # --- youtube-dl / yt-dlp ---
-        ytdl-format = "bestvideo[height<=?1440]+bestaudio/best";
-        #script-opts = ytdl_hook-ytdl_path="yt-dlp";
-      };
+      # ---- Audio / misc ----
+      volume = 50;
+      audio-display = "no";
+      keep-open = true;
+      save-position-on-quit = true;
     };
   };
 }
