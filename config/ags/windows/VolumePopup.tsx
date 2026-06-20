@@ -86,9 +86,9 @@ export default function VolumePopup({ gdkmonitor }: { gdkmonitor: Gdk.Monitor })
   const icon = createComputed([mute, vol], (m, v) => {
     if (m) return "󰖁"
     const p = Math.round(v * 100)
-    if (p === 0) return "󰖀"
+    if (p === 0) return "󰝟"
     if (p <= 33) return "󰕿"
-    if (p <= 66) return "󰗑"
+    if (p <= 66) return "󰖀"
     return "󰕾"
   })
 
