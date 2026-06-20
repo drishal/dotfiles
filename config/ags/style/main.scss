@@ -704,3 +704,63 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
   transition: all 150ms ease;
 }
 .Notification .actions button:hover { background-color: #{$accent}; color: #{$accent-ink}; }
+
+// ═════════════════════════════════════════════════════════════════════════
+//  volume popup — bottom-center toast
+// ═════════════════════════════════════════════════════════════════════════
+.ags-volpopup {
+  background-color: transparent;
+}
+
+.volpopup {
+  background-color: #{$base00};
+  border: 1px solid #{$base02};
+  border-radius: 16px;
+  padding: 10px 18px;
+  margin: 0 0 64px 0;
+  color: #{$ink};
+  transition: opacity 180ms ease;
+}
+
+.volpopup-inner {
+  min-width: 280px;
+}
+
+.volpopup-icon {
+  font-family: #{$font-mono};
+  font-size: 22px;
+  color: #{$accent};
+}
+
+.volpopup-slider { min-width: 180px; }
+.volpopup-slider trough {
+  min-height: 8px;
+  border-radius: 999px;
+  background-color: #{$base02};
+}
+.volpopup-slider highlight {
+  border-radius: 999px;
+  background-color: #{$accent};
+}
+.volpopup-slider slider {
+  min-width: 16px;
+  min-height: 16px;
+  border-radius: 999px;
+  background-color: #{$base07};
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.volpopup-text {
+  font-family: #{$font-mono};
+  font-size: 14px;
+  font-weight: 600;
+  color: #{$ink};
+  min-width: 42px;
+}
+
+.volpopup-muted .volpopup-icon {
+  color: #{$base08};
+}
+.volpopup-muted .volpopup-text {
+  color: #{$base08};
+}

@@ -9,6 +9,7 @@ import Dashboard from "./windows/Dashboard"
 import NotificationCenter from "./windows/NotificationCenter"
 import PowerMenu from "./windows/PowerMenu"
 import NotificationPopups from "./windows/NotificationPopups"
+import VolumePopup from "./windows/VolumePopup"
 import { startWeatherService } from "./lib/weather"
 
 /**
@@ -76,6 +77,7 @@ app.start({
             <NotificationCenter gdkmonitor={monitor} />
             <PowerMenu gdkmonitor={monitor} />
             <NotificationPopups gdkmonitor={monitor} />
+            <VolumePopup gdkmonitor={monitor} />
           </This>
         )}
       </For>
