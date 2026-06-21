@@ -19,13 +19,9 @@ let
   acerPerfMode = "1920x1080@320";
   lgMode = "1920x1080@143.98";
 
-  # ─── Color/HDR flags (hyprlang form, for live `hyprctl keyword`) ─────────
-  acer4kFlags = "bitdepth, 10, cm, srgb";
-  acerPerfFlags = "bitdepth, 8, cm, srgb";
-  # HDR override flags applied transiently by the Super+Shift+H toggle. Uses
-  # the monitor's EDID HDR metadata; sdrbrightness lifts SDR/desktop content so
-  # it isn't dim in HDR mode (DisplayHDR 400 panel).
-  acerHdrExtra = "bitdepth, 10, cm, hdredid, sdrbrightness, 1.2, sdrsaturation, 1.0";
+  # HDR override params (lua, for `hyprctl eval hl.monitor`). EDID HDR metadata;
+  # sdrbrightness lifts SDR/desktop content so it isn't dim (DisplayHDR 400).
+  acerHdrExtra = ''bitdepth = 10, cm = "hdredid", sdrbrightness = 1.2, sdrsaturation = 1.0'';
 
   # ─── Generated monitor config ───────────────────────────────────────────
   # Under the Lua config the persisted layout is a Lua fragment dofile()'d by
@@ -35,8 +31,7 @@ let
   # ─── Profile applier ───────────────────────────────────────────────────
   # Writes the active monitor layout to a dofile()'d Lua fragment so hyprctl
   # reloads (home-manager switch, manual reloads, etc.) don't clobber it, then
-  # applies it immediately via `hyprctl keyword` (runtime IPC, still hyprlang)
-  # for the live session.
+  # applies it immediately via `hyprctl eval` for the live session.
   applyProfile = pkgs.writeShellScript "hypr-apply-profile-impl" ''
     #!/usr/bin/env bash
     set -eu
@@ -48,14 +43,10 @@ let
 
     case "$profile" in
       perf)
-        acer_live="${acerMonitor}, ${acerPerfMode}, 0x0, 1, ${acerPerfFlags}"
-        lg_live="${lgMonitor}, ${lgMode}, 1920x0, 1, transform, 1"
         acer_lua='hl.monitor({ output = "${acerMonitor}", mode = "${acerPerfMode}", position = "0x0", scale = 1, bitdepth = 8, cm = "srgb" })'
         lg_lua='hl.monitor({ output = "${lgMonitor}", mode = "${lgMode}", position = "1920x0", scale = 1, transform = 1 })'
         ;;
       4k|*)
-        acer_live="${acerMonitor}, ${acer4kMode}, 0x0, 1.5, ${acer4kFlags}"
-        lg_live="${lgMonitor}, ${lgMode}, 2560x0, 1, transform, 1"
         acer_lua='hl.monitor({ output = "${acerMonitor}", mode = "${acer4kMode}", position = "0x0", scale = 1.5, bitdepth = 10, cm = "srgb" })'
         lg_lua='hl.monitor({ output = "${lgMonitor}", mode = "${lgMode}", position = "2560x0", scale = 1, transform = 1 })'
         profile="4k"
@@ -65,7 +56,9 @@ let
     mkdir -p "$(dirname ${monitorLuaFile})"
     printf '%s\n%s\n' "$acer_lua" "$lg_lua" > ${monitorLuaFile}
 
-    ${hyprPackage}/bin/hyprctl --batch "keyword monitor $acer_live ; keyword monitor $lg_live" >/dev/null
+    # Lua-parser Hyprland rejects `hyprctl keyword`; apply live via `eval`.
+    ${hyprPackage}/bin/hyprctl eval "$acer_lua" >/dev/null
+    ${hyprPackage}/bin/hyprctl eval "$lg_lua" >/dev/null
     sleep 0.3
   '';
 
@@ -74,12 +67,13 @@ let
     #!/usr/bin/env bash
     set -eu
 
-    current_width="$(${hyprPackage}/bin/hyprctl -j monitors \
+    height="$(${hyprPackage}/bin/hyprctl -j monitors \
       | ${pkgs.jq}/bin/jq -r \
         --arg desc "${acerDesc}" \
-        '.[] | select(.description == $desc) | .width')"
+        '.[] | select(.description == $desc) | .height')"
 
-    if [[ "$current_width" == "3840" ]]; then
+    # Above 1080p means we're in a 4K profile → drop to perf; otherwise go up.
+    if [[ "$height" =~ ^[0-9]+$ ]] && (( height > 1080 )); then
       target="perf"
       msg="Acer → 1080p @ 320Hz — toggle DFR On in OSD now"
     else
@@ -120,11 +114,11 @@ let
     else
       # Currently SDR → enable HDR on the active mode.
       if [[ "$width" == "3840" ]]; then
-        line="${acerMonitor}, ${acer4kMode}, 0x0, 1.5, ${acerHdrExtra}"
+        line='hl.monitor({ output = "${acerMonitor}", mode = "${acer4kMode}", position = "0x0", scale = 1.5, ${acerHdrExtra} })'
       else
-        line="${acerMonitor}, ${acerPerfMode}, 0x0, 1, ${acerHdrExtra}"
+        line='hl.monitor({ output = "${acerMonitor}", mode = "${acerPerfMode}", position = "0x0", scale = 1, ${acerHdrExtra} })'
       fi
-      ${hyprPackage}/bin/hyprctl keyword monitor "$line" >/dev/null
+      ${hyprPackage}/bin/hyprctl eval "$line" >/dev/null
       touch "$state"
       ${pkgs.libnotify}/bin/notify-send -t 3000 "Display" "HDR on — cm,hdredid (SDR boost 1.2)" || true
     fi
