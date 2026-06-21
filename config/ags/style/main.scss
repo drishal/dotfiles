@@ -208,6 +208,9 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
   border-radius: 12px;
   background-color: #{$base02};
   border: 1px solid #{$base02};
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 .player.playing .player-art { border: 1px solid #{$accent}; }
 .player-title  { font-size: 13px; font-weight: 600; color: #{$ink}; }

@@ -5,6 +5,7 @@ import AstalWp from "gi://AstalWp"
 import AstalBluetooth from "gi://AstalBluetooth"
 import AstalNotifd from "gi://AstalNotifd"
 import AstalMpris from "gi://AstalMpris"
+import GLib from "gi://GLib"
 
 import { createBrightness } from "../lib/brightness"
 import { airplaneOn, toggleAirplane } from "../lib/radios"
@@ -170,6 +171,27 @@ function Sliders() {
   )
 }
 
+// mpv-mpris exposes embedded cover art as a `data:image/...;base64,` URI, which
+// AstalMpris.coverArt can't cache (no path → copy_async fails) so the box ends
+// up blank. Decode such URIs to a temp file ourselves; defer to coverArt for
+// players that already expose a normal file://‌ / http url (browsers, Spotify).
+function coverPath(p: AstalMpris.Player): Accessor<string> {
+  const fileUri = (path: string) => (path.includes("://") ? path : `file://${path}`)
+  return createComputed(
+    [createBinding(p, "coverArt"), createBinding(p, "artUrl")],
+    (cover, url) => {
+      if (cover) return fileUri(cover)
+      if (!url?.startsWith("data:")) return ""
+      const comma = url.indexOf(",")
+      if (comma === -1) return ""
+      const path = `/tmp/ags-cover-${GLib.compute_checksum_for_string(GLib.ChecksumType.SHA1, url, -1)}`
+      if (!GLib.file_test(path, GLib.FileTest.EXISTS))
+        GLib.file_set_contents(path, GLib.base64_decode(url.slice(comma + 1)))
+      return fileUri(path)
+    },
+  )
+}
+
 // ── media player (mpris) ────────────────────────────────────────────────────
 function Player() {
   const mpris = AstalMpris.get_default()
@@ -193,7 +215,7 @@ function Player() {
             <box
               class="player-art"
               valign={Gtk.Align.CENTER}
-              css={createBinding(p, "coverArt")((art) =>
+              css={coverPath(p)((art) =>
                 art ? `background-image: url("${art}");` : "",
               )}
             />
