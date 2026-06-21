@@ -226,11 +226,19 @@ let
       sleep 0.5
     done
 
+    restart_pid=""
     ${pkgs.socat}/bin/socat -U - UNIX-CONNECT:"$socket" | while IFS= read -r line; do
       # monitoradded events carry connector names, not EDID descriptions. Run the
       # detector for every added monitor; it verifies the Acer description itself.
       if [[ "$line" == monitoradded* ]]; then
         ${hyprAutoDetectProfile}/bin/hypr-auto-detect-profile &
+        # The re-add tears down the bar's layer-surfaces, so the active widget
+        # stack crashes. Restart it 3s later (debounced across rapid events),
+        # parented to Hyprland via hl.exec_cmd so it gets the compositor env and
+        # survives a watcher restart.
+        [[ -n "$restart_pid" ]] && kill "$restart_pid" 2>/dev/null || true
+        ( sleep 3; ${hyprPackage}/bin/hyprctl eval 'hl.exec_cmd("${hyprRestartWidgets}/bin/hypr-restart-widgets")' >/dev/null ) &
+        restart_pid=$!
       fi
     done
   '';
