@@ -298,7 +298,8 @@ in
         no_hardware_cursors = true;
       };
       render = {
-        cm_auto_hdr = 2;
+        # HDR is fully manual via Super+Shift+H — no per-app auto-switching
+        cm_auto_hdr = 0;
         direct_scanout = 1;
         send_content_type = true;
       };
