@@ -168,15 +168,15 @@ let
       exit 0
     fi
 
-    # Prefer the highest available resolution when the monitor advertises it.
-    # The Acer's DFR modes change the EDID; choosing from the current mode list
-    # avoids replaying a stale 1080p@320 profile while the OSD is in 4K mode.
-    if printf '%s\n' "$modes" | ${pkgs.gnugrep}/bin/grep -Eq '^3840x2160@'; then
-      target="4k"
-      msg="DFR Off detected → applying 4K @ 160Hz"
-    elif printf '%s\n' "$modes" | ${pkgs.gnugrep}/bin/grep -Eq '^1920x1080@(319|320)'; then
+    # In DFR mode the EDID advertises 1920x1080@320 *and still lists* the 4K
+    # modes, so the 320Hz mode's presence is the unambiguous DFR-On signal and
+    # must be checked first — otherwise a 4K match wins and strands the panel.
+    if printf '%s\n' "$modes" | ${pkgs.gnugrep}/bin/grep -Eq '^1920x1080@(319|320)'; then
       target="perf"
       msg="DFR On detected → applying 1080p @ 320Hz"
+    elif printf '%s\n' "$modes" | ${pkgs.gnugrep}/bin/grep -Eq '^3840x2160@'; then
+      target="4k"
+      msg="DFR Off detected → applying 4K @ 160Hz"
     else
       case "$preferred" in
         3840x2160*)
