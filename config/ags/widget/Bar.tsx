@@ -153,7 +153,7 @@ function Clock({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
   )
 }
 
-// ── right: battery · net · mem · cpu · control center · tray · power ──────
+// ── right: battery · net · mem · cpu · tray · quick settings · power ──────
 function Battery() {
   const bat = AstalBattery.get_default()
   const present = createBinding(bat, "isPresent")
@@ -161,8 +161,8 @@ function Battery() {
   const charging = createBinding(bat, "charging")
   return (
     <box class="ringmod battery" visible={present} spacing={4} tooltipText="Battery">
-      <label class="ring-icon bat" label={charging((c) => (c ? "󰂅" : "󰁹"))} />
-      <label class="ring-text bat" label={percent((p) => `${Math.round(p * 100)}%`)} />
+      <label class="ring-icon bat" valign={Gtk.Align.BASELINE} label={charging((c) => (c ? "󰂅" : "󰁹"))} />
+      <label class="ring-text bat" valign={Gtk.Align.BASELINE} label={percent((p) => `${Math.round(p * 100)}%`)} />
     </box>
   )
 }
@@ -172,8 +172,8 @@ function Net() {
   return (
     <button class="net" tooltipText="Network settings" onClicked={() => sh("nm-connection-editor")}>
       <box spacing={4}>
-        <label class="net-icon" label={icon} />
-        <label class="net-text" maxWidthChars={16} ellipsize={3} label={label} />
+        <label class="net-icon" valign={Gtk.Align.BASELINE} label={icon} />
+        <label class="net-text" valign={Gtk.Align.BASELINE} maxWidthChars={16} ellipsize={3} label={label} />
       </box>
     </button>
   )
@@ -183,15 +183,17 @@ function Stats() {
   return (
     <box spacing={4}>
       <box class="ringmod" spacing={4} tooltipText="Memory used">
-        <label class="ring-icon mem" label="" />
+        <label class="ring-icon mem" valign={Gtk.Align.BASELINE} label="" />
         <label
+          valign={Gtk.Align.BASELINE}
           class={memUsage((m) => (m.percent >= 90 ? "ring-text mem si-warn" : "ring-text mem"))}
           label={memUsage((m) => `${m.usedGb.toFixed(1)}G`)}
         />
       </box>
       <box class="ringmod" spacing={4} tooltipText="CPU usage">
-        <label class="ring-icon cpu" label="" />
+        <label class="ring-icon cpu" valign={Gtk.Align.BASELINE} label="" />
         <label
+          valign={Gtk.Align.BASELINE}
           class={cpuUsage((v) => (v >= 85 ? "ring-text cpu si-warn" : "ring-text cpu"))}
           label={cpuUsage((v) => `${v}%`)}
         />
@@ -265,14 +267,15 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
           <Sep />
           <Stats />
           <Sep />
+          <Tray />
+          <Sep />
           <button
             class="ctrl"
-            tooltipText="Control center"
+            tooltipText="Quick settings"
             onClicked={() => togglePopup("dashboard", gdkmonitor)}
           >
             <label label="󰘮" />
           </button>
-          <Tray />
           <button
             class="power"
             tooltipText="Power"

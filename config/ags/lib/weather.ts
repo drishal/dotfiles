@@ -1,5 +1,6 @@
 import { createState } from "ags"
 import GLib from "gi://GLib"
+import { clockTime } from "./clock"
 
 // ─── types ─────────────────────────────────────────────────────────────────
 export interface CurrentWeather {
@@ -173,12 +174,14 @@ function fetchWeather(): void {
       uvIndex: cur.uv_index ?? 0,
     }
 
-    // Find the current hour index in the hourly array
+    // Find the current hour index, then start one hour ahead — the current
+    // conditions already live in the block above, so the strip shows the next
+    // 5 hours rather than repeating "now".
     const nowIso = cur.time.slice(0, 13) // "2026-06-18T00"
     const startIdx = json.hourly.time.findIndex((t: string) =>
       t.startsWith(nowIso),
     )
-    const safeStart = Math.max(0, startIdx)
+    const safeStart = Math.max(0, startIdx) + 1
 
     const hourly: HourlyEntry[] = []
     for (
@@ -228,10 +231,11 @@ export function windDirToCompass(deg: number): string {
 }
 
 export function formatHour(iso: string): string {
-  try {
-    const dt = GLib.DateTime.new_from_iso8601(iso, null)
-    return dt.format("%H:%M") ?? ""
-  } catch {
-    return ""
-  }
+  // Open-Meteo hourly timestamps look like "2026-06-21T15:00" (no seconds, no
+  // timezone), which GLib.DateTime.new_from_iso8601 refuses to parse — pull the
+  // parts out by hand and build a local DateTime.
+  const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/)
+  if (!m) return ""
+  const dt = GLib.DateTime.new_local(+m[1], +m[2], +m[3], +m[4], +m[5], 0)
+  return dt ? clockTime(dt) : ""
 }

@@ -3,6 +3,7 @@ import { Astal, Gtk, Gdk } from "ags/gtk4"
 import { createBinding, createState, For, type Accessor } from "ags"
 import AstalNotifd from "gi://AstalNotifd"
 import GLib from "gi://GLib"
+import { clockTime } from "../lib/clock"
 import {
   weatherState,
   wmoInfo,
@@ -14,7 +15,7 @@ import {
 // ─── notification list ──────────────────────────────────────────────────────
 function timeLabel(unix: number): string {
   try {
-    return GLib.DateTime.new_from_unix_local(unix).format("%H:%M") ?? ""
+    return clockTime(GLib.DateTime.new_from_unix_local(unix))
   } catch (_e) {
     return ""
   }
@@ -184,12 +185,12 @@ function WeatherWidget() {
       <box class="weather-card" orientation={Gtk.Orientation.VERTICAL} visible={isReady}>
         {/* current conditions */}
         <box class="weather-current" valign={Gtk.Align.CENTER}>
-          <label class="weather-icon" label={icon} />
-          <box orientation={Gtk.Orientation.VERTICAL} hexpand>
+          <label class="weather-icon" valign={Gtk.Align.CENTER} label={icon} />
+          <box orientation={Gtk.Orientation.VERTICAL} valign={Gtk.Align.CENTER} hexpand>
             <label class="weather-temp" halign={Gtk.Align.START} label={temp} />
             <label class="weather-desc" halign={Gtk.Align.START} label={desc} />
           </box>
-          <box orientation={Gtk.Orientation.VERTICAL} halign={Gtk.Align.END}>
+          <box orientation={Gtk.Orientation.VERTICAL} valign={Gtk.Align.CENTER} halign={Gtk.Align.END}>
             <label class="weather-loc" label={loc} />
             <label class="weather-feels" label={feels} />
           </box>
@@ -220,7 +221,6 @@ function WeatherWidget() {
         </box>
 
         {/* hourly forecast */}
-        <label class="weather-hourly-label" halign={Gtk.Align.START} label="Next 5 hours" />
         <box class="weather-hourly" homogeneous>
           <For each={hourly}>
             {(h) => {
@@ -230,9 +230,14 @@ function WeatherWidget() {
                   <label class="weather-hour-time" halign={Gtk.Align.CENTER} label={formatHour(h.time)} />
                   <label class="weather-hour-icon" halign={Gtk.Align.CENTER} label={hwmo.icon} />
                   <label class="weather-hour-temp" halign={Gtk.Align.CENTER} label={`${h.temp}°`} />
-                  {h.precipProb > 0 && (
-                    <label class="weather-hour-precip" halign={Gtk.Align.CENTER} label={`${h.precipProb}%`} />
-                  )}
+                  <box
+                    class={`weather-hour-precip${h.precipProb > 0 ? "" : " dry"}`}
+                    halign={Gtk.Align.CENTER}
+                    spacing={3}
+                  >
+                    <label class="weather-hour-precip-icon" label="󰖗" />
+                    <label class="weather-hour-precip-val" label={`${h.precipProb}%`} />
+                  </box>
                 </box>
               )
             }}
@@ -276,7 +281,7 @@ function buildMonth(offset: number) {
   for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7))
 
   return {
-    title: base.toLocaleDateString("en-US", { month: "long", year: "numeric" }),
+    title: base.toLocaleDateString(undefined, { month: "long", year: "numeric" }),
     weeks,
   }
 }
@@ -290,8 +295,8 @@ function CalendarColumn() {
 
   return (
     <box class="calcol" orientation={Gtk.Orientation.VERTICAL}>
-      <label class="cal-weekday" halign={Gtk.Align.START} label={now.toLocaleDateString("en-US", { weekday: "long" })} />
-      <label class="cal-date" halign={Gtk.Align.START} label={now.toLocaleDateString("en-US", { day: "numeric", month: "long" })} />
+      <label class="cal-weekday" halign={Gtk.Align.START} label={now.toLocaleDateString(undefined, { weekday: "long" })} />
+      <label class="cal-date" halign={Gtk.Align.START} label={now.toLocaleDateString(undefined, { day: "numeric", month: "long" })} />
 
       <box class="cal-nav" valign={Gtk.Align.CENTER}>
         <button class="cal-arrow" onClicked={() => setOffset((o) => o - 1)}>

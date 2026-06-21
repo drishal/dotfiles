@@ -4,6 +4,7 @@ import { createState, For, onCleanup } from "ags"
 import AstalNotifd from "gi://AstalNotifd"
 import GLib from "gi://GLib"
 import Pango from "gi://Pango"
+import { clockTime } from "../lib/clock"
 
 // How long a transient popup lingers before sliding out of the corner. It stays
 // in the notification center either way — this only hides the popup. Critical
@@ -12,7 +13,7 @@ const TIMEOUT_MS = 5000
 
 function time(unix: number) {
   try {
-    return GLib.DateTime.new_from_unix_local(unix).format("%H:%M") ?? ""
+    return clockTime(GLib.DateTime.new_from_unix_local(unix))
   } catch (_e) {
     return ""
   }
