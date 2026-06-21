@@ -23,6 +23,7 @@ nix flake update
 ```
 
 First-time Home Manager setup:
+
 ```bash
 nix run --no-write-lock-file --impure github:nix-community/home-manager -- switch --flake ~/dotfiles
 ```
@@ -91,16 +92,16 @@ NixOS/
     stylix.nix               ← cross-cutting stylix theming (catppuccin-mocha base24)
 config/                      ← XDG-style app configs (non-HM-managed / legacy)
   hyprland/, waybar/, rofi/, fish/, kitty/, ghostty/, nvim/, etc.
+  suckless/                  ← dwm, st, dmenu, dwl, dwmblocks (compiled via sudo make install)
 emacs/                       ← Emacs config.org (tangled to ~/.config/emacs/init.el)
   config.org, snippets/, themes/, unicode-fonts/, packages/
-suckless/                    ← dwm, st, dmenu, dwl, dwmblocks (compiled via sudo make install)
 scripts/                     ← utility shell scripts
 wallpapers/                  ← wallpapers (used by stylix.image)
 ```
 
 ## Module organization conventions
 
-- **`hosts/<host>/default.nix` is the orchestrator** — it imports `../common`, then opt-in modules (memory, storage, cpu/*, scheduler/*, graphics/*), then `./hardware-configuration.nix`, then per-host `packages.nix` / extras.
+- **`hosts/<host>/default.nix` is the orchestrator** — it imports `../common`, then opt-in modules (memory, storage, cpu/_, scheduler/_, graphics/\*), then `./hardware-configuration.nix`, then per-host `packages.nix` / extras.
 - **`home/common/default.nix` is the orchestrator** — imports individual files from `core/`, `desktop/`, `editors/`, `terminals/`, plus `shells/default.nix`, `browsers/betterfox.nix`, `media/mpv.nix`, and both stylix modules. Does NOT import whole `core/`, `browsers/`, or `media/` directories.
 - **Per-host tunings are opt-in** — `memory.nix`, `storage.nix`, `cpu/*-pstate.nix`, `scheduler/*.nix` are NOT imported by `common/default.nix`. Each host's `default.nix` picks what applies. Lets `nixos` (template) stay minimal.
 - **Per-host home overrides** live in `home/<host>/default.nix` and stack on top via flake module composition.
@@ -125,45 +126,45 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 
 ## Flake inputs worth knowing
 
-| Input | Purpose |
-|-------|---------|
-| `nixpkgs` | `nixos-unstable` channel |
-| `nixpkgs-master` | Pinned specific nixpkgs commit for select packages |
-| `home-manager` | User environment management |
-| `hyprland` | Hyprland WM (built from source) |
-| `emacs-overlay` | Latest Emacs + packages |
-| `emacs-lsp-booster` | Faster LSP over JSON-RPC (for eglot) |
-| `stylix` | System-wide theming |
-| `nixvim` | Declarative Neovim |
-| `private-stuff` | Local private config (email, substituter token); must exist locally |
-| `chaotic` | Chaotic-Nyx overlay (cachix, kernel patches) |
-| `nur` | Nix User Repository |
-| `cachix` | Cachix CLI (for ad-hoc `cachix use` / `cachix push`) |
-| `nix-gaming` | Gaming-focused nix packages (gamescope, etc.) |
-| `betterfox` | Firefox user.js hardening |
-| `ghostty` | Ghostty terminal emulator (built from source) |
-| `dms` | Dank Material Shell (KDE Plasma widget) |
-| `umu` | Unified Middleware for Users (Windows game launcher) |
-| `zen-browser` | Zen Browser flake |
-| `tt-schemes` | Tinted Theming color schemes (base16) |
-| `programsdb` | Flake programs SQLite database |
-| `quickemu` | Quick VM creation |
-| `lobster` | Terminal anime streaming |
-| `tmux-powerkit` | Tmux status bar plugin |
-| `nvchad4nix` | NvChad Neovim config for Nix |
-| `neovim-nightly-overlay` | Neovim nightly builds |
-| `direnv-instant` | Instant direnv evaluation |
-| `ani-cli` | Terminal anime streaming CLI |
-| `gruvbox-material` | Gruvbox Material theme (flake=false, for nvim) |
-| `llama-cpp` | LLaMA.cpp inference engine |
+| Input                    | Purpose                                                             |
+| ------------------------ | ------------------------------------------------------------------- |
+| `nixpkgs`                | `nixos-unstable` channel                                            |
+| `nixpkgs-master`         | Pinned specific nixpkgs commit for select packages                  |
+| `home-manager`           | User environment management                                         |
+| `hyprland`               | Hyprland WM (built from source)                                     |
+| `emacs-overlay`          | Latest Emacs + packages                                             |
+| `emacs-lsp-booster`      | Faster LSP over JSON-RPC (for eglot)                                |
+| `stylix`                 | System-wide theming                                                 |
+| `nixvim`                 | Declarative Neovim                                                  |
+| `private-stuff`          | Local private config (email, substituter token); must exist locally |
+| `chaotic`                | Chaotic-Nyx overlay (cachix, kernel patches)                        |
+| `nur`                    | Nix User Repository                                                 |
+| `cachix`                 | Cachix CLI (for ad-hoc `cachix use` / `cachix push`)                |
+| `nix-gaming`             | Gaming-focused nix packages (gamescope, etc.)                       |
+| `betterfox`              | Firefox user.js hardening                                           |
+| `ghostty`                | Ghostty terminal emulator (built from source)                       |
+| `dms`                    | Dank Material Shell (KDE Plasma widget)                             |
+| `umu`                    | Unified Middleware for Users (Windows game launcher)                |
+| `zen-browser`            | Zen Browser flake                                                   |
+| `tt-schemes`             | Tinted Theming color schemes (base16)                               |
+| `programsdb`             | Flake programs SQLite database                                      |
+| `quickemu`               | Quick VM creation                                                   |
+| `lobster`                | Terminal anime streaming                                            |
+| `tmux-powerkit`          | Tmux status bar plugin                                              |
+| `nvchad4nix`             | NvChad Neovim config for Nix                                        |
+| `neovim-nightly-overlay` | Neovim nightly builds                                               |
+| `direnv-instant`         | Instant direnv evaluation                                           |
+| `ani-cli`                | Terminal anime streaming CLI                                        |
+| `gruvbox-material`       | Gruvbox Material theme (flake=false, for nvim)                      |
+| `llama-cpp`              | LLaMA.cpp inference engine                                          |
 
 ## Target machines
 
-| Target | Hardware | Role | Key knobs |
-|--------|----------|------|-----------|
-| `nixos-desktop` | Ryzen 7900X + RX 6800 + 64GB DDR5 + 2× 2TB NVMe | Main desktop / gaming | amd-pstate, scx_lavd, mitigations=off, gamemode |
-| `nixos-work` | Xeon W-2295 + NVIDIA T400 + 128GB + NVMe+HDD | Workstation | intel-pstate, scx_bpfland, mitigations ON, nvidia |
-| `nixos` | template | Baseline for fresh installs | memory + storage + amd graphics only |
+| Target          | Hardware                                        | Role                        | Key knobs                                         |
+| --------------- | ----------------------------------------------- | --------------------------- | ------------------------------------------------- |
+| `nixos-desktop` | Ryzen 7900X + RX 6800 + 64GB DDR5 + 2× 2TB NVMe | Main desktop / gaming       | amd-pstate, scx_lavd, mitigations=off, gamemode   |
+| `nixos-work`    | Xeon W-2295 + NVIDIA T400 + 128GB + NVMe+HDD    | Workstation                 | intel-pstate, scx_bpfland, mitigations ON, nvidia |
+| `nixos`         | template                                        | Baseline for fresh installs | memory + storage + amd graphics only              |
 
 ## Commit conventions
 

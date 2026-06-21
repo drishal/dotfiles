@@ -73,10 +73,10 @@ emacs --batch --eval "(require 'org)" --eval '(org-babel-tangle-file "~/dotfiles
 
 #dwm setup
 echo "make install dwm"
-cd ~/dotfiles/suckless/dwm-6.4
+cd ~/dotfiles/config/suckless/dwm-6.4
 sudo make clean install
-sudo cp ~/dotfiles/suckless/dwm.desktop /usr/share/xsessions
-cd ~/dotfiles/suckless/dwmblocks
+sudo cp ~/dotfiles/config/suckless/dwm.desktop /usr/share/xsessions
+cd ~/dotfiles/config/suckless/dwmblocks
 sudo make clean install
 
 # emacs conifg

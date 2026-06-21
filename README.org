@@ -31,7 +31,7 @@ reference (and the occasional non-Nix machine).
 - *NixOS system + Home Manager configs* — a flake driving three machines
   (=flake.nix= and everything under =NixOS/=).
 - *Window managers* — Hyprland, Sway, river, qtile, awesome, xmonad, leftwm, and
-  the suckless stack (dwm, dwl, dmenu, st, dwmblocks) under =suckless/=.
+  the suckless stack (dwm, dwl, dmenu, st, dwmblocks) under =config/suckless/=.
 - *Terminals* — Alacritty, Kitty, Ghostty, foot, st.
 - *Editors* — Emacs (literate, see =emacs/=), Neovim (via nixvim + a standalone
   =config/nvim=), Doom Emacs (=config/doom.d=), Helix.
@@ -64,7 +64,7 @@ dotfiles/
 │   └── pkgs/               # custom/overridden packages (thorium, galaxy-buds)
 ├── emacs/                   # literate Emacs config + themes
 ├── config/                  # standalone (non-Nix) app configs
-├── suckless/                # dwm / dwl / st / dmenu sources + patches
+│   └── suckless/            # dwm / dwl / st / dmenu sources + patches
 ├── scripts/                 # helper scripts
 └── wallpapers/
 #+end_src
@@ -149,11 +149,12 @@ nix flake update --flake ~/dotfiles
 If you omit the =#<host>= selector, Nix tries to match the current hostname.
 
 * Non-NixOS / standalone configs
-The =config/=, =suckless/= and =emacs/= trees are plain dotfiles and work on any
-distro — symlink (or stow) the ones you want into place. The suckless programs
-ship with their sources and patches, so build them with =make && sudo make
-install= inside each directory.
+The =config/= and =emacs/= trees are plain dotfiles and work on any distro —
+symlink (or stow) the ones you want into place. The suckless programs
+(under =config/suckless/=) ship with their sources and patches, so build them
+with =make && sudo make install= inside each directory.
 
 * Screenshot
 #+CAPTION: Hyprland + NixOS
 [[./setup.png]]
+ng]]
