@@ -3,10 +3,21 @@
   programs.mpv = {
     enable = true;
 
-    # Expose mpv on the MPRIS D-Bus interface so the ags media-player indicator
-    # (AstalMpris) picks it up like any other player. HM symlinks the script
-    # into mpv's scripts dir, so no manual `script=` path is needed.
-    scripts = [ pkgs.mpvScripts.mpris ];
+    scripts = [
+      # Expose mpv on the MPRIS D-Bus interface so the ags media-player
+      # indicator (AstalMpris) picks it up like any other player.
+      pkgs.mpvScripts.mpris
+      # On-the-fly stream quality switching, bound below (Ctrl+f / Alt+f).
+      # Pulls the format list from yt-dlp and reloads at the chosen quality.
+      pkgs.mpvScripts.quality-menu
+    ];
+
+    # Leave plain `f` as mpv's fullscreen toggle; put quality-menu on Ctrl+f
+    # (video formats) and Alt+f (audio formats) — both free by default.
+    bindings = {
+      "Ctrl+f" = "script-binding quality_menu/video_formats_toggle";
+      "Alt+f" = "script-binding quality_menu/audio_formats_toggle";
+    };
 
     config = {
       # ---- Video renderer ----
@@ -40,7 +51,9 @@
       # ---- YouTube ----
       ytdl-format = "bestvideo[height<=?1440]+bestaudio/best";
       script-opts = "ytdl_hook-ytdl_path=yt-dlp";
-      ytdl-raw-options = "cookies=/home/drishal/Downloads/cookies.txt";
+      # Pull cookies live from Firefox (unencrypted cookies.sqlite — far more
+      # reliable than Chromium keyring decryption, and never goes stale).
+      ytdl-raw-options = "cookies-from-browser=firefox";
 
       # ---- Audio / misc ----
       volume = 50;
