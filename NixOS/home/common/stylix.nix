@@ -17,6 +17,8 @@
       # tmux.nix consumes config.lib.stylix.colors directly for tmux-powerkit.
       tmux.enable = false;
       rofi.enable = true;
+      # mpv.nix is a pure-technical config; OSD fonts/colors come from stylix.
+      mpv.enable = true;
       # ghostty.enable = false;
       # fish.enable = true;
     };
