@@ -22,6 +22,10 @@ let
   # ─── Color/HDR flags (hyprlang form, for live `hyprctl keyword`) ─────────
   acer4kFlags = "bitdepth, 10, cm, srgb";
   acerPerfFlags = "bitdepth, 8, cm, srgb";
+  # HDR override flags applied transiently by the Super+Shift+H toggle. Uses
+  # the monitor's EDID HDR metadata; sdrbrightness lifts SDR/desktop content so
+  # it isn't dim in HDR mode (DisplayHDR 400 panel).
+  acerHdrExtra = "bitdepth, 10, cm, hdredid, sdrbrightness, 1.2, sdrsaturation, 1.0";
 
   # ─── Generated monitor config ───────────────────────────────────────────
   # Under the Lua config the persisted layout is a Lua fragment dofile()'d by
@@ -38,6 +42,9 @@ let
     set -eu
 
     profile="''${1:-4k}"
+
+    # This always re-applies cm,srgb, so any active HDR override is now stale.
+    rm -f "$HOME/.config/hypr/hdr-on" 2>/dev/null || true
 
     case "$profile" in
       perf)
@@ -82,6 +89,45 @@ let
 
     ${applyProfile} "$target"
     ${pkgs.libnotify}/bin/notify-send -t 4000 "Display" "$msg" || true
+  '';
+
+  # ─── HDR toggle (Super+Shift+H) ─────────────────────────────────────────
+  # Transient: flips the Acer to HDR (cm,hdredid + 10-bit + SDR boost) live on
+  # whichever mode is active. A DFR/resolution change or reload reverts to SDR
+  # (applyProfile clears the state file and re-applies cm,srgb) — re-press to
+  # re-enable. HDR is opt-in this way so it's only on when actually wanted.
+  hyprHdrToggle = pkgs.writeShellScriptBin "hypr-hdr-toggle" ''
+    #!/usr/bin/env bash
+    set -eu
+
+    state="$HOME/.config/hypr/hdr-on"
+
+    width="$(${hyprPackage}/bin/hyprctl -j monitors \
+      | ${pkgs.jq}/bin/jq -r \
+        --arg desc "${acerDesc}" \
+        '.[] | select(.description == $desc) | .width')"
+
+    if [[ -z "$width" || "$width" == "null" ]]; then
+      ${pkgs.libnotify}/bin/notify-send -t 3000 "HDR" "Acer not found" || true
+      exit 0
+    fi
+
+    if [[ -e "$state" ]]; then
+      # Currently HDR → back to SDR via the normal profile applier (which also
+      # removes the state file).
+      if [[ "$width" == "3840" ]]; then ${applyProfile} 4k; else ${applyProfile} perf; fi
+      ${pkgs.libnotify}/bin/notify-send -t 3000 "Display" "HDR off — SDR (cm,srgb)" || true
+    else
+      # Currently SDR → enable HDR on the active mode.
+      if [[ "$width" == "3840" ]]; then
+        line="${acerMonitor}, ${acer4kMode}, 0x0, 1.5, ${acerHdrExtra}"
+      else
+        line="${acerMonitor}, ${acerPerfMode}, 0x0, 1, ${acerHdrExtra}"
+      fi
+      ${hyprPackage}/bin/hyprctl keyword monitor "$line" >/dev/null
+      touch "$state"
+      ${pkgs.libnotify}/bin/notify-send -t 3000 "Display" "HDR on — cm,hdredid (SDR boost 1.2)" || true
+    fi
   '';
 
   # ─── Boot-time profile detection ────────────────────────────────────────
@@ -208,6 +254,7 @@ in
 {
   home.packages = [
     hyprMonitorToggle
+    hyprHdrToggle
     hyprApplyMonitorProfile
     hyprRestartWidgets
     hyprAutoDetectProfile
@@ -295,5 +342,7 @@ in
 
     hl.unbind("SUPER + SHIFT + M")
     hl.bind("SUPER + SHIFT + M", hl.dsp.exec_cmd("hypr-monitor-toggle"))
+
+    hl.bind("SUPER + SHIFT + H", hl.dsp.exec_cmd("hypr-hdr-toggle"))
   '';
 }
