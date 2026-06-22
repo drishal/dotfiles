@@ -787,7 +787,7 @@ remove/add tangle no to whatever font you prefer
   (doom-modeline-bar-width 3)
   (doom-modeline-major-mode-icon t)
   (doom-modeline-buffer-file-name-style 'truncate-except-project)
-  (doom-modeline-icon (display-graphic-p)))
+  (doom-modeline-icon t))
 #+end_src
 
 *** Airline
@@ -875,7 +875,19 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
   (evil-snipe-override-mode +1)
   )
 #+end_src
-
+*** Evil cursor
+#+begin_src emacs-lisp
+(use-package evil-terminal-cursor-changer
+  :ensure t
+  :after evil
+  :config
+  (evil-terminal-cursor-changer-activate)
+  (setq evil-normal-state-cursor 'box
+        evil-insert-state-cursor 'bar
+        evil-visual-state-cursor 'box
+        evil-motion-state-cursor 'box
+        evil-emacs-state-cursor  'hbar))
+#+end_src
 ** Undo system
 #+begin_src emacs-lisp
 (use-package undo-tree
@@ -1167,6 +1179,18 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html
   :config
   (add-hook 'dired-mode-hook 'org-download-enable)
   (add-hook 'org-mode-hook 'org-download-enable))
+#+end_src
+* Terminal (TTY) support
+** kitty keyboard protocol
+=kkp= negotiates the kitty keyboard protocol so an =emacsclient -nw= frame in
+kitty gets the same rich key events as a GUI frame (C-RET, S-RET, C-., shifted
+keys, ...). =global-kkp-mode= probes each terminal and only enables on ones that
+advertise support, so GUI frames and dumb terminals are left untouched.
+#+begin_src emacs-lisp
+(use-package kkp
+  :ensure t
+  :config
+  (global-kkp-mode +1))
 #+end_src
 * Tools
 ** vterm
@@ -1522,7 +1546,8 @@ back. (=tide= rides with company, so it returns when this is on.)
 *** corfu + cape
 In-buffer completion UI built on Emacs's native
 =completion-at-point-functions=, so eglot/elisp/etc. integrate directly and
-=orderless= drives matching (consistent with the minibuffer).
+=orderless= drives matching (consistent with the minibuffer). The selected
+candidate is recoloured separately — see [[#completion-selection-highlight][completion selection highlight]].
 #+begin_src emacs-lisp
 (use-package corfu
   :ensure t
@@ -1627,6 +1652,45 @@ In-buffer completion UI built on Emacs's native
 
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t))
+#+end_src
+
+*** completion selection highlight
+doom-themes hardcodes a near-invisible background on the selected candidate
+(=corfu-current= → buffer =bg=, =vertico-current= → =region=); both sit a shade
+or two from the popup/minibuffer background and =region= even collapses onto the
+=bg= in 256-colour terminals. A direct background beats an inherited one, so
+=:inherit= can't fix it — this copies the theme's =region= colour (a subtle dark
+step, close to the org code-block shade but still a notch above the popup
+background so it stays visible; note it can look faint in 256-colour terminals)
+onto both faces. The override is global (corfu's popup is a separate child frame,
+so a per-frame set would miss it), and re-runs on theme changes so it survives
+=counsel-load-theme=. The corfu popup itself (=corfu-default=) is pinned to the
+theme's =tooltip= surface (=bg-alt=) — the same shade doom/catppuccin use for
+=company-tooltip= — so it reads as a raised surface distinct from both the editor
+background and the selected row. =secondary-selection= (org's =C-c '= "editing
+this block" overlay) is dropped from the theme's loud beige to a dim shade just
+above =region=, matching the same subdued layering. The =ignore-errors= guards
+=color-lighten-name=, which throws on non-colours like the =unspecified-bg= that
+=region= resolves to at daemon startup before a real frame exists; the per-frame
+hooks reapply it once a frame is live.
+#+begin_src emacs-lisp
+(defun reomacs/sync-completion-selection-faces (&rest _)
+  (require 'color)
+  (let ((bg (face-attribute 'region :background nil 'default))
+        (fg (face-attribute 'region :foreground nil 'default))
+        (popup (face-attribute 'tooltip :background nil 'default)))
+    (dolist (face '(corfu-current vertico-current))
+      (when (facep face)
+        (set-face-attribute face nil :background bg :foreground fg :extend t)))
+    (when (facep 'corfu-default)
+      (set-face-attribute 'corfu-default nil :background popup))
+    (let ((dim (and (facep 'secondary-selection)
+                    (ignore-errors (color-lighten-name bg 8)))))
+      (when dim
+        (set-face-attribute 'secondary-selection nil :background dim)))))
+(add-hook 'server-after-make-frame-hook #'reomacs/sync-completion-selection-faces)
+(add-hook 'enable-theme-functions #'reomacs/sync-completion-selection-faces)
+(reomacs/sync-completion-selection-faces)
 #+end_src
 
 *** consult
