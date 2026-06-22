@@ -44,7 +44,8 @@ let
     "dms"    = "pkill dms; dms run";
     "eww"    = "pkill end-rs || true; end-rs daemon & ${ewwLaunch}";
     "waybar" = "pkill waybar; waybar &";
-    "ags"    = "ags quit || true; ags run &";
+    # ags quit can fail silently on a wedged instance that keeps the dbus name; force-kill leftover gjs so the relaunch isn't a no-op remote.
+    "ags"    = "ags quit 2>/dev/null; pkill -9 -f 'gjs.*ags.js'; ags run &";
   };
 
   currentWidgetStartup = widgetStartup.${config.drishal.widgets};
