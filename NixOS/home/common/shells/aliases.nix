@@ -33,6 +33,7 @@
     v = "nvim";
     h = "hx";
     edd = "emacs --daemon";
+    e = "emacsclient -nw";
 
     # --- Hardware / Power ---
     b = "brightnessctl";
