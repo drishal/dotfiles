@@ -28,6 +28,15 @@ let
       i: bind (combo "SHIFT + ${wsKey i}") (mkLuaInline "hl.dsp.window.move({ workspace = ${toString i} })")
     ) (lib.range 1 10);
 
+  # Volume keys must drive the device EasyEffects is feeding, not the EE
+  # virtual sink (the default sink, whose volume is inaudible). Bundled with
+  # its runtime deps so wpctl/pw-link/python3 are always on PATH.
+  vol = pkgs.writeShellApplication {
+    name = "vol-active-sink";
+    runtimeInputs = [ pkgs.wireplumber pkgs.pipewire pkgs.python3 ];
+    text = builtins.readFile ../../../../scripts/vol.sh;
+  };
+
   # ─── Widget-stack helpers ──────────────────────────────────────────────
   # Controlled by drishal.widgets — switch requires logout.
   ewwLaunch = config.xdg.configHome + "/eww/scripts/launch.sh";
@@ -269,9 +278,9 @@ in
           }
 
           # Media keys (no modifier)
-          (bind "XF86AudioRaiseVolume" (exec "wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"))
-          (bind "XF86AudioLowerVolume" (exec "wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%-"))
-          (bind "XF86AudioMute" (exec "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"))
+          (bind "XF86AudioRaiseVolume" (exec "${vol}/bin/vol-active-sink 5%+"))
+          (bind "XF86AudioLowerVolume" (exec "${vol}/bin/vol-active-sink 5%-"))
+          (bind "XF86AudioMute" (exec "${vol}/bin/vol-active-sink toggle"))
         ];
     };
   };

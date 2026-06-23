@@ -8,6 +8,7 @@ import AstalMpris from "gi://AstalMpris"
 import GLib from "gi://GLib"
 
 import { createBrightness } from "../lib/brightness"
+import { activeEndpoint, activePercent, activeMuted } from "../lib/audio"
 import { airplaneOn, toggleAirplane } from "../lib/radios"
 import { networkState } from "../lib/network"
 import { sh, togglePopup } from "../lib/windows"
@@ -74,7 +75,6 @@ function Tiles() {
   const bt = AstalBluetooth.get_default()
   const notifd = AstalNotifd.get_default()
   const wp = AstalWp.get_default()
-  const speaker = wp?.defaultSpeaker
   const mic = wp?.defaultMicrophone
 
   const netState = networkState()
@@ -87,8 +87,8 @@ function Tiles() {
 
   const dnd = createBinding(notifd, "dontDisturb")
   const micMute = mic ? createBinding(mic, "mute") : createComputed([], () => true)
-  const spkMute = speaker ? createBinding(speaker, "mute") : createComputed([], () => true)
-  const spkVol = speaker ? createBinding(speaker, "volume") : createComputed([], () => 0)
+  const spkMute = activeMuted
+  const spkVol = activePercent
 
   return (
     <box class="tilegrid" orientation={Gtk.Orientation.VERTICAL}>
@@ -137,9 +137,12 @@ function Tiles() {
         <Tile
           icon={spkMute((m) => (m ? "󰖁" : "󰕾"))}
           title="Volume"
-          subtitle={spkVol((v) => `${Math.round(v * 100)}%`)}
+          subtitle={spkVol((p) => `${p}%`)}
           active={spkMute((m) => !m)}
-          onClicked={() => speaker && (speaker.mute = !speaker.mute)}
+          onClicked={() => {
+            const e = activeEndpoint.get()
+            if (e) e.mute = !e.mute
+          }}
         />
       </box>
     </box>
@@ -148,22 +151,21 @@ function Tiles() {
 
 // ── sliders ───────────────────────────────────────────────────────────────
 function Sliders() {
-  const wp = AstalWp.get_default()
-  const speaker = wp?.defaultSpeaker
   const bri = createBrightness()
 
   return (
     <box class="sliders" orientation={Gtk.Orientation.VERTICAL}>
-      {speaker && (
-        <SliderRow
-          extraClass="vol"
-          icon={createBinding(speaker, "mute")((m) => (m ? "󰖁" : "󰕾"))}
-          value={createBinding(speaker, "volume")}
-          onChange={(v) => speaker.set_volume(v)}
-          knobTip="Mute"
-          onKnob={() => (speaker.mute = !speaker.mute)}
-        />
-      )}
+      <SliderRow
+        extraClass="vol"
+        icon={activeMuted((m) => (m ? "󰖁" : "󰕾"))}
+        value={activePercent((p) => p / 100)}
+        onChange={(v) => activeEndpoint.get()?.set_volume(v)}
+        knobTip="Mute"
+        onKnob={() => {
+          const e = activeEndpoint.get()
+          if (e) e.mute = !e.mute
+        }}
+      />
       {bri.available && (
         <SliderRow extraClass="bri" icon="󰃢" value={bri.value} onChange={(v) => bri.set(v)} />
       )}

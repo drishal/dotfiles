@@ -1,54 +1,24 @@
 import app from "ags/gtk4/app"
 import { Astal, Gtk, Gdk } from "ags/gtk4"
-import { createBinding, createComputed, createState, onCleanup } from "ags"
-import AstalWp from "gi://AstalWp"
+import { createComputed, createState, onCleanup } from "ags"
 import GLib from "gi://GLib"
+import { activeEndpoint, activePercent, activeMuted, changePulse } from "../lib/audio"
 
 const TIMEOUT_MS = 1800
 
 /**
  * Small toast-style volume indicator, anchored to the bottom-center of each
- * monitor. Fires whenever the default speaker's volume or mute state changes
- * (media keys, dashboard slider, app control).
+ * monitor. Fires whenever the active *physical* output's volume or mute state
+ * changes (media keys, dashboard slider, app control) — following Spark / aux /
+ * speakers switching. The system default sink is the EasyEffects virtual sink,
+ * whose volume is inaudible, so we track the real output via lib/audio.
  */
 export default function VolumePopup({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
   const { BOTTOM } = Astal.WindowAnchor
-  const wp = AstalWp.get_default()
-  const speaker = wp?.defaultSpeaker
-
-  if (!speaker) {
-    return (
-      <window
-        name={`volpopup-${gdkmonitor.get_connector()}`}
-        namespace="ags-volpopup"
-        class="ags-volpopup"
-        application={app}
-        gdkmonitor={gdkmonitor}
-        layer={Astal.Layer.OVERLAY}
-        anchor={BOTTOM}
-        exclusivity={Astal.Exclusivity.IGNORE}
-        visible={false}
-      />
-    )
-  }
-
-  const vol = createBinding(speaker, "volume")
-  const mute = createBinding(speaker, "mute")
 
   // Reactive visibility — lets GTK4 CSS transitions work properly
   // (static visible={false} fights imperative .show()/.hide() in GTK4).
   const [visible, setVisible] = createState(false)
-
-  // Composite state drives the show trigger.
-  const state = createComputed([mute, vol], (m, v) => ({
-    muted: m,
-    percent: Math.round(v * 100),
-  }))
-
-  // Baseline from the current speaker state so the *first* media-key press
-  // already shows the popup (rather than just establishing a baseline).
-  let prevMuted = state.get().muted
-  let prevPercent = state.get().percent
 
   let timeout: number | null = null
   const clearHide = () => {
@@ -66,16 +36,11 @@ export default function VolumePopup({ gdkmonitor }: { gdkmonitor: Gdk.Monitor })
     })
   }
 
-  // Subscribe for the side effect — a derived accessor would never run unless
-  // it were mounted, so use an explicit subscription instead.
-  const unsub = state.subscribe(() => {
-    const s = state.get()
-    if (s.muted !== prevMuted || s.percent !== prevPercent) {
-      prevMuted = s.muted
-      prevPercent = s.percent
-      setVisible(true)
-      scheduleHide()
-    }
+  // changePulse bumps only on a real volume/mute change of the active output,
+  // so this never fires on startup (no baseline-establishing flash).
+  const unsub = changePulse.subscribe(() => {
+    setVisible(true)
+    scheduleHide()
   })
 
   onCleanup(() => {
@@ -83,21 +48,17 @@ export default function VolumePopup({ gdkmonitor }: { gdkmonitor: Gdk.Monitor })
     clearHide()
   })
 
-  const icon = createComputed([mute, vol], (m, v) => {
+  const icon = createComputed([activeMuted, activePercent], (m, p) => {
     if (m) return "󰖁"
-    const p = Math.round(v * 100)
     if (p === 0) return "󰝟"
     if (p <= 33) return "󰕿"
     if (p <= 66) return "󰖀"
     return "󰕾"
   })
 
-  const label = createComputed([mute, vol], (m, v) => {
-    if (m) return "Muted"
-    return `${Math.round(v * 100)}%`
-  })
-
-  const cls = createComputed([mute], (m) => (m ? "volpopup volpopup-muted" : "volpopup"))
+  const label = createComputed([activeMuted, activePercent], (m, p) => (m ? "Muted" : `${p}%`))
+  const cls = activeMuted((m) => (m ? "volpopup volpopup-muted" : "volpopup"))
+  const sliderVal = activePercent((p) => p / 100)
 
   return (
     <window
@@ -117,8 +78,8 @@ export default function VolumePopup({ gdkmonitor }: { gdkmonitor: Gdk.Monitor })
           class="volpopup-slider"
           hexpand
           valign={Gtk.Align.CENTER}
-          value={vol}
-          onChangeValue={({ value }) => speaker.set_volume(value)}
+          value={sliderVal}
+          onChangeValue={({ value }) => activeEndpoint.get()?.set_volume(value)}
         />
         <label class="volpopup-text" label={label} />
       </box>
