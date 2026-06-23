@@ -32,17 +32,14 @@
       gpu-api         = "vulkan";
       # Wayland-native context for zero-copy on Hyprland
       gpu-context     = "waylandvk";
-      # Don't try D3D11 on Linux
-      gpu-allow-d3d11 = false;
 
       # ---- Hardware decoding (AMD VCN via VAAPI) ----
       hwdec = "vaapi";
 
       # ---- Output / dither ----
-      # 10-bit Acer benefits from blue-noise dithering; 8-bit LG needs it more
+      # error-diffusion is the highest-quality dither; helps the 8-bit LG most
       dither-depth = "auto";
-      dither-algo  = "blue-noise";
-      dither-size  = 1;
+      dither        = "error-diffusion";
 
       # ---- HDR / color management ----
       # Both monitors are SDR; settings render SDR correctly and pass HDR through cleanly
@@ -50,14 +47,11 @@
       target-trc             = "srgb";
       target-prim            = "bt.709";
       # Tone mapping + scene-referred HDR (set even for SDR for future-proofing)
-      hdr-compute-peak       = true;
-      hdr-peak-percentile    = 99.0;
-      hdr-smooth-window      = 10;
-      hdr-scene-threshold    = 4.0;
-      hdr-display-hlg        = "auto";
-      tone-mapping           = "auto";
-      tone-mapping-mode      = "auto";
-      tone-mapping-lut-size  = 1024;
+      hdr-compute-peak         = true;
+      hdr-peak-percentile      = 99.0;
+      hdr-scene-threshold-low  = 1.0;
+      hdr-scene-threshold-high = 4.0;
+      tone-mapping             = "auto";
 
       # ---- Scalers ----
       # ewa_lanczossharp for upscale (sharpest); ewa_lanczos for chroma (no ring)
@@ -67,9 +61,6 @@
       scale-antiring  = 0.7;
       cscale-antiring = 0.7;
       dscale-antiring = 0.7;
-      # Dynamic super-resolution ready if explicitly asked
-      scale-dsol      = true;
-      dscale-factor   = 2.0;
 
       # ---- Debanding (off by default; tuned for `--deband=yes`) ----
       deband             = false;
@@ -101,9 +92,9 @@
       ytdl-raw-options = "cookies-from-browser=firefox";
 
       # ---- Audio / misc ----
-      # Run at unity; control listening level on the Spark sink (wpctl set-volume).
+      # Start at 40%; fine-tune listening level on the Spark sink (wpctl set-volume).
       # volume-max=150 leaves headroom for recordings that need a bit more.
-      volume            = 100;
+      volume            = 40;
       volume-max        = 150;
       audio-display     = "no";
       audio-channels    = "stereo";
