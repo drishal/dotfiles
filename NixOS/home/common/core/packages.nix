@@ -49,6 +49,11 @@
       # flake-utils or other extras if needed → usually not
     } (builtins.readFile ../../../../scripts/porthistory.py))
 
+    (pkgs.writers.writePython3Bin "gofile" {
+      libraries = with pkgs.python3Packages; [ requests rich ];
+      doCheck = false;
+    } (builtins.readFile ../../../../scripts/gofile.py))
+
   ];
 
   #nixd path
