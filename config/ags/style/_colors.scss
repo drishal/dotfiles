@@ -39,6 +39,13 @@ $accent-ink: "@base00"; // text on accent
 // floating bar — a touch below the bg (GTK runtime shade(), so it hot-swaps)
 $island: "shade(@base00, 0.92)";
 
+// alert surface — translucent red over the bar island, used by the urgent-
+// workspace indicator. GTK runtime alpha() on the base08 red slot, so it
+// hot-swaps with the palette. Kept as a string (like $island) so dart-sass
+// doesn't try to evaluate alpha() as a sass function.
+$alert-bg:    "alpha(@base08, 0.25)";
+$alert-bg-hi: "alpha(@base08, 0.35)";
+
 // ─── font tokens — the Stylix bridge (mirrors the colour tokens above) ──────
 //
 // GTK CSS has no font variables, so these are literal sentinel strings emitted

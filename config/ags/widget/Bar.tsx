@@ -1,6 +1,6 @@
 import app from "ags/gtk4/app"
 import { Astal, Gtk, Gdk } from "ags/gtk4"
-import { createBinding, createComputed, For, With, onCleanup } from "ags"
+import { createBinding, createComputed, createState, For, With, onCleanup } from "ags"
 import AstalHyprland from "gi://AstalHyprland"
 import AstalBattery from "gi://AstalBattery"
 import AstalNotifd from "gi://AstalNotifd"
@@ -29,6 +29,33 @@ function Workspaces({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
 
   const connector = gdkmonitor.get_connector()
   const focusWs = (id: number) => sh(`hyprctl dispatch 'hl.dsp.focus({ workspace = ${id} })'`)
+
+  // Urgent workspaces — a client rang its urgency hint (terminal bell, chat
+  // mention, …). AstalHyprland only emits a one-shot `urgent` signal (no
+  // persistent property on Workspace/Client), so we keep a Set of urgent ws
+  // ids ourselves. A slot paints red while its id is in the set; focusing that
+  // workspace — or having it already focused when it rings — clears it.
+  const [urgent, setUrgent] = createState(new Set<number>())
+  const urgentHandler = hypr.connect("urgent", (_h, c: AstalHyprland.Client) => {
+    const wsId = c.workspace?.id
+    if (!wsId || wsId <= 0) return
+    if (focused.peek()?.id === wsId) return // already visible — not an alert
+    setUrgent((prev) => (prev.has(wsId) ? prev : new Set(prev).add(wsId)))
+  })
+  const disposeFocus = focused.subscribe(() => {
+    const fws = focused.peek()
+    if (!fws || fws.id <= 0) return
+    setUrgent((prev) => {
+      if (!prev.has(fws.id)) return prev
+      const next = new Set(prev)
+      next.delete(fws.id)
+      return next
+    })
+  })
+  onCleanup(() => {
+    hypr.disconnect(urgentHandler)
+    disposeFocus()
+  })
 
   // Per-monitor workspaces: only show workspaces that have clients on THIS
   // monitor, plus the focused one (even if empty).
@@ -99,8 +126,8 @@ function Workspaces({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
             const occupied = workspaces((wss) =>
               wss.some((w) => w.id === id && (w.monitor as any).name === connector && w.clients.length > 0),
             )
-            const cls = createComputed([isActive, occupied], (a, occ) =>
-              a ? "ws ws-active" : occ ? "ws ws-busy" : "ws",
+            const cls = createComputed([isActive, occupied, urgent], (a, occ, u) =>
+              a ? "ws ws-active" : u.has(id) ? "ws ws-alert" : occ ? "ws ws-busy" : "ws",
             )
             return (
               <button class={cls} onClicked={() => focusWs(id)}>

@@ -278,6 +278,14 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
 }
 .ws.ws-active { color: #{$accent-ink}; }
 
+// urgent — a window on this workspace rang its urgency hint. Soft red tint +
+// red label; clears once the workspace is focused (see Bar.tsx).
+.ws.ws-alert {
+  color: #{$base08};
+  background-color: #{$alert-bg};
+}
+.ws.ws-alert:hover { background-color: #{$alert-bg-hi}; }
+
 // sliding accent indicator — translateX is set inline from Bar.tsx; the
 // transition here animates the slide between workspaces.
 .ws-slider {
