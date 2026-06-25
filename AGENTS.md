@@ -121,10 +121,10 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 - **Kernel** — Uses `pkgs.linuxPackages_xanmod_latest` (xanmod), not standard nixpkgs.
 - **mitigations=off on nixos-desktop only** — `nixos-work` keeps CPU mitigations ON (Cascade Lake has MDS/L1TF/Zombieload). Don't promote `mitigations=off` to common.
 - **scx scheduler split** — desktop uses `scx_lavd` (gaming), work uses `scx_bpfland` (throughput). The scheduler is NOT in common.
-- **Widget stack is `drishal.widgets`** — an enum (`ags` | `eww` | `dms` | `waybar`, default `ags`, defined in `home/common/desktop/hyprland.nix`) picking the bar / notifications / control-center stack. Hyprland startup (`widgetStartup`) and the SUPER+X restart bind (`widgetRestart`, duplicated in `nixos-desktop/hyprland.nix`) branch on it; **switching requires logout**. `ags` and `eww` reproduce the same material design; only one notification daemon runs at a time (ags → AstalNotifd, eww → end-rs, gated in `eww.nix` on `widgets == "eww"`).
-- **ags shell is GTK4 + Astal (v3 API)** — `config/ags/` is a TypeScript/JSX shell (`app.tsx` → per-monitor `<For each={monitors}>` autodetect; `widget/Bar.tsx`, `windows/{Dashboard,NotificationCenter,NotificationPopups,PowerMenu}.tsx`). Data comes from Astal libs (Hyprland/Wp/Network/Bluetooth/Notifd/Mpris/Tray/Battery), not shell scripts. Stylix feeds it the same way eww gets colours: `ags.nix` writes `~/.config/ags-stylix.css` (`@define-color base00..0F`), `style/_colors.scss` holds those as `"@base.."` string tokens emitted via `#{}` so dart-sass keeps the named-colour reference and the palette hot-swaps. `theme.css` is the run-from-repo fallback. The config dir is an out-of-store symlink, so TS/SCSS edits land on `ags quit; ags run` without a rebuild; `ags bundle app.tsx /tmp/out.js` typecheck-compiles without launching.
+- **Widget stack is `drishal.widgets`** — enum (`ags` | `eww` | `dms` | `waybar`, default `ags`, defined in `home/common/desktop/hyprland.nix`) picking bar / notifications / control-center. Hyprland startup (`widgetStartup`) and the SUPER+X restart bind (`widgetRestart`, duplicated in `nixos-desktop/hyprland.nix`) branch on it; **switching requires logout**. `ags`/`eww` share the same material design; one notification daemon at a time (ags → AstalNotifd, eww → end-rs, gated in `eww.nix` on `widgets == "eww"`).
+- **ags shell is GTK4 + Astal (v3 API)** — `config/ags/` is a TS/JSX shell (`app.tsx` per-monitor autodetect; `widget/Bar.tsx`, `windows/{Dashboard,NotificationCenter,NotificationPopups,PowerMenu}.tsx`), driven by Astal libs (Hyprland/Wp/Network/Bluetooth/Notifd/Mpris/Tray/Battery), not shell scripts. Colours: `ags.nix` writes `~/.config/ags-stylix.css` (`@define-color base00..0F`); `style/_colors.scss` references them as `"@base.."` tokens via `#{}` so dart-sass preserves the named colour and the palette hot-swaps (`theme.css` is the run-from-repo fallback). Config dir is an out-of-store symlink, so TS/SCSS edits apply on `ags quit; ags run` without a rebuild; `ags bundle app.tsx /tmp/out.js` typecheck-compiles without launching.
 - **GPU drivers per host** — `amd.nix` for desktop/template, `nvidia.nix` for work (T400). Both live in `hosts/common/graphics/` but only one is imported per host.
-- **hermes-app is an external repo** — the `hermes-app.nix` HM module (`home/common/desktop/`) wraps a PySide6 app that lives at `~/Desktop/git-stuff/hermes-app` (github.com/drishal/hermes-app), NOT in this tree. The wrapper points `appRoot` at that working tree so edits take effect on next launch; the module still generates `~/.config/HermesApp/colors.json` from stylix. Clone the repo there or the `hermes-app` command won't launch (the build still succeeds).
+- **hermes-app is an external repo** — the `hermes-app.nix` HM module (`home/common/desktop/`) wraps a PySide6 app living at `~/Desktop/git-stuff/hermes-app` (github.com/drishal/hermes-app), NOT in this tree. `appRoot` points at that working tree (edits apply on next launch); the module generates `~/.config/HermesApp/colors.json` from stylix. Clone it there or the `hermes-app` command won't launch (build still succeeds).
 
 ## Flake inputs worth knowing
 
@@ -172,70 +172,13 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 
 ## Commit conventions
 
-### Message format
+Format: `scope: short description`, or `prefix(scope): short description` when a prefix earns its place. This is a personal dotfiles repo, so **no prefix is the default** — reserve prefixes for cases that genuinely aid scanning `git log`.
 
-```
-scope: short description
-```
+- **`feat`** — only meaningful new capability (new program, new service, new workflow). NOT for adding a package to existing config or tweaking a setting. ✅ `feat(virtualization): add libvirt and docker support` ❌ `feat(emacs): add agent-shell package` → just `emacs: add agent-shell package`
+- **`fix`** — correcting something broken/misconfigured. ✅ `fix(fish): correct PATH ordering for home-manager`
+- **`chore`** — maintenance with no behavior change (lock bumps, reformatting). ✅ `chore: update flake.lock`
+- **No prefix** — config changes, package additions, setting tweaks. ✅ `waybar: show memory in GB`, `hyprland: enable blur`
 
-or when a prefix adds clarity:
+**Scope** = config area or tool (`emacs`, `hyprland`, `waybar`, `fish`, `nixvim`, `dms`, `flake.lock`…). Machine-specific → target (`nixos-desktop:`, `nixos-work:`, `nixos:`). Module-tree → area (`hosts:`, `home:`, `pkgs:`, `NixOS:`).
 
-```
-prefix(scope): short description
-```
-
-### When to use prefixes
-
-This is a dotfiles repo — most changes are config tweaks, not software features. Reserve prefixes for situations where they genuinely aid scanning `git log`.
-
-**`feat`** — Only for meaningful new capability: adding a new program, enabling a new service, introducing a new workflow. Does NOT apply to adding a package to an existing config, changing a setting, or minor customization.
-
-- ✅ `feat(virtualization): add libvirt and docker support`
-- ✅ `feat(hyprland): add monitor automation script`
-- ❌ `feat(emacs): add agent-shell package` — just `emacs: add agent-shell package`
-- ❌ `feat(waybar): show memory in GB` — just `waybar: show memory in GB`
-
-**`fix`** — Correcting something broken or misconfigured.
-
-- ✅ `fix(fish): correct PATH ordering for home-manager`
-- ✅ `fix(hyprland): fix monitor assignment on work machine`
-
-**`chore`** — Maintenance that doesn't change behavior: flake lock updates, dependency bumps, reformatting.
-
-- ✅ `chore: update flake.lock`
-- ✅ `chore(stylix): regenerate base24 colors`
-
-**No prefix** — The default. Use `scope: description` for config changes, package additions, setting tweaks, and most day-to-day work.
-
-- ✅ `emacs: add agent-shell package`
-- ✅ `waybar: show memory in GB`
-- ✅ `hyprland: enable blur`
-- ✅ `dms: set weather location to Ahmedabad`
-
-### Scope
-
-Use the config area or tool name as scope: `emacs`, `hyprland`, `waybar`, `fish`, `nixvim`, `dms`, `mpv`, `flake.lock`, `desktop`, `work`, etc.
-
-For machine-specific changes, use the target: `nixos-desktop:`, `nixos-work:`, `nixos:`.
-For module-tree changes, prefer the area: `hosts:`, `home:`, `pkgs:`, `NixOS:` for cross-cutting.
-
-### Grouping changes
-
-**Single commit when:** changes are logically one action — adding a package and its config, fixing a setup across related files.
-
-- Adding a Home Manager package + its program config → one commit
-- Fixing a Hyprland keybind in both hyprland.nix and a script → one commit
-- Updating flake.lock → always one commit (even if multiple inputs change)
-
-**Separate commits when:** changes are independent and unrelated.
-
-- Adding an Emacs package AND fixing a fish alias → two commits
-- Updating waybar style AND adding a new NixOS service → two commits
-
-### General rules
-
-- **Lowercase** — descriptions are lowercase, no period at end
-- **Imperative mood** — "add package" not "added package" or "adds package"
-- **Keep it short** — if the description fits on one line, no body needed
-- **Body when needed** — use a body only for non-obvious context (why, not what); the diff already shows what changed
-- **Don't over-organize** — this is a personal dotfiles repo, not a team project; if you're spending more time on the commit message than the change, simplify
+**Rules:** lowercase, imperative, no trailing period. One logical action = one commit (package + its config together; flake.lock always one commit); unrelated changes = separate commits. Body only for non-obvious *why*. Don't over-organize.
