@@ -6,6 +6,8 @@ NixOS system + Home Manager user configuration managed via a single flake at `~/
 
 When making changes that affect repo structure, imports, modules, flake inputs, or machine targets, update this file to keep it accurate. Stale docs are worse than no docs.
 
+**Before making host-specific changes, verify which machine you're on** — run `hostname` to confirm whether the active target is `nixos-desktop`, `nixos-work`, or something else. The three targets below have different hardware, drivers, and tuning; don't assume.
+
 ## Apply changes
 
 ```bash
