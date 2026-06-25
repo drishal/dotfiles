@@ -61,14 +61,14 @@ NixOS/
         amd.nix              ← amdgpu driver, VA-API, RADV
         nvidia.nix           ← proprietary nvidia driver
     nixos/                   ← template baseline host
-      default.nix            ← imports common + memory + storage + amd graphics
+      default.nix            ← imports common + memory + storage + network-tuning + amd graphics
       hardware-configuration.nix
     nixos-desktop/           ← main desktop (Ryzen 7900X + RX 6800)
-      default.nix            ← common + memory + storage + amd-pstate + lavd + amd graphics + packages + jellyfin
+      default.nix            ← common + memory + storage + network-tuning + amd-pstate + lavd + amd graphics + packages + jellyfin
       hardware-configuration.nix
       packages.nix           ← desktop-only packages
     nixos-work/              ← work workstation (Xeon W-2295 + T400 nvidia)
-      default.nix            ← common + memory + storage + intel-pstate + bpfland + nvidia + packages + virt
+      default.nix            ← common + memory + storage + network-tuning + intel-pstate + bpfland + nvidia + packages + virt
       hardware-configuration.nix
       packages.nix
       virtualisation.nix
@@ -78,14 +78,14 @@ NixOS/
       stylix.nix             ← HM-level stylix overrides
       core/                  ← packages.nix, git.nix, tmux.nix, fastfetch.nix
       shells/                ← default.nix, fish.nix, zsh.nix, aliases.nix (shell-agnostic aliases + PATH + env)
-      desktop/               ← hyprland, sway, waybar, rofi, dms, ags, eww, file-managers, icons
+      desktop/               ← hyprland, sway, waybar, rofi, dms, ags, eww, file-managers, hermes-app, icons
       editors/               ← default.nix, emacs.nix, nixvim.nix
       terminals/             ← default.nix (kitty, ghostty, alacritty via single module)
       browsers/              ← default.nix, betterfox.nix (firefox+betterfox; only betterfox imported)
       media/                 ← mpv.nix
       colors/                ← doom* palette yamls (legacy, unused by stylix)
     nixos-desktop/           ← desktop-only HM overrides (hyprland monitor, sway)
-    nixos-work/              ← work-only HM overrides (dual monitor, nixvim, hyprland, sway)
+    nixos-work/              ← work-only HM overrides (dual monitor, hyprland, sway)
   pkgs/                      ← custom nix derivations
     default.nix              ← attrset exposing all packages via callPackage
     thorium-browser/
@@ -146,6 +146,8 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 | `betterfox`              | Firefox user.js hardening                                           |
 | `ghostty`                | Ghostty terminal emulator (built from source)                       |
 | `dms`                    | Dank Material Shell (KDE Plasma widget)                             |
+| `end-rs`                 | end-rs notification daemon (for eww widget stack)                    |
+| `ags`                    | Astal/GTK4 shell framework (ags v3)                                  |
 | `umu`                    | Unified Middleware for Users (Windows game launcher)                |
 | `zen-browser`            | Zen Browser flake                                                   |
 | `tt-schemes`             | Tinted Theming color schemes (base16)                               |
