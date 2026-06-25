@@ -53,8 +53,10 @@ let
     "dms"    = "pkill dms; dms run";
     "eww"    = "pkill end-rs || true; end-rs daemon & ${ewwLaunch}";
     "waybar" = "pkill waybar; waybar &";
-    # ags quit can fail silently on a wedged instance that keeps the dbus name; force-kill leftover gjs so the relaunch isn't a no-op remote.
-    "ags"    = "ags quit 2>/dev/null; pkill -9 -f 'gjs.*ags.js'; ags run &";
+    # ags quit can fail silently on a wedged instance that keeps the dbus name; force-kill leftover gjs so the relaunch isn't a no-op.
+    # [g]js bracket stops pkill -f from matching its own shell (whose cmdline contains the literal pattern), which would SIGKILL the
+    # bind's shell before it reaches `ags run &` — that's why mod+x killed ags and never relaunched it.
+    "ags"    = "ags quit 2>/dev/null; pkill -9 -f '[g]js -m.*ags'; ags run &";
   };
 
   currentWidgetStartup = widgetStartup.${config.drishal.widgets};
