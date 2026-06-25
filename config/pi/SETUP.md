@@ -1,284 +1,396 @@
-# Pi Setup Guide
+# pi agent setup
 
-This document is a **self-contained, machine-executable** setup guide.
-A fresh pi instance should be able to read this file and configure everything.
+Runbook for recreating the pi coding-agent configuration on this machine.
+Follow it top to bottom. It assumes the dotfiles repo is checked out at
+`~/dotfiles` and NixOS + Home Manager are already applied.
 
-## Prerequisites (Do These Manually First)
+> **Out of scope: models & API keys.** You (the user) set these up first
+> yourself — `pi`, then `/login` for a subscription provider or drop an API
+> key into `~/.pi/agent/models.json`, then pick a model with `/model` (or
+> Ctrl+L). Nothing below touches `models.json` or `auth.json`. This guide
+> covers everything _around_ the models: the install, MCP servers,
+> extensions, skills, and the seeded memory.
 
-Before running the automated setup, ensure:
+## Prerequisites
 
-1. **pi is installed** — `npm i -g @earendil-works/pi-coding-agent`
-2. **At least one provider is authenticated** — pi needs a working model to run the setup.
-   Use whichever is available on this machine:
-   - `pi --provider openai-codex` (Codex / OpenAI — `OPENAI_API_KEY` env or `pi auth openai-codex`)
-   - `pi --provider anthropic` (Claude — `ANTHROPIC_API_KEY` env or `pi auth anthropic`)
-   - `pi --provider google` (Gemini — `GEMINI_API_KEY` env)
-   - Custom provider via env vars (see instructions.txt for local model servers)
-3. **Node.js 20+** and **npm** available
-4. **git** available (for skill installation)
+- **Node.js + npm**, with the global npm prefix set to `~/.node_modules`
+  (so `npm i -g` lands in `~/.node_modules/lib/node_modules` and binaries
+  in `~/.node_modules/bin`, which must be on `PATH`). This is provided by
+  the Home Manager shell config.
+- **uv / uvx** — used by two MCP servers (`argus`, `nixos`). Install via
+  `pipx install uv` or the standalone installer; ensure `uvx` is on `PATH`.
+- **CLI tools the seeded memory rules assume:** `gh` (GitHub CLI),
+  `obscura` (Rust headless browser, see below).
 
-## Step 1: Discover Available Models
+### SearXNG (optional — extra backend for the `argus` web-search MCP server)
 
-Run `pi --list-models` and capture the output. This tells you what providers
-and models are available on this machine.
+`argus` does **not** require SearXNG — it auto-routes to the cheapest/free
+search providers on its own and works out of the box. You only need to wire
+up SearXNG if one is **already running** somewhere and you want `argus` to use
+it as a backend. Only check if you (or the user) expect one to be up:
 
-## Step 2: Assign Models to Roles
+```bash
+docker ps --format '{{.Names}}\t{{.Ports}}' | grep -i searx   # docker route
+curl -sS -o /dev/null -w '%{http_code}\n' http://127.0.0.1:48431   # likely port
+```
 
-### Role Definitions
+- If a SearXNG is reachable (container shows up, or `curl` returns `200`),
+  set `ARGUS_SEARXNG_ENABLED=true` and `ARGUS_SEARXNG_BASE_URL=http://<host>:<port>`
+  in the `argus` block of `mcp.json` (step 5).
+- If **nothing is running** (or you just don't care), **skip this entirely** —
+  leave the `ARGUS_SEARXNG_*` env vars out of `mcp.json`. `argus` runs fine
+  without them. The NixOS config lives at `NixOS/hosts/common/searx.nix` if
+  you ever want to enable it as a system service later.
 
-These roles are fixed across all machines. The model IDs change, but the
-role semantics don't.
+## 1. Install pi
 
-| Role | Purpose | Needs | Tier | Thinking |
-|------|---------|-------|------|----------|
-| oracle | Complex reasoning, architecture decisions | reasoning | best | high |
-| planner | Task decomposition, planning | reasoning | best | high |
-| worker | Code generation, file edits | coding | mid | medium |
-| reviewer | Code review, quality checks | reasoning | high | high |
-| scout | Quick lookups, cheap operations | coding | fast | off |
-| researcher | Research, documentation lookup | reasoning | mid | medium |
-| context-builder | Context gathering, file reading | coding | fast | off |
-| delegate | Orchestrating other agents | reasoning | best | high |
+```bash
+npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+pi --version     # expect 0.80.x or newer
+```
 
-> **Note:** If you're unfamiliar with a model's capabilities, check the web
-> for its benchmarks, reasoning support, and context window before assigning it.
-> Don't guess — a wrong assignment (e.g., putting a non-reasoning model in a
-> reasoning role) significantly degrades pi's performance.
+`--ignore-scripts` is the documented install flag (pi needs no lifecycle
+scripts). The binary ends up at `~/.node_modules/bin/pi`. If pi is already
+installed and `pi --version` shows 0.80.x+, skip to step 2.
 
-### Assignment Rules
+## 2. Set up your models (you do this, not this guide)
 
-Given the output of `pi --list-models`, assign models using these rules:
+Launch `pi`, run `/login` (subscription) or add an API key to
+`~/.pi/agent/models.json`, then `/model`. Confirm a chat works before
+continuing — the MCP servers and extensions below are useless without a
+working model.
 
-1. **For tier:best roles** (oracle, planner, delegate):
-   - Pick the strongest **reasoning** model available
-   - Preference order by capability: models with larger context windows > more max output > reasoning support
-   - Cost is not a concern for tier:best
-   - If multiple reasoning models exist, prefer the one with the best benchmark reputation
-   - **Always set 2 fallback models** (second-best reasoning, third-best reasoning)
+## 3. Directory layout (`~/.pi/agent/`)
 
-2. **For tier:high roles** (reviewer):
-   - Pick a strong reasoning model, can be slightly weaker than tier:best
-   - If only one reasoning model exists, reuse it
-   - Set 2 fallbacks
+pi creates most of this on first run. What matters:
 
-3. **For tier:mid roles** (worker, researcher):
-   - Pick a solid coding/reasoning model — balanced between quality and speed
-   - If a dedicated coder model exists (name contains "coder", "codex"), prefer it for worker
-   - For researcher, prefer a reasoning model that's not the most expensive
-   - Set 2 fallbacks
+| Path                                   | Purpose                                    | Managed here? |
+| -------------------------------------- | ------------------------------------------ | ------------- |
+| `models.json`                          | Providers + API keys                       | **No** (you)  |
+| `auth.json`                            | OAuth tokens from `/login`                 | **No** (pi)   |
+| `settings.json`                        | Global settings, extensions, theme         | Yes (step 4)  |
+| `mcp.json`                             | MCP server definitions                     | Yes (step 5)  |
+| `npm/`                                 | npm extension install dir + `package.json` | Auto (step 6) |
+| `skills/`                              | User-global skills (`SKILL.md` per dir)    | Yes (step 7)  |
+| `memories/MEMORY.md`                   | Always-in-prompt agent memory              | Yes (step 8)  |
+| `mcp-cache.json`, `mcp-npx-cache.json` | Auto-generated MCP tool caches             | Auto          |
+| `sessions/`, `trust.json`, `pi-acp/`   | Runtime state                              | Auto          |
 
-4. **For tier:fast roles** (scout, context-builder):
-   - Pick the cheapest/fastest model available
-   - Mini/flash/haiku/small models preferred
-   - Non-reasoning models are fine here (thinking is off anyway)
-   - If only large models exist, pick the cheapest one
-   - Set 2 fallbacks
+## 4. `settings.json` (non-model settings)
 
-5. **Default provider and model**:
-   - Set `defaultProvider` and `defaultModel` to the oracle model's provider and id
-   - This ensures pi starts with the strongest model by default
-
-### Model Assignment Template
-
-Generate the `subagents.agentOverrides` section following this structure.
-Every model ID must use `provider/id` format:
+Write `~/.pi/agent/settings.json` — but if the file **already exists**
+(because the user already ran `/model`), **merge these keys in; do not
+overwrite the file**. `/model` writes `defaultProvider` / `defaultModel`
+into `settings.json`, and blindly replacing the file wipes the model the
+user just configured. Preserve any existing `defaultProvider`,
+`defaultModel`, and `auth`-related keys; only add/update the keys below.
+The `defaultProvider` / `defaultModel` keys are model-related and are
+written by pi on `/model` — leave them out of what you add.
 
 ```json
 {
-  "oracle": {
-    "model": "<provider>/<best-reasoning-model>",
-    "thinking": "high",
-    "fallbackModels": ["<provider>/<2nd-reasoning>", "<provider>/<3rd-reasoning>"]
-  },
-  "planner": {
-    "model": "<provider>/<best-or-2nd-reasoning>",
-    "thinking": "high",
-    "fallbackModels": ["<provider>/<reasoning>", "<provider>/<reasoning>"]
-  },
-  "worker": {
-    "model": "<provider>/<best-coder-or-mid-reasoning>",
-    "thinking": "medium",
-    "fallbackModels": ["<provider>/<alt>", "<provider>/<alt>"]
-  },
-  "reviewer": {
-    "model": "<provider>/<strong-reasoning>",
-    "thinking": "high",
-    "fallbackModels": ["<provider>/<reasoning>", "<provider>/<reasoning>"]
-  },
-  "scout": {
-    "model": "<provider>/<cheapest-fastest>",
-    "thinking": "off",
-    "fallbackModels": ["<provider>/<alt-cheap>", "<provider>/<alt-cheap>"]
-  },
-  "researcher": {
-    "model": "<provider>/<mid-reasoning>",
-    "thinking": "medium",
-    "fallbackModels": ["<provider>/<reasoning>", "<provider>/<reasoning>"]
-  },
-  "context-builder": {
-    "model": "<provider>/<cheapest-fastest>",
-    "thinking": "off",
-    "fallbackModels": ["<provider>/<alt-cheap>", "<provider>/<alt-cheap>"]
-  },
-  "delegate": {
-    "model": "<provider>/<best-reasoning>",
-    "thinking": "high",
-    "fallbackModels": ["<provider>/<2nd-reasoning>", "<provider>/<3rd-reasoning>"]
+  "theme": "dark",
+  "lastChangelogVersion": "0.80.2",
+  "packages": [
+    "npm:pi-zentui",
+    "npm:pi-mcp-adapter",
+    "npm:@spences10/pi-lsp",
+    "npm:@howaboua/pi-skill-skill-creator",
+    "npm:pi-mono-ask-user-question",
+    "npm:pi-mono-auto-fix",
+    "npm:pi-mono-btw",
+    "npm:pi-mono-context",
+    "npm:pi-mono-multi-edit",
+    "npm:@amaster.ai/pi-memory"
+  ],
+  "pi-memory": {
+    "memoryCharLimit": 6000,
+    "userCharLimit": 2000
   }
 }
 ```
 
-## Step 3: Write settings.json
+- `packages` is the list of extensions pi auto-installs into `~/.pi/agent/npm/`
+  on startup (and via `pi install <pkg>`). See step 6.
+- `pi-memory` sets the char budgets for the always-in-prompt `MEMORY.md` /
+  `USER.md` (the `memory_add` / `memory_read` tools). Keep them tight — the
+  content is injected into every turn.
 
-**Important: Merge with existing settings, do not overwrite.**
+## 5. MCP servers (`mcp.json`)
 
-If `~/.pi/agent/settings.json` already exists, read it first and merge your
-changes into it. Specifically for the `packages` array:
-
-- **Keep** any packages already present in the existing file
-- **Append** any packages from the base list below that are not already present
-- **Do not duplicate** entries (e.g., if `npm:pi-mcp-adapter` is already there,
-  don't add it again)
-
-Base packages list (add any that are missing from the existing file):
-
-```
-npm:pi-mcp-adapter
-npm:pi-web-access
-npm:pi-subagents
-npm:pi-mono-ask-user-question
-npm:pi-mono-auto-fix
-npm:pi-mono-btw
-npm:pi-mono-clear
-npm:pi-mono-context
-npm:pi-mono-context-guard
-npm:pi-mono-linear
-npm:pi-mono-loop
-npm:pi-mono-multi-edit
-npm:pi-mono-review
-npm:pi-mono-sentinel
-npm:pi-mono-simplify
-npm:pi-mono-status-line
-npm:pi-mono-team-mode
-npm:pi-mono-usage
-npm:pi-lsp-extension
-```
-
-Write `~/.pi/agent/settings.json` with the merged result:
+Write `~/.pi/agent/mcp.json`. STDIO servers use `command` + `args` (+ optional
+`env`); HTTP servers use `url`. `lifecycle: "lazy"` spawns on first use (good
+for stateless clients); `"keep-alive"` keeps the process alive (for stateful
+daemons). The server list loads at session start — new entries need a pi
+restart (or `/reload`) to appear.
 
 ```json
 {
-  "defaultThinkingLevel": "high",
-  "defaultProvider": "<resolved-from-step-2>",
-  "defaultModel": "<resolved-from-step-2>",
-  "packages": ["<merged-packages-array>"],
-  "subagents": {
-    "agentOverrides": {
-      "<resolved-assignments-from-step-2>"
-    }
-  }
-}
-```
-
-## Step 4: Install Extensions
-
-### LSP Configuration
-
-Write `~/.pi/agent/extensions/lsp/config.json`:
-
-```json
-{
-  "lsp": {
-    "typescript": {
-      "command": ["typescript-language-server", "--stdio"],
-      "extensions": [".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".mts", ".cts"]
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "lifecycle": "lazy"
     },
-    "rust": {
-      "command": ["rust-analyzer"],
-      "extensions": [".rs"]
+    "grep_app": {
+      "url": "https://mcp.grep.app",
+      "lifecycle": "lazy"
+    },
+    "argus": {
+      "command": "uvx",
+      "args": ["--from", "argus-search[mcp]", "argus", "mcp", "serve"],
+      "lifecycle": "lazy"
+    },
+    "mnemosyne": {
+      "command": "<path-to-hermes-venv>/bin/mnemosyne",
+      "args": ["mcp"],
+      "env": {
+        "MNEMOSYNE_DATA_DIR": "<path-to-mnemosyne-data>",
+        "MNEMOSYNE_EMBEDDING_API_URL": "<embedding-endpoint>/v1",
+        "MNEMOSYNE_EMBEDDING_API_KEY": "<embedding-api-key>",
+        "MNEMOSYNE_EMBEDDING_MODEL": "Qwen3-Embedding-8B",
+        "MNEMOSYNE_EMBEDDING_DIM": "4096",
+        "MNEMOSYNE_EMBEDDINGS_VIA_API": "true"
+      },
+      "lifecycle": "keep-alive"
+    },
+    "obscura": {
+      "command": "obscura",
+      "args": ["mcp"],
+      "lifecycle": "keep-alive"
+    },
+    "nixos": {
+      "command": "uvx",
+      "args": ["mcp-nixos"],
+      "lifecycle": "lazy"
     }
   }
 }
 ```
 
-Add more language servers as needed based on what's installed on this machine.
-Common additions:
-- Python: `{"command": ["pylsp"], "extensions": [".py"]}`
-- Go: `{"command": ["gopls"], "extensions": [".go"]}`
-- C/C++: `{"command": ["clangd"], "extensions": [".c", ".cpp", ".h", ".hpp"]}`
+**Before writing that block, apply these conditionals:**
 
-## Step 5: Install Packages
+- **`mnemosyne` — ask the user; don't guess.** This server is cross-session
+  memory, shared with the Hermes agent (both agents read/write one SQLite DB).
+  Its config is **not** in this guide, but can usually be **sourced from an
+  existing install** rather than pasted by hand. Do **not** write the `<...>`
+  placeholders verbatim — pi would try to exec
+  `<path-to-hermes-venv>/bin/mnemosyne` and the server would fail to start.
 
-Run npm install to set up all extension packages:
+  **First, detect what's already on the machine:**
+
+  ```bash
+  # Hermes install? (venv binary + .env + shared data dir)
+  ls ~/.hermes/hermes-agent/venv/bin/mnemosyne ~/.hermes/.env ~/.hermes/mnemosyne/data 2>/dev/null
+  # OpenClaw install carrying mnemosyne config? (check its env/config files)
+  ls ~/.openclaw 2>/dev/null
+  grep -rilE 'MNEMOSYNE|embedding' ~/.openclaw 2>/dev/null | head
+  ```
+
+  **Then use `ask_user_question` to ask the user:**
+
+  - Q1 (radio): "Set up the `mnemosyne` cross-session memory MCP server?"
+    → `Yes` / `No, skip it`
+  - Q2 (radio, only if Q1 = Yes **and** more than one source was detected
+    above): "Source its config from?" → `Hermes` (if `~/.hermes/.env` exists)
+    / `OpenClaw` (if detected) / `Fresh data dir`
+
+  **Act on the answer:**
+
+  - **No, skip** → delete the entire `mnemosyne` entry from `mcp.json`. Done.
+  - **Hermes** → fill the block from the existing Hermes install (no
+    secret-pasting). The values are fully discoverable:
+    - `command` = `~/.hermes/hermes-agent/venv/bin/mnemosyne`
+    - `args` = `["mcp"]`, `lifecycle` = `"keep-alive"`
+    - `MNEMOSYNE_DATA_DIR` = `~/.hermes/mnemosyne/data` (the shared DB)
+    - `MNEMOSYNE_EMBEDDING_API_URL`, `MNEMOSYNE_EMBEDDING_API_KEY`,
+      `MNEMOSYNE_EMBEDDING_MODEL`, `MNEMOSYNE_EMBEDDING_DIM`,
+      `MNEMOSYNE_EMBEDDINGS_VIA_API` → `grep` these five keys out of
+      `~/.hermes/.env` and copy the values verbatim into `env`.
+
+    This points pi at the **same** SQLite DB Hermes uses, so pi and Hermes
+    share one memory store.
+
+  - **OpenClaw** → discover the `MNEMOSYNE_*` env from OpenClaw's config
+    (its `.env` / settings) and fill the block the same way; `command` is
+    OpenClaw's `mnemosyne` binary if it ships one, else the Hermes venv
+    binary. If OpenClaw turns out to have no mnemosyne config, fall back to
+    the Hermes or Fresh path.
+  - **Fresh data dir** → set `MNEMOSYNE_DATA_DIR` to a new path (e.g.
+    `~/.pi/agent/mnemosyne/data`). You still need an embedding endpoint + key:
+    ask the user for `MNEMOSYNE_EMBEDDING_API_URL` and
+    `MNEMOSYNE_EMBEDDING_API_KEY`. If they don't have one, omit mnemosyne.
+
+- **`argus` — add SearXNG env if it's running.** The template above omits `env`
+  (argus auto-routes to free providers without it). If SearXNG **is** running —
+  the user said `127.0.0.1:48431` — add an `env` block to the `argus` entry:
+
+  ```json
+  "env": {
+    "ARGUS_SEARXNG_ENABLED": "true",
+    "ARGUS_SEARXNG_BASE_URL": "http://127.0.0.1:48431"
+  }
+  ```
+
+  If SearXNG is not running, leave `argus` as shown (no `env`).
+
+**What each server does / what it needs:**
+
+| Server      | Type  | Needs                                                                                                                                      |
+| ----------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `context7`  | STDIO | Nothing (public npx package, library docs).                                                                                                |
+| `grep_app`  | HTTP  | Nothing (public, code search).                                                                                                             |
+| `argus`     | STDIO | `uvx`. Web search; auto-routes to free providers. Add SearXNG env (see Prerequisites) only if one is already running.                      |
+| `mnemosyne` | STDIO | Cross-session memory (shared with Hermes). Config is sourced interactively — see the conditional above (Hermes / OpenClaw / fresh / skip). |
+| `obscura`   | STDIO | The `obscura` Rust binary on `PATH`. Headless browser / page render.                                                                       |
+| `nixos`     | STDIO | `uvx`. Query nixpkgs / NixOS options.                                                                                                      |
+
+> `mnemosyne`'s values are machine-specific (venv path, data dir, embedding
+> endpoint + key). Don't commit real values — source them interactively per
+> the conditional above, and never write the `<...>` placeholders verbatim.
+
+## 6. Extensions (npm packages)
+
+Already listed under `packages` in `settings.json` (step 4). On startup pi
+installs missing entries into `~/.pi/agent/npm/` and updates
+`~/.pi/agent/npm/package.json`. To install/update explicitly:
 
 ```bash
-cd ~/.pi/agent/npm && npm install
+pi install npm:pi-zentui          # one package
+pi update --extensions             # update all installed extensions
 ```
 
-Pi auto-generates `package.json` from the `packages` list in settings.json
-and installs them.
+What they are:
 
-## Step 6: Install Skills
+- `pi-zentui` — TUI theme/components.
+- `pi-mcp-adapter` — MCP integration adapter.
+- `@spences10/pi-lsp` — LSP diagnostics/hover/definition tools.
+- `@howaboua/pi-skill-skill-creator` — ships the `skill-creator` skill.
+- `pi-mono-ask-user-question` — interactive question tool.
+- `pi-mono-auto-fix` — auto-fix loop.
+- `pi-mono-btw` — side-channel notes.
+- `pi-mono-context` — context management.
+- `pi-mono-multi-edit` — multi-file edit tool.
+- `@amaster.ai/pi-memory` — the `memory_*` tools backing `MEMORY.md`/`USER.md`.
 
-Install skills from their git sources:
+## 7. Skills
+
+Skills are `SKILL.md` files. pi loads them from (in order) `.pi/skills/`,
+`.agents/skills/` (project, walking up parents), then `~/.pi/agent/skills/`
+and `~/.agents/skills/` (user-global). User-global is what we seed here.
+
+Install these user-global skills:
 
 ```bash
-pi skill install github:microsoft/azure-skills microsoft-foundry
-pi skill install github:vectorize-io/hindsight hindsight-docs
-pi skill install github:vercel-labs/skills find-skills
+mkdir -p ~/.pi/agent/skills ~/.agents/skills
 ```
 
-## Step 7: Configure MCP Servers
+- **`mnemosyne-memory`** → `~/.pi/agent/skills/mnemosyne-memory/SKILL.md`.
+  **Source: vendored in this repo at
+  `config/pi/skills/mnemosyne-memory/SKILL.md`** — copy from there. (Don't
+  grab `~/.hermes/.../mnemosyne-hermes/SKILL.md` — that's a _different_ skill
+  for the Hermes agent, and `~/.hermes` won't exist on a fresh machine.)
+  Teaches the agent when to use `mnemosyne_remember` / `mnemosyne_recall`.
+- **`obscura`** → `~/.pi/agent/skills/obscura/SKILL.md`. **Source: vendored in
+  this repo at `config/pi/skills/obscura/SKILL.md`** — copy from there.
+  (Don't rely on `/tmp/obscura/...` — that's an ephemeral path the binary
+  regenerates after first run and won't exist on a fresh machine.) Teaches
+  CDP / page-render usage.
+- **`skill-creator`** → no manual copy; exposed by the
+  `@howaboua/pi-skill-skill-creator` npm extension (step 6).
+- **`find-skills`, `hindsight-docs`, `microsoft-foundry`** →
+  `~/.agents/skills/` (cross-agent convention). Install on demand via the
+  `find-skills` skill; not required for a baseline setup.
 
-MCP servers are configured via pi's mcp-adapter extension. The current setup
-uses Context7 for documentation lookup. It auto-installs via npx on first use,
-so no manual setup is needed.
+If a skill ships inside a package/venv, copy just the `SKILL.md` (and any
+referenced sibling files) into the target dir — pi reads the file directly.
 
-The MCP server config is stored in pi's internal cache and auto-managed.
-Just use pi normally and it connects on demand.
+### ⚠️ Restart pi before steps 8–10
 
-## Step 8: Configure Web Search
+Extensions (step 6) and MCP servers (step 5) load at pi **startup**, not
+mid-session. You've just written `settings.json` and `mcp.json` during this
+session, so the `@amaster.ai/pi-memory` extension and the MCP servers are
+**not yet loaded** in the current session — `memory_add` won't exist as a
+tool and `/mcp` will show nothing until you restart. Exit pi and relaunch it,
+then continue from step 8.
 
-Write `~/.pi/web-search.json`:
+## 8. Seed memory
 
-```json
-{
-  "workflow": "none",
-  "curatorTimeoutSeconds": 20
-}
+`~/.pi/agent/memories/MEMORY.md` is the agent's always-in-prompt memory,
+exposed via the `memory_add` / `memory_read` / `memory_replace` /
+`memory_remove` tools (provided by the `@amaster.ai/pi-memory` extension from
+step 6). It's char-limited, so keep it to short rules + key facts only — not
+task logs.
+
+After the restart above (so the `@amaster.ai/pi-memory` extension is loaded
+and `memory_add` is available), use `memory_add` to seed the three entries
+below (one call per entry). **Don't hand-edit `MEMORY.md`**
+— the tool writes the `§` entry delimiters itself, and hand-editing risks
+breaking the format. From here the agent can add, edit (`memory_replace`), or
+remove entries as needed.
+
+**Entry 1 — tool-usage rules** (one `memory_add` call with this content):
+
+```
+# Rules
+
+## Web access
+
+- Search the web with the `argus` MCP server. Never `curl`/`wget`/`python requests` a search engine or hand-roll a scraper.
+- Open, render, or interact with a webpage with the `obscura` MCP server (or `obscura fetch`/`obscura serve` from the CLI). Never `curl`/`python requests` a page URL — they fail on JS-rendered and bot-protected pages.
+- argus discovers URLs and facts; obscura renders and interacts.
+
+## GitHub
+
+- Browse GitHub with the `gh` CLI (`gh repo view`, `gh issue`, `gh pr`, etc.) instead of scraping github.com in the browser.
+
+## Memory
+
+- Keep this `MEMORY.md`/`USER.md` compact (always-in-prompt, char-limited) — short rules and key facts only.
+- For longer or cross-session memory (decisions, project state, prior work, rationale), use the `mnemosyne` MCP server: `mnemosyne_remember` to store, `mnemosyne_recall` to retrieve. Don't dump long context here.
 ```
 
-## Step 9: Authenticate Providers
+**Entry 2 — pi MCP server config note** (one `memory_add` call):
 
-These MUST be done manually — tokens cannot be copied between machines:
+```
+pi MCP servers: configured in `~/.pi/agent/mcp.json` under `mcpServers`. pi has native MCP support (no adapter needed). STDIO servers use `command`+`args` (+optional `env`); HTTP servers use `url`. `lifecycle`: `"lazy"` (spawn on first use, good for stateless API clients) or `"keep-alive"` (persistent). Server list is loaded at session start — new entries need a pi restart (or `/reload`) to appear in the `mcp` gateway. Verify a STDIO server works with a JSON-RPC `initialize`+`tools/list` handshake over the process stdin/stdout.
+```
 
-- **OpenAI Codex**: Run `pi auth openai-codex` (opens browser OAuth)
-- **Linear**: Run `pi linear auth` (prompts for personal API key)
-- **Other providers**: Set the appropriate env var (e.g., `ANTHROPIC_API_KEY`,
-  `GEMINI_API_KEY`, `DEEPSEEK_API_KEY`, etc.)
+**Entry 3 — `memory_replace` footgun** (one `memory_add` call):
 
-## Step 10: Verify Setup
+```
+memory_replace footgun: `oldText` only *selects* the entry; `newContent` replaces the **entire entry**, not the matched substring. Passing just the changed fragment as `newContent` truncates the entry to that fragment. Always pass the full intended entry text as `newContent`. If unsure, use `memory_remove` + `memory_add` instead.
+```
 
-Run these commands to verify everything is working:
+Verify with `memory_read` — you should see all three entries.
 
-1. `pi --list-models` — should show all expected models
-2. `pi -p "What model are you?"` — should respond with the default model
-3. `pi` (interactive) — launch and check that extensions load without errors
-4. `/model` in interactive mode — verify model switching works
-5. Test a skill: ask pi to use context7 or linear to verify integrations
+## 9. Secrets checklist (user-provided)
 
-## Quick Setup Command
+These are **not** in this repo and must be supplied before first run:
 
-Once providers are authenticated, the entire setup can be driven by:
+- [ ] `~/.pi/agent/models.json` — provider API keys (you set this up, step 2).
+- [ ] `~/.pi/agent/auth.json` — created automatically by `/login`.
+- [ ] `mcp.json` → `mnemosyne` — decided via the interactive ask in step 5
+      (skip, or source from Hermes/OpenClaw, or fresh). If sourced from
+      Hermes, all values come from `~/.hermes/.env` + the fixed venv/data
+      paths — no secret-pasting needed.
+- [ ] SearXNG reachable for `argus`'s `env` block (optional — see the
+      SearXNG check in Prerequisites; if none running, just omit the env,
+      `argus` still works without it).
+- [ ] `obscura` binary on `PATH`; `uvx` on `PATH`.
+
+## 10. Verify
 
 ```bash
-pi --model <strongest-available-model> -p @SETUP.md "Follow this setup guide. Start from Step 1 and complete all steps sequentially. Use the tools available to you to write files and run commands."
+pi                       # launches; no config errors
+# inside pi:
+/mcp                     # lists every server you configured, each "connected"
+# tools from context7, grep_app, argus, obscura, nixos should appear;
+# mnemosyne appears only if you had its secrets and kept the block (step 5)
 ```
 
-Replace `<strongest-available-model>` with the best model shown by
-`pi --list-models` on this machine.
-
-### Minimal Setup (One Provider Only)
-- If only one provider with one model is available, all roles use that model
-- Fallbacks can be omitted or set to the same model
-- This works but you lose the cost optimization of tier:fast roles
+Then check the memory tools are live (`memory_read`; `mnemosyne_recall`
+only if the mnemosyne server is configured) and that an extension tool like
+`ask_user_question` or the LSP tools resolve. If a STDIO MCP server shows
+disconnected, run its `command` + `args` manually to see the startup error,
+and confirm `env`/`PATH`/secrets are set.
