@@ -356,6 +356,17 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
 }
 .ctrl:hover { color: #{$accent}; background-color: #{$base01}; }
 
+// ── clipboard button ──────────────────────────────────────────────────────
+.clipbtn {
+  font-size: 14px;
+  color: #{$ink-dim};
+  padding: 0 8px;
+  margin: 0 4px;
+  border-radius: 8px;
+  transition: all 150ms ease;
+}
+.clipbtn:hover { color: #{$accent}; background-color: #{$base01}; }
+
 .tray { margin: 0 8px; }
 .tray-item { padding: 0 4px; }
 
@@ -715,6 +726,152 @@ scale.slider.bri highlight { background-color: #{$base0A}; }
   transition: all 150ms ease;
 }
 .Notification .actions button:hover { background-color: #{$accent}; color: #{$accent-ink}; }
+
+// ═════════════════════════════════════════════════════════════════════════
+//  clipboard history — top-right popup
+// ═════════════════════════════════════════════════════════════════════════
+.clipboard {
+  background-color: #{$base00};
+  border: 1px solid #{$base02};
+  border-radius: 22px;
+  padding: 14px;
+  margin: 8px;
+  color: #{$ink};
+}
+
+// ── header ──
+.clip-header { margin-bottom: 12px; }
+.clip-title-icon {
+  font-family: #{$font-mono};
+  font-size: 20px;
+  color: #{$accent};
+  margin: 0 10px 0 4px;
+}
+.clip-title { font-size: 17px; font-weight: 700; color: #{$ink}; }
+
+.clip-hbtn {
+  font-family: #{$font-mono};
+  font-size: 17px;
+  min-width: 34px;
+  min-height: 34px;
+  margin-left: 4px;
+  border-radius: 999px;
+  color: #{$ink-dim};
+  background-color: transparent;
+  transition: all 150ms ease;
+}
+.clip-hbtn:hover { color: #{$accent}; background-color: #{$card}; }
+.clip-wipe:hover { color: #{$base08}; }
+.clip-wipe.clearing { opacity: 0.5; }
+
+// ── search ──
+.clip-searchbar {
+  background-color: #{$card};
+  border-radius: 999px;
+  padding: 4px 16px;
+  margin-bottom: 12px;
+}
+.clip-search-icon {
+  font-family: #{$font-mono};
+  font-size: 16px;
+  color: #{$ink-dim};
+  margin-right: 12px;
+}
+.clip-search {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  color: #{$ink};
+  font-size: 14px;
+  min-height: 34px;
+  caret-color: #{$accent};
+}
+.clip-search:focus { background: transparent; box-shadow: none; }
+
+// ── list ──
+.clip-list { padding-right: 4px; }
+
+.clip-row {
+  background-color: #{$card};
+  border-radius: 14px;
+  margin-bottom: 8px;
+  border: 1px solid transparent;
+  transition: background-color 150ms ease, border-color 150ms ease,
+              transform 350ms ease-in, opacity 350ms ease-in;
+}
+.clip-row:hover {
+  background-color: #{$card-hi};
+  border: 1px solid #{$accent};
+}
+
+// Clear-all: rows slide off to the right, staggered by position (mirrors the
+// notification-center clear animation).
+.clip-row.clearing-out {
+  transform: translate(40rem, 0);
+  opacity: 0;
+}
+@for $i from 1 through 15 {
+  .clip-row.clearing-out:nth-child(#{$i}) {
+    transition-delay: 0s, 0s, #{($i - 1) * 50}ms, #{($i - 1) * 50}ms;
+  }
+}
+
+.clip-copy {
+  padding: 12px 6px 12px 12px;
+  border-radius: 14px;
+}
+
+.clip-badge {
+  font-family: #{$font-mono};
+  font-size: 13px;
+  font-weight: 600;
+  color: #{$accent};
+  min-width: 30px;
+  min-height: 30px;
+  margin-right: 12px;
+  border-radius: 999px;
+  background-color: #{$base02};
+}
+
+.clip-thumb {
+  min-width: 60px;
+  min-height: 44px;
+  margin-right: 14px;
+  border-radius: 8px;
+  background-color: #{$base02};
+}
+.clip-glyph {
+  font-family: #{$font-mono};
+  font-size: 20px;
+  color: #{$ink-dim};
+  min-width: 44px;
+  min-height: 44px;
+  margin-right: 14px;
+}
+
+.clip-kind {
+  font-size: 13px;
+  font-weight: 600;
+  color: #{$accent};
+  margin-bottom: 2px;
+}
+.clip-preview { font-size: 13px; color: #{$ink-dim}; }
+
+.clip-action {
+  font-family: #{$font-mono};
+  font-size: 15px;
+  min-width: 36px;
+  min-height: 36px;
+  margin: 0 8px 0 4px;
+  border-radius: 999px;
+  color: #{$ink-dim};
+  transition: all 150ms ease;
+}
+.clip-del:hover { color: #{$base08}; background-color: #{$base02}; }
+
+.clip-empty-icon { font-family: #{$font-mono}; font-size: 34px; color: #{$base03}; }
+.clip-empty-text { color: #{$ink-dim}; font-size: 13px; }
 
 // ═════════════════════════════════════════════════════════════════════════
 //  volume popup — bottom-center toast

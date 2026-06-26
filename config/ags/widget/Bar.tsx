@@ -256,6 +256,18 @@ function Tray() {
   )
 }
 
+function Clipboard({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
+  return (
+    <button
+      class="clipbtn"
+      tooltipText="Clipboard history"
+      onClicked={() => togglePopup("clipboard", gdkmonitor)}
+    >
+      <label label="󰅍" />
+    </button>
+  )
+}
+
 function Sep() {
   return <label class="sep" label="|" />
 }
@@ -293,6 +305,8 @@ export default function Bar({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
           <Net />
           <Sep />
           <Stats />
+          <Sep />
+          <Clipboard gdkmonitor={gdkmonitor} />
           <Sep />
           <Tray />
           <Sep />

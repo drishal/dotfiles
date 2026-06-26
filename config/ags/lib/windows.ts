@@ -4,7 +4,7 @@ import type Gdk from "gi://Gdk"
 
 // All toggleable popups (base names). Opening one closes the others on the same
 // monitor, so at most one popup is visible per display at a time.
-const POPUPS = ["dashboard", "notes", "powermenu"]
+const POPUPS = ["dashboard", "notes", "powermenu", "clipboard"]
 
 /**
  * Toggle a named popup window, scoped to a monitor.
