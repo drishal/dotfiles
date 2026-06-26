@@ -89,7 +89,7 @@ written by pi on `/model` — leave them out of what you add.
 
 ```json
 {
-  "theme": "dark",
+  "theme": "gruvbox-material-hard",
   "lastChangelogVersion": "0.80.2",
   "packages": [
     "npm:pi-zentui",
@@ -115,6 +115,29 @@ written by pi on `/model` — leave them out of what you add.
 - `pi-memory` sets the char budgets for the always-in-prompt `MEMORY.md` /
   `USER.md` (the `memory_add` / `memory_read` tools). Keep them tight — the
   content is injected into every turn.
+
+### Custom theme
+
+The theme referenced above (`gruvbox-material-hard`) ships in this repo at
+`config/pi/themes/gruvbox-material-hard.json`. Install it:
+
+```bash
+mkdir -p ~/.pi/agent/themes
+cp ~/dotfiles/config/pi/themes/gruvbox-material-hard.json ~/.pi/agent/themes/
+```
+
+It implements the **Gruvbox Material Hard Dark** palette — a warm, earthy
+dark theme with muted greens, oranges, and reds. The file defines all 51 pi
+theme tokens and uses variable references (defined in `vars`) for
+maintainability. To switch at runtime, edit `settings.json`'s `"theme"` value
+or use `/settings` inside pi — and since the theme file is under `~/.pi/agent/themes/`,
+pi hot-reloads edits to the active theme file automatically.
+
+> **Why not `"theme": "dark"`?** The built-in `dark` theme is a generic blue-on-black
+> fallback. The `gruvbox-material-hard` theme is the preferred look for this
+> setup: it matches the terminal color scheme, reduces blue-light glare, and
+> uses a curated palette that was built for the Gruvbox Material vim
+> colorscheme this machine already uses.
 
 ## 5. MCP servers (`mcp.json`)
 
