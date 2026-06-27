@@ -430,6 +430,7 @@
       nerd-fonts.symbols-only
       nerd-fonts.recursive-mono
       nerd-fonts.commit-mono
+      nerd-fonts.monaspace
       noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-lgc-plus
