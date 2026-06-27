@@ -198,7 +198,17 @@ function coverPath(p: AstalMpris.Player): Accessor<string> {
 function Player() {
   const mpris = AstalMpris.get_default()
   const players = createBinding(mpris, "players")
-  const player = players((ps) => ps[0] ?? null)
+  const player = players((ps) => {
+    // Sort mpv to front so it's preferred over browsers/Discord etc.
+    const sorted = [...ps].sort((a, b) => {
+      const aIsMpv = /mpv/i.test(a.entry || a.bus_name || a.identity)
+      const bIsMpv = /mpv/i.test(b.entry || b.bus_name || b.identity)
+      if (aIsMpv && !bIsMpv) return -1
+      if (!aIsMpv && bIsMpv) return 1
+      return 0
+    })
+    return sorted[0] ?? null
+  })
 
   // Wrap the dynamic <With> in an always-present box so the player keeps its
   // slot above the date chip (an empty <With> otherwise gets appended last when
