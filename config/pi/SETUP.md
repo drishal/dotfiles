@@ -27,16 +27,28 @@ Follow it top to bottom. It assumes the dotfiles repo is checked out at
 `argus` does **not** require SearXNG — it auto-routes to the cheapest/free
 search providers on its own and works out of the box. You only need to wire
 up SearXNG if one is **already running** somewhere and you want `argus` to use
-it as a backend. Only check if you (or the user) expect one to be up:
+it as a backend. Discover the real URL — don't hard-code a port.
 
 ```bash
-docker ps --format '{{.Names}}\t{{.Ports}}' | grep -i searx   # docker route
-curl -sS -o /dev/null -w '%{http_code}\n' http://127.0.0.1:48431   # likely port
+# 1. Any docker container with "searx" in its name? Parse the host-side port
+#    from its published mapping (`<hostport>->8080` or `->8080/tcp`).
+docker ps --format '{{.Names}}\t{{.Ports}}' 2>/dev/null | grep -i searx
+# 2. Native NixOS searx.service? Its port is `server.port` in
+#    NixOS/hosts/common/searx.nix (this repo — default here is 8888).
+grep -E '^\s*server\.port' ~/dotfiles/NixOS/hosts/common/searx.nix 2>/dev/null
+# 3. Probe the candidate ports SearXNG is most likely on (8888 NixOS, 8080
+#    upstream, 48431 / 4000 common docker maps). Pick the first that returns 200.
+for p in 8888 8080 48431 4000; do
+  code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 2 "http://127.0.0.1:$p" 2>/dev/null || true)
+  [ "$code" = "200" ] && echo "searx reachable on :$p" && break
+done
 ```
 
-- If a SearXNG is reachable (container shows up, or `curl` returns `200`),
-  set `ARGUS_SEARXNG_ENABLED=true` and `ARGUS_SEARXNG_BASE_URL=http://<host>:<port>`
-  in the `argus` block of `mcp.json` (step 5).
+- If SearXNG is reachable (docker container shows up, a port returns `200`,
+  or `searx.nix` declares a `server.port`), set `ARGUS_SEARXNG_ENABLED=true`
+  and `ARGUS_SEARXNG_BASE_URL=http://127.0.0.1:<discovered-port>` in the
+  `argus` block of `mcp.json` (step 5). Use the **discovered** port — not a
+  guessed one — so `argus` actually reaches the running instance.
 - If **nothing is running** (or you just don't care), **skip this entirely** —
   leave the `ARGUS_SEARXNG_*` env vars out of `mcp.json`. `argus` runs fine
   without them. The NixOS config lives at `NixOS/hosts/common/searx.nix` if
@@ -71,6 +83,7 @@ pi creates most of this on first run. What matters:
 | `settings.json`                        | Global settings, extensions, theme         | Yes (step 4)  |
 | `mcp.json`                             | MCP server definitions                     | Yes (step 5)  |
 | `npm/`                                 | npm extension install dir + `package.json` | Auto (step 6) |
+| `extensions/skill-manage.ts`           | Local self-improvement extension           | Yes (step 7)  |
 | `skills/`                              | User-global skills (`SKILL.md` per dir)    | Yes (step 7)  |
 | `memories/MEMORY.md`                   | Always-in-prompt agent memory              | Yes (step 8)  |
 | `mcp-cache.json`, `mcp-npx-cache.json` | Auto-generated MCP tool caches             | Auto          |
@@ -245,13 +258,16 @@ restart (or `/reload`) to appear.
     `MNEMOSYNE_EMBEDDING_API_KEY`. If they don't have one, omit mnemosyne.
 
 - **`argus` — add SearXNG env if it's running.** The template above omits `env`
-  (argus auto-routes to free providers without it). If SearXNG **is** running —
-  the user said `127.0.0.1:48431` — add an `env` block to the `argus` entry:
+  (argus auto-routes to free providers without it). If the SearXNG check in
+  the Prerequisites section found a reachable URL — i.e. you got `server.port`
+  in `NixOS/hosts/common/searx.nix`, a docker `searx` container on
+  `0.0.0.0:<port>->8080`, or a `200` from one of the probe ports — add an
+  `env` block to the `argus` entry using the **discovered** port:
 
   ```json
   "env": {
     "ARGUS_SEARXNG_ENABLED": "true",
-    "ARGUS_SEARXNG_BASE_URL": "http://127.0.0.1:48431"
+    "ARGUS_SEARXNG_BASE_URL": "http://127.0.0.1:<discovered-port>"
   }
   ```
 
@@ -296,17 +312,68 @@ What they are:
 - `pi-mono-multi-edit` — multi-file edit tool.
 - `@amaster.ai/pi-memory` — the `memory_*` tools backing `MEMORY.md`/`USER.md`.
 
-## 7. Skills
+## 7. Skills + local extension
 
 Skills are `SKILL.md` files. pi loads them from (in order) `.pi/skills/`,
 `.agents/skills/` (project, walking up parents), then `~/.pi/agent/skills/`
 and `~/.agents/skills/` (user-global). User-global is what we seed here.
 
-Install these user-global skills:
+There is also one **local TypeScript extension**,
+`extensions/skill-manage.ts`, that gives pi the dynamic skill-creation loop
+this config relies on. Install it in the same pass.
 
 ```bash
-mkdir -p ~/.pi/agent/skills ~/.agents/skills
+mkdir -p ~/.pi/agent/skills ~/.agents/skills ~/.pi/agent/extensions
 ```
+
+### 7a. Local extension — `skill-manage.ts` (the self-improvement loop)
+
+Copy the vendored extension into pi's global extensions dir:
+
+```bash
+cp ~/dotfiles/config/pi/extensions/skill-manage.ts ~/.pi/agent/extensions/
+```
+
+What it does (one self-contained file, no npm deps):
+
+- Registers a **`skill_manage`** tool the LLM can call to
+  create / patch / edit / delete skills and their supporting
+  `references/` / `templates/` / `scripts/` / `assets/` files. New skills go
+  to `~/.pi/agent/skills/<category?>/<name>/` and get a
+  `.pi-provenance.json` sidecar (`created_by: "agent"`) so agent-created
+  skills stay distinguishable from hand-written ones. Every write runs an
+  inline efficiency check (frontmatter parse, kebab-case, description length,
+  forbidden trigger-selection headings in the body, plain-scalar quoting,
+  dangling `references/`/`scripts/`/`assets/` paths).
+- Walks every turn counting tool calls; after **10** calls in a turn that
+  did NOT already call `skill_manage`, it injects a follow-up user message
+  that asks the agent to review the turn and codify anything worth saving.
+  The review prompt is a port of the Hermes Agent background-review prompt,
+  including the _do-not-capture_ rules (env-dependent failures, negative
+  tool claims, transient errors — they rot into self-imposed refusals) and
+  the 4-step update preference order (patch-loaded → patch-umbrella →
+  add-support-file → create-class-level-skill). Counter resets whenever
+  `skill_manage` is called; nudge turns don't re-arm their own follow-up.
+  Tune at the top of the file: `NUDGE_INTERVAL` (set to `0` to disable).
+- Adds a **`/learn <anything>`** command — gather from a dir, URL, pasted
+  notes, or "what I just did", then author one skill via `skill_manage`.
+  Adapted from Hermes' `/learn` command.
+- Adds a **`/skills-show`** command — lists discovered skills with a `+`
+  marker for agent-created ones (uses `ctx.ui.select` so it's harmless in
+  background/print modes — fires the picker only if you actually call it).
+
+This is the actionable counterpart to the `skill-creator` skill from step 6:
+that skill is the **authoring guide** (writing-quality rules, references
+split, efficiency posture); this extension is the **actor** (a registered
+tool with trigger guidance baked into its description so the model does not
+have to load a SKILL.md first). Both coexist and reinforce each other.
+
+> The `skill-manage.ts` file uses `StringEnum` from `@earendil-works/pi-ai`
+> and `Type` from `typebox` — both are bundled in pi's `node_modules` and
+> resolved at load time, so the extension needs no `npm install` of its own.
+> It loads via `jiti` (pi's TypeScript loader) — no build step.
+
+### 7b. User-global skills
 
 - **`mnemosyne-memory`** → `~/.pi/agent/skills/mnemosyne-memory/SKILL.md`.
   **Source: vendored in this repo at
@@ -314,28 +381,39 @@ mkdir -p ~/.pi/agent/skills ~/.agents/skills
   grab `~/.hermes/.../mnemosyne-hermes/SKILL.md` — that's a _different_ skill
   for the Hermes agent, and `~/.hermes` won't exist on a fresh machine.)
   Teaches the agent when to use `mnemosyne_remember` / `mnemosyne_recall`.
-- **`obscura`** → `~/.pi/agent/skills/obscura/SKILL.md`. **Source: vendored in
-  this repo at `config/pi/skills/obscura/SKILL.md`** — copy from there.
+- **`obscura`** → `~/.pi/agent/skills/obscura/SKILL.md`. **Source: vendored
+  in this repo at `config/pi/skills/obscura/SKILL.md`** — copy from there.
   (Don't rely on `/tmp/obscura/...` — that's an ephemeral path the binary
   regenerates after first run and won't exist on a fresh machine.) Teaches
   CDP / page-render usage.
 - **`skill-creator`** → no manual copy; exposed by the
-  `@howaboua/pi-skill-skill-creator` npm extension (step 6).
+  `@howaboua/pi-skill-skill-creator` npm extension (step 6). It's the
+  authoring-quality reference skill — the actual `skill_manage` _tool_
+  comes from the local extension in 7a, so the model can create skills even
+  if it never reads this SKILL.md.
 - **`find-skills`, `hindsight-docs`, `microsoft-foundry`** →
   `~/.agents/skills/` (cross-agent convention). Install on demand via the
   `find-skills` skill; not required for a baseline setup.
+
+Copy the two vendored skills:
+
+```bash
+cp -r ~/dotfiles/config/pi/skills/mnemosyne-memory ~/.pi/agent/skills/
+cp -r ~/dotfiles/config/pi/skills/obscura          ~/.pi/agent/skills/
+```
 
 If a skill ships inside a package/venv, copy just the `SKILL.md` (and any
 referenced sibling files) into the target dir — pi reads the file directly.
 
 ### ⚠️ Restart pi before steps 8–10
 
-Extensions (step 6) and MCP servers (step 5) load at pi **startup**, not
-mid-session. You've just written `settings.json` and `mcp.json` during this
-session, so the `@amaster.ai/pi-memory` extension and the MCP servers are
-**not yet loaded** in the current session — `memory_add` won't exist as a
-tool and `/mcp` will show nothing until you restart. Exit pi and relaunch it,
-then continue from step 8.
+Extensions (step 6 + 7a) and MCP servers (step 5) load at pi **startup**,
+not mid-session. You've just written `settings.json` and `mcp.json` and
+dropped `skill-manage.ts` into `~/.pi/agent/extensions/` during this
+session, so the `@amaster.ai/pi-memory` and `skill-manage` extensions and
+the MCP servers are **not yet loaded** in the current session — `memory_add`
+and `skill_manage` won't exist as tools and `/mcp` will show nothing until
+you restart. Exit pi and relaunch it, then continue from step 8.
 
 ## 8. Seed memory
 
@@ -417,3 +495,35 @@ only if the mnemosyne server is configured) and that an extension tool like
 `ask_user_question` or the LSP tools resolve. If a STDIO MCP server shows
 disconnected, run its `command` + `args` manually to see the startup error,
 and confirm `env`/`PATH`/secrets are set.
+
+Confirm the self-improvement loop (step 7a) is live:
+
+- The **authoritative** check is the `skill_manage` tool, since
+  `registerTool` and both `registerCommand` calls (`/learn`, `/skills-show`)
+  run in the same extension factory — if `skill_manage` resolves, the whole
+  extension loaded. Run the smoke test (single line):
+
+  ```
+  Call skill_manage action="create" name="zz-setup-smoketest" content="---
+  name: zz-setup-smoketest
+  description: "Use when smoke-testing skill_manage installation. Delete me."
+  ---
+  # Smoke test
+
+  Placeholder created during SETUP verification.
+  " and paste the result; then call skill_manage action="delete" name="zz-setup-smoketest" absorbed_into="" to clean it up.
+  ```
+
+  Expect the create to write the skill under
+  `~/.pi/agent/skills/zz-setup-smoketest/` and return an efficiency-check
+  report, and the delete to remove it and record the absorption to
+  `~/.pi/agent/skills/.skill_archives.json`. If pi says the tool is missing,
+  re-check the file landed at `~/.pi/agent/extensions/skill-manage.ts` and
+  that you restarted pi after step 7a.
+
+- `/learn` and `/skills-show` are **user-typed slash commands**, not
+  LLM-callable tools, so don't expect the model to see them in its own command
+  inventory — open pi interactively and type `/` <kbd>tab</kbd> (or run
+  `/commands`); both should appear there. `/learn <anything>` authors a new
+  skill from a dir/URL/pasted notes/"what I just did"; `/skills-show` lists
+  discovered skills (a `+` marks agent-created ones).
