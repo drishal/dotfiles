@@ -15,17 +15,21 @@ automatically. If you don't `mnemosyne_remember`, nothing is saved. If you don't
 `mnemosyne_recall`, you're working blind to past context (yours _and_ Hermes's).
 Treat the triggers in the description as mandatory.
 
+Use Mnemosyne for normal durable memories (preferences, decisions, project state,
+prior work). Use `MEMORY.md`/`USER.md` only for core rules/facts that must be
+present in every prompt; keep them tiny.
+
 ## Connection facts
 
-- **MCP server name:** `mnemosyne` (in `~/.pi/agent/mcp.json`, lazy lifecycle)
-- **Shared DB:** `~/.hermes/mnemosyne/data/mnemosyne.db` (SQLite + WAL mode; pi and Hermes never run simultaneously, so single-writer-at-a-time is always safe)
-- **Embeddings:** Qwen3-Embedding-8B @ 4096 dims via the litellm gateway (`http://192.168.11.14:8085/v1`) — configured in the MCP server env, already working. Stored as `int8[4096]` (quantized, 4KB/vector).
-- **Hybrid ranking:** 50% vector similarity + 30% FTS5 text + 20% importance + optional temporal boost. Tunable per-query via `vec_weight`/`fts_weight`/`importance_weight`/`temporal_weight`.
-- **No reranker model** — uses MMR (diversity) + lexical fusion. Sidesteps the broken gateway Qwen3-Reranker serving entirely.
+- **MCP server name:** `mnemosyne` (configured in `~/.pi/agent/mcp.json`, lazy lifecycle). Pi must be restarted or `/reload`ed after editing MCP config because the MCP server list is read at startup.
+- **MCP command:** `/home/drishal/.hermes/hermes-agent/.venv/bin/mnemosyne mcp` with `LD_LIBRARY_PATH=/run/current-system/sw/share/nix-ld/lib` on NixOS. Direct calls without that env can produce misleading dependency failures.
+- **Hermes private DB:** `~/.hermes/mnemosyne/data/mnemosyne.db` (Hermes memory provider's main SQLite DB).
+- **Shared surface DB:** `~/.mnemosyne/data/shared/mnemosyne.db` exposed by `mnemosyne_shared_*` tools for compact cross-agent facts/preferences.
+- **Hermes config:** `~/.hermes/config.yaml` has `memory.provider: mnemosyne` and `memory.mnemosyne.shared_surface_read: true`, `auto_sleep: true`, `vector_type: int8`.
+- **Hybrid ranking:** vector similarity + FTS5 text rank + importance + optional temporal boost. Tunable per-query via `vec_weight`/`fts_weight`/`importance_weight`/`temporal_weight`.
 - **No `reflect`** — unlike Hindsight, there is no agentic reasoning loop. `mnemosyne_recall` is the retrieval tool; `mnemosyne_sleep` runs background consolidation (compression), not synthesis.
 
-If a tool call to `mnemosyne` fails, the binary may be missing — it lives at
-`/home/drishal/.hermes/hermes-agent/venv/bin/mnemosyne` (Hermes's venv).
+If a tool call to `mnemosyne` fails, first verify the MCP command with a JSON-RPC `initialize` + `tools/list` handshake using the env above.
 
 ## Core tools
 
@@ -54,6 +58,10 @@ mnemosyne_recall(query, limit?, temporal_weight?, vec_weight?, fts_weight?, impo
 - `limit`: max results. Default 5. Use 10+ for broad context loading.
 - `temporal_weight`: 0.0 = ignore recency, 0.2 = mild bias (default-ish), 0.5 = strong recency. Set 0.0 when searching for old decisions.
 - Returns ranked results (each has `id`, `content`, `source`, `importance`, `timestamp`). **Read them before acting.**
+
+### mnemosyne_shared_* — compact cross-agent surface
+
+Use `mnemosyne_shared_remember`, `mnemosyne_shared_recall`, `mnemosyne_shared_forget`, and `mnemosyne_shared_stats` for stable facts/preferences that should be deliberately visible across agents through the shared surface DB (`~/.mnemosyne/data/shared/mnemosyne.db`). Prefer shared tools for compact user/system/workflow metadata; use normal `mnemosyne_remember` for richer private episodic memory.
 
 ### mnemosyne_sleep — consolidation (use sparingly)
 
@@ -125,16 +133,21 @@ mnemosyne_invalidate(memory_id, replacement_id?)
 
 When `mnemosyne_recall` surfaces the same multi-step workflow 2+ times across
 sessions (or you catch yourself re-deriving a procedure you've run before),
-formalize it into a reusable skill instead of solving it ad hoc again:
+consider formalizing it into a reusable skill instead of solving it ad hoc again:
 
 1. Confirm it deserves a skill — recurring, recognizable steps, quality improves
-   with reuse. Skip one-offs.
-2. Load the `skill-creator` skill (`/skill:skill-creator`) and follow its
+   with reuse. Skip one-offs and short troubleshooting turns.
+2. Prefer patching a loaded/existing skill when it is wrong, stale, or missing a
+   step. Prefer adding `references/` under an existing umbrella over creating a
+   new skill directory.
+3. Create a new skill only when the user explicitly asked for one, or after
+   asking for and receiving confirmation.
+4. Load the `skill-creator` skill (`/skill:skill-creator`) and follow its
    methodology (minimal shape, lean quoted frontmatter, trigger-rich description,
    operational body).
-3. Write the new skill to `~/.pi/agent/skills/<name>/SKILL.md`.
-4. Run skill-creator's efficiency check on it and fix hard issues before shipping.
-5. `mnemosyne_remember` a note that the skill exists (importance 0.7,
+5. If a new skill is confirmed, write it to `~/.pi/agent/skills/<name>/SKILL.md`.
+6. Run skill-creator's efficiency check on it and fix hard issues before shipping.
+7. `mnemosyne_remember` a note that the skill exists (importance 0.7,
    `metadata: {"agent":"pi","skill":true}`) so future sessions — yours or
    Hermes's — reach for it instead of re-deriving.
 
@@ -144,5 +157,5 @@ it → validator gates quality → mnemosyne records that the skill now exists.
 ## Deep reference
 
 The full Mnemosyne source is at `~/.hermes/hermes-agent/venv/lib/python3.11/site-packages/mnemosyne/`.
-The repo (`AxDSan/mnemosyne`) has docs at `https://github.com/AxDSan/mnemosyne/tree/main/docs`.
+The repo (`mnemosyne-oss/mnemosyne`) has docs at `https://github.com/mnemosyne-oss/mnemosyne/tree/main/docs`.
 For the 25-tool inventory, run `mnemosyne mcp` and send a `tools/list` request.

@@ -7,12 +7,10 @@
  *      edit / delete skills and their supporting files. The tool description
  *      carries the *when to use it* guidance the system prompt always sees,
  *      so the model does not have to remember to load a SKILL.md first.
- *   2. After every turn that produced >= NUDGE_INTERVAL tool calls (and did
- *      NOT already call `skill_manage`), it injects a follow-up user message
- *      that asks the agent to review the turn and codify anything worth
- *      saving. The review prompt is a near-verbatim port of Hermes'
- *      `_SKILL_REVIEW_PROMPT` (the *do-not-capture* rules are what keep the
- *      library from rotting into self-imposed refusals).
+ *   2. Adds a user-triggered `/skill-review` command that asks the agent to
+ *      review the current conversation and codify anything worth saving. The
+ *      review prompt keeps Hermes' *do-not-capture* rules, but Pi does not
+ *      auto-trigger this by default; the user decides when to run it.
  *   3. Adds a `/learn <anything>` command that gathers sources and authors a
  *      single SKILL.md via `skill_manage`, mirroring Hermes' `/learn`.
  *
@@ -37,10 +35,10 @@ import * as path from "node:path";
 import * as os from "node:os";
 
 // ─── Tunables ──────────────────────────────────────────────────────────────
-// Tool calls in one turn before the skill-review nudge fires. Mirrors Hermes'
-// `skills.creation_nudge_interval` (default 10). Set to 0 to disable nudging.
-const NUDGE_INTERVAL = 10;
-// Skip the autonomous nudge in non-interactive print/json/rpc modes.
+// Tool calls in one turn before the optional automatic skill-review nudge fires.
+// Default is 0: no automatic review. Prefer the explicit `/skill-review` command.
+const NUDGE_INTERVAL = 0;
+// Skip the autonomous nudge in non-interactive print/json/rpc modes if enabled.
 const NUDGE_NONINTERACTIVE_ONLY = false;
 // Default skills root for `create`. Global user library, single source of truth.
 const GLOBAL_SKILLS_DIR = path.join(os.homedir(), ".pi", "agent", "skills");
@@ -676,9 +674,9 @@ function handleSkillManage(
 
 // ─── Review prompt (near-verbatim port of Hermes' `_SKILL_REVIEW_PROMPT`) ──
 
-const SKILL_REVIEW_PROMPT = `Review the work you just completed in this session and update the skill library. Be ACTIVE — most sessions produce at least one skill update, even if small. A pass that does nothing is a missed learning opportunity, not a neutral outcome.
+const SKILL_REVIEW_PROMPT = `Review the work completed in this session and update the skill library only when there is durable, reusable learning. Empty-but-honest beats a rotting library: if nothing durable was learned, say 'Nothing durable to save this turn.' and stop.
 
-Target shape of the library: CLASS-LEVEL skills, each with a rich SKILL.md and a \`references/\` directory for session-specific detail. Not a long flat list of narrow one-session-one-skill entries. This shapes HOW you update, not WHETHER you update.
+Target shape of the library: CLASS-LEVEL skills, each with a rich SKILL.md and a \`references/\` directory for session-specific detail. Not a long flat list of narrow one-session-one-skill entries. Prefer patching or adding references under an existing umbrella over creating new skill directories.
 
 Signals to look for (any one of these warrants action):
   • User corrected your style, tone, format, legibility, or verbosity. Frustration signals like 'stop doing X', 'this is too verbose', 'don't format like this', 'why are you explaining', 'just give me the answer', or an explicit 'remember this' are FIRST-CLASS skill signals, not just memory signals. Update the relevant skill(s) to embed the preference so the next session starts already knowing.
@@ -690,7 +688,7 @@ Preference order — prefer the earliest action that fits, but do pick one when 
   1. UPDATE A SKILL YOU LOADED THIS SESSION. Use the \`read\` tool to look back at any SKILL.md you opened this turn. If one of them covers the territory of the new learning, PATCH that one first via \`skill_manage(action='patch', name='<skill>', old_string='...', new_string='...')\`.
   2. UPDATE AN EXISTING UMBRELLA. If no loaded skill fits but an existing class-level skill does (call \`skill_manage\`-style discovery by reading likely skills under ~/.pi/agent/skills/), patch it. Add a subsection, a pitfall, or broaden a trigger.
   3. ADD A SUPPORT FILE under an existing umbrella. Use \`skill_manage(action='write_file', ...)\` with file_path starting with \`references/\`, \`templates/\`, or \`scripts/\`. Add a one-line pointer to it in the umbrella's SKILL.md.
-  4. CREATE A NEW CLASS-LEVEL SKILL via \`skill_manage(action='create', name='<class-level-name>', content='---\\nname: ...\\ndescription: "Use when <trigger>. <behavior>."\\n---\\n# ...\\n', category='<optional>')\`. The name MUST be at the class level — NOT a specific PR number, error string, feature codename, library-alone name, or 'fix-X / debug-Y / audit-Z-today' session artifact. If the proposed name only makes sense for today's task, it's wrong — fall back to (1), (2), or (3).
+  4. CREATE A NEW CLASS-LEVEL SKILL only if the user explicitly asked for one or you have asked for and received confirmation. Use \`skill_manage(action='create', name='<class-level-name>', content='---\\nname: ...\\ndescription: "Use when <trigger>. <behavior>."\\n---\\n# ...\\n', category='<optional>')\`. The name MUST be at the class level — NOT a specific PR number, error string, feature codename, library-alone name, or 'fix-X / debug-Y / audit-Z-today' session artifact. If the proposed name only makes sense for today's task, it's wrong — fall back to (1), (2), or (3).
 
 User-preference embedding (important): when the user expressed a style/format/workflow preference, the update belongs in the SKILL.md body, not just in memory. Memory captures 'who the user is'; skills capture 'how to do this class of task for this user'.
 
@@ -699,7 +697,7 @@ DO NOT capture (these become persistent self-imposed constraints that bite you l
   • Negative claims about tools or features ('browser tools do not work', 'X tool is broken', 'cannot use Y'). These harden into refusals the agent cites against itself for months after the actual problem was fixed.
   • Session-specific transient errors that resolved before the turn ended.
 
-If nothing durable was learned, say 'Nothing durable to save this turn.' and stop. Do not create a skill just to satisfy the nudge — empty-but-honest beats a rotting library.
+If nothing durable was learned, say 'Nothing durable to save this turn.' and stop. Do not create a skill just to satisfy the review — empty-but-honest beats a rotting library.
 
 When in doubt about an existing skill's current shape, read it with the \`read\` tool before patching.`;
 
@@ -784,10 +782,10 @@ Actions: create (full SKILL.md + optional category), patch (old_string/new_strin
 
 On delete, pass absorbed_into="<umbrella>" when merging this skill's content into another (the target must already exist — create/patch it first), or absorbed_into="" when pruning with no forwarding target. The intent is recorded in ~/.pi/agent/skills/.skill_archives.json.
 
-Create when: a complex task succeeded (5+ tool calls), errors were overcome, a user-corrected approach worked, a non-trivial workflow was discovered, or the user asks you to remember a procedure.
+Create only when the user explicitly asked for a new skill, or after asking for and receiving confirmation. Do not create new skills for short troubleshooting turns or one-offs.
 Update when: instructions are stale/wrong, OS-specific failures appeared, or missing steps/pitfalls were found during use. If you loaded a skill and hit issues it did not cover, patch it immediately.
 
-After difficult/iterative tasks, offer to save as a skill. Skip for simple one-offs. Confirm with the user before deleting.
+After difficult/iterative tasks, offer to save as a skill. Prefer patching existing skills or adding references under an umbrella. Confirm with the user before creating or deleting.
 
 Good skills: a trigger-rich description in frontmatter, ordered steps with exact commands, a pitfalls section, and verification steps. Use the \`read\` tool on existing skills under ~/.pi/agent/skills/ to see format examples. The tool runs an efficiency check after every write and reports hard issues (invalid frontmatter, description too long, forbidden trigger-selection headings in the body); fix those and call patch/edit before reporting done.
 
@@ -795,8 +793,9 @@ A SKILL.md's frontmatter \`name\` MUST match the \`name\` argument. Never create
 		promptSnippet:
 			"Create, patch, or delete reusable skills (SKILL.md) for recurring workflows",
 		promptGuidelines: [
-			"Use skill_manage (action='create') after solving a non-trivial recurring problem worth saving, after the user corrects your workflow, or when the user asks to remember a procedure.",
-			"Prefer skill_manage action='patch' over action='edit' for small fixes — patch only the changed lines.",
+			"Use skill_manage action='patch' to improve loaded/existing skills when they are wrong, stale, or missing a step.",
+			"Create new skills with skill_manage action='create' only when the user explicitly asked for a skill or after receiving confirmation.",
+			"Prefer skill_manage action='patch' or action='write_file' under an existing umbrella over creating a new skill directory.",
 			"When skill_manage is unavailable, prefer editing an existing skill over creating a new one with a similar name.",
 		],
 		parameters: Type.Object({
@@ -876,6 +875,20 @@ A SKILL.md's frontmatter \`name\` MUST match the \`name\` argument. Never create
 					`unexpected error in skill_manage: ${(e as Error).message}`,
 				);
 			}
+		},
+	});
+
+	// ── /skill-review command ────────────────────────────────────────────
+	pi.registerCommand("skill-review", {
+		description:
+			"Review the current session for durable skill-library updates (user-triggered; conservative by default)",
+		handler: async (_args, ctx) => {
+			if (ctx.hasUI) {
+				ctx.ui.notify("Skill review queued", "info");
+			}
+			pi.sendUserMessage(`${NUDGE_MARKER} ${SKILL_REVIEW_PROMPT}`, {
+				deliverAs: "followUp",
+			});
 		},
 	});
 

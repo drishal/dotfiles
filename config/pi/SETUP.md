@@ -119,7 +119,8 @@ written by pi on `/model` — leave them out of what you add.
   "pi-memory": {
     "memoryCharLimit": 6000,
     "userCharLimit": 2000
-  }
+  },
+  "quietStartup": false
 }
 ```
 
@@ -166,7 +167,7 @@ restart (or `/reload`) to appear.
     "context7": {
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp@latest"],
-      "lifecycle": "lazy"
+      "lifecycle": "keep-alive"
     },
     "grep_app": {
       "url": "https://mcp.grep.app",
@@ -236,13 +237,22 @@ restart (or `/reload`) to appear.
   - **No, skip** → delete the entire `mnemosyne` entry from `mcp.json`. Done.
   - **Hermes** → fill the block from the existing Hermes install (no
     secret-pasting). The values are fully discoverable:
-    - `command` = `~/.hermes/hermes-agent/venv/bin/mnemosyne`
+    - `command` = `~/.hermes/hermes-agent/.venv/bin/mnemosyne`
+      (check `.venv/` vs `venv/` — the Hermes venv may use either name)
     - `args` = `["mcp"]`, `lifecycle` = `"keep-alive"`
-    - `MNEMOSYNE_DATA_DIR` = `~/.hermes/mnemosyne/data` (the shared DB)
-    - `MNEMOSYNE_EMBEDDING_API_URL`, `MNEMOSYNE_EMBEDDING_API_KEY`,
-      `MNEMOSYNE_EMBEDDING_MODEL`, `MNEMOSYNE_EMBEDDING_DIM`,
-      `MNEMOSYNE_EMBEDDINGS_VIA_API` → `grep` these five keys out of
-      `~/.hermes/.env` and copy the values verbatim into `env`.
+    - On NixOS, add `"env": { "LD_LIBRARY_PATH":
+"/run/current-system/sw/share/nix-ld/lib" }` — mnemosyne's
+      libstdc++ dependency resolves differently outside the nix-shell.
+    - If the `mnemosyne-hermes` plugin package is installed (`uv pip show
+mnemosyne-hermes` succeeds in the Hermes venv), embedding is handled
+      automatically through Hermes' `memory_provider` plugin system — no
+      `MNEMOSYNE_EMBEDDING_*` env vars needed. Verify with `hermes mnemosyne
+stats` (check that `dense_score > 0` in recall results).
+    - If using mnemosyne standalone (no Hermes plugin), source
+      `MNEMOSYNE_DATA_DIR`, `MNEMOSYNE_EMBEDDING_API_URL`,
+      `MNEMOSYNE_EMBEDDING_API_KEY`, `MNEMOSYNE_EMBEDDING_MODEL`,
+      `MNEMOSYNE_EMBEDDING_DIM`, and `MNEMOSYNE_EMBEDDINGS_VIA_API` from
+      `~/.hermes/.env` (if present) or ask the user for an embedding endpoint.
 
     This points pi at the **same** SQLite DB Hermes uses, so pi and Hermes
     share one memory store.
@@ -345,16 +355,19 @@ What it does (one self-contained file, no npm deps):
   inline efficiency check (frontmatter parse, kebab-case, description length,
   forbidden trigger-selection headings in the body, plain-scalar quoting,
   dangling `references/`/`scripts/`/`assets/` paths).
-- Walks every turn counting tool calls; after **10** calls in a turn that
-  did NOT already call `skill_manage`, it injects a follow-up user message
-  that asks the agent to review the turn and codify anything worth saving.
-  The review prompt is a port of the Hermes Agent background-review prompt,
-  including the _do-not-capture_ rules (env-dependent failures, negative
-  tool claims, transient errors — they rot into self-imposed refusals) and
-  the 4-step update preference order (patch-loaded → patch-umbrella →
-  add-support-file → create-class-level-skill). Counter resets whenever
-  `skill_manage` is called; nudge turns don't re-arm their own follow-up.
-  Tune at the top of the file: `NUDGE_INTERVAL` (set to `0` to disable).
+- The `skill_manage` tool description guides the agent to **prefer patches
+  over creation** and to **confirm with the user before creating** — no
+  autonomous skill creation.
+- Adds a user-triggered **`/skill-review`** command that injects a
+  conservative review prompt asking the agent to audit the session and
+  codify anything worth saving (preferring patches over new skills, never
+  creating without confirmation). The review prompt is a port of the Hermes
+  Agent background-review prompt, including the _do-not-capture_ rules
+  (env-dependent failures, negative tool claims, transient errors — they rot
+  into self-imposed refusals) and the 4-step update preference order
+  (patch-loaded → patch-umbrella → add-support-file → class-level-skill).
+- Automatic nudging is **disabled by default** (`NUDGE_INTERVAL = 0`) —
+  Pi only reviews on explicit `/skill-review`. No silent/autonomous prompts.
 - Adds a **`/learn <anything>`** command — gather from a dir, URL, pasted
   notes, or "what I just did", then author one skill via `skill_manage`.
   Adapted from Hermes' `/learn` command.
@@ -447,8 +460,8 @@ remove entries as needed.
 
 ## Memory
 
-- Keep this `MEMORY.md`/`USER.md` compact (always-in-prompt, char-limited) — short rules and key facts only.
-- For longer or cross-session memory (decisions, project state, prior work, rationale), use the `mnemosyne` MCP server: `mnemosyne_remember` to store, `mnemosyne_recall` to retrieve. Don't dump long context here.
+- Use Mnemosyne for normal durable memories (preferences, decisions, project state, prior work); `mnemosyne_remember` stores and `mnemosyne_recall` retrieves.
+- Use `MEMORY.md`/`USER.md` only for core rules/facts that must be present in every prompt; keep them tiny.
 ```
 
 **Entry 2 — pi MCP server config note** (one `memory_add` call):
