@@ -13,6 +13,10 @@
     bindings = {
       "Ctrl+f" = "script-binding quality_menu/video_formats_toggle";
       "Alt+f"  = "script-binding quality_menu/audio_formats_toggle";
+      # i = toggle interpolation, I = cycle tscale kernel, d = toggle deband
+      "i" = "cycle-values interpolation yes no";
+      "I" = "cycle-values tscale oversample linear catmull_rom mitchell gaussian";
+      "d" = "cycle-values deband yes no";
     };
 
     config = {
@@ -33,13 +37,12 @@
       # Wayland-native context for zero-copy on Hyprland
       gpu-context     = "waylandvk";
 
-      # ---- Hardware decoding (AMD VCN via VAAPI) ----
-      hwdec = "vaapi";
+      # ---- Hardware decoding (AMD VCN via Vulkan video — zero-copy) ----
+      hwdec = "vulkan";
 
       # ---- Output / dither ----
-      # error-diffusion is the highest-quality dither; helps the 8-bit LG most
       dither-depth = "auto";
-      dither        = "error-diffusion";
+      dither        = "ordered";
 
       # ---- HDR / color management ----
       # Both monitors are SDR; settings render SDR correctly and pass HDR through cleanly
@@ -54,9 +57,10 @@
       tone-mapping             = "auto";
 
       # ---- Scalers ----
-      # ewa_lanczossharp for upscale (sharpest); ewa_lanczos for chroma (no ring)
-      scale           = "ewa_lanczossharp";
-      cscale          = "ewa_lanczos";
+      # ewa_lanczos = excellent quality, much lighter than ewa_lanczossharp
+      # spline36 for chroma (no ringing); mitchell for downscale (smooth)
+      scale           = "ewa_lanczos";
+      cscale          = "spline36";
       dscale          = "mitchell";
       scale-antiring  = 0.7;
       cscale-antiring = 0.7;
@@ -70,9 +74,11 @@
       deband-grain       = 8;
 
       # ---- Interpolation / frame timing ----
-      # Display-resample = tear-free on VRR-off Hyprland, no judder
-      video-sync         = "display-resample";
-      interpolation      = true;
+      # Interpolation is EXPENSIVE on high-refresh displays (24fps→160Hz = 6.7x frames).
+      # Bind `i` to toggle it on the fly when you want it (anime pans, slow credits).
+      # Shift+I cycles the tscale kernel.
+      video-sync         = "audio";
+      interpolation      = false;
       tscale             = "oversample";
       tscale-radius      = 2.0;
       tscale-clamp       = 0.0;
