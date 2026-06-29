@@ -17,6 +17,10 @@ let
       ];
     override = final: prev: {
       rustic = prev.rustic.overrideAttrs { ignoreCompilationError = true; };
+      # projectile 20260627.907 added projectile-consult.el with a hard
+      # (require 'consult) at byte-compile time, but consult isn't a declared
+      # compile dep. Drop this once emacs-overlay #544 is fixed upstream.
+      projectile = prev.projectile.overrideAttrs { ignoreCompilationError = true; };
       eglot-booster = final.melpaBuild {
         pname = "eglot-booster";
         version = "0.1.0.0.20240616";
