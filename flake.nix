@@ -24,6 +24,10 @@
 
     nixvim = {
       url = "github:nix-community/nixvim";
+      # Must follow our nixpkgs, otherwise nixvim bundles its own nixpkgs and
+      # the resulting dual-stdenv luajit collides in neovim's buildEnv.
+      # See nix-community/nixvim#4463.
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 
