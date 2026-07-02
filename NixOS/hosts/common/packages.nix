@@ -156,6 +156,7 @@
     gpu-screen-recorder
     gpu-screen-recorder-gtk
     gparted
+    gping
     hdparm
     htop
     # hollywood
