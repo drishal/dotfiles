@@ -15,6 +15,11 @@ PanelWindow {
     readonly property string screenName: bar.screen ? bar.screen.name : ""
     readonly property string launchCmd: "rofi -show drun -icon-theme Papirus -show-icons"
 
+    // Portrait monitors (e.g. a rotated panel) get the stats cluster
+    // collapsed behind a chevron by default; landscape stays expanded.
+    readonly property bool vertical: bar.screen ? bar.screen.height > bar.screen.width : false
+    property bool statsExpanded: !vertical
+
     WlrLayershell.namespace: "quickshell-bar"
     color: "transparent"
 
@@ -192,6 +197,70 @@ PanelWindow {
                 }
             }
 
+            // ── collapsible stats cluster: internet · ram · cpu ─────
+            // Chevron collapses net/mem/cpu to declutter (default collapsed on
+            // portrait monitors, expanded on landscape). Click to toggle.
+            Row {
+                id: statsGroup
+                spacing: 9
+                anchors.verticalCenter: parent.verticalCenter
+
+                Item {
+                    width: chev.implicitWidth + 10
+                    height: 22
+                    anchors.verticalCenter: parent.verticalCenter
+                    Rectangle {
+                        anchors.fill: parent
+                        radius: 8
+                        color: chevMa.containsMouse ? Theme.base01 : "transparent"
+                    }
+                    Text {
+                        id: chev
+                        anchors.centerIn: parent
+                        // right-anchored bar grows the cluster leftward, so the
+                        // chevron points left when collapsed (where content appears)
+                        // and right when expanded (fold back rightward).
+                        text: "󰅁"
+                        rotation: bar.statsExpanded ? 180 : 0
+                        color: chevMa.containsMouse ? Theme.accent : Theme.inkDim
+                        font.family: Theme.fontMono
+                        font.pixelSize: 14
+                        // springy overshoot spin on toggle
+                        Behavior on rotation {
+                            NumberAnimation { duration: 360; easing.type: Easing.OutBack }
+                        }
+                    }
+                    MouseArea {
+                        id: chevMa
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: bar.statsExpanded = !bar.statsExpanded
+                    }
+                }
+
+                Item {
+                    id: clusterClip
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: 22
+                    clip: true
+                    visible: width > 1
+                    width: bar.statsExpanded ? clusterRow.implicitWidth : 0
+                    opacity: bar.statsExpanded ? 1 : 0
+                    // snappy exponential slide-reveal + fade
+                    Behavior on width {
+                        NumberAnimation { duration: 320; easing.type: Easing.OutExpo }
+                    }
+                    Behavior on opacity {
+                        NumberAnimation { duration: 260; easing.type: Easing.OutCubic }
+                    }
+
+                    Row {
+                        id: clusterRow
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: 9
+
             // network
             Item {
                 anchors.verticalCenter: parent.verticalCenter
@@ -233,10 +302,6 @@ PanelWindow {
                 }
             }
 
-            Sep {
-                anchors.verticalCenter: parent.verticalCenter
-            }
-
             // mem
             Row {
                 spacing: 6
@@ -273,6 +338,9 @@ PanelWindow {
                     color: Sys.cpu >= 85 ? Theme.base08 : Theme.base0C
                     font.family: Theme.fontSans
                     font.pixelSize: 12
+                }
+            }
+                    }
                 }
             }
 
