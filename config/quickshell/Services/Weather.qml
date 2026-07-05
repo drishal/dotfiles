@@ -42,7 +42,7 @@ Singleton {
             },
             "48": {
                 icon: "󰖑",
-                desc: "Rime fog"
+                desc: "Depositing rime fog"
             },
             "51": {
                 icon: "󰼰",
@@ -50,11 +50,19 @@ Singleton {
             },
             "53": {
                 icon: "󰼰",
-                desc: "Drizzle"
+                desc: "Moderate drizzle"
             },
             "55": {
                 icon: "󰖗",
                 desc: "Dense drizzle"
+            },
+            "56": {
+                icon: "󰖗",
+                desc: "Freezing drizzle"
+            },
+            "57": {
+                icon: "󰖗",
+                desc: "Dense freezing drizzle"
             },
             "61": {
                 icon: "󰖖",
@@ -62,11 +70,19 @@ Singleton {
             },
             "63": {
                 icon: "󰖖",
-                desc: "Rain"
+                desc: "Moderate rain"
             },
             "65": {
                 icon: "󰖖",
                 desc: "Heavy rain"
+            },
+            "66": {
+                icon: "󰖖",
+                desc: "Freezing rain"
+            },
+            "67": {
+                icon: "󰖖",
+                desc: "Heavy freezing rain"
             },
             "71": {
                 icon: "󰖘",
@@ -74,23 +90,35 @@ Singleton {
             },
             "73": {
                 icon: "󰖘",
-                desc: "Snow"
+                desc: "Moderate snow"
             },
             "75": {
                 icon: "󰖘",
                 desc: "Heavy snow"
             },
+            "77": {
+                icon: "󰖘",
+                desc: "Snow grains"
+            },
             "80": {
                 icon: "󰖖",
-                desc: "Rain showers"
+                desc: "Slight rain showers"
             },
             "81": {
                 icon: "󰖖",
-                desc: "Rain showers"
+                desc: "Moderate rain showers"
             },
             "82": {
                 icon: "󰖖",
-                desc: "Violent showers"
+                desc: "Violent rain showers"
+            },
+            "85": {
+                icon: "󰖘",
+                desc: "Slight snow showers"
+            },
+            "86": {
+                icon: "󰖘",
+                desc: "Heavy snow showers"
             },
             "95": {
                 icon: "󰖞",
@@ -98,11 +126,11 @@ Singleton {
             },
             "96": {
                 icon: "󰖞",
-                desc: "Thunderstorm"
+                desc: "Thunderstorm with hail"
             },
             "99": {
                 icon: "󰖞",
-                desc: "Severe storm"
+                desc: "Severe thunderstorm"
             }
         })
     readonly property var wmoNight: ({
@@ -117,6 +145,106 @@ Singleton {
             "2": {
                 icon: "󰼱",
                 desc: "Partly cloudy"
+            },
+            "3": {
+                icon: "󰖕",
+                desc: "Overcast"
+            },
+            "45": {
+                icon: "󰖑",
+                desc: "Fog"
+            },
+            "48": {
+                icon: "󰖑",
+                desc: "Depositing rime fog"
+            },
+            "51": {
+                icon: "󰼱",
+                desc: "Light drizzle"
+            },
+            "53": {
+                icon: "󰼱",
+                desc: "Moderate drizzle"
+            },
+            "55": {
+                icon: "󰖗",
+                desc: "Dense drizzle"
+            },
+            "56": {
+                icon: "󰖗",
+                desc: "Freezing drizzle"
+            },
+            "57": {
+                icon: "󰖗",
+                desc: "Dense freezing drizzle"
+            },
+            "61": {
+                icon: "󰖖",
+                desc: "Slight rain"
+            },
+            "63": {
+                icon: "󰖖",
+                desc: "Moderate rain"
+            },
+            "65": {
+                icon: "󰖖",
+                desc: "Heavy rain"
+            },
+            "66": {
+                icon: "󰖖",
+                desc: "Freezing rain"
+            },
+            "67": {
+                icon: "󰖖",
+                desc: "Heavy freezing rain"
+            },
+            "71": {
+                icon: "󰖘",
+                desc: "Slight snow"
+            },
+            "73": {
+                icon: "󰖘",
+                desc: "Moderate snow"
+            },
+            "75": {
+                icon: "󰖘",
+                desc: "Heavy snow"
+            },
+            "77": {
+                icon: "󰖘",
+                desc: "Snow grains"
+            },
+            "80": {
+                icon: "󰖖",
+                desc: "Slight rain showers"
+            },
+            "81": {
+                icon: "󰖖",
+                desc: "Moderate rain showers"
+            },
+            "82": {
+                icon: "󰖖",
+                desc: "Violent rain showers"
+            },
+            "85": {
+                icon: "󰖘",
+                desc: "Slight snow showers"
+            },
+            "86": {
+                icon: "󰖘",
+                desc: "Heavy snow showers"
+            },
+            "95": {
+                icon: "󰖞",
+                desc: "Thunderstorm"
+            },
+            "96": {
+                icon: "󰖞",
+                desc: "Thunderstorm with hail"
+            },
+            "99": {
+                icon: "󰖞",
+                desc: "Severe thunderstorm"
             }
         })
 
