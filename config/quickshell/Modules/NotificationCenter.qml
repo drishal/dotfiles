@@ -576,12 +576,12 @@ PanelWindow {
                                     }
                                 }
                                 Column {
-                                    // centred over the last grid column below
-                                    anchors.horizontalCenter: parent.right
-                                    anchors.horizontalCenterOffset: -curBlock.width / 10
+                                    // pinned to the card's right edge, both lines
+                                    // flush right
+                                    anchors.right: parent.right
                                     anchors.verticalCenter: parent.verticalCenter
                                     Text {
-                                        anchors.horizontalCenter: parent.horizontalCenter
+                                        anchors.right: parent.right
                                         text: Weather.locationName
                                         color: Theme.inkDim
                                         font.family: Theme.fontSans
@@ -589,7 +589,7 @@ PanelWindow {
                                         font.weight: Font.DemiBold
                                     }
                                     Text {
-                                        anchors.horizontalCenter: parent.horizontalCenter
+                                        anchors.right: parent.right
                                         text: Weather.current ? "Feels " + Weather.current.feelsLike + "°" : ""
                                         color: Theme.base03
                                         font.family: Theme.fontSans
