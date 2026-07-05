@@ -306,8 +306,12 @@ in
       render = {
         # HDR is fully manual via Super+Shift+H — no per-app auto-switching
         cm_auto_hdr = 0;
-        direct_scanout = 1;
-        send_content_type = true;
+        # Both off: scanout enter/exit (software cursor breaks it) and the
+        # monitor's content-type profile autoswitch each force a DP re-sync
+        # on the Acer — fullscreen CS2/Zed blanked the display on every
+        # menu/panel change at 4K160.
+        direct_scanout = 0;
+        send_content_type = false;
       };
     };
 
