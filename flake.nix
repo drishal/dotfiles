@@ -116,6 +116,10 @@
       url = "github:aylur/ags";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    herdr = {
+      url = "github:ogulcancelik/herdr";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -211,6 +215,7 @@
             {
               nixpkgs.overlays = [
                 inputs.emacs-overlay.overlay
+                inputs.herdr.overlays.default
               ];
             }
             # chaotic.nixosModules.default

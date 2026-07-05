@@ -120,6 +120,7 @@
     ethtool
     easyeffects
     eza
+    herdr
     lsd
     fastfetch
     fdk_aac
