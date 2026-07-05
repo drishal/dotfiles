@@ -47,6 +47,8 @@ let
     "waybar" = "waybar";
     # ags owns its own notifications (AstalNotifd) — no separate daemon.
     "ags"    = "ags run";
+    # quickshell owns its own notifications (NotificationServer). -d detaches.
+    "quickshell" = "qs -d";
   };
 
   widgetRestart = {
@@ -57,6 +59,7 @@ let
     # [g]js bracket stops pkill -f from matching its own shell (whose cmdline contains the literal pattern), which would SIGKILL the
     # bind's shell before it reaches `ags run &` — that's why mod+x killed ags and never relaunched it.
     "ags"    = "ags quit 2>/dev/null; pkill -9 -f '[g]js -m.*ags'; ags run &";
+    "quickshell" = "qs kill 2>/dev/null; qs -d &";
   };
 
   currentWidgetStartup = widgetStartup.${config.drishal.widgets};
@@ -64,7 +67,7 @@ let
 in
 {
   options.drishal.widgets = lib.mkOption {
-    type = lib.types.enum [ "dms" "eww" "waybar" "ags" ];
+    type = lib.types.enum [ "dms" "eww" "waybar" "ags" "quickshell" ];
     default = "ags";
     description = "Which widget stack to use for bar / notifications / control-center. Switch requires logout.";
   };

@@ -17,6 +17,7 @@
     ./desktop/sway.nix
     ./desktop/dms.nix
     ./desktop/ags.nix
+    ./desktop/quickshell.nix
     ./desktop/eww.nix
     ./desktop/hermes-app.nix
 

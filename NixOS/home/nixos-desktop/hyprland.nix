@@ -253,6 +253,7 @@ let
     # [g]js bracket stops pkill -f from matching its own shell (whose cmdline contains the literal pattern), which would SIGKILL the
     # bind's shell before it reaches `ags run &` — that's why mod+x killed ags and never relaunched it.
     "ags"    = "ags quit 2>/dev/null; pkill -9 -f '[g]js -m.*ags'; ags run &";
+    "quickshell" = "qs kill 2>/dev/null; qs -d &";
   };
 
 in
