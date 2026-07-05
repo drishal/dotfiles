@@ -514,12 +514,12 @@ PanelWindow {
                             id: wcol
                             anchors.fill: parent
                             anchors.margins: 12
-                            // Size each of the three blocks to its content and
-                            // spread the leftover space evenly between them, so the
-                            // current / details / hourly rows keep a consistent
-                            // vertical rhythm instead of bunching at the bottom.
+                            // Size the three blocks + two separators to their
+                            // content and spread the leftover space evenly between
+                            // them (5 children → 4 gaps), so the rows keep a
+                            // consistent vertical rhythm.
                             spacing: Weather.status === "ready"
-                                ? Math.max(0, (height - curBlock.height - detailsRow.height - hourlyRow.height) / 2)
+                                ? Math.max(0, (height - curBlock.height - detailsRow.height - hourlyRow.height - wsep1.height - wsep2.height) / 4)
                                 : 0
 
                             // loading / error
@@ -542,14 +542,18 @@ PanelWindow {
 
                                 Text {
                                     id: curIcon
-                                    // left-aligned so the big icon starts on the same
-                                    // vertical line as the HUMIDITY / 21:00 columns below
-                                    anchors.left: parent.left
+                                    // ink-centred over the first grid column below
+                                    x: curBlock.width / 10 - (curTm.tightBoundingRect.x + curTm.tightBoundingRect.width / 2)
                                     anchors.verticalCenter: parent.verticalCenter
                                     text: Weather.current ? Weather.wmoInfo(Weather.current.weatherCode, Weather.current.isDay).icon : ""
                                     font.family: Theme.fontMono
                                     font.pixelSize: 32
                                     color: Theme.accent
+                                    TextMetrics {
+                                        id: curTm
+                                        font: curIcon.font
+                                        text: curIcon.text
+                                    }
                                 }
                                 Column {
                                     id: curTemp
@@ -572,10 +576,12 @@ PanelWindow {
                                     }
                                 }
                                 Column {
-                                    anchors.right: parent.right
+                                    // centred over the last grid column below
+                                    anchors.horizontalCenter: parent.right
+                                    anchors.horizontalCenterOffset: -curBlock.width / 10
                                     anchors.verticalCenter: parent.verticalCenter
                                     Text {
-                                        anchors.right: parent.right
+                                        anchors.horizontalCenter: parent.horizontalCenter
                                         text: Weather.locationName
                                         color: Theme.inkDim
                                         font.family: Theme.fontSans
@@ -583,13 +589,22 @@ PanelWindow {
                                         font.weight: Font.DemiBold
                                     }
                                     Text {
-                                        anchors.right: parent.right
+                                        anchors.horizontalCenter: parent.horizontalCenter
                                         text: Weather.current ? "Feels " + Weather.current.feelsLike + "°" : ""
                                         color: Theme.base03
                                         font.family: Theme.fontSans
                                         font.pixelSize: 11
                                     }
                                 }
+                            }
+
+                            Rectangle {
+                                id: wsep1
+                                visible: Weather.status === "ready"
+                                width: parent.width
+                                height: 1
+                                color: Theme.base03
+                                opacity: 0.25
                             }
 
                             // Each metric owns one fixed-width column. Keeping the
@@ -603,44 +618,43 @@ PanelWindow {
                                     { i: "󰖎", v: Weather.current.humidity + "%", l: "HUMIDITY" },
                                     { i: "󰖝", v: Weather.current.windSpeed + " " + Weather.windDirToCompass(Weather.current.windDir), l: "WIND" },
                                     { i: "󰓅", v: "" + Weather.current.uvIndex, l: "UV INDEX" },
+                                    { i: "󰊚", v: Weather.current.pressure + " hPa", l: "PRESSURE" },
                                     { i: "󰖗", v: Weather.current.precipitation + " mm", l: "RAIN" }
                                 ] : []
-                                // space-between: cells are content-sized, so one
-                                // computed gap keeps the spacing between columns
-                                // truly equal (equal cell widths don't, since the
-                                // content widths differ)
-                                spacing: {
-                                    let used = 0
-                                    for (const c of visibleChildren) used += c.width
-                                    return Math.max(0, (width - used) / Math.max(1, metrics.length - 1))
-                                }
+                                // clean grid: equal-width cells, everything centered.
+                                // Both this row and the hourly strip have 5 columns,
+                                // so the column centre-lines run straight through both.
+                                readonly property real cellW: width / Math.max(1, metrics.length)
 
                                 Repeater {
                                     model: detailsRow.metrics
                                     delegate: Column {
                                         required property var modelData
-                                        required property int index
-                                        // first/last cells align to the card edges;
-                                        // shorter lines in middle cells center on the
-                                        // cell's widest line
-                                        readonly property int hAlign: index === 0 ? Text.AlignLeft
-                                            : index === detailsRow.metrics.length - 1 ? Text.AlignRight
-                                            : Text.AlignHCenter
-                                        width: Math.max(mIcon.implicitWidth, mValue.implicitWidth, mLabel.implicitWidth)
+                                        width: detailsRow.cellW
                                         spacing: 2
-                                        Text {
-                                            id: mIcon
+                                        // centre the icon by its painted ink, not its
+                                        // advance box — Nerd Font glyphs overflow the
+                                        // box and lean right when box-centred
+                                        Item {
                                             width: parent.width
-                                            horizontalAlignment: parent.hAlign
-                                            text: modelData.i
-                                            color: Theme.accent
-                                            font.family: Theme.fontMono
-                                            font.pixelSize: 16
+                                            height: mIcon.height
+                                            Text {
+                                                id: mIcon
+                                                x: parent.width / 2 - (mTm.tightBoundingRect.x + mTm.tightBoundingRect.width / 2)
+                                                text: modelData.i
+                                                color: Theme.accent
+                                                font.family: Theme.fontMono
+                                                font.pixelSize: 16
+                                                TextMetrics {
+                                                    id: mTm
+                                                    font: mIcon.font
+                                                    text: mIcon.text
+                                                }
+                                            }
                                         }
                                         Text {
-                                            id: mValue
                                             width: parent.width
-                                            horizontalAlignment: parent.hAlign
+                                            horizontalAlignment: Text.AlignHCenter
                                             text: modelData.v
                                             color: Theme.ink
                                             font.family: Theme.fontSans
@@ -648,9 +662,8 @@ PanelWindow {
                                             font.weight: Font.Bold
                                         }
                                         Text {
-                                            id: mLabel
                                             width: parent.width
-                                            horizontalAlignment: parent.hAlign
+                                            horizontalAlignment: Text.AlignHCenter
                                             text: modelData.l
                                             color: Theme.base03
                                             font.family: Theme.fontSans
@@ -660,54 +673,59 @@ PanelWindow {
                                 }
                             }
 
+                            Rectangle {
+                                id: wsep2
+                                visible: Weather.status === "ready"
+                                width: parent.width
+                                height: 1
+                                color: Theme.base03
+                                opacity: 0.25
+                            }
+
                             // One column per hour keeps time/icon/temp/rain as a
                             // single aligned unit across the five-hour strip.
                             Row {
                                 id: hourlyRow
                                 visible: Weather.status === "ready"
                                 width: parent.width
-                                // space-between, mirroring the details row
-                                spacing: {
-                                    let used = 0
-                                    for (const c of visibleChildren) used += c.width
-                                    return Math.max(0, (width - used) / Math.max(1, Weather.hourly.length - 1))
-                                }
+                                // same equal-cell centred grid as the details row
+                                readonly property real cellW: width / Math.max(1, Weather.hourly.length)
 
                                 Repeater {
                                     model: Weather.hourly
                                     delegate: Column {
                                         required property var modelData
-                                        required property int index
-                                        // first/last hours align to the card edges,
-                                        // the rest center on their widest line
-                                        readonly property int hAlign: index === 0 ? Text.AlignLeft
-                                            : index === Weather.hourly.length - 1 ? Text.AlignRight
-                                            : Text.AlignHCenter
-                                        width: Math.max(hTime.implicitWidth, hIcon.implicitWidth,
-                                                        hTemp.implicitWidth, hPrecip.implicitWidth)
+                                        width: hourlyRow.cellW
                                         spacing: 2
                                         Text {
-                                            id: hTime
                                             width: parent.width
-                                            horizontalAlignment: parent.hAlign
+                                            horizontalAlignment: Text.AlignHCenter
                                             text: modelData.time.slice(11, 16)
                                             color: Theme.base03
                                             font.family: Theme.fontSans
                                             font.pixelSize: 9
                                         }
-                                        Text {
-                                            id: hIcon
+                                        // ink-centred like the details-row icons
+                                        Item {
                                             width: parent.width
-                                            horizontalAlignment: parent.hAlign
-                                            text: Weather.wmoInfo(modelData.weatherCode, true).icon
-                                            font.family: Theme.fontMono
-                                            font.pixelSize: 18
-                                            color: Theme.accent
+                                            height: hIcon.height
+                                            Text {
+                                                id: hIcon
+                                                x: parent.width / 2 - (hTm.tightBoundingRect.x + hTm.tightBoundingRect.width / 2)
+                                                text: Weather.wmoInfo(modelData.weatherCode, true).icon
+                                                font.family: Theme.fontMono
+                                                font.pixelSize: 18
+                                                color: Theme.accent
+                                                TextMetrics {
+                                                    id: hTm
+                                                    font: hIcon.font
+                                                    text: hIcon.text
+                                                }
+                                            }
                                         }
                                         Text {
-                                            id: hTemp
                                             width: parent.width
-                                            horizontalAlignment: parent.hAlign
+                                            horizontalAlignment: Text.AlignHCenter
                                             text: modelData.temp + "°"
                                             color: Theme.ink
                                             font.family: Theme.fontSans
@@ -715,9 +733,8 @@ PanelWindow {
                                             font.weight: Font.Bold
                                         }
                                         Text {
-                                            id: hPrecip
                                             width: parent.width
-                                            horizontalAlignment: parent.hAlign
+                                            horizontalAlignment: Text.AlignHCenter
                                             text: modelData.precipProb + "%"
                                             color: modelData.precipProb > 0 ? Theme.base0D : Theme.base03
                                             opacity: modelData.precipProb > 0 ? 1 : 0.45
