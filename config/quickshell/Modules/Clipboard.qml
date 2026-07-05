@@ -46,6 +46,26 @@ PanelWindow {
         focus: win.visible
         Keys.onEscapePressed: Popups.close("clipboard", win.screenName)
 
+        // Drives the staggered row slide-out; the timer waits for the last row
+        // to finish before actually wiping the history.
+        property bool clearing: false
+        Timer {
+            id: wipeTimer
+            onTriggered: {
+                Clip.wipe();
+                card.clearing = false;
+            }
+        }
+        Connections {
+            target: win
+            function onVisibleChanged() {
+                if (!win.visible) {
+                    wipeTimer.stop();
+                    card.clearing = false;
+                }
+            }
+        }
+
         Column {
             anchors.fill: parent
             anchors.margins: 14
@@ -77,20 +97,27 @@ PanelWindow {
                     height: 34
                     radius: 999
                     anchors.verticalCenter: parent.verticalCenter
-                    color: wipeMa.containsMouse ? Theme.card : "transparent"
+                    opacity: card.clearing ? 0.5 : 1
+                    color: (wipeMa.containsMouse && !card.clearing) ? Theme.card : "transparent"
                     Text {
                         anchors.centerIn: parent
                         text: "󰩹"
                         font.family: Theme.fontMono
                         font.pixelSize: 17
-                        color: wipeMa.containsMouse ? Theme.base08 : Theme.inkDim
+                        color: (wipeMa.containsMouse && !card.clearing) ? Theme.base08 : Theme.inkDim
                     }
                     MouseArea {
                         id: wipeMa
                         anchors.fill: parent
                         hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: Clip.wipe()
+                        onClicked: {
+                            if (card.clearing || Clip.count === 0)
+                                return;
+                            card.clearing = true;
+                            wipeTimer.interval = (Clip.filtered.length - 1) * 50 + 350 + 80;
+                            wipeTimer.restart();
+                        }
                     }
                 }
                 Rectangle {
@@ -174,6 +201,47 @@ PanelWindow {
                             border.width: crma.containsMouse ? 1 : 0
                             border.color: Theme.accent
                             implicitHeight: 68
+
+                            // Staggered slide-out on Wipe: rows glide off to the
+                            // right + fade, delayed by position (mirrors ags
+                            // .clip-row.clearing-out).
+                            transform: Translate {
+                                id: crowSlide
+                            }
+                            states: State {
+                                name: "clearing"
+                                when: card.clearing
+                                PropertyChanges {
+                                    target: crowSlide
+                                    x: 600
+                                }
+                                PropertyChanges {
+                                    target: crow
+                                    opacity: 0
+                                }
+                            }
+                            transitions: Transition {
+                                to: "clearing"
+                                SequentialAnimation {
+                                    PauseAnimation {
+                                        duration: crow.index * 50
+                                    }
+                                    ParallelAnimation {
+                                        NumberAnimation {
+                                            target: crowSlide
+                                            property: "x"
+                                            duration: 350
+                                            easing.type: Easing.InCubic
+                                        }
+                                        NumberAnimation {
+                                            target: crow
+                                            property: "opacity"
+                                            duration: 350
+                                            easing.type: Easing.InCubic
+                                        }
+                                    }
+                                }
+                            }
 
                             Row {
                                 anchors.left: parent.left

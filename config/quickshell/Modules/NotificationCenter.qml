@@ -46,6 +46,27 @@ PanelWindow {
         focus: win.visible
         Keys.onEscapePressed: Popups.close("notes", win.screenName)
 
+        // Drives the staggered card slide-out; the timer waits for the last
+        // card to finish before actually dismissing them all.
+        property bool clearing: false
+        Timer {
+            id: clearTimer
+            onTriggered: {
+                Notif.clearAll();
+                card.clearing = false;
+            }
+        }
+        // Reset if the panel is hidden mid-clear.
+        Connections {
+            target: win
+            function onVisibleChanged() {
+                if (!win.visible) {
+                    clearTimer.stop();
+                    card.clearing = false;
+                }
+            }
+        }
+
         Row {
             anchors.fill: parent
             anchors.margins: 14
@@ -79,6 +100,7 @@ PanelWindow {
                                 delegate: Rectangle {
                                     id: ncard
                                     required property var modelData
+                                    required property int index
                                     readonly property var n: modelData.n
                                     readonly property var acts: Notif.visibleActions(n)
                                     width: parent.width - 4
@@ -87,6 +109,48 @@ PanelWindow {
                                     border.width: n.urgency === NotificationUrgency.Critical ? 1 : 0
                                     border.color: Theme.base08
                                     implicitHeight: ncontent.implicitHeight + 18
+
+                                    // Staggered slide-out on Clear all: each card glides
+                                    // off to the right + fades, delayed by its position
+                                    // (mirrors ags .ncard.clearing-out). Translate keeps
+                                    // the Column positioner from fighting the motion.
+                                    transform: Translate {
+                                        id: ncardSlide
+                                    }
+                                    states: State {
+                                        name: "clearing"
+                                        when: card.clearing
+                                        PropertyChanges {
+                                            target: ncardSlide
+                                            x: 520
+                                        }
+                                        PropertyChanges {
+                                            target: ncard
+                                            opacity: 0
+                                        }
+                                    }
+                                    transitions: Transition {
+                                        to: "clearing"
+                                        SequentialAnimation {
+                                            PauseAnimation {
+                                                duration: ncard.index * 50
+                                            }
+                                            ParallelAnimation {
+                                                NumberAnimation {
+                                                    target: ncardSlide
+                                                    property: "x"
+                                                    duration: 350
+                                                    easing.type: Easing.InCubic
+                                                }
+                                                NumberAnimation {
+                                                    target: ncard
+                                                    property: "opacity"
+                                                    duration: 350
+                                                    easing.type: Easing.InCubic
+                                                }
+                                            }
+                                        }
+                                    }
 
                                     MouseArea {
                                         id: ncma
@@ -293,12 +357,13 @@ PanelWindow {
                             width: clrTxt.implicitWidth + 36
                             height: 34
                             radius: 10
-                            color: clrMa.containsMouse ? Theme.accent : Theme.card
+                            opacity: card.clearing ? 0.5 : 1
+                            color: (clrMa.containsMouse && !card.clearing) ? Theme.accent : Theme.card
                             Text {
                                 id: clrTxt
                                 anchors.centerIn: parent
                                 text: "Clear all"
-                                color: clrMa.containsMouse ? Theme.accentInk : Theme.ink
+                                color: (clrMa.containsMouse && !card.clearing) ? Theme.accentInk : Theme.ink
                                 font.family: Theme.fontSans
                                 font.pixelSize: 13
                             }
@@ -307,7 +372,14 @@ PanelWindow {
                                 anchors.fill: parent
                                 hoverEnabled: true
                                 cursorShape: Qt.PointingHandCursor
-                                onClicked: Notif.clearAll()
+                                onClicked: {
+                                    if (card.clearing || Notif.list.length === 0)
+                                        return;
+                                    card.clearing = true;
+                                    // last card's delay + slide + a little slack
+                                    clearTimer.interval = (Notif.list.length - 1) * 50 + 350 + 80;
+                                    clearTimer.restart();
+                                }
                             }
                         }
                     }
