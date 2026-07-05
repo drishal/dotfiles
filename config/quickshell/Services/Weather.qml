@@ -282,7 +282,7 @@ Singleton {
     Process {
         id: proc
         command: {
-            const cur = ["temperature_2m", "apparent_temperature", "relative_humidity_2m", "weathercode", "windspeed_10m", "winddirection_10m", "precipitation", "is_day", "uv_index"].join(",");
+            const cur = ["temperature_2m", "apparent_temperature", "relative_humidity_2m", "weathercode", "windspeed_10m", "winddirection_10m", "precipitation", "is_day", "uv_index", "pressure_msl"].join(",");
             const hr = ["temperature_2m", "weathercode", "precipitation_probability"].join(",");
             const url = "https://api.open-meteo.com/v1/forecast" + "?latitude=" + root.lat + "&longitude=" + root.lon + "&current=" + cur + "&hourly=" + hr + "&forecast_days=2&timezone=auto";
             return ["bash", "-c", "curl -s '" + url + "'"];
@@ -305,7 +305,8 @@ Singleton {
                         precipitation: c.precipitation,
                         weatherCode: c.weathercode,
                         isDay: c.is_day === 1,
-                        uvIndex: c.uv_index || 0
+                        uvIndex: c.uv_index || 0,
+                        pressure: Math.round(c.pressure_msl)
                     };
                     const nowIso = c.time.slice(0, 13);
                     let startIdx = j.hourly.time.findIndex(t => t.startsWith(nowIso));
