@@ -68,7 +68,7 @@ in
 {
   options.drishal.widgets = lib.mkOption {
     type = lib.types.enum [ "dms" "eww" "waybar" "ags" "quickshell" ];
-    default = "ags";
+    default = "quickshell";
     description = "Which widget stack to use for bar / notifications / control-center. Switch requires logout.";
   };
 
