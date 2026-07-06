@@ -80,6 +80,7 @@
         cursor-style = "block";
         cursor-style-blink = false;
         shell-integration-features = "no-cursor";
+        quit-without-confirmation = true;
       };
     };
     wezterm = {
