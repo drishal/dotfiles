@@ -11,6 +11,7 @@
     enable = true;
     enableMan = true;
     nixpkgs.config.allowUnfree = true;
+    nixpkgs.source = inputs.nixpkgs.outPath;
     # colorschemes.onedark.enable = true;
     # colorschemes.tokyonight = {
     #   enable = true;
