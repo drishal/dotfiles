@@ -1,4 +1,4 @@
-{ config, inputs, lib, ... }:
+{ config, inputs, lib, user, ... }:
 {
   imports = [ inputs.betterfox.modules.homeManager.betterfox ]; # or inputs.betterfox.homeModules.betterfox
 
@@ -13,7 +13,7 @@
     # Custom overrides on top of Betterfox — fixes for stutter with many (20-30+) tabs.
     # These merge into the same user.js Betterfox generates. Keys that Betterfox also
     # sets need lib.mkForce (it writes with plain priority); the rest are untouched by it.
-    profiles."nhkf2vcg.default".settings = {
+    profiles."${user}.default".settings = {
       # Re-enable on-disk cache: Betterfox runs RAM-only (128MB), which thrashes/evicts
       # with lots of tabs and forces re-fetch on tab switch. We're on fast NVMe, so the
       # SSD-wear rationale doesn't apply.
@@ -32,7 +32,7 @@
 
     betterfox = {
       enable = true;
-      profiles."nhkf2vcg.default"= {
+      profiles."${user}.default"= {
         enableAllSections = true;
         settings = {
           smoothfox = {

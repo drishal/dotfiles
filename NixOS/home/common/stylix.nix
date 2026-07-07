@@ -2,6 +2,7 @@
   config,
   inputs,
   pkgs,
+  user,
   ...
 }:
 
@@ -9,7 +10,7 @@
   stylix = {
     targets = {
       emacs.enable = false;
-      firefox.profileNames = [ "nhkf2vcg.default" ];
+      firefox.profileNames = [ "${user}.default" ];
       neovim.enable = false;
       nixvim.enable = false;
       helix.enable = false;
