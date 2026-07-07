@@ -19,7 +19,7 @@ in
     config = {
       # --- Core ---
       modifier = "Mod4"; # SUPER key
-      terminal = "kitty";
+      terminal = config.drishal.defaultApps.terminal;
       menu = "rofi -show drun -icon-theme Papirus -show-icons";
 
       # --- Gaps (from hyprland general) ---
@@ -81,11 +81,11 @@ in
         in
         lib.mkOptionDefault {
           # Launchers
-          "${mod}+Return" = "exec kitty";
+          "${mod}+Return" = "exec ${config.drishal.defaultApps.terminal}";
           "${mod}+d" = "exec rofi -show drun -icon-theme Papirus -show-icons";
           "${mod}+v" = "exec pavucontrol";
           "${mod}+t" = "exec GDK_BACKEND=x11 xfce4-taskmanager";
-          "${mod}+e" = "exec nemo";
+          "${mod}+e" = "exec ${config.drishal.defaultApps.fileManager}";
           "${mod}+a" = "exec emacsclient -c";
 
           # Window management
@@ -95,7 +95,7 @@ in
           "${mod}+f" = "fullscreen toggle";
 
           # Apps
-          "${mod}+Shift+f" = "exec firefox";
+          "${mod}+Shift+f" = "exec ${config.drishal.defaultApps.browser}";
           "${mod}+Shift+l" = "exec ${swaylockCmd}";
 
           # DMS restart (port of "pkill dms; dms run")

@@ -77,12 +77,13 @@ in
     configType = "lua";
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     settings = {
-      # Variables → Lua locals (local mainMod = "SUPER", local terminal = "kitty")
+      # Variables → Lua locals (local mainMod = "SUPER", local terminal = apps.terminal).
+      # Apps are sourced from drishal.defaultApps (see desktop/default-apps.nix).
       mainMod = {
         _var = "SUPER";
       };
       terminal = {
-        _var = "kitty";
+        _var = config.drishal.defaultApps.terminal;
       };
 
       # Autostart → hl.on("hyprland.start", ...). Rendered as a list so per-host
@@ -229,7 +230,7 @@ in
       bind =
         [
           (bind (combo "RETURN") (mkLuaInline "hl.dsp.exec_cmd(terminal)"))
-          # (bind (combo "RETURN") (exec "kitty --single-instance"))
+          # (bind (combo "RETURN") (exec "${config.drishal.defaultApps.terminal} --single-instance"))
           (bind (combo "D") (exec "rofi -show drun -icon-theme Papirus -show-icons"))
           (bind (combo "V") (exec "pavucontrol"))
           # wofi clipboard history with image thumbnails (rofi stays the default
@@ -238,11 +239,11 @@ in
           (bind (combo "T") (exec "GDK_BACKEND=x11 xfce4-taskmanager"))
           (bind (combo "Q") (mkLuaInline "hl.dsp.window.close()"))
           (bind (combo "SHIFT + Q") (exec "kill -9 $(pidof Hyprland)"))
-          (bind (combo "SHIFT + F") (exec "firefox"))
+          (bind (combo "SHIFT + F") (exec config.drishal.defaultApps.browser))
           (bind (combo "SHIFT + L") (
             exec "swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 7x5 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000  --fade-in 0.2"
           ))
-          (bind (combo "E") (exec "nemo"))
+          (bind (combo "E") (exec config.drishal.defaultApps.fileManager))
           (bind (combo "x") (exec currentWidgetRestart))
           (bind (combo "SHIFT + X") (mkLuaInline "hl.dsp.exit()"))
           (bind (combo "A") (exec "emacsclient -c"))

@@ -10,6 +10,7 @@
     ./core/tmux.nix
     ./core/fastfetch.nix
 
+    ./desktop/default-apps.nix
     ./desktop/rofi.nix
     ./desktop/file-managers.nix
     ./desktop/waybar.nix
