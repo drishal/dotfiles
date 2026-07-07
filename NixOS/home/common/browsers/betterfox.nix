@@ -1,10 +1,14 @@
-{ inputs, lib, ... }:
+{ config, inputs, lib, ... }:
 {
   imports = [ inputs.betterfox.modules.homeManager.betterfox ]; # or inputs.betterfox.homeModules.betterfox
 
   # In firefox
   programs.firefox = {
     enable = true;
+    # Force the XDG config path so HM writes profiles.ini and Firefox reads
+    # from ~/.config/mozilla/firefox (not the legacy ~/.mozilla/firefox,
+    # which is the default while home.stateVersion < "26.05").
+    configPath = "${config.xdg.configHome}/mozilla/firefox";
 
     # Custom overrides on top of Betterfox — fixes for stutter with many (20-30+) tabs.
     # These merge into the same user.js Betterfox generates. Keys that Betterfox also
