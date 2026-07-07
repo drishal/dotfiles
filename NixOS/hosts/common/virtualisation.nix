@@ -3,6 +3,7 @@
   pkgs,
   inputs,
   lib,
+  user,
   ...
 }:
 
@@ -67,7 +68,7 @@
   # };
   programs.virt-manager.enable = true;
 
-  users.extraGroups.vboxusers.members = [ "drishal" ];
+  users.extraGroups.vboxusers.members = [ user ];
   virtualisation.spiceUSBRedirection.enable = true;
     environment = {
       etc = {

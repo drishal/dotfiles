@@ -1,4 +1,4 @@
-{ config, inputs, lib, pkgs, ... }:
+{ config, inputs, lib, pkgs, user, ... }:
 
 {
   imports = [
@@ -33,8 +33,8 @@
   programs.home-manager.enable = true;
 
   home = {
-    username = "drishal";
-    homeDirectory = "/home/drishal";
+    username = user;
+    homeDirectory = "/home/${user}";
   };
   programs.man.generateCaches = true;
   news.display = "silent";

@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, user, ... }:
 
 {
   # networking.enableIPv6  = false;
@@ -50,9 +50,9 @@
       host all all ::1/128 trust
     '';
     initialScript = pkgs.writeText "backend-initScript" ''
-      CREATE ROLE drishal WITH LOGIN PASSWORD 'aiphonepass' CREATEDB;
+      CREATE ROLE ${user} WITH LOGIN PASSWORD 'aiphonepass' CREATEDB;
       CREATE DATABASE aiphone;
-      GRANT ALL PRIVILEGES ON DATABASE aiphone TO drishal;
+      GRANT ALL PRIVILEGES ON DATABASE aiphone TO ${user};
     '';
   };
 

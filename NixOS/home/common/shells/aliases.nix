@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, user, ... }:
 
 {
   # 2. The Aliases (Apply to ALL shells: Fish, Zsh, Bash, etc.)
@@ -68,7 +68,7 @@
     galaxy-buds = "steam-run ~/Downloads/GalaxyBudsClient_Linux_64bit_Portable.bin";
     remove-dunst = "sudo rm /usr/share/dbus-1/services/org.knopwob.dunst.service";
     mongodb = "sudo systemctl start mongodb.service";
-    wine64 = "env WINEARCH=win64 WINEPREFIX='/home/drishal/.wine64' wine64";
+    wine64 = "env WINEARCH=win64 WINEPREFIX='/home/${user}/.wine64' wine64";
 
     # --- Tools ---
     # watch-amd-gpu = "sudo watch -n 0.5 bat /sys/kernel/debug/dri/0/amdgpu_pm_info";
@@ -101,7 +101,7 @@
 
     # Misc
     qemu-create-img = "qemu-img create -f qcow2";
-    arch = "OVERFS_MODE=1 /home/drishal/Desktop/iso/arch/runimage.superlite --run-shell";
+    arch = "OVERFS_MODE=1 /home/${user}/Desktop/iso/arch/runimage.superlite --run-shell";
   };
   home.packages = with pkgs; [
     (pkgs.writeShellScriptBin "watch-sync" ''

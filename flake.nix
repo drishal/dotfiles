@@ -24,9 +24,6 @@
 
     nixvim = {
       url = "github:nix-community/nixvim";
-      # Must follow our nixpkgs, otherwise nixvim bundles its own nixpkgs and
-      # the resulting dual-stdenv luajit collides in neovim's buildEnv.
-      # See nix-community/nixvim#4463.
       inputs.nixpkgs.follows = "nixpkgs";
     };
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
@@ -145,6 +142,7 @@
     }@inputs:
     let
       system = "x86_64-linux";
+      user = "drishal";
 
       pkgs = import nixpkgs {
         inherit system;
@@ -183,8 +181,8 @@
           extraSpecialArgs = {
             inherit system;
             inherit inputs;
+            inherit user;
           };
-          user = "drishal";
         in
         {
           "${user}@nixos-desktop" = home-manager.lib.homeManagerConfiguration {
@@ -228,6 +226,7 @@
           specialArgs = {
             inherit inputs;
             inherit pkgs-master;
+            inherit user;
           };
         in
         {

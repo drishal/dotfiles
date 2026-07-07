@@ -3,6 +3,7 @@
   pkgs,
   inputs,
   lib,
+  user,
   ...
 }:
 {
@@ -22,7 +23,7 @@
     promptInit = "";
   };
   programs.xonsh.enable = true;
-  users.users.drishal = {
+  users.users.${user} = {
     shell = pkgs.zsh;
     isNormalUser = true;
     extraGroups = [

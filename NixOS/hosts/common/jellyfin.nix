@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, user, ... }:
 
 {
   services.jellyfin = {
@@ -28,11 +28,11 @@
   systemd.services.jellyfin.serviceConfig.PrivateUsers = lib.mkForce false;
 
   # Allow Jellyfin to access ~/Movies without exposing the rest of $HOME.
-  # /home/drishal only needs execute permission so Jellyfin can traverse it.
+  # /home/${user} only needs execute permission so Jellyfin can traverse it.
   # ~/Movies gets recursive read/execute ACLs for existing and future files.
   systemd.tmpfiles.rules = [
-    "a+ /home/drishal - - - - u:jellyfin:--x,m::--x"
-    "A+ /home/drishal/Movies - - - - u:jellyfin:rX,d:u:jellyfin:rX,m::rX,d:m::rX"
+    "a+ /home/${user} - - - - u:jellyfin:--x,m::--x"
+    "A+ /home/${user}/Movies - - - - u:jellyfin:rX,d:u:jellyfin:rX,m::rX,d:m::rX"
   ];
 
   # Allow Jellyfin to use AMD VAAPI / hardware transcoding devices.

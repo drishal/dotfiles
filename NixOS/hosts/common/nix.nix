@@ -3,6 +3,7 @@
   pkgs,
   inputs,
   lib,
+  user,
   ...
 }:
 
@@ -23,7 +24,7 @@
       auto-optimise-store = true;
       trusted-users = [
         "root"
-        "drishal"
+        user
       ];
       # access-tokens = "${builtins.readFile ${private-stuff}/token.txt;}";
       access-tokens = builtins.readFile "${inputs.private-stuff}/token.txt";
@@ -55,6 +56,6 @@
     enable = true;
     clean.enable = true;
     clean.extraArgs = "--keep-since 2d --keep 2";
-    flake = "/home/drishal/dotfiles";
+    flake = "/home/${user}/dotfiles";
   };
 }

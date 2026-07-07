@@ -3,6 +3,7 @@
   lib,
   pkgs,
   modulesPath,
+  user,
   ...
 }:
 
@@ -75,7 +76,7 @@
     };
   };
 
-  users.groups.i2c.members = [ "drishal" ];
+  users.groups.i2c.members = [ user ];
   # services.sunshine = {
   #   enable = true;
   #   autoStart = false;
