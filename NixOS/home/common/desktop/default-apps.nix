@@ -16,7 +16,7 @@
 
 let
   apps = {
-    terminal = "kitty";
+    terminal = "ghostty";
     fileManager = "nemo";
     browser = "firefox";
     pdf = "okular";
