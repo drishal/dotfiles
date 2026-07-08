@@ -108,6 +108,10 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 - **Per-host tunings are opt-in** — `memory.nix`, `storage.nix`, `cpu/*-pstate.nix`, `scheduler/*.nix` are NOT imported by `common/default.nix`. Each host's `default.nix` picks what applies. Lets `nixos` (template) stay minimal.
 - **Per-host home overrides** live in `home/<host>/default.nix` and stack on top via flake module composition.
 
+## Code style
+
+- **Comments** — short and precise; max 1 line, 2 only if the explanation is genuinely needed. No comment if the code is self-explanatory.
+
 ## Critical gotchas
 
 - **Path is hardcoded to `~/dotfiles`** — symlinks, flake references, and scripts all assume this location. Clone there.

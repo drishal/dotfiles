@@ -75,6 +75,8 @@
         # theme = "Gruvbox Material Dark";
         # font-family = "${config.stylix.fonts.monospace.name}";
         # font-size = config.stylix.fonts.sizes.terminal;
+        # Pure linear alpha compositing (physically correct; matches kitty's text_composition_strategy).
+        alpha-blending = "linear";
         window-padding-x = 5;
         window-padding-y = 5;
         cursor-style = "block";
