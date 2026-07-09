@@ -376,7 +376,7 @@ Defaults to \"material\""
    ;; markdown-mode
    (markdown-markup-face :foreground base5)
    (markdown-header-face :inherit 'bold :foreground blue)
-   ((markdown-code-face &override) :background (doom-lighten base3 0.05))
+   ((markdown-code-face &override) :background bg-alt)
 
    ;; org-mode
    (org-hide :foreground hidden)
