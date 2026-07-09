@@ -394,9 +394,11 @@ PanelWindow {
                         QsMenuAnchor {
                             id: trayMenu
                             menu: trayItem.modelData.menu
-                            anchor.window: bar
-                            anchor.rect.x: trayItem.x + leftRow.x
-                            anchor.rect.y: island.height
+                            anchor.item: trayItem
+                            anchor.margins.bottom: -6
+                            anchor.edges: Edges.Bottom | Edges.Left
+                            anchor.gravity: Edges.Bottom | Edges.Right
+                            anchor.adjustment: PopupAdjustment.Flip | PopupAdjustment.Slide
                         }
                     }
                 }
