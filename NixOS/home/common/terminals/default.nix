@@ -82,6 +82,8 @@
         cursor-style = "block";
         cursor-style-blink = false;
         shell-integration-features = "no-cursor";
+        working-directory = "home";
+        window-inherit-working-directory = false;
         confirm-close-surface = false;
       };
     };
