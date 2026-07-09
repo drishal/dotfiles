@@ -435,6 +435,7 @@
       nerd-fonts.commit-mono
       nerd-fonts.monaspace
       noto-fonts
+      noto-fonts-color-emoji
       noto-fonts-cjk-sans
       noto-fonts-lgc-plus
       roboto
