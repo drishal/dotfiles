@@ -618,7 +618,7 @@ PanelWindow {
                                     { i: "󰖎", v: Weather.current.humidity + "%", l: "HUMIDITY" },
                                     { i: "󰖝", v: Weather.current.windSpeed + " " + Weather.windDirToCompass(Weather.current.windDir), l: "WIND" },
                                     { i: "󰓅", v: "" + Weather.current.uvIndex, l: "UV INDEX" },
-                                    { i: "󰊚", v: Weather.current.pressure + " hPa", l: "PRESSURE" },
+                                    { i: "󰖛", v: Weather.current.cloudCover + "%", l: "CLOUDS" },
                                     { i: "󰖗", v: Weather.current.precipitation + " mm", l: "RAIN" }
                                 ] : []
                                 // clean grid: equal-width cells, everything centered.
