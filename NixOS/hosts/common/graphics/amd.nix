@@ -32,7 +32,9 @@
     VDPAU_DRIVER = "radeonsi";
     # MOZ_DISABLE_RDD_SANDBOX="1";
     AMD_VULKAN_ICD = "RADV";
-    VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+    # Don't pin VK_ICD_FILENAMES to the 64-bit ICD — it starves 32-bit apps
+    # (Steam client) of a usable ICD and breaks their Vulkan init. Let the
+    # loader auto-discover both /run/opengl-driver{,-32} ICDs.
     # MOZ_ENABLE_WAYLAND="1";
   };
 
