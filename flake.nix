@@ -96,6 +96,11 @@
       flake = false;
     };
 
+    brave-previews = {
+      url = "github:drishal/brave-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # neovim plugins
     gruvbox-material = {
       url = "github:sainnhe/gruvbox-material";

@@ -40,6 +40,16 @@
     })
   ];
 
+  programs.brave-origin-beta = {
+    enable = true;
+    commandLineArgs = [
+      "--ignore-gpu-blocklist"
+      "--enable-zero-copy"
+      "--ozone-platform-hint=auto"
+      "--enable-features=VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+    ];
+  };
+
   #postgresql
   services.postgresql = {
     enable = true;
