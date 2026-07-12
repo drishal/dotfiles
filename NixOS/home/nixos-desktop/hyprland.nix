@@ -330,6 +330,19 @@ in
         monitor = lgMonitor;
       }) (lib.range 6 10);
 
+    # CS2 ignores its own display setting and opens on the vertical LG
+    # (ValveSoftware/csgo-osx-linux#3282). Pin it to the Acer; keep it
+    # fullscreen since a stray resize blackens the viewmodels.
+    window_rule = [
+      {
+        name = "cs2-acer";
+        match.class = "cs2";
+        monitor = acerMonitor;
+        fullscreen = true;
+        keep_aspect_ratio = true;
+      }
+    ];
+
     on = [
       {
         _args = [
