@@ -59,7 +59,12 @@ let
     # [g]js bracket stops pkill -f from matching its own shell (whose cmdline contains the literal pattern), which would SIGKILL the
     # bind's shell before it reaches `ags run &` — that's why mod+x killed ags and never relaunched it.
     "ags"    = "ags quit 2>/dev/null; pkill -9 -f '[g]js -m.*ags'; ags run &";
-    "quickshell" = "qs kill 2>/dev/null; qs -d &";
+    # `qs kill` only kills one instance, so it can never clear a duplicate (and
+    # quickshell survives the DFR layer-surface teardown rather than crashing, so
+    # a restart stacks a second bar). pkill every instance first; the [q] bracket
+    # stops pkill -f matching its own shell. Nix wraps the binary (comm becomes
+    # .quickshell-wra), so match the cmdline path with -f, not -x.
+    "quickshell" = "pkill -f '[q]uickshell' 2>/dev/null; sleep 0.2; qs -d &";
   };
 
   currentWidgetStartup = widgetStartup.${config.drishal.widgets};
