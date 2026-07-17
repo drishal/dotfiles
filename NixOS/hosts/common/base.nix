@@ -140,8 +140,6 @@
 
   # services.haveged.enable = true;  # obsolete on kernel 5.6+ (CRNG self-seeds)
 
-  security.rtkit.enable = true;
-
   services.fstrim = {
     enable = true;
     interval = "weekly";
@@ -163,39 +161,6 @@
   services.tailscale = {
     enable = true;
   };
-  services.pipewire = {
-    wireplumber = {
-      enable = true;
-      extraConfig = {
-        actions = {
-          update-props = {
-            "bluez5.autoswitch-profile" = true;
-          };
-        };
-        pipewire = {
-          "10-fifine-mic" = {
-            match = [
-              { "node.name" = "alsa_input.usb-3142_Fifine_Microphone-00.mono-fallback"; }
-            ];
-            update-props = {
-              "audio.format" = "S16LE";
-              "audio.rate" = 48000; # Force mic to 48 kHz only
-              "audio.channels" = 1; # Keep mono
-              "channelmix.upmix" = false;
-              "channelmix.normalize" = false;
-            };
-          };
-        };
-      };
-    };
-    # media-session.enable = false;
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = false;
-  };
-  services.pulseaudio.enable = false;
   # backlight
   hardware.acpilight.enable = true;
 

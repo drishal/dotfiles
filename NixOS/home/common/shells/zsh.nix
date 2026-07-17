@@ -321,6 +321,30 @@ in
       }
       add-zsh-hook precmd _newline_after_command
 
+      # ---------- manual zsh cache cleanup ----------
+      zcleanup() {
+        local _zcd="$HOME/.cache/zsh"
+        local _cur="$_zcd/zcompdump-$ZSH_VERSION"
+        echo "Cleaning stale zcompdumps…"
+
+        # Stale version-suffixed dumps in the cache dir
+        for _old in "$_zcd"/zcompdump*(N.); do
+          [[ "$_old" == "$_cur" || "$_old" == "$_cur.zwc" ]] && continue
+          rm -f "$_old" && echo "  rm $_old"
+        done
+
+        # Orphaned prezto cache
+        [[ -d "$HOME/.cache/prezto" ]] && { rm -rf "$HOME/.cache/prezto" && echo "  rm -rf ~/.cache/prezto"; }
+
+        # Stray dumps in $HOME (default compinit location)
+        for _old in "$HOME"/.zcompdump*(N); do
+          rm -f "$_old" && echo "  rm $_old"
+        done
+
+        unset _old
+        echo "Done."
+      }
+
       # ---------- syntax highlighting (MUST be last) ----------
       # F-Sy-H wraps ZLE widgets, so it has to be sourced after compinit,
       # autosuggestions, and all custom `zle -N` widgets above.

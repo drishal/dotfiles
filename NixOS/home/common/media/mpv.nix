@@ -98,6 +98,16 @@
       ytdl-raw-options = "cookies-from-browser=firefox";
 
       # ---- Audio / misc ----
+      # Bit-perfect path: mpv → PipeWire AO → Spark DAC at native rate.
+      # `ao=pipewire` uses the native PipeWire audio output (no ALSA/Pulse
+      # indirection).  `audio-device` targets the Spark explicitly so mpv
+      # always sends to the DAC even if the system default changes.
+      # `audio-samplerate` and `audio-format` are deliberately UNSET —
+      # leaving them unset lets mpv pass through the file's native rate
+      # and bit depth, which is what enables WirePlumber's rate switching.
+      # WirePlumber config in hosts/common/audio.nix handles the rest.
+      ao              = "pipewire";
+      audio-device    = "pipewire/alsa_output.usb-TTGK_Technology_Co._Ltd_Audiocular_Spark-00.analog-stereo";
       # Start at 40%; fine-tune listening level on the Spark sink (wpctl set-volume).
       # volume-max=150 leaves headroom for recordings that need a bit more.
       volume            = 40;
