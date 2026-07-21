@@ -85,6 +85,8 @@
         working-directory = "home";
         window-inherit-working-directory = false;
         confirm-close-surface = false;
+        # Hide the cell-size overlay (e.g. "80x24") that pops up on resize.
+        osd = false;
       };
     };
     wezterm = {
