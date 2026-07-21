@@ -39,7 +39,8 @@ flake.nix / flake.lock       ← top-level flake (inputs, outputs, overlays)
 NixOS/
   hosts/                     ← NixOS system modules
     common/                  ← shared across all hosts
-      default.nix            ← imports base/gui/nix/packages/users/virt/searx + shared/stylix (firewall, tlp commented out)
+      default.nix            ← imports audio/base/gui/nix/packages/users/virt/searx + shared/stylix (firewall, tlp commented out)
+      audio.nix              ← bit-perfect audio: WirePlumber rate-switching for Audiocular Spark DAC (shared work+desktop)
       base.nix               ← boot, networking, pipewire, bluetooth, tailscale, kernel pkg
       gui.nix                ← display server, Hyprland, input, fonts
       nix.nix                ← nix daemon settings
@@ -64,9 +65,10 @@ NixOS/
       default.nix            ← imports common + memory + storage + network-tuning + amd graphics
       hardware-configuration.nix
     nixos-desktop/           ← main desktop (Ryzen 7900X + RX 6800)
-      default.nix            ← common + memory + storage + network-tuning + amd-pstate + lavd + amd graphics + packages + jellyfin
+      default.nix            ← common + brave-previews + memory + storage + network-tuning + amd-pstate + lavd + amd graphics + packages + jellyfin
       hardware-configuration.nix
       packages.nix           ← desktop-only packages
+      llama-cpp.nix          ← local llama.cpp derivation (Zen4 + LTO), callPackage'd from packages.nix; tracks whichever fork the `llama-cpp` input points at
     nixos-work/              ← work workstation (Xeon W-2295 + T400 nvidia)
       default.nix            ← common + memory + storage + network-tuning + intel-pstate + bpfland + nvidia + packages + virt
       hardware-configuration.nix
@@ -78,7 +80,7 @@ NixOS/
       stylix.nix             ← HM-level stylix overrides
       core/                  ← packages.nix, git.nix, tmux.nix, fastfetch.nix
       shells/                ← default.nix, fish.nix, zsh.nix, aliases.nix (shell-agnostic aliases + PATH + env)
-      desktop/               ← hyprland, sway, waybar, rofi, dms, ags, eww, file-managers, hermes-app, icons
+      desktop/               ← hyprland, sway, waybar, rofi, dms, ags, eww, quickshell, default-apps, file-managers, hermes-app, icons
       editors/               ← default.nix, emacs.nix, nixvim.nix
       terminals/             ← default.nix (kitty, ghostty, alacritty via single module)
       browsers/              ← default.nix, betterfox.nix (firefox+betterfox; only betterfox imported)
@@ -128,6 +130,7 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 - **Widget stack is `drishal.widgets`** — enum (`ags` | `eww` | `dms` | `waybar` | `quickshell`, default `ags`, defined in `home/common/desktop/hyprland.nix`) picking bar / notifications / control-center. Hyprland startup (`widgetStartup`) and the SUPER+X restart bind (`widgetRestart`, duplicated in `nixos-desktop/hyprland.nix`) branch on it; **switching requires logout**. `ags`/`eww`/`quickshell` share the same material design; one notification daemon at a time (ags → AstalNotifd, eww → end-rs gated in `eww.nix` on `widgets == "eww"`, quickshell → its own `NotificationServer`). Only one may own `org.freedesktop.Notifications` at a time — running two shells at once logs a "server already registered" warning.
 - **quickshell shell is Quickshell 0.3.0 + QML** — `config/quickshell/` is a faithful QML port of the ags shell (`shell.qml` per-monitor `Variants`; `Modules/{Bar,Workspaces,Dashboard,NotificationCenter,NotificationPopups,PowerMenu,VolumePopup,Clipboard}.qml`), driven by Quickshell native services (Hyprland/Pipewire/Mpris/SystemTray/UPower/Bluetooth/Notifications) plus singletons in `Services/` (Sys, Net, Radios, Weather, Clip, Audio, Brightness, Notif, Popups). Colours: `quickshell.nix` writes `~/.config/quickshell-stylix.json` (`{colors, fonts}`); `Common/Theme.qml` reads it via `FileView` (hot-reloads on switch) with a baked gruvbox fallback. Config dir is an out-of-store symlink, so QML edits apply on `qs kill; qs` (or the built-in hot reload) without a rebuild. **Hyprland runs `configType = "lua"`, so workspace/exit dispatches are Lua expressions** (`hl.dsp.focus{...}`, `hl.dsp.exit()`), exactly like the ags config — not classic `dispatch workspace N`. Popups toggle in-process via the `Popups` singleton (per-monitor), also reachable via IPC: `qs ipc call popups toggle dashboard`. Test-load without launching: `qs -p config/quickshell/shell.qml` and watch the log for QML errors.
 - **ags shell is GTK4 + Astal (v3 API)** — `config/ags/` is a TS/JSX shell (`app.tsx` per-monitor autodetect; `widget/Bar.tsx`, `windows/{Dashboard,NotificationCenter,NotificationPopups,PowerMenu}.tsx`), driven by Astal libs (Hyprland/Wp/Network/Bluetooth/Notifd/Mpris/Tray/Battery), not shell scripts. Colours: `ags.nix` writes `~/.config/ags-stylix.css` (`@define-color base00..0F`); `style/_colors.scss` references them as `"@base.."` tokens via `#{}` so dart-sass preserves the named colour and the palette hot-swaps (`theme.css` is the run-from-repo fallback). Config dir is an out-of-store symlink, so TS/SCSS edits apply on `ags quit; ags run` without a rebuild; `ags bundle app.tsx /tmp/out.js` typecheck-compiles without launching.
+- **Default apps are single-sourced** — `home/common/desktop/default-apps.nix` defines `drishal.defaultApps` (terminal/browser/editor/filemanager…), consumed by `xdg.mimeApps` + `xdg.terminal-exec`, by hyprland/sway keybinds, and by quickshell/ags/eww at runtime via `~/.config/drishal/default-apps.json`. Override per-host in the host's home module; don't hardcode app names elsewhere.
 - **GPU drivers per host** — `amd.nix` for desktop/template, `nvidia.nix` for work (T400). Both live in `hosts/common/graphics/` but only one is imported per host.
 - **hermes-app is an external repo** — the `hermes-app.nix` HM module (`home/common/desktop/`) wraps a PySide6 app living at `~/Desktop/git-stuff/hermes-app` (github.com/drishal/hermes-app), NOT in this tree. `appRoot` points at that working tree (edits apply on next launch); the module generates `~/.config/HermesApp/colors.json` from stylix. Clone it there or the `hermes-app` command won't launch (build still succeeds).
 
@@ -165,7 +168,8 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 | `direnv-instant`         | Instant direnv evaluation                                           |
 | `ani-cli`                | Terminal anime streaming CLI                                        |
 | `gruvbox-material`       | Gruvbox Material theme (flake=false, for nvim)                      |
-| `llama-cpp`              | LLaMA.cpp inference engine                                          |
+| `llama-cpp`              | llama.cpp src (flake=false); a fork, swapped often to test models needing a special build; built via `llama-cpp.nix` |
+| `brave-previews`         | Brave Beta/Nightly browser flake (desktop nixos module)             |
 
 ## Target machines
 
