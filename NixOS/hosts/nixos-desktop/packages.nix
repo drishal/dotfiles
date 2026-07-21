@@ -1,4 +1,9 @@
-{ pkgs, inputs, user, ... }:
+{
+  pkgs,
+  inputs,
+  user,
+  ...
+}:
 
 {
   # networking.enableIPv6  = false;
@@ -13,20 +18,21 @@
   # };
   programs.gamemode.enable = true;
   environment.systemPackages = with pkgs; [
-    # llama-cpp (TurboQuant fork) with Vulkan backend.
+    # llama-cpp (whichever fork the `llama-cpp` input pins) with Vulkan backend.
     # Source hash tracked by flake.lock via the `flake = false` input — no
     # manual fetchFromGitHub/hash maintenance. The local package.nix is pure
-    # build-recipe code (TurboQuant's, with TheTom/llama-cpp-turboquant#194's
-    # duplicate `spirv-headers` formal arg removed); it carries no hashes.
-    # We can't use TurboQuant's own flake packaging (#194 parse error) nor the
-    # ani-cli src-swap pattern (nixpkgs llama-cpp.overrideAttrs returns a
-    # function under the chaotic overlay here), so callPackage it directly.
-    # Web UI / npm build is disabled (we don't use it, and TurboQuant's
-    # tools/ui lockfile diverges from nixpkgs' pinned npmDepsHash).
-    (pkgs.callPackage ./llama-cpp-turboquant.nix {
+    # build-recipe code (upstream's, with the duplicate `spirv-headers` formal
+    # arg some forks carry removed); it holds no hashes. We can't use a fork's
+    # own flake packaging (dup-arg parse error) nor the ani-cli src-swap pattern
+    # (nixpkgs llama-cpp.overrideAttrs returns a function under the chaotic
+    # overlay here), so callPackage it directly. Web UI / npm build disabled
+    # (unused, and forks' tools/ui lockfile diverges from nixpkgs' npmDepsHash).
+    (pkgs.callPackage ./llama-cpp.nix {
       src = inputs.llama-cpp;
       useVulkan = true;
       useWebUi = false;
+      optimizeZen4 = true;
+      useLto = true;
     })
     teams-for-linux
     i2c-tools

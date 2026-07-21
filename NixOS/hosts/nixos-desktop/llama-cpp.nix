@@ -1,8 +1,8 @@
-# Local copy of TheTom/llama-cpp-turboquant's .devops/nix/package.nix
-# with one fix: upstream lists `spirv-headers` twice in the formal arguments
-# (a parse-time error in Nix), which breaks `inputs.llama-cpp.packages.*.default`.
-# This file is the corrected derivation, parameterized by `src` (the TurboQuant
-# flake outPath) so we can callPackage it directly.
+# Local copy of llama.cpp's .devops/nix/package.nix with one fix: some forks
+# list `spirv-headers` twice in the formal arguments (a parse-time error in
+# Nix), which breaks `inputs.llama-cpp.packages.*.default`. This file is the
+# corrected derivation, parameterized by `src` (the flake outPath) so we can
+# callPackage it directly against whichever `llama-cpp` fork is pinned.
 #
 # importNpmLock defaults to null because we build with useWebUi=false; the
 # `webui` attr is never forced in that case. If you flip useWebUi to true,
@@ -56,6 +56,8 @@
   enableStatic ? effectiveStdenv.hostPlatform.isStatic,
   precompileMetalShaders ? false,
   useWebUi ? true,
+  optimizeZen4 ? false,
+  useLto ? false,
 }:
 
 let
@@ -124,7 +126,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp${pnameSuffix}";
   version = llamaVersion;
 
-  # Source is the TurboQuant flake outPath, passed in by the caller.
+  # Source is the flake outPath, passed in by the caller.
   # Mirror upstream's cleanSourceWith filtering so *.nix/*.md/hidden/flake.lock
   # changes don't needlessly rebuild.
   src = lib.cleanSourceWith {
@@ -179,20 +181,19 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # see https://github.com/ggml-org/llama.cpp/pull/6118 for discussion
   __noChroot = effectiveStdenv.isDarwin && useMetalKit && precompileMetalShaders;
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      pkg-config
-      git
-    ]
-    ++ optionals useCuda [
-      cudaPackages.cuda_nvcc
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    git
+  ]
+  ++ optionals useCuda [
+    cudaPackages.cuda_nvcc
 
-      autoAddDriverRunpath
-    ]
-    ++ optionals (effectiveStdenv.hostPlatform.isGnu && enableStatic) [ glibc.static ]
-    ++ optionals (effectiveStdenv.isDarwin && useMetalKit && precompileMetalShaders) [ xcrunHost ];
+    autoAddDriverRunpath
+  ]
+  ++ optionals (effectiveStdenv.hostPlatform.isGnu && enableStatic) [ glibc.static ]
+  ++ optionals (effectiveStdenv.isDarwin && useMetalKit && precompileMetalShaders) [ xcrunHost ];
 
   buildInputs =
     optionals effectiveStdenv.isDarwin darwinBuildInputs
@@ -203,37 +204,51 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals useVulkan vulkanBuildInputs
     ++ [ openssl ];
 
-  cmakeFlags =
-    [
-      (cmakeBool "LLAMA_BUILD_SERVER" true)
-      (cmakeBool "LLAMA_BUILD_WEBUI" useWebUi)
-      (cmakeBool "BUILD_SHARED_LIBS" (!enableStatic))
-      (cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
-      (cmakeBool "GGML_NATIVE" false)
-      (cmakeBool "GGML_BLAS" useBlas)
-      (cmakeBool "GGML_CUDA" useCuda)
-      (cmakeBool "GGML_HIP" useRocm)
-      (cmakeBool "GGML_METAL" useMetalKit)
-      (cmakeBool "GGML_VULKAN" useVulkan)
-      (cmakeBool "GGML_STATIC" enableStatic)
-      (cmakeBool "GGML_RPC" useRpc)
-    ]
-    ++ optionals useCuda [
-      (
-        with cudaPackages.flags;
-        cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (
-          builtins.concatStringsSep ";" (map dropDot cudaCapabilities)
-        )
+  cmakeFlags = [
+    (cmakeBool "LLAMA_BUILD_SERVER" true)
+    (cmakeBool "LLAMA_BUILD_WEBUI" useWebUi)
+    (cmakeBool "BUILD_SHARED_LIBS" (!enableStatic))
+    (cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
+    (cmakeBool "GGML_NATIVE" false)
+    (cmakeBool "GGML_LTO" useLto)
+    (cmakeBool "GGML_BLAS" useBlas)
+    (cmakeBool "GGML_CUDA" useCuda)
+    (cmakeBool "GGML_HIP" useRocm)
+    (cmakeBool "GGML_METAL" useMetalKit)
+    (cmakeBool "GGML_VULKAN" useVulkan)
+    (cmakeBool "GGML_STATIC" enableStatic)
+    (cmakeBool "GGML_RPC" useRpc)
+  ]
+  ++ optionals optimizeZen4 [
+    (cmakeFeature "CMAKE_C_FLAGS" "-march=znver4")
+    (cmakeFeature "CMAKE_CXX_FLAGS" "-march=znver4")
+    (cmakeBool "GGML_AVX" true)
+    (cmakeBool "GGML_AVX2" true)
+    (cmakeBool "GGML_AVX512" true)
+    (cmakeBool "GGML_AVX512_VBMI" true)
+    (cmakeBool "GGML_AVX512_VNNI" true)
+    (cmakeBool "GGML_AVX512_BF16" true)
+    (cmakeBool "GGML_BMI2" true)
+    (cmakeBool "GGML_F16C" true)
+    (cmakeBool "GGML_FMA" true)
+    (cmakeBool "GGML_SSE42" true)
+  ]
+  ++ optionals useCuda [
+    (
+      with cudaPackages.flags;
+      cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (
+        builtins.concatStringsSep ";" (map dropDot cudaCapabilities)
       )
-    ]
-    ++ optionals useRocm [
-      (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.llvm.clang}/bin/clang")
-      (cmakeFeature "CMAKE_HIP_ARCHITECTURES" rocmGpuTargets)
-    ]
-    ++ optionals useMetalKit [
-      (lib.cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
-      (cmakeBool "GGML_METAL_EMBED_LIBRARY" (!precompileMetalShaders))
-    ];
+    )
+  ]
+  ++ optionals useRocm [
+    (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.llvm.clang}/bin/clang")
+    (cmakeFeature "CMAKE_HIP_ARCHITECTURES" rocmGpuTargets)
+  ]
+  ++ optionals useMetalKit [
+    (lib.cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
+    (cmakeBool "GGML_METAL_EMBED_LIBRARY" (!precompileMetalShaders))
+  ];
 
   # Environment variables needed for ROCm
   env = optionalAttrs useRocm {
@@ -259,7 +274,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     broken = (useMetalKit && !effectiveStdenv.isDarwin);
 
     description = "Inference of LLaMA model in pure C/C++${descriptionSuffix}";
-    homepage = "https://github.com/TheTom/llama-cpp-turboquant/";
+    homepage = "https://github.com/ggml-org/llama.cpp/";
     license = lib.licenses.mit;
 
     # Accommodates `nix run` and `lib.getExe`
