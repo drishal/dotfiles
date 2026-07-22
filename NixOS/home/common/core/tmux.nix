@@ -31,13 +31,13 @@ in
 
       # === Theme (stylix) ===
       set -g status-style "bg=${c.base01},fg=${c.base05}"
-      set -g status-left "#[bg=${c.base0D},fg=${c.base00},bold] #S #[bg=${c.base01},fg=${c.base01}] "
+      set -g status-left "#[fg=${c.base0D},bold] [#S] "
       set -g status-left-length 40
       set -g status-right "#[fg=${c.base04}] %H:%M #[bg=${c.base0D},fg=${c.base00},bold] #h "
       set -g status-right-length 60
 
-      set -g window-status-format "#[fg=${c.base04}] #I:#W "
-      set -g window-status-current-format "#[bg=${c.base0D},fg=${c.base00},bold] #I:#W "
+      set -g window-status-format "#[fg=${c.base04}] #I #W "
+      set -g window-status-current-format "#[bg=${c.base0D},fg=${c.base00},bold] #I #[bg=${c.base02},fg=${c.base05}] #W "
       set -g window-status-separator ""
 
       set -g pane-border-style "fg=${c.base02}"
