@@ -13,10 +13,26 @@ in
     terminal = "tmux-256color";
     mouse = true;
     keyMode = "vi";
-    plugins = [ pkgs.tmuxPlugins.sensible ];
+    baseIndex = 1;
+    plugins = with pkgs.tmuxPlugins; [
+      sensible
+      vim-tmux-navigator
+    ];
 
     extraConfig = ''
       set -gq allow-passthrough on
+
+      # true color passthrough (keeps stylix palette accurate in TUIs)
+      set -ag terminal-features ",*:RGB"
+
+      # panes from 1 (windows via baseIndex), keep them gapless after closing
+      setw -g pane-base-index 1
+      set -g renumber-windows on
+
+      # new splits/windows inherit the current pane's path
+      bind '"' split-window -c "#{pane_current_path}"
+      bind % split-window -h -c "#{pane_current_path}"
+      bind c new-window -c "#{pane_current_path}"
 
       # Clipboard: copy to system clipboard via OSC52
       set -g set-clipboard external
@@ -24,7 +40,9 @@ in
       set -ag terminal-overrides ",xterm-256color:clipboard:osc52"
       set -ag terminal-overrides ",tmux-256color:clipboard:osc52"
 
-      # vi copy mode: Enter/y and mouse drag copy to system clipboard and exit
+      # vi copy mode: v/C-v select, Enter/y and mouse drag copy to clipboard
+      bind -T copy-mode-vi v send -X begin-selection
+      bind -T copy-mode-vi C-v send -X rectangle-toggle
       bind -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel
       bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel
       bind -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel
