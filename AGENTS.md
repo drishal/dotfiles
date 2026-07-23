@@ -79,6 +79,7 @@ NixOS/
       default.nix            ← imports individual core/desktop/editors/terminals files + shells + stylix
       stylix.nix             ← HM-level stylix overrides
       core/                  ← packages.nix, git.nix, tmux.nix, fastfetch.nix
+        tmux/                ← Hermes/OpenCode lifecycle adapters for tmux-agent-status
       shells/                ← default.nix, fish.nix, zsh.nix, aliases.nix (shell-agnostic aliases + PATH + env)
       desktop/               ← hyprland, sway, waybar, rofi, dms, ags, eww, quickshell, default-apps, file-managers, hermes-app, icons
       editors/               ← default.nix, emacs.nix, nixvim.nix
@@ -162,7 +163,8 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 | `programsdb`             | Flake programs SQLite database                                      |
 | `quickemu`               | Quick VM creation                                                   |
 | `lobster`                | Terminal anime streaming                                            |
-| `tmux-powerkit`          | Tmux status bar plugin                                              |
+| `tmux-which-key`         | Declarative discoverable tmux key menu                              |
+| `tmux-agent-status`      | Agent attention/status source (flake=false, packaged by tmux.nix)   |
 | `nvchad4nix`             | NvChad Neovim config for Nix                                        |
 | `neovim-nightly-overlay` | Neovim nightly builds                                               |
 | `direnv-instant`         | Instant direnv evaluation                                           |

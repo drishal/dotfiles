@@ -2034,7 +2034,8 @@
         "programsdb": "programsdb",
         "quickemu": "quickemu",
         "stylix": "stylix",
-        "tmux-powerkit": "tmux-powerkit",
+        "tmux-agent-status": "tmux-agent-status",
+        "tmux-which-key": "tmux-which-key",
         "tt-schemes": "tt-schemes",
         "umu": "umu",
         "zen-browser": "zen-browser"
@@ -2295,23 +2296,39 @@
         "type": "github"
       }
     },
-    "tmux-powerkit": {
+    "tmux-agent-status": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1782288097,
+        "narHash": "sha256-NZcTzrpgYR1SZtPF6u3AuCjbOot5IjL5lgnipmPr/0Q=",
+        "owner": "samleeney",
+        "repo": "tmux-agent-status",
+        "rev": "037af053aeb15219fd6b7dd2d6a0d76c83f46001",
+        "type": "github"
+      },
+      "original": {
+        "owner": "samleeney",
+        "repo": "tmux-agent-status",
+        "type": "github"
+      }
+    },
+    "tmux-which-key": {
       "inputs": {
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1784343648,
-        "narHash": "sha256-Agm3F14P59SQt61r4cUASX6+so/yH8gcAO2LQSnBkGc=",
-        "owner": "fabioluciano",
-        "repo": "tmux-powerkit",
-        "rev": "fdd875fd8b3755be03829dc5a01a00c64ccd0c71",
+        "lastModified": 1778948988,
+        "narHash": "sha256-eEFe85W/byPtxiRhdAaT22fEFNKsi5AEKsYAuDYcTCo=",
+        "owner": "alexwforsythe",
+        "repo": "tmux-which-key",
+        "rev": "85fb9756447b989f3b94e515d1e6ee7fec76cba2",
         "type": "github"
       },
       "original": {
-        "owner": "fabioluciano",
-        "repo": "tmux-powerkit",
+        "owner": "alexwforsythe",
+        "repo": "tmux-which-key",
         "type": "github"
       }
     },

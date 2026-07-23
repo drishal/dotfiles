@@ -1,0 +1,13 @@
+name: tmux-agent-status
+version: "1.0"
+description: Report Hermes Agent lifecycle state to tmux
+provides_hooks:
+  - on_session_start
+  - pre_llm_call
+  - pre_api_request
+  - pre_tool_call
+  - post_tool_call
+  - pre_approval_request
+  - post_approval_response
+  - post_llm_call
+  - on_session_end

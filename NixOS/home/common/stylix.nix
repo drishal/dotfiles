@@ -15,7 +15,7 @@
       nixvim.enable = false;
       helix.enable = false;
       hyprpaper.enable = true;
-      # tmux.nix consumes config.lib.stylix.colors directly for tmux-powerkit.
+      # tmux.nix consumes config.lib.stylix.colors for its status line and menus.
       tmux.enable = false;
       rofi.enable = true;
       # mpv.nix is a pure-technical config; OSD fonts/colors come from stylix.

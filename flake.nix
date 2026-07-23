@@ -67,9 +67,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    tmux-powerkit = {
-      url = "github:fabioluciano/tmux-powerkit";
+    tmux-which-key = {
+      url = "github:alexwforsythe/tmux-which-key";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    tmux-agent-status = {
+      url = "github:samleeney/tmux-agent-status";
+      flake = false;
     };
 
     nix-gaming.url = "github:fufexan/nix-gaming";
@@ -167,7 +171,7 @@
 
     in
     {
-       homeConfigurations =
+      homeConfigurations =
         let
           commonModules = [
             ./NixOS/home/common
@@ -181,6 +185,7 @@
             }
             nixvim.homeModules.nixvim
             stylix.homeModules.stylix
+            inputs.tmux-which-key.homeManagerModules.default
             "${private-stuff}/hm-email.nix"
           ];
           extraSpecialArgs = {
