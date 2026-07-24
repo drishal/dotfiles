@@ -16,11 +16,8 @@ let
     '';
   });
 
-  # ---- fast-syntax-highlighting theme driven by the stylix base16 palette ----
-  # Mirrors F-Sy-H's bundled themes/base16.ini, translating each ANSI index it
-  # uses to the corresponding stylix base color. Standard base16 ANSI mapping:
-  #   1→base08 2→base0B 3→base0A 4→base0D 5→base0E 6→base0C
-  #   8→base03 9→base09 10→base01 11→base02 12→base04 14→base0F
+  # F-Sy-H theme from the stylix base16 palette; mirrors its bundled themes/base16.ini.
+  # ANSI→base map: 1→08 2→0B 3→0A 4→0D 5→0E 6→0C 8→03 9→09 10→01 11→02 12→04 14→0F
   c = config.lib.stylix.colors;
   fshStyles = {
     # [base]
@@ -101,11 +98,9 @@ in
     enable = true;
     enableCompletion = true;
 
-    # emacs keybindings (was: `bindkey -e` in initContent).
     defaultKeymap = "emacs";
 
-    # Shell options (was: raw `setopt` lines in initContent).
-    # setOptions emits one `setopt <opt>` each; prefix NO_ to unset.
+    # Emits one `setopt <opt>` each; prefix NO_ to unset
     setOptions = [
       "AUTO_CD" # `foo/` cd's into foo
       "AUTO_PUSHD" # cd pushes onto dir stack (then `cd -<TAB>`)
@@ -122,9 +117,7 @@ in
     completionInit = ''
       autoload -Uz compinit
 
-      # User-managed completion drop-in directory.
-      # Drop _foo completion files here and they're picked up on next shell.
-      # (Must be added to fpath BEFORE compinit to take effect.)
+      # Drop _foo files here to add completions; must join fpath before compinit
       _zcomp_cache="$HOME/.cache/zsh/completions"
       mkdir -p "$_zcomp_cache"
       fpath=("$_zcomp_cache" $fpath)
@@ -133,9 +126,8 @@ in
       zcompdump="$zcompdump_dir/zcompdump-$ZSH_VERSION"
       mkdir -p "$zcompdump_dir"
 
-      # Force a full rescan when new completion functions appear on fpath that
-      # aren't in the dump.  compinit -C skips this check — fine for speed, but
-      # means newly-installed packages (system or HM) silently lose completions.
+      # compinit -C skips the fpath scan, so newly-installed packages would
+      # silently lose completions; detect that case and do a full rescan.
       _need_full_compinit=false
       if [[ ! -s "$zcompdump" ]]; then
         _need_full_compinit=true
@@ -164,24 +156,20 @@ in
       fi
       unset _need_full_compinit
 
-      # Precompile the dump for faster future startup.
-      # Only do this when missing or older than the dump.
+      # Precompile the dump for faster future startup
       if [[ -s "$zcompdump" && ( ! -s "$zcompdump.zwc" || "$zcompdump" -nt "$zcompdump.zwc" ) ]]; then
         zcompile "$zcompdump"
       fi
     '';
     autosuggestion = {
       enable = true;
-      # was: ZSH_AUTOSUGGEST_STRATEGY=(history completion) in initContent
       strategy = [
         "history"
         "completion"
       ];
     };
-    # Syntax highlighting: using fast-syntax-highlighting (F-Sy-H) instead of
-    # the HM-native zsh-syntax-highlighting. F-Sy-H is faster on long lines and
-    # highlights more (paths, args, variables, brackets, per-command chroma).
-    # Sourced at the END of initContent (must load after autosuggestions).
+    # Using fast-syntax-highlighting instead — faster and highlights more.
+    # Sourced at the end of initContent, after autosuggestions.
     # syntaxHighlighting.enable = true;
     historySubstringSearch = {
       enable = true; # type prefix + Up/Down to filter history
@@ -213,8 +201,7 @@ in
         src = "${fzf-tab}/share/fzf-tab";
       }
       {
-        # Large set of hand-written completers for tools not in zsh core.
-        # Adds its completers to fpath; picked up by compinit.
+        # Hand-written completers for tools not in zsh core; added to fpath
         name = "zsh-completions";
         src = "${pkgs.zsh-completions}/share/zsh/site-functions";
       }
@@ -224,17 +211,12 @@ in
       autoload -U +X bashcompinit && bashcompinit
       autoload -Uz add-zsh-hook
 
-      # fzf-tab's native module can error on filenames containing single
-      # quotes. Unload it so fzf-tab uses the pure-zsh color fallback.
+      # Native module errors on filenames with single quotes; use the zsh fallback
       zmodload -u aloxaf/fzftab >/dev/null 2>&1
       unset FZF_TAB_MODULE_VERSION 2>/dev/null
       source "$FZF_TAB_HOME"/lib/zsh-ls-colors/ls-colors.zsh fzf-tab-lscolors
 
-      # Shell options moved to programs.zsh.setOptions (native).
-      # emacs keymap moved to programs.zsh.defaultKeymap (native).
-      # HIST_IGNORE_ALL_DUPS / SHARE_HISTORY come from programs.zsh.history.
-
-      # ---------- key bindings (was: prezto editor) ----------
+      # ---------- key bindings ----------
       # Treat / . _ - as word boundaries (more fish-like word jumps)
       autoload -Uz select-word-style
       select-word-style bash
@@ -260,7 +242,6 @@ in
       bindkey '^[[3~' delete-char
 
       # ---------- autosuggestions ----------
-      # Strategy moved to programs.zsh.autosuggestion.strategy (native).
       # Right arrow / End already accept. Add Ctrl+Space if you like:
       # bindkey '^ ' autosuggest-accept
 
@@ -289,11 +270,7 @@ in
       zstyle ':completion:*' use-cache on
       zstyle ':completion:*' cache-path "$HOME/.cache/zsh/compcache"
 
-      #  completions for tools carapace doesn't cover 
-      # carapace handles ~1000 commands; the rest fall back to file completion.
-      # Layer in tool-native completions + a `--help`-parsing fallback so these
-      # behave more like fish (which auto-generates from man/help pages).
-      # (User completion drop-in dir is set up in completionInit above.)
+      # carapace covers ~1000 commands; the rest fall back to file completion
 
       # ---------- fzf-tab ----------
       zstyle ':fzf-tab:*' switch-group ',' '.'   # cycle groups with , / .
@@ -302,7 +279,7 @@ in
       zstyle ':fzf-tab:complete:cd:*'          fzf-preview 'eza -1 --icons --color=always $realpath'
       zstyle ':fzf-tab:complete:__zoxide_z:*'  fzf-preview 'eza -1 --icons --color=always $realpath'
 
-      # terminal title (was: prezto terminal module)
+      # terminal title
       _zsh_title_precmd()  { print -Pn "\e]0;%n@%m: %~\a" }
       _zsh_title_preexec() {
         local cmd="''${1//[$'\t\r\n']/ }"
@@ -346,20 +323,17 @@ in
       }
 
       # ---------- syntax highlighting (MUST be last) ----------
-      # F-Sy-H wraps ZLE widgets, so it has to be sourced after compinit,
-      # autosuggestions, and all custom `zle -N` widgets above.
+      # F-Sy-H wraps ZLE widgets, so it must load after every `zle -N` above
 
-      # F-Sy-H curl/wget-fetches a "secondary theme" from GitHub on first run if
-      # $FAST_WORK_DIR/secondary_theme.zsh is missing. Pre-create it (empty) so
-      # no network call ever happens — keeps startup offline/reproducible.
+      # F-Sy-H fetches a secondary theme from GitHub if this file is missing;
+      # pre-create it empty so startup stays offline.
       export FAST_WORK_DIR="''${XDG_CACHE_HOME:-$HOME/.cache}/fast-syntax-highlighting"
       [[ -d $FAST_WORK_DIR ]] || mkdir -p "$FAST_WORK_DIR"
       [[ -e $FAST_WORK_DIR/secondary_theme.zsh ]] || : > "$FAST_WORK_DIR/secondary_theme.zsh"
 
       source ${pkgs.zsh-fast-syntax-highlighting}/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 
-      # Theme from the stylix base16 palette (see fshStyles in the let block).
-      # Applied after sourcing so these win over F-Sy-H's :=-defaults.
+      # Applied after sourcing so these win over F-Sy-H's :=-defaults
       typeset -gA FAST_HIGHLIGHT_STYLES
       ${fshStyleLines}
     '';

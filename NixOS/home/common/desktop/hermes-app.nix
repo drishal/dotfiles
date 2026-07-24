@@ -5,20 +5,13 @@
   ...
 }:
 
-# Standalone Hermes desktop app.
+# Standalone Hermes desktop app — PySide6/QML UI with an in-process Python backend,
+# exposed here as a `hermes-app` command + desktop entry.
 #
-# A PySide6 (Qt Quick) program. The UI is QML; the backend is in-process Python
-# (httpx for HTTP/SSE, sqlite3 for the DB), so there's no Quickshell, no
-# curl/python3 subprocesses, and no DMS dependency. This module exposes it as a
-# launchable `hermes-app` command + desktop entry.
+# Lives in its own repo (github.com/drishal/hermes-app) at ~/Desktop/git-stuff/hermes-app;
+# main.py is read from that working tree, so edits apply on next launch without a rebuild.
 #
-# The app lives in its own repo (github.com/drishal/hermes-app), checked out at
-# ~/Desktop/git-stuff/hermes-app. main.py is referenced from that live working
-# tree, so QML/Python tweaks take effect on next launch without a home-manager
-# rebuild. Clone it there, or adjust appRoot below.
-#
-# The welcome dashboard shells out to the `hermes` CLI, which is expected on the
-# user's PATH (inherited); everything else is self-contained in the python env.
+# The welcome dashboard shells out to the `hermes` CLI, expected on the inherited PATH.
 let
   appRoot = "${config.home.homeDirectory}/Desktop/git-stuff/hermes-app";
 
@@ -46,9 +39,7 @@ in
 {
   home.packages = [ hermes-app ];
 
-  # Derive the app palette from the active stylix scheme. Theme.qml reads this
-  # at startup (base24 slots → its token surface), falling back to its bundled
-  # gruvbox defaults when the file is absent. Refreshes on home-manager switch.
+  # Theme.qml reads this at startup, falling back to bundled gruvbox if absent
   xdg.configFile."HermesApp/colors.json".text =
     let
       c = config.lib.stylix.colors;

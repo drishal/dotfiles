@@ -24,14 +24,11 @@ let
   acerHdrExtra = ''bitdepth = 10, cm = "hdredid", sdrbrightness = 1.2, sdrsaturation = 1.0'';
 
   # ─── Generated monitor config ───────────────────────────────────────────
-  # Under the Lua config the persisted layout is a Lua fragment dofile()'d by
-  # hyprland.lua (see extraConfig below) so reloads don't clobber it.
+  # Persisted as a Lua fragment dofile()'d by hyprland.lua so reloads don't clobber it
   monitorLuaFile = "$HOME/.config/hypr/monitors.lua";
 
   # ─── Profile applier ───────────────────────────────────────────────────
-  # Writes the active monitor layout to a dofile()'d Lua fragment so hyprctl
-  # reloads (home-manager switch, manual reloads, etc.) don't clobber it, then
-  # applies it immediately via `hyprctl eval` for the live session.
+  # Persists the layout to the Lua fragment, then applies it live via `hyprctl eval`
   applyProfile = pkgs.writeShellScript "hypr-apply-profile-impl" ''
     #!/usr/bin/env bash
     set -eu
@@ -86,10 +83,8 @@ let
   '';
 
   # ─── HDR toggle (Super+Shift+H) ─────────────────────────────────────────
-  # Transient: flips the Acer to HDR (cm,hdredid + 10-bit + SDR boost) live on
-  # whichever mode is active. A DFR/resolution change or reload reverts to SDR
-  # (applyProfile clears the state file and re-applies cm,srgb) — re-press to
-  # re-enable. HDR is opt-in this way so it's only on when actually wanted.
+  # Transient by design: any DFR/resolution change or reload reverts to SDR, so HDR
+  # is only ever on when explicitly asked for. Re-press to re-enable.
   hyprHdrToggle = pkgs.writeShellScriptBin "hypr-hdr-toggle" ''
     #!/usr/bin/env bash
     set -eu
@@ -133,9 +128,8 @@ let
   '';
 
   # ─── Auto-detect profile from monitor's advertised mode ─────────────────
-  # Called whenever monitoradded fires (DFR toggle, hotplug, etc.). Hyprland's
-  # socket event contains the connector name (e.g. DP-1), not the EDID desc, so
-  # the script queries monitors itself and exits unless the Acer is present.
+  # The monitoradded event carries the connector name, not the EDID desc, so this
+  # queries monitors itself and exits unless the Acer is present.
   hyprAutoDetectProfile = pkgs.writeShellScriptBin "hypr-auto-detect-profile" ''
     #!/usr/bin/env bash
     set -eu
@@ -143,9 +137,8 @@ let
     preferred=""
     modes=""
 
-    # After a DFR toggle the monitor is re-added before EDID/mode info has fully
-    # settled. Retry briefly so the first DFR-on transition can be corrected
-    # automatically instead of leaving Hyprland's default 4K profile active.
+    # After a DFR toggle the monitor is re-added before EDID/mode info settles;
+    # retry briefly so the first transition isn't stranded on the 4K profile.
     for _ in {1..20}; do
       monitor_json="$(${hyprPackage}/bin/hyprctl -j monitors all)"
       preferred="$(printf '%s\n' "$monitor_json" \
@@ -168,9 +161,8 @@ let
       exit 0
     fi
 
-    # In DFR mode the EDID advertises 1920x1080@320 *and still lists* the 4K
-    # modes, so the 320Hz mode's presence is the unambiguous DFR-On signal and
-    # must be checked first — otherwise a 4K match wins and strands the panel.
+    # In DFR mode the EDID still lists the 4K modes, so the 320Hz mode's presence
+    # is the only unambiguous DFR-On signal and must be checked first.
     if printf '%s\n' "$modes" | ${pkgs.gnugrep}/bin/grep -Eq '^1920x1080@(319|320)'; then
       target="perf"
       msg="DFR On detected → applying 1080p @ 320Hz"
@@ -232,10 +224,8 @@ let
       # detector for every added monitor; it verifies the Acer description itself.
       if [[ "$line" == monitoradded* ]]; then
         ${hyprAutoDetectProfile}/bin/hypr-auto-detect-profile &
-        # The re-add tears down the bar's layer-surfaces, so the active widget
-        # stack crashes. Restart it 3s later (debounced across rapid events),
-        # parented to Hyprland via hl.exec_cmd so it gets the compositor env and
-        # survives a watcher restart.
+        # The re-add tears down the bar's layer-surfaces and crashes the widget stack.
+        # Restart debounced via hl.exec_cmd so it inherits the compositor env.
         [[ -n "$restart_pid" ]] && kill "$restart_pid" 2>/dev/null || true
         ( sleep 3; ${hyprPackage}/bin/hyprctl eval 'hl.exec_cmd("${hyprRestartWidgets}/bin/hypr-restart-widgets")' >/dev/null ) &
         restart_pid=$!
@@ -249,15 +239,11 @@ let
     "dms"    = "pkill dms; dms run";
     "eww"    = "pkill end-rs || true; end-rs daemon & ${ewwLaunch}";
     "waybar" = "pkill waybar; waybar &";
-    # ags quit can fail silently on a wedged instance that keeps the dbus name; force-kill leftover gjs so the relaunch isn't a no-op.
-    # [g]js bracket stops pkill -f from matching its own shell (whose cmdline contains the literal pattern), which would SIGKILL the
-    # bind's shell before it reaches `ags run &` — that's why mod+x killed ags and never relaunched it.
+    # `ags quit` fails silently on a wedged instance holding the dbus name, so force-kill
+    # gjs too. The [g]js bracket stops pkill -f matching its own shell before `ags run &`.
     "ags"    = "ags quit 2>/dev/null; pkill -9 -f '[g]js -m.*ags'; ags run &";
-    # `qs kill` only kills one instance, so it can never clear a duplicate (and
-    # quickshell survives the DFR layer-surface teardown rather than crashing, so
-    # a restart stacks a second bar). pkill every instance first; the [q] bracket
-    # stops pkill -f matching its own shell. Nix wraps the binary (comm becomes
-    # .quickshell-wra), so match the cmdline path with -f, not -x.
+    # `qs kill` only kills one instance, so restarts stack a second bar — pkill every
+    # instance first. Nix wraps the binary, so match the cmdline with -f, not -x.
     "quickshell" = "pkill -f '[q]uickshell' 2>/dev/null; sleep 0.2; qs -d &";
   };
 
@@ -311,10 +297,8 @@ in
       render = {
         # HDR is fully manual via Super+Shift+H — no per-app auto-switching
         cm_auto_hdr = 0;
-        # Both off: scanout enter/exit (software cursor breaks it) and the
-        # monitor's content-type profile autoswitch each force a DP re-sync
-        # on the Acer — fullscreen CS2/Zed blanked the display on every
-        # menu/panel change at 4K160.
+        # Both force a DP re-sync on the Acer, blanking fullscreen CS2/Zed on
+        # every menu change at 4K160.
         direct_scanout = 0;
         send_content_type = false;
       };
@@ -330,9 +314,8 @@ in
         monitor = lgMonitor;
       }) (lib.range 6 10);
 
-    # CS2 ignores its own display setting and opens on the vertical LG
-    # (ValveSoftware/csgo-osx-linux#3282). Pin it to the Acer; keep it
-    # fullscreen since a stray resize blackens the viewmodels.
+    # CS2 ignores its own display setting (ValveSoftware/csgo-osx-linux#3282); pin it
+    # to the Acer and keep it fullscreen, since a stray resize blackens the viewmodels.
     window_rule = [
       {
         name = "cs2-acer";
@@ -356,9 +339,8 @@ in
     ];
   };
 
-  # Appended raw to hyprland.lua: load the persisted monitor layout on every
-  # (re)load, and override SUPER+SHIFT+M from the common "layout master" bind to
-  # the DFR display toggle.
+  # Appended raw to hyprland.lua: reload the persisted layout, and rebind
+  # SUPER+SHIFT+M from "layout master" to the DFR display toggle.
   wayland.windowManager.hyprland.extraConfig = lib.mkAfter ''
     do
       local hm_mon = os.getenv("HOME") .. "/.config/hypr/monitors.lua"

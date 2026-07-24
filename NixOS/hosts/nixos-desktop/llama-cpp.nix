@@ -1,12 +1,8 @@
-# Local copy of llama.cpp's .devops/nix/package.nix with one fix: some forks
-# list `spirv-headers` twice in the formal arguments (a parse-time error in
-# Nix), which breaks `inputs.llama-cpp.packages.*.default`. This file is the
-# corrected derivation, parameterized by `src` (the flake outPath) so we can
-# callPackage it directly against whichever `llama-cpp` fork is pinned.
+# Local copy of llama.cpp's .devops/nix/package.nix, fixing forks that list
+# `spirv-headers` twice. Parameterized by `src` so it callPackages any pinned fork.
 #
-# importNpmLock defaults to null because we build with useWebUi=false; the
-# `webui` attr is never forced in that case. If you flip useWebUi to true,
-# add the `import-npm-lock` flake input and pass the real helper here.
+# importNpmLock is null since useWebUi=false never forces the `webui` attr;
+# flipping it on needs the `import-npm-lock` flake input passed here.
 {
   lib,
   glibc,

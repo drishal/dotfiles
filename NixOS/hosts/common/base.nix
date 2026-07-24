@@ -13,8 +13,7 @@
   boot.kernelModules = [ "v4l2loopback" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
 
-  # common kernel params (host-specific params live in hosts/<host>/default.nix
-  # and hosts/common/cpu/*.nix)
+  # host-specific params live in hosts/<host>/default.nix and hosts/common/cpu/*.nix
   boot.kernelParams = [
     "split_lock_detect=off"
     "preempt=full"
@@ -32,32 +31,26 @@
     "fs.inotify.max_user_instances" = 1024; # default 128; quickshell alone opens 14
   };
 
-  # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   #boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
-  # Set your time zone.
   time.timeZone = "Asia/Kolkata";
   # services.ntp.enable = true;
   services.timesyncd.enable = true;
 
-  # systemd settings
   systemd.settings.Manager.DefaultTimeoutStopSec = "30s";
 
   # cgroups support
   # systemd.enableUnifiedCgroupHierarchy = true;
-  #bluetooth
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
 
-  # firmware updator
   services.fwupd.enable = true;
 
   #man
   # documentation.man.generateCaches = false;
 
-  #openssh
   services.openssh = {
     enable = true;
     ports = [
@@ -66,7 +59,6 @@
     ];
   };
 
-  # power-management
   powerManagement = {
     enable = true;
     # cpuFreqGovernor = "schedutil";
@@ -91,7 +83,6 @@
     # wireless.iwd.enable = true;
     # hostname
     #hostName = "nixos";
-    # dns
     nameservers = [
       "1.1.1.1"
       "1.0.0.1"
@@ -109,12 +100,10 @@
     # "2001:4860:4860::8888"
     # ];
   };
-  # Configure keymap in X11
   # services.xserver.layout = "us";
   services.xserver.xkb.layout = "us";
   # services.xserver.xkbOptions = "eurosign:e";
 
-  # Enable CUPS to print documents.
   services.printing = {
     enable = true;
     # drivers = with pkgs; [foomatic-db-ppds-withNonfreeDb];
@@ -144,15 +133,8 @@
     enable = true;
     interval = "weekly";
   };
-  # Local DNS cache (resolved). With Tailscale DNS enabled (CorpDNS) the real
-  # upstream is whatever the tailnet pushes — currently NextDNS over DoH via the
-  # 100.100.100.100 MagicDNS stub, NOT the Cloudflare servers below (those are only
-  # the fallback resolved uses when Tailscale DNS is off). resolved caches in front
-  # of that path so repeat lookups skip the network round-trip, and gives Tailscale
-  # the split-DNS integration it prefers (MagicDNS for *.ts.net, system DNS for the
-  # rest) instead of rewriting resolv.conf directly. Opportunistic DoT only applies
-  # to resolved's own direct upstreams (the fallback path) and degrades to plaintext
-  # if unavailable. DNSSEC off to avoid breaking captive portals.
+  # Local DNS cache giving Tailscale the split-DNS integration it prefers; with
+  # tailnet DNS on, upstream is MagicDNS, not the nameservers above. DNSSEC off for captive portals.
   services.resolved = {
     enable = true;
     dnssec = "false";
@@ -161,13 +143,11 @@
   services.tailscale = {
     enable = true;
   };
-  # backlight
   hardware.acpilight.enable = true;
 
   # udev 250 doesn't reliably reinitialize devices after restart
   systemd.services.systemd-udevd.restartIfChanged = false;
 
-  #session variables
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     LESS = "-g -i -M -R -S -w -X -z4";

@@ -9,17 +9,9 @@ let
   agsPkgs = inputs.ags.packages.${pkgs.stdenv.hostPlatform.system};
   c = config.lib.stylix.colors;
 
-  # Stylix → AGS bridge.
-  #
-  # The bar's SCSS references GTK named colors (@accent, @bg, …) rather than
-  # literal hex, so the palette can hot-swap without recompiling. Here we emit
-  # those @define-color rules from the live base16 scheme. app.tsx reads this
-  # file at startup and prepends it to the stylesheet.
-  #
-  # It lives next to (not inside) ~/.config/ags because that directory is an
-  # out-of-store symlink to the repo — Home Manager can't write into it.
-  # style/_colors.scss references these @base.. names through #{} interpolation,
-  # so the palette hot-swaps on a switch without recompiling the SCSS.
+  # Stylix → AGS bridge: emits @define-color rules that _colors.scss references
+  # through #{}, so the palette hot-swaps without recompiling the SCSS.
+  # Lives next to ~/.config/ags — that dir is an out-of-store symlink HM can't write into.
   stylixCss = ''
     @define-color base00 #${c.base00};
     @define-color base01 #${c.base01};
@@ -39,13 +31,8 @@ let
     @define-color base0F #${c.base0F};
   '';
 
-  # Stylix → AGS font bridge.
-  #
-  # GTK CSS has no font variables, so the SCSS leaves `AGS_FONT_SANS` /
-  # `AGS_FONT_MONO` sentinels (see style/_colors.scss). app.tsx reads this file
-  # at startup and swaps the sentinels for the live Stylix families, so picking
-  # a new font in shared/stylix.nix re-themes the shell on the next
-  # `ags quit; ags run` after a Home Manager switch.
+  # GTK CSS has no font variables, so _colors.scss leaves AGS_FONT_SANS/MONO
+  # sentinels that app.tsx swaps for the live Stylix families at startup.
   fontSans = config.stylix.fonts.sansSerif.name;
   fontMono = config.stylix.fonts.monospace.name;
   fontsJson = builtins.toJSON {

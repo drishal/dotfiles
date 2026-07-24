@@ -1,13 +1,9 @@
 { pkgs, config, ... }:
 
 let
-  # Toggle a floating watch-sync popup (bound to W in yazi). watch-sync shows
-  # the live kernel disk write-back queue, so after a paste you can confirm the
-  # data has actually flushed to the device, not just landed in page cache
-  # (with dirty_bytes=4G a copy "finishes" into cache near-instantly).
-  # pgrep/pkill keyed on the kitty --class makes it a WM-agnostic toggle and a
-  # no-op-safe re-press; watch-sync only reads /proc/meminfo so closing and
-  # reopening loses no state.
+  # Floating watch-sync popup (W in yazi) showing the kernel write-back queue, so a
+  # paste can be confirmed flushed — with dirty_bytes=4G it "finishes" into cache instantly.
+  # Keyed on the kitty --class so the toggle is WM-agnostic and safe to re-press.
   watchSyncPopup = pkgs.writeShellScriptBin "watch-sync-popup" ''
     set -eu
     marker="watch-sync-float"

@@ -1,8 +1,6 @@
 { ... }:
-# Memory tuning — large RAM + zram + NVMe.
-# Using absolute byte values instead of percent ratios; on 64+GB systems the
-# default ratios let writeback queues grow into multi-GB territory and stall
-# the system when they flush.
+# Memory tuning — large RAM + zram + NVMe. Absolute byte values instead of percent
+# ratios: on 64+GB the default ratios grow writeback queues into stall territory.
 {
   boot.kernel.sysctl = {
     "vm.dirty_bytes" = 4 * 1024 * 1024 * 1024;       # 4 GiB hard cap

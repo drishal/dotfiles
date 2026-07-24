@@ -5,18 +5,14 @@
   # In firefox
   programs.firefox = {
     enable = true;
-    # Force the XDG config path so HM writes profiles.ini and Firefox reads
-    # from ~/.config/mozilla/firefox (not the legacy ~/.mozilla/firefox,
-    # which is the default while home.stateVersion < "26.05").
+    # Force the XDG path; ~/.mozilla/firefox is still the default below stateVersion 26.05
     configPath = "${config.xdg.configHome}/mozilla/firefox";
 
-    # Custom overrides on top of Betterfox — fixes for stutter with many (20-30+) tabs.
-    # These merge into the same user.js Betterfox generates. Keys that Betterfox also
-    # sets need lib.mkForce (it writes with plain priority); the rest are untouched by it.
+    # Overrides for stutter with 20-30+ tabs, merged into Betterfox's user.js.
+    # Keys Betterfox also sets need lib.mkForce — it writes with plain priority.
     profiles."${user}.default".settings = {
-      # Re-enable on-disk cache: Betterfox runs RAM-only (128MB), which thrashes/evicts
-      # with lots of tabs and forces re-fetch on tab switch. We're on fast NVMe, so the
-      # SSD-wear rationale doesn't apply.
+      # Betterfox's RAM-only 128MB cache evicts and re-fetches on tab switch;
+      # the SSD-wear rationale doesn't apply on NVMe.
       "browser.cache.disk.enable" = lib.mkForce true;
       "browser.cache.disk.capacity" = 1048576; # 1 GB
 

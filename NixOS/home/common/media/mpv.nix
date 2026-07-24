@@ -20,16 +20,9 @@
     };
 
     config = {
-      # ─────────────────────────────────────────────────────────
-      #  GPU: AMD RX 6800 XT (RADV/NAVI21), Hyprland Wayland
-      #  Monitors: Acer XV272K V5 (4K@160, 10-bit)
-      #            LG UltraGear (1080p@144, 8-bit)
-      #  Audio: mpv → EasyEffects (oratory1990) → Spark → Gate
-      #
-      #  Theming (fonts, OSD colors, sub font, background) is
-      #  handled by stylix.targets.mpv — see shared/stylix.nix and
-      #  home/common/stylix.nix. Do not duplicate those here.
-      # ─────────────────────────────────────────────────────────
+      # Tuned for: RX 6800 XT (RADV) on Hyprland, Acer XV272K 4K@160 10-bit +
+      # LG UltraGear 1080p@144, audio via EasyEffects → Spark → Gate.
+      # Theming is stylix.targets.mpv's job — don't duplicate it here.
 
       # ---- Video renderer ----
       vo              = "gpu-next";
@@ -57,8 +50,7 @@
       tone-mapping             = "auto";
 
       # ---- Scalers ----
-      # ewa_lanczos = excellent quality, much lighter than ewa_lanczossharp
-      # spline36 for chroma (no ringing); mitchell for downscale (smooth)
+      # ewa_lanczos is much lighter than ewa_lanczossharp; spline36 chroma avoids ringing
       scale           = "ewa_lanczos";
       cscale          = "spline36";
       dscale          = "mitchell";
@@ -74,9 +66,7 @@
       deband-grain       = 8;
 
       # ---- Interpolation / frame timing ----
-      # Interpolation is EXPENSIVE on high-refresh displays (24fps→160Hz = 6.7x frames).
-      # Bind `i` to toggle it on the fly when you want it (anime pans, slow credits).
-      # Shift+I cycles the tscale kernel.
+      # Expensive at 24fps→160Hz, so left off; `i` toggles it, Shift+I cycles tscale.
       video-sync         = "audio";
       interpolation      = false;
       tscale             = "oversample";
@@ -98,14 +88,9 @@
       ytdl-raw-options = "cookies-from-browser=firefox";
 
       # ---- Audio / misc ----
-      # Bit-perfect path: mpv → PipeWire AO → Spark DAC at native rate.
-      # `ao=pipewire` uses the native PipeWire audio output (no ALSA/Pulse
-      # indirection).  `audio-device` targets the Spark explicitly so mpv
-      # always sends to the DAC even if the system default changes.
-      # `audio-samplerate` and `audio-format` are deliberately UNSET —
-      # leaving them unset lets mpv pass through the file's native rate
-      # and bit depth, which is what enables WirePlumber's rate switching.
-      # WirePlumber config in hosts/common/audio.nix handles the rest.
+      # Bit-perfect: native PipeWire AO, Spark targeted explicitly so a default-sink
+      # change can't divert it. audio-samplerate/audio-format stay UNSET so the file's
+      # native rate passes through for WirePlumber to switch on (see hosts/common/audio.nix).
       ao              = "pipewire";
       audio-device    = "pipewire/alsa_output.usb-TTGK_Technology_Co._Ltd_Audiocular_Spark-00.analog-stereo";
       # Start at 40%; fine-tune listening level on the Spark sink (wpctl set-volume).

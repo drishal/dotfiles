@@ -28,9 +28,8 @@ let
       i: bind (combo "SHIFT + ${wsKey i}") (mkLuaInline "hl.dsp.window.move({ workspace = ${toString i} })")
     ) (lib.range 1 10);
 
-  # Volume keys must drive the device EasyEffects is feeding, not the EE
-  # virtual sink (the default sink, whose volume is inaudible). Bundled with
-  # its runtime deps so wpctl/pw-link/python3 are always on PATH.
+  # Volume keys must drive the device EasyEffects feeds, not the inaudible EE
+  # virtual sink. Bundled with its deps so wpctl/pw-link/python3 stay on PATH.
   vol = pkgs.writeShellApplication {
     name = "vol-active-sink";
     runtimeInputs = [ pkgs.wireplumber pkgs.pipewire pkgs.python3 ];
@@ -55,15 +54,11 @@ let
     "dms"    = "pkill dms; dms run";
     "eww"    = "pkill end-rs || true; end-rs daemon & ${ewwLaunch}";
     "waybar" = "pkill waybar; waybar &";
-    # ags quit can fail silently on a wedged instance that keeps the dbus name; force-kill leftover gjs so the relaunch isn't a no-op.
-    # [g]js bracket stops pkill -f from matching its own shell (whose cmdline contains the literal pattern), which would SIGKILL the
-    # bind's shell before it reaches `ags run &` — that's why mod+x killed ags and never relaunched it.
+    # `ags quit` fails silently on a wedged instance holding the dbus name, so force-kill
+    # gjs too. The [g]js bracket stops pkill -f matching its own shell before `ags run &`.
     "ags"    = "ags quit 2>/dev/null; pkill -9 -f '[g]js -m.*ags'; ags run &";
-    # `qs kill` only kills one instance, so it can never clear a duplicate (and
-    # quickshell survives the DFR layer-surface teardown rather than crashing, so
-    # a restart stacks a second bar). pkill every instance first; the [q] bracket
-    # stops pkill -f matching its own shell. Nix wraps the binary (comm becomes
-    # .quickshell-wra), so match the cmdline path with -f, not -x.
+    # `qs kill` only kills one instance, so restarts stack a second bar — pkill every
+    # instance first. Nix wraps the binary, so match the cmdline with -f, not -x.
     "quickshell" = "pkill -f '[q]uickshell' 2>/dev/null; sleep 0.2; qs -d &";
   };
 

@@ -7,14 +7,9 @@
 let
   c = config.lib.stylix.colors;
 
-  # Stylix → Quickshell bridge (mirrors ags.nix).
-  #
-  # Theme.qml reads this JSON at startup and hot-reloads on change (FileView
-  # watchChanges), so picking a new Stylix scheme / font re-themes the shell on
-  # the next `home-manager switch` — no QML edit, no relaunch beyond the file
-  # watcher firing. It lives next to (not inside) ~/.config/quickshell because
-  # that dir is an out-of-store symlink to the repo and Home Manager can't write
-  # into it.
+  # Stylix → Quickshell bridge (mirrors ags.nix). Theme.qml hot-reloads this via
+  # FileView, so a switch re-themes the shell live. Lives next to ~/.config/quickshell
+  # because that dir is an out-of-store symlink HM can't write into.
   stylixJson = builtins.toJSON {
     colors = {
       base00 = "#${c.base00}";
@@ -41,17 +36,14 @@ let
   };
 in
 {
-  # Live-editable: symlink the repo config to ~/.config/quickshell so QML edits
-  # take effect on the next `qs kill; qs` (or the built-in hot reload) without a
-  # Home Manager rebuild.
+  # Out-of-store symlink so QML edits apply on `qs kill; qs` without a rebuild
   xdg.configFile."quickshell".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/quickshell";
 
   xdg.configFile."quickshell-stylix.json".text = stylixJson;
 
-  # Quickshell + the CLI tools the QML shell shells out to (must be on PATH, not
-  # just a private runtime like ags's gjs typelibs). Installed unconditionally
-  # so switching drishal.widgets to "quickshell" works without a rebuild.
+  # The QML shell shells out to these, so they must be on PATH. Installed
+  # unconditionally so switching drishal.widgets to "quickshell" needs no rebuild.
   home.packages = with pkgs; [
     quickshell
     cliphist # clipboard history

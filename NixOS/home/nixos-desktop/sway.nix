@@ -5,9 +5,8 @@
 }:
 
 let
-  # Sway uses connector names (e.g. DP-1, HDMI-A-1) not descriptions like Hyprland.
-  # Find yours with: swaymsg -t get_outputs
-  # Update these to match your actual connector names.
+  # Sway uses connector names (DP-1, …) not descriptions; find yours with
+  # `swaymsg -t get_outputs`.
   acerOutput = "DP-1";
   lgOutput = "DP-2";
 
@@ -70,8 +69,7 @@ in
 
   wayland.windowManager.sway.config = {
     # --- Output/Monitor config (default: 4K mode) ---
-    # Sway uses connector names, not descriptions. Find yours with:
-    #   swaymsg -t get_outputs
+    # Connector names, not descriptions — see `swaymsg -t get_outputs`
     output = {
       "${acerOutput}" = {
         mode = "3840x2160@160Hz";

@@ -5,14 +5,9 @@
   ...
 }:
 
-# Single source of truth for default applications. Consumed by:
-#   - xdg.mimeApps + xdg.terminal-exec (this file, below)
-#   - hyprland.nix / sway.nix keybinds (read `config.drishal.defaultApps`)
-#   - quickshell / ags / eww at runtime, via the JSON mirror under
-#     ~/.config/drishal/default-apps.json.
-#
-# Override per-host by setting `drishal.defaultApps.<key> = "..."` in the
-# host's home override module.
+# Single source of truth for default apps: xdg.mimeApps + xdg.terminal-exec below,
+# hyprland/sway keybinds, and quickshell/ags/eww via ~/.config/drishal/default-apps.json.
+# Override per-host with `drishal.defaultApps.<key>` in the host's home module.
 
 let
   apps = {

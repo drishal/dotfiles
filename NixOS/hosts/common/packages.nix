@@ -453,7 +453,8 @@
   #     enableZshIntegration = true;
   #   };
   # programs.firefox.nativeMessagingHosts.ff2mpv=true;
-  # Use nixpkgs' built-in programs.sqlite so command-not-found and man-db consume a database that matches the active nixpkgs revision. Overriding this with flake-programs-sqlite conflicts with the module default.
+  # Left to nixpkgs' built-in programs.sqlite so the db matches the active nixpkgs
+  # revision; overriding it with flake-programs-sqlite conflicts with the module default.
   # programs.command-not-found.dbPath = inputs.programsdb.packages.${pkgs.system}.programs-sqlite;
   programs.nix-ld.enable = true;
 

@@ -9,15 +9,9 @@ let
   c = config.lib.stylix.colors;
   repo = "${config.home.homeDirectory}/dotfiles/config/eww";
 
-  # Stylix → eww bridge.
-  #
-  # eww.scss does `@import "colors";`. Home Manager owns that one partial,
-  # regenerating it from the live base16 palette on every switch, while every
-  # other file in ~/.config/eww is an out-of-store symlink to the repo (so
-  # layout/style edits land on the next `eww reload` without a rebuild).
-  #
-  # Mixing a generated file with symlinks is why we link each repo entry
-  # individually rather than the whole directory.
+  # Stylix → eww bridge: HM owns the `colors` partial eww.scss imports, while every
+  # other file is an out-of-store symlink so edits land on the next `eww reload`.
+  # Mixing generated and symlinked files is why entries are linked individually.
   colorsScss = ''
     // Generated from the live Stylix scheme — edit the scheme, not this file.
     $base00: #${c.base00};
@@ -65,16 +59,11 @@ in
   # Stylix-generated colour partial (store-managed, regenerated each switch).
   xdg.configFile."eww/colors.scss".text = colorsScss;
 
-  # end-rs config — only when eww is the active stack. The upstream default
-  # config.toml end-rs writes on first run points eww_binary_path at
-  # ~/.local/bin/eww (wrong on NixOS), so end-rs silently fails to push any
-  # popup. Pin it to the eww we install + NixOS icon dirs. The var/window/
-  # widget names must match end.yuck.
+  # end-rs writes a default config pointing eww_binary_path at ~/.local/bin/eww,
+  # which is wrong on NixOS and makes it silently drop popups. Names must match end.yuck.
   #
-  # Every timeout is 0 (never auto-close) on purpose: a notification carrying
-  # actions then stays up until the user answers or hits its ✕ close button,
-  # keeping its buttons live in end-rs. scripts/notif-reaper.py (an eww
-  # deflisten) restores normal auto-dismiss for the action-less ones.
+  # Timeouts are all 0 so notifications with actions stay up until answered;
+  # scripts/notif-reaper.py re-adds auto-dismiss for the action-less ones.
   xdg.configFile."end-rs/config.toml" = lib.mkIf (config.drishal.widgets == "eww") {
     text = ''
       eww_binary_path = "${lib.getExe pkgs.eww}"

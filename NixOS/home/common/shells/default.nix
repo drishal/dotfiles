@@ -28,10 +28,8 @@
       add_newline = false;
       line_break.disabled = true;
       nix_shell.symbol = "❄ ";
-      # Disabled: the only prompt module that touches the network stack
-      # (AF_NETLINK route/interface queries every prompt), which stalls for
-      # seconds when offline. Renders nothing outside a named `ip netns exec`
-      # shell anyway — no visible loss locally or over SSH.
+      # Disabled: queries AF_NETLINK every prompt, stalling for seconds when
+      # offline, and renders nothing outside a named `ip netns exec` shell.
       netns.disabled = true;
     };
   };

@@ -71,9 +71,7 @@
       };
     };
   };
-  # this is a life saver.
-  # literally no documentation about this anywhere.
-  # might be good to write about this...
+  # Undocumented but essential for tuigreet
   # https://www.reddit.com/r/NixOS/comments/u0cdpi/tuigreet_with_xmonad_how/
   systemd.services.greetd.serviceConfig = {
     Type = "idle";
@@ -157,7 +155,6 @@
   # resolve gnome and plasma issues
   programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
 
-  # lidswitch
   services.logind = {
     settings =  {
       Login = {
