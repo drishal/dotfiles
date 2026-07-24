@@ -42,18 +42,20 @@
           };
         };
 
-        "10-fifine-mic" = {
+        "10-fifine-a6v" = {
           "monitor.alsa.rules" = [
             {
               matches = [
-                { "node.name" = "alsa_input.usb-3142_Fifine_Microphone-00.mono-fallback"; }
+                {
+                  "alsa.components" = "USB3142:a601";
+                  "media.class" = "Audio/Source";
+                }
               ];
               actions.update-props = {
-                "audio.format" = "S16LE";
+                "node.description" = "FIFINE AmpliGame A6V";
+                "audio.format" = "S24LE";
                 "audio.rate" = 48000;
                 "audio.channels" = 1;
-                "channelmix.upmix" = false;
-                "channelmix.normalize" = false;
               };
             }
           ];
