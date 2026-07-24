@@ -11,16 +11,11 @@
   imports = [
     ./nixvim.nix
     ./emacs.nix
+    ./helix.nix
   ];
   programs = {
     micro = {
       enable = false;
-    };
-    helix = {
-      enable = true;
-      extraConfig = ''
-        ${builtins.readFile ../../../../config/helix/config.toml}
-      '';
     };
     zed-editor = {
       enable = true;

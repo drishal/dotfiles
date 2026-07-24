@@ -111,6 +111,12 @@
       flake = false;
     };
 
+    # helix (steel) plugins
+    vim-hx = {
+      url = "github:mattwparas/vim.hx";
+      flake = false;
+    };
+
     dms.url = "github:AvengeMedia/DankMaterialShell";
     end-rs.url = "github:Dr-42/end-rs";
     llama-cpp = {

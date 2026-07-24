@@ -82,7 +82,7 @@ NixOS/
         tmux/                ← Hermes/OpenCode lifecycle adapters for tmux-agent-status
       shells/                ← default.nix, fish.nix, zsh.nix, aliases.nix (shell-agnostic aliases + PATH + env)
       desktop/               ← hyprland, sway, waybar, rofi, dms, ags, eww, quickshell, default-apps, file-managers, hermes-app, icons
-      editors/               ← default.nix, emacs.nix, nixvim.nix
+      editors/               ← default.nix, emacs.nix, nixvim.nix, helix.nix
       terminals/             ← default.nix (kitty, ghostty, alacritty via single module)
       browsers/              ← default.nix, betterfox.nix (firefox+betterfox; only betterfox imported)
       media/                 ← mpv.nix
@@ -97,6 +97,7 @@ NixOS/
     stylix.nix               ← cross-cutting stylix theming (catppuccin-mocha base24)
 config/                      ← XDG-style app configs (non-HM-managed / legacy)
   hyprland/, waybar/, rofi/, fish/, kitty/, ghostty/, nvim/, etc.
+  helix/config.toml          ← standalone vim-keybind config for non-nix machines; NOT read by helix.nix
   suckless/                  ← dwm, st, dmenu, dwl, dwmblocks (compiled via sudo make install)
 emacs/                       ← Emacs config.org (tangled to ~/.config/emacs/init.el)
   config.org, snippets/, themes/, unicode-fonts/, packages/
@@ -123,6 +124,7 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 - **Some `:tangle no` blocks intentionally skipped** — alternative fonts/ligatures/themes, the elpaca bootstrap, and the lsp-mode fallback stack. Don't tangle them blindly.
 - **Some config/ files are .org** — `config/fish/config.org`, `config/hyprland/hyprland.org`, etc. need `org-babel-tangle` to produce their output. The legacy `scripts/home-setup.sh` does this; Home Manager handles most now.
 - **Symlink loop** — `config/leftwm/onedark/onedark` is a self-referencing symlink. Don't traverse it.
+- **helix runs steelix + vim.hx** — `home/common/editors/helix.nix` sets `programs.helix.package = pkgs.steelix` (helix fork with the Steel scheme runtime) and vendors the `vim-hx` flake input to `~/.config/helix/cogs/vim-hx`, loaded by a generated `init.scm`. Vim emulation lives in Steel, so `settings.keys` only holds helix-native binds vim.hx doesn't cover. `config/helix/config.toml` is a *separate* portable config for non-nix machines — editing it changes nothing here.
 - **Aliases live in shells/** — `home/common/shells/aliases.nix` defines `home.shellAliases` (applied to all shells by HM). Shell-specific config is in `zsh.nix` / `fish.nix`.
 - **suckless tools** — dwm, st, dwmblocks are compiled with `sudo make clean install`, not managed by Nix. Config changes require recompilation.
 - **Kernel** — Uses `pkgs.linuxPackages_xanmod_latest` (xanmod), not standard nixpkgs.
@@ -170,6 +172,7 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 | `direnv-instant`         | Instant direnv evaluation                                           |
 | `ani-cli`                | Terminal anime streaming CLI                                        |
 | `gruvbox-material`       | Gruvbox Material theme (flake=false, for nvim)                      |
+| `vim-hx`                 | Steel vim-bindings plugin for helix (flake=false, vendored by `helix.nix`) |
 | `llama-cpp`              | llama.cpp src (flake=false); a fork, swapped often to test models needing a special build; built via `llama-cpp.nix` |
 | `brave-previews`         | Brave Beta/Nightly browser flake (desktop nixos module)             |
 
