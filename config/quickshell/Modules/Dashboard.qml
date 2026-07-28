@@ -25,8 +25,27 @@ PanelWindow {
     exclusiveZone: 0
     anchors.top: true
     anchors.right: true
-    implicitWidth: 540
-    implicitHeight: card.implicitHeight + 16
+    implicitWidth: 420
+    // While open the window is held at the size the card would need with a
+    // detail expanded, so expanding/collapsing never resizes the layer-shell
+    // surface — per-frame resizes stutter, and the final one flickers. Input is
+    // masked to the card so the reserved-but-empty strip stays click-through.
+    property real holdHeight: 0
+    implicitHeight: Math.max(card.implicitHeight + 16, holdHeight)
+    mask: Region {
+        item: card
+    }
+
+    // Inline detail panel below the tiles ("" = collapsed), DMS-style.
+    property string expandedSection: ""
+    onVisibleChanged: {
+        if (visible) {
+            holdHeight = card.implicitHeight + 16 + 248;
+        } else {
+            holdHeight = 0;
+            expandedSection = "";
+        }
+    }
 
     readonly property var adapter: Bluetooth.defaultAdapter
     readonly property var player: {
@@ -47,33 +66,34 @@ PanelWindow {
         property string subtitle
         property bool on: false
         property bool chevron: false
+        property bool expanded: false
         signal clicked
-        implicitHeight: 62
+        implicitHeight: 50
         radius: Theme.radiusSm
         color: on ? Theme.accent : (tma.containsMouse ? Theme.cardHi : Theme.card)
         Row {
             anchors.fill: parent
-            anchors.leftMargin: 14
-            anchors.rightMargin: 14
+            anchors.leftMargin: 11
+            anchors.rightMargin: 11
             spacing: 0
             Text {
                 anchors.verticalCenter: parent.verticalCenter
-                width: 32
+                width: 26
                 text: tile.glyph
                 font.family: Theme.fontMono
-                font.pixelSize: 20
+                font.pixelSize: 17
                 color: tile.on ? Theme.accentInk : Theme.ink
             }
             Column {
                 anchors.verticalCenter: parent.verticalCenter
-                width: parent.width - 32 - (tile.chevron ? 22 : 0)
-                spacing: 1
+                width: parent.width - 26 - (tile.chevron ? 18 : 0)
+                spacing: 0
                 Text {
                     width: parent.width
                     text: tile.title
                     color: tile.on ? Theme.accentInk : Theme.ink
                     font.family: Theme.fontSans
-                    font.pixelSize: 13
+                    font.pixelSize: 12
                     font.weight: Font.DemiBold
                     elide: Text.ElideRight
                 }
@@ -82,18 +102,25 @@ PanelWindow {
                     text: tile.subtitle
                     color: tile.on ? Theme.accentInk : Theme.inkDim
                     font.family: Theme.fontSans
-                    font.pixelSize: 11
+                    font.pixelSize: 10
                     elide: Text.ElideRight
                 }
             }
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 visible: tile.chevron
-                width: tile.chevron ? 22 : 0
+                width: tile.chevron ? 18 : 0
                 text: "󰅂"
                 font.family: Theme.fontMono
-                font.pixelSize: 16
+                font.pixelSize: 14
                 color: tile.on ? Theme.accentInk : Theme.inkDim
+                rotation: tile.expanded ? 90 : 0
+                Behavior on rotation {
+                    NumberAnimation {
+                        duration: 150
+                        easing.type: Easing.OutCubic
+                    }
+                }
             }
         }
         MouseArea {
@@ -102,6 +129,44 @@ PanelWindow {
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
             onClicked: tile.clicked()
+        }
+    }
+
+    // ── inline detail host ────────────────────────────────────────────────
+    // Only the slot's height animates, so the tiles below glide instead of
+    // jumping; the card grows into space the window already reserved.
+    component Detail: Item {
+        id: detail
+        property string section
+        readonly property bool open: win.expandedSection === section
+        height: 0
+        clip: true
+        visible: height > 0
+
+        onOpenChanged: {
+            slide.to = open ? 248 : 0;
+            slide.restart();
+        }
+
+        NumberAnimation {
+            id: slide
+            target: detail
+            property: "height"
+            duration: 220
+            easing.type: Easing.OutCubic
+        }
+
+        WifiDetail {
+            width: parent.width
+            height: 240
+            opacity: detail.open ? 1 : 0
+            live: detail.open
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 160
+                }
+            }
         }
     }
 
@@ -114,10 +179,10 @@ PanelWindow {
         to: 1
         background: Item {
             Rectangle {
-                x: s.knobBtn.width + 12
-                y: s.height / 2 - 4
-                width: s.availableWidth - s.knobBtn.width - 12
-                height: 8
+                x: s.knobBtn.width + 10
+                y: s.height / 2 - 3
+                width: s.availableWidth - s.knobBtn.width - 10
+                height: 6
                 radius: 999
                 color: Theme.base02
                 Rectangle {
@@ -131,8 +196,8 @@ PanelWindow {
         property alias knobBtn: knobBtn
         Rectangle {
             id: knobBtn
-            width: 40
-            height: 40
+            width: 34
+            height: 34
             radius: 999
             anchors.verticalCenter: parent.verticalCenter
             color: kma.containsMouse ? Theme.cardHi : Theme.card
@@ -140,7 +205,7 @@ PanelWindow {
                 anchors.centerIn: parent
                 text: s.knob
                 font.family: Theme.fontMono
-                font.pixelSize: 17
+                font.pixelSize: 15
                 color: Theme.ink
             }
             MouseArea {
@@ -152,10 +217,10 @@ PanelWindow {
             }
         }
         handle: Rectangle {
-            x: knobBtn.width + 12 + s.visualPosition * (s.availableWidth - knobBtn.width - 12 - width)
+            x: knobBtn.width + 10 + s.visualPosition * (s.availableWidth - knobBtn.width - 10 - width)
             y: s.height / 2 - height / 2
-            width: 16
-            height: 16
+            width: 14
+            height: 14
             radius: 999
             color: Theme.base07
         }
@@ -163,39 +228,45 @@ PanelWindow {
 
     Rectangle {
         id: card
-        anchors.fill: parent
+        // Sized to its content, not to the window: while `holdHeight` pins the
+        // window through a transition, a card filling it would keep the
+        // background at full size and snap when the hold releases.
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
         anchors.margins: 8
-        radius: 24
+        height: implicitHeight
+        radius: 20
         color: Theme.base00
         border.width: 1
         border.color: Theme.base02
         focus: win.visible
         Keys.onEscapePressed: Popups.close("dashboard", win.screenName)
-        implicitHeight: layout.implicitHeight + 28
+        implicitHeight: layout.implicitHeight + 24
 
         Column {
             id: layout
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.margins: 14
-            spacing: 14
+            anchors.margins: 12
+            spacing: 10
 
             // ── header ──
             Item {
                 width: parent.width
-                height: 48
+                height: 38
                 Row {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 10
-                    height: 48
+                    spacing: 9
+                    height: 38
                     // ClippingRectangle clips its children to the rounded shape,
                     // so the .face image is masked to a proper circle (a plain
                     // Rectangle + clip:true would only clip a square).
                     ClippingRectangle {
-                        width: 38
-                        height: 38
+                        width: 34
+                        height: 34
                         radius: width / 2
                         anchors.verticalCenter: parent.verticalCenter
                         color: Theme.base02
@@ -215,14 +286,14 @@ PanelWindow {
                         text: "drishal"
                         color: Theme.ink
                         font.family: Theme.fontSans
-                        font.pixelSize: 14
+                        font.pixelSize: 13
                         font.weight: Font.DemiBold
                     }
                 }
                 Row {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 8
+                    spacing: 6
                     Repeater {
                         model: [
                             {
@@ -236,8 +307,8 @@ PanelWindow {
                         ]
                         delegate: Rectangle {
                             required property var modelData
-                            width: 38
-                            height: 38
+                            width: 32
+                            height: 32
                             radius: 999
                             color: hma.containsMouse ? Theme.cardHi : Theme.card
                             Text {
@@ -257,8 +328,8 @@ PanelWindow {
                         }
                     }
                     Rectangle {
-                        width: 38
-                        height: 38
+                        width: 32
+                        height: 32
                         radius: 999
                         color: pma.containsMouse ? Theme.cardHi : Theme.card
                         Text {
@@ -283,85 +354,106 @@ PanelWindow {
                 text: "Quick Controls"
                 color: Theme.inkDim
                 font.family: Theme.fontSans
-                font.pixelSize: 13
+                font.pixelSize: 11
                 font.weight: Font.DemiBold
             }
 
             // ── tiles ──
-            Grid {
+            // Rows are explicit (not a Grid) so the detail panel can slide in
+            // directly under the row that owns the expanded tile, DMS-style.
+            Column {
+                id: tiles
                 width: parent.width
-                columns: 3
-                columnSpacing: 10
-                rowSpacing: 10
-                readonly property real tw: (width - 2 * 10) / 3
+                spacing: 0
+                readonly property real tw: (width - 8) / 2
 
-                Tile {
-                    width: parent.tw
-                    glyph: Net.icon
-                    title: "Network"
-                    subtitle: Net.label
-                    chevron: true
-                    on: Net.active
-                    onClicked: Quickshell.execDetached(["nm-connection-editor"])
-                }
-                Tile {
-                    width: parent.tw
-                    glyph: "󰂯"
-                    title: "Bluetooth"
-                    subtitle: {
-                        if (!win.adapter || !win.adapter.enabled)
-                            return "Off";
-                        const d = win.adapter.devices ? win.adapter.devices.values.find(x => x.connected) : null;
-                        return d ? d.name : "On";
+                Row {
+                    spacing: 8
+                    bottomPadding: 8
+                    Tile {
+                        width: tiles.tw
+                        glyph: Net.icon
+                        title: "Network"
+                        subtitle: Net.label
+                        chevron: true
+                        on: Net.active
+                        expanded: win.expandedSection === "wifi"
+                        onClicked: win.expandedSection = win.expandedSection === "wifi" ? "" : "wifi"
                     }
-                    on: win.adapter && win.adapter.enabled
-                    onClicked: {
-                        if (win.adapter)
-                            win.adapter.enabled = !win.adapter.enabled;
-                    }
-                }
-                Tile {
-                    width: parent.tw
-                    glyph: "󰀝"
-                    title: "Airplane"
-                    subtitle: Radios.airplaneOn ? "On" : "Off"
-                    on: Radios.airplaneOn
-                    onClicked: Radios.toggle()
-                }
-                Tile {
-                    width: parent.tw
-                    readonly property bool micMuted: Audio.source && Audio.source.audio ? Audio.source.audio.muted : true
-                    glyph: micMuted ? "󰍭" : "󰍬"
-                    title: "Microphone"
-                    subtitle: micMuted ? "Muted" : "Active"
-                    on: !micMuted
-                    onClicked: {
-                        if (Audio.source && Audio.source.audio)
-                            Audio.source.audio.muted = !Audio.source.audio.muted;
+                    Tile {
+                        width: tiles.tw
+                        glyph: "󰂯"
+                        title: "Bluetooth"
+                        subtitle: {
+                            if (!win.adapter || !win.adapter.enabled)
+                                return "Off";
+                            const d = win.adapter.devices ? win.adapter.devices.values.find(x => x.connected) : null;
+                            return d ? d.name : "On";
+                        }
+                        on: win.adapter && win.adapter.enabled
+                        onClicked: {
+                            if (win.adapter)
+                                win.adapter.enabled = !win.adapter.enabled;
+                        }
                     }
                 }
-                Tile {
-                    width: parent.tw
-                    glyph: "󰂛"
-                    title: "Do Not Disturb"
-                    subtitle: Notif.dnd ? "On" : "Off"
-                    on: Notif.dnd
-                    onClicked: Notif.toggleDnd()
+
+                Detail {
+                    id: netDetail
+                    width: parent.width
+                    section: "wifi"
                 }
-                Tile {
-                    width: parent.tw
-                    glyph: Audio.muted ? "󰖁" : "󰕾"
-                    title: "Volume"
-                    subtitle: Audio.percent + "%"
-                    on: !Audio.muted
-                    onClicked: Audio.toggleMute()
+
+                Row {
+                    spacing: 8
+                    bottomPadding: 8
+                    Tile {
+                        width: tiles.tw
+                        glyph: "󰀝"
+                        title: "Airplane"
+                        subtitle: Radios.airplaneOn ? "On" : "Off"
+                        on: Radios.airplaneOn
+                        onClicked: Radios.toggle()
+                    }
+                    Tile {
+                        width: tiles.tw
+                        readonly property bool micMuted: Audio.source && Audio.source.audio ? Audio.source.audio.muted : true
+                        glyph: micMuted ? "󰍭" : "󰍬"
+                        title: "Microphone"
+                        subtitle: micMuted ? "Muted" : "Active"
+                        on: !micMuted
+                        onClicked: {
+                            if (Audio.source && Audio.source.audio)
+                                Audio.source.audio.muted = !Audio.source.audio.muted;
+                        }
+                    }
+                }
+
+                Row {
+                    spacing: 8
+                    Tile {
+                        width: tiles.tw
+                        glyph: "󰂛"
+                        title: "Do Not Disturb"
+                        subtitle: Notif.dnd ? "On" : "Off"
+                        on: Notif.dnd
+                        onClicked: Notif.toggleDnd()
+                    }
+                    Tile {
+                        width: tiles.tw
+                        glyph: Audio.muted ? "󰖁" : "󰕾"
+                        title: "Volume"
+                        subtitle: Audio.percent + "%"
+                        on: !Audio.muted
+                        onClicked: Audio.toggleMute()
+                    }
                 }
             }
 
             // ── sliders ──
             ThemedSlider {
                 width: parent.width
-                height: 44
+                height: 36
                 fill: Theme.accent
                 knob: Audio.muted ? "󰖁" : "󰕾"
                 value: Audio.volume
@@ -370,7 +462,7 @@ PanelWindow {
             }
             ThemedSlider {
                 width: parent.width
-                height: 44
+                height: 36
                 visible: Brightness.available
                 fill: Theme.base0A
                 knob: "󰃢"
@@ -382,7 +474,7 @@ PanelWindow {
             Rectangle {
                 width: parent.width
                 visible: win.player !== null
-                implicitHeight: 68
+                implicitHeight: 58
                 radius: Theme.radiusSm
                 color: Theme.card
                 border.width: 1
@@ -390,12 +482,12 @@ PanelWindow {
 
                 Row {
                     anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 12
+                    anchors.margins: 10
+                    spacing: 10
                     Rectangle {
-                        width: 44
-                        height: 44
-                        radius: 12
+                        width: 38
+                        height: 38
+                        radius: 10
                         anchors.verticalCenter: parent.verticalCenter
                         color: Theme.base02
                         clip: true
@@ -407,7 +499,7 @@ PanelWindow {
                         }
                     }
                     Column {
-                        width: parent.width - 44 - ctlRow.width - 24
+                        width: parent.width - 38 - ctlRow.width - 20
                         anchors.verticalCenter: parent.verticalCenter
                         spacing: 2
                         Text {
