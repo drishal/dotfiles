@@ -9,7 +9,10 @@
   fonts.fontconfig.enable = true;
   stylix = {
     enable = true;
-    #base16Scheme = "${config.scheme}";
+    # Newer stylix no longer infers polarity from the scheme's `variant:` field.
+    # Without this, the GNOME target writes color-scheme='default' (light).
+    polarity = "dark";
+    # base16Scheme = "${config.scheme}";
     # base16Scheme = "${inputs.tt-schemes}/base24/catppuccin-mocha.yaml";
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/kanagawa.yaml"; # base16 wave (upstream)
     # base16Scheme = ../home/common/colors/kanagawa.yaml; # base24 wave (local, accurate terminal brights)
