@@ -3,8 +3,10 @@
 {
   environment.systemPackages = with pkgs; [
     go
-    (brave.override {
-      commandLineArgs = [
+    (brave.overrideAttrs (old: {
+      # brave is a plain derivation here (no .override); commandLineArgs is a
+      # callPackage formal of make-brave.nix baked into the wrapper, so use overrideAttrs.
+      commandLineArgs = (old.commandLineArgs or "") + " " + lib.concatStringsSep " " [
         # Wayland
         "--ozone-platform-hint=auto"
         "--enable-wayland-ime"
@@ -20,7 +22,7 @@
         "--enable-features=Vulkan"
         "--enable-hardware-overlays"
       ];
-    })
+    }))
   ];
   services.mysql = {
     enable = true;

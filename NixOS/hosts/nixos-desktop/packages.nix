@@ -36,14 +36,16 @@
     })
     teams-for-linux
     i2c-tools
-    (brave.override {
-      commandLineArgs = [
+    (brave.overrideAttrs (old: {
+      # brave is a plain derivation here (no .override); commandLineArgs is a
+      # callPackage formal of make-brave.nix baked into the wrapper, so use overrideAttrs.
+      commandLineArgs = (old.commandLineArgs or "") + " " + lib.concatStringsSep " " [
         "--ignore-gpu-blocklist"
         "--enable-zero-copy"
         "--ozone-platform-hint=auto"
         "--enable-features=VaapiIgnoreDriverChecks,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
       ];
-    })
+    }))
   ];
 
   programs.brave-origin-beta = {
