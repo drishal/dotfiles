@@ -42,13 +42,9 @@ let
               -e 's/tmux set-hook -ga after-kill-window/tmux set-hook -g "window-unlinked[812]"/' \
               -e 's/tmux set-hook -ga after-rename-window/tmux set-hook -g "after-rename-window[813]"/' \
               tmux-agent-status.tmux
-            substituteInPlace scripts/lib/collect.sh \
-              --replace-fail 'pgrep -a "claude|codex|devin"' \
-                             'pgrep -a "claude|codex|devin|hermes|opencode"' \
-              --replace-fail '[[ "$acmd" == *devin* ]] && agent_name="devin"' \
-                             '[[ "$acmd" == *devin* ]] && agent_name="devin"
-                  [[ "$acmd" == *hermes* ]] && agent_name="hermes"
-                  [[ "$acmd" == *opencode* ]] && agent_name="opencode"'
+            substituteInPlace scripts/lib/agent-processes.sh \
+              --replace-fail '/^(claude|codex|devin)$/' \
+                             '/^(claude|codex|devin|hermes|opencode)$/'
             substituteInPlace scripts/daemon-monitor.sh \
               --replace-fail 'SMART_MONITOR="$SCRIPT_DIR/../smart-monitor.sh"' \
                              'SMART_MONITOR="$SCRIPT_DIR/../smart-monitor.sh"

@@ -225,7 +225,6 @@
     lsof
     man
     mangohud
-    materia-theme
     mesa-demos
     metasploit
     # mov-cli

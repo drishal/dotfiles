@@ -120,7 +120,8 @@
     dms.url = "github:AvengeMedia/DankMaterialShell";
     end-rs.url = "github:Dr-42/end-rs";
     llama-cpp = {
-      url = "github:TheTom/llama-cpp-turboquant/feature/turboquant-kv-cache";
+      # url = "github:TheTom/llama-cpp-turboquant/feature/turboquant-kv-cache";
+      url = "github:ggml-org/llama.cpp";
       flake = false;
     };
 
