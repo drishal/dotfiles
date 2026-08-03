@@ -1,7 +1,8 @@
-{ ... }:
+{ inputs, ... }:
 {
   imports = [
     ../common
+    inputs.brave-previews.nixosModules.default
     ../common/memory.nix
     ../common/storage.nix
     ../common/network-tuning.nix
