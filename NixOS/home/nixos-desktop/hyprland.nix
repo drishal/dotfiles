@@ -292,7 +292,7 @@ in
   wayland.windowManager.hyprland.settings = {
     config = {
       cursor = {
-        no_hardware_cursors = true;
+        no_hardware_cursors = false;
       };
       render = {
         # HDR is fully manual via Super+Shift+H — no per-app auto-switching
