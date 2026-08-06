@@ -10,6 +10,7 @@
     ../common/scheduler/bpfland.nix
     ../common/graphics/nvidia.nix
     ./hardware-configuration.nix
+    ./mounts.nix
     ./packages.nix
     ./virtualisation.nix
   ];
