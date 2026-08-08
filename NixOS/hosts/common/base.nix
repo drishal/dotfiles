@@ -113,7 +113,12 @@
     nssmdns4 = true;
   };
 
-  services.logind.killUserProcesses = true;
+  # true kills the whole session scope on logout — takes tmux/herdr/hermes with it
+  services.logind.killUserProcesses = false;
+  # switch writes logind.conf but never signals logind; reload (not restart) keeps sessions
+  systemd.services.systemd-logind.reloadTriggers = [
+    config.environment.etc."systemd/logind.conf".source
+  ];
   # services.logind.lidSwitch = "suspend";
   # Enable sound.
   # sound.enable = true;
