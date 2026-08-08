@@ -26,6 +26,7 @@
   users.users.${user} = {
     shell = pkgs.zsh;
     isNormalUser = true;
+    linger = true; # keep user@.service (hermes-gateway, syncthing) alive without a login
     extraGroups = [
       "wheel"
       "netdev"
