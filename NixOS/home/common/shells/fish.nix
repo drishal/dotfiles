@@ -20,7 +20,7 @@
       for c in progress prefix completion description
           set -eU fish_pager_color_$c 2>/dev/null
       end
-
+      set -g fish_greeting ""
       set -g fish_color_normal        ${config.lib.stylix.colors.base05}
       set -g fish_color_command       ${config.lib.stylix.colors.base0B}
       set -g fish_color_keyword       ${config.lib.stylix.colors.base0D}

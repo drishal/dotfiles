@@ -24,7 +24,7 @@
   };
   programs.xonsh.enable = true;
   users.users.${user} = {
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
     isNormalUser = true;
     linger = true; # keep user@.service (hermes-gateway, syncthing) alive without a login
     extraGroups = [
