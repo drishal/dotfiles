@@ -44,6 +44,9 @@
       set -g fish_pager_color_prefix      ${config.lib.stylix.colors.base0C}
       set -g fish_pager_color_completion  ${config.lib.stylix.colors.base05}
       set -g fish_pager_color_description ${config.lib.stylix.colors.base0E}
+
+      # Workaround for fish torn-escape / input decoder slowness (issue #11668).
+      contains omit-term-workarounds $fish_features || set -Ua fish_features omit-term-workarounds
     '';
     plugins = [
       # {
