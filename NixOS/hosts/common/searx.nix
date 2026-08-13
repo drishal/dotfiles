@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  inputs,
   lib,
   ...
 }:
@@ -17,7 +18,9 @@
       server = {
         port = 48431;
         bind_address = "0.0.0.0";
-        secret_key = "be07787f1bb522a61853986d4468578701af5d536a96bba2048d6094f45dc6d2";
+        # Read from ~/.private-stuff/searx-secret.txt (local-only git repo).
+        # Still lands in /nix/store via readFile — migrate to sops-nix eventually.
+        secret_key = builtins.readFile "${inputs.private-stuff}/searx-secret.txt";
         # Redis is enabled (redisCreateLocally) for engine caching, but the
         # SearXNG request rate-limiter is off — we're behind Tailscale and
         # only Argus/Hermes call this locally.
