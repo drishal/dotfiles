@@ -214,8 +214,18 @@ in
         }
       ];
 
-      # Float, size and center the yazi watch-sync popup (toggled with W in yazi).
       window_rule = [
+        # GTK apps (nemo, ...) restore a saved maximized state on launch, which
+        # Hyprland honours as maximized-fullscreen so the window covers the tile
+        # split instead of joining it. Same rule Hyprland ships by default.
+        {
+          name = "suppress-maximize";
+          match = {
+            class = ".*";
+          };
+          suppress_event = "maximize";
+        }
+        # Float, size and center the yazi watch-sync popup (toggled with W in yazi).
         {
           name = "watch-sync-float";
           match = {
