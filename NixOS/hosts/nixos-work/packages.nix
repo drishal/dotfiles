@@ -3,26 +3,26 @@
 {
   environment.systemPackages = with pkgs; [
     go
-    (brave.overrideAttrs (old: {
-      # brave is a plain derivation here (no .override); commandLineArgs is a
-      # callPackage formal of make-brave.nix baked into the wrapper, so use overrideAttrs.
-      commandLineArgs = (old.commandLineArgs or "") + " " + lib.concatStringsSep " " [
-        # Wayland
-        "--ozone-platform-hint=auto"
-        "--enable-wayland-ime"
-        # VA-API via nvidia-vaapi-driver (NVDEC backend)
-        "--ignore-gpu-blocklist"
-        "--enable-zero-copy"
-        "--enable-features=VaapiVideoDecoder,VaapiIgnoreDriverChecks"
-        "--disable-features=UseChromeOSDirectVideoDecoder"
-        # GPU rasterization
-        "--enable-gpu-rasterization"
-        "--enable-native-gpu-memory-buffers"
-        # NVIDIA Wayland
-        "--enable-features=Vulkan"
-        "--enable-hardware-overlays"
-      ];
-    }))
+    # (brave.overrideAttrs (old: {
+    #   # brave is a plain derivation here (no .override); commandLineArgs is a
+    #   # callPackage formal of make-brave.nix baked into the wrapper, so use overrideAttrs.
+    #   commandLineArgs = (old.commandLineArgs or "") + " " + lib.concatStringsSep " " [
+    #     # Wayland
+    #     "--ozone-platform-hint=auto"
+    #     "--enable-wayland-ime"
+    #     # VA-API via nvidia-vaapi-driver (NVDEC backend)
+    #     "--ignore-gpu-blocklist"
+    #     "--enable-zero-copy"
+    #     "--enable-features=VaapiVideoDecoder,VaapiIgnoreDriverChecks"
+    #     "--disable-features=UseChromeOSDirectVideoDecoder"
+    #     # GPU rasterization
+    #     "--enable-gpu-rasterization"
+    #     "--enable-native-gpu-memory-buffers"
+    #     # NVIDIA Wayland
+    #     "--enable-features=Vulkan"
+    #     "--enable-hardware-overlays"
+    #   ];
+    # }))
   ];
 
   programs.brave-origin-beta = {
