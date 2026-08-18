@@ -249,7 +249,6 @@
     # nil
     nim
     nitch
-    nitrogen
     nixpkgs-fmt
     nmap
     nodejs
@@ -293,7 +292,6 @@
     rofi
     rquickshare
     rofi-emoji
-    simplescreenrecorder
     # sony-headphones-client
     # scx
     # smplayer
