@@ -2362,9 +2362,9 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 (setq interprogram-cut-function 'wl-copy)
 (setq interprogram-paste-function 'wl-paste)
 ;; Strip Windows CR (\r) from paste — Pwnbox VNC clipboard sneaks in CRLF
-(defun wl-paste-strip-cr ()
-  (replace-regexp-in-string "\r" "" (wl-paste)))
-(setq interprogram-paste-function 'wl-paste-strip-cr)
+;; (defun wl-paste-strip-cr ()
+  ;; (replace-regexp-in-string "\r" "" (wl-paste)))
+;; (setq interprogram-paste-function 'wl-paste-strip-cr)
 #+end_src
 
 * elaca stuff for dashboard
