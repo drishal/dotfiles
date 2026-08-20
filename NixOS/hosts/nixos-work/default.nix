@@ -13,5 +13,6 @@
     ./mounts.nix
     ./packages.nix
     ./virtualisation.nix
+    "${inputs.private-stuff}/rustdesk.nix"
   ];
 }
