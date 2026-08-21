@@ -1946,11 +1946,11 @@
     "private-stuff": {
       "flake": false,
       "locked": {
-        "lastModified": 1787151226,
-        "narHash": "sha256-BVav9wr+lKzxxmI6+zx9hh59W2ekhLGYgiMsic0YtOI=",
+        "lastModified": 1787318927,
+        "narHash": "sha256-SR/FhOONQIFlaekXzEE1d5IoFy4sntmeu0ypb7OHOfM=",
         "ref": "refs/heads/main",
-        "rev": "b869917640af2241423f1b8a5a27469f61a903c1",
-        "revCount": 21,
+        "rev": "f68f8d7dd073d4dc67d31a58796ee4cb007a303e",
+        "revCount": 22,
         "type": "git",
         "url": "file:/home/drishal/.private-stuff/"
       },
