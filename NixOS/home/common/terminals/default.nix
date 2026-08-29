@@ -20,7 +20,7 @@
           gamma-correct-blending = false;
 
         };
-        colors = with config.lib.stylix.colors; {
+        colors-dark = with config.lib.stylix.colors; {
           cursor = "${base00} ${base06}";
         };
         scrollback = {
