@@ -208,15 +208,17 @@ touch ~/.emacs.d/custom.el
 #+end_src
 *** .local/bin path 
 #+begin_src emacs-lisp
-(add-to-list 'exec-path "~/.local/bin")
-(setenv "PATH" (concat (getenv "PATH")":~/.local/bin"))
+(let ((dir (expand-file-name "~/.local/bin")))
+  (add-to-list 'exec-path dir)
+  (setenv "PATH" (concat (getenv "PATH") ":" dir)))
 #+end_src
 
 
 *** adding cargo to path
 #+begin_src emacs-lisp
-(add-to-list 'exec-path "~/.cargo/bin")
-(setenv "PATH" (concat (getenv "PATH")":~/.cargo/bin"))
+(let ((dir (expand-file-name "~/.cargo/bin")))
+  (add-to-list 'exec-path dir)
+  (setenv "PATH" (concat (getenv "PATH") ":" dir)))
 #+end_src
 
 *** emacs-direnv
@@ -260,7 +262,7 @@ remove/add tangle no to whatever font you prefer
 ;; (add-to-list 'default-frame-alist '(font . "RecMonoSmCasual Nerd Font-12:weight=Medium" ))
 ;; (add-to-list 'default-frame-alist '(font . "CommitMono-12:weight=Regular" ))
 
-(setq global-prettify-symbols-mode t)
+(global-prettify-symbols-mode 1)
 ;; (add-to-list 'default-frame-alist '(font . "FiraCode Nerd Font-14" ))
 ;; (add-to-list 'default-frame-alist '(font . "Comic Mono-12:weight=medium" ))
 ;; (set-face-attribute 'default t :font "FiraCode Nerd Font-12")
@@ -736,7 +738,7 @@ remove/add tangle no to whatever font you prefer
   (modus-themes-load-theme 'modus-gruvbox-material))
 #+end_src
 **** ef theme
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle no
 (use-package ef-themes :ensure t
   ;; :init
   ;; (load-theme 'ef-winter)
@@ -818,10 +820,8 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
     :prefix "SPC"
     :global-prefix "C-SPC")
   
-  (efs/leader-keys
-    "t"  '(:ignore t :which-key "toggles")
-    "tt" '(counsel-load-theme :which-key "choose theme")
-    "fde" '(lambda () (interactive) (find-file (expand-file-name "~/dotfiles/emacs/config.org")))))
+  ;; Leader bindings live in the "Doom-style leader keymap" section below.
+  )
 
 (use-package evil
   :ensure t
@@ -850,6 +850,194 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
 
 
 #+end_src
+** Doom-style leader keymap
+Ported from =doomemacs/modules= =modules/config/default/+evil-bindings.el=,
+remapped onto the packages actually installed here (consult instead of ivy,
+eglot instead of lsp-mode, no =doom/*= helpers). Workspaces (=SPC TAB=) live
+with persp-mode.
+
+One table drives both the bindings and the which-key labels. Passing
+=:which-key= through general costs ~3s at startup, because it re-registers every
+description once per evil state per prefix; batching them into a single
+=which-key-add-key-based-replacements= call is effectively free.
+#+begin_src emacs-lisp
+(with-eval-after-load 'general
+  (defun reomacs/search-project-symbol-at-point ()
+    "Ripgrep the project for the symbol under point."
+    (interactive)
+    (consult-ripgrep nil (thing-at-point 'symbol t)))
+
+  (defun reomacs/yank-buffer-path ()
+    "Copy the current buffer's path to the kill ring."
+    (interactive)
+    (if-let* ((path (or buffer-file-name default-directory)))
+        (message "Copied: %s" (kill-new (abbreviate-file-name path)))
+      (user-error "Buffer is not visiting a file")))
+
+  (defun reomacs/find-config ()
+    "Open the literate Emacs config."
+    (interactive)
+    (find-file (expand-file-name "~/dotfiles/emacs/config.org")))
+
+  ;; (key command description); a nil command just labels a prefix.
+  (defvar reomacs/leader-bindings
+    '(
+    ("SPC" projectile-find-file "find file in project")
+    ("." find-file "find file")
+    ("," persp-switch-to-buffer "workspace buffer")
+    ("<" consult-buffer "switch buffer")
+    (":" execute-extended-command "M-x")
+    (";" pp-eval-expression "eval expression")
+    ("`" evil-switch-to-windows-last-buffer "last buffer")
+    ("'" vertico-repeat "resume last search")
+    ("/" consult-ripgrep "search project")
+    ("*" reomacs/search-project-symbol-at-point "search symbol at point")
+    ("u" universal-argument "universal argument")
+    ("w" (:keymap evil-window-map) "window")
+    ("h" (:keymap help-map) "help")
+    ("x" scratch-buffer "scratch buffer")
+    ("X" org-capture "org capture")
+    ("RET" consult-bookmark "jump to bookmark")
+    ("b" nil "buffer")
+    ("b[" previous-buffer "previous buffer")
+    ("b]" next-buffer "next buffer")
+    ("bb" persp-switch-to-buffer "workspace buffer")
+    ("bB" consult-buffer "switch buffer")
+    ("bc" clone-indirect-buffer "clone buffer")
+    ("bC" clone-indirect-buffer-other-window "clone other window")
+    ("bd" kill-current-buffer "kill buffer")
+    ("bi" ibuffer "ibuffer")
+    ("bk" kill-current-buffer "kill buffer")
+    ("bl" evil-switch-to-windows-last-buffer "last buffer")
+    ("bm" bookmark-set "set bookmark")
+    ("bM" bookmark-delete "delete bookmark")
+    ("bn" next-buffer "next buffer")
+    ("bN" evil-buffer-new "new buffer")
+    ("bp" previous-buffer "previous buffer")
+    ("br" revert-buffer "revert buffer")
+    ("bR" rename-buffer "rename buffer")
+    ("bs" basic-save-buffer "save buffer")
+    ("bS" evil-write-all "save all buffers")
+    ("bx" scratch-buffer "scratch buffer")
+    ("bz" bury-buffer "bury buffer")
+    ("c" nil "code")
+    ("ca" eglot-code-actions "code action")
+    ("cc" compile "compile")
+    ("cC" recompile "recompile")
+    ("cd" xref-find-definitions "jump to definition")
+    ("cD" xref-find-references "jump to references")
+    ("cf" eglot-format "format buffer/region")
+    ("ci" eglot-find-implementation "find implementations")
+    ("cj" eglot-find-declaration "find declaration")
+    ("ck" eldoc-doc-buffer "documentation")
+    ("cl" eglot "start LSP")
+    ("cL" eglot-shutdown "shutdown LSP")
+    ("cR" eglot-reconnect "reconnect LSP")
+    ("cr" eglot-rename "rename")
+    ("ct" eglot-find-typeDefinition "find type definition")
+    ("cw" delete-trailing-whitespace "delete trailing whitespace")
+    ("cx" consult-flymake "list errors")
+    ("f" nil "file")
+    ("fd" dired "find directory")
+    ("fD" dired-jump "dired here")
+    ("ff" find-file "find file")
+    ("fl" locate "locate file")
+    ("fp" reomacs/find-config "find config.org")
+    ("fr" consult-recent-file "recent files")
+    ("fs" basic-save-buffer "save file")
+    ("fS" write-file "save file as...")
+    ("fy" reomacs/yank-buffer-path "yank file path")
+    ("g" nil "git")
+    ("gg" magit-status "magit status")
+    ("gb" magit-blame "blame")
+    ("gc" magit-clone "clone repo")
+    ("gd" magit-dispatch "magit dispatch")
+    ("gf" magit-file-dispatch "file dispatch")
+    ("gi" magit-init "init repo")
+    ("gl" magit-log "log")
+    ("gR" vc-revert "revert file")
+    ("i" nil "insert")
+    ("ie" emojify-insert-emoji "emoji")
+    ("il" org-insert-link "link")
+    ("is" yas-insert-snippet "snippet")
+    ("iS" yas-new-snippet "new snippet")
+    ("iy" consult-yank-pop "from kill ring")
+    ("n" nil "notes")
+    ("na" org-agenda "agenda")
+    ("nc" org-capture "capture")
+    ("nl" org-store-link "store link")
+    ("o" nil "open")
+    ("oa" agent-shell "agent shell")
+    ("od" dired-sidebar-toggle-sidebar "dired sidebar")
+    ("oD" docker "docker")
+    ("oe" eshell "eshell")
+    ("of" elfeed "elfeed RSS")
+    ("om" bongo "bongo music")
+    ("op" treemacs "treemacs")
+    ("oP" neotree-toggle "neotree")
+    ("os" shell "shell")
+    ("ot" vterm "vterm")
+    ("p" nil "project")
+    ("p!" projectile-run-shell-command-in-root "run cmd in root")
+    ("p&" projectile-run-async-shell-command-in-root "async cmd in root")
+    ("pa" projectile-add-known-project "add project")
+    ("pb" projectile-switch-to-buffer "project buffer")
+    ("pc" projectile-compile-project "compile project")
+    ("pd" projectile-remove-known-project "remove project")
+    ("pe" projectile-edit-dir-locals "edit .dir-locals")
+    ("pf" projectile-find-file "find file in project")
+    ("pi" projectile-invalidate-cache "invalidate cache")
+    ("pk" projectile-kill-buffers "kill project buffers")
+    ("pp" projectile-switch-project "switch project")
+    ("pr" projectile-recentf "recent project files")
+    ("pR" projectile-run-project "run project")
+    ("pT" projectile-test-project "test project")
+    ("q" nil "quit/session")
+    ("qf" delete-frame "delete frame")
+    ("qK" save-buffers-kill-emacs "kill emacs (and daemon)")
+    ("qq" save-buffers-kill-terminal "quit emacs")
+    ("qQ" evil-quit-all-with-error-code "quit without saving")
+    ("qr" restart-emacs "restart emacs")
+    ("s" nil "search")
+    ("sb" consult-line "search buffer")
+    ("sB" consult-line-multi "search all buffers")
+    ("sd" consult-find "search directory")
+    ("sf" locate "locate file")
+    ("si" consult-imenu "jump to symbol")
+    ("sI" consult-imenu-multi "symbol in open buffers")
+    ("sj" evil-show-jumps "jump list")
+    ("sk" consult-man "man pages")
+    ("sm" consult-bookmark "jump to bookmark")
+    ("sp" consult-ripgrep "search project")
+    ("sr" evil-show-marks "jump to mark")
+    ("su" undo-tree-visualize "undo history")
+    ("t" nil "toggle")
+    ("tc" global-display-fill-column-indicator-mode "fill column indicator")
+    ("tf" flymake-mode "flymake")
+    ("tF" toggle-frame-fullscreen "fullscreen")
+    ("th" hl-line-mode "highlight line")
+    ("tl" display-line-numbers-mode "line numbers")
+    ("tr" read-only-mode "read-only")
+    ("ts" flyspell-mode "spell checker")
+    ("tt" consult-theme "choose theme")
+    ("tv" visible-mode "visible mode")
+    ("tw" visual-line-mode "soft line wrapping")
+    ("tW" whitespace-mode "whitespace")))
+
+  (apply #'general-define-key
+         :keymaps '(normal insert visual emacs)
+         :prefix "SPC" :global-prefix "C-SPC"
+         (mapcan (lambda (b) (and (nth 1 b) (list (nth 0 b) (nth 1 b))))
+                 reomacs/leader-bindings))
+
+  (apply #'which-key-add-key-based-replacements
+         (mapcan (lambda (b) (list (concat "SPC " (nth 0 b)) (nth 2 b)))
+                 reomacs/leader-bindings)))
+
+;; `vertico-repeat' (SPC ') needs the history recorded per session.
+(add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
+#+end_src
+
 *** Evil args
 #+begin_src emacs-lisp
 (use-package evil-args :ensure t
@@ -955,7 +1143,8 @@ Put backup files neatly away
 #+begin_src emacs-lisp
   (use-package magit
     :ensure t
-    :commands (magit-status magit-dispatch magit-blame magit-log))
+    :commands (magit-status magit-dispatch magit-blame magit-log
+               magit-file-dispatch magit-clone magit-init))
   (use-package transient
     :ensure t
     :defer t)
@@ -977,7 +1166,7 @@ Put backup files neatly away
 (setq-default c-basic-offset 4)      ; Number of spaces to use for each level of indentation
 (setq-default tab-stop-list nil)     ; Use tab-width value for 'tab-stop-list'
 (electric-indent-mode 1)             ; Automatically indent new lines with same number of spaces as previous line
-(setq-default electric-layout-mode t); Automatically adjust indentation based on context
+(electric-layout-mode 1)            ; Auto-insert newlines per `electric-layout-rules'
 #+end_src
 
 ** y for yes
@@ -1280,16 +1469,101 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
 
 
 #+end_src
-** perspective.el
-#+begin_src emacs-lisp :tangle no
-(use-package perspective
+** persp-mode (workspaces)
+Doom-style workspaces, modelled on =doomemacs/modules :ui workspaces=. Note this
+is =persp-mode= (Bad-ptr), *not* =perspective.el= -- different packages, and
+=treemacs-persp= below requires this one. =SPC TAB= mirrors Doom's prefix,
+including =SPC TAB 1..9= for tab-like switching.
+#+begin_src emacs-lisp
+(use-package persp-mode
   :ensure t
-  :bind
-  ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
+  :unless noninteractive
+  :hook (after-init . persp-mode)
   :custom
-  (persp-mode-prefix-key (kbd "C-c M-p"))  ; pick your own prefix key here
-  :init
-  (persp-mode))
+  (persp-keymap-prefix (kbd "C-c w"))
+  (persp-save-dir (expand-file-name "workspaces/" user-emacs-directory))
+  (persp-auto-save-fname "autosave")
+  ;; Never auto-resume: emacs runs as a daemon here, and restoring window
+  ;; configs before a real frame exists fails with "Window ... too small to
+  ;; accommodate state". Doom sets -1 for the same reason. Load with SPC TAB l.
+  (persp-auto-resume-time -1)
+  (persp-auto-save-opt (if noninteractive 0 1))
+  (persp-autokill-buffer-on-remove 'kill-weak)
+  (persp-reset-windows-on-nil-window-conf nil)
+  (persp-remove-buffers-from-nil-persp-behaviour nil)
+  (persp-kill-foreign-buffer-behaviour 'kill)
+  (persp-switch-to-added-buffer nil)
+  (persp-set-last-persp-for-new-frames t)
+  :config
+  ;; The nil perspective is special -- buffers cannot really be assigned to it.
+  ;; Hide it and bootstrap a real "main" workspace instead (Doom does the same).
+  ;; Plain defvar, not a defcustom, so `:custom' cannot set it.
+  (setq persp-nil-hidden t)
+
+  (defvar reomacs/workspace-main "main"
+    "Name of the primary workspace, which replaces the quirky nil perspective.")
+
+  (defun reomacs/workspace-names ()
+    "Open workspace names, excluding the hidden nil perspective."
+    (cl-remove persp-nil-name persp-names-cache :count 1))
+
+  (defun reomacs/workspace-ensure-main ()
+    "Create `reomacs/workspace-main' and make sure no frame sits on nil."
+    (when persp-mode
+      (unless (persp-get-by-name reomacs/workspace-main)
+        (persp-add-new reomacs/workspace-main))
+      (dolist (frame (frame-list))
+        (when (string= (safe-persp-name (get-current-persp frame)) persp-nil-name)
+          (persp-frame-switch reomacs/workspace-main frame)))))
+  (add-hook 'persp-mode-hook #'reomacs/workspace-ensure-main)
+  (add-hook 'persp-after-load-state-functions #'reomacs/workspace-ensure-main)
+
+  ;; `uniquify' renames buffers, which breaks persp-mode's name-based session
+  ;; restore. Doom disables it while workspaces are on.
+  (setq uniquify-buffer-name-style nil)
+
+  ;; The autosave file is rewritten constantly and otherwise tops recentf.
+  (add-to-list 'recentf-exclude (regexp-quote persp-auto-save-fname))
+
+  (defun reomacs/workspace-switch-to-index (index)
+    "Switch to the workspace at INDEX (0-based)."
+    (let ((dest (nth index (reomacs/workspace-names))))
+      (if dest (persp-frame-switch dest)
+        (message "No workspace at #%d" (1+ index)))))
+
+  (defun reomacs/workspace-display ()
+    "Echo the workspace list as a tab bar, Doom-style."
+    (interactive)
+    (let ((current (safe-persp-name (get-current-persp)))
+          (message-log-max nil))
+      (message "%s"
+               (mapconcat
+                (lambda (pair)
+                  (propertize (format " [%d] %s " (1+ (car pair)) (cdr pair))
+                              'face (if (equal current (cdr pair)) 'highlight 'shadow)))
+                (seq-map-indexed #'cons (reomacs/workspace-names))
+                " "))))
+
+  (with-eval-after-load 'general
+    (efs/leader-keys
+      "TAB"   '(:ignore t :which-key "workspaces")
+      "TAB TAB" '(reomacs/workspace-display   :which-key "display tab bar")
+      "TAB n" '(persp-add-new                 :which-key "new")
+      "TAB d" '(persp-kill                    :which-key "delete")
+      "TAB r" '(persp-rename                  :which-key "rename")
+      "TAB ." '(persp-switch                  :which-key "switch")
+      "TAB ]" '(persp-next                    :which-key "next")
+      "TAB [" '(persp-prev                    :which-key "previous")
+      "TAB b" '(persp-switch-to-buffer        :which-key "workspace buffer")
+      "TAB s" '(persp-save-state-to-file      :which-key "save session")
+      "TAB l" '(persp-load-state-from-file    :which-key "load session"))
+    ;; SPC TAB 1..9 -- the tab-like half of Doom's workspace bindings.
+    (dotimes (i 9)
+      (eval `(efs/leader-keys
+               ,(format "TAB %d" (1+ i))
+               '(,(lambda () (interactive) (reomacs/workspace-switch-to-index i))
+                 :which-key ,(format "switch to %d" (1+ i))))
+            t))))
 #+end_src
 ** treemacs
 #+begin_src emacs-lisp
@@ -1391,8 +1665,10 @@ https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-Mail-
   :after (treemacs magit)
   :ensure t)
 
-(use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
-  :after (treemacs persp-mode) ;;or perspective vs. persp-mode
+;; Scopes the treemacs buffer per workspace. Requires persp-mode (not
+;; perspective.el); `Perspectives' is the scope type treemacs-persp registers.
+(use-package treemacs-persp
+  :after (treemacs persp-mode)
   :ensure t
   :config (treemacs-set-scope-type 'Perspectives))
 #+end_src
@@ -1592,13 +1868,34 @@ candidate is recoloured separately — see [[#completion-selection-highlight][co
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 #+end_src
 ** treesitter auto
-#+begin_src emacs-lisp
+Non-Nix only: =emacs.nix= ships =treesit-grammars.with-all-grammars= on
+=treesit-extra-load-path=, which Emacs searches *before* anything else, so
+=treesit-auto-install= would only fetch duplicates outside the store.
+#+begin_src emacs-lisp :tangle no
 (use-package treesit-auto :ensure t
   :custom
-  (setq treesit-auto-install t)
+  (treesit-auto-install t)
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
+#+end_src
+** treesitter mode remaps
+Emacs 31 already routes rs/go/ts/tsx/yaml through =*-ts-mode-maybe=. These are
+the ones it still leaves on the legacy mode, so remap them by hand instead of
+pulling in =treesit-auto= just for the mapping.
+#+begin_src emacs-lisp
+;; (legacy-mode ts-mode grammar) -- grammar is spelled out because it does not
+;; always match the mode name (c++-ts-mode uses the `cpp' grammar).
+(dolist (spec '((sh-mode         bash-ts-mode bash)
+                (js-json-mode    json-ts-mode json)
+                (conf-toml-mode  toml-ts-mode toml)
+                (css-mode        css-ts-mode  css)
+                (c-mode          c-ts-mode    c)
+                (c++-mode        c++-ts-mode  cpp)
+                (go-mode         go-ts-mode   go)
+                (yaml-mode       yaml-ts-mode yaml)))
+  (when (treesit-language-available-p (nth 2 spec))
+    (add-to-list 'major-mode-remap-alist (cons (nth 0 spec) (nth 1 spec)))))
 #+end_src
 ** treesitter settings
 #+begin_src emacs-lisp
@@ -1777,9 +2074,6 @@ https://github.com/minad/consult
   ;; This adds thin lines, sorting and hides the mode line of the window.
   (advice-add #'register-preview :override #'consult-register-window)
 
-  ;; Optionally replace `completing-read-multiple' with an enhanced version.
-  (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
-
   ;; Use Consult to select xref locations with preview
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref)
@@ -1856,7 +2150,9 @@ https://github.com/minad/marginalia
 https://emacs-lsp.github.io/lsp-mode/
 and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 *** flycheck install
-#+begin_src emacs-lisp
+Only needed alongside the LSP Mode block below (also =:tangle no=); eglot drives
+flymake instead. Re-tangle both together if you switch back.
+#+begin_src emacs-lisp :tangle no
 (use-package flycheck :ensure t)
 #+end_src
 
@@ -1989,28 +2285,6 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 ;; (elpaca project)
 (use-package flymake :ensure t)
 
-(use-package project-rootfile :ensure t)
-(defvar lk/home-full-path (getenv "HOME"))
-
-(defun lk/project-find-root (path)
-  "Search up the PATH for known project file markers. Throws an error if found path is
-  equal to users home directory"
-  (when-let ((root
-              (if-let ((vc-root (project-try-vc default-directory)))
-                  ;; get dir from (vc Git "dir")
-                  (car (last vc-root))
-                ;; this returns #s(project-rootfile-plain "~/tmp/foobar/") struct,
-                ;; we need the :root part
-                (project-rootfile-plain--root
-                 (project-rootfile-try-detect default-directory)))))
-    (let* ((root-exp (expand-file-name root)))
-      ;; bail if detected dir is equal to home (can happen!)
-      (when (string-equal lk/home-full-path root-exp)
-        (message "Root folder is equal to HOME!")
-        (throw 'lk/invalid-project-root t))
-      ;; otherwise we're good
-      root-exp)))
-
 ;; (use-package project
 ;;   :ensure t
 ;;   :after (project-rootfile)
@@ -2029,6 +2303,11 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 
 (use-package eglot
   :ensure t
+  ;; Only `eglot' and `eglot-ensure' are autoloaded upstream; the rest need
+  ;; stubs or the SPC c bindings below would be void until eglot loads.
+  :commands (eglot-code-actions eglot-rename eglot-format eglot-find-declaration
+             eglot-find-implementation eglot-find-typeDefinition
+             eglot-reconnect eglot-shutdown)
   :init
   (setq project-vc-extra-root-markers '("Cargo.toml"))
   :config
@@ -2190,8 +2469,10 @@ and also https://emacs-lsp.github.io/lsp-mode/page/languages/
 #+end_src
 *** nix
 #+begin_src emacs-lisp
+;; No `:mode' -- nix-ts-mode owns .nix. Kept for the nix-repl / nix-build /
+;; nix-shell / nix-flake / nix-format-buffer commands, which nix-ts-mode lacks.
 (use-package nix-mode :ensure t
-  :mode "\\.nix\\'")
+  :commands (nix-repl nix-build nix-shell nix-flake nix-format-buffer nix-prettify-mode))
 ;; (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
 ;; (lsp-register-client
 ;;  (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
