@@ -83,7 +83,7 @@
       timeoutlen = 300;
       completeopt = "menuone,noselect";
       termguicolors = true;
-      guifont = "FantasqueSansM Nerd Font:h14";
+      guifont = "${config.stylix.fonts.monospace.name}:h${toString config.stylix.fonts.sizes.terminal}";
       # mapleader = "<Space>";
     };
     globals = {
@@ -94,6 +94,7 @@
     extraPackages = with pkgs; [ luajitPackages.lua-utils-nvim ];
     extraPlugins = with pkgs.vimPlugins; [
       orgmode
+      friendly-snippets
       # orgmode
       # (gruvbox-material.overrideAttrs (old: {
       #   src = pkgs.fetchFromGitHub {
@@ -125,11 +126,199 @@
         xclip.enable = true;
       };
     };
+    keymaps = [
+      {
+        mode = "n";
+        key = "<Esc>";
+        action = "<cmd>nohlsearch<cr>";
+        options.desc = "Clear search highlight";
+      }
+
+      # Telescope
+      {
+        mode = "n";
+        key = "<leader>ff";
+        action = "<cmd>Telescope find_files<cr>";
+        options.desc = "Find files";
+      }
+      {
+        mode = "n";
+        key = "<leader>fg";
+        action = "<cmd>Telescope live_grep<cr>";
+        options.desc = "Live grep";
+      }
+      {
+        mode = "n";
+        key = "<leader>fb";
+        action = "<cmd>Telescope buffers<cr>";
+        options.desc = "Buffers";
+      }
+      {
+        mode = "n";
+        key = "<leader>fh";
+        action = "<cmd>Telescope help_tags<cr>";
+        options.desc = "Help tags";
+      }
+      {
+        mode = "n";
+        key = "<leader>fr";
+        action = "<cmd>Telescope oldfiles<cr>";
+        options.desc = "Recent files";
+      }
+      {
+        mode = "n";
+        key = "<leader>fd";
+        action = "<cmd>Telescope diagnostics<cr>";
+        options.desc = "Diagnostics";
+      }
+
+      # Explorer / git
+      {
+        mode = "n";
+        key = "<leader>e";
+        action = "<cmd>Neotree toggle<cr>";
+        options.desc = "File explorer";
+      }
+      {
+        mode = "n";
+        key = "<leader>gg";
+        action = "<cmd>LazyGit<cr>";
+        options.desc = "Lazygit";
+      }
+      {
+        mode = "n";
+        key = "<leader>gb";
+        action = "<cmd>Gitsigns blame_line<cr>";
+        options.desc = "Blame line";
+      }
+      {
+        mode = "n";
+        key = "<leader>gp";
+        action = "<cmd>Gitsigns preview_hunk<cr>";
+        options.desc = "Preview hunk";
+      }
+      {
+        mode = "n";
+        key = "<leader>gs";
+        action = "<cmd>Gitsigns stage_hunk<cr>";
+        options.desc = "Stage hunk";
+      }
+      {
+        mode = "n";
+        key = "]c";
+        action = "<cmd>Gitsigns next_hunk<cr>";
+        options.desc = "Next hunk";
+      }
+      {
+        mode = "n";
+        key = "[c";
+        action = "<cmd>Gitsigns prev_hunk<cr>";
+        options.desc = "Prev hunk";
+      }
+
+      # Buffers (barbar)
+      {
+        mode = "n";
+        key = "<S-h>";
+        action = "<cmd>BufferPrevious<cr>";
+        options.desc = "Previous buffer";
+      }
+      {
+        mode = "n";
+        key = "<S-l>";
+        action = "<cmd>BufferNext<cr>";
+        options.desc = "Next buffer";
+      }
+      {
+        mode = "n";
+        key = "<leader>bd";
+        action = "<cmd>BufferClose<cr>";
+        options.desc = "Close buffer";
+      }
+      {
+        mode = "n";
+        key = "<leader>bp";
+        action = "<cmd>BufferPin<cr>";
+        options.desc = "Pin buffer";
+      }
+
+      # Trouble
+      {
+        mode = "n";
+        key = "<leader>xx";
+        action = "<cmd>Trouble diagnostics toggle<cr>";
+        options.desc = "Diagnostics (workspace)";
+      }
+      {
+        mode = "n";
+        key = "<leader>xX";
+        action = "<cmd>Trouble diagnostics toggle filter.buf=0<cr>";
+        options.desc = "Diagnostics (buffer)";
+      }
+      {
+        mode = "n";
+        key = "<leader>xt";
+        action = "<cmd>Trouble todo toggle<cr>";
+        options.desc = "Todo list";
+      }
+
+      # Format
+      {
+        mode = [
+          "n"
+          "v"
+        ];
+        key = "<leader>cf";
+        action.__raw = "function() require('conform').format({ async = true, lsp_format = 'fallback' }) end";
+        options.desc = "Format buffer";
+      }
+
+      # Flash
+      {
+        mode = [
+          "n"
+          "x"
+          "o"
+        ];
+        key = "s";
+        action.__raw = "function() require('flash').jump() end";
+        options.desc = "Flash jump";
+      }
+      {
+        mode = [
+          "n"
+          "x"
+          "o"
+        ];
+        key = "S";
+        action.__raw = "function() require('flash').treesitter() end";
+        options.desc = "Flash treesitter";
+      }
+    ];
     #lsp config
     plugins = {
       dashboard.enable = true;
       lsp = {
         enable = true;
+        inlayHints = true;
+        keymaps = {
+          silent = true;
+          lspBuf = {
+            "gd" = "definition";
+            "gD" = "declaration";
+            "gr" = "references";
+            "gI" = "implementation";
+            "gy" = "type_definition";
+            "K" = "hover";
+            "<leader>cr" = "rename";
+            "<leader>ca" = "code_action";
+          };
+          diagnostic = {
+            "]d" = "goto_next";
+            "[d" = "goto_prev";
+            "<leader>cd" = "open_float";
+          };
+        };
         servers = {
           ts_ls.enable = true;
           rust_analyzer = {
@@ -145,7 +334,6 @@
           jsonls.enable = true;
         };
       };
-      lspkind.enable = true;
       # lazy = {
       #   enable = true;
       #   plugins = with pkgs.vimPlugins; [
@@ -157,14 +345,42 @@
       # rustaceanvim = {
       #   enable = true;
       # };
-      lsp-format.enable = true;
-      luasnip.enable = true;
-      cmp_luasnip.enable = true;
-      cmp-treesitter.enable = true;
+      conform-nvim = {
+        enable = true;
+        autoInstall.enable = true;
+        settings = {
+          format_on_save = {
+            timeout_ms = 500;
+            lsp_format = "fallback";
+          };
+          formatters_by_ft = {
+            nix = [ "nixfmt" ];
+            lua = [ "stylua" ];
+            python = [ "ruff_format" ];
+            rust = [ "rustfmt" ];
+            go = [ "gofmt" ];
+            sh = [ "shfmt" ];
+            javascript = [ "prettierd" ];
+            typescript = [ "prettierd" ];
+            javascriptreact = [ "prettierd" ];
+            typescriptreact = [ "prettierd" ];
+            json = [ "prettierd" ];
+            yaml = [ "prettierd" ];
+            css = [ "prettierd" ];
+            html = [ "prettierd" ];
+            markdown = [ "prettierd" ];
+          };
+        };
+      };
       which-key.enable = true;
       nvim-autopairs.enable = true;
       direnv.enable = true;
       web-devicons.enable = true;
+      # Makes lua_ls aware of the `vim` global and nvim runtime types.
+      lazydev.enable = true;
+      trouble.enable = true;
+      todo-comments.enable = true;
+      flash.enable = true;
       # neorg = {
       #   enable = true;
       #   modules = {
@@ -195,8 +411,51 @@
       gitsigns.enable = true;
       treesitter = {
         enable = true;
+        nixvimInjections = true;
+        # Grammars come from nix, so `ensure_installed` is never used. All 320
+        # would be installed by default; this is the set actually edited here.
+        grammarPackages = with config.programs.nixvim.plugins.treesitter.package.builtGrammars; [
+          bash
+          c
+          cpp
+          css
+          diff
+          dockerfile
+          fish
+          git_config
+          git_rebase
+          gitcommit
+          gitignore
+          go
+          gomod
+          gosum
+          html
+          hyprlang
+          ini
+          javascript
+          json
+          lua
+          luadoc
+          make
+          markdown
+          markdown_inline
+          nix
+          python
+          query
+          regex
+          rust
+          scss
+          sql
+          ssh_config
+          toml
+          tsx
+          typescript
+          vim
+          vimdoc
+          xml
+          yaml
+        ];
         settings = {
-          ensureInstalled = "all";
           highlight = {
             enable = true;
             use_languagetree = true;
@@ -204,7 +463,6 @@
           incremental_selection = {
             enable = true;
           };
-          nixvimInjections = true;
           indent = {
             enable = true;
           };
@@ -215,61 +473,101 @@
         enable = true;
         settings = {
           clickable = true;
-          autoHide = true;
+          # Hide the tabline when only one buffer is open. `autoHide = true` was
+          # silently ignored: barbar wants snake_case, and an int.
+          auto_hide = 1;
         };
       };
 
       mini = {
         enable = true;
         # mockDevIcons = true;
+        modules = {
+          ai = {
+            n_lines = 50;
+          };
+          # Default `sa`/`sd`/... would shadow flash's `s`, so use a `gs` prefix.
+          surround.mappings = {
+            add = "gsa";
+            delete = "gsd";
+            replace = "gsr";
+            find = "gsf";
+            find_left = "gsF";
+            highlight = "gsh";
+          };
+          splitjoin = { }; # gS toggles a bracketed list one-line <-> multi-line
+          align = { }; # ga / gA align into columns
+          move = { }; # Alt-hjkl moves line or selection
+          trailspace = { };
+        };
       };
       nix.enable = true;
       tmux-navigator.enable = true;
-      cmp = {
+      blink-cmp = {
         enable = true;
-        autoEnableSources = true;
         settings = {
-          mapping = {
-            "<Down>" = "cmp.mapping.select_next_item()";
-            "<Up>" = "cmp.mapping.select_prev_item()";
-            "<C-d>" = "cmp.mapping.scroll_docs(-4)";
-            "<C-f>" = "cmp.mapping.scroll_docs(4)";
-            "<C-Space>" = " cmp.mapping.complete {}";
-            "<CR>" = "cmp.mapping.confirm({ select = true })";
-            "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
-            "<S-Tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
+          keymap = {
+            # <CR> accepts, <Tab> walks the list then snippet placeholders.
+            preset = "enter";
+            "<Tab>" = [
+              "select_next"
+              "snippet_forward"
+              "fallback"
+            ];
+            "<S-Tab>" = [
+              "select_prev"
+              "snippet_backward"
+              "fallback"
+            ];
+            "<Down>" = [
+              "select_next"
+              "fallback"
+            ];
+            "<Up>" = [
+              "select_prev"
+              "fallback"
+            ];
+            "<C-d>" = [
+              "scroll_documentation_up"
+              "fallback"
+            ];
+            "<C-f>" = [
+              "scroll_documentation_down"
+              "fallback"
+            ];
+            "<C-space>" = [
+              "show"
+              "show_documentation"
+              "hide_documentation"
+            ];
+            "<C-e>" = [ "hide" ];
           };
-          sources = [
-            { name = "nvim_lsp"; }
-            { name = "path"; }
-            { name = "buffer"; }
-            { name = "luasnip"; }
-            { name = "nvim_lua"; }
+          sources.default = [
+            "lsp"
+            "path"
+            "snippets"
+            "buffer"
           ];
-          snippet.expand = ''
-            function(args)
-            require "luasnip".lsp_expand(args.body)
-            end
-          '';
           completion = {
-            completeopt = "menu,menuone,noselect";
-          };
-
-          window = {
-            completion = {
-              border = "rounded";
+            list.selection = {
+              preselect = false;
+              auto_insert = false;
             };
             documentation = {
-              border = "rounded";
+              auto_show = true;
+              auto_show_delay_ms = 200;
+              window.border = "rounded";
             };
+            menu.border = "rounded";
+            ghost_text.enabled = true;
+            accept.auto_brackets.enabled = true;
           };
-          experimental = {
-            ghost_text = true;
+          signature = {
+            enabled = true;
+            window.border = "rounded";
           };
+          appearance.nerd_font_variant = "mono";
         };
-      };
-      cmp-nvim-lsp = {
-        enable = true;
       };
       lualine = {
         enable = true;
@@ -333,6 +631,17 @@
       };
       snacks = {
         enable = true;
+        settings = {
+          bigfile.enabled = true; # disable heavy features on huge files
+          quickfile.enabled = true; # render the file before plugins load
+          statuscolumn.enabled = true; # fold/sign/number column
+          indent.enabled = true; # indent guides + scope
+          scope.enabled = true; # scope-aware textobjects/motions
+          input.enabled = true; # nicer vim.ui.input
+          words.enabled = true; # highlight + navigate LSP references
+          notifier.enabled = false; # noice already owns messages
+          scroll.enabled = false; # smooth scroll fights terminal repaint
+        };
       };
     };
   };
