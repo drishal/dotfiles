@@ -9,6 +9,7 @@
     ./core/packages.nix
     ./core/tmux.nix
     ./core/fastfetch.nix
+    ./core/pi-theme.nix
 
     ./desktop/default-apps.nix
     ./desktop/rofi.nix
