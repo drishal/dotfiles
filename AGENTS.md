@@ -78,7 +78,7 @@ NixOS/
     common/
       default.nix            ← imports individual core/desktop/editors/terminals files + shells + stylix
       stylix.nix             ← HM-level stylix overrides
-      core/                  ← packages.nix, git.nix, tmux.nix, fastfetch.nix
+      core/                  ← packages.nix, git.nix, tmux.nix, fastfetch.nix, pi-theme.nix
         tmux/                ← Hermes/OpenCode lifecycle adapters for tmux-agent-status
       shells/                ← default.nix, fish.nix, zsh.nix, aliases.nix (shell-agnostic aliases + PATH + env)
       desktop/               ← hyprland, sway, waybar, rofi, dms, ags, eww, quickshell, default-apps, file-managers, hermes-app, icons

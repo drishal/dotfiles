@@ -191,6 +191,23 @@ touch ~/.emacs.d/custom.el
   (elpaca-use-package-mode))
 #+end_src
 
+** stop emacsclient frames stranding the minibuffer
+=server.el= throws to top level whenever a client asks for a frame or a file
+while a minibuffer is open, which leaves the new frame showing an inactive
+=*Minibuf-1*= where every key is undefined.  Abort the minibuffer normally
+instead, so its window configuration is restored.
+#+begin_src emacs-lisp
+(defun reomacs/server-goto-toplevel (fn proc)
+  "Leave an open minibuffer cleanly instead of throwing to top level."
+  (if (> (minibuffer-depth) 0)
+      (progn (run-with-timer 0 nil #'server-execute-continuation proc)
+             (abort-minibuffers))
+    (funcall fn proc)))
+
+(with-eval-after-load 'server
+  (advice-add 'server-goto-toplevel :around #'reomacs/server-goto-toplevel))
+#+end_src
+
 * Initialize package sources
 ** enable native comp for packages
 #+begin_src emacs-lisp
@@ -1494,11 +1511,26 @@ including =SPC TAB 1..9= for tab-like switching.
   (persp-kill-foreign-buffer-behaviour 'kill)
   (persp-switch-to-added-buffer nil)
   (persp-set-last-persp-for-new-frames t)
+  ;; Don't restore a window config into new emacsclient frames: that path in
+  ;; persp-mode permanently overwrites `initial-buffer-choice' with the last
+  ;; visited file, so every later frame opens there instead of the dashboard.
+  ;; Switching workspaces still restores layouts.
+  (persp-emacsclient-init-frame-behaviour-override nil)
   :config
   ;; The nil perspective is special -- buffers cannot really be assigned to it.
   ;; Hide it and bootstrap a real "main" workspace instead (Doom does the same).
   ;; Plain defvar, not a defcustom, so `:custom' cannot set it.
   (setq persp-nil-hidden t)
+
+  ;; A failed autosave must never abort `kill-emacs'. persp serialises window
+  ;; configs through a temporary frame, which a daemon with no client frames
+  ;; open cannot create ("Unknown terminal type"); the error escapes
+  ;; `kill-emacs-hook', kill-emacs gives up, and systemd SIGKILLs us 90s later.
+  (defun reomacs/persp-asave-on-exit-safely (fn &rest args)
+    "Demote autosave errors so shutdown always completes."
+    (with-demoted-errors "[persp-mode] autosave on exit skipped: %S"
+      (apply fn args)))
+  (advice-add 'persp-asave-on-exit :around #'reomacs/persp-asave-on-exit-safely)
 
   (defvar reomacs/workspace-main "main"
     "Name of the primary workspace, which replaces the quirky nil perspective.")
