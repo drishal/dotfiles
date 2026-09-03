@@ -25,9 +25,22 @@ Follow it top to bottom. It assumes the dotfiles repo is checked out at
 ### SearXNG (optional — extra backend for the `argus` web-search MCP server)
 
 `argus` does **not** require SearXNG — it auto-routes to the cheapest/free
-search providers on its own and works out of the box. You only need to wire
-up SearXNG if one is **already running** somewhere and you want `argus` to use
-it as a backend. Discover the real URL — don't hard-code a port.
+search providers on its own and works out of the box. SearXNG is an optional
+backend: only wire it up if the user wants it and can provide the base URL.
+Never hard-code or guess a port — use only what the user provides or what the
+discovery check below actually finds.
+
+**Ask the user which to use** (via `ask_user_question`): "How should `argus` search?"
+- **Free providers (default)** → nothing to configure; skip the rest of this
+  section.
+- **Provide a SearXNG URL** → the user gives the base URL (e.g.
+  `http://127.0.0.1:8888`); set `ARGUS_SEARXNG_ENABLED=true` and
+  `ARGUS_SEARXNG_BASE_URL=<provided-url>` in the `argus` block of `mcp.json`
+  (step 5).
+
+Only use a URL the user provides, or one confirmed by the discovery check
+below — don't guess ports blindly. If the user chose free providers, the
+discovery check is unnecessary.
 
 ```bash
 # 1. Any docker container with "searx" in its name? Parse the host-side port
@@ -45,14 +58,14 @@ done
 ```
 
 - If SearXNG is reachable (docker container shows up, a port returns `200`,
-  or `searx.nix` declares a `server.port`), set `ARGUS_SEARXNG_ENABLED=true`
-  and `ARGUS_SEARXNG_BASE_URL=http://127.0.0.1:<discovered-port>` in the
-  `argus` block of `mcp.json` (step 5). Use the **discovered** port — not a
-  guessed one — so `argus` actually reaches the running instance.
-- If **nothing is running** (or you just don't care), **skip this entirely** —
-  leave the `ARGUS_SEARXNG_*` env vars out of `mcp.json`. `argus` runs fine
-  without them. The NixOS config lives at `NixOS/hosts/common/searx.nix` if
-  you ever want to enable it as a system service later.
+  or `searx.nix` declares a `server.port`) **and the user chose SearXNG**, set
+  `ARGUS_SEARXNG_ENABLED=true` and
+  `ARGUS_SEARXNG_BASE_URL=http://127.0.0.1:<discovered-port>` in the `argus`
+  block of `mcp.json` (step 5). Confirm the choice with the user before wiring.
+- If **nothing is running** (or the user chose free providers), **skip this
+  entirely** — leave the `ARGUS_SEARXNG_*` env vars out of `mcp.json`. `argus`
+  runs fine without them. The NixOS config lives at `NixOS/hosts/common/searx.nix`
+  if you ever want to enable it as a system service later.
 
 ## 1. Install pi
 
@@ -83,7 +96,7 @@ pi creates most of this on first run. What matters:
 | `settings.json`                        | Global settings, extensions, theme         | Yes (step 4)  |
 | `mcp.json`                             | MCP server definitions                     | Yes (step 5)  |
 | `npm/`                                 | npm extension install dir + `package.json` | Auto (step 6) |
-| `extensions/skill-manage.ts`           | Local self-improvement extension           | Yes (step 7)  |
+| `extensions/`                           | Local TypeScript extensions               | See step 7    |
 | `skills/`                              | User-global skills (`SKILL.md` per dir)    | Yes (step 7)  |
 | `memories/MEMORY.md`                   | Always-in-prompt agent memory              | Yes (step 8)  |
 | `mcp-cache.json`, `mcp-npx-cache.json` | Auto-generated MCP tool caches             | Auto          |
@@ -102,56 +115,53 @@ written by pi on `/model` — leave them out of what you add.
 
 ```json
 {
-  "theme": "gruvbox-material-hard",
-  "lastChangelogVersion": "0.80.2",
+  "theme": "gruvbox-material",
   "packages": [
-    "npm:pi-zentui",
-    "npm:pi-mcp-adapter",
-    "npm:@spences10/pi-lsp",
+    "npm:@ff-labs/pi-fff",
     "npm:@howaboua/pi-skill-skill-creator",
+    "npm:@narumitw/pi-plan-mode",
+    "npm:pi-background-tasks",
+    "npm:pi-cache-graph",
+    "npm:pi-hashline-edit-pro",
+    "npm:pi-lens",
+    "npm:pi-mcp-adapter",
     "npm:pi-mono-ask-user-question",
     "npm:pi-mono-auto-fix",
     "npm:pi-mono-btw",
     "npm:pi-mono-context",
-    "npm:pi-mono-multi-edit",
-    "npm:@amaster.ai/pi-memory"
+    "npm:pi-mono-context-guard",
+    "npm:pi-mono-review",
+    "npm:pi-simplify",
+    "npm:pi-x-search",
+    "npm:pi-zentui@0.22.3",
+    "npm:pk-pi-hermes-evolve"
   ],
-  "pi-memory": {
-    "memoryCharLimit": 6000,
-    "userCharLimit": 2000
+  "defaultThinkingLevel": "xhigh",
+  "compaction": {
+    "enabled": true,
+    "reserveTokens": 45000,
+    "keepRecentTokens": 30000
   },
-  "quietStartup": false
+  "markdown": { "mermaid": "final" }
 }
 ```
 
 - `packages` is the list of extensions pi auto-installs into `~/.pi/agent/npm/`
   on startup (and via `pi install <pkg>`). See step 6.
-- `pi-memory` sets the char budgets for the always-in-prompt `MEMORY.md` /
-  `USER.md` (the `memory_add` / `memory_read` tools). Keep them tight — the
-  content is injected into every turn.
-
 ### Custom theme
 
-The theme referenced above (`gruvbox-material-hard`) ships in this repo at
-`config/pi/themes/gruvbox-material-hard.json`. Install it:
+Three themes ship in this repo at `config/pi/themes/`: `gruvbox-material.json`
+(default), `claude-dark.json`, and `stylix.json`. Install the one you want:
 
 ```bash
 mkdir -p ~/.pi/agent/themes
-cp ~/dotfiles/config/pi/themes/gruvbox-material-hard.json ~/.pi/agent/themes/
+cp ~/dotfiles/config/pi/themes/gruvbox-material.json ~/.pi/agent/themes/
 ```
 
-It implements the **Gruvbox Material Hard Dark** palette — a warm, earthy
-dark theme with muted greens, oranges, and reds. The file defines all 51 pi
-theme tokens and uses variable references (defined in `vars`) for
-maintainability. To switch at runtime, edit `settings.json`'s `"theme"` value
-or use `/settings` inside pi — and since the theme file is under `~/.pi/agent/themes/`,
-pi hot-reloads edits to the active theme file automatically.
-
-> **Why not `"theme": "dark"`?** The built-in `dark` theme is a generic blue-on-black
-> fallback. The `gruvbox-material-hard` theme is the preferred look for this
-> setup: it matches the terminal color scheme, reduces blue-light glare, and
-> uses a curated palette that was built for the Gruvbox Material vim
-> colorscheme this machine already uses.
+Each file defines all pi theme tokens. To switch at runtime, edit
+`settings.json`'s `"theme"` value or use `/settings` inside pi — and since
+theme files live under `~/.pi/agent/themes/`, pi hot-reloads edits to the
+active theme file automatically.
 
 ## 5. MCP servers (`mcp.json`)
 
@@ -179,16 +189,8 @@ restart (or `/reload`) to appear.
       "lifecycle": "lazy"
     },
     "mnemosyne": {
-      "command": "<path-to-hermes-venv>/bin/mnemosyne",
+      "command": "<path-to-mnemosyne-binary>",
       "args": ["mcp"],
-      "env": {
-        "MNEMOSYNE_DATA_DIR": "<path-to-mnemosyne-data>",
-        "MNEMOSYNE_EMBEDDING_API_URL": "<embedding-endpoint>/v1",
-        "MNEMOSYNE_EMBEDDING_API_KEY": "<embedding-api-key>",
-        "MNEMOSYNE_EMBEDDING_MODEL": "Qwen3-Embedding-8B",
-        "MNEMOSYNE_EMBEDDING_DIM": "4096",
-        "MNEMOSYNE_EMBEDDINGS_VIA_API": "true"
-      },
       "lifecycle": "keep-alive"
     },
     "obscura": {
@@ -207,72 +209,41 @@ restart (or `/reload`) to appear.
 
 **Before writing that block, apply these conditionals:**
 
-- **`mnemosyne` — ask the user; don't guess.** This server is cross-session
-  memory, shared with the Hermes agent (both agents read/write one SQLite DB).
-  Its config is **not** in this guide, but can usually be **sourced from an
-  existing install** rather than pasted by hand. Do **not** write the `<...>`
-  placeholders verbatim — pi would try to exec
-  `<path-to-hermes-venv>/bin/mnemosyne` and the server would fail to start.
+- **`mnemosyne` — ask the user; don't guess.** Cross-session memory MCP server.
+  Mnemosyne is self-configuring: once it has run once (or an existing install is
+  present), all of its settings — data dir, embedding endpoint, model, dims — live
+  in **its own** `config.yaml` inside its data dir (precedence:
+  `config.yaml > env vars > defaults`). The MCP block only needs the binary path.
 
-  **First, detect what's already on the machine:**
+  **Detect what's already on the machine:**
 
   ```bash
-  # Hermes install? (venv binary + .env + shared data dir)
-  ls ~/.hermes/hermes-agent/venv/bin/mnemosyne ~/.hermes/.env ~/.hermes/mnemosyne/data 2>/dev/null
-  # OpenClaw install carrying mnemosyne config? (check its env/config files)
-  ls ~/.openclaw 2>/dev/null
-  grep -rilE 'MNEMOSYNE|embedding' ~/.openclaw 2>/dev/null | head
+  # an existing mnemosyne install? (binary on PATH, or inside an agent venv)
+  command -v mnemosyne || find ~ -maxdepth 4 -name mnemosyne -type f 2>/dev/null | head -3
+  # existing data dir (its config.yaml records the embedding settings)
+  ls ~/.mnemosyne 2>/dev/null
   ```
 
   **Then use `ask_user_question` to ask the user:**
 
   - Q1 (radio): "Set up the `mnemosyne` cross-session memory MCP server?"
     → `Yes` / `No, skip it`
-  - Q2 (radio, only if Q1 = Yes **and** more than one source was detected
-    above): "Source its config from?" → `Hermes` (if `~/.hermes/.env` exists)
-    / `OpenClaw` (if detected) / `Fresh data dir`
 
   **Act on the answer:**
 
   - **No, skip** → delete the entire `mnemosyne` entry from `mcp.json`. Done.
-  - **Hermes** → fill the block from the existing Hermes install (no
-    secret-pasting). The values are fully discoverable:
-    - `command` = `~/.hermes/hermes-agent/.venv/bin/mnemosyne`
-      (check `.venv/` vs `venv/` — the Hermes venv may use either name)
-    - `args` = `["mcp"]`, `lifecycle` = `"keep-alive"`
-    - On NixOS, add `"env": { "LD_LIBRARY_PATH":
-"/run/current-system/sw/share/nix-ld/lib" }` — mnemosyne's
-      libstdc++ dependency resolves differently outside the nix-shell.
-    - If the `mnemosyne-hermes` plugin package is installed (`uv pip show
-mnemosyne-hermes` succeeds in the Hermes venv), embedding is handled
-      automatically through Hermes' `memory_provider` plugin system — no
-      `MNEMOSYNE_EMBEDDING_*` env vars needed. Verify with `hermes mnemosyne
-stats` (check that `dense_score > 0` in recall results).
-    - If using mnemosyne standalone (no Hermes plugin), source
-      `MNEMOSYNE_DATA_DIR`, `MNEMOSYNE_EMBEDDING_API_URL`,
-      `MNEMOSYNE_EMBEDDING_API_KEY`, `MNEMOSYNE_EMBEDDING_MODEL`,
-      `MNEMOSYNE_EMBEDDING_DIM`, and `MNEMOSYNE_EMBEDDINGS_VIA_API` from
-      `~/.hermes/.env` (if present) or ask the user for an embedding endpoint.
-
-    This points pi at the **same** SQLite DB Hermes uses, so pi and Hermes
-    share one memory store.
-
-  - **OpenClaw** → discover the `MNEMOSYNE_*` env from OpenClaw's config
-    (its `.env` / settings) and fill the block the same way; `command` is
-    OpenClaw's `mnemosyne` binary if it ships one, else the Hermes venv
-    binary. If OpenClaw turns out to have no mnemosyne config, fall back to
-    the Hermes or Fresh path.
-  - **Fresh data dir** → set `MNEMOSYNE_DATA_DIR` to a new path (e.g.
-    `~/.pi/agent/mnemosyne/data`). You still need an embedding endpoint + key:
-    ask the user for `MNEMOSYNE_EMBEDDING_API_URL` and
-    `MNEMOSYNE_EMBEDDING_API_KEY`. If they don't have one, omit mnemosyne.
-
-- **`argus` — add SearXNG env if it's running.** The template above omits `env`
-  (argus auto-routes to free providers without it). If the SearXNG check in
-  the Prerequisites section found a reachable URL — i.e. you got `server.port`
-  in `NixOS/hosts/common/searx.nix`, a docker `searx` container on
-  `0.0.0.0:<port>->8080`, or a `200` from one of the probe ports — add an
-  `env` block to the `argus` entry using the **discovered** port:
+  - **Yes, existing install** → point `command` at the detected binary.
+  - **Yes, fresh** → install mnemosyne (see the upstream repo,
+    [mnemosyne-oss/mnemosyne](https://github.com/mnemosyne-oss/mnemosyne)), then
+    set embedding config **in mnemosyne's own config**
+    (`mnemosyne config set embedding_api_url ...` etc.) or via
+    `MNEMOSYNE_EMBEDDING_*` env vars — ask the user for the endpoint/key.
+    Keep `mcp.json` free of credentials — mnemosyne's config.yaml is the right home.
+- **`argus` — wire the search backend the user chose (see SearXNG note in
+  Prerequisites).** The template above omits `env` — that's the **free
+  providers** default and needs nothing. If the user chose SearXNG (gave a URL
+  or the discovery check found one), add an `env` block to the `argus` entry
+  using that URL:
 
   ```json
   "env": {
@@ -281,7 +252,7 @@ stats` (check that `dense_score > 0` in recall results).
   }
   ```
 
-  If SearXNG is not running, leave `argus` as shown (no `env`).
+  If the user chose free providers, leave `argus` as shown (no `env`).
 
 **What each server does / what it needs:**
 
@@ -289,14 +260,14 @@ stats` (check that `dense_score > 0` in recall results).
 | ----------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | `context7`  | STDIO | Nothing (public npx package, library docs).                                                                                                |
 | `grep_app`  | HTTP  | Nothing (public, code search).                                                                                                             |
-| `argus`     | STDIO | `uvx`. Web search; auto-routes to free providers. Add SearXNG env (see Prerequisites) only if one is already running.                      |
-| `mnemosyne` | STDIO | Cross-session memory (shared with Hermes). Config is sourced interactively — see the conditional above (Hermes / OpenClaw / fresh / skip). |
+| `argus`     | STDIO | `uvx`. Web search; free providers by default, or SearXNG if the user provided a URL (see Prerequisites + conditional above).               |
+| `mnemosyne` | STDIO | Cross-session memory. Binary path is machine-specific — see the conditional above. All other settings live in mnemosyne's own config. |
 | `obscura`   | STDIO | The `obscura` Rust binary on `PATH`. Headless browser / page render.                                                                       |
 | `nixos`     | STDIO | `uvx`. Query nixpkgs / NixOS options.                                                                                                      |
 
-> `mnemosyne`'s values are machine-specific (venv path, data dir, embedding
-> endpoint + key). Don't commit real values — source them interactively per
-> the conditional above, and never write the `<...>` placeholders verbatim.
+> `mnemosyne`'s `command` is machine-specific. Don't commit real paths — source
+> them interactively per the conditional above, and never write the `<...>`
+> placeholders verbatim.
 
 ## 6. Extensions (npm packages)
 
@@ -311,137 +282,112 @@ pi update --extensions             # update all installed extensions
 
 What they are:
 
-- `pi-zentui` — TUI theme/components.
-- `pi-mcp-adapter` — MCP integration adapter.
-- `@spences10/pi-lsp` — LSP diagnostics/hover/definition tools.
-- `@howaboua/pi-skill-skill-creator` — ships the `skill-creator` skill.
+- `@ff-labs/pi-fff` — fuzzy file finder + frecency-ranked search.
+- `@howaboua/pi-skill-skill-creator` — ships the `skill-creator` skill (skill authoring quality guide).
+- `@narumitw/pi-plan-mode` — plan mode (decision-ready plans before implementation).
+- `pi-background-tasks` — background shell tasks / agents with notifications.
+- `pi-cache-graph` — code graph caching (project reports, symbol search).
+- `pi-hashline-edit-pro` — hashline-anchored precise file edits.
+- `pi-lens` — diagnostics aggregator (LSP, lint, structural rules).
+- `pi-mcp-adapter` — MCP server integration (config merging, oauth, `/mcp` panel).
 - `pi-mono-ask-user-question` — interactive question tool.
 - `pi-mono-auto-fix` — auto-fix loop.
 - `pi-mono-btw` — side-channel notes.
 - `pi-mono-context` — context management.
-- `pi-mono-multi-edit` — multi-file edit tool.
-- `@amaster.ai/pi-memory` — the `memory_*` tools backing `MEMORY.md`/`USER.md`.
-
+- `pi-mono-context-guard` — context protection.
+- `pi-mono-review` — code review tooling.
+- `pi-simplify` — output simplification.
+- `pi-x-search` — X/Twitter search.
+- `pi-zentui@0.22.3` — pinned: TUI rendering (pin survives updates; see patches/README if you apply local patches).
+- `pk-pi-hermes-evolve` — Hermes-style reflective prompt/self-improvement loop.
 ## 7. Skills + local extension
 
 Skills are `SKILL.md` files. pi loads them from (in order) `.pi/skills/`,
 `.agents/skills/` (project, walking up parents), then `~/.pi/agent/skills/`
 and `~/.agents/skills/` (user-global). User-global is what we seed here.
 
-There is also one **local TypeScript extension**,
-`extensions/skill-manage.ts`, that gives pi the dynamic skill-creation loop
-this config relies on. Install it in the same pass.
+Both user-global skills are pulled from their upstream repos (see 7b) — nothing
+skill-related is vendored here. The repo ships one **recipe doc** for a local
+TypeScript extension:
 
-```bash
-mkdir -p ~/.pi/agent/skills ~/.agents/skills ~/.pi/agent/extensions
-```
+- `litellm-auto.md` — the recipe for an optional extension that
+  auto-discovers chat models from a self-hosted LiteLLM-compatible gateway
+  (`/v1/model/info`) and registers them as a provider. Only relevant if you run
+  your own gateway; skip otherwise. The doc contains the full minimal
+  implementation, config env vars, hardening notes, and where credentials live.
 
-### 7a. Local extension — `skill-manage.ts` (the self-improvement loop)
-
-Copy the vendored extension into pi's global extensions dir:
-
-```bash
-cp ~/dotfiles/config/pi/extensions/skill-manage.ts ~/.pi/agent/extensions/
-```
-
-What it does (one self-contained file, no npm deps):
-
-- Registers a **`skill_manage`** tool the LLM can call to
-  create / patch / edit / delete skills and their supporting
-  `references/` / `templates/` / `scripts/` / `assets/` files. New skills go
-  to `~/.pi/agent/skills/<category?>/<name>/` and get a
-  `.pi-provenance.json` sidecar (`created_by: "agent"`) so agent-created
-  skills stay distinguishable from hand-written ones. Every write runs an
-  inline efficiency check (frontmatter parse, kebab-case, description length,
-  forbidden trigger-selection headings in the body, plain-scalar quoting,
-  dangling `references/`/`scripts/`/`assets/` paths).
-- The `skill_manage` tool description guides the agent to **prefer patches
-  over creation** and to **confirm with the user before creating** — no
-  autonomous skill creation.
-- Adds a user-triggered **`/skill-review`** command that injects a
-  conservative review prompt asking the agent to audit the session and
-  codify anything worth saving (preferring patches over new skills, never
-  creating without confirmation). The review prompt is a port of the Hermes
-  Agent background-review prompt, including the _do-not-capture_ rules
-  (env-dependent failures, negative tool claims, transient errors — they rot
-  into self-imposed refusals) and the 4-step update preference order
-  (patch-loaded → patch-umbrella → add-support-file → class-level-skill).
-- Automatic nudging is **disabled by default** (`NUDGE_INTERVAL = 0`) —
-  Pi only reviews on explicit `/skill-review`. No silent/autonomous prompts.
-- Adds a **`/learn <anything>`** command — gather from a dir, URL, pasted
-  notes, or "what I just did", then author one skill via `skill_manage`.
-  Adapted from Hermes' `/learn` command.
-- Adds a **`/skills-show`** command — lists discovered skills with a `+`
-  marker for agent-created ones (uses `ctx.ui.select` so it's harmless in
-  background/print modes — fires the picker only if you actually call it).
-
-This is the actionable counterpart to the `skill-creator` skill from step 6:
-that skill is the **authoring guide** (writing-quality rules, references
-split, efficiency posture); this extension is the **actor** (a registered
-tool with trigger guidance baked into its description so the model does not
-have to load a SKILL.md first). Both coexist and reinforce each other.
-
-> The `skill-manage.ts` file uses `StringEnum` from `@earendil-works/pi-ai`
-> and `Type` from `typebox` — both are bundled in pi's `node_modules` and
-> resolved at load time, so the extension needs no `npm install` of its own.
-> It loads via `jiti` (pi's TypeScript loader) — no build step.
+**Machine-specific local extensions stay out of this repo.** Anything encoding
+environment specifics (gateway URLs, deployment names, aliases) is written
+directly in `~/.pi/agent/extensions/` on each machine, following the recipe
+above. Examples:
+- a gateway model-discovery extension (see `extensions/litellm-auto.md`)
+- UI/render tweaks tied to a specific pi version
+- machine-integration shims (e.g. terminal multiplexer or wrapper-agent
+  integrations that talk to local sockets)
 
 ### 7b. User-global skills
 
-- **`mnemosyne-memory`** → `~/.pi/agent/skills/mnemosyne-memory/SKILL.md`.
-  **Source: vendored in this repo at
-  `config/pi/skills/mnemosyne-memory/SKILL.md`** — copy from there. (Don't
-  grab `~/.hermes/.../mnemosyne-hermes/SKILL.md` — that's a _different_ skill
-  for the Hermes agent, and `~/.hermes` won't exist on a fresh machine.)
-  Teaches the agent when to use `mnemosyne_remember` / `mnemosyne_recall`.
-- **`obscura`** → `~/.pi/agent/skills/obscura/SKILL.md`. **Source: vendored
-  in this repo at `config/pi/skills/obscura/SKILL.md`** — copy from there.
-  (Don't rely on `/tmp/obscura/...` — that's an ephemeral path the binary
-  regenerates after first run and won't exist on a fresh machine.) Teaches
-  CDP / page-render usage.
+- **`mnemosyne`** → from the upstream repo,
+  **[mnemosyne-oss/mnemosyne](https://github.com/mnemosyne-oss/mnemosyne)** — do
+  **not** vendor it here. Clone the repo and copy the memory-usage skill from
+  `integrations/zero/skills/mnemosyne/SKILL.md` (agent-generic; teaches the
+  `mnemosyne_remember` / `mnemosyne_recall` trigger discipline):
+
+  ```bash
+  git clone --depth 1 https://github.com/mnemosyne-oss/mnemosyne /tmp/mnemosyne
+  mkdir -p ~/.pi/agent/skills/mnemosyne
+  cp /tmp/mnemosyne/integrations/zero/skills/mnemosyne/SKILL.md ~/.pi/agent/skills/mnemosyne/
+  rm -rf /tmp/mnemosyne
+  ```
+
+  Only relevant if you set up the mnemosyne MCP server (step 5). Note the
+  upstream skill's `memory_*` naming section describes the plugin surface —
+  the MCP tools are `mnemosyne_*` (the skill's MCP section covers this).
+- **`obscura`** → from the upstream repo,
+  **[h4ckf0r0day/obscura](https://github.com/h4ckf0r0day/obscura)** — do **not**
+  vendor it here. Clone and copy its skill:
+
+  ```bash
+  git clone --depth 1 https://github.com/h4ckf0r0day/obscura /tmp/obscura
+  mkdir -p ~/.pi/agent/skills/obscura
+  cp /tmp/obscura/skills/obscura/SKILL.md ~/.pi/agent/skills/obscura/
+  rm -rf /tmp/obscura
+  ```
+
+  Teaches CDP / page-render usage. Install it only if you use the obscura MCP
+  server (step 5).
 - **`skill-creator`** → no manual copy; exposed by the
   `@howaboua/pi-skill-skill-creator` npm extension (step 6). It's the
-  authoring-quality reference skill — the actual `skill_manage` _tool_
-  comes from the local extension in 7a, so the model can create skills even
-  if it never reads this SKILL.md.
+  authoring-quality reference skill.
 - **`find-skills`, `hindsight-docs`, `microsoft-foundry`** →
   `~/.agents/skills/` (cross-agent convention). Install on demand via the
   `find-skills` skill; not required for a baseline setup.
 
-Copy the two vendored skills:
+No vendored skills remain — both come from their upstream repos (commands above).
 
-```bash
-cp -r ~/dotfiles/config/pi/skills/mnemosyne-memory ~/.pi/agent/skills/
-cp -r ~/dotfiles/config/pi/skills/obscura          ~/.pi/agent/skills/
-```
 
 If a skill ships inside a package/venv, copy just the `SKILL.md` (and any
 referenced sibling files) into the target dir — pi reads the file directly.
 
 ### ⚠️ Restart pi before steps 8–10
 
-Extensions (step 6 + 7a) and MCP servers (step 5) load at pi **startup**,
-not mid-session. You've just written `settings.json` and `mcp.json` and
-dropped `skill-manage.ts` into `~/.pi/agent/extensions/` during this
-session, so the `@amaster.ai/pi-memory` and `skill-manage` extensions and
-the MCP servers are **not yet loaded** in the current session — `memory_add`
-and `skill_manage` won't exist as tools and `/mcp` will show nothing until
-you restart. Exit pi and relaunch it, then continue from step 8.
+Extensions (step 6 + 7) and MCP servers (step 5) load at pi **startup**,
+not mid-session. You've just written `settings.json` and `mcp.json` during
+this session, so the npm extensions and MCP servers are **not yet loaded** —
+`/mcp` will show nothing until you restart. Exit pi and relaunch it, then
+continue from step 8.
 
 ## 8. Seed memory
 
-`~/.pi/agent/memories/MEMORY.md` is the agent's always-in-prompt memory,
-exposed via the `memory_add` / `memory_read` / `memory_replace` /
-`memory_remove` tools (provided by the `@amaster.ai/pi-memory` extension from
-step 6). It's char-limited, so keep it to short rules + key facts only — not
-task logs.
+If you installed the `@amaster.ai/pi-memory` package (optional add-on, not in
+the default package list above), `~/.pi/agent/memories/MEMORY.md` is the
+agent's always-in-prompt memory, exposed via `memory_add` / `memory_read` /
+`memory_replace` / `memory_remove` tools. It's char-limited — keep it to short
+rules + key facts only, not task logs.
 
-After the restart above (so the `@amaster.ai/pi-memory` extension is loaded
-and `memory_add` is available), use `memory_add` to seed the three entries
-below (one call per entry). **Don't hand-edit `MEMORY.md`**
-— the tool writes the `§` entry delimiters itself, and hand-editing risks
-breaking the format. From here the agent can add, edit (`memory_replace`), or
-remove entries as needed.
+To seed it, use `memory_add` (one call per entry). **Don't hand-edit
+`MEMORY.md`** — the tool writes the `§` entry delimiters itself, and
+hand-editing risks breaking the format.
 
 **Entry 1 — tool-usage rules** (one `memory_add` call with this content):
 
@@ -478,19 +424,15 @@ memory_replace footgun: `oldText` only *selects* the entry; `newContent` replace
 
 Verify with `memory_read` — you should see all three entries.
 
-## 9. Secrets checklist (user-provided)
+## 9. Checklist (user-provided, outside this repo)
 
-These are **not** in this repo and must be supplied before first run:
+These are **not in this repo** — supply them before first run:
 
-- [ ] `~/.pi/agent/models.json` — provider API keys (you set this up, step 2).
+- [ ] `~/.pi/agent/models.json` — provider configuration (you set this up, step 2).
 - [ ] `~/.pi/agent/auth.json` — created automatically by `/login`.
-- [ ] `mcp.json` → `mnemosyne` — decided via the interactive ask in step 5
-      (skip, or source from Hermes/OpenClaw, or fresh). If sourced from
-      Hermes, all values come from `~/.hermes/.env` + the fixed venv/data
-      paths — no secret-pasting needed.
-- [ ] SearXNG reachable for `argus`'s `env` block (optional — see the
-      SearXNG check in Prerequisites; if none running, just omit the env,
-      `argus` still works without it).
+- [ ] `argus` search backend — user's choice: **free providers** (default,
+      nothing to do) or a **SearXNG base URL** they provide (see the SearXNG
+      note in Prerequisites and the `argus` conditional in step 5).
 - [ ] `obscura` binary on `PATH`; `uvx` on `PATH`.
 
 ## 10. Verify
@@ -500,43 +442,14 @@ pi                       # launches; no config errors
 # inside pi:
 /mcp                     # lists every server you configured, each "connected"
 # tools from context7, grep_app, argus, obscura, nixos should appear;
-# mnemosyne appears only if you had its secrets and kept the block (step 5)
+# mnemosyne appears only if you kept the block (step 5)
 ```
 
-Then check the memory tools are live (`memory_read`; `mnemosyne_recall`
-only if the mnemosyne server is configured) and that an extension tool like
-`ask_user_question` or the LSP tools resolve. If a STDIO MCP server shows
-disconnected, run its `command` + `args` manually to see the startup error,
-and confirm `env`/`PATH`/secrets are set.
+Then check that an extension tool like `ask_user_question` or the pi-lens
+diagnostics tools resolve. If a STDIO MCP server shows disconnected, run its
+`command` + `args` manually to see the startup error, and confirm `env`/`PATH`
+are set.
 
-Confirm the self-improvement loop (step 7a) is live:
-
-- The **authoritative** check is the `skill_manage` tool, since
-  `registerTool` and both `registerCommand` calls (`/learn`, `/skills-show`)
-  run in the same extension factory — if `skill_manage` resolves, the whole
-  extension loaded. Run the smoke test (single line):
-
-  ```
-  Call skill_manage action="create" name="zz-setup-smoketest" content="---
-  name: zz-setup-smoketest
-  description: "Use when smoke-testing skill_manage installation. Delete me."
-  ---
-  # Smoke test
-
-  Placeholder created during SETUP verification.
-  " and paste the result; then call skill_manage action="delete" name="zz-setup-smoketest" absorbed_into="" to clean it up.
-  ```
-
-  Expect the create to write the skill under
-  `~/.pi/agent/skills/zz-setup-smoketest/` and return an efficiency-check
-  report, and the delete to remove it and record the absorption to
-  `~/.pi/agent/skills/.skill_archives.json`. If pi says the tool is missing,
-  re-check the file landed at `~/.pi/agent/extensions/skill-manage.ts` and
-  that you restarted pi after step 7a.
-
-- `/learn` and `/skills-show` are **user-typed slash commands**, not
-  LLM-callable tools, so don't expect the model to see them in its own command
-  inventory — open pi interactively and type `/` <kbd>tab</kbd> (or run
-  `/commands`); both should appear there. `/learn <anything>` authors a new
-  skill from a dir/URL/pasted notes/"what I just did"; `/skills-show` lists
-  discovered skills (a `+` marks agent-created ones).
+Confirm the npm extensions are live: run `pi config` and check the package list
+from step 4 shows everything enabled; try a tool provided by one of them (e.g.
+`ask_user_question` or the pi-lens diagnostics tools).
