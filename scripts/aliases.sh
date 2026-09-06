@@ -58,7 +58,7 @@ alias bal="sudo echo 'balanced' | sudo tee /sys/firmware/acpi/platform_profile; 
 alias ps="sudo echo 'low-power' | sudo tee /sys/firmware/acpi/platform_profile; sudo cpupower frequency-set -g schedutil"
 # alias ps="powerprofilesctl set power-saver"
 alias pnow="cat /sys/firmware/acpi/platform_profile"
-alias amdgpu_high="echo 'high' >  /sys/class/drm/card0/device/power_dpm_force_performance_level"
+alias amdgpu_high="echo high | sudo tee /sys/bus/pci/devices/0000:03:00.0/power_dpm_force_performance_level >/dev/null"
 
 
 # fixes 

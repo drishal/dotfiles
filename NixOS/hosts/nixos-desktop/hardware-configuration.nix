@@ -23,20 +23,11 @@
   boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.kernelParams = [
-    # --- GPU Optimization ---
-    "amdgpu.aspm=0" # Disable PCIe power saving
-    "amdgpu.runpm=0" # Disable Runtime PM
-    "amdgpu.bapm=0" # Disable Bidirectional Application PM
-    "amdgpu.ppfeaturemask=0xffffffff" # Unlock Overclocking/Undervolting
-
-    # --- CPU & Latency Optimization ---
-    "cpufreq.default_governor=performance" # Force max clocks
-    "amd_pstate=active"
-    "processor.max_cstate=2" # Cap at C2 (18µs wake) — eliminates shell stutter from scx_lavd C3 wake latency (350µs)
+    "amdgpu.aspm=0" # PCIe ASPM off — desktop latency
+    "cpufreq.default_governor=performance"
+    "processor.max_cstate=2" # C2 cap; scx_lavd C3 wake was ~350µs
     "iommu=pt"
     "threadirqs"
-    "amdgpu.gfx_off=0"
-    "amdgpu.dcdebugmask=0x10"
     "mitigations=off"
   ];
 

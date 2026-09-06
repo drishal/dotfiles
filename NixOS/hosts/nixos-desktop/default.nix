@@ -13,4 +13,7 @@
     ./packages.nix
     ../common/jellyfin.nix
   ];
+
+  # Pin Hyprland/Aquamarine to the RX 6800; card0/card1 swap across boots.
+  environment.sessionVariables.AQ_DRM_DEVICES = "/dev/dri/by-path/pci-0000:03:00.0-card";
 }

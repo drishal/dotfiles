@@ -1,7 +1,5 @@
 { pkgs, ... }:
-# Latency-criticality aware virtual deadline — designed for gaming workloads.
-# Higher framerates than EEVDF with fewer stutters; Core Compaction saves
-# power at <50% CPU load.
+# LAVD --performance: gaming/audio tail latency. Compaction off (all cores).
 {
   services.scx = {
     enable = true;
