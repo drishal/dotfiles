@@ -16,7 +16,23 @@
   #   enable = true;
   #   package = pkgs.ollama-rocm;
   # };
-  programs.gamemode.enable = true;
+  programs.gamemode = {
+    enable = true;
+    settings = {
+      general.renice = 10;
+
+      # CCD0 = cores 0-5 + SMT siblings 12-17: one 32MB L3 domain, and the
+      # higher-binned half (prefcore rank 216/206/216 vs 176/191 on CCD1).
+      # An explicit list bypasses gamemode's autodetect, which only knows
+      # 7900X3D/7950X3D and Intel P/E — not the plain 7900X.
+      cpu.pin_cores = "0-5,12-17";
+      cpu.park_cores = "no"; # parking needs the gamemode group; pinning doesn't
+
+      # No [gpu] section on purpose: gamemode's gpu_device is a raw card index
+      # (gpuclockctl.c: /sys/class/drm/card%ld/device/%s) and card0/card1 swap
+      # across boots here, so it would target the iGPU on some boots.
+    };
+  };
   environment.systemPackages = with pkgs; [
     # llama-cpp (whichever fork the `llama-cpp` input pins) with Vulkan backend.
     # Source hash tracked by flake.lock via the `flake = false` input — no
