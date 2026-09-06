@@ -36,10 +36,8 @@
       "docker"
       "adb"
       "libvirtd"
-      "plugdev"
       "input"
       "podman"
-      "docker"
       "openrazer"
     ];
   };
