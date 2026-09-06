@@ -64,7 +64,7 @@ NixOS/
     nixos/                   ← template baseline host
       default.nix            ← imports common + memory + storage + network-tuning + amd graphics
       hardware-configuration.nix
-    nixos-desktop/           ← main desktop (Ryzen 7900X + RX 6800)
+    nixos-desktop/           ← main desktop (Ryzen 7900X + RX 6800 XT)
       default.nix            ← common + brave-previews + memory + storage + network-tuning + amd-pstate + lavd + amd graphics + packages + jellyfin
       hardware-configuration.nix
       packages.nix           ← desktop-only packages
@@ -136,6 +136,9 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 - **ags shell is GTK4 + Astal (v3 API)** — `config/ags/` is a TS/JSX shell (`app.tsx` per-monitor autodetect; `widget/Bar.tsx`, `windows/{Dashboard,NotificationCenter,NotificationPopups,PowerMenu}.tsx`), driven by Astal libs (Hyprland/Wp/Network/Bluetooth/Notifd/Mpris/Tray/Battery), not shell scripts. Colours: `ags.nix` writes `~/.config/ags-stylix.css` (`@define-color base00..0F`); `style/_colors.scss` references them as `"@base.."` tokens via `#{}` so dart-sass preserves the named colour and the palette hot-swaps (`theme.css` is the run-from-repo fallback). Config dir is an out-of-store symlink, so TS/SCSS edits apply on `ags quit; ags run` without a rebuild; `ags bundle app.tsx /tmp/out.js` typecheck-compiles without launching.
 - **Default apps are single-sourced** — `home/common/desktop/default-apps.nix` defines `drishal.defaultApps` (terminal/browser/editor/filemanager…), consumed by `xdg.mimeApps` + `xdg.terminal-exec` and by hyprland/sway keybinds. Also mirrored to `~/.config/drishal/default-apps.json` for runtime shells, but nothing reads that yet. Binary name doubles as the `.desktop` id; `desktopIdOverrides` in the module covers the exceptions (okular). Override per-host in the host's home module; don't hardcode app names elsewhere.
 - **GPU drivers per host** — `amd.nix` for desktop/template, `nvidia.nix` for work (T400). Both live in `hosts/common/graphics/` but only one is imported per host.
+- **Address the desktop GPU by udev symlink, never by-path** — `AQ_DRM_DEVICES` is a `:`-separated list, so a `/dev/dri/by-path/pci-0000:03:00.0-card` value splits into three bogus paths and Hyprland aborts in `initServer` on every login ([aquamarine#167](https://github.com/hyprwm/aquamarine/issues/167), still open). `nixos-desktop/default.nix` creates colon-free `dri/rx6800` + `dri/rx6800-render` symlinks by PCI slot and points `AQ_DRM_DEVICES` and jellyfin at those. `card`/`renderD` numbering is not stable: `simpledrm` takes minor 0 at boot, so the dGPU is `card1` even with the iGPU disabled — anything taking a raw card index (gamemode's `gpu_device`) is unreliable here.
+- **Jellyfin hardware acceleration is off** — `common/jellyfin.nix` sets `hardwareAcceleration.type`/`device` but never `enable`, which defaults to false, so upstream emits no `<VaapiDevice>` and transcoding is CPU-only. The `type`/`device`/`transcoding` settings there are inert until `hardwareAcceleration.enable = true`.
+- **gamemode pins games to CCD0** — `nixos-desktop/packages.nix` sets `cpu.pin_cores = "0-5,12-17"`: one 32MB L3 domain and the better-binned half of the 7900X (prefcore 216/206/216 vs 176/191). The explicit list is required — gamemode's autodetect only knows 7900X3D/7950X3D and Intel P/E. Needs `gamemoderun %command%` in the launcher. No `[gpu]` section on purpose (see the card-index note above).
 
 ## Flake inputs worth knowing
 
@@ -174,13 +177,14 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 | `gruvbox-material`       | Gruvbox Material theme (flake=false, for nvim)                      |
 | `vim-hx`                 | Steel vim-bindings plugin for helix (flake=false, vendored by `helix.nix`) |
 | `llama-cpp`              | llama.cpp src (flake=false); a fork, swapped often to test models needing a special build; built via `llama-cpp.nix` |
+| `herdr`                  | Terminal herd/agent manager (overlay + tmux window)                 |
 | `brave-previews`         | Brave Beta/Nightly browser flake (desktop nixos module)             |
 
 ## Target machines
 
 | Target          | Hardware                                        | Role                        | Key knobs                                         |
 | --------------- | ----------------------------------------------- | --------------------------- | ------------------------------------------------- |
-| `nixos-desktop` | Ryzen 7900X + RX 6800 + 64GB DDR5 + 2× 2TB NVMe | Main desktop / gaming       | amd-pstate, scx_lavd, mitigations=off, gamemode   |
+| `nixos-desktop` | Ryzen 7900X + RX 6800 XT + 64GB DDR5 + 2× 2TB NVMe | Main desktop / gaming       | amd-pstate, scx_lavd, mitigations=off, gamemode (CCD0 pinning), THP madvise, noatime, iGPU off in BIOS |
 | `nixos-work`    | Xeon W-2295 + NVIDIA T400 + 128GB + NVMe+HDD    | Workstation                 | intel-pstate, scx_bpfland, mitigations ON, nvidia |
 | `nixos`         | template                                        | Baseline for fresh installs | memory + storage + amd graphics only              |
 
