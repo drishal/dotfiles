@@ -140,45 +140,17 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 - **Jellyfin hardware acceleration is off** — `common/jellyfin.nix` sets `hardwareAcceleration.type`/`device` but never `enable`, which defaults to false, so upstream emits no `<VaapiDevice>` and transcoding is CPU-only. The `type`/`device`/`transcoding` settings there are inert until `hardwareAcceleration.enable = true`.
 - **gamemode pins games to CCD0** — `nixos-desktop/packages.nix` sets `cpu.pin_cores = "0-5,12-17"`: one 32MB L3 domain and the better-binned half of the 7900X (prefcore 216/206/216 vs 176/191). The explicit list is required — gamemode's autodetect only knows 7900X3D/7950X3D and Intel P/E. Needs `gamemoderun %command%` in the launcher. No `[gpu]` section on purpose (see the card-index note above).
 
-## Flake inputs worth knowing
+## Flake inputs
 
-| Input                    | Purpose                                                             |
-| ------------------------ | ------------------------------------------------------------------- |
-| `nixpkgs`                | `nixos-unstable` channel                                            |
-| `nixpkgs-master`         | Pinned specific nixpkgs commit for select packages                  |
-| `home-manager`           | User environment management                                         |
-| `hyprland`               | Hyprland WM (built from source)                                     |
-| `emacs-overlay`          | Latest Emacs + packages                                             |
-| `emacs-lsp-booster`      | Faster LSP over JSON-RPC (for eglot)                                |
-| `stylix`                 | System-wide theming                                                 |
-| `nixvim`                 | Declarative Neovim                                                  |
-| `private-stuff`          | Local private config (email, substituter token); must exist locally |
-| `chaotic`                | Chaotic-Nyx overlay (cachix, kernel patches)                        |
-| `nur`                    | Nix User Repository                                                 |
-| `cachix`                 | Cachix CLI (for ad-hoc `cachix use` / `cachix push`)                |
-| `nix-gaming`             | Gaming-focused nix packages (gamescope, etc.)                       |
-| `betterfox`              | Firefox user.js hardening                                           |
-| `ghostty`                | Ghostty terminal emulator (built from source)                       |
-| `dms`                    | Dank Material Shell (KDE Plasma widget)                             |
-| `end-rs`                 | end-rs notification daemon (for eww widget stack)                    |
-| `ags`                    | Astal/GTK4 shell framework (ags v3)                                  |
-| `umu`                    | Unified Middleware for Users (Windows game launcher)                |
-| `zen-browser`            | Zen Browser flake                                                   |
-| `tt-schemes`             | Tinted Theming color schemes (base16)                               |
-| `programsdb`             | Flake programs SQLite database                                      |
-| `quickemu`               | Quick VM creation                                                   |
-| `lobster`                | Terminal anime streaming                                            |
-| `tmux-which-key`         | Declarative discoverable tmux key menu                              |
-| `tmux-agent-status`      | Agent attention/status source (flake=false, packaged by tmux.nix)   |
-| `nvchad4nix`             | NvChad Neovim config for Nix                                        |
-| `neovim-nightly-overlay` | Neovim nightly builds                                               |
-| `direnv-instant`         | Instant direnv evaluation                                           |
-| `ani-cli`                | Terminal anime streaming CLI                                        |
-| `gruvbox-material`       | Gruvbox Material theme (flake=false, for nvim)                      |
-| `vim-hx`                 | Steel vim-bindings plugin for helix (flake=false, vendored by `helix.nix`) |
-| `llama-cpp`              | llama.cpp src (flake=false); a fork, swapped often to test models needing a special build; built via `llama-cpp.nix` |
-| `herdr`                  | Terminal herd/agent manager (overlay + tmux window)                 |
-| `brave-previews`         | Brave Beta/Nightly browser flake (desktop nixos module)             |
+`flake.nix` is the source of truth — read it rather than a list here. A table drifts fast
+(23 input changes in six months) and `herdr` sat undocumented for months because of it.
+
+Only what the URL doesn't tell you:
+
+- **`nixpkgs`** is `nixos-unstable`. **`nixpkgs-master`** is a pinned commit for a few packages that need it.
+- **`chaotic`** (Chaotic-Nyx) is where `linuxPackages_cachyos-gcc` comes from.
+- **Several inputs are `flake = false` sources vendored by a module rather than consumed as flakes** — grep `flake = false` in `flake.nix` for the current set. The non-obvious pairings: `vim-hx` → `helix.nix`, `llama-cpp` → `llama-cpp.nix` (a fork, swapped often), `tmux-agent-status` → `tmux.nix`, `gruvbox-material` → nvim.
+- **`private-stuff`** must exist locally or every build fails — see Critical gotchas.
 
 ## Target machines
 
