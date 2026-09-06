@@ -81,7 +81,7 @@ NixOS/
       core/                  ← packages.nix, git.nix, tmux.nix, fastfetch.nix, pi-theme.nix
         tmux/                ← Hermes/OpenCode lifecycle adapters for tmux-agent-status
       shells/                ← default.nix, fish.nix, zsh.nix, aliases.nix (shell-agnostic aliases + PATH + env)
-      desktop/               ← hyprland, sway, waybar, rofi, dms, ags, eww, quickshell, default-apps, file-managers, hermes-app, icons
+      desktop/               ← hyprland, sway, waybar, rofi, dms, ags, eww, quickshell, default-apps, file-managers, icons
       editors/               ← default.nix, emacs.nix, nixvim.nix, helix.nix
       terminals/             ← default.nix (kitty, ghostty, alacritty via single module)
       browsers/              ← default.nix, betterfox.nix (firefox+betterfox; only betterfox imported)
@@ -136,7 +136,6 @@ wallpapers/                  ← wallpapers (used by stylix.image)
 - **ags shell is GTK4 + Astal (v3 API)** — `config/ags/` is a TS/JSX shell (`app.tsx` per-monitor autodetect; `widget/Bar.tsx`, `windows/{Dashboard,NotificationCenter,NotificationPopups,PowerMenu}.tsx`), driven by Astal libs (Hyprland/Wp/Network/Bluetooth/Notifd/Mpris/Tray/Battery), not shell scripts. Colours: `ags.nix` writes `~/.config/ags-stylix.css` (`@define-color base00..0F`); `style/_colors.scss` references them as `"@base.."` tokens via `#{}` so dart-sass preserves the named colour and the palette hot-swaps (`theme.css` is the run-from-repo fallback). Config dir is an out-of-store symlink, so TS/SCSS edits apply on `ags quit; ags run` without a rebuild; `ags bundle app.tsx /tmp/out.js` typecheck-compiles without launching.
 - **Default apps are single-sourced** — `home/common/desktop/default-apps.nix` defines `drishal.defaultApps` (terminal/browser/editor/filemanager…), consumed by `xdg.mimeApps` + `xdg.terminal-exec`, by hyprland/sway keybinds, and by quickshell/ags/eww at runtime via `~/.config/drishal/default-apps.json`. Override per-host in the host's home module; don't hardcode app names elsewhere.
 - **GPU drivers per host** — `amd.nix` for desktop/template, `nvidia.nix` for work (T400). Both live in `hosts/common/graphics/` but only one is imported per host.
-- **hermes-app is an external repo** — the `hermes-app.nix` HM module (`home/common/desktop/`) wraps a PySide6 app living at `~/Desktop/git-stuff/hermes-app` (github.com/drishal/hermes-app), NOT in this tree. `appRoot` points at that working tree (edits apply on next launch); the module generates `~/.config/HermesApp/colors.json` from stylix. Clone it there or the `hermes-app` command won't launch (build still succeeds).
 
 ## Flake inputs worth knowing
 
