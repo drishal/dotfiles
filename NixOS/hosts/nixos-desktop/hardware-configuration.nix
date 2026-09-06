@@ -24,8 +24,9 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.kernelParams = [
     "amdgpu.aspm=0" # PCIe ASPM off — desktop latency
-    "cpufreq.default_governor=performance"
     "processor.max_cstate=2" # C2 cap; scx_lavd C3 wake was ~350µs
+    # khugepaged collapse locks pages; pairs with compaction_proactiveness=0
+    "transparent_hugepage=madvise"
     "iommu=pt"
     "threadirqs"
     "mitigations=off"
@@ -34,6 +35,7 @@
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/dfe9f586-6ff5-4ec8-a459-e665323919dc";
     fsType = "ext4";
+    options = [ "noatime" ];
   };
 
   fileSystems."/boot" = {
