@@ -52,6 +52,19 @@
     kitty = {
       shellIntegration.mode = "no-cursor no-cwd no-prompt-mark";
       enable = true;
+      # --single-instance is CLI-only (no kitty.conf equivalent), so bake it into
+      # the binary: keybinds and the packaged kitty.desktop both exec bare `kitty`.
+      # Also shares one GPU sprite cache across windows instead of per-window.
+      package = pkgs.symlinkJoin {
+        name = "kitty-single-instance";
+        paths = [ pkgs.kitty ];
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        postBuild = ''
+          rm "$out/bin/kitty"
+          makeWrapper ${pkgs.kitty}/bin/kitty "$out/bin/kitty" \
+            --add-flags --single-instance
+        '';
+      };
       settings = {
         confirm_os_window_close = 0;
         cursor_blink_interval = 0;
