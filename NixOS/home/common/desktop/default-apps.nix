@@ -6,22 +6,21 @@
 }:
 
 # Single source of truth for default apps: xdg.mimeApps + xdg.terminal-exec below,
-# hyprland/sway keybinds, and quickshell/ags/eww via ~/.config/drishal/default-apps.json.
+# hyprland/sway keybinds, and ~/.config/drishal/default-apps.json for runtime shells.
 # Override per-host with `drishal.defaultApps.<key>` in the host's home module.
 
 let
-  apps = {
-    terminal = "ghostty";
-    fileManager = "nemo";
-    browser = "firefox";
-    pdf = "okular";
-    media = "mpv";
-  };
+  cfg = config.drishal.defaultApps;
 
-  desktopId = app: "${apps.${app}}.desktop";
+  # Binary name -> .desktop id, only where they differ from "<binary>.desktop".
+  desktopIdOverrides = {
+    okular = "org.kde.okular.desktop"; # kdePackages.okular
+  };
+  desktopId = key: desktopIdOverrides.${cfg.${key}} or "${cfg.${key}}.desktop";
+
   terminalDesktopId = desktopId "terminal";
   browserDesktopId = desktopId "browser";
-  pdfDesktopId = "org.kde.okular.desktop"; # kdePackages.okular ships as org.kde.okular.desktop
+  pdfDesktopId = desktopId "pdf";
   mediaDesktopId = desktopId "media";
   fileManagerDesktopId = desktopId "fileManager";
 in
@@ -33,11 +32,23 @@ in
       associations and WM keybinds. Override per-host as needed.
     '';
     type = lib.types.attrsOf lib.types.str;
-    default = apps;
-    example = apps;
+    default = { };
+    example = {
+      terminal = "kitty";
+      browser = "firefox";
+    };
   };
 
   config = {
+    # mkDefault per key so overriding one app doesn't drop the others.
+    drishal.defaultApps = lib.mapAttrs (_: lib.mkDefault) {
+      terminal = "ghostty";
+      fileManager = "nemo";
+      browser = "firefox";
+      pdf = "okular";
+      media = "mpv";
+    };
+
     xdg.mimeApps = {
       enable = true;
       defaultApplications = {
@@ -51,8 +62,7 @@ in
         # PDF.
         "application/pdf" = pdfDesktopId;
 
-        # Media — common video/audio types. Wildcards aren't valid in
-        # mimeapps.list, so list concrete types mpv actually handles.
+        # Media — wildcards aren't valid in mimeapps.list, so list concrete types.
         "video/mp4" = mediaDesktopId;
         "video/x-matroska" = mediaDesktopId;
         "video/webm" = mediaDesktopId;
@@ -85,9 +95,8 @@ in
       };
     };
 
-    # JSON mirror so runtime shells (quickshell/ags/eww) can resolve the
-    # same defaults without re-implementing the lookup in TypeScript/QML/Lua.
-    xdg.configFile."drishal/default-apps.json".text =
-      builtins.toJSON config.drishal.defaultApps;
+    # JSON mirror so runtime shells (quickshell/ags/eww) can resolve the same
+    # defaults without re-implementing the lookup. Nothing reads it yet.
+    xdg.configFile."drishal/default-apps.json".text = builtins.toJSON cfg;
   };
 }
