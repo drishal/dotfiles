@@ -25,4 +25,10 @@
 
   # Override common/jellyfin.nix's renderD128, which lands on the iGPU some boots.
   services.jellyfin.hardwareAcceleration.device = lib.mkForce "/dev/dri/rx6800-render";
+
+  # nm-online -s waits for NM startup, not connectivity, and cost 7.6s of the
+  # 18.9s userspace boot via network-online.target -> docker -> graphical.target.
+  # Nothing wanting that target here (docker, jellyfin, fwupd-refresh) needs
+  # upstream connectivity to start.
+  systemd.services.NetworkManager-wait-online.enable = false;
 }
