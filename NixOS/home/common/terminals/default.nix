@@ -76,7 +76,18 @@
         update_check_interval = 0;
         wayland_enable_ime  = false;
         window_padding_width = 5;
+        # Match ghostty: hug the top-left instead of centering the leftover space.
+        placement_strategy = "top-left";
         clipboard_control = "write-clipboard write-primary read-clipboard read-primary";
+      };
+      # Zoom only the focused window; the default `all` resizes every window in the single instance.
+      keybindings = {
+        "ctrl+shift+equal" = "change_font_size current +2.0";
+        "ctrl+shift+plus" = "change_font_size current +2.0";
+        "ctrl+shift+kp_add" = "change_font_size current +2.0";
+        "ctrl+shift+minus" = "change_font_size current -2.0";
+        "ctrl+shift+kp_subtract" = "change_font_size current -2.0";
+        "ctrl+shift+backspace" = "change_font_size current 0";
       };
     };
     zellij = {
