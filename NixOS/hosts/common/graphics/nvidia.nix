@@ -51,9 +51,8 @@
       # independent third-party "nouveau" open source driver)
       open = true;
 
-      # Ensure all GPUs stay awake even during headless mode
-      # Fixes a glitch
-      nvidiaPersistenced = false;
+      # driver stays initialized: containers/CUDA pay multi-second re-init without it
+      nvidiaPersistenced = true;
     };
 
     # Required for Nvidia support in containers (Docker, Podman, etc.)
