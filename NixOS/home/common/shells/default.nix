@@ -27,10 +27,11 @@
     settings = {
       add_newline = false;
       line_break.disabled = true;
-      # 500ms default times out on the first git call after boot: fsmonitor
-      # spawns its daemon against a cold 198MiB pack while docker/open-webui
-      # still hog I/O. Warm calls are ~0ms, so this only covers the cold path.
-      command_timeout = 1000;
+      # Cold git path (stale index + fsmonitor daemon respawn + cold page cache,
+      # under docker/mysql I/O load) measures ~1.0s; starship runs git with
+      # GIT_OPTIONAL_LOCKS=0 so prompts don't benefit from index refresh the way
+      # interactive git does. 2000 = 2x headroom, warm path stays ~0ms.
+      command_timeout = 2000;
       nix_shell.symbol = "❄ ";
       # Disabled: queries AF_NETLINK every prompt, stalling for seconds when
       # offline, and renders nothing outside a named `ip netns exec` shell.
