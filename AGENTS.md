@@ -49,9 +49,10 @@ NixOS/
       virtualisation.nix     ← libvirt, docker
       jellyfin.nix           ← opt-in: jellyfin media server
       firewall.nix, searx.nix, tlp.nix
-      memory.nix             ← opt-in: dirty_bytes 4G / bg 64M, zram, swappiness
+      memory.nix             ← opt-in: dirty_bytes 4G / bg 64M, zram, swappiness, zswap disabled
       network-tuning.nix     ← opt-in: BBR/MTU probing/keepalive/buffer tuning for Tailscale
       storage.nix            ← opt-in: NVMe sched=none, HDD bfq, nr_requests=2048
+      btrfs.nix              ← opt-in: monthly btrfs autoScrub of /
       cpu/
         amd-pstate.nix       ← opt-in: amd_pstate=active + perf governor
         intel-pstate.nix     ← opt-in: intel_pstate=active + perf governor
