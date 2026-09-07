@@ -41,6 +41,14 @@
 
   systemd.settings.Manager.DefaultTimeoutStopSec = "30s";
 
+  # wait-online gated network-online (→ docker) and cost ~6s at boot; docker bridge networking doesn't need it
+  systemd.services.NetworkManager-wait-online.wantedBy = lib.mkForce [ ];
+
+  services.journald.settings.Journal = {
+    SystemMaxUse = "2G";
+    MaxRetentionSec = "4week";
+  };
+
   # cgroups support
   # systemd.enableUnifiedCgroupHierarchy = true;
   hardware.bluetooth.enable = true;
