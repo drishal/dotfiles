@@ -2,6 +2,9 @@
 # Memory tuning — large RAM + zram + NVMe. Absolute byte values instead of percent
 # ratios: on 64+GB the default ratios grow writeback queues into stall territory.
 {
+  # zram is the swap device; zswap would compress the same pages twice
+  boot.kernelParams = [ "zswap.enabled=0" ];
+
   boot.kernel.sysctl = {
     "vm.dirty_bytes" = 4 * 1024 * 1024 * 1024;       # 4 GiB hard cap
     "vm.dirty_background_bytes" = 64 * 1024 * 1024;  # 64 MiB starts writeback
