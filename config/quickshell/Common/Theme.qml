@@ -52,10 +52,34 @@ Singleton {
     property string fontSans: "Google Sans"
     property string fontMono: "Maple Mono NF"
 
+    // Stylix's wallpaper, for the lock screen. Empty when running straight
+    // from the repo without the bridge file.
+    property string wallpaper: ""
+
     // ── design tokens (from main.scss) ─────────────────────────────────────
     readonly property int radius: 18
     readonly property int radiusSm: 14
     readonly property int gap: 10
+
+    // ── motion tokens (Material 3 Expressive) ──────────────────────────────
+    // Both lists are indexed by Anim.Type, so Anim.qml is a plain lookup. The
+    // spatial curves have control points above 1 — that overshoot is what makes
+    // movement feel springy; effects curves stay under 1 so colour and opacity
+    // never bounce.
+    readonly property var curveStandard: [0.20, 0.00, 0.00, 1.00, 1, 1]
+    readonly property var curveEmphasized: [0.05, 0.70, 0.10, 1.00, 1, 1]
+    readonly property var curveFastSpatial: [0.42, 1.67, 0.21, 0.90, 1, 1]
+    readonly property var curveDefaultSpatial: [0.38, 1.21, 0.22, 1.00, 1, 1]
+    readonly property var curveSlowSpatial: [0.39, 1.29, 0.35, 0.98, 1, 1]
+    readonly property var curveFastEffects: [0.31, 0.94, 0.34, 1.00, 1, 1]
+    readonly property var curveDefaultEffects: [0.34, 0.80, 0.34, 1.00, 1, 1]
+    readonly property var curveSlowEffects: [0.34, 0.88, 0.34, 1.00, 1, 1]
+    // exits accelerate away rather than easing out
+    readonly property var curveStandardAccel: [0.30, 0.00, 1.00, 1.00, 1, 1]
+    readonly property var curveEmphasizedAccel: [0.30, 0.00, 0.80, 0.15, 1, 1]
+
+    readonly property var animDurations: [200, 400, 600, 1000, 200, 400, 600, 1000, 350, 500, 650, 150, 200, 300, 250, 250]
+    readonly property var animCurves: [curveStandard, curveStandard, curveStandard, curveStandard, curveEmphasized, curveEmphasized, curveEmphasized, curveEmphasized, curveFastSpatial, curveDefaultSpatial, curveSlowSpatial, curveFastEffects, curveDefaultEffects, curveSlowEffects, curveStandardAccel, curveEmphasizedAccel]
 
     // ── Stylix JSON bridge ─────────────────────────────────────────────────
     function applyJson(text) {
@@ -65,6 +89,8 @@ Singleton {
             for (const k of Object.keys(c))
                 if (root.hasOwnProperty(k))
                     root[k] = c[k];
+            if (d.wallpaper)
+                root.wallpaper = d.wallpaper;
             if (d.fonts) {
                 if (d.fonts.sans)
                     root.fontSans = d.fonts.sans;
