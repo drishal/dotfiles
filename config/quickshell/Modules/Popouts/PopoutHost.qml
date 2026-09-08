@@ -25,8 +25,19 @@ Item {
     property string current: ""
     property real anchorX: 0
 
-    readonly property bool open: current !== ""
+    // A panel owns the screen while it is open, so the hover popout stands
+    // down — otherwise clicking the CPU/RAM cluster leaves its popout sitting
+    // under the process panel that just grew out of the same spot, and the
+    // pointer never leaves the item to dismiss it.
+    readonly property bool blocked: Popups.current(screenName) !== ""
+
+    readonly property bool open: current !== "" && !blocked
     property bool snapNext: true
+
+    onBlockedChanged: if (blocked) {
+        closeTimer.stop();
+        current = "";
+    }
 
     // Held through a close so the frame keeps its size while fading out.
     property string lastName: ""
@@ -57,6 +68,8 @@ Item {
     readonly property real maskH: frame.visible ? wantH + lift : 0
 
     function request(name, cx) {
+        if (blocked)
+            return;
         closeTimer.stop();
         anchorX = cx;
         current = name;
