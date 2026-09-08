@@ -250,9 +250,10 @@ in
           (bind (combo "Q") (mkLuaInline "hl.dsp.window.close()"))
           (bind (combo "SHIFT + Q") (exec "kill -9 $(pidof Hyprland)"))
           (bind (combo "SHIFT + F") (exec config.drishal.defaultApps.browser))
-          (bind (combo "SHIFT + L") (
-            exec "swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 7x5 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000  --fade-in 0.2"
-          ))
+          # Goes through logind so every lock path is the same one: the
+          # quickshell session lock listens for the signal, and falls back to
+          # swaylock when its PAM stack is not switched in yet.
+          (bind (combo "SHIFT + L") (exec "loginctl lock-session"))
           (bind (combo "E") (exec config.drishal.defaultApps.fileManager))
           (bind (combo "x") (exec currentWidgetRestart))
           (bind (combo "SHIFT + X") (mkLuaInline "hl.dsp.exit()"))

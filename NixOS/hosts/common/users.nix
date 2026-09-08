@@ -54,6 +54,8 @@
   # };
 
   security.pam.services.hyprlock = {};
+  # quickshell's session lock (config/quickshell/Modules/LockScreen.qml)
+  security.pam.services.quickshell = {};
   security.pam.loginLimits = [
     {
       domain = "*";      # applies to all users

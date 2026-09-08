@@ -33,6 +33,8 @@ let
       sans = config.stylix.fonts.sansSerif.name;
       mono = config.stylix.fonts.monospace.name;
     };
+    # Lock screen background — follows stylix.image without a second source.
+    wallpaper = "${config.stylix.image}";
   };
 in
 {
@@ -55,5 +57,7 @@ in
     pavucontrol # audio settings (dashboard cog)
     util-linux # rfkill (airplane tile)
     libnotify
+    dbus # dbus-monitor — LockState listens for logind's Lock signal
+    procps # ps, for the process list
   ];
 }
