@@ -105,8 +105,10 @@ Singleton {
         return "󰤟";
     }
 
+    // Every tick spawns nmcli; poll briskly only while something is showing
+    // the result. User-initiated changes call refresh() directly anyway.
     Timer {
-        interval: 5000
+        interval: root.refs > 0 ? 5000 : 15000
         running: true
         repeat: true
         triggeredOnStart: true

@@ -27,8 +27,14 @@ Panel {
 
     // Inline detail panel below the tiles ("" = collapsed), DMS-style.
     property string expandedSection: ""
-    onShownChanged: if (!shown)
-        expandedSection = ""
+    onShownChanged: {
+        if (shown) {
+            Radios.addRef();
+        } else {
+            Radios.removeRef();
+            expandedSection = "";
+        }
+    }
 
     readonly property var adapter: Bluetooth.defaultAdapter
     readonly property var player: {
@@ -467,6 +473,9 @@ Panel {
                             source: win.player ? (win.player.trackArtUrl || "") : ""
                             fillMode: Image.PreserveAspectCrop
                             visible: status === Image.Ready
+                            // Album art is routinely 1000px square for a 38px slot.
+                            sourceSize.width: 76
+                            sourceSize.height: 76
                         }
                     }
                     Column {

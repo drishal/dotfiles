@@ -164,198 +164,205 @@ Panel {
             }
 
             // list
-            FadeFlickable {
-                id: clipScroll
+            // A ListView, not a Repeater: a Repeater builds an Image for
+            // every history entry at once, so opening the panel decoded the
+            // whole clipboard. This keeps only the visible rows alive.
+            Item {
                 width: parent.width
                 height: parent.height - 44 - 34 - 24 - 24
-                contentHeight: clipCol.height
 
-                Column {
-                    id: clipCol
-                    width: clipScroll.width
+                FadeListView {
+                    id: clipScroll
+
+                    anchors.fill: parent
                     spacing: 8
+                    clip: true
 
-                    Repeater {
-                        model: Clip.filtered
-                        delegate: StyledRect {
-                            id: crow
-                            required property var modelData
-                            required property int index
-                            width: parent.width - 4
-                            radius: 14
-                            color: crma.containsMouse ? Theme.cardHi : Theme.card
-                            border.width: crma.containsMouse ? 1 : 0
-                            border.color: Theme.accent
-                            implicitHeight: 68
+                    model: ScriptModel {
+                        values: Clip.filtered
+                        objectProp: "id"
+                    }
 
-                            // Staggered slide-out on Wipe: rows glide off to the
-                            // right + fade, delayed by position (mirrors ags
-                            // .clip-row.clearing-out).
-                            transform: Translate {
-                                id: crowSlide
+                    delegate: StyledRect {
+                    id: crow
+                    required property var modelData
+                    required property int index
+                    width: clipScroll.width - 4
+                    radius: 14
+                    color: crma.containsMouse ? Theme.cardHi : Theme.card
+                    border.width: crma.containsMouse ? 1 : 0
+                    border.color: Theme.accent
+                    implicitHeight: 68
+
+                    // Staggered slide-out on Wipe: rows glide off to the
+                    // right + fade, delayed by position (mirrors ags
+                    // .clip-row.clearing-out).
+                    transform: Translate {
+                        id: crowSlide
+                    }
+                    states: State {
+                        name: "clearing"
+                        when: card.clearing
+                        PropertyChanges {
+                            target: crowSlide
+                            x: 600
+                        }
+                        PropertyChanges {
+                            target: crow
+                            opacity: 0
+                        }
+                    }
+                    transitions: Transition {
+                        to: "clearing"
+                        SequentialAnimation {
+                            PauseAnimation {
+                                duration: crow.index * 50
                             }
-                            states: State {
-                                name: "clearing"
-                                when: card.clearing
-                                PropertyChanges {
+                            ParallelAnimation {
+                                Anim {
                                     target: crowSlide
-                                    x: 600
+                                    property: "x"
+                                    type: Anim.EmphasizedAccel
                                 }
-                                PropertyChanges {
+                                Anim {
                                     target: crow
-                                    opacity: 0
-                                }
-                            }
-                            transitions: Transition {
-                                to: "clearing"
-                                SequentialAnimation {
-                                    PauseAnimation {
-                                        duration: crow.index * 50
-                                    }
-                                    ParallelAnimation {
-                                        Anim {
-                                            target: crowSlide
-                                            property: "x"
-                                            type: Anim.EmphasizedAccel
-                                        }
-                                        Anim {
-                                            target: crow
-                                            property: "opacity"
-                                            type: Anim.EmphasizedAccel
-                                        }
-                                    }
-                                }
-                            }
-
-                            Row {
-                                anchors.left: parent.left
-                                anchors.right: delBtn.left
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.leftMargin: 12
-                                spacing: 12
-
-                                StyledRect {
-                                    width: 30
-                                    height: 30
-                                    radius: 999
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    color: Theme.base02
-                                    StyledText {
-                                        anchors.centerIn: parent
-                                        text: crow.index + 1
-                                        font.family: Theme.fontSans
-                                        font.pixelSize: 13
-                                        font.weight: Font.DemiBold
-                                        color: Theme.accent
-                                    }
-                                }
-
-                                // thumbnail (image) or glyph (text)
-                                Image {
-                                    visible: crow.modelData.isImage
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    width: crow.modelData.isImage ? 60 : 0
-                                    height: 44
-                                    source: crow.modelData.isImage ? ("file://" + crow.modelData.thumb) : ""
-                                    fillMode: Image.PreserveAspectFit
-                                    cache: false
-                                }
-                                StyledText {
-                                    visible: !crow.modelData.isImage
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    width: crow.modelData.isImage ? 0 : 44
-                                    text: "󰅎"
-                                    horizontalAlignment: Text.AlignHCenter
-                                    font.family: Theme.fontMono
-                                    font.pixelSize: 20
-                                    color: Theme.inkDim
-                                }
-
-                                Column {
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    width: crow.width - 30 - (crow.modelData.isImage ? 60 : 44) - delBtn.width - 60
-                                    spacing: 2
-                                    StyledText {
-                                        width: parent.width
-                                        text: crow.modelData.isImage ? ("Image • " + crow.modelData.dimensions + " " + crow.modelData.imageType.toUpperCase()) : "Text"
-                                        color: Theme.accent
-                                        font.family: Theme.fontSans
-                                        font.pixelSize: 13
-                                        font.weight: Font.DemiBold
-                                    }
-                                    StyledText {
-                                        width: parent.width
-                                        text: crow.modelData.preview
-                                        color: Theme.inkDim
-                                        font.family: Theme.fontSans
-                                        font.pixelSize: 13
-                                        elide: Text.ElideRight
-                                        maximumLineCount: 1
-                                    }
-                                }
-                            }
-
-                            MouseArea {
-                                id: crma
-                                anchors.left: parent.left
-                                anchors.right: delBtn.left
-                                anchors.top: parent.top
-                                anchors.bottom: parent.bottom
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: {
-                                    Clip.copy(crow.modelData);
-                                    Popups.close("clipboard", win.screenName);
-                                }
-                            }
-
-                            StyledRect {
-                                id: delBtn
-                                anchors.right: parent.right
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.rightMargin: 8
-                                width: 36
-                                height: 36
-                                radius: 999
-                                color: delMa.containsMouse ? Theme.base02 : "transparent"
-                                StyledText {
-                                    anchors.centerIn: parent
-                                    text: "󰅖"
-                                    font.family: Theme.fontMono
-                                    font.pixelSize: 15
-                                    color: delMa.containsMouse ? Theme.base08 : Theme.inkDim
-                                }
-                                MouseArea {
-                                    id: delMa
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    cursorShape: Qt.PointingHandCursor
-                                    onClicked: Clip.remove(crow.modelData)
+                                    property: "opacity"
+                                    type: Anim.EmphasizedAccel
                                 }
                             }
                         }
                     }
 
-                    // empty state
-                    Column {
-                        width: parent.width
-                        visible: Clip.count === 0
-                        topPadding: 160
-                        spacing: 8
+                    Row {
+                        anchors.left: parent.left
+                        anchors.right: delBtn.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.leftMargin: 12
+                        spacing: 12
+
+                        StyledRect {
+                            width: 30
+                            height: 30
+                            radius: 999
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: Theme.base02
+                            StyledText {
+                                anchors.centerIn: parent
+                                text: crow.index + 1
+                                font.family: Theme.fontSans
+                                font.pixelSize: 13
+                                font.weight: Font.DemiBold
+                                color: Theme.accent
+                            }
+                        }
+
+                        // thumbnail (image) or glyph (text)
+                        Image {
+                            visible: crow.modelData.isImage
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: crow.modelData.isImage ? 60 : 0
+                            height: 44
+                            source: crow.modelData.isImage ? ("file://" + crow.modelData.thumb) : ""
+                            fillMode: Image.PreserveAspectFit
+                            cache: false
+                            sourceSize.width: 120
+                            sourceSize.height: 88
+                        }
                         StyledText {
-                            anchors.horizontalCenter: parent.horizontalCenter
+                            visible: !crow.modelData.isImage
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: crow.modelData.isImage ? 0 : 44
                             text: "󰅎"
+                            horizontalAlignment: Text.AlignHCenter
                             font.family: Theme.fontMono
-                            font.pixelSize: 34
-                            color: Theme.base03
-                        }
-                        StyledText {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            text: "Clipboard is empty"
+                            font.pixelSize: 20
                             color: Theme.inkDim
-                            font.family: Theme.fontSans
-                            font.pixelSize: 13
                         }
+
+                        Column {
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: crow.width - 30 - (crow.modelData.isImage ? 60 : 44) - delBtn.width - 60
+                            spacing: 2
+                            StyledText {
+                                width: parent.width
+                                text: crow.modelData.isImage ? ("Image • " + crow.modelData.dimensions + " " + crow.modelData.imageType.toUpperCase()) : "Text"
+                                color: Theme.accent
+                                font.family: Theme.fontSans
+                                font.pixelSize: 13
+                                font.weight: Font.DemiBold
+                            }
+                            StyledText {
+                                width: parent.width
+                                text: crow.modelData.preview
+                                color: Theme.inkDim
+                                font.family: Theme.fontSans
+                                font.pixelSize: 13
+                                elide: Text.ElideRight
+                                maximumLineCount: 1
+                            }
+                        }
+                    }
+
+                    MouseArea {
+                        id: crma
+                        anchors.left: parent.left
+                        anchors.right: delBtn.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            Clip.copy(crow.modelData);
+                            Popups.close("clipboard", win.screenName);
+                        }
+                    }
+
+                    StyledRect {
+                        id: delBtn
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.rightMargin: 8
+                        width: 36
+                        height: 36
+                        radius: 999
+                        color: delMa.containsMouse ? Theme.base02 : "transparent"
+                        StyledText {
+                            anchors.centerIn: parent
+                            text: "󰅖"
+                            font.family: Theme.fontMono
+                            font.pixelSize: 15
+                            color: delMa.containsMouse ? Theme.base08 : Theme.inkDim
+                        }
+                        MouseArea {
+                            id: delMa
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: Clip.remove(crow.modelData)
+                        }
+                    }
+                }
+                }
+
+                // empty state
+                Column {
+                    width: parent.width
+                    visible: Clip.count === 0
+                    topPadding: 160
+                    spacing: 8
+                    StyledText {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: "󰅎"
+                        font.family: Theme.fontMono
+                        font.pixelSize: 34
+                        color: Theme.base03
+                    }
+                    StyledText {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: "Clipboard is empty"
+                        color: Theme.inkDim
+                        font.family: Theme.fontSans
+                        font.pixelSize: 13
                     }
                 }
             }

@@ -72,224 +72,233 @@ Panel {
                     anchors.rightMargin: 16 // breathing room before the divider
                     spacing: 8
 
-                    FadeFlickable {
-                        id: nlistScroll
+                    // A ListView, not a Repeater over the whole list: Notif.list
+                    // grows all session, and a Repeater would hold a decoded
+                    // Image for every notification ever received. This keeps
+                    // only the visible rows alive.
+                    Item {
                         width: parent.width
                         height: parent.height - footer.height - 8
-                        contentHeight: nlistCol.height
 
-                        Column {
-                            id: nlistCol
-                            width: nlistScroll.width
+                        FadeListView {
+                            id: nlistScroll
+
+                            anchors.fill: parent
                             spacing: 6
+                            clip: true
 
-                            Repeater {
-                                model: Notif.list
-                                delegate: StyledRect {
-                                    id: ncard
-                                    required property var modelData
-                                    required property int index
-                                    readonly property var n: modelData.n
-                                    readonly property var acts: Notif.visibleActions(n)
-                                    width: parent.width - 4
-                                    radius: 12
-                                    color: ncma.containsMouse ? Theme.cardHi : Theme.card
-                                    border.width: n.urgency === NotificationUrgency.Critical ? 1 : 0
-                                    border.color: Theme.base08
-                                    implicitHeight: ncontent.implicitHeight + 18
+                            model: ScriptModel {
+                                values: Notif.list
+                            }
 
-                                    // Staggered slide-out on Clear all: each card glides
-                                    // off to the right + fades, delayed by its position
-                                    // (mirrors ags .ncard.clearing-out). Translate keeps
-                                    // the Column positioner from fighting the motion.
-                                    transform: Translate {
-                                        id: ncardSlide
+                            delegate: StyledRect {
+                            id: ncard
+                            required property var modelData
+                            required property int index
+                            readonly property var n: modelData.n
+                            readonly property var acts: Notif.visibleActions(n)
+                            width: nlistScroll.width - 4
+                            radius: 12
+                            color: ncma.containsMouse ? Theme.cardHi : Theme.card
+                            border.width: n.urgency === NotificationUrgency.Critical ? 1 : 0
+                            border.color: Theme.base08
+                            implicitHeight: ncontent.implicitHeight + 18
+
+                            // Staggered slide-out on Clear all: each card glides
+                            // off to the right + fades, delayed by its position
+                            // (mirrors ags .ncard.clearing-out). Translate keeps
+                            // the Column positioner from fighting the motion.
+                            transform: Translate {
+                                id: ncardSlide
+                            }
+                            states: State {
+                                name: "clearing"
+                                when: card.clearing
+                                PropertyChanges {
+                                    target: ncardSlide
+                                    x: 520
+                                }
+                                PropertyChanges {
+                                    target: ncard
+                                    opacity: 0
+                                }
+                            }
+                            transitions: Transition {
+                                to: "clearing"
+                                SequentialAnimation {
+                                    PauseAnimation {
+                                        duration: ncard.index * 50
                                     }
-                                    states: State {
-                                        name: "clearing"
-                                        when: card.clearing
-                                        PropertyChanges {
+                                    ParallelAnimation {
+                                        Anim {
                                             target: ncardSlide
-                                            x: 520
+                                            property: "x"
+                                            type: Anim.EmphasizedAccel
                                         }
-                                        PropertyChanges {
+                                        Anim {
                                             target: ncard
-                                            opacity: 0
+                                            property: "opacity"
+                                            type: Anim.EmphasizedAccel
                                         }
                                     }
-                                    transitions: Transition {
-                                        to: "clearing"
-                                        SequentialAnimation {
-                                            PauseAnimation {
-                                                duration: ncard.index * 50
-                                            }
-                                            ParallelAnimation {
-                                                Anim {
-                                                    target: ncardSlide
-                                                    property: "x"
-                                                    type: Anim.EmphasizedAccel
-                                                }
-                                                Anim {
-                                                    target: ncard
-                                                    property: "opacity"
-                                                    type: Anim.EmphasizedAccel
-                                                }
-                                            }
-                                        }
-                                    }
+                                }
+                            }
 
-                                    MouseArea {
-                                        id: ncma
+                            MouseArea {
+                                id: ncma
+                                anchors.fill: parent
+                                hoverEnabled: true
+                            }
+
+                            Row {
+                                id: ncontent
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.top: parent.top
+                                anchors.margins: 9
+                                anchors.leftMargin: 12
+                                anchors.rightMargin: 12
+                                spacing: 10
+
+                                // icon / image
+                                StyledRect {
+                                    width: 34
+                                    height: 34
+                                    radius: 999
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    color: ncard.n.image ? "transparent" : Theme.base02
+                                    clip: true
+                                    Image {
                                         anchors.fill: parent
-                                        hoverEnabled: true
+                                        source: ncard.n.image || ""
+                                        visible: status === Image.Ready
+                                        fillMode: Image.PreserveAspectCrop
+                                        // Without this a screenshot notification
+                                        // decodes at full resolution for a 34px avatar.
+                                        sourceSize.width: 68
+                                        sourceSize.height: 68
                                     }
+                                    StyledText {
+                                        anchors.centerIn: parent
+                                        visible: !ncard.n.image
+                                        text: "󰂚"
+                                        font.family: Theme.fontMono
+                                        font.pixelSize: 15
+                                        color: Theme.accent
+                                    }
+                                }
 
+                                Column {
+                                    // Reference the card's explicit width, NOT parent (the Row):
+                                    // a Row sizes to its children, so `parent.width - N` here
+                                    // would be a circular dependency that collapses the text.
+                                    // card width − (12+12 margins + 34 icon + 10 spacing).
+                                    width: ncard.width - 68
+                                    spacing: 1
                                     Row {
-                                        id: ncontent
-                                        anchors.left: parent.left
-                                        anchors.right: parent.right
-                                        anchors.top: parent.top
-                                        anchors.margins: 9
-                                        anchors.leftMargin: 12
-                                        anchors.rightMargin: 12
-                                        spacing: 10
-
-                                        // icon / image
-                                        StyledRect {
-                                            width: 34
-                                            height: 34
-                                            radius: 999
+                                        width: parent.width
+                                        spacing: 6
+                                        StyledText {
+                                            width: parent.width - tt.width - cl.width - 12
+                                            text: ncard.n.summary || ncard.n.appName || "Notification"
+                                            color: Theme.ink
+                                            font.family: Theme.fontSans
+                                            font.pixelSize: 13
+                                            font.weight: Font.DemiBold
+                                            elide: Text.ElideRight
+                                        }
+                                        StyledText {
+                                            id: tt
+                                            text: Qt.formatDateTime(new Date(ncard.modelData.time), "HH:mm")
+                                            color: Theme.inkDim
+                                            font.family: Theme.fontSans
+                                            font.pixelSize: 11
                                             anchors.verticalCenter: parent.verticalCenter
-                                            color: ncard.n.image ? "transparent" : Theme.base02
-                                            clip: true
-                                            Image {
+                                        }
+                                        StyledText {
+                                            id: cl
+                                            text: "󰅖"
+                                            color: clma.containsMouse ? Theme.base08 : Theme.inkDim
+                                            font.family: Theme.fontMono
+                                            font.pixelSize: 12
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            MouseArea {
+                                                id: clma
                                                 anchors.fill: parent
-                                                source: ncard.n.image || ""
-                                                visible: status === Image.Ready
-                                                fillMode: Image.PreserveAspectCrop
-                                            }
-                                            StyledText {
-                                                anchors.centerIn: parent
-                                                visible: !ncard.n.image
-                                                text: "󰂚"
-                                                font.family: Theme.fontMono
-                                                font.pixelSize: 15
-                                                color: Theme.accent
+                                                anchors.margins: -4
+                                                hoverEnabled: true
+                                                cursorShape: Qt.PointingHandCursor
+                                                onClicked: Notif.dismiss(ncard.n)
                                             }
                                         }
-
-                                        Column {
-                                            // Reference the card's explicit width, NOT parent (the Row):
-                                            // a Row sizes to its children, so `parent.width - N` here
-                                            // would be a circular dependency that collapses the text.
-                                            // card width − (12+12 margins + 34 icon + 10 spacing).
-                                            width: ncard.width - 68
-                                            spacing: 1
-                                            Row {
-                                                width: parent.width
-                                                spacing: 6
+                                    }
+                                    StyledText {
+                                        width: parent.width
+                                        visible: (ncard.n.body || "") !== ""
+                                        text: ncard.n.body || ""
+                                        color: Theme.inkDim
+                                        font.family: Theme.fontSans
+                                        font.pixelSize: 12
+                                        textFormat: Text.MarkdownText
+                                        wrapMode: Text.WordWrap
+                                        maximumLineCount: 3
+                                        elide: Text.ElideRight
+                                    }
+                                    Row {
+                                        spacing: 6
+                                        visible: ncard.acts.length > 0
+                                        topPadding: 4
+                                        Repeater {
+                                            model: ncard.acts
+                                            delegate: StyledRect {
+                                                id: nab
+                                                required property var modelData
+                                                width: nabt.implicitWidth + 20
+                                                height: 26
+                                                radius: 9
+                                                color: nabma.containsMouse ? Theme.accent : Theme.base02
                                                 StyledText {
-                                                    width: parent.width - tt.width - cl.width - 12
-                                                    text: ncard.n.summary || ncard.n.appName || "Notification"
-                                                    color: Theme.ink
+                                                    id: nabt
+                                                    anchors.centerIn: parent
+                                                    text: nab.modelData.text
+                                                    color: nabma.containsMouse ? Theme.accentInk : Theme.ink
                                                     font.family: Theme.fontSans
-                                                    font.pixelSize: 13
-                                                    font.weight: Font.DemiBold
-                                                    elide: Text.ElideRight
-                                                }
-                                                StyledText {
-                                                    id: tt
-                                                    text: Qt.formatDateTime(new Date(ncard.modelData.time), "HH:mm")
-                                                    color: Theme.inkDim
-                                                    font.family: Theme.fontSans
-                                                    font.pixelSize: 11
-                                                    anchors.verticalCenter: parent.verticalCenter
-                                                }
-                                                StyledText {
-                                                    id: cl
-                                                    text: "󰅖"
-                                                    color: clma.containsMouse ? Theme.base08 : Theme.inkDim
-                                                    font.family: Theme.fontMono
                                                     font.pixelSize: 12
-                                                    anchors.verticalCenter: parent.verticalCenter
-                                                    MouseArea {
-                                                        id: clma
-                                                        anchors.fill: parent
-                                                        anchors.margins: -4
-                                                        hoverEnabled: true
-                                                        cursorShape: Qt.PointingHandCursor
-                                                        onClicked: Notif.dismiss(ncard.n)
-                                                    }
                                                 }
-                                            }
-                                            StyledText {
-                                                width: parent.width
-                                                visible: (ncard.n.body || "") !== ""
-                                                text: ncard.n.body || ""
-                                                color: Theme.inkDim
-                                                font.family: Theme.fontSans
-                                                font.pixelSize: 12
-                                                textFormat: Text.MarkdownText
-                                                wrapMode: Text.WordWrap
-                                                maximumLineCount: 3
-                                                elide: Text.ElideRight
-                                            }
-                                            Row {
-                                                spacing: 6
-                                                visible: ncard.acts.length > 0
-                                                topPadding: 4
-                                                Repeater {
-                                                    model: ncard.acts
-                                                    delegate: StyledRect {
-                                                        id: nab
-                                                        required property var modelData
-                                                        width: nabt.implicitWidth + 20
-                                                        height: 26
-                                                        radius: 9
-                                                        color: nabma.containsMouse ? Theme.accent : Theme.base02
-                                                        StyledText {
-                                                            id: nabt
-                                                            anchors.centerIn: parent
-                                                            text: nab.modelData.text
-                                                            color: nabma.containsMouse ? Theme.accentInk : Theme.ink
-                                                            font.family: Theme.fontSans
-                                                            font.pixelSize: 12
-                                                        }
-                                                        MouseArea {
-                                                            id: nabma
-                                                            anchors.fill: parent
-                                                            hoverEnabled: true
-                                                            cursorShape: Qt.PointingHandCursor
-                                                            onClicked: nab.modelData.invoke()
-                                                        }
-                                                    }
+                                                MouseArea {
+                                                    id: nabma
+                                                    anchors.fill: parent
+                                                    hoverEnabled: true
+                                                    cursorShape: Qt.PointingHandCursor
+                                                    onClicked: nab.modelData.invoke()
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
+                        }
+                        }
 
-                            // empty state
-                            Column {
-                                width: parent.width
-                                visible: Notif.list.length === 0
-                                topPadding: 120
-                                spacing: 8
-                                StyledText {
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    text: "󰂚"
-                                    font.family: Theme.fontMono
-                                    font.pixelSize: 34
-                                    color: Theme.base03
-                                }
-                                StyledText {
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    text: "No notifications"
-                                    color: Theme.inkDim
-                                    font.family: Theme.fontSans
-                                    font.pixelSize: 13
-                                }
+                        // empty state
+                        Column {
+                            width: parent.width
+                            visible: Notif.list.length === 0
+                            topPadding: 120
+                            spacing: 8
+                            StyledText {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                text: "󰂚"
+                                font.family: Theme.fontMono
+                                font.pixelSize: 34
+                                color: Theme.base03
+                            }
+                            StyledText {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                text: "No notifications"
+                                color: Theme.inkDim
+                                font.family: Theme.fontSans
+                                font.pixelSize: 13
                             }
                         }
                     }

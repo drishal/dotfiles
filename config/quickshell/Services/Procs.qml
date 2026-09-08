@@ -33,6 +33,10 @@ Singleton {
     }
     function removeRef() {
         refs = Math.max(0, refs - 1);
+        // ~900 objects and their command lines; no reason to hold them while
+        // nothing is displaying them.
+        if (refs === 0)
+            list = [];
     }
 
     function refresh() {

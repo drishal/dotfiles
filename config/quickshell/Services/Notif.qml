@@ -14,7 +14,10 @@ Singleton {
     id: root
 
     property bool dnd: false
-    property var list: [] // [{ n, time }]
+    property var list: [] // [{ n, time }], newest first, capped at maxList
+    // Uncapped, this grows for the whole session and every entry pins a
+    // notification object and its image.
+    readonly property int maxList: 100
     property var popups: [] // [{ n, time }]
 
     readonly property int count: list.length
@@ -67,7 +70,7 @@ Singleton {
             };
 
             // center: replace if already present (same object on update), else prepend
-            root.list = [entry].concat(root._removeFrom(root.list, notif));
+            root.list = [entry].concat(root._removeFrom(root.list, notif)).slice(0, root.maxList);
 
             if (!root.dnd) {
                 root.popups = [entry].concat(root._removeFrom(root.popups, notif));

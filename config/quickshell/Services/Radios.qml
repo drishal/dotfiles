@@ -13,8 +13,20 @@ Singleton {
 
     property bool airplaneOn: false
 
+    // Ref-counted like Net: the dashboard is the only consumer, and each tick
+    // spawns rfkill.
+    property int refs: 0
+
+    function addRef() {
+        refs += 1;
+        poll.running = true;
+    }
+    function removeRef() {
+        refs = Math.max(0, refs - 1);
+    }
+
     Timer {
-        interval: 5000
+        interval: root.refs > 0 ? 5000 : 60000
         running: true
         repeat: true
         triggeredOnStart: true

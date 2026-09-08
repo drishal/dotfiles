@@ -24,18 +24,11 @@ Item {
     readonly property real maxOffset: Math.max(0, label.implicitWidth + leftPadding - width)
 
     property real offset: 0
-    property int direction: 1
-    property real holdLeft: holdMs
 
-    function reset() {
-        offset = 0;
-        direction = 1;
-        holdLeft = holdMs;
-    }
+    readonly property int travelMs: Math.max(1, Math.round(maxOffset / pxPerMs))
 
     onScrollingChanged: if (!scrolling)
-        reset()
-    onTextChanged: reset()
+        offset = 0
 
     clip: true
     implicitHeight: label.implicitHeight
@@ -50,27 +43,33 @@ Item {
         elide: root.overflowing ? Text.ElideNone : Text.ElideRight
     }
 
-    FrameAnimation {
+    // Declarative rather than a per-frame JS callback: the animation driver
+    // runs this in C++, so a long window title costs no script execution.
+    SequentialAnimation {
         running: root.scrolling
+        loops: Animation.Infinite
 
-        onTriggered: {
-            const ms = frameTime * 1000;
-            if (root.holdLeft > 0) {
-                root.holdLeft -= ms;
-                return;
-            }
-            const next = root.offset + root.direction * ms * root.pxPerMs;
-            if (next >= root.maxOffset) {
-                root.offset = root.maxOffset;
-                root.direction = -1;
-                root.holdLeft = root.holdMs;
-            } else if (next <= 0) {
-                root.offset = 0;
-                root.direction = 1;
-                root.holdLeft = root.holdMs;
-            } else {
-                root.offset = next;
-            }
+        PauseAnimation {
+            duration: root.holdMs
+        }
+        NumberAnimation {
+            target: root
+            property: "offset"
+            from: 0
+            to: root.maxOffset
+            duration: root.travelMs
+            easing.type: Easing.Linear
+        }
+        PauseAnimation {
+            duration: root.holdMs
+        }
+        NumberAnimation {
+            target: root
+            property: "offset"
+            from: root.maxOffset
+            to: 0
+            duration: root.travelMs
+            easing.type: Easing.Linear
         }
     }
 }
