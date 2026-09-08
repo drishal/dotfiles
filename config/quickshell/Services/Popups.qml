@@ -14,7 +14,7 @@ Singleton {
 
     // The exclusive group. Transient surfaces (volume OSD, notification
     // popups) are not tracked here.
-    readonly property var group: ["dashboard", "notes", "powermenu", "clipboard"]
+    readonly property var group: ["dashboard", "notes", "powermenu", "clipboard", "processes"]
 
     // screenName -> currently open popup name ("" = none). Reassigned wholesale
     // on every change so bindings referencing openByScreen re-evaluate.
