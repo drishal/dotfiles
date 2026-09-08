@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import Quickshell
 import qs.Common
 import qs.Services
 
@@ -22,6 +23,7 @@ Panel {
         if (shown) {
             Procs.addRef();
             search.text = "";
+            queryDebounce.stop();
             Procs.query = "";
             search.forceActiveFocus();
         } else {
@@ -128,6 +130,14 @@ Panel {
                 }
             }
         }
+    }
+
+    // Typing should not re-filter and re-diff the list on every keystroke.
+    Timer {
+        id: queryDebounce
+
+        interval: 120
+        onTriggered: Procs.query = search.text
     }
 
     Elevation {
@@ -313,7 +323,7 @@ Panel {
                             font.family: Theme.fontSans
                             font.pixelSize: 13
                             background: null
-                            onTextChanged: Procs.query = text
+                            onTextChanged: queryDebounce.restart()
                             Keys.onEscapePressed: win.close()
                         }
                     }
@@ -366,134 +376,136 @@ Panel {
                 }
 
                 // ── rows ──
-                FadeFlickable {
+                // A ListView, not a Repeater: a Repeater rebuilds every
+                // delegate whenever the model array changes, so each keystroke
+                // and each 3s poll was reconstructing hundreds of rows. This
+                // builds only what is visible and recycles on scroll, and
+                // ScriptModel diffs by pid so a refresh updates rows in place
+                // instead of replacing them.
+                FadeListView {
                     id: procScroll
 
                     width: parent.width
                     height: layout.height - headerRow.height - summaryRow.height - searchBox.height - colHeaders.height - footerRow.height - layout.spacing * 5
-                    contentHeight: rows.height
+                    spacing: 2
+                    clip: true
 
-                    Column {
-                        id: rows
+                    model: ScriptModel {
+                        values: Procs.filtered.slice(0, 300)
+                        objectProp: "pid"
+                    }
+
+                    delegate: StyledRect {
+                        id: prow
+
+                        required property var modelData
+
+                        readonly property real pidW: 70
+                        readonly property real userW: 90
+                        readonly property real cpuW: 80
+                        readonly property real memW: 90
+                        readonly property real killW: 34
 
                         width: procScroll.width
-                        spacing: 2
+                        height: 34
+                        radius: 8
+                        color: "transparent"
 
-                        Repeater {
-                            model: Procs.filtered.slice(0, 300)
+                        StateLayer {
+                            id: rowState
 
-                            delegate: StyledRect {
-                                id: prow
+                            cursorShape: Qt.ArrowCursor
+                            acceptedButtons: Qt.NoButton
+                        }
 
-                                required property var modelData
+                        Row {
+                            anchors.fill: parent
+                            anchors.leftMargin: 4
+                            anchors.rightMargin: 4
 
-                                width: rows.width
-                                height: 34
-                                radius: 8
-                                color: "transparent"
+                            Column {
+                                width: prow.width - prow.pidW - prow.userW - prow.cpuW - prow.memW - prow.killW - 8
+                                anchors.verticalCenter: parent.verticalCenter
+                                spacing: 0
 
-                                readonly property real pidW: 70
-                                readonly property real userW: 90
-                                readonly property real cpuW: 80
-                                readonly property real memW: 90
-                                readonly property real killW: 34
-
-                                StateLayer {
-                                    id: rowState
-
-                                    cursorShape: Qt.ArrowCursor
-                                    acceptedButtons: Qt.NoButton
+                                StyledText {
+                                    width: parent.width
+                                    text: prow.modelData.name
+                                    font.pixelSize: 12
+                                    font.weight: Font.DemiBold
+                                    elide: Text.ElideRight
                                 }
+                                StyledText {
+                                    width: parent.width
+                                    text: prow.modelData.cmd
+                                    color: Theme.base03
+                                    font.pixelSize: 9
+                                    elide: Text.ElideRight
+                                }
+                            }
+                            StyledText {
+                                width: prow.pidW
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: prow.modelData.pid
+                                color: Theme.inkDim
+                                font.family: Theme.fontMono
+                                font.pixelSize: 11
+                            }
+                            StyledText {
+                                width: prow.userW
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: prow.modelData.user
+                                color: Theme.inkDim
+                                font.pixelSize: 11
+                                elide: Text.ElideRight
+                            }
+                            StyledText {
+                                width: prow.cpuW
+                                anchors.verticalCenter: parent.verticalCenter
+                                horizontalAlignment: Text.AlignRight
+                                text: prow.modelData.cpu.toFixed(1) + "%"
+                                color: prow.modelData.cpu >= 50 ? Theme.base08 : Theme.base0C
+                                font.pixelSize: 12
+                                font.weight: Font.DemiBold
+                            }
+                            StyledText {
+                                width: prow.memW
+                                anchors.verticalCenter: parent.verticalCenter
+                                horizontalAlignment: Text.AlignRight
+                                text: Procs.formatMem(prow.modelData.rssKb)
+                                color: Theme.base09
+                                font.pixelSize: 12
+                            }
+                            Item {
+                                width: prow.killW
+                                height: parent.height
 
-                                Row {
-                                    anchors.fill: parent
-                                    anchors.leftMargin: 4
-                                    anchors.rightMargin: 4
+                                StyledRect {
+                                    anchors.centerIn: parent
+                                    width: 26
+                                    height: 26
+                                    radius: 999
+                                    opacity: rowState.containsMouse ? 1 : 0
+                                    visible: opacity > 0.01
+                                    color: "transparent"
 
-                                    Column {
-                                        width: prow.width - prow.pidW - prow.userW - prow.cpuW - prow.memW - prow.killW - 8
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        spacing: 0
-
-                                        StyledText {
-                                            width: parent.width
-                                            text: prow.modelData.name
-                                            font.pixelSize: 12
-                                            font.weight: Font.DemiBold
-                                            elide: Text.ElideRight
+                                    Behavior on opacity {
+                                        Anim {
+                                            type: Anim.FastEffects
                                         }
-                                        StyledText {
-                                            width: parent.width
-                                            text: prow.modelData.cmd
-                                            color: Theme.base03
-                                            font.pixelSize: 9
-                                            elide: Text.ElideRight
-                                        }
                                     }
-                                    StyledText {
-                                        width: prow.pidW
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        text: prow.modelData.pid
-                                        color: Theme.inkDim
-                                        font.family: Theme.fontMono
-                                        font.pixelSize: 11
-                                    }
-                                    StyledText {
-                                        width: prow.userW
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        text: prow.modelData.user
-                                        color: Theme.inkDim
-                                        font.pixelSize: 11
-                                        elide: Text.ElideRight
-                                    }
-                                    StyledText {
-                                        width: prow.cpuW
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        horizontalAlignment: Text.AlignRight
-                                        text: prow.modelData.cpu.toFixed(1) + "%"
-                                        color: prow.modelData.cpu >= 50 ? Theme.base08 : Theme.base0C
-                                        font.pixelSize: 12
-                                        font.weight: Font.DemiBold
-                                    }
-                                    StyledText {
-                                        width: prow.memW
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        horizontalAlignment: Text.AlignRight
-                                        text: Procs.formatMem(prow.modelData.rssKb)
-                                        color: Theme.base09
-                                        font.pixelSize: 12
-                                    }
-                                    Item {
-                                        width: prow.killW
-                                        height: parent.height
 
-                                        StyledRect {
-                                            anchors.centerIn: parent
-                                            width: 26
-                                            height: 26
-                                            radius: 999
-                                            opacity: rowState.containsMouse ? 1 : 0
-                                            color: "transparent"
+                                    StyledIcon {
+                                        anchors.centerIn: parent
+                                        text: "󰅖"
+                                        color: killState.containsMouse ? Theme.base08 : Theme.inkDim
+                                        font.pixelSize: 13
+                                    }
+                                    StateLayer {
+                                        id: killState
 
-                                            Behavior on opacity {
-                                                Anim {
-                                                    type: Anim.FastEffects
-                                                }
-                                            }
-
-                                            StyledIcon {
-                                                anchors.centerIn: parent
-                                                text: "󰅖"
-                                                color: killState.containsMouse ? Theme.base08 : Theme.inkDim
-                                                font.pixelSize: 13
-                                            }
-                                            StateLayer {
-                                                id: killState
-
-                                                color: Theme.base08
-                                                onClicked: Procs.kill(prow.modelData.pid)
-                                            }
-                                        }
+                                        color: Theme.base08
+                                        onClicked: Procs.kill(prow.modelData.pid)
                                     }
                                 }
                             }
