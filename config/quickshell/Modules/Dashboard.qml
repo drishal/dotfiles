@@ -1,51 +1,34 @@
 import QtQuick
 import QtQuick.Controls
 import Quickshell
-import Quickshell.Wayland
 import Quickshell.Services.Mpris
 import Quickshell.Bluetooth
 import Quickshell.Widgets
 import qs.Common
 import qs.Services
 
-// Quick-settings control center, top-right (mirrors ags Dashboard).
-// Tiles (network/bluetooth/airplane/mic/DND/volume), volume+brightness
-// sliders, and the mpris media player (mpv preferred).
+// Quick-settings control center, top-right. Tiles (network/bluetooth/airplane/
+// mic/DND/volume), volume+brightness sliders, and the mpris media player.
+//
+// The card is free to grow and shrink now: the window behind this panel spans
+// the whole screen and never resizes, so expanding a detail costs one input
+// region update per frame instead of a layer-shell reconfigure. That retires
+// the old reserved-height workaround entirely.
 
-PanelWindow {
+Panel {
     id: win
-    required property var modelData
-    screen: modelData
-    readonly property string screenName: screen ? screen.name : ""
 
-    visible: Popups.isOpen("dashboard", win.screenName)
-    color: "transparent"
-    WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.keyboardFocus: visible ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
-    exclusiveZone: 0
-    anchors.top: true
-    anchors.right: true
-    implicitWidth: 420
-    // While open the window is held at the size the card would need with a
-    // detail expanded, so expanding/collapsing never resizes the layer-shell
-    // surface — per-frame resizes stutter, and the final one flickers. Input is
-    // masked to the card so the reserved-but-empty strip stays click-through.
-    property real holdHeight: 0
-    implicitHeight: Math.max(card.implicitHeight + 16, holdHeight)
-    mask: Region {
-        item: card
-    }
+    name: "dashboard"
+    keyboard: true
+    slideFrom: Qt.TopEdge
+
+    width: 404
+    height: card.implicitHeight
 
     // Inline detail panel below the tiles ("" = collapsed), DMS-style.
     property string expandedSection: ""
-    onVisibleChanged: {
-        if (visible) {
-            holdHeight = card.implicitHeight + 16 + 248;
-        } else {
-            holdHeight = 0;
-            expandedSection = "";
-        }
-    }
+    onShownChanged: if (!shown)
+        expandedSection = ""
 
     readonly property var adapter: Bluetooth.defaultAdapter
     readonly property var player: {
@@ -59,8 +42,9 @@ PanelWindow {
     }
 
     // ── reusable quick-toggle tile ─────────────────────────────────────────
-    component Tile: Rectangle {
+    component Tile: StyledRect {
         id: tile
+
         property string glyph
         property string title
         property string subtitle
@@ -68,19 +52,21 @@ PanelWindow {
         property bool chevron: false
         property bool expanded: false
         signal clicked
+
         implicitHeight: 50
         radius: Theme.radiusSm
-        color: on ? Theme.accent : (tma.containsMouse ? Theme.cardHi : Theme.card)
+        color: on ? Theme.accent : Theme.card
+
         Row {
             anchors.fill: parent
             anchors.leftMargin: 11
             anchors.rightMargin: 11
             spacing: 0
-            Text {
+
+            StyledIcon {
                 anchors.verticalCenter: parent.verticalCenter
                 width: 26
                 text: tile.glyph
-                font.family: Theme.fontMono
                 font.pixelSize: 17
                 color: tile.on ? Theme.accentInk : Theme.ink
             }
@@ -88,72 +74,61 @@ PanelWindow {
                 anchors.verticalCenter: parent.verticalCenter
                 width: parent.width - 26 - (tile.chevron ? 18 : 0)
                 spacing: 0
-                Text {
+
+                StyledText {
                     width: parent.width
                     text: tile.title
                     color: tile.on ? Theme.accentInk : Theme.ink
-                    font.family: Theme.fontSans
                     font.pixelSize: 12
                     font.weight: Font.DemiBold
                     elide: Text.ElideRight
                 }
-                Text {
+                StyledText {
                     width: parent.width
                     text: tile.subtitle
                     color: tile.on ? Theme.accentInk : Theme.inkDim
-                    font.family: Theme.fontSans
                     font.pixelSize: 10
                     elide: Text.ElideRight
                 }
             }
-            Text {
+            StyledIcon {
                 anchors.verticalCenter: parent.verticalCenter
                 visible: tile.chevron
                 width: tile.chevron ? 18 : 0
                 text: "󰅂"
-                font.family: Theme.fontMono
-                font.pixelSize: 14
                 color: tile.on ? Theme.accentInk : Theme.inkDim
                 rotation: tile.expanded ? 90 : 0
+
                 Behavior on rotation {
-                    NumberAnimation {
-                        duration: 150
-                        easing.type: Easing.OutCubic
+                    Anim {
+                        type: Anim.FastSpatial
                     }
                 }
             }
         }
-        MouseArea {
-            id: tma
-            anchors.fill: parent
-            hoverEnabled: true
-            cursorShape: Qt.PointingHandCursor
+        StateLayer {
+            color: tile.on ? Theme.accentInk : Theme.ink
             onClicked: tile.clicked()
         }
     }
 
     // ── inline detail host ────────────────────────────────────────────────
-    // Only the slot's height animates, so the tiles below glide instead of
-    // jumping; the card grows into space the window already reserved.
+    // Only the slot's height animates; the tiles below glide, and the card
+    // grows with it.
     component Detail: Item {
         id: detail
+
         property string section
         readonly property bool open: win.expandedSection === section
-        height: 0
+
+        height: open ? 248 : 0
         clip: true
         visible: height > 0
 
-        onOpenChanged: {
-            slide.to = open ? 248 : 0;
-            slide.restart();
-        }
-
-        NumberAnimation {
-            id: slide
-            target: detail
-            property: "height"
-            duration: 220
-            easing.type: Easing.OutCubic
+        Behavior on height {
+            Anim {
+                type: Anim.Emphasized
+            }
         }
 
         WifiDetail {
@@ -163,8 +138,8 @@ PanelWindow {
             live: detail.open
 
             Behavior on opacity {
-                NumberAnimation {
-                    duration: 160
+                Anim {
+                    type: Anim.DefaultEffects
                 }
             }
         }
@@ -172,20 +147,25 @@ PanelWindow {
 
     component ThemedSlider: Slider {
         id: s
+
         property color fill: Theme.accent
         property string knob
+        property alias knobBtn: knobBtn
         signal knobClicked
+
         from: 0
         to: 1
+
         background: Item {
-            Rectangle {
+            StyledRect {
                 x: s.knobBtn.width + 10
                 y: s.height / 2 - 3
                 width: s.availableWidth - s.knobBtn.width - 10
                 height: 6
                 radius: 999
                 color: Theme.base02
-                Rectangle {
+
+                StyledRect {
                     width: s.visualPosition * parent.width
                     height: parent.height
                     radius: 999
@@ -193,30 +173,7 @@ PanelWindow {
                 }
             }
         }
-        property alias knobBtn: knobBtn
-        Rectangle {
-            id: knobBtn
-            width: 34
-            height: 34
-            radius: 999
-            anchors.verticalCenter: parent.verticalCenter
-            color: kma.containsMouse ? Theme.cardHi : Theme.card
-            Text {
-                anchors.centerIn: parent
-                text: s.knob
-                font.family: Theme.fontMono
-                font.pixelSize: 15
-                color: Theme.ink
-            }
-            MouseArea {
-                id: kma
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                onClicked: s.knobClicked()
-            }
-        }
-        handle: Rectangle {
+        handle: StyledRect {
             x: knobBtn.width + 10 + s.visualPosition * (s.availableWidth - knobBtn.width - 10 - width)
             y: s.height / 2 - height / 2
             width: 14
@@ -224,28 +181,72 @@ PanelWindow {
             radius: 999
             color: Theme.base07
         }
+
+        StyledRect {
+            id: knobBtn
+
+            width: 34
+            height: 34
+            radius: 999
+            anchors.verticalCenter: parent.verticalCenter
+            color: Theme.card
+
+            StyledIcon {
+                anchors.centerIn: parent
+                text: s.knob
+                color: Theme.ink
+                font.pixelSize: 15
+            }
+            StateLayer {
+                onClicked: s.knobClicked()
+            }
+        }
     }
 
-    Rectangle {
+    component RoundButton: StyledRect {
+        id: rb
+
+        property string glyph
+        property color hoverFg: Theme.accent
+        signal clicked
+
+        width: 32
+        height: 32
+        radius: 999
+        color: Theme.card
+
+        StyledIcon {
+            anchors.centerIn: parent
+            text: rb.glyph
+            color: rbState.containsMouse ? rb.hoverFg : Theme.inkDim
+            font.pixelSize: 16
+        }
+        StateLayer {
+            id: rbState
+
+            onClicked: rb.clicked()
+        }
+    }
+
+    Elevation {
+        anchors.fill: card
+        radius: card.radius
+        level: 4
+    }
+
+    StyledRect {
         id: card
-        // Sized to its content, not to the window: while `holdHeight` pins the
-        // window through a transition, a card filling it would keep the
-        // background at full size and snap when the hold releases.
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.margins: 8
-        height: implicitHeight
+
+        anchors.fill: parent
         radius: 20
         color: Theme.base00
         border.width: 1
         border.color: Theme.base02
-        focus: win.visible
-        Keys.onEscapePressed: Popups.close("dashboard", win.screenName)
         implicitHeight: layout.implicitHeight + 24
 
         Column {
             id: layout
+
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
@@ -256,14 +257,15 @@ PanelWindow {
             Item {
                 width: parent.width
                 height: 38
+
                 Row {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 9
                     height: 38
-                    // ClippingRectangle clips its children to the rounded shape,
-                    // so the .face image is masked to a proper circle (a plain
-                    // Rectangle + clip:true would only clip a square).
+
+                    // ClippingRectangle clips children to the rounded shape, so
+                    // the .face image is masked to a proper circle.
                     ClippingRectangle {
                         width: 34
                         height: 34
@@ -272,6 +274,7 @@ PanelWindow {
                         color: Theme.base02
                         border.width: 1
                         border.color: Theme.accent
+
                         Image {
                             anchors.fill: parent
                             source: Quickshell.env("HOME") + "/.face"
@@ -281,12 +284,9 @@ PanelWindow {
                             visible: status === Image.Ready
                         }
                     }
-                    Text {
+                    StyledText {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "drishal"
-                        color: Theme.ink
-                        font.family: Theme.fontSans
-                        font.pixelSize: 13
+                        text: Quickshell.env("USER") || "user"
                         font.weight: Font.DemiBold
                     }
                 }
@@ -294,82 +294,48 @@ PanelWindow {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 6
-                    Repeater {
-                        model: [
-                            {
-                                g: "󰒓",
-                                cmd: "pavucontrol"
-                            },
-                            {
-                                g: "󰍁",
-                                cmd: "loginctl lock-session"
-                            }
-                        ]
-                        delegate: Rectangle {
-                            required property var modelData
-                            width: 32
-                            height: 32
-                            radius: 999
-                            color: hma.containsMouse ? Theme.cardHi : Theme.card
-                            Text {
-                                anchors.centerIn: parent
-                                text: modelData.g
-                                font.family: Theme.fontMono
-                                font.pixelSize: 16
-                                color: hma.containsMouse ? Theme.accent : Theme.inkDim
-                            }
-                            MouseArea {
-                                id: hma
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: Quickshell.execDetached(["bash", "-c", parent.modelData.cmd])
-                            }
+
+                    RoundButton {
+                        glyph: "󰒓"
+                        onClicked: Quickshell.execDetached(["pavucontrol"])
+                    }
+                    RoundButton {
+                        glyph: "󰍁"
+                        onClicked: {
+                            win.close();
+                            Quickshell.execDetached(["loginctl", "lock-session"]);
                         }
                     }
-                    Rectangle {
-                        width: 32
-                        height: 32
-                        radius: 999
-                        color: pma.containsMouse ? Theme.cardHi : Theme.card
-                        Text {
-                            anchors.centerIn: parent
-                            text: "󰐥"
-                            font.family: Theme.fontMono
-                            font.pixelSize: 16
-                            color: pma.containsMouse ? Theme.accent : Theme.inkDim
-                        }
-                        MouseArea {
-                            id: pma
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: Popups.toggle("powermenu", win.screenName)
-                        }
+                    RoundButton {
+                        glyph: "󰐥"
+                        hoverFg: Theme.base08
+                        onClicked: Popups.toggle("powermenu", win.screenName)
                     }
                 }
             }
 
-            Text {
+            StyledText {
                 text: "Quick Controls"
                 color: Theme.inkDim
-                font.family: Theme.fontSans
                 font.pixelSize: 11
                 font.weight: Font.DemiBold
             }
 
             // ── tiles ──
             // Rows are explicit (not a Grid) so the detail panel can slide in
-            // directly under the row that owns the expanded tile, DMS-style.
+            // directly under the row that owns the expanded tile.
             Column {
                 id: tiles
+
                 width: parent.width
                 spacing: 0
+
                 readonly property real tw: (width - 8) / 2
 
                 Row {
                     spacing: 8
                     bottomPadding: 8
+
                     Tile {
                         width: tiles.tw
                         glyph: Net.icon
@@ -399,7 +365,6 @@ PanelWindow {
                 }
 
                 Detail {
-                    id: netDetail
                     width: parent.width
                     section: "wifi"
                 }
@@ -407,6 +372,7 @@ PanelWindow {
                 Row {
                     spacing: 8
                     bottomPadding: 8
+
                     Tile {
                         width: tiles.tw
                         glyph: "󰀝"
@@ -416,8 +382,11 @@ PanelWindow {
                         onClicked: Radios.toggle()
                     }
                     Tile {
-                        width: tiles.tw
+                        id: micTile
+
                         readonly property bool micMuted: Audio.source && Audio.source.audio ? Audio.source.audio.muted : true
+
+                        width: tiles.tw
                         glyph: micMuted ? "󰍭" : "󰍬"
                         title: "Microphone"
                         subtitle: micMuted ? "Muted" : "Active"
@@ -431,6 +400,7 @@ PanelWindow {
 
                 Row {
                     spacing: 8
+
                     Tile {
                         width: tiles.tw
                         glyph: "󰂛"
@@ -471,7 +441,7 @@ PanelWindow {
             }
 
             // ── media player ──
-            Rectangle {
+            StyledRect {
                 width: parent.width
                 visible: win.player !== null
                 implicitHeight: 58
@@ -484,13 +454,14 @@ PanelWindow {
                     anchors.fill: parent
                     anchors.margins: 10
                     spacing: 10
-                    Rectangle {
+
+                    ClippingRectangle {
                         width: 38
                         height: 38
                         radius: 10
                         anchors.verticalCenter: parent.verticalCenter
                         color: Theme.base02
-                        clip: true
+
                         Image {
                             anchors.fill: parent
                             source: win.player ? (win.player.trackArtUrl || "") : ""
@@ -502,68 +473,56 @@ PanelWindow {
                         width: parent.width - 38 - ctlRow.width - 20
                         anchors.verticalCenter: parent.verticalCenter
                         spacing: 2
-                        Text {
+
+                        ScrollingText {
                             width: parent.width
                             text: win.player ? (win.player.trackTitle || "Unknown") : ""
-                            color: Theme.ink
-                            font.family: Theme.fontSans
-                            font.pixelSize: 13
                             font.weight: Font.DemiBold
-                            elide: Text.ElideRight
                         }
-                        Text {
+                        StyledText {
                             width: parent.width
                             text: win.player ? (win.player.trackArtist || "") : ""
                             color: Theme.inkDim
-                            font.family: Theme.fontSans
                             font.pixelSize: 11
                             elide: Text.ElideRight
                         }
                     }
                     Row {
                         id: ctlRow
+
                         anchors.verticalCenter: parent.verticalCenter
                         spacing: 4
+
                         Repeater {
-                            model: [
-                                {
-                                    g: "󰒮",
-                                    a: "prev"
-                                },
-                                {
-                                    g: "play",
-                                    a: "toggle"
-                                },
-                                {
-                                    g: "󰒭",
-                                    a: "next"
-                                }
-                            ]
-                            delegate: Rectangle {
+                            model: ["prev", "toggle", "next"]
+
+                            delegate: StyledRect {
+                                id: mediaBtn
+
                                 required property var modelData
-                                readonly property bool isPlay: modelData.a === "toggle"
+
+                                readonly property bool isPlay: modelData === "toggle"
+
                                 width: 30
                                 height: 30
                                 radius: 999
-                                color: cma.containsMouse ? Theme.cardHi : "transparent"
-                                Text {
+                                color: "transparent"
+
+                                StyledIcon {
                                     anchors.centerIn: parent
-                                    text: isPlay ? (win.player && win.player.playbackState === MprisPlaybackState.Playing ? "󰏤" : "󰐊") : modelData.g
-                                    font.family: Theme.fontMono
-                                    font.pixelSize: isPlay ? 17 : 15
-                                    color: isPlay ? Theme.accent : (cma.containsMouse ? Theme.accent : Theme.inkDim)
+                                    text: mediaBtn.isPlay ? (win.player && win.player.playbackState === MprisPlaybackState.Playing ? "󰏤" : "󰐊") : (mediaBtn.modelData === "prev" ? "󰒮" : "󰒭")
+                                    font.pixelSize: mediaBtn.isPlay ? 17 : 15
+                                    color: mediaBtn.isPlay || mediaState.containsMouse ? Theme.accent : Theme.inkDim
                                 }
-                                MouseArea {
-                                    id: cma
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    cursorShape: Qt.PointingHandCursor
+                                StateLayer {
+                                    id: mediaState
+
                                     onClicked: {
                                         if (!win.player)
                                             return;
-                                        if (modelData.a === "prev")
+                                        if (mediaBtn.modelData === "prev")
                                             win.player.previous();
-                                        else if (modelData.a === "next")
+                                        else if (mediaBtn.modelData === "next")
                                             win.player.next();
                                         else
                                             win.player.togglePlaying();

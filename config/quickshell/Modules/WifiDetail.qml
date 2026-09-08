@@ -8,7 +8,7 @@ import qs.Services
 // pattern: the tile's chevron reveals an inline detail view instead of a
 // separate window). Scan list + connect/disconnect/forget, all via Net/nmcli.
 
-Rectangle {
+StyledRect {
     id: root
 
     property bool live: false // panel expanded — only then do we scan
@@ -55,7 +55,7 @@ Rectangle {
             root.pendingSsid = root.pendingSsid === n.ssid ? "" : n.ssid;
     }
 
-    component IconButton: Rectangle {
+    component IconButton: StyledRect {
         id: btn
         property string glyph
         property bool spinning: false
@@ -64,7 +64,7 @@ Rectangle {
         height: 26
         radius: 999
         color: ma.containsMouse ? Theme.cardHi : "transparent"
-        Text {
+        StyledText {
             id: gt
             anchors.centerIn: parent
             text: btn.glyph
@@ -97,7 +97,7 @@ Rectangle {
         Item {
             width: parent.width
             height: 26
-            Text {
+            StyledText {
                 anchors.verticalCenter: parent.verticalCenter
                 text: "Wi-Fi"
                 color: Theme.ink
@@ -134,14 +134,14 @@ Rectangle {
             Column {
                 anchors.centerIn: parent
                 spacing: 6
-                Text {
+                StyledText {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: "󰖪"
                     font.family: Theme.fontMono
                     font.pixelSize: 26
                     color: Theme.inkDim
                 }
-                Text {
+                StyledText {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: Net.wifiPresent ? "Wi-Fi is off" : "No Wi-Fi adapter"
                     color: Theme.inkDim
@@ -166,7 +166,7 @@ Rectangle {
                 width: parent.width
                 spacing: 3
 
-                Text {
+                StyledText {
                     visible: Net.networks.length === 0
                     text: Net.scanning ? "Scanning…" : "No networks found"
                     color: Theme.inkDim
@@ -182,7 +182,7 @@ Rectangle {
                         width: listCol.width
                         spacing: 3
 
-                        Rectangle {
+                        StyledRect {
                             width: parent.width
                             height: 34
                             radius: 10
@@ -193,7 +193,7 @@ Rectangle {
                                 anchors.leftMargin: 8
                                 anchors.rightMargin: 8
                                 spacing: 8
-                                Text {
+                                StyledText {
                                     anchors.verticalCenter: parent.verticalCenter
                                     width: 18
                                     text: Net.signalIcon(modelData.signal)
@@ -201,7 +201,7 @@ Rectangle {
                                     font.pixelSize: 14
                                     color: modelData.active ? Theme.accentInk : Theme.ink
                                 }
-                                Text {
+                                StyledText {
                                     anchors.verticalCenter: parent.verticalCenter
                                     width: parent.width - 18 - 8 * 3 - actions.width
                                     text: modelData.ssid
@@ -215,7 +215,7 @@ Rectangle {
                                     id: actions
                                     anchors.verticalCenter: parent.verticalCenter
                                     spacing: 4
-                                    Text {
+                                    StyledText {
                                         anchors.verticalCenter: parent.verticalCenter
                                         visible: modelData.secured
                                         text: "󰌾"
@@ -223,7 +223,7 @@ Rectangle {
                                         font.pixelSize: 12
                                         color: modelData.active ? Theme.accentInk : Theme.inkDim
                                     }
-                                    Text {
+                                    StyledText {
                                         anchors.verticalCenter: parent.verticalCenter
                                         visible: Net.busySsid === modelData.ssid
                                         text: "󰔟"
@@ -256,7 +256,7 @@ Rectangle {
                             visible: root.pendingSsid === modelData.ssid
                             spacing: 6
 
-                            Rectangle {
+                            StyledRect {
                                 width: parent.width - 62
                                 height: 30
                                 radius: 8
@@ -284,12 +284,12 @@ Rectangle {
                                     }
                                 }
                             }
-                            Rectangle {
+                            StyledRect {
                                 width: 56
                                 height: 30
                                 radius: 8
                                 color: cma.containsMouse ? Theme.accent : Theme.cardHi
-                                Text {
+                                StyledText {
                                     anchors.centerIn: parent
                                     text: "Connect"
                                     color: cma.containsMouse ? Theme.accentInk : Theme.ink
@@ -310,7 +310,7 @@ Rectangle {
             }
         }
 
-        Text {
+        StyledText {
             id: errText
             width: parent.width
             visible: Net.error !== ""

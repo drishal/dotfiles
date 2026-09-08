@@ -1,50 +1,47 @@
 import QtQuick
 import QtQuick.Controls
 import Quickshell
-import Quickshell.Wayland
 import qs.Common
 import qs.Services
 
-// cliphist clipboard history, top-right (mirrors ags Clipboard). Search field,
-// numbered rows with image thumbnails / text preview, per-row delete, wipe-all.
+// cliphist clipboard history, top-right. Search field, numbered rows with
+// image thumbnails / text preview, per-row delete, wipe-all.
 
-PanelWindow {
+Panel {
     id: win
-    required property var modelData
-    screen: modelData
-    readonly property string screenName: screen ? screen.name : ""
 
-    visible: Popups.isOpen("clipboard", win.screenName)
-    onVisibleChanged: {
-        if (visible) {
+    name: "clipboard"
+    keyboard: true
+    slideFrom: Qt.TopEdge
+
+    width: 560
+    height: 640
+
+    onShownChanged: {
+        if (shown) {
             Clip.query = "";
             search.text = "";
             Clip.refresh();
             search.forceActiveFocus();
+        } else {
+            wipeTimer.stop();
+            card.clearing = false;
         }
     }
-    color: "transparent"
-    WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.keyboardFocus: visible ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
-    exclusiveZone: 0
-    anchors.top: true
-    anchors.right: true
-    implicitWidth: 580
-    implicitHeight: card.height + 16
 
-    Rectangle {
+    Elevation {
+        anchors.fill: card
+        radius: card.radius
+        level: 4
+    }
+
+    StyledRect {
         id: card
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.margins: 8
-        width: 560
-        height: 640
+        anchors.fill: parent
         radius: 22
         color: Theme.base00
         border.width: 1
         border.color: Theme.base02
-        focus: win.visible
-        Keys.onEscapePressed: Popups.close("clipboard", win.screenName)
 
         // Drives the staggered row slide-out; the timer waits for the last row
         // to finish before actually wiping the history.
@@ -56,16 +53,6 @@ PanelWindow {
                 card.clearing = false;
             }
         }
-        Connections {
-            target: win
-            function onVisibleChanged() {
-                if (!win.visible) {
-                    wipeTimer.stop();
-                    card.clearing = false;
-                }
-            }
-        }
-
         Column {
             anchors.fill: parent
             anchors.margins: 14
@@ -75,7 +62,7 @@ PanelWindow {
             Row {
                 width: parent.width
                 spacing: 0
-                Text {
+                StyledText {
                     anchors.verticalCenter: parent.verticalCenter
                     width: 34
                     text: "󰅍"
@@ -83,7 +70,7 @@ PanelWindow {
                     font.pixelSize: 20
                     color: Theme.accent
                 }
-                Text {
+                StyledText {
                     anchors.verticalCenter: parent.verticalCenter
                     width: parent.width - 34 - 40 - 40
                     text: "Clipboard History (" + Clip.count + ")"
@@ -92,14 +79,14 @@ PanelWindow {
                     font.pixelSize: 17
                     font.weight: Font.Bold
                 }
-                Rectangle {
+                StyledRect {
                     width: 34
                     height: 34
                     radius: 999
                     anchors.verticalCenter: parent.verticalCenter
                     opacity: card.clearing ? 0.5 : 1
                     color: (wipeMa.containsMouse && !card.clearing) ? Theme.card : "transparent"
-                    Text {
+                    StyledText {
                         anchors.centerIn: parent
                         text: "󰩹"
                         font.family: Theme.fontMono
@@ -115,18 +102,18 @@ PanelWindow {
                             if (card.clearing || Clip.count === 0)
                                 return;
                             card.clearing = true;
-                            wipeTimer.interval = (Clip.filtered.length - 1) * 50 + 350 + 80;
+                            wipeTimer.interval = (Clip.filtered.length - 1) * 50 + Theme.animDurations[Anim.EmphasizedAccel] + 80;
                             wipeTimer.restart();
                         }
                     }
                 }
-                Rectangle {
+                StyledRect {
                     width: 34
                     height: 34
                     radius: 999
                     anchors.verticalCenter: parent.verticalCenter
                     color: closeMa.containsMouse ? Theme.card : "transparent"
-                    Text {
+                    StyledText {
                         anchors.centerIn: parent
                         text: "󰅖"
                         font.family: Theme.fontMono
@@ -144,7 +131,7 @@ PanelWindow {
             }
 
             // search
-            Rectangle {
+            StyledRect {
                 width: parent.width
                 height: 44
                 radius: 999
@@ -154,7 +141,7 @@ PanelWindow {
                     anchors.leftMargin: 16
                     anchors.rightMargin: 16
                     spacing: 12
-                    Text {
+                    StyledText {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "󰍉"
                         font.family: Theme.fontMono
@@ -171,27 +158,26 @@ PanelWindow {
                         font.pixelSize: 14
                         background: null
                         onTextChanged: Clip.query = text
-                        Keys.onEscapePressed: Popups.close("clipboard", win.screenName)
+                        Keys.onEscapePressed: win.close()
                     }
                 }
             }
 
             // list
-            ScrollView {
+            FadeFlickable {
                 id: clipScroll
                 width: parent.width
                 height: parent.height - 44 - 34 - 24 - 24
-                clip: true
-                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+                contentHeight: clipCol.height
 
                 Column {
-                    // ScrollView viewport width (parent.width would be ~0 here).
-                    width: clipScroll.availableWidth
+                    id: clipCol
+                    width: clipScroll.width
                     spacing: 8
 
                     Repeater {
                         model: Clip.filtered
-                        delegate: Rectangle {
+                        delegate: StyledRect {
                             id: crow
                             required property var modelData
                             required property int index
@@ -227,17 +213,15 @@ PanelWindow {
                                         duration: crow.index * 50
                                     }
                                     ParallelAnimation {
-                                        NumberAnimation {
+                                        Anim {
                                             target: crowSlide
                                             property: "x"
-                                            duration: 350
-                                            easing.type: Easing.InCubic
+                                            type: Anim.EmphasizedAccel
                                         }
-                                        NumberAnimation {
+                                        Anim {
                                             target: crow
                                             property: "opacity"
-                                            duration: 350
-                                            easing.type: Easing.InCubic
+                                            type: Anim.EmphasizedAccel
                                         }
                                     }
                                 }
@@ -250,13 +234,13 @@ PanelWindow {
                                 anchors.leftMargin: 12
                                 spacing: 12
 
-                                Rectangle {
+                                StyledRect {
                                     width: 30
                                     height: 30
                                     radius: 999
                                     anchors.verticalCenter: parent.verticalCenter
                                     color: Theme.base02
-                                    Text {
+                                    StyledText {
                                         anchors.centerIn: parent
                                         text: crow.index + 1
                                         font.family: Theme.fontSans
@@ -276,7 +260,7 @@ PanelWindow {
                                     fillMode: Image.PreserveAspectFit
                                     cache: false
                                 }
-                                Text {
+                                StyledText {
                                     visible: !crow.modelData.isImage
                                     anchors.verticalCenter: parent.verticalCenter
                                     width: crow.modelData.isImage ? 0 : 44
@@ -291,7 +275,7 @@ PanelWindow {
                                     anchors.verticalCenter: parent.verticalCenter
                                     width: crow.width - 30 - (crow.modelData.isImage ? 60 : 44) - delBtn.width - 60
                                     spacing: 2
-                                    Text {
+                                    StyledText {
                                         width: parent.width
                                         text: crow.modelData.isImage ? ("Image • " + crow.modelData.dimensions + " " + crow.modelData.imageType.toUpperCase()) : "Text"
                                         color: Theme.accent
@@ -299,7 +283,7 @@ PanelWindow {
                                         font.pixelSize: 13
                                         font.weight: Font.DemiBold
                                     }
-                                    Text {
+                                    StyledText {
                                         width: parent.width
                                         text: crow.modelData.preview
                                         color: Theme.inkDim
@@ -325,7 +309,7 @@ PanelWindow {
                                 }
                             }
 
-                            Rectangle {
+                            StyledRect {
                                 id: delBtn
                                 anchors.right: parent.right
                                 anchors.verticalCenter: parent.verticalCenter
@@ -334,7 +318,7 @@ PanelWindow {
                                 height: 36
                                 radius: 999
                                 color: delMa.containsMouse ? Theme.base02 : "transparent"
-                                Text {
+                                StyledText {
                                     anchors.centerIn: parent
                                     text: "󰅖"
                                     font.family: Theme.fontMono
@@ -358,14 +342,14 @@ PanelWindow {
                         visible: Clip.count === 0
                         topPadding: 160
                         spacing: 8
-                        Text {
+                        StyledText {
                             anchors.horizontalCenter: parent.horizontalCenter
                             text: "󰅎"
                             font.family: Theme.fontMono
                             font.pixelSize: 34
                             color: Theme.base03
                         }
-                        Text {
+                        StyledText {
                             anchors.horizontalCenter: parent.horizontalCenter
                             text: "Clipboard is empty"
                             color: Theme.inkDim

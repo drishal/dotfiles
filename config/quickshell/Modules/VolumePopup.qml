@@ -1,28 +1,22 @@
 import QtQuick
 import QtQuick.Controls
-import Quickshell
-import Quickshell.Wayland
 import qs.Common
 import qs.Services
 
-// Toast-style volume OSD, bottom-center (mirrors ags VolumePopup). Fires
-// whenever the active physical output's volume/mute changes (media keys,
-// dashboard slider, app control) via Audio.changePulse — never on startup.
+// Toast-style volume OSD, bottom-centre. Fires whenever the active physical
+// output's volume/mute changes (media keys, dashboard slider, app control) via
+// Audio.changePulse — never on startup.
 
-PanelWindow {
+Panel {
     id: win
-    required property var modelData
-    screen: modelData
 
     property bool showing: false
-    color: "transparent"
-    WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
-    exclusiveZone: 0
-    anchors.bottom: true
-    implicitWidth: card.width
-    implicitHeight: card.height + 64
-    visible: showing
+
+    shown: showing
+    slideFrom: Qt.BottomEdge
+
+    width: card.width
+    height: card.height
 
     readonly property string icon: {
         if (Audio.muted)
@@ -39,23 +33,29 @@ PanelWindow {
 
     Timer {
         id: hideTimer
+
         interval: 1800
         onTriggered: win.showing = false
     }
 
     Connections {
         target: Audio
+
         function onChangePulseChanged() {
             win.showing = true;
             hideTimer.restart();
         }
     }
 
-    Rectangle {
+    Elevation {
+        anchors.fill: card
+        radius: card.radius
+        level: 3
+    }
+
+    StyledRect {
         id: card
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 64
+
         width: inner.implicitWidth + 36
         height: inner.implicitHeight + 20
         radius: 16
@@ -65,40 +65,43 @@ PanelWindow {
 
         Row {
             id: inner
+
             anchors.centerIn: parent
             spacing: 12
             width: 280
 
-            Text {
+            StyledIcon {
                 anchors.verticalCenter: parent.verticalCenter
                 text: win.icon
-                font.family: Theme.fontMono
                 font.pixelSize: 22
                 color: Audio.muted ? Theme.base08 : Theme.accent
             }
             Slider {
                 id: slider
+
                 anchors.verticalCenter: parent.verticalCenter
                 width: 180
                 from: 0
                 to: 1
                 value: Audio.volume
                 onMoved: Audio.setVolume(value)
-                background: Rectangle {
+
+                background: StyledRect {
                     x: slider.leftPadding
                     y: slider.topPadding + slider.availableHeight / 2 - height / 2
                     width: slider.availableWidth
                     height: 8
                     radius: 999
                     color: Theme.base02
-                    Rectangle {
+
+                    StyledRect {
                         width: slider.visualPosition * parent.width
                         height: parent.height
                         radius: 999
                         color: Theme.accent
                     }
                 }
-                handle: Rectangle {
+                handle: StyledRect {
                     x: slider.leftPadding + slider.visualPosition * (slider.availableWidth - width)
                     y: slider.topPadding + slider.availableHeight / 2 - height / 2
                     width: 16
@@ -107,14 +110,14 @@ PanelWindow {
                     color: Theme.base07
                 }
             }
-            Text {
+            StyledText {
                 anchors.verticalCenter: parent.verticalCenter
                 text: Audio.muted ? "Muted" : Audio.percent + "%"
-                font.family: Theme.fontSans
                 font.pixelSize: 14
                 font.weight: Font.DemiBold
                 color: Audio.muted ? Theme.base08 : Theme.ink
                 width: 42
+                animate: true
             }
         }
     }

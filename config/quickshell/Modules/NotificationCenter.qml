@@ -1,50 +1,51 @@
 import QtQuick
 import QtQuick.Controls
 import Quickshell
-import Quickshell.Wayland
 import Quickshell.Services.Notifications
 import qs.Common
 import qs.Services
 
-// Notification center + calendar + weather, top-center (mirrors ags
-// NotificationCenter). Left: scrollable notification list with DND toggle +
-// clear-all. Right: date, current month calendar, Open-Meteo weather card.
+// Notification center + calendar + weather, top-center. Left: scrollable
+// notification list with DND toggle + clear-all. Right: date, current month
+// calendar, Open-Meteo weather card.
 
-PanelWindow {
+Panel {
     id: win
-    required property var modelData
-    screen: modelData
-    readonly property string screenName: screen ? screen.name : ""
 
-    visible: Popups.isOpen("notes", win.screenName)
-    onVisibleChanged: if (visible)
-        Weather.fetchNow()
-    color: "transparent"
-    WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.keyboardFocus: visible ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
-    exclusiveZone: 0
-    anchors.top: true
-    implicitWidth: card.width + 16
-    implicitHeight: card.height + 16
+    name: "notes"
+    keyboard: true
+    slideFrom: Qt.TopEdge
+
+    width: 800
+    height: 560
+
+    onShownChanged: {
+        if (shown)
+            Weather.fetchNow();
+        else {
+            clearTimer.stop();
+            card.clearing = false;
+        }
+    }
 
     SystemClock {
         id: clock
         precision: SystemClock.Minutes
     }
 
-    Rectangle {
+    Elevation {
+        anchors.fill: card
+        radius: card.radius
+        level: 4
+    }
+
+    StyledRect {
         id: card
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        anchors.topMargin: 8
-        width: 800
-        height: 560
+        anchors.fill: parent
         radius: 22
         color: Theme.base00
         border.width: 1
         border.color: Theme.base02
-        focus: win.visible
-        Keys.onEscapePressed: Popups.close("notes", win.screenName)
 
         // Drives the staggered card slide-out; the timer waits for the last
         // card to finish before actually dismissing them all.
@@ -56,17 +57,6 @@ PanelWindow {
                 card.clearing = false;
             }
         }
-        // Reset if the panel is hidden mid-clear.
-        Connections {
-            target: win
-            function onVisibleChanged() {
-                if (!win.visible) {
-                    clearTimer.stop();
-                    card.clearing = false;
-                }
-            }
-        }
-
         Row {
             anchors.fill: parent
             anchors.margins: 14
@@ -82,22 +72,20 @@ PanelWindow {
                     anchors.rightMargin: 16 // breathing room before the divider
                     spacing: 8
 
-                    ScrollView {
+                    FadeFlickable {
                         id: nlistScroll
                         width: parent.width
                         height: parent.height - footer.height - 8
-                        clip: true
-                        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+                        contentHeight: nlistCol.height
 
                         Column {
-                            // ScrollView viewport width — `parent.width` inside a
-                            // Controls ScrollView is the flickable's content width (~0).
-                            width: nlistScroll.availableWidth
+                            id: nlistCol
+                            width: nlistScroll.width
                             spacing: 6
 
                             Repeater {
                                 model: Notif.list
-                                delegate: Rectangle {
+                                delegate: StyledRect {
                                     id: ncard
                                     required property var modelData
                                     required property int index
@@ -136,17 +124,15 @@ PanelWindow {
                                                 duration: ncard.index * 50
                                             }
                                             ParallelAnimation {
-                                                NumberAnimation {
+                                                Anim {
                                                     target: ncardSlide
                                                     property: "x"
-                                                    duration: 350
-                                                    easing.type: Easing.InCubic
+                                                    type: Anim.EmphasizedAccel
                                                 }
-                                                NumberAnimation {
+                                                Anim {
                                                     target: ncard
                                                     property: "opacity"
-                                                    duration: 350
-                                                    easing.type: Easing.InCubic
+                                                    type: Anim.EmphasizedAccel
                                                 }
                                             }
                                         }
@@ -169,7 +155,7 @@ PanelWindow {
                                         spacing: 10
 
                                         // icon / image
-                                        Rectangle {
+                                        StyledRect {
                                             width: 34
                                             height: 34
                                             radius: 999
@@ -182,7 +168,7 @@ PanelWindow {
                                                 visible: status === Image.Ready
                                                 fillMode: Image.PreserveAspectCrop
                                             }
-                                            Text {
+                                            StyledText {
                                                 anchors.centerIn: parent
                                                 visible: !ncard.n.image
                                                 text: "󰂚"
@@ -202,7 +188,7 @@ PanelWindow {
                                             Row {
                                                 width: parent.width
                                                 spacing: 6
-                                                Text {
+                                                StyledText {
                                                     width: parent.width - tt.width - cl.width - 12
                                                     text: ncard.n.summary || ncard.n.appName || "Notification"
                                                     color: Theme.ink
@@ -211,7 +197,7 @@ PanelWindow {
                                                     font.weight: Font.DemiBold
                                                     elide: Text.ElideRight
                                                 }
-                                                Text {
+                                                StyledText {
                                                     id: tt
                                                     text: Qt.formatDateTime(new Date(ncard.modelData.time), "HH:mm")
                                                     color: Theme.inkDim
@@ -219,7 +205,7 @@ PanelWindow {
                                                     font.pixelSize: 11
                                                     anchors.verticalCenter: parent.verticalCenter
                                                 }
-                                                Text {
+                                                StyledText {
                                                     id: cl
                                                     text: "󰅖"
                                                     color: clma.containsMouse ? Theme.base08 : Theme.inkDim
@@ -236,7 +222,7 @@ PanelWindow {
                                                     }
                                                 }
                                             }
-                                            Text {
+                                            StyledText {
                                                 width: parent.width
                                                 visible: (ncard.n.body || "") !== ""
                                                 text: ncard.n.body || ""
@@ -254,14 +240,14 @@ PanelWindow {
                                                 topPadding: 4
                                                 Repeater {
                                                     model: ncard.acts
-                                                    delegate: Rectangle {
+                                                    delegate: StyledRect {
                                                         id: nab
                                                         required property var modelData
                                                         width: nabt.implicitWidth + 20
                                                         height: 26
                                                         radius: 9
                                                         color: nabma.containsMouse ? Theme.accent : Theme.base02
-                                                        Text {
+                                                        StyledText {
                                                             id: nabt
                                                             anchors.centerIn: parent
                                                             text: nab.modelData.text
@@ -290,14 +276,14 @@ PanelWindow {
                                 visible: Notif.list.length === 0
                                 topPadding: 120
                                 spacing: 8
-                                Text {
+                                StyledText {
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     text: "󰂚"
                                     font.family: Theme.fontMono
                                     font.pixelSize: 34
                                     color: Theme.base03
                                 }
-                                Text {
+                                StyledText {
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     text: "No notifications"
                                     color: Theme.inkDim
@@ -317,7 +303,7 @@ PanelWindow {
                             anchors.left: parent.left
                             anchors.verticalCenter: parent.verticalCenter
                             spacing: 10
-                            Text {
+                            StyledText {
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: "Do Not Disturb"
                                 color: Theme.ink
@@ -325,13 +311,13 @@ PanelWindow {
                                 font.pixelSize: 13
                                 font.weight: Font.DemiBold
                             }
-                            Rectangle {
+                            StyledRect {
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: 42
                                 height: 22
                                 radius: 999
                                 color: Notif.dnd ? Theme.accent : Theme.base02
-                                Rectangle {
+                                StyledRect {
                                     width: 16
                                     height: 16
                                     radius: 999
@@ -339,8 +325,8 @@ PanelWindow {
                                     x: Notif.dnd ? parent.width - width - 3 : 3
                                     color: Notif.dnd ? Theme.accentInk : Theme.ink
                                     Behavior on x {
-                                        NumberAnimation {
-                                            duration: 150
+                                        Anim {
+                                            type: Anim.FastSpatial
                                         }
                                     }
                                 }
@@ -351,7 +337,7 @@ PanelWindow {
                                 }
                             }
                         }
-                        Rectangle {
+                        StyledRect {
                             anchors.right: parent.right
                             anchors.verticalCenter: parent.verticalCenter
                             width: clrTxt.implicitWidth + 36
@@ -359,7 +345,7 @@ PanelWindow {
                             radius: 10
                             opacity: card.clearing ? 0.5 : 1
                             color: (clrMa.containsMouse && !card.clearing) ? Theme.accent : Theme.card
-                            Text {
+                            StyledText {
                                 id: clrTxt
                                 anchors.centerIn: parent
                                 text: "Clear all"
@@ -377,7 +363,7 @@ PanelWindow {
                                         return;
                                     card.clearing = true;
                                     // last card's delay + slide + a little slack
-                                    clearTimer.interval = (Notif.list.length - 1) * 50 + 350 + 80;
+                                    clearTimer.interval = (Notif.list.length - 1) * 50 + Theme.animDurations[Anim.EmphasizedAccel] + 80;
                                     clearTimer.restart();
                                 }
                             }
@@ -387,7 +373,7 @@ PanelWindow {
             }
 
             // divider
-            Rectangle {
+            StyledRect {
                 width: 1
                 height: parent.height - 12
                 anchors.verticalCenter: parent.verticalCenter
@@ -415,13 +401,13 @@ PanelWindow {
                         id: rightHeader
                         width: parent.width
                         spacing: 2
-                        Text {
+                        StyledText {
                             text: Qt.formatDateTime(clock.date, "dddd")
                             color: Theme.inkDim
                             font.family: Theme.fontSans
                             font.pixelSize: 14
                         }
-                        Text {
+                        StyledText {
                             text: Qt.formatDateTime(clock.date, "d MMMM yyyy")
                             color: Theme.ink
                             font.family: Theme.fontSans
@@ -451,7 +437,7 @@ PanelWindow {
                                 required property var modelData
                                 width: cal.cw
                                 height: 26
-                                Text {
+                                StyledText {
                                     anchors.centerIn: parent
                                     text: modelData
                                     color: Theme.inkDim
@@ -481,7 +467,7 @@ PanelWindow {
                                 readonly property bool isToday: modelData === cal.today.getDate()
                                 width: cal.cw
                                 height: 34
-                                Rectangle {
+                                StyledRect {
                                     anchors.centerIn: parent
                                     width: 30
                                     height: 30
@@ -489,7 +475,7 @@ PanelWindow {
                                     visible: parent.isToday
                                     color: Theme.accent
                                 }
-                                Text {
+                                StyledText {
                                     anchors.centerIn: parent
                                     visible: modelData > 0
                                     text: modelData > 0 ? modelData : ""
@@ -504,7 +490,7 @@ PanelWindow {
                     }
 
                     // ── weather card (fills the lower half symmetrically) ──
-                    Rectangle {
+                    StyledRect {
                         width: parent.width
                         height: rightCol.blockH
                         radius: 12
@@ -523,7 +509,7 @@ PanelWindow {
                                 : 0
 
                             // loading / error
-                            Text {
+                            StyledText {
                                 visible: Weather.status !== "ready"
                                 text: Weather.status === "error" ? "Weather unavailable" : "Loading weather…"
                                 color: Weather.status === "error" ? Theme.base08 : Theme.inkDim
@@ -540,7 +526,7 @@ PanelWindow {
                                 width: parent.width
                                 height: Math.max(curIcon.height, curTemp.height)
 
-                                Text {
+                                StyledText {
                                     id: curIcon
                                     // ink-centred over the first grid column below
                                     x: curBlock.width / 10 - (curTm.tightBoundingRect.x + curTm.tightBoundingRect.width / 2)
@@ -561,14 +547,14 @@ PanelWindow {
                                     anchors.leftMargin: 12
                                     anchors.verticalCenter: parent.verticalCenter
                                     spacing: 1
-                                    Text {
+                                    StyledText {
                                         text: Weather.current ? Weather.current.temp + "°C" : ""
                                         color: Theme.ink
                                         font.family: Theme.fontSans
                                         font.pixelSize: 22
                                         font.weight: Font.Bold
                                     }
-                                    Text {
+                                    StyledText {
                                         text: Weather.current ? Weather.wmoInfo(Weather.current.weatherCode, Weather.current.isDay).desc : ""
                                         color: Theme.inkDim
                                         font.family: Theme.fontSans
@@ -580,7 +566,7 @@ PanelWindow {
                                     // flush right
                                     anchors.right: parent.right
                                     anchors.verticalCenter: parent.verticalCenter
-                                    Text {
+                                    StyledText {
                                         anchors.right: parent.right
                                         text: Weather.locationName
                                         color: Theme.inkDim
@@ -588,7 +574,7 @@ PanelWindow {
                                         font.pixelSize: 11
                                         font.weight: Font.DemiBold
                                     }
-                                    Text {
+                                    StyledText {
                                         anchors.right: parent.right
                                         text: Weather.current ? "Feels " + Weather.current.feelsLike + "°" : ""
                                         color: Theme.base03
@@ -598,7 +584,7 @@ PanelWindow {
                                 }
                             }
 
-                            Rectangle {
+                            StyledRect {
                                 id: wsep1
                                 visible: Weather.status === "ready"
                                 width: parent.width
@@ -638,7 +624,7 @@ PanelWindow {
                                         Item {
                                             width: parent.width
                                             height: mIcon.height
-                                            Text {
+                                            StyledText {
                                                 id: mIcon
                                                 x: parent.width / 2 - (mTm.tightBoundingRect.x + mTm.tightBoundingRect.width / 2)
                                                 text: modelData.i
@@ -652,7 +638,7 @@ PanelWindow {
                                                 }
                                             }
                                         }
-                                        Text {
+                                        StyledText {
                                             width: parent.width
                                             horizontalAlignment: Text.AlignHCenter
                                             text: modelData.v
@@ -661,7 +647,7 @@ PanelWindow {
                                             font.pixelSize: 13
                                             font.weight: Font.Bold
                                         }
-                                        Text {
+                                        StyledText {
                                             width: parent.width
                                             horizontalAlignment: Text.AlignHCenter
                                             text: modelData.l
@@ -673,7 +659,7 @@ PanelWindow {
                                 }
                             }
 
-                            Rectangle {
+                            StyledRect {
                                 id: wsep2
                                 visible: Weather.status === "ready"
                                 width: parent.width
@@ -697,7 +683,7 @@ PanelWindow {
                                         required property var modelData
                                         width: hourlyRow.cellW
                                         spacing: 2
-                                        Text {
+                                        StyledText {
                                             width: parent.width
                                             horizontalAlignment: Text.AlignHCenter
                                             text: modelData.time.slice(11, 16)
@@ -709,7 +695,7 @@ PanelWindow {
                                         Item {
                                             width: parent.width
                                             height: hIcon.height
-                                            Text {
+                                            StyledText {
                                                 id: hIcon
                                                 x: parent.width / 2 - (hTm.tightBoundingRect.x + hTm.tightBoundingRect.width / 2)
                                                 text: Weather.wmoInfo(modelData.weatherCode, true).icon
@@ -723,7 +709,7 @@ PanelWindow {
                                                 }
                                             }
                                         }
-                                        Text {
+                                        StyledText {
                                             width: parent.width
                                             horizontalAlignment: Text.AlignHCenter
                                             text: modelData.temp + "°"
@@ -732,7 +718,7 @@ PanelWindow {
                                             font.pixelSize: 14
                                             font.weight: Font.Bold
                                         }
-                                        Text {
+                                        StyledText {
                                             width: parent.width
                                             horizontalAlignment: Text.AlignHCenter
                                             text: modelData.precipProb + "%"

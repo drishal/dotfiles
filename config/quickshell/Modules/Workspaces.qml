@@ -3,14 +3,16 @@ import Quickshell
 import Quickshell.Hyprland
 import qs.Common
 
-// Per-monitor workspace numbers with a sliding accent pill (mirrors ags
-// Bar.tsx Workspaces). Shows only workspaces that have windows on THIS monitor,
-// plus the focused one; the pill glides under the number labels like a tab
-// indicator. NOTE: this Hyprland runs configType = "lua", so dispatches are Lua
+// Per-monitor workspace numbers. Two backgrounds sit under the labels: a pill
+// merging each run of adjacent occupied workspaces, and the accent indicator
+// for the focused one. The indicator's leading and trailing edges animate at
+// different speeds, so it stretches into a trail as it moves and settles back.
+// NOTE: this Hyprland runs configType = "lua", so dispatches are Lua
 // expressions (hl.dsp.focus{...}), exactly like the ags config.
 
 Item {
     id: root
+
     required property string screenName
 
     readonly property int slotW: 26
@@ -59,8 +61,34 @@ Item {
         return false;
     }
 
+    // Runs of adjacent occupied slots, as [{start, end}] index pairs. One pill
+    // per run reads as "these workspaces have windows" far better than N dots.
+    readonly property var occupiedRuns: {
+        const runs = [];
+        let start = -1;
+        for (let i = 0; i < root.slots.length; i++) {
+            const busy = root.isBusy(root.slots[i]);
+            if (busy && start < 0)
+                start = i;
+            if (!busy && start >= 0) {
+                runs.push({
+                    start: start,
+                    end: i - 1
+                });
+                start = -1;
+            }
+        }
+        if (start >= 0)
+            runs.push({
+                start: start,
+                end: root.slots.length - 1
+            });
+        return runs;
+    }
+
     Connections {
         target: Hyprland
+
         function onRawEvent(event) {
             // Hyprland emits `urgent` with a window address; mark its workspace.
             if (event.name === "urgent")
@@ -80,73 +108,116 @@ Item {
     implicitWidth: Math.max(row.implicitWidth, 1)
     implicitHeight: 22
 
-    // sliding accent pill (below the labels)
-    Rectangle {
+    // occupied-run pills (below everything)
+    Repeater {
+        model: root.occupiedRuns
+
+        delegate: StyledRect {
+            required property var modelData
+
+            x: modelData.start * root.pitch
+            width: (modelData.end - modelData.start) * root.pitch + root.slotW
+            height: 20
+            radius: 8
+            anchors.verticalCenter: parent.verticalCenter
+            color: Theme.base01
+
+            scale: 0
+            Component.onCompleted: scale = 1
+
+            Behavior on x {
+                Anim {
+                    type: Anim.Emphasized
+                }
+            }
+            Behavior on width {
+                Anim {
+                    type: Anim.Emphasized
+                }
+            }
+            Behavior on scale {
+                Anim {
+                    type: Anim.FastSpatial
+                }
+            }
+        }
+    }
+
+    // active indicator with a trailing stretch
+    StyledRect {
         id: pill
+
+        // Leading edge leads on the way there, trailing edge lags behind, so
+        // the pill elongates mid-move. Equal targets, different durations.
+        property real leading: Math.max(0, root.activeIdx) * root.pitch
+        property real trailing: Math.max(0, root.activeIdx) * root.pitch
+
         visible: root.activeIdx >= 0
-        width: root.slotW
+        x: Math.min(leading, trailing)
+        width: Math.abs(leading - trailing) + root.slotW
         height: 20
         radius: 8
         color: Theme.accent
         anchors.verticalCenter: parent.verticalCenter
-        x: Math.max(0, root.activeIdx) * root.pitch
-        Behavior on x {
-            NumberAnimation {
-                duration: 300
-                easing.type: Easing.OutCubic
+
+        Behavior on leading {
+            Anim {
+                type: Anim.Emphasized
+                duration: Theme.animDurations[Anim.EmphasizedSmall]
+            }
+        }
+        Behavior on trailing {
+            Anim {
+                type: Anim.Emphasized
+                duration: Theme.animDurations[Anim.EmphasizedSmall] * 2
             }
         }
     }
 
     Row {
         id: row
+
         spacing: root.slotGap
         anchors.verticalCenter: parent.verticalCenter
 
         Repeater {
             model: root.slots
-            delegate: Rectangle {
+
+            delegate: StyledRect {
                 id: slot
+
                 required property int modelData
+
                 readonly property bool active: modelData === root.focusedId
                 readonly property bool isUrgent: !!root.urgent[modelData]
                 readonly property bool busy: root.isBusy(modelData)
+
                 width: root.slotW
                 height: 20
                 radius: 8
-                color: {
-                    if (active)
-                        return "transparent"; // pill paints the bg
-                    if (isUrgent)
-                        return Theme.alertBg;
-                    if (ma.containsMouse)
-                        return Theme.base01;
-                    return "transparent";
-                }
+                // The pills behind paint occupied and active; only urgent needs
+                // its own surface here.
+                color: !active && isUrgent ? Theme.alertBg : "transparent"
 
-                Text {
+                StyledText {
                     anchors.centerIn: parent
                     text: slot.modelData
-                    font.family: Theme.fontSans
-                    font.pixelSize: 13
                     color: {
                         if (slot.active)
                             return Theme.accentInk;
                         if (slot.isUrgent)
                             return Theme.base08;
-                        if (ma.containsMouse)
+                        if (slotState.containsMouse)
                             return Theme.ink;
                         if (slot.busy)
                             return Theme.inkDim;
                         return Theme.base03;
                     }
                 }
+                StateLayer {
+                    id: slotState
 
-                MouseArea {
-                    id: ma
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
+                    color: slot.active ? Theme.accentInk : Theme.ink
                     onClicked: Hyprland.dispatch("hl.dsp.focus({ workspace = " + slot.modelData + " })")
                 }
             }

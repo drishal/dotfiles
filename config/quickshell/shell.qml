@@ -12,14 +12,14 @@ ShellRoot {
     id: root
 
     // Hot-reload QML edits (the config dir is a live symlink to the repo), so
-    // edits apply without relaunching — mirrors the ags `ags quit; ags run`
-    // live-edit workflow but automatic.
+    // edits apply without relaunching.
     Component.onCompleted: Quickshell.watchFiles = true
 
     // Toggle popups from outside (keybinds / CLI), scoped to the focused
     // monitor:  qs ipc call popups toggle dashboard
     IpcHandler {
         target: "popups"
+
         function focusedScreen(): string {
             return Hyprland.focusedMonitor ? Hyprland.focusedMonitor.name : "";
         }
@@ -34,35 +34,41 @@ ShellRoot {
         }
     }
 
-    // One instance of each surface per monitor (Variants injects modelData =
-    // the screen). Bar is always-on; the popups toggle via the Popups
-    // singleton, scoped per monitor.
+    // qs ipc call lock lock — `loginctl lock-session` also works, LockState
+    // listens for the logind signal.
+    IpcHandler {
+        target: "lock"
+
+        function lock(): void {
+            LockState.lock();
+        }
+        function unlock(): void {
+            LockState.unlock();
+        }
+        function isLocked(): bool {
+            return LockState.locked;
+        }
+    }
+
+    LockScreen {}
+
+    // Three windows per monitor, all fixed at screen size: a zero-input strut
+    // reserving the bar's space, the Top-layer surface holding the bar and
+    // every interactive panel, and the Overlay-layer surface for transient
+    // feedback that must survive a fullscreen window.
     Variants {
         model: Quickshell.screens
-        Bar {}
+
+        BarExclusion {}
     }
     Variants {
         model: Quickshell.screens
-        Dashboard {}
+
+        ShellSurface {}
     }
     Variants {
         model: Quickshell.screens
-        NotificationCenter {}
-    }
-    Variants {
-        model: Quickshell.screens
-        PowerMenu {}
-    }
-    Variants {
-        model: Quickshell.screens
-        Clipboard {}
-    }
-    Variants {
-        model: Quickshell.screens
-        NotificationPopups {}
-    }
-    Variants {
-        model: Quickshell.screens
-        VolumePopup {}
+
+        OverlaySurface {}
     }
 }
