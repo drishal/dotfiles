@@ -43,13 +43,9 @@ Item {
     onStatsExpandedChanged: Qt.callLater(updateStatsAnchor)
     Component.onCompleted: Qt.callLater(updateStatsAnchor)
 
-    function openPopout(item, name) {
+    function togglePopout(item, name) {
         if (popouts)
-            popouts.request(name, item.mapToItem(bar, item.width / 2, 0).x);
-    }
-    function closePopout() {
-        if (popouts)
-            popouts.release();
+            popouts.toggle(name, item.mapToItem(bar, item.width / 2, 0).x);
     }
 
     implicitHeight: 36
@@ -90,11 +86,14 @@ Item {
         }
     }
 
-    // ── status cell: rounded hover surface + optional popout ────────────────
+    // ── status cell ────────────────────────────────────────────────────────
+    // Left click opens this item's popout, right click its full panel. Both are
+    // deliberate: opening on hover fires constantly just from crossing the bar.
     component Cell: Item {
         id: cell
 
         property string popout: ""
+        property string panel: ""
         property alias hovered: cellState.containsMouse
         default property alias content: inner.data
         signal clicked
@@ -117,14 +116,16 @@ Item {
             StateLayer {
                 id: cellState
 
-                onClicked: cell.clicked()
-                onContainsMouseChanged: {
-                    if (cell.popout === "")
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                onClicked: mouse => {
+                    if (mouse.button === Qt.RightButton) {
+                        if (cell.panel !== "")
+                            Popups.toggle(cell.panel, bar.screenName);
                         return;
-                    if (containsMouse)
-                        bar.openPopout(cell, cell.popout);
-                    else
-                        bar.closePopout();
+                    }
+                    if (cell.popout !== "")
+                        bar.togglePopout(cell, cell.popout);
+                    cell.clicked();
                 }
             }
         }
@@ -346,8 +347,8 @@ Item {
 
                         Cell {
                             popout: "network"
+                            panel: "dashboard"
                             anchors.verticalCenter: parent.verticalCenter
-                            onClicked: Popups.toggle("dashboard", bar.screenName)
 
                             Row {
                                 spacing: 6
@@ -376,8 +377,8 @@ Item {
                             id: statsCell
 
                             popout: "stats"
+                            panel: "processes"
                             anchors.verticalCenter: parent.verticalCenter
-                            onClicked: Popups.toggle("processes", bar.screenName)
                             onXChanged: bar.updateStatsAnchor()
                             onWidthChanged: bar.updateStatsAnchor()
 

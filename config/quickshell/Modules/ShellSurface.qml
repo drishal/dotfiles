@@ -83,12 +83,17 @@ PanelWindow {
         height: panel.visible ? panel.height : 0
     }
 
-    // Click anywhere outside an open panel to dismiss it — with every panel in
-    // one window this is a single grab instead of one per popup.
+    // Click anywhere outside to dismiss whatever is open — with everything in
+    // one window this is a single grab instead of one per popup. Clicks on the
+    // bar itself are inside the window, so switching between bar items does not
+    // clear.
     HyprlandFocusGrab {
-        active: win.anyPanel
+        active: win.anyPanel || popouts.open
         windows: [win]
-        onCleared: Popups.closeAll(win.screenName)
+        onCleared: {
+            Popups.closeAll(win.screenName);
+            popouts.close();
+        }
     }
 
     Bar {

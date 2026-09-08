@@ -207,7 +207,7 @@ Item {
         }
 
         StyledText {
-            text: "Click for all processes"
+            text: "Right-click for all processes"
             color: Theme.base03
             font.pixelSize: 10
         }

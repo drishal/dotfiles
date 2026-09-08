@@ -2,9 +2,11 @@ import QtQuick
 import qs.Common
 import qs.Services
 
-// One popout container shared by every bar status item. Moving between items
-// morphs it rather than closing and reopening: a spring drives x/width/height
-// (so retargeting mid-flight keeps its velocity) while the bodies cross-fade.
+// One popout container shared by every bar status item. Opened by left-clicking
+// an item — hovering is too easy to trigger by accident on a bar you sweep the
+// pointer across. Clicking a different item morphs the popout across rather than
+// closing and reopening: a spring drives x/width/height (so retargeting
+// mid-flight keeps its velocity) while the bodies cross-fade.
 //
 // All bodies stay instantiated. Building one on demand meant the swap paid for
 // constructing it — WifiDetail plus an nmcli spawn — right in the middle of the
@@ -34,10 +36,8 @@ Item {
     readonly property bool open: current !== "" && !blocked
     property bool snapNext: true
 
-    onBlockedChanged: if (blocked) {
-        closeTimer.stop();
-        current = "";
-    }
+    onBlockedChanged: if (blocked)
+        current = ""
 
     // Held through a close so the frame keeps its size while fading out.
     property string lastName: ""
@@ -67,15 +67,18 @@ Item {
     readonly property real maskW: frame.visible ? wantW : 0
     readonly property real maskH: frame.visible ? wantH + lift : 0
 
-    function request(name, cx) {
+    function toggle(name, cx) {
         if (blocked)
             return;
-        closeTimer.stop();
+        if (current === name) {
+            current = "";
+            return;
+        }
         anchorX = cx;
         current = name;
     }
-    function release() {
-        closeTimer.restart();
+    function close() {
+        current = "";
     }
     function sync() {
         spring.retarget(wantX, wantW, wantH);
@@ -90,13 +93,6 @@ Item {
     onWantXChanged: sync()
     onOpenChanged: if (!open)
         snapNext = true
-
-    Timer {
-        id: closeTimer
-
-        interval: 180
-        onTriggered: root.current = ""
-    }
 
     Spring {
         id: spring
@@ -185,14 +181,6 @@ Item {
                     }
                 }
             }
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            acceptedButtons: Qt.NoButton
-            onEntered: closeTimer.stop()
-            onExited: root.release()
         }
     }
 }
