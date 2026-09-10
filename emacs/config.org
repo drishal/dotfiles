@@ -515,8 +515,11 @@ remove/add tangle no to whatever font you prefer
 (use-package rainbow-mode
   :ensure t
   :init
+  ;; Skip gamegrid buffers: rainbow-mode turns font-lock on, and font-lock's
+  ;; unfontify pass strips the face properties gamegrid uses without glyphs
+  ;; (a tty frame), blanking the tetris board.
   (define-globalized-minor-mode my-global-rainbow-mode rainbow-mode
-    (lambda () (rainbow-mode 1)))
+    (lambda () (unless (bound-and-true-p gamegrid-display-mode) (rainbow-mode 1))))
   (my-global-rainbow-mode 1)
   )
 #+end_src
@@ -864,6 +867,38 @@ Evil is an extensible vi layer for Emacs. It emulates the main features of Vim.
   :after evil
   :config
   (evil-collection-init))
+
+  ;; evil-collection turns tetris into hjkl-only (evil normal state); put the
+  ;; stock arrow bindings back next to them. Runs after evil-collection-tetris-setup.
+  (with-eval-after-load 'evil-collection-tetris
+    (evil-define-key 'normal tetris-mode-map
+      (kbd "<left>")  #'tetris-move-left
+      (kbd "<right>") #'tetris-move-right
+      (kbd "<up>")    #'tetris-rotate-prev
+      (kbd "<down>")  #'tetris-move-down
+      (kbd "SPC")     #'tetris-move-bottom))
+
+  ;; gamegrid's tile bakes a gradient bevel into the outer eighth of every
+  ;; glyph, so the board reads as a thick gray lattice. Flat fill instead,
+  ;; with a 1px darker edge to keep adjacent cells apart.
+  (defun reomacs/gamegrid-flat-xpm ()
+    (let* ((size (gamegrid-calculate-glyph-size))
+           (inner (- size 2)))
+      (concat (format "/* XPM */
+static char *noname[] = {
+\"%d %d 3 1\",
+\"+ s col1\",
+\". s col2\",
+\"- s col3\",
+" size size)
+              (format "\"%s\",\n" (make-string size ?+))
+              (mapconcat (lambda (_) (format "\"+%s+\",\n" (make-string inner ?-)))
+                         (number-sequence 1 inner) "")
+              (format "\"%s\"\n};\n" (make-string size ?+)))))
+  (advice-add 'gamegrid-xpm :override #'reomacs/gamegrid-flat-xpm)
+
+  ;; Line numbers offset the 30x22 char grid.
+  (add-hook 'tetris-mode-hook (lambda () (display-line-numbers-mode -1)))
 
 
 #+end_src
