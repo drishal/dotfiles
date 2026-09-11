@@ -54,6 +54,16 @@ ShellRoot {
         }
     }
 
+    // qs ipc call toast show "Title" "Body" — also the smoke-test path for
+    // the internal toast stack.
+    IpcHandler {
+        target: "toast"
+
+        function show(summary: string, body: string): void {
+            Toaster.toast(summary, body, "", Toaster.Normal);
+        }
+    }
+
     LockScreen {}
 
     // Three windows per monitor, all fixed at screen size: a zero-input strut

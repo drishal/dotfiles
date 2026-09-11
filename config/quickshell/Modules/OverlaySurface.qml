@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Wayland
@@ -37,6 +38,19 @@ PanelWindow {
         PanelRegion {
             panel: volume
         }
+        PanelRegion {
+            panel: toasts
+        }
+    }
+    Toasts {
+        id: toasts
+
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.rightMargin: 12
+        anchors.bottomMargin: 12
+
+        screenName: win.screenName
     }
 
     component PanelRegion: Region {
