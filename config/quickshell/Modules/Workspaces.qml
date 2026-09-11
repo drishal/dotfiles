@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
@@ -119,7 +120,7 @@ Item {
             width: (modelData.end - modelData.start) * root.pitch + root.slotW
             height: 20
             radius: 8
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: parent ? parent.verticalCenter : undefined
             color: Theme.base01
 
             scale: 0
@@ -158,7 +159,7 @@ Item {
         height: 20
         radius: 8
         color: Theme.accent
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenter: parent ? parent.verticalCenter : undefined
 
         Behavior on leading {
             Anim {
