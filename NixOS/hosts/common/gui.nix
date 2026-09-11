@@ -87,6 +87,11 @@
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     enable = true;
   };
+
+  # DDC/CI for external-monitor brightness (quickshell's Brightness service).
+  # Loads i2c-dev and installs the udev rules — the module alone leaves
+  # /dev/i2c-* root-only and ddcutil fails for the user.
+  hardware.i2c.enable = true;
   # QT settings
   # environment.variables.QT_QPA_PLATFORMTHEME = lib.mkForce "";
   # qt.platformTheme="qt5ct";
