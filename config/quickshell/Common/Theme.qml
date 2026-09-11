@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 pragma Singleton
 
 // Colour + font tokens — the Stylix bridge (mirrors the ags shell's

@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 //@ pragma UseQApplication
 import Quickshell
 import qs.Modules

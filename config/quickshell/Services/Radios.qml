@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 pragma Singleton
 
 // Airplane mode via rfkill (mirrors ags lib/radios.ts). A udev ACL grants the

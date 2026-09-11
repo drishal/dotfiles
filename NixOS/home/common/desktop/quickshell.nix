@@ -51,6 +51,7 @@ in
     cliphist # clipboard history
     wl-clipboard # wl-copy
     brightnessctl # backlight slider
+    ddcutil # DDC/CI external-monitor brightness
     imagemagick # `magick` — clipboard image thumbnails
     curl # weather (open-meteo)
     networkmanagerapplet # nm-connection-editor (network tile/module)

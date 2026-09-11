@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 pragma Singleton
 
 // Weather via Open-Meteo (mirrors ags lib/weather.ts). curl the forecast every

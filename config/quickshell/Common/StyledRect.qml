@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 
 // Rectangle that cross-fades every colour change. Used shell-wide so Stylix

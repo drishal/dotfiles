@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 pragma Singleton
 
 // Active *physical* audio output (mirrors ags lib/audio.ts).

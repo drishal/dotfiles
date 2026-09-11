@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 pragma Singleton
 
 // cliphist-backed clipboard history (mirrors ags lib/clipboard.ts).

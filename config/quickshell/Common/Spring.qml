@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 
 // Critically-damped spring integrator over a small vector (x, width, height).

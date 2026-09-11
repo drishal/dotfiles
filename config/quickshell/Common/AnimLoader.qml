@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 
 // Loader that fades out, swaps content, then fades in — so replacing a panel's

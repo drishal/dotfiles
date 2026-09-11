@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 pragma Singleton
 
 // CPU + memory stats, derived from /proc (mirrors ags lib/system.ts).

@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 pragma Singleton
 
 // Network readout + wifi control via nmcli (mirrors ags lib/network.ts, which

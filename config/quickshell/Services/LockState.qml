@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 pragma Singleton
 
 // Lock screen state, shared so the IPC handler, the logind Lock signal and the

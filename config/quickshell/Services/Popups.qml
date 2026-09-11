@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 pragma Singleton
 
 // Per-monitor popup state (mirrors ags lib/windows.ts). At most one of the
