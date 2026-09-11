@@ -57,6 +57,11 @@ Singleton {
     FileView {
         path: "/etc/pam.d/quickshell"
         printErrors: false // absent until the NixOS switch; that is the signal
+        // Watched, so a switch flips this in the running shell. Read once, a
+        // shell started before the switch keeps falling back to swaylock until
+        // it is restarted — which reads as the lock simply not working.
+        watchChanges: true
+        onFileChanged: reload()
         onLoaded: root.pamReady = true
         onLoadFailed: root.pamReady = false
     }
