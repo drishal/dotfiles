@@ -17,4 +17,12 @@
     enable = true;
     memoryPercent = 25;
   };
+
+  # systemd-oomd is on by default but monitors nothing — every slice ships
+  # ManagedOOM*=auto. Opt in the root + user slices (Fedora's set).
+  systemd.oomd = {
+    enableRootSlice = true;
+    enableUserSlices = true;
+    settings.OOM.DefaultMemoryPressureDurationSec = "20s"; # PSI stall time; no per-slice equivalent
+  };
 }
