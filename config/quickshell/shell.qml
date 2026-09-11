@@ -17,7 +17,15 @@ ShellRoot {
 
     // Hot-reload QML edits (the config dir is a live symlink to the repo), so
     // edits apply without relaunching.
-    Component.onCompleted: Quickshell.watchFiles = true
+    Component.onCompleted: {
+        Quickshell.watchFiles = true;
+
+        // Singletons are created on first use, and nothing else references
+        // these two — without touching them the idle lock and the battery
+        // warnings never run at all.
+        void Idle;
+        void BatteryMonitor;
+    }
 
     // Toggle popups from outside (keybinds / CLI), scoped to the focused
     // monitor:  qs ipc call popups toggle dashboard
