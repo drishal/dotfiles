@@ -36,6 +36,20 @@ let
     text = builtins.readFile ../../../../scripts/vol.sh;
   };
 
+  # Screen capture. hyprctl is deliberately not a runtime input: it comes
+  # from the running session, so this can't pull a second Hyprland build.
+  capture = pkgs.writeShellApplication {
+    name = "capture";
+    runtimeInputs = with pkgs; [
+      grim
+      slurp
+      jq
+      wl-clipboard
+      libnotify
+    ];
+    text = builtins.readFile ../../../../scripts/capture.sh;
+  };
+
   # ─── Widget-stack helpers ──────────────────────────────────────────────
   # Controlled by drishal.widgets — switch requires logout.
   ewwLaunch = config.xdg.configHome + "/eww/scripts/launch.sh";
@@ -260,8 +274,8 @@ in
           (bind (combo "A") (exec "emacsclient -c"))
           (bind (combo "SPACE") (mkLuaInline ''hl.dsp.window.float({ action = "toggle" })''))
           (bind (combo "F") (mkLuaInline "hl.dsp.window.fullscreen()"))
-          (bind (combo "SHIFT + s") (exec "grimshot copy area"))
-          (bind (combo "s") (exec "grimshot copy output"))
+          (bind (combo "SHIFT + s") (exec "${capture}/bin/capture area"))
+          (bind (combo "s") (exec "${capture}/bin/capture output"))
           (bind (combo "K") (mkLuaInline "hl.dsp.window.cycle_next()"))
           (bind (combo "J") (mkLuaInline "hl.dsp.window.cycle_next({ next = false })"))
           (bind (combo "SHIFT + M") (exec "hyprctl keyword general:layout master"))
