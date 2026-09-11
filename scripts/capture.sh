@@ -6,7 +6,7 @@
 # no socket under Hyprland: OUTPUT comes back empty and grim silently composites
 # every monitor instead. Ask hyprctl, which is always on PATH in a session.
 #
-# Usage: capture.sh <output | area | window>
+# Usage: capture.sh <output | area | window | text>
 
 notify() { notify-send -a capture -t 2000 "$@" 2>/dev/null || true; }
 
@@ -35,8 +35,25 @@ case "${1:-output}" in
     grim -g "$geom" - | wl-copy --type image/png
     notify "Copied window to clipboard"
     ;;
+  text)
+    # Freeze the screen first, so grim captures the frozen overlay rather than
+    # content shifting underneath as hyprpicker tears down.
+    hyprpicker -r -z >/dev/null 2>&1 &
+    picker=$!
+    trap 'kill "$picker" 2>/dev/null || true' EXIT
+    sleep .1
+
+    geom=$(slurp) || exit 0
+    text=$(grim -g "$geom" - |
+      tesseract stdin stdout --oem 1 --psm 6 -l "${CAPTURE_OCR_LANGS:-eng}" \
+        --dpi 300 -c preserve_interword_spaces=1 2>/dev/null) || true
+
+    [[ -n $text ]] || { notify "No text found in selection"; exit 1; }
+    printf '%s' "$text" | wl-copy
+    notify "Copied text from selection"
+    ;;
   *)
-    echo "Usage: capture.sh <output | area | window>" >&2
+    echo "Usage: capture.sh <output | area | window | text>" >&2
     exit 1
     ;;
 esac
