@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
 import Quickshell
@@ -95,12 +96,15 @@ Panel {
                             id: ncard
                             required property var modelData
                             required property int index
-                            readonly property var n: modelData.n
-                            readonly property var acts: Notif.visibleActions(n)
+                            // modelData.n goes null transiently while the
+                            // ScriptModel recycles delegates during a reload;
+                            // every nested binding reads through this guard.
+                            readonly property var n: modelData ? modelData.n : null
+                            readonly property var acts: n ? Notif.visibleActions(n) : []
                             width: nlistScroll.width - 4
                             radius: 12
                             color: ncma.containsMouse ? Theme.cardHi : Theme.card
-                            border.width: n.urgency === NotificationUrgency.Critical ? 1 : 0
+                            border.width: n && n.urgency === NotificationUrgency.Critical ? 1 : 0
                             border.color: Theme.base08
                             implicitHeight: ncontent.implicitHeight + 18
 
@@ -165,12 +169,11 @@ Panel {
                                     width: 34
                                     height: 34
                                     radius: 999
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    color: ncard.n.image ? "transparent" : Theme.base02
+                                    color: n && n.image ? "transparent" : Theme.base02
                                     clip: true
                                     Image {
                                         anchors.fill: parent
-                                        source: ncard.n.image || ""
+                                        source: n && n.image ? n.image : ""
                                         visible: status === Image.Ready
                                         fillMode: Image.PreserveAspectCrop
                                         // Without this a screenshot notification
@@ -180,7 +183,7 @@ Panel {
                                     }
                                     StyledText {
                                         anchors.centerIn: parent
-                                        visible: !ncard.n.image
+                                        visible: !(n && n.image)
                                         text: "󰂚"
                                         font.family: Theme.fontMono
                                         font.pixelSize: 15
@@ -200,7 +203,7 @@ Panel {
                                         spacing: 6
                                         StyledText {
                                             width: parent.width - tt.width - cl.width - 12
-                                            text: ncard.n.summary || ncard.n.appName || "Notification"
+                                            text: n ? (n.summary || n.appName || "Notification") : ""
                                             color: Theme.ink
                                             font.family: Theme.fontSans
                                             font.pixelSize: 13
@@ -209,7 +212,7 @@ Panel {
                                         }
                                         StyledText {
                                             id: tt
-                                            text: Qt.formatDateTime(new Date(ncard.modelData.time), "HH:mm")
+                                            text: ncard.modelData ? Qt.formatDateTime(new Date(ncard.modelData.time), "HH:mm") : ""
                                             color: Theme.inkDim
                                             font.family: Theme.fontSans
                                             font.pixelSize: 11
@@ -228,14 +231,15 @@ Panel {
                                                 anchors.margins: -4
                                                 hoverEnabled: true
                                                 cursorShape: Qt.PointingHandCursor
-                                                onClicked: Notif.dismiss(ncard.n)
+                                                onClicked: if (ncard.n)
+                                                    Notif.dismiss(ncard.n)
                                             }
                                         }
                                     }
                                     StyledText {
                                         width: parent.width
-                                        visible: (ncard.n.body || "") !== ""
-                                        text: ncard.n.body || ""
+                                        visible: n && (n.body || "") !== ""
+                                        text: n && n.body ? n.body : ""
                                         color: Theme.inkDim
                                         font.family: Theme.fontSans
                                         font.pixelSize: 12
