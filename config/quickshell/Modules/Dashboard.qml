@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
 import Quickshell
@@ -37,15 +38,7 @@ Panel {
     }
 
     readonly property var adapter: Bluetooth.defaultAdapter
-    readonly property var player: {
-        const ps = Mpris.players ? Mpris.players.values : [];
-        const sorted = ps.slice().sort((a, b) => {
-            const am = /mpv/i.test(a.identity || "");
-            const bm = /mpv/i.test(b.identity || "");
-            return am === bm ? 0 : (am ? -1 : 1);
-        });
-        return sorted[0] || null;
-    }
+    readonly property var player: Players.active
 
     // ── reusable quick-toggle tile ─────────────────────────────────────────
     component Tile: StyledRect {
@@ -470,7 +463,7 @@ Panel {
 
                         Image {
                             anchors.fill: parent
-                            source: win.player ? (win.player.trackArtUrl || "") : ""
+                            source: Players.artUrl(win.player)
                             fillMode: Image.PreserveAspectCrop
                             visible: status === Image.Ready
                             // Album art is routinely 1000px square for a 38px slot.

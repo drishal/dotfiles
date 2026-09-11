@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell.Services.Mpris
 import qs.Common
@@ -6,15 +7,8 @@ import qs.Services
 Card {
     id: root
 
-    // Prefer whatever is actually playing; fall back to the first player so a
-    // paused track still shows.
-    readonly property var player: {
-        const ps = Mpris.players ? Mpris.players.values : [];
-        for (const p of ps)
-            if (p.playbackState === MprisPlaybackState.Playing)
-                return p;
-        return ps.length > 0 ? ps[0] : null;
-    }
+    // Players.active prefers whatever is playing, then mpv, then first.
+    readonly property var player: Players.active
     readonly property bool playing: player && player.playbackState === MprisPlaybackState.Playing
 
     // Sized to its content rather than stretched to fill the column — a media
@@ -90,7 +84,7 @@ Card {
                     id: art
 
                     anchors.fill: parent
-                    source: root.player && root.player.trackArtUrl ? root.player.trackArtUrl : ""
+                    source: Players.artUrl(root.player)
                     fillMode: Image.PreserveAspectCrop
                     asynchronous: true
                     sourceSize.width: 104
