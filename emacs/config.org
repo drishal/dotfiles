@@ -1567,6 +1567,16 @@ including =SPC TAB 1..9= for tab-like switching.
       (apply fn args)))
   (advice-add 'persp-asave-on-exit :around #'reomacs/persp-asave-on-exit-safely)
 
+  ;; `persp-update-frame-lighter' batches frames for a second, so a frame
+  ;; closed in the meantime gets `set-frame-parameter'd while dead. The signal
+  ;; aborts the batch before its queue is cleared, so it then repeats forever.
+  (defun reomacs/persp-skip-lighter-on-dead-frame (frame parameter &rest _)
+    "Drop a `persp-lighter' write aimed at a frame that is already gone."
+    (or (not (eq parameter 'persp-lighter))
+        (frame-live-p (or frame (selected-frame)))))
+  (advice-add 'set-frame-parameter :before-while
+              #'reomacs/persp-skip-lighter-on-dead-frame)
+
   (defvar reomacs/workspace-main "main"
     "Name of the primary workspace, which replaces the quirky nil perspective.")
 
