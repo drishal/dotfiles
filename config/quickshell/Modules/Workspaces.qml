@@ -2,14 +2,18 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.WindowManager
 import qs.Common
 
-// Per-monitor workspace numbers. Two backgrounds sit under the labels: a pill
-// merging each run of adjacent occupied workspaces, and the accent indicator
-// for the focused one. The indicator's leading and trailing edges animate at
+// Per-monitor workspace numbers. A pill sits behind the row, and the accent
+// indicator marks the focused one; its leading and trailing edges animate at
 // different speeds, so it stretches into a trail as it moves and settles back.
-// NOTE: this Hyprland runs configType = "lua", so dispatches are Lua
-// expressions (hl.dsp.focus{...}), exactly like the ags config.
+// NOTE: workspaces come from ext-workspace-v1 (Quickshell.WindowManager), not
+// Quickshell.Hyprland — Hyprland 0.56 dropped workspace ids from its IPC
+// (hyprwm/Hyprland#16140) and quickshell still parses them, so every workspace
+// there reads back as id -1. The wheel handler still dispatches, which is a
+// command rather than a query and so is unaffected; this Hyprland runs
+// configType = "lua", hence the Lua expression.
 
 Item {
     id: root
@@ -20,126 +24,49 @@ Item {
     readonly property int slotGap: 6
     readonly property int pitch: slotW + slotGap
 
-    property int focusedId: Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id : -1
-
-    // Track urgent workspace ids ourselves (Hyprland exposes ws.urgent, but we
-    // also clear on focus). Set of ids as a plain object.
-    property var urgent: ({})
-
-    function windowsOn(ws) {
-        const o = ws.lastIpcObject;
-        return o && typeof o.windows === "number" ? o.windows : (ws.toplevels ? ws.toplevels.values.length : 0);
-    }
-    function monitorOf(ws) {
-        const o = ws.lastIpcObject;
-        return o ? o.monitor : (ws.monitor ? ws.monitor.name : "");
+    readonly property var projection: {
+        for (const p of WindowManager.windowsetProjections)
+            if (p.screens.some(s => s && s.name === root.screenName))
+                return p;
+        return null;
     }
 
+    function coordOf(ws) {
+        return ws.coordinates.length > 0 ? ws.coordinates[0] : parseInt(ws.name) || 0;
+    }
+
+    // Hyprland only keeps a workspace alive while it holds windows or is
+    // focused, so everything ext reports here is worth a slot.
     readonly property var slots: {
-        const all = Hyprland.workspaces ? Hyprland.workspaces.values : [];
-        const ids = [];
-        for (const ws of all) {
-            if (!ws || ws.id <= 0)
-                continue;
-            if (monitorOf(ws) === root.screenName && windowsOn(ws) > 0)
-                ids.push(ws.id);
-        }
-        // Always include the focused workspace on this monitor.
-        const fw = Hyprland.focusedWorkspace;
-        if (fw && fw.id > 0 && monitorOf(fw) === root.screenName && ids.indexOf(fw.id) === -1)
-            ids.push(fw.id);
-        ids.sort((a, b) => a - b);
-        return ids;
+        const p = root.projection;
+        if (!p)
+            return [];
+        return [...p.windowsets].sort((a, b) => root.coordOf(a) - root.coordOf(b));
     }
 
-    readonly property int activeIdx: root.slots.indexOf(root.focusedId)
-
-    function isBusy(id) {
-        const all = Hyprland.workspaces ? Hyprland.workspaces.values : [];
-        for (const ws of all)
-            if (ws.id === id && monitorOf(ws) === root.screenName && windowsOn(ws) > 0)
-                return true;
-        return false;
-    }
-
-    // Runs of adjacent occupied slots, as [{start, end}] index pairs. One pill
-    // per run reads as "these workspaces have windows" far better than N dots.
-    readonly property var occupiedRuns: {
-        const runs = [];
-        let start = -1;
-        for (let i = 0; i < root.slots.length; i++) {
-            const busy = root.isBusy(root.slots[i]);
-            if (busy && start < 0)
-                start = i;
-            if (!busy && start >= 0) {
-                runs.push({
-                    start: start,
-                    end: i - 1
-                });
-                start = -1;
-            }
-        }
-        if (start >= 0)
-            runs.push({
-                start: start,
-                end: root.slots.length - 1
-            });
-        return runs;
-    }
-
-    Connections {
-        target: Hyprland
-
-        function onRawEvent(event) {
-            // Hyprland emits `urgent` with a window address; mark its workspace.
-            if (event.name === "urgent")
-                Hyprland.refreshWorkspaces();
-        }
-    }
-
-    // Clear urgent flag once its workspace becomes focused.
-    onFocusedIdChanged: {
-        if (root.urgent[root.focusedId]) {
-            const n = Object.assign({}, root.urgent);
-            delete n[root.focusedId];
-            root.urgent = n;
-        }
+    readonly property int activeIdx: {
+        for (let i = 0; i < root.slots.length; i++)
+            if (root.slots[i].active)
+                return i;
+        return -1;
     }
 
     implicitWidth: Math.max(row.implicitWidth, 1)
     implicitHeight: 22
 
-    // occupied-run pills (below everything)
-    Repeater {
-        model: root.occupiedRuns
+    // One pill behind the row — every slot is occupied, bar the focused one
+    // when it is empty, and the accent indicator covers that anyway.
+    StyledRect {
+        width: Math.max(0, root.slots.length - 1) * root.pitch + root.slotW
+        height: 20
+        radius: 8
+        visible: root.slots.length > 0
+        anchors.verticalCenter: parent.verticalCenter
+        color: Theme.base01
 
-        delegate: StyledRect {
-            required property var modelData
-
-            x: modelData.start * root.pitch
-            width: (modelData.end - modelData.start) * root.pitch + root.slotW
-            height: 20
-            radius: 8
-            anchors.verticalCenter: parent ? parent.verticalCenter : undefined
-            color: Theme.base01
-
-            scale: 0
-            Component.onCompleted: scale = 1
-
-            Behavior on x {
-                Anim {
-                    type: Anim.Emphasized
-                }
-            }
-            Behavior on width {
-                Anim {
-                    type: Anim.Emphasized
-                }
-            }
-            Behavior on scale {
-                Anim {
-                    type: Anim.FastSpatial
-                }
+        Behavior on width {
+            Anim {
+                type: Anim.Emphasized
             }
         }
     }
@@ -159,7 +86,7 @@ Item {
         height: 20
         radius: 8
         color: Theme.accent
-        anchors.verticalCenter: parent ? parent.verticalCenter : undefined
+        anchors.verticalCenter: parent.verticalCenter
 
         Behavior on leading {
             Anim {
@@ -182,16 +109,17 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
 
         Repeater {
-            model: root.slots
+            model: ScriptModel {
+                values: root.slots
+            }
 
             delegate: StyledRect {
                 id: slot
 
-                required property int modelData
+                required property var modelData
 
-                readonly property bool active: modelData === root.focusedId
-                readonly property bool isUrgent: !!root.urgent[modelData]
-                readonly property bool busy: root.isBusy(modelData)
+                readonly property bool active: modelData?.active ?? false
+                readonly property bool isUrgent: modelData?.urgent ?? false
 
                 width: root.slotW
                 height: 20
@@ -202,7 +130,7 @@ Item {
 
                 StyledText {
                     anchors.centerIn: parent
-                    text: slot.modelData
+                    text: slot.modelData?.name ?? ""
                     color: {
                         if (slot.active)
                             return Theme.accentInk;
@@ -210,16 +138,14 @@ Item {
                             return Theme.base08;
                         if (slotState.containsMouse)
                             return Theme.ink;
-                        if (slot.busy)
-                            return Theme.inkDim;
-                        return Theme.base03;
+                        return Theme.inkDim;
                     }
                 }
                 StateLayer {
                     id: slotState
 
                     color: slot.active ? Theme.accentInk : Theme.ink
-                    onClicked: Hyprland.dispatch("hl.dsp.focus({ workspace = " + slot.modelData + " })")
+                    onClicked: slot.modelData?.activate()
                 }
             }
         }

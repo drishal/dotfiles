@@ -11,7 +11,7 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
-import Quickshell.Hyprland
+import qs.Services
 
 Singleton {
     id: root
@@ -25,20 +25,9 @@ Singleton {
     property var list: [] // Toast objects, newest first
     readonly property int count: list.length
 
-    // Same fullscreen check as Notif — non-critical toasts yield to games.
-    function hasFullscreen() {
-        const ms = Hyprland.monitors ? Hyprland.monitors.values : [];
-        for (const m of ms) {
-            const tl = m.activeWorkspace ? m.activeWorkspace.toplevels : null;
-            if (tl && tl.values.some(t => t.lastIpcObject && t.lastIpcObject.fullscreen > 1))
-                return true;
-        }
-        return false;
-    }
-
     function toast(summary, body, icon, type) {
         const critical = type === Toaster.Error;
-        if (!critical && root.hasFullscreen())
+        if (!critical && Notif.hasFullscreen())
             return;
         const t = toastComp.createObject(root, {
                 summary: summary || "",
