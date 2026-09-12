@@ -24,6 +24,10 @@ Panel {
         if (shown)
             Weather.fetchNow();
         else {
+            // Closing the panel must not cancel a Clear all that is still
+            // playing its slide-out — that left every notification in place.
+            if (card.clearing)
+                Notif.clearAll();
             clearTimer.stop();
             card.clearing = false;
         }
@@ -51,6 +55,13 @@ Panel {
         // Drives the staggered card slide-out; the timer waits for the last
         // card to finish before actually dismissing them all.
         property bool clearing: false
+        // Stagger: 50ms per card, capped so the clear still commits quickly on
+        // a long list (uncapped it ran to 5s at maxList and had to be waited
+        // out with the panel open).
+        readonly property int staggerStep: 50
+        readonly property int staggerMax: 12
+        readonly property int clearDelay: Math.min(Notif.list.length - 1, staggerMax) * staggerStep + Theme.animDurations[Anim.EmphasizedAccel] + 80
+
         Timer {
             id: clearTimer
             onTriggered: {
@@ -131,7 +142,10 @@ Panel {
                                 to: "clearing"
                                 SequentialAnimation {
                                     PauseAnimation {
-                                        duration: ncard.index * 50
+                                        // Clamped: index is -1 while a delegate is
+                                        // recycled, and the stagger must match
+                                        // card.clearDelay.
+                                        duration: Math.max(0, Math.min(ncard.index, card.staggerMax)) * card.staggerStep
                                     }
                                     ParallelAnimation {
                                         Anim {
@@ -376,7 +390,7 @@ Panel {
                                         return;
                                     card.clearing = true;
                                     // last card's delay + slide + a little slack
-                                    clearTimer.interval = (Notif.list.length - 1) * 50 + Theme.animDurations[Anim.EmphasizedAccel] + 80;
+                                    clearTimer.interval = card.clearDelay;
                                     clearTimer.restart();
                                 }
                             }

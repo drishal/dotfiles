@@ -105,6 +105,14 @@ Singleton {
                 time: Date.now()
             };
 
+            // Prune the entry when the server closes the notification, with the
+            // object captured here. This used to hang off a delegate in an
+            // Instantiator that read `modelData` at signal time — undefined once
+            // the delegate is recycled, so the handler threw and the
+            // notification was never dropped from `list`.
+            if (!root.list.some(e => e.n === notif) && notif.closed)
+                notif.closed.connect(() => root._drop(notif));
+
             // center: replace if already present (same object on update), else prepend
             root.list = [entry].concat(root._removeFrom(root.list, notif)).slice(0, root.maxList);
 
@@ -117,21 +125,6 @@ Singleton {
                     hideTimer.createObject(root, {
                         notif: notif
                     });
-            }
-        }
-    }
-
-    // Per-notification lifecycle: prune when dismissed/expired anywhere.
-    Instantiator {
-        model: root.list
-        delegate: QtObject {
-            required property var modelData
-            Component.onCompleted: {
-                // Live notifications expose Retainable; restored snapshots
-                // don't (dropped already means gone for them).
-                const n = modelData && modelData.n;
-                if (n && n.Retainable && n.Retainable.dropped)
-                    n.Retainable.dropped.connect(() => root._drop(modelData.n));
             }
         }
     }
