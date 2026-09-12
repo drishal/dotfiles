@@ -126,6 +126,14 @@ Singleton {
                         notif: notif
                     });
             }
+
+            // A timed-out notification that was never shown still expires: the
+            // client is saying the content is transient, not that it should wait.
+            if (!critical && notif.expireTimeout > 0)
+                expireTimer.createObject(root, {
+                    notif: notif,
+                    interval: notif.expireTimeout
+                });
         }
     }
 
@@ -139,6 +147,28 @@ Singleton {
             running: true
             onTriggered: {
                 root.popups = root._removeFrom(root.popups, notif);
+                destroy();
+            }
+        }
+    }
+
+    // Expiry. quickshell exposes the client's raw D-Bus expire_timeout in ms
+    // (-1 = server's choice, 0 = never) and nothing else acts on it — libnotify
+    // leaves the timeout to the server, so `notify-send -t 2000` used to sit in
+    // the center for the whole session. Criticals are exempt, as in the popups.
+    Component {
+        id: expireTimer
+        Timer {
+            property var notif
+            // Started explicitly: `interval` arrives with createObject, after a
+            // declared `running: true` would already have fired it.
+            Component.onCompleted: start()
+            onTriggered: {
+                // Already gone — dismissed, closed by the client, or dropped by a
+                // reload — is fine: expire() is a no-op once the id is unknown.
+                try {
+                    notif.expire();
+                } catch (e) {}
                 destroy();
             }
         }
