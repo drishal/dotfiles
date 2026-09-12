@@ -10,6 +10,7 @@
     ./core/tmux.nix
     ./core/fastfetch.nix
     ./core/pi-theme.nix
+    ./core/aria2.nix
 
     ./desktop/default-apps.nix
     ./desktop/rofi.nix
@@ -24,6 +25,7 @@
 
     ./browsers/betterfox.nix
     ./media/mpv.nix
+    ./media/yt-dlp.nix
 
     ../../shared/stylix.nix
     ./stylix.nix
