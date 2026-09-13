@@ -430,6 +430,8 @@
       nerd-fonts.symbols-only
       nerd-fonts.recursive-mono
       nerd-fonts.commit-mono
+      # Unclipped metrics + Nerd Font glyphs + default-on ligatures; see NixOS/pkgs/commit-mono-fixed.
+      (pkgs.callPackage ../../pkgs/commit-mono-fixed { })
       nerd-fonts.googlesanscode
       nerd-fonts.monaspace
       noto-fonts
