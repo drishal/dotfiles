@@ -82,6 +82,8 @@
       };
       # Zoom only the focused window; the default `all` resizes every window in the single instance.
       keybindings = {
+        # Shadows the default move_window_forward on this key.
+        "ctrl+shift+f" = "search_scrollback";
         "ctrl+shift+equal" = "change_font_size current +2.0";
         "ctrl+shift+plus" = "change_font_size current +2.0";
         "ctrl+shift+kp_add" = "change_font_size current +2.0";
