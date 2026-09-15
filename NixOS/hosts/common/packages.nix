@@ -69,7 +69,6 @@
     bc
     bison
     # brave
-    btop
     # pkgs-master.bun
     (bun.overrideAttrs (old: rec {                                                                                                                                                         
      version = "1.3.14";                                                                                                                                                                  
