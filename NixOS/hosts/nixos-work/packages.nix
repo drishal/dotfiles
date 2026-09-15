@@ -33,11 +33,13 @@
       # VA-API via nvidia-vaapi-driver (NVDEC) — vainfo-verified.
       # No `Vulkan` feature here: ozone-wayland explicitly rejects it
       # ("not compatible with Vulkan"), and it was the crash suspect on 09/15.
-      "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks"
+      "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiOnNvidiaGPUs,VaapiVideoDecoder,VaapiIgnoreDriverChecks"
       "--disable-features=UseChromeOSDirectVideoDecoder"
-      # No --use-angle=vulkan here: ANGLE-vulkan can't find libvulkan.so.1 on
-      # Nix (not in the binary's RUNPATH), EGL init fails and GL falls back.
-      # Default EGL/GL path verified error-free on the T400.
+      # nvidia-vaapi-driver README recipe for Chromium: ANGLE-on-GL so libva's
+      # NVDEC backend attaches (verified missing without these — video fell
+      # back to SW decode; dmon dec=0). Distinct from ANGLE-vulkan above.
+      "--use-gl=angle"
+      "--use-angle=gl"
     ];
   };
   services.mysql = {
