@@ -28,20 +28,16 @@
   programs.brave-origin-beta = {
     enable = true;
     commandLineArgs = [
-      # Wayland
       "--ozone-platform-hint=auto"
       "--enable-wayland-ime"
-      # VA-API via nvidia-vaapi-driver (NVDEC backend)
-      "--ignore-gpu-blocklist"
-      "--enable-zero-copy"
-      "--enable-features=VaapiVideoDecoder,VaapiIgnoreDriverChecks"
+      # VA-API via nvidia-vaapi-driver (NVDEC) — vainfo-verified.
+      # No `Vulkan` feature here: ozone-wayland explicitly rejects it
+      # ("not compatible with Vulkan"), and it was the crash suspect on 09/15.
+      "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiVideoDecoder,VaapiIgnoreDriverChecks"
       "--disable-features=UseChromeOSDirectVideoDecoder"
-      # GPU rasterization
-      "--enable-gpu-rasterization"
-      "--enable-native-gpu-memory-buffers"
-      # NVIDIA Wayland
-      "--enable-features=Vulkan"
-      "--enable-hardware-overlays"
+      # No --use-angle=vulkan here: ANGLE-vulkan can't find libvulkan.so.1 on
+      # Nix (not in the binary's RUNPATH), EGL init fails and GL falls back.
+      # Default EGL/GL path verified error-free on the T400.
     ];
   };
   services.mysql = {
