@@ -52,6 +52,17 @@ let
     text = builtins.readFile ../../../../scripts/capture.sh;
   };
 
+  # MOD+F: fullscreenstate 2 0 for Chromium-based apps (screen covered, client
+  # told it's still windowed → browser chrome stays), plain fullscreen for the
+  # rest. hyprctl comes from the running session, like the capture script.
+  smartFullscreen = pkgs.writeShellApplication {
+    name = "smart-fullscreen";
+    runtimeInputs = with pkgs; [
+      jq
+    ];
+    text = builtins.readFile ../../../../scripts/smart-fullscreen.sh;
+  };
+
   # ─── Widget-stack helpers ──────────────────────────────────────────────
   # Controlled by drishal.widgets — switch requires logout.
   ewwLaunch = config.xdg.configHome + "/eww/scripts/launch.sh";
@@ -251,6 +262,16 @@ in
           size = "900 460";
           center = true;
         }
+        # Fullscreen chromium/electron windows go edge-to-edge: no rounding, no
+        # border. Gaps stay (they are workspace-level, not per-window).
+        {
+          name = "fullscreen-chrome";
+          match = {
+            fullscreen = true;
+          };
+          rounding = 0;
+          border_size = 0;
+        }
       ];
 
       bind =
@@ -275,7 +296,7 @@ in
           (bind (combo "SHIFT + X") (mkLuaInline "hl.dsp.exit()"))
           (bind (combo "A") (exec "emacsclient -c"))
           (bind (combo "SPACE") (mkLuaInline ''hl.dsp.window.float({ action = "toggle" })''))
-          (bind (combo "F") (mkLuaInline "hl.dsp.window.fullscreen()"))
+          (bind (combo "F") (exec "${smartFullscreen}/bin/smart-fullscreen"))
           (bind (combo "SHIFT + s") (exec "${capture}/bin/capture area"))
           (bind (combo "s") (exec "${capture}/bin/capture output"))
           (bind (combo "CTRL + s") (exec "${capture}/bin/capture text"))
