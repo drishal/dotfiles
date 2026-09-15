@@ -44,7 +44,7 @@ in
     drishal.defaultApps = lib.mapAttrs (_: lib.mkDefault) {
       terminal = "kitty";
       fileManager = "nemo";
-      browser = "firefox";
+      browser = "brave-origin-beta";
       pdf = "okular";
       media = "mpv";
     };
