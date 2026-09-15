@@ -253,7 +253,7 @@
     nmap
     nodejs
     nerd-font-patcher
-    nvtopPackages.amd
+    nvtopPackages.full
     noto-fonts
     ntfs3g
     obs-studio
