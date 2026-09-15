@@ -103,7 +103,7 @@
   - [[#which-key][which key]]
 - [[#prevent-warnings-spam][prevent *warnings* spam]]
 - [[#wl-clipboard][wl-clipboard]]
-- [[#elaca-stuff-for-dashboard][elaca stuff for dashboard]]
+- [[#elpaca-stuff-for-dashboard][elpaca stuff for dashboard]]
 
 * emacs startup
 ** Just make sure to run this once
@@ -2753,7 +2753,7 @@ flymake instead. Re-tangle both together if you switch back.
 ;; (setq interprogram-paste-function 'wl-paste-strip-cr)
 #+end_src
 
-* elaca stuff for dashboard
+* elpaca stuff for dashboard
 #+begin_src emacs-lisp :tangle no
 (setq elpaca-after-init-time (current-time)) ;; prevents `elpaca-after-init-hook` from running later.
 (elpaca-wait)
