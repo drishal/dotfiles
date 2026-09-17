@@ -57,6 +57,10 @@
   programs.brave-origin-beta = {
     enable = true;
     commandLineArgs = [
+      # Pin the OSCrypt key backend — without it Brave probes KWallet/libsecret
+      # depending on what is up at each login, and a backend switch re-encrypts
+      # cookies with a new key → logged out on every reboot.
+      "--password-store=gnome-libsecret"
       "--ignore-gpu-blocklist"
       "--enable-zero-copy"
       "--ozone-platform-hint=auto"

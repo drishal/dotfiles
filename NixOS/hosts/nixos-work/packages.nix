@@ -28,6 +28,9 @@
   programs.brave-origin-beta = {
     enable = true;
     commandLineArgs = [
+      # Pin the OSCrypt key backend — a backend switch between boots re-encrypts
+      # cookies with a new key → logged out on every reboot.
+      "--password-store=gnome-libsecret"
       "--ozone-platform-hint=auto"
       "--enable-wayland-ime"
       # VA-API via nvidia-vaapi-driver (NVDEC) — vainfo-verified.
