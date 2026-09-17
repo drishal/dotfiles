@@ -160,7 +160,14 @@
       system = "x86_64-linux";
       user = "drishal";
 
-      pkgs = import nixpkgs {
+      # nixpkgs with out-of-channel fixes; empty the list once they land upstream
+      nixpkgs-patched = (import nixpkgs { inherit system; }).applyPatches {
+        name = "nixpkgs-patched";
+        src = nixpkgs;
+        patches = [ ./patches/playwright-webkit-libmanette.patch ];
+      };
+
+      pkgs = import nixpkgs-patched {
         inherit system;
         config = {
           allowUnfree = true;

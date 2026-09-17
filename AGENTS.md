@@ -105,6 +105,7 @@ config/                      ← XDG-style app configs (non-HM-managed / legacy)
   suckless/                  ← dwm, st, dmenu, dwl, dwmblocks (compiled via sudo make install)
 emacs/                       ← Emacs config.org (tangled to ~/.config/emacs/init.el)
   config.org, snippets/, themes/, unicode-fonts/, packages/
+patches/                     ← patches applied to the nixpkgs source tree (see Flake inputs)
 scripts/                     ← utility shell scripts
 wallpapers/                  ← wallpapers (used by stylix.image)
 ```
@@ -167,6 +168,18 @@ Only what the URL doesn't tell you:
 - **`chaotic`** (Chaotic-Nyx) is where `linuxPackages_cachyos-gcc` comes from.
 - **Several inputs are `flake = false` sources vendored by a module rather than consumed as flakes** — grep `flake = false` in `flake.nix` for the current set. The non-obvious pairings: `vim-hx` → `helix.nix`, `llama-cpp` → `llama-cpp.nix` (a fork, swapped often), `tmux-agent-status` → `tmux.nix`, `gruvbox-material` → nvim.
 - **`private-stuff`** must exist locally or every build fails — see Critical gotchas.
+
+### Patched nixpkgs
+
+`pkgs` (the Home Manager one) is imported from `nixpkgs-patched`, an `applyPatches` of the `nixpkgs`
+input with `patches/*.patch` applied — the escape hatch for a fix that is on nixpkgs master but has not
+reached `nixos-unstable`, so a channel bump doesn't have to be reverted. Keep the list empty when
+nothing is pending; `applyPatches` is IFD and copies the ~500MB tree on every nixpkgs bump.
+
+Patches are **git-tracked or invisible** — flakes only see tracked files, so `git add` a new patch
+before switching. Drop a patch once upstream lands it: `patch -p1` fails loudly on an already-applied
+hunk, which is the intended signal. **`nixosConfigurations` still use the unpatched input** (`lib` and
+`lib.nixosSystem` come from `nixpkgs`), so a system-level package needing a patch won't get it.
 
 ## Target machines
 
