@@ -2420,10 +2420,12 @@ flymake instead. Re-tangle both together if you switch back.
                '(toml-ts-mode . ("taplo" "lsp" "stdio")))
   (add-to-list 'eglot-server-programs
                '((python-mode python-ts-mode) . ("basedpyright-langserver" "--stdio")))
+  (add-to-list 'eglot-server-programs
+               '((yaml-mode yaml-ts-mode) . ("yaml-language-server" "--stdio")))
   ;; (add-to-list 'eglot-server-programs '(nix-ts-mode . ("nil")))
 
   :hook
-  (nix-ts-mode . eglot-ensure)
+  ((nix-ts-mode yaml-ts-mode) . eglot-ensure)
   )
 (use-package eldoc
   :ensure t
@@ -2681,6 +2683,8 @@ flymake instead. Re-tangle both together if you switch back.
 *** Docker Mode
 Compose files are left to =yaml-ts-mode=. =docker-compose-mode= was archived
 upstream in Aug 2026 and dropped from MELPA, and it only derived from =yaml-mode=.
+Its keyword completion is replaced by =yaml-language-server=, which pulls the live
+compose schema from SchemaStore instead of a keyword list frozen at spec 3.6.
 #+begin_src emacs-lisp
 (use-package dockerfile-mode
   :ensure t

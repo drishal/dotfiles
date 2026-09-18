@@ -22,6 +22,7 @@
     starship
     nixfmt
     taplo
+    yaml-language-server
     gnome-themes-extra
     gjs
     hexedit
