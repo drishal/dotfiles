@@ -2679,15 +2679,13 @@ flymake instead. Re-tangle both together if you switch back.
 #+end_src
 
 *** Docker Mode
+Compose files are left to =yaml-ts-mode=. =docker-compose-mode= was archived
+upstream in Aug 2026 and dropped from MELPA, and it only derived from =yaml-mode=.
 #+begin_src emacs-lisp
 (use-package dockerfile-mode
   :ensure t
   :mode (("Dockerfile\\'" . dockerfile-mode)
          ("\\.dockerfile\\'" . dockerfile-mode)))
-(use-package docker-compose-mode
-  :ensure t
-  :mode (("docker-compose.*\\.ya?ml\\'" . docker-compose-mode)
-         ("compose.*\\.ya?ml\\'" . docker-compose-mode)))
 (use-package docker
   :ensure t
   :bind ("C-c d" . docker))
