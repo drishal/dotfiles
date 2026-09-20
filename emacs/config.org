@@ -199,13 +199,27 @@ touch ~/.emacs.d/custom.el
 while a minibuffer is open, which leaves the new frame showing an inactive
 =*Minibuf-1*= where every key is undefined.  Abort the minibuffer normally
 instead, so its window configuration is restored.
+
+Guard on the minibuffer being *live*, not on =minibuffer-depth=.  That counter
+tracks the recursive stack globally and stays above zero on a stale recursive
+edit whose minibuffer window has already fallen back to =*Minibuf-0*=, while
+=abort-minibuffers= needs the current buffer to be an active minibuffer and
+otherwise signals "Not in a minibuffer".  The error escapes to the client, which
+dies before drawing a frame, and the recursion is never unwound -- so every
+later =emacsclient -c= fails the same way until the daemon restarts.
+=(minibufferp BUF t)= rejects =*Minibuf-0*=; plain =minibufferp= accepts it.
+=top-level= remains the fallback, so a surprise here can never strand the daemon.
 #+begin_src emacs-lisp
 (defun reomacs/server-goto-toplevel (fn proc)
   "Leave an open minibuffer cleanly instead of throwing to top level."
-  (if (> (minibuffer-depth) 0)
-      (progn (run-with-timer 0 nil #'server-execute-continuation proc)
-             (abort-minibuffers))
-    (funcall fn proc)))
+  (let ((win (active-minibuffer-window)))
+    (if (and win (minibufferp (window-buffer win) t))
+        (progn
+          (run-with-timer 0 nil #'server-execute-continuation proc)
+          (condition-case nil
+              (with-selected-window win (abort-minibuffers))
+            (error (top-level))))
+      (funcall fn proc))))
 
 (with-eval-after-load 'server
   (advice-add 'server-goto-toplevel :around #'reomacs/server-goto-toplevel))
