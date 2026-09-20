@@ -1,0 +1,7 @@
+#+TITLE: Zen browser tweaks 
+
+* about:config flags
+** no borders for an immersive experience
+#+begin_src
+zen.view.experimental-no-window-controls = true
+#+end_src
