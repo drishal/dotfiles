@@ -7,6 +7,16 @@
 }:
 
 # base system configuration
+let
+  # herdroid drives ssh with bare POSIX snippets fish can't parse; hand its sessions a sh
+  sshPosixShim = pkgs.writeShellScript "ssh-posix-shim" ''
+    case "$SSH_ORIGINAL_COMMAND" in
+      "") exec ${pkgs.fish}/bin/fish -l ;;
+      sftp | internal-sftp) exec ${pkgs.openssh}/libexec/sftp-server ;;
+      *) exec ${pkgs.bash}/bin/bash -c "$SSH_ORIGINAL_COMMAND" ;;
+    esac
+  '';
+in
 {
   boot.kernelPackages = pkgs.linuxPackages_cachyos-gcc ;
   systemd.user.services.orca.wantedBy = lib.mkForce [ ];
@@ -65,6 +75,11 @@
       22
       8022
     ];
+    # scoped to the phone's tailscale address: only herdroid needs the shim
+    extraConfig = ''
+      Match User drishal Address 100.73.123.49
+        ForceCommand ${sshPosixShim}
+    '';
   };
 
   powerManagement = {
