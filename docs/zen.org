@@ -1,7 +1,18 @@
-#+TITLE: Zen browser tweaks 
+#+TITLE: Zen browser tweaks
 
-* about:config flags
-** no borders for an immersive experience
-#+begin_src
-zen.view.experimental-no-window-controls = true
-#+end_src
+about:config options I've set. Verified against zen-beta 1.22.2b; defaults live
+in =browser/omni.ja:defaults/preferences/firefox.js= (grep =zen\.=).
+
+| pref                                     | value | default | what it does                                        |
+|------------------------------------------+-------+---------+-----------------------------------------------------|
+| zen.theme.content-element-separation     | 0     | 8       | px gap around the page; 8 renders as a black border |
+| zen.view.experimental-no-window-controls | true  | false   | removes min/max/close entirely (no hover reveal)    |
+| zen.view.compact.enable-at-startup       | true  | false   | start in compact mode                               |
+| zen.view.show-newtab-button-top          | false | true    | hides the new-tab button at the top of the sidebar  |
+
+=~/.config/zen/to12y6gl.Default Profile/prefs.js= is the actual record — grep
+=user_pref("zen.= there rather than trying to recall what was changed.
+
+Also set but *inert*: =zen.view.compact.hide-toolbar=. =canHideToolbar= ANDs it
+with =!_hasSetSingleToolbar=, and =zen.view.use-single-toolbar= is true, so
+nothing reads it. Clear it whenever.
