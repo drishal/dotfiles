@@ -164,7 +164,7 @@
       nixpkgs-patched = (import nixpkgs { inherit system; }).applyPatches {
         name = "nixpkgs-patched";
         src = nixpkgs;
-        patches = [ ./patches/playwright-webkit-libmanette.patch ];
+        patches = [ ];
       };
 
       pkgs = import nixpkgs-patched {
