@@ -1,0 +1,33 @@
+{
+  "defaultProvider": "litellm",
+  "defaultModel": "GLM-5.3-Flash",
+  "lastChangelogVersion": "0.86.1",
+  "theme": "gruvbox-material",
+  "packages": [
+    "npm:@ff-labs/pi-fff",
+    "npm:@gamaraan/todos-tool",
+    "npm:@narumitw/pi-plan-mode",
+    "npm:pi-background-tasks",
+    "npm:pi-hashline-edit-pro",
+    "npm:pi-lens",
+    "npm:pi-mcp-adapter",
+    "npm:pi-mono-ask-user-question",
+    "npm:pi-mono-auto-fix",
+    "npm:pi-mono-btw",
+    "npm:pi-mono-context",
+    "npm:pi-mono-context-guard",
+    "npm:pi-mono-review",
+    "npm:pi-simplify",
+    "npm:pi-x-search",
+    "npm:pi-zentui@0.25.0"
+  ],
+  "defaultThinkingLevel": "max",
+  "compaction": {
+    "enabled": true,
+    "reserveTokens": 45000,
+    "keepRecentTokens": 30000
+  },
+  "markdown": {
+    "mermaid": "final"
+  }
+}

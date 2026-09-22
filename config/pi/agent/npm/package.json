@@ -1,0 +1,22 @@
+{
+  "name": "pi-extensions",
+  "private": true,
+  "dependencies": {
+    "@ff-labs/pi-fff": "^0.11.0",
+    "@gamaraan/todos-tool": "^0.3.0",
+    "@narumitw/pi-plan-mode": "^0.58.2",
+    "pi-background-tasks": "^2.6.2",
+    "pi-hashline-edit-pro": "^4.3.6",
+    "pi-lens": "^4.2.1",
+    "pi-mcp-adapter": "^2.35.0",
+    "pi-mono-ask-user-question": "^1.8.0",
+    "pi-mono-auto-fix": "^0.3.2",
+    "pi-mono-btw": "^1.7.4",
+    "pi-mono-context": "^0.1.1",
+    "pi-mono-context-guard": "^1.8.0",
+    "pi-mono-review": "^1.8.2",
+    "pi-simplify": "^0.2.3",
+    "pi-x-search": "^0.1.1",
+    "pi-zentui": "0.25.0"
+  }
+}

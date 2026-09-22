@@ -1,0 +1,47 @@
+{
+  "name": "@badliveware/pi-compaction-continue",
+  "version": "0.1.5",
+  "description": "Watchdog nudge extension for Pi after idle compactions or stalled continuation turns.",
+  "type": "module",
+  "keywords": [
+    "pi-package",
+    "pi-extension",
+    "compaction",
+    "ralph",
+    "watchdog",
+    "stall"
+  ],
+  "license": "MIT",
+  "author": "BadLiveware",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BadLiveware/pi.git",
+    "directory": "agent/extensions/public/compaction-continue"
+  },
+  "bugs": {
+    "url": "https://github.com/BadLiveware/pi/issues"
+  },
+  "homepage": "https://github.com/BadLiveware/pi/tree/main/agent/extensions/public/compaction-continue#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "index.ts",
+    "src",
+    "package.json"
+  ],
+  "pi": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "peerDependencies": {
+    "@mariozechner/pi-coding-agent": "*"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

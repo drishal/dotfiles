@@ -1,0 +1,41 @@
+# ── Secrets (moved out of config: ~/.pi/secrets/) ──────────────────────
+/secrets/
+
+# ── Credentials & auth ─────────────────────────────────────────────────
+agent/auth.json
+# mcp.json carries live MCP credentials inline.
+# Ignored until those move to env vars; rebuild it from SETUP.md step 5.
+agent/mcp.json
+# models.json — provider config incl. LAN IP, hand-tuned per machine
+agent/models.json
+# models-store.json — xai oauth/user token store, keep private
+agent/models-store.json
+
+# litellm-auto.ts — gateway-specific model discovery (deployment names/aliases);
+# ships docs/extensions/litellm-auto.md instead — rebuild per machine from the doc
+agent/extensions/litellm-auto.ts
+agent/auth.json.bak
+agent/models.json.bak
+
+# ── Sessions & runtime state (private, large) ──────────────────────────
+agent/sessions/
+agent/tasks/
+agent/.pi/
+.pi/
+om/
+pi-acp/
+tasks/
+web-search-cache/
+
+# ── Caches (regenerated) ───────────────────────────────────────────────
+agent/mcp-cache.json
+agent/litellm-models-cache.json
+agent/mcp-npx-cache.json
+agent/fff/
+
+# ── Vendored code (restore with: cd agent/npm && npm ci) ───────────────
+agent/npm/node_modules/
+
+# ── OS noise ───────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
