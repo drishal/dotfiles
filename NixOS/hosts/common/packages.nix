@@ -148,6 +148,7 @@
     gnome-calculator
     gnome-sound-recorder
     gnumake
+    glab
     gnupg
     gh
     ghostscript
