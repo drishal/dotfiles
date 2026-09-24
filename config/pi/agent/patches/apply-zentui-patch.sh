@@ -7,7 +7,7 @@
 #   apply-zentui-patch.sh --check    status only, no changes
 set -uo pipefail
 PATCH_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PKG_DIR="/home/drishal/.pi/agent/npm/node_modules/pi-zentui"
+PKG_DIR="${PI_CODING_AGENT_DIR:-$HOME/.pi/agent}/npm/node_modules/pi-zentui"
 PATCH_FILE="$PATCH_DIR/pi-zentui-token-context.patch"
 
 [ -d "$PKG_DIR" ] || { echo "pi-zentui not found at $PKG_DIR" >&2; exit 1; }

@@ -10,10 +10,12 @@ agent/mcp.json
 agent/models.json
 # models-store.json — xai oauth/user token store, keep private
 agent/models-store.json
+# model-state.json — per-machine model pick (remember-model.ts)
+agent/model-state.json
+agent/model-state.json.tmp
 
-# litellm-auto.ts — gateway-specific model discovery (deployment names/aliases);
-# ships docs/extensions/litellm-auto.md instead — rebuild per machine from the doc
-agent/extensions/litellm-auto.ts
+# litellm-auto.ts IS tracked: the shareable build reads its key from auth.json
+# and discovers models at runtime — no deployment names or hosts in the file.
 agent/auth.json.bak
 agent/models.json.bak
 
@@ -39,3 +41,7 @@ agent/npm/node_modules/
 # ── OS noise ───────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
+
+# npm/ — pi's own install tree + lockfile (written with --legacy-peer-deps);
+# rebuilt from settings.json packages[] by bootstrap.sh step 4
+agent/npm/

@@ -1,81 +1,92 @@
 /**
- * remember-model — persist the last user-selected model + thinking level so
- * the next session starts on it instead of resetting to defaultModel.
+ * remember-model — persist the last user-selected model + thinking level to a
+ * machine-local state file (model-state.json) and re-apply it on startup.
  *
- * Pi's `/model` and `/thinking` pickers persist via Ctrl+S into settings.json
- * (defaultModel / defaultThinkingLevel / modelThinkingLevels). When you just
- * select with Enter (no Ctrl+S), the choice applies only to the current
- * session and the next launch reverts to whatever is in settings.json.
- *
- * This extension closes that gap: on every non-restore `model_select` and
- * `thinking_level_select`, it writes the selection back into settings.json,
- * so the next launch restores exactly what you last picked.
+ * Why not settings.json: settings.json is synced to dotfiles. Model picks
+ * change constantly and must not produce dotfile commits. This extension
+ * moves that churn into ~/.pi/agent/model-state.json (never synced) and
+ * re-applies the saved pick on every non-resume session start.
  *
  * - `model_select` source "set" | "cycle"  → persist provider+model
- *   (source "restore" is the launch-time restore of an already-saved pick;
- *   re-persisting it would be a no-op but is skipped to avoid write churn)
+ *   (source "restore" is a launch-time replay; skipped to avoid churn)
  * - `thinking_level_select`                → persist level + per-model pin
+ *   (the pin is re-applied whenever that model is selected again)
+ * - `session_start` startup|new|reload     → re-apply the saved pick
+ *   ("resume"/"fork" are skipped: the session's own model history replays
+ *   itself and should win over the last global pick)
  *
- * No state of its own; reads/writes ~/.pi/agent/settings.json only.
+ * settings.json holds no model keys at all. Pi applies its built-in default
+ * for the first moments after boot; this extension switches to the
+ * remembered pick right after.
+ *
+ * Caveat: pi's own Ctrl+S inside the /model or /thinking picker still writes
+ * defaultModel/defaultThinkingLevel back into settings.json. Prefer Enter to
+ * confirm a pick. If those keys ever reappear in settings.json, delete them
+ * once — this extension does not fight pi's settings manager.
+ *
+ * No state of its own; reads/writes ~/.pi/agent/model-state.json only.
  */
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-const AGENT_DIR = process.env.PI_AGENT_DIR ?? `${process.env.HOME}/.pi/agent`;
-const SETTINGS_PATH = path.join(AGENT_DIR, "settings.json");
+const AGENT_DIR = process.env.PI_CODING_AGENT_DIR ?? `${process.env.HOME}/.pi/agent`;
+const STATE_PATH = path.join(AGENT_DIR, "model-state.json");
 
-interface SettingsShape {
-	defaultProvider?: string;
-	defaultModel?: string;
-	defaultThinkingLevel?: string;
-	modelThinkingLevels?: Record<string, string>;
-	[key: string]: unknown;
+type ThinkingLevelParam = Parameters<ExtensionAPI["setThinkingLevel"]>[0];
+
+interface ModelState {
+	provider?: string;
+	model?: string;
+	/** Global fallback thinking level. */
+	thinkingLevel?: ThinkingLevelParam;
+	/** Per-model thinking pins, keyed "provider/modelId". */
+	modelThinkingLevels?: Record<string, ThinkingLevelParam>;
+}
+
+function readState(): ModelState {
+	try {
+		if (!fs.existsSync(STATE_PATH)) return {};
+		return JSON.parse(fs.readFileSync(STATE_PATH, "utf-8")) as ModelState;
+	} catch (err) {
+		const msg = err instanceof Error ? err.message : String(err);
+		console.error(`[remember-model] failed to read model-state.json: ${msg}`);
+		return {};
+	}
 }
 
 /**
- * Merge-patch settings.json with an atomic temp-file + rename so a crash
+ * Merge-patch model-state.json with an atomic temp-file + rename so a crash
  * mid-write cannot leave a truncated file.
- *
- * Pi writes settings.json asynchronously through a file lock (proper-lockfile
- * lockfile on the real path). This extension cannot reach that lock from the
- * bundled runtime, so it minimizes the race instead: read-modify-write in one
- * synchronous block, last-writer-wins. Conflicts with pi's own Ctrl+S saves
- * are rare (both touch different keys, and pi deep-merges nested fields), and
- * the writes are debounced below so bursts of model_select/thinking events
- * collapse to a single disk write.
  */
-function patchSettings(patch: SettingsShape): void {
+function patchState(patch: ModelState): void {
 	try {
-		const current: SettingsShape = fs.existsSync(SETTINGS_PATH)
-			? (JSON.parse(fs.readFileSync(SETTINGS_PATH, "utf-8")) as SettingsShape)
-			: {};
-
-		const next: SettingsShape = { ...current, ...patch };
+		const current = readState();
+		const next: ModelState = { ...current, ...patch };
 
 		// Deep-merge modelThinkingLevels so a per-model pin does not wipe
 		// pins for other models.
-		if (patch.modelThinkingLevels && current.modelThinkingLevels) {
+		if (patch.modelThinkingLevels || current.modelThinkingLevels) {
 			next.modelThinkingLevels = {
 				...current.modelThinkingLevels,
 				...patch.modelThinkingLevels,
 			};
 		}
 
-		const tmp = `${SETTINGS_PATH}.tmp`;
+		const tmp = `${STATE_PATH}.tmp`;
 		fs.writeFileSync(tmp, JSON.stringify(next, null, 2) + "\n", "utf-8");
-		fs.renameSync(tmp, SETTINGS_PATH);
+		fs.renameSync(tmp, STATE_PATH);
 	} catch (err) {
 		const msg = err instanceof Error ? err.message : String(err);
-		console.error(`[remember-model] failed to persist settings: ${msg}`);
+		console.error(`[remember-model] failed to persist model-state.json: ${msg}`);
 	}
 }
 
 /** Coalesce rapid events into one write so switching models isn't write-spammy. */
 let pendingTimer: ReturnType<typeof setTimeout> | undefined;
-let pendingPatch: SettingsShape = {};
+let pendingPatch: ModelState = {};
 
-function schedulePatch(patch: SettingsShape): void {
+function schedulePatch(patch: ModelState): void {
 	pendingPatch = {
 		...pendingPatch,
 		...patch,
@@ -93,29 +104,82 @@ function schedulePatch(patch: SettingsShape): void {
 		pendingTimer = undefined;
 		const toWrite = pendingPatch;
 		pendingPatch = {};
-		patchSettings(toWrite);
+		patchState(toWrite);
 	}, 250);
 }
 
+/** True while session_start is re-applying the saved pick, so the events our
+ * own setModel/setThinkingLevel calls trigger don't get re-persisted. */
+let restoring = false;
+
 export default async function (pi: ExtensionAPI) {
+	pi.on("session_start", async (event, ctx) => {
+		// resume/fork: the session replays its own model changes; leave them be.
+		if (event.reason === "resume" || event.reason === "fork") return;
+
+		const state = readState();
+		if (!state.provider || !state.model) return;
+
+		const target = ctx.modelRegistry.find(state.provider, state.model);
+		if (!target) {
+			console.error(
+				`[remember-model] saved model ${state.provider}/${state.model} not found; keeping pi's default`,
+			);
+			return;
+		}
+
+		restoring = true;
+		try {
+			const ok = await pi.setModel(target);
+			if (!ok) {
+				console.error(
+					`[remember-model] could not restore ${state.provider}/${state.model} (auth not configured?)`,
+				);
+				return;
+			}
+
+			// Per-model pin wins over the global remembered level.
+			const key = `${state.provider}/${state.model}`;
+			const level = state.modelThinkingLevels?.[key] ?? state.thinkingLevel;
+			if (level) pi.setThinkingLevel(level);
+		} finally {
+			restoring = false;
+		}
+	});
+
 	pi.on("model_select", async (event) => {
-		// "restore" = launch-time replay of the saved default; re-saving would
-		// be a no-op and just adds write churn. Persist user-driven changes.
+		if (restoring) return;
+		// "restore" = launch-time replay; re-saving would be a no-op plus churn.
 		if (event.source === "restore") return;
 
 		const { provider, id } = event.model;
-		schedulePatch({ defaultProvider: provider, defaultModel: id });
+		schedulePatch({ provider, model: id });
+
+		// Apply this model's pinned thinking level on switch, so the level
+		// follows the model mid-session too, not only after a restart.
+		// Include the not-yet-flushed debounced patch, not just what's on disk.
+		const pins = { ...readState().modelThinkingLevels, ...pendingPatch.modelThinkingLevels };
+		const pin = pins[`${provider}/${id}`];
+		if (pin && pin !== pi.getThinkingLevel()) {
+			restoring = true;
+			try {
+				pi.setThinkingLevel(pin);
+			} finally {
+				restoring = false;
+			}
+		}
 	});
 
-	pi.on("thinking_level_select", async (event) => {
+	pi.on("thinking_level_select", async (event, ctx) => {
+		if (restoring) return;
 		const level = event.level;
 
 		// Persist as the global default…
-		const patch: SettingsShape = { defaultThinkingLevel: level };
+		const patch: ModelState = { thinkingLevel: level };
 
 		// …and as a per-model pin when a model is already active, so the level
 		// follows the model across sessions.
-		const model = pi.getModel?.();
+		const model = ctx.model;
 		if (model) {
 			const key = `${model.provider}/${model.id}`;
 			patch.modelThinkingLevels = { [key]: level };
