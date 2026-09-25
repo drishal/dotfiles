@@ -1,0 +1,40 @@
+--- a/plugins/vnc/vnc_plugin.c
++++ b/plugins/vnc/vnc_plugin.c
+@@ -1117,6 +1117,24 @@
+ }
+ 
+ 
++#if LIBVNCSERVER_CHECK_VERSION_VERSION(0, 9, 14)
++/* Dynamic resolution: the widget's first size-allocate lands before the
++ * server's screen layout, so SendExtDesktopSize skipped it. Resend it now. */
++static gboolean remmina_plugin_vnc_dynres_sync(RemminaProtocolWidget *gp)
++{
++	TRACE_CALL(__func__);
++	RemminaPluginVncData *gpdata = GET_PLUGIN_DATA(gp);
++	GtkAllocation alloc;
++
++	if (gpdata->connected && gpdata->client && gpdata->drawing_area &&
++	    remmina_plugin_service->remmina_protocol_widget_get_current_scale_mode(gp) == REMMINA_PROTOCOL_WIDGET_SCALE_MODE_DYNRES) {
++		gtk_widget_get_allocation(gpdata->drawing_area, &alloc);
++		SendExtDesktopSize(gpdata->client, alloc.width, alloc.height);
++	}
++	return G_SOURCE_REMOVE;
++}
++#endif
++
+ static gboolean remmina_plugin_vnc_main_loop(RemminaProtocolWidget *gp)
+ {
+ 	TRACE_CALL(__func__);
+@@ -1171,6 +1189,12 @@
+ 			}
+ 			return FALSE;
+ 		}
++#if LIBVNCSERVER_CHECK_VERSION_VERSION(0, 9, 14)
++		if (cl->screen.width && !g_object_get_data(G_OBJECT(gp), "vnc-dynres-synced")) {
++			g_object_set_data(G_OBJECT(gp), "vnc-dynres-synced", GINT_TO_POINTER(1));
++			IDLE_ADD((GSourceFunc)remmina_plugin_vnc_dynres_sync, gp);
++		}
++#endif
+ 	}
+ 
+ 	return TRUE;

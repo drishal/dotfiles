@@ -288,6 +288,8 @@
     qbittorrent
     ranger
     read-edid
+    # VNC dynamic resolution fixes for htbvnc; see NixOS/pkgs/remmina-dynres.
+    (pkgs.callPackage ../../pkgs/remmina-dynres { })
     ripgrep
     rofi
     rquickshare

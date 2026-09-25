@@ -94,6 +94,7 @@ NixOS/
     default.nix              ← attrset exposing all packages via callPackage
     thorium-browser/
     galaxy-buds-client/
+    remmina-dynres/          ← remmina + libvncclient patches so VNC dynamic resolution works (~/.local/bin/htbvnc)
   shared/
     stylix.nix               ← cross-cutting stylix theming (catppuccin-mocha base24)
 config/                      ← XDG-style app configs (non-HM-managed / legacy)
