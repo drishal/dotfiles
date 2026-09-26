@@ -419,6 +419,7 @@ The rest of `extensions/` **is** tracked here and linked by `bootstrap.sh`:
 | `compaction-continue/` | Watchdog that nudges pi to resume when a turn stalls. Upstream is unmaintained since 2026-05; the compaction half it was written for was fixed in pi 0.84.4, the stalled-turn half is still live. |
 | `sudo-session.ts` | `/sudo` elevation for the bash tool. |
 | `remember-model.ts` | Persists last model + thinking level across sessions in `model-state.json`, and exports that file's `mem0` section (memory models) as the env vars the shared mem0 settings expand. |
+| `eval/` | `eval` tool: Python (`runner.py`, plain CPython — `python3` on PATH or `EVAL_PYTHON`) and JavaScript (`kernel.cjs`, Node REPL semantics) in persistent per-session kernels. Last-expression value, top-level await, `!cmd`/`%pip` in Python; Ctrl+C/timeout interrupts a cell, and a kernel that will not stop is restarted. Modelled on omp's `eval`. |
 | `mem0-recall.ts` | Draws mem0's recall message as one `● Recalled N memories` line (Ctrl+O expands) instead of a full tinted block. `MEM0_RECALL=hide`/`full` in its header. |
 | `herdr-agent-state.ts` | Publishes agent state for desktop integrations. |
 | `pi-code-planner/` | Planner instruction templates (`instructions/`). |

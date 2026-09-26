@@ -45,3 +45,6 @@ Thumbs.db
 # npm/ — pi's own install tree + lockfile (written with --legacy-peer-deps);
 # rebuilt from settings.json packages[] by bootstrap.sh step 4
 agent/npm/
+
+# Python bytecode (eval/runner.py when imported)
+__pycache__/
