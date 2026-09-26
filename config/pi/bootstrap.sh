@@ -44,7 +44,9 @@ PER_ENTRY=( extensions themes skills )
 # settings.json is neither linked nor copied wholesale: it holds BOTH shared
 # config (packages, theme, compaction) and per-machine choices. These keys are
 # per-machine and never enter the repo — a different box runs a different
-# provider, and the model name is not public information.
+# provider, and the model name is not public information. (Settings that
+# need a per-machine value but can expand ${VAR} — the pi-memory-mem0 block —
+# stay shared; remember-model.ts exports the values from model-state.json.)
 LOCAL_KEYS='["defaultProvider","defaultModel","defaultThinkingLevel","lastChangelogVersion"]'
 
 say "pi bootstrap: $REPO -> $PI"
@@ -114,19 +116,30 @@ for d in "${PER_ENTRY[@]}"; do
 done
 
 # --- 3b. settings.json (merged, never overwritten) -------------------------
-# Repo supplies the shared keys; whatever this machine already chose for
-# LOCAL_KEYS is carried over untouched. A fresh machine simply has none, and
-# pi picks a model on first run.
+# The repo supplies the shared keys and wins where both define one. Nothing
+# that exists only on this machine is dropped: LOCAL_KEYS (model choice, mem0
+# config), any other live-only key, and packages installed here with
+# `pi install` that the repo does not list yet. Those are reported as
+# live-only so they can be shared with --sync-back (or deliberately kept
+# local). A fresh machine simply gets the repo copy.
 say "settings.json (merge, local keys preserved):"
 SRC_S="$REPO/agent/settings.json"; DST_S="$PI/settings.json"
+PNAME='def pname: (if type == "string" then . else (.source // "") end)
+  | if startswith("npm:") then .[4:]
+      | (if startswith("@") then "@" + (.[1:] | split("@")[0]) else split("@")[0] end)
+    else . end;'
 if [ ! -f "$SRC_S" ]; then
   say "  missing $SRC_S"
 elif [ ! -f "$DST_S" ]; then
   act "settings.json (new)"
   [ $CHECK -eq 0 ] && cp -p "$SRC_S" "$DST_S"
 else
-  merged="$(jq -s --argjson keys "$LOCAL_KEYS" \
-      '.[0] * (.[1] | with_entries(select(.key as $k | $keys | index($k))))' \
+  merged="$(jq -s "$PNAME"'
+      .[0] as $repo | .[1] as $live
+      | ($live * $repo)
+      | .packages = (($repo.packages // [])
+          + [($live.packages // [])[]
+             | select(pname as $n | ($repo.packages // []) | map(pname) | index($n) | not)])' \
       "$SRC_S" "$DST_S")" || { say "  jq merge failed"; exit 1; }
   if [ "$merged" = "$(cat "$DST_S")" ]; then
     ok "settings.json"
@@ -135,8 +148,16 @@ else
     [ $CHECK -eq 0 ] && printf '%s\n' "$merged" > "$DST_S"
   fi
   for k in $(printf '%s' "$LOCAL_KEYS" | jq -r '.[]'); do
-    v="$(jq -r --arg k "$k" '.[$k] // empty' "$DST_S")"
+    v="$(jq -r --arg k "$k" '.[$k] // empty | if type == "string" then . else "(\(type), set)" end' "$DST_S")"
     [ -n "$v" ] && printf '  kept    %s = %s (local)\n' "$k" "$v"
+  done
+  jq -rs --argjson keys "$LOCAL_KEYS" "$PNAME"'
+      .[0] as $repo | .[1] as $live
+      | ([($live.packages // [])[] | select(pname as $n | ($repo.packages // []) | map(pname) | index($n) | not)
+          | if type == "string" then . else .source end]
+         + [$live | keys[] | select(. as $k | ($repo | has($k) | not) and ($keys | index($k) | not))])[]' \
+      "$SRC_S" "$DST_S" | while IFS= read -r x; do
+    printf '  live    %s (not in repo; --sync-back to share it)\n' "$x"
   done
 fi
 
@@ -164,6 +185,45 @@ while IFS= read -r spec; do
   [ $CHECK -eq 1 ] && continue
   pi install "$spec" >/dev/null 2>&1 || { say "  FAILED  pi install $spec"; exit 1; }
 done < <(jq -r '.packages[]? | if type=="string" then . else .source end' "$PI/settings.json")
+
+# --- 4b. memory storage ---------------------------------------------------
+# mem0ai (behind the mem0 extension) imports some of its PEER dependencies at
+# load time — better-sqlite3 for the local store, and pg, which it imports even
+# though the SQLite store never uses it. pi installs with peers disabled, so
+# after `pi install` memory fails with "Mem0 init failed: Cannot find package".
+# Rather than hard-code that list, load mem0 and install whatever it reports
+# missing (at mem0ai's declared peer range) until it loads. pi's own npm flags
+# (--legacy-peer-deps) matter: plain `npm install` would also pull in every
+# other package's peers (~370 modules).
+mem0_missing() {   # first package mem0 cannot load; "" if fine; "!msg" otherwise
+  (cd "$PI/npm" && node -e '
+    import("mem0ai/oss")
+      .then(() => { new (require("better-sqlite3"))(":memory:"); })
+      .catch((e) => {
+        const m = /Cannot find (?:package|module) \x27([^\x27]+)\x27/.exec(e.message);
+        console.log(m ? m[1] : `!${String(e.message).split("\n")[0]}`);
+      });' 2>/dev/null)
+}
+MEM0="$PI/npm/node_modules/mem0ai/package.json"
+if [ -f "$MEM0" ]; then
+  for _ in 1 2 3 4 5 6; do
+    miss="$(mem0_missing)"
+    [ -z "$miss" ] && { ok "mem0 dependencies load"; break; }
+    case "$miss" in '!'*) say "  FAILED  mem0 does not load: ${miss#!}"; break ;; esac
+    name="$(node -p "const s='$miss'; s.startsWith('@') ? s.split('/').slice(0, 2).join('/') : s.split('/')[0]")"
+    range="$(node -p "require('$MEM0').peerDependencies?.['$name'] ?? 'latest'")"
+    VERB=install act "$name@$range (mem0 peer)"
+    [ $CHECK -eq 1 ] && break
+    npm install "$name@$range" --prefix "$PI/npm" --legacy-peer-deps --no-audit --no-fund \
+        </dev/null >/dev/null 2>&1 || { say "  FAILED  npm install $name@$range"; break; }
+  done
+  # The shared settings block names no models: remember-model.ts exports
+  # them from model-state.json's "mem0" section, which only this machine has.
+  for k in llm embedder; do
+    jq -e --arg k "$k" '.mem0[$k] | strings | length > 0' "$PI/model-state.json" >/dev/null 2>&1 ||
+      say "  NOTE    model-state.json has no mem0.$k; mem0 cannot run (SETUP.md step 8)"
+  done
+fi
 
 # --- 5. the silent one ----------------------------------------------------
 # The zentui patch lives INSIDE node_modules, which is untracked. A fresh
@@ -196,4 +256,8 @@ Per-machine model choice (never in the repo):
   each model keeps its own thinking level. Avoid Ctrl+S in /model or /thinking:
   that writes defaultModel etc. into settings.json (harmless — --sync-back
   strips them — but it duplicates the choice).
+
+  Its "mem0" section holds the memory models (llm, embedder), which
+  remember-model.ts exports for the shared settings.json block to expand
+  (SETUP.md step 8). Memories live in $PI/memories/.
 EOF
