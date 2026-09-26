@@ -41,7 +41,10 @@
         "config": {
           "model": "${MEM0_EMBED_MODEL}"
         }
-      }
-    }
+      },
+      "customInstructions": "Extract only durable, reusable facts about the user and their environment. Each fact: under 25 words, atomic (one fact per entry), present tense. Include: tooling/workflow preferences, machine/environment setup, project layout, stable corrections. Exclude: quotes or summaries of previous answers, transient debugging state, one-off task details, file contents, and anything not confirmed by the user. Unrelated chatter must yield an empty facts list."
+    },
+    "topK": 3,
+    "recallFrequency": "session"
   }
 }
