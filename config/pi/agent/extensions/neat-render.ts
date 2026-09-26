@@ -45,6 +45,8 @@
  *   NEAT_RENDER_RULES=1  restore the horizontal rules around a run; needs
  *                        NEAT_RENDER_BATCH=1 to be visible
  *   NEAT_RENDER_PULSE=0  static bullet on running rows instead of a pulse
+ *   NEAT_RENDER_FRAME=0  ctrl+o shows pi's tinted box instead of the
+ *                        omp-style frame (command / Output / status)
  *   NEAT_RENDER_FOLD_THINKING=0  show fenced code inside thinking verbatim
  *   NEAT_RENDER_INSET=n  left inset for tool rows (default 1, matching pi's
  *                        message output pad; set 0 to hug the left edge)
@@ -104,6 +106,11 @@ function resultText(row: ToolRow): string {
 		.filter((p) => p?.type === "text" && typeof p.text === "string")
 		.map((p) => p.text as string)
 		.join("\n");
+}
+
+/** "1 line", "12 lines". */
+function plural(n: number, word: string): string {
+	return `${n} ${word}${n === 1 ? "" : "s"}`;
 }
 
 function countLines(text: string): number {
@@ -217,7 +224,7 @@ function summarize(row: ToolRow): Summary {
 		const to = num(args.end_line) ?? num(args.endLine) ??
 			(from !== undefined && limit !== undefined ? from + limit - 1 : undefined);
 		if (from !== undefined) where += to !== undefined ? `:${from}-${to}` : `:${from}`;
-		return { label: "Read", detail: where, facts: lines ? [`${lines} lines`] : [] };
+		return { label: "Read", detail: where, facts: lines ? [plural(lines, "line")] : [] };
 	}
 
 	if (name === "bash") {
@@ -233,7 +240,7 @@ function summarize(row: ToolRow): Summary {
 		} else if (!row.isPartial && row.result?.isError) {
 			facts.push("failed");
 		}
-		if (lines) facts.push(`${lines} lines`);
+		if (lines) facts.push(plural(lines, "line"));
 		return { label: "Bash", detail: `$ ${cmd}`, facts };
 	}
 
@@ -259,7 +266,7 @@ function summarize(row: ToolRow): Summary {
 		// modifier, so it belongs with the outcome, not the title.
 		const mode = str(args.mode);
 		if (mode && mode !== "readable") facts.push(mode);
-		if (lines) facts.push(`${lines} lines`);
+		if (lines) facts.push(plural(lines, "line"));
 
 		return {
 			label: name,
@@ -349,7 +356,7 @@ function summarize(row: ToolRow): Summary {
 	return {
 		label: name,
 		detail: firstArg,
-		facts: lines ? [`${lines} lines`] : [],
+		facts: lines ? [plural(lines, "line")] : [],
 	};
 }
 
@@ -573,18 +580,133 @@ function installCard(): Patchable | undefined {
 	return proto;
 }
 
+/* ── expanded rows: framed, omp-style ──────────────────────────────────── */
+
+type Renderable = { render(width: number): string[] };
+/** The parts of pi's ToolExecutionComponent the frame is built from. */
+type ToolInternals = {
+	contentBox?: { children?: Renderable[] };
+	imageComponents?: Renderable[];
+	imageSpacers?: Renderable[];
+	hasRendererDefinition?(): boolean;
+	getRenderShell?(): string;
+	formatToolExecution?(): string;
+};
+
+const ANSI_RE = /\x1b\[[0-9;?]*[A-Za-z]|\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)/g;
+const isBlank = (line: string) => line.replace(ANSI_RE, "").trim() === "";
+
+/** Drop the blank padding lines renderers put above and below their text. */
+function trimBlank(lines: string[]): string[] {
+	let a = 0;
+	let b = lines.length;
+	while (a < b && isBlank(lines[a])) a++;
+	while (b > a && isBlank(lines[b - 1])) b--;
+	return lines.slice(a, b);
+}
+
+/**
+ * Ctrl+O view of one tool call, framed the way omp draws it:
+ *
+ *   ╭──────────────────────────────────────────────╮
+ *   │ $ strings -n 4 ~/.local/bin/omp | sed -n '…' │
+ *   ├─── Output ───────────────────────────────────┤
+ *   │   type: "input_text",                        │
+ *   ╰─── 40 lines ─────────────────────────────────╯
+ *
+ * Border colours follow omp's output-block states: dim when done, accent
+ * while running, error on failure.
+ *
+ * pi's own expanded view puts the same content in a tinted box padded by a
+ * blank line on every side, and the row bullet landed on that blank line,
+ * alone. Here the call and result come straight from the children of pi's
+ * content box — the tool's own renderCall/renderResult output, so diffs and
+ * syntax colours survive — minus the tint. Images are drawn after the frame
+ * rather than inside it, so terminal graphics are not clipped by borders.
+ *
+ * Returns undefined when the tool draws its own framing (render shell
+ * "self"), leaving that one to pi. NEAT_RENDER_FRAME=0 restores pi's box.
+ */
+function framedLines(comp: unknown, row: ToolRow, theme: ThemeLike, width: number): string[] | undefined {
+	const c = comp as ToolInternals;
+	const inner = width - 4; // "│ " + text + " │"
+	if (inner < 12) return undefined;
+
+	let call: string[];
+	let output: string[];
+	if (c.hasRendererDefinition?.()) {
+		if (c.getRenderShell?.() === "self") return undefined;
+		const kids = c.contentBox?.children ?? [];
+		if (kids.length === 0) return undefined;
+		const [first, ...rest] = kids;
+		call = trimBlank(first.render(inner));
+		output = trimBlank(rest.flatMap((k) => k.render(inner)));
+	} else {
+		// No renderer at all: pi formats the whole call as one text block.
+		const text = c.formatToolExecution?.();
+		if (!text) return undefined;
+		call = [];
+		output = trimBlank(text.split("\n"));
+	}
+
+	// omp's state colours: quiet when done, accent while running, red on failure.
+	const tone = row.isPartial ? "accent" : row.result?.isError ? "error" : "dim";
+	const g = (s: string) => theme.fg(tone, s);
+	const fit = (s: string) => (visibleWidth(s) > inner ? truncateToWidth(s, inner) : s);
+	const boxed = (line: string) => {
+		const t = fit(line);
+		return `${g("│")} ${t}${" ".repeat(Math.max(0, inner - visibleWidth(t)))} ${g("│")}`;
+	};
+	/** A border with a label set into it after a 3-dash cap, as omp draws it:
+	 *  `├─── Output ───┤`. Fill = width - (corner + cap) - label - corner. */
+	const labelled = (left: string, label: string, right: string, color: string) => {
+		const l = truncateToWidth(` ${label} `, Math.max(0, width - 5));
+		return g(`${left}───`) + theme.fg(color, l) + g("─".repeat(Math.max(0, width - 5 - visibleWidth(l)))) + g(right);
+	};
+
+	const out = ["", g(`╭${"─".repeat(width - 2)}╮`)];
+	out.push(...call.map(boxed));
+	if (output.length > 0) {
+		if (call.length > 0) out.push(labelled("├", "Output", "┤", "toolTitle"));
+		out.push(...output.map(boxed));
+	}
+	const { facts } = summarize(row);
+	const status = row.isPartial ? ["running…"] : facts;
+	out.push(status.length > 0 ? labelled("╰", status.join(" · "), "╯", tone) : g(`╰${"─".repeat(width - 2)}╯`));
+
+	// Images keep pi's own layout, below the frame.
+	const images = c.imageComponents ?? [];
+	images.forEach((img, i) => {
+		const spacer = c.imageSpacers?.[i];
+		if (spacer) out.push(...spacer.render(width));
+		out.push(...img.render(width));
+	});
+	return out;
+}
+
 /* ── patch 2: compact tool rows ────────────────────────────────────────── */
 
 function installRows(): Patchable | undefined {
 	const proto = ToolExecutionComponent?.prototype as unknown as Patchable | undefined;
 	if (!proto || typeof proto.render !== "function" || proto[ROW_PATCH]) return undefined;
 	const original = proto.render;
+	const frame = !off("NEAT_RENDER_FRAME");
 
 	proto.render = function (width: number): string[] {
 		const theme = state.theme;
 		const row = this as unknown as ToolRow;
-		// Expanded rows keep pi's full output; only the collapsed row is ours.
-		if (!theme || row.expanded) return original.call(this, width);
+		if (!theme) return original.call(this, width);
+		if (row.expanded) {
+			if (frame) {
+				try {
+					const framed = framedLines(this, row, theme, width);
+					if (framed) return framed;
+				} catch {
+					// fall through to pi's own expanded view
+				}
+			}
+			return original.call(this, width);
+		}
 		// Arm the next pulse frame while this call is still in flight.
 		if (row.isPartial) armPulse(this);
 		try {
@@ -678,6 +800,9 @@ function renderRun(run: ToolRow[], theme: ThemeLike, width: number, rules: boole
 
 	/** One call as a bulleted row; continuation lines align under the text. */
 	const bulleted = (r: ToolRow): string[] => {
+		// An expanded (ctrl+o) row is a frame — or pi's box — which carries its
+		// own chrome. A bullet there sat alone on the box's blank first line.
+		if (r.expanded) return render(r, Math.max(8, width - pad.length)).map((l) => (l ? pad + l : l));
 		const lines = render(r, Math.max(8, width - pad.length - 2));
 		return lines.map((l, idx) => (idx === 0 ? `${pad}${dotFor(r)} ${l}` : `${pad}  ${l}`));
 	};
