@@ -135,7 +135,9 @@
           },
           "extensionStatuses": {
             "defaultPlacement": "right",
-            "placements": {},
+            "placements": {
+              "mem0": "off"
+            },
             "colorModes": {}
           }
         }

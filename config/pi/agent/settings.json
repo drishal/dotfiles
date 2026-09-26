@@ -15,7 +15,9 @@
     "npm:pi-simplify",
     "npm:pi-web-access",
     "npm:pi-x-search",
-    "npm:pi-zentui@0.25.0"
+    "npm:pi-zentui@0.25.0",
+    "npm:@amaster.ai/pi-memory-mem0",
+    "npm:@joemccann/pi-pdf"
   ],
   "compaction": {
     "enabled": true,
@@ -24,5 +26,22 @@
   },
   "markdown": {
     "mermaid": "final"
+  },
+  "pi-memory-mem0": {
+    "mode": "embedded",
+    "oss": {
+      "llm": {
+        "provider": "${MEM0_PROVIDER:-litellm}",
+        "config": {
+          "model": "${MEM0_LLM_MODEL}"
+        }
+      },
+      "embedder": {
+        "provider": "${MEM0_PROVIDER:-litellm}",
+        "config": {
+          "model": "${MEM0_EMBED_MODEL}"
+        }
+      }
+    }
   }
 }

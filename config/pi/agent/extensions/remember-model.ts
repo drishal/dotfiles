@@ -24,6 +24,19 @@
  * confirm a pick. If those keys ever reappear in settings.json, delete them
  * once — this extension does not fight pi's settings manager.
  *
+ * model-state.json also carries the per-machine mem0 models. The shared
+ * settings.json block for pi-memory-mem0 names no models — it expands
+ * ${MEM0_LLM_MODEL} etc. — so this extension exports them from here when it
+ * loads, before mem0 reads its settings at session start:
+ *
+ *   "mem0": { "llm": "<chat model>", "embedder": "<embedding model>",
+ *             "provider": "<pi provider, optional>" }
+ *
+ *   → MEM0_LLM_MODEL, MEM0_EMBED_MODEL, MEM0_PROVIDER
+ *
+ * A variable already set in the environment wins. Model/thinking writes
+ * leave the section alone (patchState merges into the existing file).
+ *
  * No state of its own; reads/writes ~/.pi/agent/model-state.json only.
  */
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
@@ -42,6 +55,24 @@ interface ModelState {
 	thinkingLevel?: ThinkingLevelParam;
 	/** Per-model thinking pins, keyed "provider/modelId". */
 	modelThinkingLevels?: Record<string, ThinkingLevelParam>;
+	/** Per-machine mem0 models, exported as env for settings.json. */
+	mem0?: { llm?: string; embedder?: string; provider?: string };
+}
+
+/** model-state.json "mem0" key -> env var the settings.json block expands. */
+const MEM0_ENV = {
+	llm: "MEM0_LLM_MODEL",
+	embedder: "MEM0_EMBED_MODEL",
+	provider: "MEM0_PROVIDER",
+} as const;
+
+function exportMem0Env(state: ModelState): void {
+	for (const [key, env] of Object.entries(MEM0_ENV)) {
+		const value = state.mem0?.[key as keyof typeof MEM0_ENV];
+		if (typeof value === "string" && value.trim() && process.env[env] === undefined) {
+			process.env[env] = value.trim();
+		}
+	}
 }
 
 function readState(): ModelState {
@@ -113,6 +144,10 @@ function schedulePatch(patch: ModelState): void {
 let restoring = false;
 
 export default async function (pi: ExtensionAPI) {
+	// Now, not at session_start: mem0 reads its settings in its own
+	// session_start handler, which may run before ours.
+	exportMem0Env(readState());
+
 	pi.on("session_start", async (event, ctx) => {
 		// resume/fork: the session replays its own model changes; leave them be.
 		if (event.reason === "resume" || event.reason === "fork") return;

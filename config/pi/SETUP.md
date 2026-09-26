@@ -131,7 +131,7 @@ pi creates most of this on first run. What matters:
 `AGENTS.md` is worth calling out: it carries the MCP routing rules that tell
 the model which tool to reach for (`web_search`/`web_fetch` for the web,
 obscura for pages that need a real browser, grep_app for public code, context7
-for library docs, mnemosyne for memory, nixos for packages). Without it the
+for library docs, nixos for packages; memory is the mem0 extension, step 8). Without it the
 servers are present but rarely chosen well.
 
 ## 4. `settings.json` (non-model settings)
@@ -249,16 +249,15 @@ Each is independently useful; take what you need.
 | `grep_app` | HTTP | search public GitHub code | nothing |
 | `nixos` | STDIO (`uvx`) | nixpkgs / NixOS options lookup | `uvx` |
 | `obscura` | STDIO | drive a real page — navigate, click, forms, JS render | `obscura` on `PATH` |
-| `mnemosyne` | STDIO | cross-session memory (`remember` / `recall`) | its own binary + `config.yaml` |
 
 Web search is **not** on this list: `pi-web-access` (step 6) provides
-`web_search` / `web_fetch` as ordinary tools, with local SearXNG tried first.
+`web_search` / `fetch_content` as ordinary tools, with local SearXNG tried first.
 An MCP search server such as `argus` is redundant alongside it.
 
 > **Credentials belong in `env`, not inline where you can help it.** A token
 > written straight into `mcp.json` is why the file is untracked. Prefer
 > `"API_TOKEN": "${API_TOKEN}"` env entries exported from your shell, or
-> keep the server's own config file (mnemosyne does this) as the credential home.
+> keep the credential in the server's own config file.
 
 > **On `keep-alive` vs `lazy`.** Both appear in the prompt as a single
 > `mcp__<server>` namespace proxy — the underlying tools are *not* enumerated,
@@ -278,11 +277,6 @@ An MCP search server such as `argus` is redundant alongside it.
       "url": "https://mcp.grep.app",
       "lifecycle": "lazy"
     },
-    "mnemosyne": {
-      "command": "<path-to-mnemosyne-binary>",
-      "args": ["mcp"],
-      "lifecycle": "keep-alive"
-    },
     "obscura": {
       "command": "obscura",
       "args": ["mcp"],
@@ -297,51 +291,17 @@ An MCP search server such as `argus` is redundant alongside it.
 }
 ```
 
-**Before writing that block, apply these conditionals:**
-
-- **`mnemosyne` — ask the user; don't guess.** Cross-session memory MCP server.
-  Mnemosyne is self-configuring: once it has run once (or an existing install is
-  present), all of its settings — data dir, embedding endpoint, model, dims — live
-  in **its own** `config.yaml` inside its data dir (precedence:
-  `config.yaml > env vars > defaults`). The MCP block only needs the binary path.
-
-  **Detect what's already on the machine:**
-
-  ```bash
-  # an existing mnemosyne install? (binary on PATH, or inside an agent venv)
-  command -v mnemosyne || find ~ -maxdepth 4 -name mnemosyne -type f 2>/dev/null | head -3
-  # existing data dir (its config.yaml records the embedding settings)
-  ls ~/.mnemosyne 2>/dev/null
-  ```
-
-  **Then use `ask_user_question` to ask the user:**
-
-  - Q1 (radio): "Set up the `mnemosyne` cross-session memory MCP server?"
-    → `Yes` / `No, skip it`
-
-  **Act on the answer:**
-
-  - **No, skip** → delete the entire `mnemosyne` entry from `mcp.json`. Done.
-  - **Yes, existing install** → point `command` at the detected binary.
-  - **Yes, fresh** → install mnemosyne (see the upstream repo,
-    [mnemosyne-oss/mnemosyne](https://github.com/mnemosyne-oss/mnemosyne)), then
-    set embedding config **in mnemosyne's own config**
-    (`mnemosyne config set embedding_api_url ...` etc.) or via
-    `MNEMOSYNE_EMBEDDING_*` env vars — ask the user for the endpoint/key.
-    Keep `mcp.json` free of credentials — mnemosyne's config.yaml is the right home.
 **What each server does / what it needs:**
 
 | Server      | Type  | Needs                                                                                                                                      |
 | ----------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | `context7`  | STDIO | Nothing (public npx package, library docs).                                                                                                |
 | `grep_app`  | HTTP  | Nothing (public, code search).                                                                                                             |
-| `mnemosyne` | STDIO | Cross-session memory. Binary path is machine-specific — see the conditional above. All other settings live in mnemosyne's own config. |
 | `obscura`   | STDIO | The `obscura` Rust binary on `PATH`. Headless browser / page render.                                                                       |
 | `nixos`     | STDIO | `uvx`. Query nixpkgs / NixOS options.                                                                                                      |
 
-> `mnemosyne`'s `command` is machine-specific. Don't commit real paths — source
-> them interactively per the conditional above, and never write the `<...>`
-> placeholders verbatim.
+Memory is not an MCP server any more: the mem0 extension (step 8) replaced
+mnemosyne here.
 
 ## 6. Extensions (npm packages)
 
@@ -380,7 +340,7 @@ What they are:
 - `pi-mono-context` — prints current context-window usage *without* adding
   that report to future context.
 - `pi-mono-review` — reviews GitHub PRs and GitLab MRs.
-- `pi-web-access` — `web_search` / `web_fetch`. SearXNG first when configured
+- `pi-web-access` — `web_search` / `fetch_content`. SearXNG first when configured
   (see Prerequisites), then public providers. GitHub URLs are cloned locally
   rather than scraped, so the agent gets real file contents.
 - `pi-simplify` — reviews the **local** working diff for clarity and
@@ -394,6 +354,16 @@ What they are:
   the local patch in step 6b from being silently reverted. Keep the pin in
   both `settings.json` and `npm/package.json` — a caret range in either
   defeats it.
+- `@amaster.ai/pi-memory-mem0` — cross-session memory, per project. Needs a
+  per-machine config block and two extra npm modules; see step 8.
+- `@joemccann/pi-pdf` — 12 PDF tools (text/table extraction, `pdf_to_images`,
+  merge/split, forms, OCR, …) plus a `pdf` skill. It runs `python3` from
+  `PATH` with no way to point it elsewhere, so that `python3` must have
+  `pypdf pdfplumber reportlab` (and `pdf2image pytesseract pypdfium2 Pillow`
+  plus `poppler`/`tesseract` for page images and OCR). NixOS has no user
+  site-packages (PEP 668), so this machine uses a uv venv at
+  `~/.venvs/pi-pdf` and a `~/.local/bin/python3` shim that execs it — which
+  makes that venv every shell's `python3`, not just pi's.
 ### 6b. Local patches (`patches/`) — the silent step
 
 `patches/` holds a patch applied **inside `node_modules/pi-zentui/`**, making
@@ -444,32 +414,17 @@ The rest of `extensions/` **is** tracked here and linked by `bootstrap.sh`:
 
 | Extension | Does |
 |---|---|
-| `neat-render.ts` | Claude-Code-shaped tool rows: two-line call/outcome, wrapped `└ $` for running commands, inline edit diffs, pulsing bullet. Env knobs in its header. |
+| `neat-render.ts` | Claude-Code-shaped tool rows: two-line call/outcome, wrapped `└ $` for running commands, inline edit diffs, pulsing bullet. Ctrl+O shows each call in an omp-style frame (command, `Output` divider, status in the bottom border) instead of pi's tinted box. Env knobs in its header. |
 | `read-guard/` | Trims a `read` only when it would overflow the context window, returning the first 30 lines plus a use-grep-instead directive. From little-coder. Replaced `pi-mono-context-guard`, which capped every read at 120 lines regardless of pressure. |
 | `compaction-continue/` | Watchdog that nudges pi to resume when a turn stalls. Upstream is unmaintained since 2026-05; the compaction half it was written for was fixed in pi 0.84.4, the stalled-turn half is still live. |
 | `sudo-session.ts` | `/sudo` elevation for the bash tool. |
-| `remember-model.ts` | Persists last model + thinking level across sessions. |
+| `remember-model.ts` | Persists last model + thinking level across sessions in `model-state.json`, and exports that file's `mem0` section (memory models) as the env vars the shared mem0 settings expand. |
+| `mem0-recall.ts` | Draws mem0's recall message as one `● Recalled N memories` line (Ctrl+O expands) instead of a full tinted block. `MEM0_RECALL=hide`/`full` in its header. |
 | `herdr-agent-state.ts` | Publishes agent state for desktop integrations. |
 | `pi-code-planner/` | Planner instruction templates (`instructions/`). |
 
 ### 7b. User-global skills
 
-- **`mnemosyne`** → from the upstream repo,
-  **[mnemosyne-oss/mnemosyne](https://github.com/mnemosyne-oss/mnemosyne)** — do
-  **not** vendor it here. Clone the repo and copy the memory-usage skill from
-  `integrations/zero/skills/mnemosyne/SKILL.md` (agent-generic; teaches the
-  `mnemosyne_remember` / `mnemosyne_recall` trigger discipline):
-
-  ```bash
-  git clone --depth 1 https://github.com/mnemosyne-oss/mnemosyne /tmp/mnemosyne
-  mkdir -p ~/.pi/agent/skills/mnemosyne
-  cp /tmp/mnemosyne/integrations/zero/skills/mnemosyne/SKILL.md ~/.pi/agent/skills/mnemosyne/
-  rm -rf /tmp/mnemosyne
-  ```
-
-  Only relevant if you set up the mnemosyne MCP server (step 5). Note the
-  upstream skill's `memory_*` naming section describes the plugin surface —
-  the MCP tools are `mnemosyne_*` (the skill's MCP section covers this).
 - **`obscura`** → from the upstream repo,
   **[h4ckf0r0day/obscura](https://github.com/h4ckf0r0day/obscura)** — do **not**
   vendor it here. Clone and copy its skill:
@@ -495,8 +450,7 @@ The rest of `extensions/` **is** tracked here and linked by `bootstrap.sh`:
   (v0.0.5, too immature to carry). Re-add with
   `pi install npm:@howaboua/pi-skill-skill-creator` if you want it back.
 
-The two user-global skills that matter here (`mnemosyne-memory`, `obscura`)
-are vendored under `config/pi/agent/skills/` and linked by `bootstrap.sh`;
+The user-global skill that matters here (`obscura`) is vendored under `config/pi/agent/skills/` and linked by `bootstrap.sh`;
 the upstream clone commands above are the fallback for a machine without this
 repo.
 
@@ -512,60 +466,79 @@ this session, so the npm extensions and MCP servers are **not yet loaded** —
 `/mcp` will show nothing until you restart. Exit pi and relaunch it, then
 continue from step 8.
 
-## 8. Seed memory — *optional, not installed by default*
+## 8. Memory (mem0)
 
-> **This step needs `@amaster.ai/pi-memory`, which is no longer in the package
-> list.** Without it there is no `memories/MEMORY.md` and no `memory_*` tools,
-> and this whole step is a no-op. Durable memory on this machine goes through
-> the **mnemosyne** MCP server instead (step 5), with the routing rules living
-> in `AGENTS.md` rather than in `MEMORY.md`. Skip to step 9 unless you have
-> deliberately reinstalled the package:
-> `pi install npm:@amaster.ai/pi-memory`.
+Cross-session memory is the `@amaster.ai/pi-memory-mem0` extension, already in
+`packages` (step 4). It runs mem0 **in-process** ("embedded" mode) — no
+Docker, no server: memories live in three SQLite files under
+`~/.pi/agent/memories/`, kept separately per project (per working directory).
 
-If you installed the `@amaster.ai/pi-memory` package,
-`~/.pi/agent/memories/MEMORY.md` is the agent's always-in-prompt memory,
-exposed via `memory_add` / `memory_read` / `memory_replace` / `memory_remove`
-tools. It's char-limited — keep it to short rules + key facts only, not task
-logs.
+- **Automatic capture** — after each turn an LLM extracts durable facts.
+- **Automatic recall** — before each prompt the closest memories (by embedding
+  similarity) are added to the conversation as untrusted data, not to the
+  system prompt, so prompt caching is unaffected.
+- **`mem0_memory` tool** and **`/mem0`** commands (`status`, `search`,
+  `profile`, `add`, `delete`) for looking things up or editing by hand.
 
-To seed it, use `memory_add` (one call per entry). **Don't hand-edit
-`MEMORY.md`** — the tool writes the `§` entry delimiters itself, and
-hand-editing risks breaking the format.
+**Per-machine config.** mem0 needs to know which models to use, and model names
+never enter this repo. The `pi-memory-mem0` block in `settings.json` is shared
+(it is in this repo) but names no models — it expands environment variables:
 
-**Entry 1 — tool-usage rules** (one `memory_add` call with this content):
-
-```
-# Rules
-
-## Web access
-
-- Search the web with `web_search`. Never `curl`/`wget`/`python requests` a search engine or hand-roll a scraper.
-- Open, render, or interact with a webpage with the `obscura` MCP server (or `obscura fetch`/`obscura serve` from the CLI). Never `curl`/`python requests` a page URL — they fail on JS-rendered and bot-protected pages.
-- `web_search` discovers; `web_fetch` reads one page (and clones GitHub URLs locally); obscura is for pages that need a real browser.
-
-## GitHub
-
-- Browse GitHub with the `gh` CLI (`gh repo view`, `gh issue`, `gh pr`, etc.) instead of scraping github.com in the browser.
-
-## Memory
-
-- Use Mnemosyne for normal durable memories (preferences, decisions, project state, prior work); `mnemosyne_remember` stores and `mnemosyne_recall` retrieves.
-- Use `MEMORY.md`/`USER.md` only for core rules/facts that must be present in every prompt; keep them tiny.
+```json
+"pi-memory-mem0": {
+  "mode": "embedded",
+  "oss": {
+    "llm":      { "provider": "${MEM0_PROVIDER:-litellm}", "config": { "model": "${MEM0_LLM_MODEL}" } },
+    "embedder": { "provider": "${MEM0_PROVIDER:-litellm}", "config": { "model": "${MEM0_EMBED_MODEL}" } }
+  }
+}
 ```
 
-**Entry 2 — pi MCP server config note** (one `memory_add` call):
+The values come from the `"mem0"` section of `~/.pi/agent/model-state.json` —
+the same per-machine file that remembers your model picks, never linked, synced
+or committed. `extensions/remember-model.ts` exports it as environment
+variables when pi starts, before mem0 reads its settings; a variable already
+set in your shell wins. Add it on each machine:
 
-```
-pi MCP servers: configured in `~/.pi/agent/mcp.json` under `mcpServers`. pi has native MCP support (no adapter needed). STDIO servers use `command`+`args` (+optional `env`); HTTP servers use `url`. `lifecycle`: `"lazy"` (spawn on first use, good for stateless API clients) or `"keep-alive"` (persistent). Server list is loaded at session start — new entries need a pi restart (or `/reload`) to appear in the `mcp` gateway. Verify a STDIO server works with a JSON-RPC `initialize`+`tools/list` handshake over the process stdin/stdout.
-```
-
-**Entry 3 — `memory_replace` footgun** (one `memory_add` call):
-
-```
-memory_replace footgun: `oldText` only *selects* the entry; `newContent` replaces the **entire entry**, not the matched substring. Passing just the changed fragment as `newContent` truncates the entry to that fragment. Always pass the full intended entry text as `newContent`. If unsure, use `memory_remove` + `memory_add` instead.
+```json
+"mem0": {
+  "llm": "<fast chat model>",
+  "embedder": "<embedding model>",
+  "provider": "<pi provider>"
+}
 ```
 
-Verify with `memory_read` — you should see all three entries.
+(`provider` is optional and defaults to `litellm`. Model and thinking-level
+writes leave this section alone.)
+
+The provider is any pi provider name — keys and base URLs come from pi's own
+registry, so there is nothing else to configure. Pick a fast chat model for
+extraction (it runs once per turn) and any OpenAI-compatible embedding model;
+the vector size is detected automatically. `bootstrap.sh` prints a NOTE when
+`mem0.llm` or `mem0.embedder` is missing.
+
+**Load-time dependencies.** mem0 imports two of its *peer* dependencies as
+soon as it loads: `better-sqlite3` (the store) and `pg` (imported even though
+the SQLite store never uses it). pi installs packages with peers disabled, so
+after a plain `pi install` memory fails with "Mem0 init failed: Cannot find
+package". `bootstrap.sh` step 4b loads mem0 and installs whatever it reports
+missing, with pi's own npm flags, until it loads. By hand:
+
+```bash
+npm install better-sqlite3 pg --prefix ~/.pi/agent/npm --legacy-peer-deps
+```
+
+(Plain `npm install` inside `npm/` would also pull in every other package's
+peers — hundreds of extra modules.) npm downloads a prebuilt `better-sqlite3`
+binary for common platforms; otherwise it compiles, which needs `python3`,
+`make` and a C++ compiler.
+
+**Check:** run `/mem0 status`. (Its footer entry is turned off in
+`zentui.json` under `extensionStatuses.placements`; set `"mem0"` to `"right"`
+to show it again.)
+
+Memories are separate from Hermes's Mnemosyne store by design — each agent
+keeps its own.
 
 ## 9. Checklist (user-provided, outside this repo)
 
@@ -584,8 +557,8 @@ These are **not in this repo** — supply them before first run:
 pi                       # launches; no config errors
 # inside pi:
 /mcp                     # lists every server you configured, each "connected"
-# tools from whichever servers you configured should appear;
-# mnemosyne appears only if you kept the block (step 5)
+# tools from whichever servers you configured should appear
+/mem0 status             # memory active (step 8)
 ```
 
 Then check that an extension tool like `ask_user_question` or the pi-lens
