@@ -1,0 +1,12 @@
+{
+  "provider": "<provider>",
+  "model": "<model-id>",
+  "thinkingLevel": "medium",
+  "modelThinkingLevels": {
+    "<provider>/<model-id>": "high"
+  },
+  "mem0": {
+    "llm": "<memory-extraction-model>",
+    "embedder": "<embedding-model>"
+  }
+}

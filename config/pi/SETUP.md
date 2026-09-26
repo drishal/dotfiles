@@ -496,9 +496,10 @@ never enter this repo. The `pi-memory-mem0` block in `settings.json` is shared
 
 The values come from the `"mem0"` section of `~/.pi/agent/model-state.json` —
 the same per-machine file that remembers your model picks, never linked, synced
-or committed. `extensions/remember-model.ts` exports it as environment
-variables when pi starts, before mem0 reads its settings; a variable already
-set in your shell wins. Add it on each machine:
+or committed (`agent/model-state_example.json` here shows the shape).
+`extensions/remember-model.ts` exports it as environment variables when pi
+starts, before mem0 reads its settings; a variable already set in your shell
+wins. Add it on each machine:
 
 ```json
 "mem0": {
