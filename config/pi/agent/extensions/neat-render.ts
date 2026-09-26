@@ -45,6 +45,10 @@
  *   NEAT_RENDER_RULES=1  restore the horizontal rules around a run; needs
  *                        NEAT_RENDER_BATCH=1 to be visible
  *   NEAT_RENDER_PULSE=0  static bullet on running rows instead of a pulse
+ *   NEAT_RENDER_COMMENTS=0  keep a bash command's leading `# comment`
+ *                        lines inline instead of on a dim line above the call
+ *   NEAT_RENDER_HIGHLIGHT=0  ctrl+o shows a bash command in pi's single
+ *                        colour instead of syntax-highlighted
  *   NEAT_RENDER_FRAME=0  ctrl+o shows pi's tinted box instead of the
  *                        omp-style frame (command / Output / status)
  *   NEAT_RENDER_FOLD_THINKING=0  show fenced code inside thinking verbatim
@@ -53,8 +57,8 @@
  */
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
-import { ToolExecutionComponent, UserMessageComponent } from "@earendil-works/pi-coding-agent";
-import { Container, truncateToWidth, visibleWidth } from "@earendil-works/pi-tui";
+import { highlightCode, ToolExecutionComponent, UserMessageComponent } from "@earendil-works/pi-coding-agent";
+import { Container, truncateToWidth, visibleWidth, wrapTextWithAnsi } from "@earendil-works/pi-tui";
 
 const CARD_PATCH = Symbol.for("dr.pi.neatRender.card.v1");
 const ROW_PATCH = Symbol.for("dr.pi.neatRender.row.v1");
@@ -64,6 +68,7 @@ type ThemeLike = {
 	fg(slot: string, text: string): string;
 	bg(slot: string, text: string): string;
 	bold(text: string): string;
+	italic?(text: string): string;
 };
 
 type ToolRow = {
@@ -153,7 +158,35 @@ type Summary = {
 	body?: string[];
 	/** Render nothing at all — a batch member that is not the commit. */
 	hidden?: boolean;
+	/** The model's own remark about the call (a bash command's leading
+	 *  `# comment` lines), shown dim on its own line instead of in the detail. */
+	note?: string;
 };
+
+/**
+ * Split a bash command's leading `# comment` lines off the command.
+ *
+ * Models often narrate inside the command itself ("# check how pi loads
+ * extensions ⏎ rg -n …"), which collapses to `$ # check how pi loads…` and
+ * pushes the real command off the row. Only the display changes: the tool
+ * still runs the command verbatim. A shebang is not a comment, and a command
+ * that is nothing but comments is left alone.
+ */
+function splitLeadingComments(cmd: string, marker = "#"): { note?: string; command: string } {
+	const lines = cmd.split("\n");
+	const notes: string[] = [];
+	let i = 0;
+	for (; i < lines.length; i++) {
+		const t = lines[i].trim();
+		if (t === "" && notes.length > 0) continue;
+		if (!t.startsWith(marker) || t.startsWith("#!")) break;
+		const text = t.slice(marker.length).replace(/^[#/\s]*/, "");
+		if (text) notes.push(text);
+	}
+	const command = lines.slice(i).join("\n").trim();
+	if (!command || notes.length === 0) return { command: cmd };
+	return { note: notes.join(" "), command };
+}
 
 /** Diff rows shown inline under an edit before the rest is elided. */
 const DIFF_PREVIEW_LINES = 8;
@@ -241,7 +274,31 @@ function summarize(row: ToolRow): Summary {
 			facts.push("failed");
 		}
 		if (lines) facts.push(plural(lines, "line"));
-		return { label: "Bash", detail: `$ ${cmd}`, facts };
+		const { note, command } = off("NEAT_RENDER_COMMENTS") ? { command: cmd } : splitLeadingComments(cmd);
+		return { label: "Bash", detail: `$ ${command}`, facts, note };
+	}
+
+	if (name === "eval") {
+		// The eval extension: a Python/JavaScript cell. Label by language,
+		// show the first line of code (a leading comment goes above the row,
+		// as for bash), and the size of what it printed.
+		const lang = str(args.language);
+		const code = str(args.code) ?? "";
+		const { note, command } = off("NEAT_RENDER_COMMENTS")
+			? { command: code }
+			: splitLeadingComments(code, lang === "js" ? "//" : "#");
+		const codeLines = command.split("\n").filter((l) => l.trim());
+		const facts: string[] = [];
+		if (!row.isPartial && row.result?.isError) facts.push("failed");
+		if (lines) facts.push(plural(lines, "line"));
+		const ms = num(row.result?.details?.durationMs);
+		if (ms !== undefined && ms >= 1000) facts.push(`${(ms / 1000).toFixed(1)}s`);
+		return {
+			label: lang === "js" ? "JavaScript" : lang === "py" ? "Python" : "eval",
+			detail: codeLines.length > 1 ? `${codeLines[0]} …` : codeLines[0],
+			facts,
+			note,
+		};
 	}
 
 	if (WEB_TOOLS.has(name)) {
@@ -469,8 +526,11 @@ function wrapTo(text: string, width: number, max: number): string[] {
  *
  * NEAT_RENDER_SPLIT=0 keeps the old single-line form.
  */
+/** Lines a row puts above its call line (the `# remark`), per row. */
+const LEAD_LINES = new WeakMap<ToolRow, number>();
+
 function rowLines(row: ToolRow, theme: ThemeLike, width: number): string[] {
-	const { label, detail, facts, glue, body: extra, hidden } = summarize(row);
+	const { label, detail, facts, glue, body: extra, hidden, note } = summarize(row);
 	if (hidden) return [];
 	const sep = theme.fg("dim", " · ");
 	const failed = row.result?.isError === true;
@@ -485,6 +545,16 @@ function rowLines(row: ToolRow, theme: ThemeLike, width: number): string[] {
 	const fit = (s: string) => (visibleWidth(s) > width ? truncateToWidth(s, width) : s);
 
 	const running = row.isPartial === true;
+	// The model's remark reads first, like a comment above a shell command.
+	// It sits in the bullet column (see renderRun), so it heads the call below
+	// it instead of trailing the previous row's result.
+	const noteLine = note && split
+		? (() => {
+				const dim = theme.fg("dim", `# ${oneLine(note, Math.max(8, width))}`);
+				return [fit(theme.italic ? theme.italic(dim) : dim)];
+			})()
+		: [];
+	LEAD_LINES.set(row, noteLine.length);
 
 	// Running, split mode: the command moves to its own wrapped `└ $` block,
 	// so the header carries only the label and status.
@@ -496,6 +566,7 @@ function rowLines(row: ToolRow, theme: ThemeLike, width: number): string[] {
 		const lead = theme.fg("dim", "└ ");
 		const body = wrapTo(detail, Math.max(8, width - 2), WRAP_LINES);
 		return [
+			...noteLine,
 			header,
 			...body.map((l, i) =>
 				fit((i === 0 ? lead : "  ") + theme.fg("syntaxVariable", l)),
@@ -531,7 +602,7 @@ function rowLines(row: ToolRow, theme: ThemeLike, width: number): string[] {
 		return [fit(out)];
 	}
 
-	const out = [fit(head)];
+	const out = [...noteLine, fit(head)];
 	if (facts.length > 0) {
 		out.push(fit(theme.fg("dim", "└ ") + facts.map(paint).join(sep)));
 	}
@@ -606,6 +677,54 @@ function trimBlank(lines: string[]): string[] {
 }
 
 /**
+ * Make each highlighted line carry its own colour.
+ *
+ * highlightCode colours a token once and splits into lines afterwards, so a
+ * token spanning lines — a quoted `node -e '…'` script, a heredoc — opens its
+ * colour on the first line and closes it on the last, leaving the lines in
+ * between uncoloured once each is drawn on its own. Re-open the colour at the
+ * start of each continued line and close it at the end, so every framed line
+ * is self-contained (and the border after it keeps its own colour).
+ */
+function carryColour(lines: string[]): string[] {
+	let open = "";
+	return lines.map((line) => {
+		const full = open + line;
+		open = "";
+		for (const m of full.matchAll(/\x1b\[([0-9;]*)m/g)) {
+			const code = m[1];
+			if (code === "" || code === "0" || code === "39") open = "";
+			else if (/^(38;|3[0-7]$|9[0-7]$)/.test(code)) open = m[0];
+		}
+		return open ? `${full}\x1b[39m` : full;
+	});
+}
+
+/**
+ * A bash command for the expanded frame: `$ ` then the command syntax-
+ * highlighted as bash with pi's own highlighter (the theme's syntax* colours,
+ * the same as Markdown code blocks). Continuation lines — heredoc bodies,
+ * `\`-continued lines, wrapped long lines — indent under the command.
+ * pi's bash renderCall draws the whole command in one colour.
+ */
+function highlightedCommand(cmd: string, theme: ThemeLike, width: number): string[] {
+	let lines: string[];
+	try {
+		lines = carryColour(highlightCode(cmd, "bash"));
+	} catch {
+		lines = cmd.split("\n");
+	}
+	const room = Math.max(8, width - 2);
+	const out: string[] = [];
+	lines.forEach((line, i) => {
+		wrapTextWithAnsi(line, room).forEach((part, j) => {
+			out.push((i === 0 && j === 0 ? theme.fg("dim", "$ ") : "  ") + part);
+		});
+	});
+	return out;
+}
+
+/**
  * Ctrl+O view of one tool call, framed the way omp draws it:
  *
  *   ╭──────────────────────────────────────────────╮
@@ -639,7 +758,10 @@ function framedLines(comp: unknown, row: ToolRow, theme: ThemeLike, width: numbe
 		const kids = c.contentBox?.children ?? [];
 		if (kids.length === 0) return undefined;
 		const [first, ...rest] = kids;
-		call = trimBlank(first.render(inner));
+		const cmd = row.toolName === "bash" ? (str(row.args?.command) ?? str(row.args?.cmd)) : undefined;
+		call = cmd && !off("NEAT_RENDER_HIGHLIGHT")
+			? highlightedCommand(cmd, theme, inner)
+			: trimBlank(first.render(inner));
 		output = trimBlank(rest.flatMap((k) => k.render(inner)));
 	} else {
 		// No renderer at all: pi formats the whole call as one text block.
@@ -804,7 +926,10 @@ function renderRun(run: ToolRow[], theme: ThemeLike, width: number, rules: boole
 		// own chrome. A bullet there sat alone on the box's blank first line.
 		if (r.expanded) return render(r, Math.max(8, width - pad.length)).map((l) => (l ? pad + l : l));
 		const lines = render(r, Math.max(8, width - pad.length - 2));
-		return lines.map((l, idx) => (idx === 0 ? `${pad}${dotFor(r)} ${l}` : `${pad}  ${l}`));
+		const lead = LEAD_LINES.get(r) ?? 0;
+		return lines.map((l, idx) =>
+			idx < lead ? `${pad}${l}` : idx === lead ? `${pad}${dotFor(r)} ${l}` : `${pad}  ${l}`,
+		);
 	};
 
 	if (run.length === 1 || !on("NEAT_RENDER_BATCH")) {
@@ -833,11 +958,12 @@ function renderRun(run: ToolRow[], theme: ThemeLike, width: number, rules: boole
 	run.forEach((child, idx) => {
 		const last = idx === run.length - 1;
 		const lines = render(child, Math.max(8, width - pad.length - 5));
+		const first = LEAD_LINES.get(child) ?? 0;
 		lines.forEach((line, li) => {
 			const lead =
-				li === 0
+				li === first
 					? pad + theme.fg("dim", last ? "└─ " : "├─ ")
-					: pad + theme.fg("dim", last ? "   " : "│  ");
+					: pad + theme.fg("dim", li < first || !last ? "│  " : "   ");
 			out.push(lead + line);
 		});
 	});

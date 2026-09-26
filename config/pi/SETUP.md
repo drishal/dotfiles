@@ -414,7 +414,7 @@ The rest of `extensions/` **is** tracked here and linked by `bootstrap.sh`:
 
 | Extension | Does |
 |---|---|
-| `neat-render.ts` | Claude-Code-shaped tool rows: two-line call/outcome, wrapped `└ $` for running commands, inline edit diffs, pulsing bullet. Ctrl+O shows each call in an omp-style frame (command, `Output` divider, status in the bottom border) instead of pi's tinted box. Env knobs in its header. |
+| `neat-render.ts` | Claude-Code-shaped tool rows: two-line call/outcome, wrapped `└ $` for running commands, inline edit diffs, pulsing bullet. Ctrl+O shows each call in an omp-style frame (command — bash syntax-highlighted — then an `Output` divider, status in the bottom border) instead of pi's tinted box. A bash command's leading `# comment` lines show as a dim `# …` line above the call, so the row itself shows the actual command. Env knobs in its header. |
 | `read-guard/` | Trims a `read` only when it would overflow the context window, returning the first 30 lines plus a use-grep-instead directive. From little-coder. Replaced `pi-mono-context-guard`, which capped every read at 120 lines regardless of pressure. |
 | `compaction-continue/` | Watchdog that nudges pi to resume when a turn stalls. Upstream is unmaintained since 2026-05; the compaction half it was written for was fixed in pi 0.84.4, the stalled-turn half is still live. |
 | `sudo-session.ts` | `/sudo` elevation for the bash tool. |
