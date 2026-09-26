@@ -420,6 +420,7 @@ The rest of `extensions/` **is** tracked here and linked by `bootstrap.sh`:
 | `sudo-session.ts` | `/sudo` elevation for the bash tool. |
 | `remember-model.ts` | Persists last model + thinking level across sessions in `model-state.json`, and exports that file's `mem0` section (memory models) as the env vars the shared mem0 settings expand. |
 | `eval/` | `eval` tool: Python (`runner.py`, plain CPython — `python3` on PATH or `EVAL_PYTHON`) and JavaScript (`kernel.cjs`, Node REPL semantics) in persistent per-session kernels. Last-expression value, top-level await, `!cmd`/`%pip` in Python; Ctrl+C/timeout interrupts a cell, and a kernel that will not stop is restarted. Modelled on omp's `eval`. |
+| `smart-capture.ts` | Write gate for mem0: judges each prompt's final answer (YES/NO via mem0's own extraction model) and only then stores it. Needs `"autoCapture": false` on pi-memory-mem0. `/mem0gate` for status. |
 | `mem0-recall.ts` | Draws mem0's recall message as one `● Recalled N memories` line (Ctrl+O expands) instead of a full tinted block. `MEM0_RECALL=hide`/`full` in its header. |
 | `herdr-agent-state.ts` | Publishes agent state for desktop integrations. |
 | `pi-code-planner/` | Planner instruction templates (`instructions/`). |
@@ -474,10 +475,16 @@ Cross-session memory is the `@amaster.ai/pi-memory-mem0` extension, already in
 Docker, no server: memories live in three SQLite files under
 `~/.pi/agent/memories/`, kept separately per project (per working directory).
 
-- **Automatic capture** — after each turn an LLM extracts durable facts.
-- **Automatic recall** — before each prompt the closest memories (by embedding
-  similarity) are added to the conversation as untrusted data, not to the
-  system prompt, so prompt caching is unaffected.
+- **Gated capture** — mem0's own `autoCapture` is off; `extensions/smart-capture.ts`
+  owns capture instead. After each prompt it skips acknowledgements and slash
+  commands, asks mem0's extraction model a one-word "durable fact? YES/NO"
+  about your message plus the final answer, and only on YES hands the pair to
+  mem0 (same provider, scoping and `customInstructions`). A judge error stores
+  anyway; if the gate cannot start it warns, since nothing else would save.
+  `/mem0gate` shows its decisions; `MEM0_GATE=off` disables it.
+- **Automatic recall** — at the start of each session (`recallFrequency:
+  "session"`) the `topK: 3` closest memories are added to the conversation as
+  untrusted data, not to the system prompt, so prompt caching is unaffected.
 - **`mem0_memory` tool** and **`/mem0`** commands (`status`, `search`,
   `profile`, `add`, `delete`) for looking things up or editing by hand.
 
