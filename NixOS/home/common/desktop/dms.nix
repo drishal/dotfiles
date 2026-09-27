@@ -11,7 +11,19 @@
 
   home.packages = with pkgs; [
     curl
-    python3
+    # The one python3 on PATH (a second python in home.packages would collide on
+    # bin/python3). Beyond DMS, it carries the PDF libraries for pi's `pdf` skill
+    # (~/.pi/agent/skills/pdf) and pi's `eval` tool.
+    (python3.withPackages (ps: with ps; [
+      pypdf
+      pdfplumber
+      reportlab
+      pdf2image
+      pytesseract
+      pypdfium2
+      pillow
+    ]))
+    tesseract # OCR for the pdf skill (pytesseract calls the binary)
   ];
 
 
