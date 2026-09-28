@@ -9,7 +9,12 @@
   ...
 }:
 let
-  hermes = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  hermesBase = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default;
+
+  # Plugins that need Python packages go here: the venv is read-only, so runtime installs can't add them.
+  hermes = hermesBase.override {
+    extraPythonPackages = [ (hermesBase.python.pkgs.callPackage ./hermes/mnemosyne.nix { }) ];
+  };
 in
 {
   home.packages = [ hermes ];
