@@ -1,36 +1,41 @@
-# Imported from NixOS/home/common/default.nix.
-# flake.nix input: hermes-agent.url = "github:NousResearch/hermes-agent";
-#
-# Does not set environment or environmentFiles. Either one rewrites ~/.hermes/.env
-# from scratch. Does not set configFile: that overwrites config.yaml every
-# activation. Does not set settings: Nix keys replace the same keys on disk,
-# and memory.provider is already mnemosyne there. An empty settings attrset
-# still deep-merges terminal.cwd = $HOME into config.yaml.
-#
-# Enabling the service writes ~/.hermes/.managed and blocks `hermes config set`,
-# `hermes setup`, and `hermes gateway install`. The new unit is
-# hermes-agent.service. The hand unit hermes-gateway.service is not managed here.
-#
-# Mnemosyne cannot ride this package. nixpkgs#mnemosyne is the spaced-repetition
-# app. The live plugin is a dangling symlink into the deleted checkout venv
-# (~/.hermes/plugins/mnemosyne -> hermes-agent/.venv/.../mnemosyne_hermes).
-# mnemosyne-hermes is an entry-point package (hermes_agent.memory_providers),
-# and the Nix hermes venv is sealed, so pip into it does not stick. extraPlugins
-# of the git tree only drops plugin.yaml; Hermes still has to import
-# mnemosyne_hermes. The path that survives a sealed runtime is their wrapper
-# mode: a side venv outside the store, same Python major.minor as the nix
-# hermes binary (not the old 3.12 checkout), then
-#   mnemosyne-hermes install --mode wrapper --python "$VENV/bin/python"
-# That writes a real plugins/mnemosyne directory. Activation only deletes
-# plugins/nix-managed-* symlinks, so that directory is left alone. Not wired.
-{ inputs, ... }:
+# Nix packages Hermes and runs its gateway; ~/.hermes (config.yaml, .env, plugins) stays imperative.
+# The upstream services.hermes-agent is not used: it writes ~/.hermes/.managed and sets HERMES_MANAGED,
+# and either one makes `hermes model` / `hermes config set` refuse.
 {
-  imports = [ inputs.hermes-agent.homeManagerModules.default ];
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  hermes = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default;
+in
+{
+  home.packages = [ hermes ];
 
-  programs.hermes-agent.enable = true;
-
-  services.hermes-agent = {
-    enable = true;
-    gateway.enable = true;
+  # Not named hermes-gateway: `hermes gateway start/restart` rewrites that unit file, and on a Nix
+  # install `hermes gateway install` writes an ExecStart that does not exist. Restart with systemctl.
+  systemd.user.services.hermes-agent = {
+    Unit.Description = "Hermes Agent Gateway";
+    Install.WantedBy = [ "default.target" ];
+    Service = {
+      ExecStart = "${lib.getExe hermes} gateway";
+      WorkingDirectory = config.home.homeDirectory;
+      Environment = [
+        "HERMES_HOME=${config.home.homeDirectory}/.hermes"
+        "HERMES_SUPERVISED_CHILD=1"
+        # The shell's toolset, so the agent's terminal tool and systemd-run work from the gateway.
+        "PATH=${config.home.profileDirectory}/bin:/run/wrappers/bin:/run/current-system/sw/bin"
+      ];
+      # Exit codes mirror the unit Hermes generates: 75 = restart requested, 78 = fatal config.
+      Restart = "always";
+      RestartSec = 5;
+      RestartForceExitStatus = 75;
+      SuccessExitStatus = 75;
+      RestartPreventExitStatus = 78;
+      KillMode = "mixed";
+      UMask = "0077";
+    };
   };
 }
