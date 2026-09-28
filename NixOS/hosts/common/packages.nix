@@ -308,6 +308,7 @@
     socat
     swaylock-effects
     swaybg
+    swayimg
     telegram-desktop
     tmate
     tetex
