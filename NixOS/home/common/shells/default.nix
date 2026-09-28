@@ -61,6 +61,7 @@
     "$HOME/.node_modules/bin"
     "$HOME/.nimble/bin"
     "$HOME/.cargo/bin"
+    "$HOME/.bun/bin"
   ];
 
   # Shell-agnostic env vars; Home Manager wires these into fish, bash and zsh.
