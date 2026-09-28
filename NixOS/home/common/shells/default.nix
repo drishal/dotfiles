@@ -78,5 +78,8 @@
     PLAYWRIGHT_BROWSERS_PATH = "${pkgs.playwright-driver.browsers}";
     PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true"; # NixOS-specific: skips glibc/os checks
     PLAYWRIGHT_HOST_PLATFORM_OVERRIDE = "ubuntu-24.04"; # helps with version compatibility
+
+    # pi's env switches live in ~/.pi/agent/pi.env (the pi config repo), loaded
+    # by pi itself, so non-Nix machines get them too.
   };
 }

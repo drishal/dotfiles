@@ -3,7 +3,7 @@
 # Hands the active stylix scheme to pi-coding-agent as a base16/base24 YAML.
 #
 # pi itself only reads JSON themes; the base16-theme extension
-# (config/pi/agent/extensions/base16-theme.ts) turns every
+# (~/.pi/agent/extensions/base16-theme.ts in the pi config repo) turns every
 # ~/.pi/agent/themes/<name>.yaml into <name>.json at startup. So this module
 # only has to write the palette — the colour mapping lives in one place, and
 # the coding agent re-themes along with everything else on a rebuild.
