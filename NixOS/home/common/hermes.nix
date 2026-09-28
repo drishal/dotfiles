@@ -17,7 +17,12 @@ let
   };
 in
 {
-  home.packages = [ hermes ];
+  # `hermes desktop` builds from a source checkout and cannot work here; hermesDesktop is the
+  # prebuilt app (`hermes-desktop` + launcher), pinned to this `hermes`.
+  home.packages = [
+    hermes
+    hermes.hermesDesktop
+  ];
 
   # Not named hermes-gateway: `hermes gateway start/restart` rewrites that unit file, and on a Nix
   # install `hermes gateway install` writes an ExecStart that does not exist. Restart with systemctl.
