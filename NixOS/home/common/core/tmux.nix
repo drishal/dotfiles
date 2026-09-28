@@ -510,7 +510,8 @@ in
 
     if [ -x "$HOME/.local/bin/hermes" ]; then
       "$HOME/.local/bin/hermes" plugins enable tmux-agent-status \
-        --no-allow-tool-override >/dev/null
+        --no-allow-tool-override >/dev/null \
+        || echo "mergeTmuxAgentHooks: hermes plugin enable failed" >&2
     fi
   '';
 }

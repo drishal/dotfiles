@@ -55,6 +55,8 @@
       flake = false;
     };
 
+    hermes-agent.url = "github:NousResearch/hermes-agent";
+
     lobster.url = "github:justchokingaround/lobster";
 
     tt-schemes = {

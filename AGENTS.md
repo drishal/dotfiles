@@ -170,6 +170,7 @@ Only what the URL doesn't tell you:
 - **`chaotic`** (Chaotic-Nyx) is where `linuxPackages_cachyos-gcc` comes from.
 - **Several inputs are `flake = false` sources vendored by a module rather than consumed as flakes** — grep `flake = false` in `flake.nix` for the current set. The non-obvious pairings: `vim-hx` → `helix.nix`, `llama-cpp` → `llama-cpp.nix` (a fork, swapped often), `tmux-agent-status` → `tmux.nix`, `gruvbox-material` → nvim.
 - **`private-stuff`** must exist locally or every build fails — see Critical gotchas.
+- **`hermes-agent`** is the Home Manager module in `home/common/hermes.nix`, not a NixOS system service. It does not own `~/.hermes/.env`.
 
 ### Patched nixpkgs
 

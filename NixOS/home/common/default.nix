@@ -12,6 +12,7 @@
     ./core/btop.nix
     ./core/pi-theme.nix
     ./core/aria2.nix
+    ./hermes.nix
 
     ./desktop/default-apps.nix
     ./desktop/rofi.nix
