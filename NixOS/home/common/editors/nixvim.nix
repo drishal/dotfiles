@@ -343,6 +343,7 @@
       # };
       image.enable = true;
       # rustaceanvim = {
+      render-markdown.enable = true;
       #   enable = true;
       # };
       conform-nvim = {
