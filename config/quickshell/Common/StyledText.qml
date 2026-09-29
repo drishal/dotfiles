@@ -13,6 +13,8 @@ Text {
     font.family: Theme.fontSans
     font.pixelSize: 13
     textFormat: Text.PlainText
+    // FreeType + fontconfig hinting; the distance-field default is soft at bar sizes.
+    renderType: Text.NativeRendering
 
     Behavior on color {
         CAnim {}

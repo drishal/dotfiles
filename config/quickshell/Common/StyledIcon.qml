@@ -12,6 +12,8 @@ Text {
     color: Theme.inkDim
     font.family: Theme.fontMono
     font.pixelSize: 14
+    // Same as StyledText: hinted FreeType glyphs, crisper than distance fields.
+    renderType: Text.NativeRendering
 
     x: inkCentered && parent ? parent.width / 2 - (tm.tightBoundingRect.x + tm.tightBoundingRect.width / 2) : x
 
