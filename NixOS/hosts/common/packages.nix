@@ -310,7 +310,6 @@
     swaybg
     swayimg
     telegram-desktop
-    tmate
     tetex
     # texlive.combined.scheme-full
     #texlive.combined.scheme-medium
