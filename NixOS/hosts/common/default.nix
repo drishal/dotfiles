@@ -9,6 +9,7 @@
     ./users.nix
     ./virtualisation.nix
     ./searx.nix
+    ./dsh.nix
     # ./firewall.nix
     # ./tlp.nix
     ../../shared/stylix.nix

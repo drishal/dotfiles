@@ -3,10 +3,12 @@
   nixConfig = {
     extra-substituters = [
       "https://nix-community.cachix.org"
+      "https://deepseek-harness-nix.cachix.org"
       # "https://emacsng.cachix.org"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "deepseek-harness-nix.cachix.org-1:5NrkwLN9veNMhiINtU5ZeV4isXFhFsOwn6Ms7J1M+TA="
       # "emacsng.cachix.org-1:i7wOr4YpdRpWWtShI8bT6V7lOTnPeI7Ho6HaZegFWMI="
     ];
   };
@@ -135,6 +137,11 @@
       url = "github:ogulcancelik/herdr";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    deepseek-harness = {
+      url = "github:moraxyc/deepseek-harness.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -240,6 +247,7 @@
               nixpkgs.overlays = [
                 inputs.emacs-overlay.overlay
                 inputs.herdr.overlays.default
+                inputs.deepseek-harness.overlays.default
               ];
             }
             # chaotic.nixosModules.default

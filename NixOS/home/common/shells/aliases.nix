@@ -16,6 +16,9 @@
     hms-offline = "home-manager switch --flake ~/dotfiles --option substitute false";
     home-setup = "~/dotfiles/scripts/home-setup.sh";
 
+    # --- Tools ---
+    dsh-tui = "dsh --profile nix-tui";
+
     # --- Package Management ---
     yay = "paru";
     p = "paru";
