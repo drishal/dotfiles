@@ -462,7 +462,8 @@ in
 
   xdg.configFile."opencode/plugins/tmux-agent-status.js".source = opencodeAgentStatus;
 
-  home.activation.mergeTmuxAgentHooks = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  # After installPackages so the profile's hermes exists on a fresh install.
+  home.activation.mergeTmuxAgentHooks = lib.hm.dag.entryAfter [ "writeBoundary" "installPackages" ] ''
     merge_agent_hooks() {
       kind="$1"
       target="$2"
@@ -508,8 +509,8 @@ in
     merge_agent_hooks claude "$HOME/.claude/settings.json"
     merge_agent_hooks codex "$HOME/.codex/hooks.json"
 
-    if [ -x "$HOME/.local/bin/hermes" ]; then
-      "$HOME/.local/bin/hermes" plugins enable tmux-agent-status \
+    if [ -x "${config.home.profileDirectory}/bin/hermes" ]; then
+      "${config.home.profileDirectory}/bin/hermes" plugins enable tmux-agent-status \
         --no-allow-tool-override >/dev/null \
         || echo "mergeTmuxAgentHooks: hermes plugin enable failed" >&2
     fi

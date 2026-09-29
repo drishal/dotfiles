@@ -26,7 +26,7 @@
   users.users.${user} = {
     shell = pkgs.fish;
     isNormalUser = true;
-    linger = true; # keep user@.service (hermes-gateway, syncthing) alive without a login
+    linger = true; # keep user@.service (hermes-agent, syncthing) alive without a login
     extraGroups = [
       "wheel"
       "netdev"
