@@ -239,7 +239,6 @@
     # }))
     mlocate
     mission-center
-    mosh
     mpv
     ncdu
     ncurses
