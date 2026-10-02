@@ -152,7 +152,7 @@
     gnupg
     gh
     ghostscript
-    goverlay
+    # goverlay # lazarus-qt6 fails: empty NIX_LDFLAGS prefix check (nixpkgs b4fd65b)
     gsmartcontrol
     gpu-screen-recorder
     gpu-screen-recorder-gtk
