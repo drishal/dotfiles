@@ -1,29 +1,30 @@
 { config, lib, pkgs, ... }:
 
-# agent-web-ui: web UI for pi and omp on 127.0.0.1:4783. The app stays a git checkout
-# (~/Desktop/git-stuff/webui); after pulling, `npm run build` there, then restart this unit.
+# agent-web-ui: web UI for pi and omp. The app stays a git checkout (~/Desktop/git-stuff/webui);
+# PORT, HOST and the login live in its .env. After pulling: `npm run build`, then restart this unit.
 let
   appDir = "%h/Desktop/git-stuff/webui";
 in
 {
   systemd.user.services.agent-web-ui = {
     Unit = {
-      Description = "Agent Web UI for pi and omp (127.0.0.1:4783)";
+      Description = "Agent Web UI for pi and omp";
       ConditionPathExists = "${appDir}/dist/server/server/index.js";
     };
     Install.WantedBy = [ "default.target" ];
     Service = {
       ExecStart = "${lib.getExe pkgs.nodejs} ${appDir}/dist/server/server/index.js";
       WorkingDirectory = appDir;
+      # Only PATH: anything else set here would override the app's .env.
       Environment = [
-        "PORT=4783"
-        "WORKSPACE_ROOTS=%h"
         # The shell's toolset: omp is in ~/.local/bin, and the agents' tools need the rest.
         "PATH=%h/.local/bin:%h/.node_modules/bin:%h/.cargo/bin:%h/.bun/bin:/run/wrappers/bin:${config.home.profileDirectory}/bin:/etc/profiles/per-user/${config.home.username}/bin:/run/current-system/sw/bin"
       ];
       # "always": SIGTERM exits 0, so "on-failure" would leave it dead after a kill by name.
       Restart = "always";
       RestartSec = 5;
+      # 78 = bad settings in .env (e.g. HOST=0.0.0.0 without a login); the journal says why.
+      RestartPreventExitStatus = 78;
     };
   };
 }
