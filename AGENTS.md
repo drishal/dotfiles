@@ -82,7 +82,7 @@ NixOS/
       stylix.nix             ← HM-level stylix overrides
       hermes.nix             ← hermes package (+ plugin Python deps), desktop app, gateway + webui user units; no config
       hermes/                ← mnemosyne.nix (memory provider built against the hermes interpreter)
-      core/                  ← packages.nix, git.nix, tmux.nix, fastfetch.nix, btop.nix, pi-theme.nix, aria2.nix
+      core/                  ← packages.nix, git.nix, tmux.nix, fastfetch.nix, btop.nix, pi-theme.nix, agent-web-ui-theme.nix, aria2.nix
         tmux/                ← Hermes/OpenCode lifecycle adapters for tmux-agent-status
       shells/                ← default.nix, fish.nix, zsh.nix, aliases.nix (shell-agnostic aliases + PATH + env)
       desktop/               ← hyprland, sway, waybar, rofi, dms, ags, eww, quickshell, default-apps, file-managers, icons

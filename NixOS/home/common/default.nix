@@ -11,6 +11,7 @@
     ./core/fastfetch.nix
     ./core/btop.nix
     ./core/pi-theme.nix
+    ./core/agent-web-ui-theme.nix
     ./core/aria2.nix
     ./hermes.nix
 
