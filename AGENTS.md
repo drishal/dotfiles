@@ -91,7 +91,7 @@ NixOS/
       browsers/              ← default.nix, betterfox.nix (firefox+betterfox; only betterfox imported)
       media/                 ← mpv.nix, yt-dlp.nix
       colors/                ← doom* palette yamls (legacy, unused by stylix)
-    nixos-desktop/           ← desktop-only HM overrides (hyprland monitor, sway)
+    nixos-desktop/           ← desktop-only HM overrides (hyprland monitor, sway, agent-web-ui user unit)
     nixos-work/              ← work-only HM overrides (dual monitor, hyprland, sway)
   pkgs/                      ← custom nix derivations
     default.nix              ← attrset exposing all packages via callPackage
