@@ -70,12 +70,12 @@
     bison
     # brave
     # pkgs-master.bun
-    (bun.overrideAttrs (old: rec {                                                                                                                                                         
-     version = "1.3.14";                                                                                                                                                                  
-     src = pkgs.fetchurl {                                                                                                                                                                
-       url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";                                                                                        
-       hash = "sha256-lR7iruhV8IWVruxiJSJqKY0/6oOj3NZGXAnLzN9+hI8=";                                                                                                                      
-     };                                                                                                                                                                                   
+    (bun.overrideAttrs (old: rec {
+     version = "1.3.14";
+     src = pkgs.fetchurl {
+       url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
+       hash = "sha256-lR7iruhV8IWVruxiJSJqKY0/6oOj3NZGXAnLzN9+hI8=";
+     };
    }))
     brightnessctl
     bridge-utils
@@ -280,6 +280,7 @@
     pdfgrep
     poppler
     ps_mem
+    psmisc
     python3
     python3Packages.pip
     playerctl
@@ -501,6 +502,15 @@
     libGL
     libva
 
+    # ── Foreign Wine (jc141 bundles) ──
+    # libvulkan.so.1 loader (vkd3d-proton) + gnutls (schannel) + libkrb5 (kerberos/ntlm).
+    vulkan-loader
+    gnutls
+    libkrb5
+    # winewayland.so needs libwayland-client/egl (missing → EGL/Vulkan init fails).
+    wayland
+    # jc141 releases ship their own non-Nix Wine; its ntdll.so needs libunwind.
+    libunwind
     # from https://github.com/NixOS/nixpkgs/blob/nixos-23.05/pkgs/games/steam/fhsenv.nix#L124-L136
     fontconfig
     freetype

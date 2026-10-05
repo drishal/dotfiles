@@ -34,6 +34,7 @@
     };
   };
   environment.systemPackages = with pkgs; [
+    inputs.nix-gaming.packages.${pkgs.stdenv.hostPlatform.system}.wine-tkg
     # llama-cpp (whichever fork the `llama-cpp` input pins) with Vulkan backend.
     # Source hash tracked by flake.lock via the `flake = false` input — no
     # manual fetchFromGitHub/hash maintenance. The local package.nix is pure
