@@ -36,7 +36,11 @@
 
     cachix.url = "github:cachix/cachix";
 
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
+      # Own pin is glibc 2.42; system mesa needs GLIBC_2.43 or GBM never loads.
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay/";
@@ -80,7 +84,14 @@
       flake = false;
     };
 
-    nix-gaming.url = "github:fufexan/nix-gaming";
+    nix-gaming = {
+      url = "github:fufexan/nix-gaming";
+      # Wine must build against the same nixpkgs as system Mesa: its ICDs
+      # link LLVM needing the newest glibc, and a stale pin loads libm 2.42
+      # first → `GLIBC_2.44 not found` on every Vulkan driver. Same reason
+      # hyprland follows nixpkgs.
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     ghostty = {
       url = "github:ghostty-org/ghostty";
