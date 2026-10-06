@@ -82,7 +82,7 @@ NixOS/
       stylix.nix             ← HM-level stylix overrides
       hermes.nix             ← hermes package (+ plugin Python deps), desktop app, gateway + webui user units; no config
       hermes/                ← mnemosyne.nix (memory provider built against the hermes interpreter)
-      core/                  ← packages.nix, git.nix, tmux.nix, fastfetch.nix, btop.nix, pi-theme.nix, agent-web-ui-theme.nix, aria2.nix
+      core/                  ← packages.nix, git.nix, tmux.nix, fastfetch.nix, btop.nix, pi-theme.nix, agent-web-ui-theme.nix, agent-web-ui.nix, aria2.nix
         tmux/                ← Hermes/OpenCode lifecycle adapters for tmux-agent-status
       shells/                ← default.nix, fish.nix, zsh.nix, aliases.nix (shell-agnostic aliases + PATH + env)
       desktop/               ← hyprland, sway, waybar, rofi, dms, ags, eww, quickshell, default-apps, file-managers, icons
@@ -91,7 +91,7 @@ NixOS/
       browsers/              ← default.nix, betterfox.nix (firefox+betterfox; only betterfox imported)
       media/                 ← mpv.nix, yt-dlp.nix
       colors/                ← doom* palette yamls (legacy, unused by stylix)
-    nixos-desktop/           ← desktop-only HM overrides (hyprland monitor, sway, agent-web-ui user unit)
+    nixos-desktop/           ← desktop-only HM overrides (hyprland monitor, sway, llama-embed)
     nixos-work/              ← work-only HM overrides (dual monitor, hyprland, sway)
   pkgs/                      ← custom nix derivations
     default.nix              ← attrset exposing all packages via callPackage

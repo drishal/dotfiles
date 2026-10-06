@@ -9,6 +9,7 @@
     ./core/packages.nix
     ./core/tmux.nix
     ./core/fastfetch.nix
+    ./core/agent-web-ui.nix
     ./core/btop.nix
     ./core/pi-theme.nix
     ./core/agent-web-ui-theme.nix
