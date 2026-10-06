@@ -11,8 +11,21 @@
 let
   hermesBase = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default;
 
+  # Upstream's flake never passes `version`, so the package says v0.0.0 (pyproject's placeholder);
+  # a git install takes it from the release tags, which are dates (v2026.9.24). The source's own
+  # release date stands in, read at eval time so it follows every `nix flake update`.
+  hermesRelease =
+    let
+      line = lib.findFirst (l: lib.hasPrefix "__release_date__" l) null (
+        lib.splitString "\n" (builtins.readFile "${inputs.hermes-agent}/hermes_cli/__init__.py")
+      );
+      found = if line == null then null else builtins.match ''__release_date__ = "([^"]+)".*'' line;
+    in
+    if found == null then "0.0.0" else builtins.head found;
+
   # Plugins that need Python packages go here: the venv is read-only, so runtime installs can't add them.
   hermes = hermesBase.override {
+    version = hermesRelease;
     extraPythonPackages = [ (hermesBase.python.pkgs.callPackage ./hermes/mnemosyne.nix { }) ];
   };
 
