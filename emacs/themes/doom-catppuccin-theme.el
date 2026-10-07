@@ -224,7 +224,7 @@ background contrast. All other values default to \"mocha\"."
    (highlight      _lavender)
    (vertical-bar   _crust)
    (selection      _blue)
-   (builtin        _peach)
+   (builtin        _red)
    (comments       _overlay0)
    (doc-comments   (if doom-catppuccin-brighter-comments _sky base6))
    (constants      _peach)
@@ -234,11 +234,11 @@ background contrast. All other values default to \"mocha\"."
    (operators      _sky)
    (type           _yellow)
    (strings        _green)
-   (variables      _blue)
+   (variables      _text)
    (numbers        _peach)
    ;; (region         `(,(doom-lighten (car bg-alt) 0.15) ,@(doom-lighten (cdr base1) 0.35)))
    ;; (region         _surface2)
-   (region         `(,(car _surface2) ,@(cdr _overlay0)))
+   (region         (doom-lighten bg 0.17))
    (error          _red)
    (warning        _yellow)
    (success        _green)
@@ -311,7 +311,8 @@ background contrast. All other values default to \"mocha\"."
     :inherit 'mode-line-inactive
     :background modeline-bg-inactive-alt
     :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-inactive-alt)))
-   (cursor :background _blue)
+   (cursor :background _rosewater)
+   (hl-line :background (doom-lighten bg 0.05) :extend t)
 
    ;; company
    (company-tooltip-selection     :background base3)
