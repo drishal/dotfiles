@@ -40,7 +40,7 @@ Singleton {
     readonly property color card: base01 // elevated surface
     readonly property color cardHi: base02 // hover / pressed
     readonly property color ink: base05 // primary text
-    readonly property color inkDim: base04 // secondary text
+    readonly property color inkDim: Qt.tint(base00, Qt.rgba(base05.r, base05.g, base05.b, 0.65)) // secondary text, scheme-independent
     readonly property color accent: base0D // accent
     readonly property color accentInk: base00 // text on accent
     // floating bar island — a touch below the bg (shade(base00, 0.92))
