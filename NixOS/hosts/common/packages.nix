@@ -525,6 +525,9 @@
     libidn
     libepoxy
     tbb
+
+    # ── Tern ──
+    webkitgtk_4_1
   ];
 
   # insecure packages
