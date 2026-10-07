@@ -1,21 +1,33 @@
-system: "base16"
-name: "doom-one"
-author: "Drishal"
+system: "base24"
+name: "Doom One"
+author: "Drishal (palette from doom-themes doom-one, by Henrik Lissner)"
 variant: "dark"
+# base24 mapping of doom-themes' doom-one. Background/foreground ramp is
+# monotonic (base00 -> base07 strictly lighter) as base16 requires; accents are
+# doom-one's own. doom-one has no bright ANSI set, so base12-14/16/17 are the
+# accents lightened 8% (HLS) and base15 is doom's real cyan over the teal base0C.
 palette:
-  base00: "282c34" # Default Background
-  base01: "1b2229" # Black
-  base02: "202328" # Bright Black
-  base03: "3f444a" # Grey
-  base04: "5b6268" # Light Grey
-  base05: "bbc2cf" # Foreground
-  base06: "9ca0a4" # White
-  base07: "dfdfdf" # Bright White
-  base08: "ff6c6b" # red
-  base09: "da8548" # orange
-  base0A: "ecbe7b" # yellow
-  base0B: "98be65" # green
-  base0C: "46d9ff" # cyan
-  base0D: "51afef" # blue
-  base0E: "c678dd" # magenta
-  base0F: "a9a1e1" # violet
+  base00: "282c34" # Default Background          (bg)
+  base01: "2f343d" # Lighter Background / elevated (between bg and base4)
+  base02: "3f444a" # Selection Background         (doom base4)
+  base03: "5b6268" # Comments, Line Highlighting  (doom base5, comment)
+  base04: "9ca0a4" # Dark Foreground              (doom base7)
+  base05: "bbc2cf" # Default Foreground           (fg)
+  base06: "dfdfdf" # Light Foreground             (doom base8)
+  base07: "eff1f5" # Lightest Foreground          (derived)
+  base08: "ff6c6b" # red                          (red)
+  base09: "da8548" # orange                       (orange)
+  base0A: "ecbe7b" # yellow                       (yellow)
+  base0B: "98be65" # green                        (green)
+  base0C: "4db5bd" # cyan                         (teal)
+  base0D: "51afef" # blue                         (blue)
+  base0E: "c678dd" # magenta                      (magenta)
+  base0F: "a9a1e1" # special                      (violet)
+  base10: "21242b" # Darker Background            (doom bg-alt)
+  base11: "1b2229" # Darkest Background           (doom base0)
+  base12: "ff9594" # Bright Red                   (red +8%)
+  base13: "f1d09f" # Bright Yellow                (yellow +8%)
+  base14: "abca82" # Bright Green                 (green +8%)
+  base15: "46d9ff" # Bright Cyan                  (cyan)
+  base16: "76c0f2" # Bright Blue                  (blue +8%)
+  base17: "d499e5" # Bright Purple                (magenta +8%)
