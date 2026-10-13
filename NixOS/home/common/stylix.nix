@@ -17,7 +17,8 @@
       hyprpaper.enable = true;
       # tmux.nix consumes config.lib.stylix.colors for its status line and menus.
       tmux.enable = false;
-      rofi.enable = true;
+      # rofi.nix builds its own theme from the stylix palette.
+      rofi.enable = false;
       # mpv.nix is a pure-technical config; OSD fonts/colors come from stylix.
       mpv.enable = true;
       # ghostty.enable = false;
