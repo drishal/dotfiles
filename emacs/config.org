@@ -2046,6 +2046,8 @@ pulling in =treesit-auto= just for the mapping.
 (use-package vertico :ensure t
   :init
   (vertico-mode)
+  :custom
+  (vertico-count 10)                    ; vertical height of the single popup
   )
 
 (use-package orderless :ensure t
@@ -2079,7 +2081,15 @@ pulling in =treesit-auto= just for the mapping.
   ;;       #'command-completion-default-include-p)
 
   ;; Enable recursive minibuffers
-  (setq enable-recursive-minibuffers t))
+  (setq enable-recursive-minibuffers t)
+
+  ;; One completion strip: let the minibuffer resize, never pop a second
+  ;; *Completions* window.
+  (setq resize-mini-windows t)
+  (add-to-list 'display-buffer-alist
+               '("\\*Completions\\*"
+                 (display-buffer-no-window)
+                 (allow-no-window . t))))
 #+end_src
 
 *** completion selection highlight
