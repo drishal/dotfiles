@@ -341,11 +341,14 @@
       #     orgmode
       #   ];
       # };
-      image.enable = true;
-      # rustaceanvim = {
+      # needs a real kitty-capable terminal (queries a tty over stdout, kitty graphics).
+      # In nvim --embed (neotern) there is no tty — image.nvim aborts startup before the
+      # LSP attaches. Only set it up when $TERM is kitty's.
+      image = {
+        enable = true;
+        callSetup = false;
+      };
       render-markdown.enable = true;
-      #   enable = true;
-      # };
       conform-nvim = {
         enable = true;
         autoInstall.enable = true;
@@ -645,5 +648,15 @@
         };
       };
     };
+
+    # image.nvim needs a real kitty tty (kitty backend does vim.loop.new_tty(1) on stdout).
+    # neotern runs nvim --embed with stdout as a msgpack pipe, so require() throws
+    # E5113 and aborts startup before the LSP attaches. Skip setup there; it sets g:neotern.
+    extraConfigLua = # lua
+      ''
+        if vim.g.neotern == nil then
+          require("image").setup({})
+        end
+      '';
   };
 }
