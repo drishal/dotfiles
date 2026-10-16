@@ -23,10 +23,12 @@ let
     in
     if found == null then "0.0.0" else builtins.head found;
 
+  mnemosyne = hermesBase.python.pkgs.callPackage ./hermes/mnemosyne.nix { };
+
   # Plugins that need Python packages go here: the venv is read-only, so runtime installs can't add them.
   hermes = hermesBase.override {
     version = hermesRelease;
-    extraPythonPackages = [ (hermesBase.python.pkgs.callPackage ./hermes/mnemosyne.nix { }) ];
+    extraPythonPackages = [ mnemosyne ];
   };
 
   # The CLI wrapper's environment (plugin PYTHONPATH, bundled resources) ending in the interpreter,
@@ -58,6 +60,7 @@ in
       Environment = [
         "HERMES_HOME=${config.home.homeDirectory}/.hermes"
         "HERMES_SUPERVISED_CHILD=1"
+        "HERMES_INSTALL_ROOT=${lib.getBin hermes}/share/hermes-agent"
         # The shell's toolset, so the agent's terminal tool and systemd-run work from the gateway.
         "PATH=${config.home.profileDirectory}/bin:/run/wrappers/bin:/run/current-system/sw/bin"
       ];
@@ -105,4 +108,11 @@ in
       TimeoutStopSec = 30;
     };
   };
+
+  # A real directory for the memory-provider migration's `find_provider_dir` — the entry point alone
+  # isn't enough, so the migration false-positives and tells you to `plugins install mnemosyne` (which
+  # would fetch the catalog 0.10.x and shadow this pin at 0.5.0). Symlinks the exact Nix package dir
+  # the entry point already resolves to: user dirs outrank entry points in load order, so the runtime
+  # keeps loading the same store path. Never run `hermes plugins install mnemosyne`.
+  home.file.".hermes/plugins/mnemosyne".source = "${mnemosyne}/${hermesBase.python.sitePackages}/mnemosyne_hermes";
 }

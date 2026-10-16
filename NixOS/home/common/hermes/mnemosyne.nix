@@ -55,8 +55,10 @@ let
 in
 wheel {
   pname = "mnemosyne-hermes";
-  # 0.7.x needs mnemosyne-memory 4.0 (beta); 0.5.0 + 3.15.1 wrote the existing database.
-  version = "0.5.0";
-  hash = "sha256-z6vtLygWxr+ypkBJjLMzjo3r1p4XiqCrYZV2iJljaL8=";
+  # 0.7.1 is the last version whose constructor doesn't hit the P1b home-binding gate on
+  # Nix installs (0.7.4 raises on `self._beam = None` in `__init__` when contextvars carry
+  # a home but `initialize()` hasn't run). 0.7.2 is broken against 3.15.1, skip it.
+  version = "0.7.1";
+  hash = "sha256-rLFEnoBFfwMqpJylpCYFcTWJyWEAFybhi+U9lBsvQas=";
   dependencies = [ mnemosyne-memory ];
 }
