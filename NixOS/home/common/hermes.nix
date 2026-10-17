@@ -1,4 +1,5 @@
-# Nix packages Hermes and runs its gateway and webui; ~/.hermes (config.yaml, .env, plugins) stays imperative.
+# Nix packages Hermes from numtide's llm-agents.nix and runs its gateway;
+# ~/.hermes (config.yaml, .env, plugins) stays imperative.
 # The upstream services.hermes-agent is not used: it writes ~/.hermes/.managed and sets HERMES_MANAGED,
 # and either one makes `hermes model` / `hermes config set` refuse.
 {
@@ -9,45 +10,24 @@
   ...
 }:
 let
-  hermesBase = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default;
-
-  # Upstream's flake never passes `version`, so the package says v0.0.0 (pyproject's placeholder);
-  # a git install takes it from the release tags, which are dates (v2026.9.24). The source's own
-  # release date stands in, read at eval time so it follows every `nix flake update`.
-  hermesRelease =
-    let
-      line = lib.findFirst (l: lib.hasPrefix "__release_date__" l) null (
-        lib.splitString "\n" (builtins.readFile "${inputs.hermes-agent}/hermes_cli/__init__.py")
-      );
-      found = if line == null then null else builtins.match ''__release_date__ = "([^"]+)".*'' line;
-    in
-    if found == null then "0.0.0" else builtins.head found;
-
-  mnemosyne = hermesBase.python.pkgs.callPackage ./hermes/mnemosyne.nix { };
-
-  # Plugins that need Python packages go here: the venv is read-only, so runtime installs can't add them.
-  hermes = hermesBase.override {
-    version = hermesRelease;
-    extraPythonPackages = [ mnemosyne ];
-  };
-
-  # The CLI wrapper's environment (plugin PYTHONPATH, bundled resources) ending in the interpreter,
-  # for hermes-webui, which runs the agent in-process.
-  hermesPython = pkgs.runCommand "hermes-python" { } ''
-    wrapper=${lib.getExe hermes}
-    tail -n1 "$wrapper" | grep -q '^exec ' || { echo "hermes wrapper no longer ends in exec" >&2; exit 1; }
-    mkdir -p $out/bin
-    { sed '$d' "$wrapper"; echo 'exec ${hermes.hermesVenv}/bin/python3 "$@"'; } > $out/bin/hermes-python
-    chmod +x $out/bin/hermes-python
-  '';
+  llmAgents = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
+  hermes = llmAgents.hermes-agent;
 in
 {
-  # `hermes desktop` builds from a source checkout and cannot work here; hermesDesktop is the
-  # prebuilt app (`hermes-desktop` + launcher), pinned to this `hermes`.
+  # numtide ships the desktop app separately (`hermes desktop` cannot build from a Nix install).
+  # Plugins install natively into ~/.hermes/plugins (`hermes plugins install`, or the plugin's own
+  # installer); numtide's package has no extraPythonPackages hook to inject them from Nix.
   home.packages = [
     hermes
-    hermes.hermesDesktop
+    llmAgents.hermes-desktop
   ];
+
+  # numtide's cache carries hermes-agent, hermes-desktop and their python deps, so this builds
+  # nothing locally. Written as a file rather than nix.settings, which asserts on nix.package.
+  home.file.".config/nix/nix.conf".text = ''
+    extra-substituters = https://cache.numtide.com
+    extra-trusted-public-keys = niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=
+  '';
 
   # Not named hermes-gateway: `hermes gateway start/restart` rewrites that unit file, and on a Nix
   # install `hermes gateway install` writes an ExecStart that does not exist. Restart with systemctl.
@@ -60,9 +40,10 @@ in
       Environment = [
         "HERMES_HOME=${config.home.homeDirectory}/.hermes"
         "HERMES_SUPERVISED_CHILD=1"
-        "HERMES_INSTALL_ROOT=${lib.getBin hermes}/share/hermes-agent"
+        # No HERMES_INSTALL_ROOT: numtide bakes the install stamp inside site-packages, which is
+        # where pm.paths.install_stamp_path looks when the variable is unset.
         # The shell's toolset, so the agent's terminal tool and systemd-run work from the gateway.
-        "PATH=${config.home.profileDirectory}/bin:/run/wrappers/bin:/run/current-system/sw/bin"
+        "PATH=${config.home.profileDirectory}/bin:/run/wrappers/bin:/run/current-system/sw/bin:${config.home.homeDirectory}/.local/bin"
       ];
       # Exit codes mirror the unit Hermes generates: 75 = restart requested, 78 = fatal config.
       Restart = "always";
@@ -75,44 +56,6 @@ in
     };
   };
 
-  # The webui stays a git clone at ~/hermes-webui; this pins what it runs. Left to discover an agent,
-  # it picks up a ~/.hermes/hermes-agent checkout (or curl|bash installs one) whose pm fights this one.
-  systemd.user.services.hermes-webui = {
-    Unit = {
-      Description = "Hermes WebUI";
-      After = [
-        "network-online.target"
-        "hermes-agent.service"
-      ];
-      Wants = [ "network-online.target" ];
-      Requires = [ "hermes-agent.service" ];
-      ConditionPathExists = "%h/hermes-webui/bootstrap.py";
-      StartLimitIntervalSec = 0;
-    };
-    Install.WantedBy = [ "default.target" ];
-    Service = {
-      ExecStartPre = "-%h/.local/bin/hermes-webui-update.sh";
-      ExecStart = "%h/hermes-webui/.venv/bin/python %h/hermes-webui/bootstrap.py --no-browser --skip-agent-install";
-      WorkingDirectory = "%h/hermes-webui";
-      Environment = [
-        "HERMES_HOME=%h/.hermes"
-        "HERMES_WEBUI_PYTHON=${hermesPython}/bin/hermes-python"
-        "HERMES_WEBUI_AGENT_DIR=${hermes.hermesVenv}/${hermesBase.python.sitePackages}"
-        # The server otherwise runs from the agent dir, which is read-only.
-        "HERMES_WEBUI_SERVER_CWD=%h/hermes-webui"
-        "PATH=${config.home.profileDirectory}/bin:/run/wrappers/bin:/run/current-system/sw/bin"
-      ];
-      Restart = "on-failure";
-      RestartSec = 5;
-      KillMode = "mixed";
-      TimeoutStopSec = 30;
-    };
-  };
-
-  # A real directory for the memory-provider migration's `find_provider_dir` — the entry point alone
-  # isn't enough, so the migration false-positives and tells you to `plugins install mnemosyne` (which
-  # would fetch the catalog 0.10.x and shadow this pin at 0.5.0). Symlinks the exact Nix package dir
-  # the entry point already resolves to: user dirs outrank entry points in load order, so the runtime
-  # keeps loading the same store path. Never run `hermes plugins install mnemosyne`.
-  home.file.".hermes/plugins/mnemosyne".source = "${mnemosyne}/${hermesBase.python.sitePackages}/mnemosyne_hermes";
+  # hermes-webui is deliberately absent: the ~/hermes-webui clone is gone, and its unit pinned
+  # upstream-only internals (hermesVenv, the derived hermes-python wrapper) numtide does not expose.
 }

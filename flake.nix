@@ -63,6 +63,9 @@
 
     hermes-agent.url = "github:NousResearch/hermes-agent";
 
+    # numtide's repackaging of the same tree: what home/common/hermes.nix actually installs.
+    llm-agents.url = "github:numtide/llm-agents.nix";
+
     lobster.url = "github:justchokingaround/lobster";
 
     tt-schemes = {
