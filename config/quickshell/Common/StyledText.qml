@@ -2,8 +2,8 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import qs.Common
 
-// Text with the shell's defaults baked in. `animate` cross-fades on text
-// change, which suits values that tick (clock, percentages) rather than labels.
+// Text with the shell's defaults baked in. `animate` dips to transparent on text
+// change, so it suits jittery values (percentages), not a clock that reads as a blink.
 Text {
     id: root
 

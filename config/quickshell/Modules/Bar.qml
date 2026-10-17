@@ -218,7 +218,6 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: Qt.formatDateTime(clock.date, "MMM d   HH:mm")
                         font.weight: Font.DemiBold
-                        animate: true
                     }
                     StyledRect {
                         anchors.verticalCenter: parent.verticalCenter
