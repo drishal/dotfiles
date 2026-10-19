@@ -23,6 +23,17 @@
     nixfmt
     taplo
     yaml-language-server
+    # Language servers
+    typescript-language-server
+    typescript
+    biome
+    vscode-langservers-extracted
+    bash-language-server
+    shellcheck
+    shfmt
+    ruff
+    stylua
+    marksman
     gnome-themes-extra
     gjs
     hexedit
