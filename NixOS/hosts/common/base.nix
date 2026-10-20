@@ -18,7 +18,26 @@ let
   '';
 in
 {
-  boot.kernelPackages = pkgs.linuxPackages_cachyos-gcc ;
+  # Back to linuxPackages_cachyos-gcc once chaotic's nixpkgs includes NixOS/nixpkgs#571181 (modules.cer).
+  # The two module overrides adapt to that PR; drop each once nixpkgs fixes the package.
+  boot.kernelPackages = pkgs.linuxPackages_xanmod_latest.extend (
+    final: prev: {
+      # NixOS/nixpkgs#575861 (open): otherwise depmod's index files collide with the kernel's.
+      v4l2loopback = prev.v4l2loopback.overrideAttrs {
+        preBuild = "sed -i '/depmod/d' Makefile";
+        installFlags = [
+          "DEPMOD=true"
+          "INSTALL_MOD_PATH=${placeholder "out"}"
+        ];
+      };
+      # openrazer copies its .ko files instead of modules_install, so they miss the .ko.cer the module tree needs.
+      openrazer = prev.openrazer.overrideAttrs (old: {
+        postInstall = (old.postInstall or "") + ''
+          for m in "$out"/lib/modules/*/kernel/drivers/hid/*.ko; do ${lib.getExe pkgs.kmodigest} "$m"; done
+        '';
+      });
+    }
+  );
   systemd.user.services.orca.wantedBy = lib.mkForce [ ];
   boot.kernelModules = [ "v4l2loopback" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
