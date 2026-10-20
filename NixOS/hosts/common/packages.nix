@@ -533,5 +533,5 @@
   ];
 
   # insecure packages
-  nixpkgs.config.permittedInsecurePackages = [ "openssl-1.1.1t" "electron-12.2.3" "libsoup-2.74.3" "qtwebengine-5.15.19" "electron-40.10.5" "ventoy-1.1.17"];
+  nixpkgs.config.permittedInsecurePackages = [ "openssl-1.1.1t" "electron-12.2.3" "libsoup-2.74.3" "qtwebengine-5.15.19" "electron-40.10.5" "ventoy-1.1.18"];
 }
