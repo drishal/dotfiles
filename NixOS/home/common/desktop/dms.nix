@@ -29,6 +29,8 @@
 
   programs.dank-material-shell = {
     enable = true;
+    # Only pulls in khal, which nothing here configures (and which fails to build).
+    enableCalendarEvents = false;
 
     # settings = builtins.fromJSON (builtins.readFile ./dms.json);
     settings = {
