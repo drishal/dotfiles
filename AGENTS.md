@@ -48,7 +48,7 @@ NixOS/
       users.nix              ← user accounts
       virtualisation.nix     ← libvirt, docker
       jellyfin.nix           ← opt-in: jellyfin media server
-      dsh.nix                ← DeepSeek Harness CLI + mutable web/tui profiles (imported by common)
+      dsh.nix                ← DeepSeek Harness CLI + mutable web/tui profiles (import commented out in common: it compiles locally on every revision)
       firewall.nix, searx.nix, tlp.nix
       memory.nix             ← opt-in: dirty_bytes 4G / bg 64M, zram, swappiness, zswap disabled
       network-tuning.nix     ← opt-in: BBR/MTU probing/keepalive/buffer tuning for Tailscale
