@@ -14,7 +14,6 @@
     ./core/omp-theme.nix
     ./core/agent-web-ui-theme.nix
     ./core/aria2.nix
-    ./hermes.nix
 
     ./desktop/default-apps.nix
     ./desktop/rofi.nix
