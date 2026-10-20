@@ -147,6 +147,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # GPUI renders through Vulkan: its own pin links glibc 2.42 and cannot
+    # load system mesa's ICD (needs 2.44), so the window never opens.
+    herdr-gpui = {
+      url = "github:penso/herdr-gpui";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     deepseek-harness = {
       url = "github:moraxyc/deepseek-harness.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -256,6 +263,7 @@
               nixpkgs.overlays = [
                 inputs.emacs-overlay.overlay
                 inputs.herdr.overlays.default
+                inputs.herdr-gpui.overlays.default
                 inputs.deepseek-harness.overlays.default
               ];
             }

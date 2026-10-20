@@ -120,6 +120,7 @@
     easyeffects
     eza
     herdr
+    herdr-gpui
     lsd
     fastfetch
     fdk_aac

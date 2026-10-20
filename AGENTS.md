@@ -176,6 +176,7 @@ Only what the URL doesn't tell you:
 - **Several inputs are `flake = false` sources vendored by a module rather than consumed as flakes** — grep `flake = false` in `flake.nix` for the current set. The non-obvious pairings: `vim-hx` → `helix.nix`, `llama-cpp` → `llama-cpp.nix` (a fork, swapped often), `tmux-agent-status` → `tmux.nix`, `gruvbox-material` → nvim.
 - **`private-stuff`** must exist locally or every build fails — see Critical gotchas.
 - **`nix-gaming` follows `nixpkgs`** — same stale-glibc failure as hyprland: its Wine links glibc 2.42 while system Mesa's ICDs need 2.44, so every Vulkan driver fails to load under system Wine. Don't drop the follows.
+- **`herdr-gpui` follows `nixpkgs` too** — GPUI renders through Vulkan, so the app must share the system's glibc. On its own pin (glibc 2.42) the process cannot load mesa's radeon ICD (`GLIBC_2.44 not found` from `libLLVM`), every Vulkan driver is dropped, and it aborts with "No GPU adapters found". Installed from `overlays.default` in `hosts/common/packages.nix`.
 
 ### Patched nixpkgs
 
