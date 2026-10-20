@@ -492,6 +492,7 @@
     libxdamage
     libxtst
     libxrandr
+    libxi # Hermes' cua-driver (computer use)
     libxext
     libx11
     libxfixes
