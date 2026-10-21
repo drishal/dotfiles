@@ -58,6 +58,7 @@
     acpi
     argc
     android-tools
+    inputs.leaf.packages.${pkgs.system}.leaf
     (ani-cli.overrideAttrs (old: {
       src = inputs.ani-cli;
     }))

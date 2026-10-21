@@ -118,6 +118,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    leaf = {
+      url = "github:DeepanshuMishraa/leaf";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # neovim plugins
     gruvbox-material = {
       url = "github:sainnhe/gruvbox-material";
