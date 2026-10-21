@@ -24,8 +24,9 @@ let
   acerHdrExtra = ''bitdepth = 10, cm = "hdredid", sdrbrightness = 1.2, sdrsaturation = 1.0'';
 
   # ─── Generated monitor config ───────────────────────────────────────────
-  # Persisted as a Lua fragment dofile()'d by hyprland.lua so reloads don't clobber it
-  monitorLuaFile = "$HOME/.config/hypr/monitors.lua";
+  # Live layout, dofile()'d on reload so it re-matches the active rules (no modeset).
+  # Per Hyprland instance, so a fresh login starts from the EDID-safe defaults.
+  monitorLuaFile = "$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/monitors.lua";
 
   # ─── Profile applier ───────────────────────────────────────────────────
   # Persists the layout to the Lua fragment, then applies it live via `hyprctl eval`
@@ -83,8 +84,8 @@ let
   '';
 
   # ─── HDR toggle (Super+Shift+H) ─────────────────────────────────────────
-  # Transient by design: any DFR/resolution change or reload reverts to SDR, so HDR
-  # is only ever on when explicitly asked for. Re-press to re-enable.
+  # Any DFR/resolution change reverts to SDR, so HDR is only ever on when explicitly
+  # asked for. Persisted to the live layout so a reload keeps it.
   hyprHdrToggle = pkgs.writeShellScriptBin "hypr-hdr-toggle" ''
     #!/usr/bin/env bash
     set -eu
@@ -113,6 +114,8 @@ let
       else
         line='hl.monitor({ output = "${acerMonitor}", mode = "${acerPerfMode}", position = "0x0", scale = 1, ${acerHdrExtra} })'
       fi
+      lg_lua="$(${pkgs.gnused}/bin/sed -n 2p ${monitorLuaFile} 2>/dev/null || true)"
+      printf '%s\n%s\n' "$line" "$lg_lua" > ${monitorLuaFile}
       ${hyprPackage}/bin/hyprctl eval "$line" >/dev/null
       touch "$state"
       ${pkgs.libnotify}/bin/notify-send -t 3000 "Display" "HDR on — cm,hdredid (SDR boost 1.2)" || true
@@ -260,17 +263,6 @@ in
     pkgs.libnotify
   ];
 
-  # Keep the dofile()'d startup fragment EDID-safe. Exact profiles are applied
-  # after Hyprland can query the monitor's currently advertised modes.
-  home.activation.seedHyprMonitorsConf = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    conf="$HOME/.config/hypr/monitors.lua"
-    mkdir -p "$(dirname "$conf")"
-    {
-      printf 'hl.monitor({ output = "%s", mode = "highres", position = "0x0", scale = "auto", bitdepth = 8, cm = "srgb" })\n' "${acerMonitor}"
-      printf 'hl.monitor({ output = "%s", mode = "preferred", position = "auto-right", scale = 1, transform = 1 })\n' "${lgMonitor}"
-    } > "$conf"
-  '';
-
   # ─── Systemd user service to run the watcher ───────────────────────────
   systemd.user.services.hypr-monitor-watcher = {
     Unit = {
@@ -339,15 +331,18 @@ in
     ];
   };
 
-  # Appended raw to hyprland.lua: reload the persisted layout, and rebind
-  # SUPER+SHIFT+M from "layout master" to the DFR display toggle.
+  # Appended raw to hyprland.lua: reload the live layout (EDID-safe defaults until a
+  # profile is applied), and rebind SUPER+SHIFT+M from "layout master" to the DFR toggle.
   wayland.windowManager.hyprland.extraConfig = lib.mkAfter ''
     do
-      local hm_mon = os.getenv("HOME") .. "/.config/hypr/monitors.lua"
-      local f = io.open(hm_mon)
+      local live = os.getenv("XDG_RUNTIME_DIR") .. "/hypr/" .. os.getenv("HYPRLAND_INSTANCE_SIGNATURE") .. "/monitors.lua"
+      local f = io.open(live)
       if f then
         f:close()
-        dofile(hm_mon)
+        dofile(live)
+      else
+        hl.monitor({ output = "${acerMonitor}", mode = "highres", position = "0x0", scale = "auto", bitdepth = 8, cm = "srgb" })
+        hl.monitor({ output = "${lgMonitor}", mode = "preferred", position = "auto-right", scale = 1, transform = 1 })
       end
     end
 
