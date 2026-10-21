@@ -278,7 +278,9 @@ in
         [
           (bind (combo "RETURN") (mkLuaInline "hl.dsp.exec_cmd(terminal)"))
           # (bind (combo "RETURN") (exec "${config.drishal.defaultApps.terminal} --single-instance"))
-          (bind (combo "D") (exec "rofi -show drun -icon-theme Papirus -show-icons"))
+          # Raycast-style palette (rofi.nix): apps + commands, with tabs for the other modes.
+          (bind (combo "D") (exec "rofi-palette"))
+          (bind (combo "period") (exec "rofi-palette emoji"))
           (bind (combo "V") (exec "pavucontrol"))
           # wofi clipboard history with image thumbnails (rofi stays the default
           # launcher; this is a dedicated image-aware clipboard picker).
@@ -341,4 +343,6 @@ in
   };
 
   config.services.hyprpaper.package = null;
+  # On PATH for rofi-palette's screenshot commands.
+  config.home.packages = [ capture ];
 }

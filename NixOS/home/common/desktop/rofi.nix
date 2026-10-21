@@ -131,6 +131,131 @@ let
       cursor: inherit;
     }
   '';
+
+  # Raycast-style palette: the grid's tokens as a single-column list, with the
+  # mode tabs as a bottom bar. Follow-up dmenus (confirm, audio output) get a prompt instead.
+  paletteTheme = ''
+    @import "launcher"
+
+    window { width: 720px; }
+
+    mainbox {
+      padding: 12px;
+      spacing: 8px;
+      children: [ "inputbar", "message", "listview", "mode-switcher" ];
+    }
+
+    inputbar {
+      padding: 6px 10px 14px 10px;
+      border: 0 0 1px 0;
+      border-color: @hi;
+    }
+    entry { placeholder: "Search"; }
+
+    listview {
+      columns: 1;
+      lines: 8;
+      flow: vertical;
+      scrollbar: false;
+      spacing: 2px;
+      padding: 0;
+    }
+
+    element {
+      orientation: horizontal;
+      spacing: 12px;
+      padding: 8px 12px;
+      border-radius: 12px;
+    }
+    element-icon { size: 30px; }
+    element-text {
+      horizontal-align: 0;
+      vertical-align: 0.5;
+      font: "${sans} 11";
+    }
+
+    mode-switcher {
+      spacing: 4px;
+      padding: 10px 0 0 0;
+      border: 1px 0 0 0;
+      border-color: @hi;
+    }
+    button {
+      padding: 6px 10px;
+      border-radius: 10px;
+      font: "${sans} 10";
+      text-color: @dim;
+      horizontal-align: 0.5;
+      cursor: pointer;
+    }
+    button selected {
+      background-color: @accent-soft;
+      text-color: @ink;
+    }
+
+    prompt {
+      padding: 4px 10px;
+      border-radius: 10px;
+      background-color: @accent-soft;
+      vertical-align: 0.5;
+      font: "${sans} 10";
+    }
+
+    @media (enabled: DMENU) {
+      mainbox { children: [ "inputbar", "message", "listview" ]; }
+      inputbar { children: [ "prompt", "entry" ]; }
+      entry { placeholder: "Filter"; }
+      listview { lines: 6; }
+    }
+  '';
+
+  mkMode =
+    name: runtimeInputs:
+    pkgs.writeShellApplication {
+      name = "rofi-${name}";
+      inherit runtimeInputs;
+      text = builtins.readFile ../../../../scripts/rofi/${name}.sh;
+    };
+
+  clipMode = mkMode "clip" (with pkgs; [ cliphist wl-clipboard ]);
+  webMode = mkMode "web" (with pkgs; [ jq xdg-utils ]);
+  # capture, hyprctl and swaymsg come from the session (capture is installed by hyprland.nix).
+  commandsMode = mkMode "commands" (
+    with pkgs;
+    [
+      cliphist
+      glib # gio
+      hyprpicker
+      jq
+      libnotify
+      networkmanager
+      bluez
+      pipewire
+      playerctl
+      wireplumber
+    ]
+  );
+
+  # One rofi, one tab per mode: Ctrl+Tab / Shift+Arrow or a click switches tabs.
+  palette = pkgs.writeShellApplication {
+    name = "rofi-palette";
+    text = ''
+      mode=''${1:-combi}
+      shift || true
+      exec ${config.programs.rofi.finalPackage}/bin/rofi -show "$mode" -theme palette \
+        -modes "combi,window,clipboard:${clipMode}/bin/rofi-clip,calc,emoji,web:${webMode}/bin/rofi-web,filebrowser" \
+        -combi-modes "drun,commands:${commandsMode}/bin/rofi-commands" \
+        -combi-display-format "{text}" \
+        -drun-display-format "{name}[<span alpha='55%' size='small'>   {generic}</span>]" \
+        -window-format "{t}<span alpha='55%' size='small'>   {c}</span>" \
+        -sort -sorting-method fzf \
+        -qalc-binary ${pkgs.libqalculate}/bin/qalc \
+        -calc-command "printf %s '{result}' | ${pkgs.wl-clipboard}/bin/wl-copy" \
+        -hint-result "= " \
+        -hint-welcome "5 USD to INR · 3 weeks from now · 70 kg to lb  —  Ctrl+Enter copies the result" \
+        "$@"
+    '';
+  };
 in
 {
   programs = {
@@ -146,13 +271,26 @@ in
         me-select-entry = "";
         me-accept-entry = "MousePrimary";
         scroll-method = 1;
+
+        # Tab labels in rofi-palette's mode switcher.
+        combi.display-name = "󰍉  Search";
+        window.display-name = "󱂬  Windows";
+        clipboard.display-name = "󰅌  Clipboard";
+        calc.display-name = "󰃬  Calc";
+        emoji.display-name = "󰞅  Emoji";
+        web.display-name = "󰖟  Web";
+        filebrowser.display-name = "󰉋  Files";
       };
       plugins = with pkgs; [
         rofi-emoji
+        rofi-calc
         glibcLocales
       ];
     };
   };
 
+  home.packages = [ palette ];
+
   xdg.dataFile."rofi/themes/launcher.rasi".text = theme;
+  xdg.dataFile."rofi/themes/palette.rasi".text = paletteTheme;
 }
