@@ -198,6 +198,10 @@ in
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     LESS = "-g -i -M -R -S -w -X -z4";
+    # Hermes' bundled python-build-standalone OpenSSL names /etc/ssl/cert.pem,
+    # absent on NixOS; point the whole session at the real bundle (fixes PM downloads).
+    SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
+    NIX_SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
   };
 
   networking.firewall.enable = false;
