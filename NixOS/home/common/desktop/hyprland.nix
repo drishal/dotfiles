@@ -93,6 +93,8 @@ let
   };
 
   currentWidgetStartup = widgetStartup.${config.drishal.widgets};
+  # quickshell is its own polkit agent, and a session takes only one.
+  polkitAgent = lib.optionalString (config.drishal.widgets != "quickshell") "lxpolkit & ";
   currentWidgetRestart = widgetRestart.${config.drishal.widgets};
 in
 {
@@ -125,7 +127,7 @@ in
             (mkLuaInline ''
               function()
                 -- Common autostart (always runs)
-                hl.exec_cmd("lxpolkit & nm-applet --indicator & blueman-applet & hyprpaper")
+                hl.exec_cmd("${polkitAgent}nm-applet --indicator & blueman-applet & hyprpaper")
                 hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
                 -- cliphist storer daemons: capture both text and image copies so
                 -- the rofi (ags) and wofi clipboard menus have history to show.

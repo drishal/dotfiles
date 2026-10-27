@@ -89,6 +89,8 @@ ShellRoot {
 
     LockScreen {}
 
+    PolkitDialog {}
+
     // Three windows per monitor, all fixed at screen size: a zero-input strut
     // reserving the bar's space, the Top-layer surface holding the bar and
     // every interactive panel, and the Overlay-layer surface for transient
