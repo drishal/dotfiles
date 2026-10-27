@@ -72,6 +72,21 @@ ShellRoot {
         }
     }
 
+    // qs ipc call brightness up — for keybinds; the OSD follows.
+    IpcHandler {
+        target: "brightness"
+
+        function up(): void {
+            Brightness.step(0.05);
+        }
+        function down(): void {
+            Brightness.step(-0.05);
+        }
+        function set(percent: int): void {
+            Brightness.set(percent / 100);
+        }
+    }
+
     LockScreen {}
 
     // Three windows per monitor, all fixed at screen size: a zero-input strut

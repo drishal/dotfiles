@@ -26,9 +26,27 @@ Singleton {
     // The old single-value API the dashboard slider still uses.
     readonly property real value: primary ? primary.value : 0
 
+    // Bumped by user-initiated changes only (never the startup probe), so the
+    // OSD can follow it the way it follows Audio.changePulse.
+    property int changePulse: 0
+
     function set(v) {
-        if (root.primary)
-            root.primary.set(v);
+        if (!root.primary)
+            return;
+        root.primary.set(v);
+        root.changePulse++;
+    }
+    // Relative to the last reading, so it refuses until there is one — a
+    // failed read once left value at 0 and a step dimmed the panel to 0%.
+    function step(delta) {
+        if (root.primary && root.primary.known)
+            root.set(Math.max(0, Math.min(1, root.value + delta)));
+    }
+
+    // Number("") is 0, not NaN, so an empty read must not count as a reading.
+    function parsePercent(text) {
+        const t = text.trim();
+        return /^\d+$/.test(t) ? Number(t) / 100 : -1;
     }
 
     Component.onCompleted: {
@@ -42,12 +60,15 @@ Singleton {
         property string kind: "backlight" // "backlight" | "ddc"
         property string name: "" // ddc: monitor description; backlight: device
         property real value: 0 // 0..1
+        // False until a real reading arrives; relative steps wait for it.
+        property bool known: false
         readonly property bool available: kind === "backlight" || ddcReady
         property bool ddcReady: false
 
         function set(v) {
             const pct = Math.max(0, Math.min(100, Math.round(v * 100)));
             target.value = pct / 100;
+            target.known = true;
             if (kind === "backlight")
                 Quickshell.execDetached(["brightnessctl", "s", pct + "%"]);
             else
@@ -81,9 +102,11 @@ Singleton {
         command: ["bash", "-c", "brightnessctl -m i | cut -d, -f4 | tr -d '%'"]
         stdout: StdioCollector {
             onStreamFinished: {
-                const n = Number(this.text.trim());
-                if (!isNaN(n) && root.backlight)
-                    root.backlight.value = n / 100;
+                const v = root.parsePercent(this.text);
+                if (v >= 0 && root.backlight) {
+                    root.backlight.value = v;
+                    root.backlight.known = true;
+                }
             }
         }
     }
@@ -115,11 +138,26 @@ Singleton {
         command: ["bash", "-c", "ddcutil getvcp 10 --sleep-multiplier=0.02 2>/dev/null | grep -oE 'current value = [0-9]+' | grep -oE '[0-9]+'"]
         stdout: StdioCollector {
             onStreamFinished: {
-                const n = Number(this.text.trim());
-                if (!isNaN(n) && root.ddc)
-                    root.ddc.value = n / 100;
+                const v = root.parsePercent(this.text);
+                if (v >= 0 && root.ddc) {
+                    root.ddc.value = v;
+                    root.ddc.known = true;
+                } else if (ddcRetry.tries < 3) {
+                    ddcRetry.tries++;
+                    ddcRetry.start();
+                }
             }
         }
+    }
+
+    // ddcutil fails while another instance holds the bus lock; try again.
+    Timer {
+        id: ddcRetry
+
+        property int tries: 0
+
+        interval: 2000
+        onTriggered: ddcRead.running = true
     }
 
     function rebuild() {

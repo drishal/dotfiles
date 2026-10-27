@@ -4,14 +4,17 @@ import QtQuick.Controls
 import qs.Common
 import qs.Services
 
-// Toast-style volume OSD, bottom-centre. Fires whenever the active physical
-// output's volume/mute changes (media keys, dashboard slider, app control) via
-// Audio.changePulse — never on startup.
+// Toast-style OSD, bottom-centre, for volume and brightness. Fires on
+// Audio.changePulse (media keys, dashboard slider, app control) and
+// Brightness.changePulse (keybind IPC, dashboard slider) — never on startup.
+// Switching kind while it is up swaps the contents in place.
 
 Panel {
     id: win
 
     property bool showing: false
+    property string kind: "volume"
+    readonly property bool isVolume: kind === "volume"
 
     shown: showing
     attached: false
@@ -20,7 +23,14 @@ Panel {
     width: card.width
     height: card.height
 
+    readonly property real level: isVolume ? Audio.volume : Brightness.value
+    readonly property bool off: isVolume && Audio.muted
+
     readonly property string icon: {
+        if (!isVolume) {
+            const b = Brightness.value;
+            return b <= 0.33 ? "󰃞" : b <= 0.66 ? "󰃟" : "󰃠";
+        }
         if (Audio.muted)
             return "󰖁";
         const p = Audio.percent;
@@ -40,12 +50,24 @@ Panel {
         onTriggered: win.showing = false
     }
 
+    function pulse(k) {
+        win.kind = k;
+        win.showing = true;
+        hideTimer.restart();
+    }
+
     Connections {
         target: Audio
 
         function onChangePulseChanged() {
-            win.showing = true;
-            hideTimer.restart();
+            win.pulse("volume");
+        }
+    }
+    Connections {
+        target: Brightness
+
+        function onChangePulseChanged() {
+            win.pulse("brightness");
         }
     }
 
@@ -76,7 +98,7 @@ Panel {
                 anchors.verticalCenter: parent.verticalCenter
                 text: win.icon
                 font.pixelSize: 22
-                color: Audio.muted ? Theme.base08 : Theme.accent
+                color: win.off ? Theme.base08 : Theme.accent
             }
             Slider {
                 id: slider
@@ -85,8 +107,8 @@ Panel {
                 width: 180
                 from: 0
                 to: 1
-                value: Audio.volume
-                onMoved: Audio.setVolume(value)
+                value: win.level
+                onMoved: win.isVolume ? Audio.setVolume(value) : Brightness.set(value)
 
                 background: StyledRect {
                     x: slider.leftPadding
@@ -114,10 +136,10 @@ Panel {
             }
             StyledText {
                 anchors.verticalCenter: parent.verticalCenter
-                text: Audio.muted ? "Muted" : Audio.percent + "%"
+                text: win.off ? "Muted" : win.isVolume ? Audio.percent + "%" : Math.round(Brightness.value * 100) + "%"
                 font.pixelSize: 14
                 font.weight: Font.DemiBold
-                color: Audio.muted ? Theme.base08 : Theme.ink
+                color: win.off ? Theme.base08 : Theme.ink
                 width: 42
                 animate: true
             }

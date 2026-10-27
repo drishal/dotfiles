@@ -36,7 +36,7 @@ PanelWindow {
             panel: notifications
         }
         PanelRegion {
-            panel: volume
+            panel: osd
         }
         PanelRegion {
             panel: toasts
@@ -65,8 +65,8 @@ PanelWindow {
         screenName: win.screenName
     }
 
-    VolumePopup {
-        id: volume
+    Osd {
+        id: osd
 
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
