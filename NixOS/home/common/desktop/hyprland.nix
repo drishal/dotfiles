@@ -12,8 +12,9 @@ let
   # `combo`/`comboWith` build the key-combo string referencing the `mainMod`
   # Lua local (rendered from the `_var` entry below).
   combo = key: mkLuaInline ''mainMod .. " + ${key}"'';
-  # A bind entry: combo + dispatcher (both raw Lua expressions).
-  bind = c: disp: { _args = [ c disp ]; };
+  # A bind entry: combo + dispatcher (both raw Lua expressions) + description.
+  # The description is what quickshell's keybind cheatsheet (SUPER+/) lists.
+  bind = c: disp: desc: { _args = [ c disp { description = desc; } ]; };
   # Convenience for exec_cmd binds.
   exec = cmd: mkLuaInline ''hl.dsp.exec_cmd("${cmd}")'';
 
@@ -21,11 +22,13 @@ let
   # Key 10 is bound to the "0" key, matching the old hyprlang config.
   wsKey = i: if i == 10 then "0" else toString i;
   workspaceBinds =
-    map (i: bind (combo (wsKey i)) (mkLuaInline "hl.dsp.focus({ workspace = ${toString i} })")) (
+    map (i: bind (combo (wsKey i)) (mkLuaInline "hl.dsp.focus({ workspace = ${toString i} })") "Switch to workspace") (
       lib.range 1 10
     )
     ++ map (
-      i: bind (combo "SHIFT + ${wsKey i}") (mkLuaInline "hl.dsp.window.move({ workspace = ${toString i} })")
+      i:
+      bind (combo "SHIFT + ${wsKey i}") (mkLuaInline "hl.dsp.window.move({ workspace = ${toString i} })")
+        "Move window to workspace"
     ) (lib.range 1 10);
 
   # Volume keys must drive the device EasyEffects feeds, not the inaudible EE
@@ -276,68 +279,76 @@ in
 
       bind =
         [
-          (bind (combo "RETURN") (mkLuaInline "hl.dsp.exec_cmd(terminal)"))
+          (bind (combo "RETURN") (mkLuaInline "hl.dsp.exec_cmd(terminal)") "Terminal")
           # (bind (combo "RETURN") (exec "${config.drishal.defaultApps.terminal} --single-instance"))
           # Raycast-style palette (rofi.nix): apps + commands, with tabs for the other modes.
-          (bind (combo "D") (exec "rofi-palette"))
-          (bind (combo "period") (exec "rofi-palette emoji"))
-          (bind (combo "V") (exec "pavucontrol"))
+          (bind (combo "D") (exec "rofi-palette") "App launcher")
+          (bind (combo "period") (exec "rofi-palette emoji") "Emoji picker")
+          (bind (combo "V") (exec "pavucontrol") "Audio mixer")
           # wofi clipboard history with image thumbnails (rofi stays the default
           # launcher; this is a dedicated image-aware clipboard picker).
-          (bind (combo "SHIFT + V") (exec "${config.home.homeDirectory}/dotfiles/scripts/clipboard-wofi.sh"))
-          (bind (combo "T") (exec "GDK_BACKEND=x11 xfce4-taskmanager"))
-          (bind (combo "Q") (mkLuaInline "hl.dsp.window.close()"))
-          (bind (combo "SHIFT + Q") (exec "kill -9 $(pidof Hyprland)"))
-          (bind (combo "SHIFT + F") (exec config.drishal.defaultApps.browser))
+          (bind (combo "SHIFT + V") (exec "${config.home.homeDirectory}/dotfiles/scripts/clipboard-wofi.sh") "Clipboard history")
+          (bind (combo "T") (exec "GDK_BACKEND=x11 xfce4-taskmanager") "Task manager")
+          (bind (combo "Q") (mkLuaInline "hl.dsp.window.close()") "Close window")
+          (bind (combo "SHIFT + Q") (exec "kill -9 $(pidof Hyprland)") "Kill Hyprland")
+          (bind (combo "SHIFT + F") (exec config.drishal.defaultApps.browser) "Browser")
           # Goes through logind so every lock path is the same one: the
           # quickshell session lock listens for the signal, and falls back to
           # swaylock when its PAM stack is not switched in yet.
-          (bind (combo "SHIFT + L") (exec "loginctl lock-session"))
-          (bind (combo "E") (exec config.drishal.defaultApps.fileManager))
-          (bind (combo "x") (exec currentWidgetRestart))
-          (bind (combo "SHIFT + X") (mkLuaInline "hl.dsp.exit()"))
-          (bind (combo "A") (exec "emacsclient -c"))
-          (bind (combo "SPACE") (mkLuaInline ''hl.dsp.window.float({ action = "toggle" })''))
-          (bind (combo "F") (exec "${smartFullscreen}/bin/smart-fullscreen"))
-          (bind (combo "SHIFT + s") (exec "${capture}/bin/capture area"))
-          (bind (combo "s") (exec "${capture}/bin/capture output"))
-          (bind (combo "CTRL + s") (exec "${capture}/bin/capture text"))
-          (bind (combo "K") (mkLuaInline "hl.dsp.window.cycle_next()"))
-          (bind (combo "J") (mkLuaInline "hl.dsp.window.cycle_next({ next = false })"))
-          (bind (combo "SHIFT + M") (exec "hyprctl keyword general:layout master"))
-          (bind (combo "H") (mkLuaInline "hl.dsp.window.resize({ x = -20, y = 0, relative = true })"))
-          (bind (combo "L") (mkLuaInline "hl.dsp.window.resize({ x = 20, y = 0, relative = true })"))
-          (bind (combo "CTRL + J") (mkLuaInline "hl.dsp.window.resize({ x = 0, y = 20, relative = true })"))
-          (bind (combo "SHIFT + J") (mkLuaInline ''hl.dsp.layout("swapprev")''))
-          (bind (combo "SHIFT + K") (mkLuaInline ''hl.dsp.layout("swapnext")''))
-          (bind (combo "M") (mkLuaInline ''hl.dsp.layout("swapwithmaster")''))
+          (bind (combo "SHIFT + L") (exec "loginctl lock-session") "Lock screen")
+          (bind (combo "E") (exec config.drishal.defaultApps.fileManager) "File manager")
+          (bind (combo "x") (exec currentWidgetRestart) "Restart shell")
+          (bind (combo "SHIFT + X") (mkLuaInline "hl.dsp.exit()") "Exit Hyprland")
+          (bind (combo "A") (exec "emacsclient -c") "Emacs")
+          (bind (combo "SPACE") (mkLuaInline ''hl.dsp.window.float({ action = "toggle" })'') "Toggle floating")
+          (bind (combo "F") (exec "${smartFullscreen}/bin/smart-fullscreen") "Fullscreen")
+          (bind (combo "SHIFT + s") (exec "${capture}/bin/capture area") "Screenshot area")
+          (bind (combo "s") (exec "${capture}/bin/capture output") "Screenshot monitor")
+          (bind (combo "CTRL + s") (exec "${capture}/bin/capture text") "Copy text from screen")
+          (bind (combo "K") (mkLuaInline "hl.dsp.window.cycle_next()") "Focus next window")
+          (bind (combo "J") (mkLuaInline "hl.dsp.window.cycle_next({ next = false })") "Focus previous window")
+          (bind (combo "SHIFT + M") (exec "hyprctl keyword general:layout master") "Master layout")
+          (bind (combo "H") (mkLuaInline "hl.dsp.window.resize({ x = -20, y = 0, relative = true })") "Shrink window")
+          (bind (combo "L") (mkLuaInline "hl.dsp.window.resize({ x = 20, y = 0, relative = true })") "Grow window")
+          (bind (combo "CTRL + J") (mkLuaInline "hl.dsp.window.resize({ x = 0, y = 20, relative = true })") "Grow window height")
+          (bind (combo "SHIFT + J") (mkLuaInline ''hl.dsp.layout("swapprev")'') "Swap with previous")
+          (bind (combo "SHIFT + K") (mkLuaInline ''hl.dsp.layout("swapnext")'') "Swap with next")
+          (bind (combo "M") (mkLuaInline ''hl.dsp.layout("swapwithmaster")'') "Swap with master")
+          (bind (combo "slash") (exec "qs ipc call popups toggle cheatsheet") "Keybind cheatsheet")
+          (bind (combo "TAB") (exec "qs ipc call popups toggle overview") "Workspace overview")
         ]
         ++ workspaceBinds
         ++ [
           # Scroll through workspaces with mainMod + scroll
-          (bind (combo "mouse_down") (mkLuaInline ''hl.dsp.focus({ workspace = "e+1" })''))
-          (bind (combo "mouse_up") (mkLuaInline ''hl.dsp.focus({ workspace = "e-1" })''))
+          (bind (combo "mouse_down") (mkLuaInline ''hl.dsp.focus({ workspace = "e+1" })'') "Next workspace")
+          (bind (combo "mouse_up") (mkLuaInline ''hl.dsp.focus({ workspace = "e-1" })'') "Previous workspace")
 
           # Move/resize windows with mainMod + LMB/RMB (was bindm in hyprlang)
           {
             _args = [
               (combo "mouse:272")
               (mkLuaInline "hl.dsp.window.drag()")
-              { mouse = true; }
+              {
+                mouse = true;
+                description = "Drag window";
+              }
             ];
           }
           {
             _args = [
               (combo "mouse:273")
               (mkLuaInline "hl.dsp.window.resize()")
-              { mouse = true; }
+              {
+                mouse = true;
+                description = "Resize window";
+              }
             ];
           }
 
           # Media keys (no modifier)
-          (bind "XF86AudioRaiseVolume" (exec "${vol}/bin/vol-active-sink 5%+"))
-          (bind "XF86AudioLowerVolume" (exec "${vol}/bin/vol-active-sink 5%-"))
-          (bind "XF86AudioMute" (exec "${vol}/bin/vol-active-sink toggle"))
+          (bind "XF86AudioRaiseVolume" (exec "${vol}/bin/vol-active-sink 5%+") "Volume up")
+          (bind "XF86AudioLowerVolume" (exec "${vol}/bin/vol-active-sink 5%-") "Volume down")
+          (bind "XF86AudioMute" (exec "${vol}/bin/vol-active-sink toggle") "Mute")
         ];
     };
   };

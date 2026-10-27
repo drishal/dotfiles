@@ -89,6 +89,9 @@ PanelWindow {
         PanelRegion {
             panel: processes
         }
+        PanelRegion {
+            panel: cheatsheet
+        }
     }
 
     // Click anywhere outside to dismiss whatever is open — with everything in
@@ -117,7 +120,7 @@ PanelWindow {
         anchors.fill: parent
         islandX: bar.islandInset
         islandW: bar.width - bar.islandInset * 2
-        surfaces: [popouts, dashboard, notes, clipboard, powermenu, processes]
+        surfaces: [popouts, dashboard, notes, clipboard, powermenu, processes, cheatsheet]
         transform: Translate {
             y: win.hideY
         }
@@ -173,6 +176,16 @@ PanelWindow {
         anchors.right: parent.right
         anchors.topMargin: Theme.barHeight
         anchors.rightMargin: Theme.islandInset
+
+        screenName: win.screenName
+    }
+
+    Cheatsheet {
+        id: cheatsheet
+
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.topMargin: Theme.barHeight
 
         screenName: win.screenName
     }
