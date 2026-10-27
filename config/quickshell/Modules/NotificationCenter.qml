@@ -38,6 +38,61 @@ Panel {
         precision: SystemClock.Minutes
     }
 
+    // ── grouping by app ──
+    // Groups keep the order of their newest notification. A group of two or
+    // more gets a header on its newest card; folded groups show only that
+    // card. Groups of three or more start folded until toggled.
+    property var foldedApps: ({})
+
+    function appOf(e) {
+        return (e && e.n && e.n.appName) || "Other";
+    }
+    function isFolded(app, count) {
+        return count > 1 && (win.foldedApps[app] ?? count >= 3);
+    }
+    function toggleGroup(app, count) {
+        const f = Object.assign({}, win.foldedApps);
+        f[app] = !win.isFolded(app, count);
+        win.foldedApps = f;
+    }
+    function clearGroup(app) {
+        for (const e of Notif.list.filter(e => win.appOf(e) === app))
+            Notif.dismiss(e.n);
+    }
+
+    readonly property var grouping: {
+        const order = [];
+        const by = {};
+        for (const e of Notif.list) {
+            const a = win.appOf(e);
+            if (!by[a]) {
+                by[a] = [];
+                order.push(a);
+            }
+            by[a].push(e);
+        }
+        const rows = [];
+        const heads = new Map();
+        for (const a of order) {
+            const g = by[a];
+            const folded = win.isFolded(a, g.length);
+            heads.set(g[0], {
+                app: a,
+                count: g.length,
+                folded: folded
+            });
+            if (folded)
+                rows.push(g[0]);
+            else
+                rows.push(...g);
+        }
+        return {
+            rows: rows,
+            heads: heads
+        };
+    }
+
+
     Item {
         id: card
         anchors.fill: parent
@@ -90,7 +145,7 @@ Panel {
                             clip: true
 
                             model: ScriptModel {
-                                values: Notif.list
+                                values: win.grouping.rows
                             }
 
                             delegate: StyledRect {
@@ -102,12 +157,27 @@ Panel {
                             // every nested binding reads through this guard.
                             readonly property var n: modelData ? modelData.n : null
                             readonly property var acts: n ? Notif.visibleActions(n) : []
+                            readonly property var group: modelData ? (win.grouping.heads.get(modelData) ?? null) : null
+                            readonly property bool isHead: group !== null && group.count > 1
                             width: nlistScroll.width - 4
                             radius: 12
                             color: ncma.containsMouse ? Theme.cardHi : Theme.card
                             border.width: n && n.urgency === NotificationUrgency.Critical ? 1 : 0
                             border.color: Theme.base08
-                            implicitHeight: ncontent.implicitHeight + 18
+                            implicitHeight: ncontent.implicitHeight + 18 + (isHead ? groupHeader.height : 0)
+
+                            // The next card of a folded group, peeking out
+                            // from underneath (fits in the list spacing).
+                            StyledRect {
+                                z: -1
+                                visible: ncard.isHead && ncard.group.folded
+                                x: 10
+                                y: ncard.height - 8
+                                width: ncard.width - 20
+                                height: 13
+                                radius: 8
+                                color: Theme.base02
+                            }
 
                             // Staggered slide-out on Clear all: each card glides
                             // off to the right + fades, delayed by its position
@@ -158,11 +228,91 @@ Panel {
                                 hoverEnabled: true
                             }
 
+                            // group header: app · count, clear group, fold
+                            Item {
+                                id: groupHeader
+                                visible: ncard.isHead
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.top: parent.top
+                                anchors.leftMargin: 12
+                                anchors.rightMargin: 8
+                                height: ncard.isHead ? 28 : 0
+
+                                Row {
+                                    anchors.left: parent.left
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.verticalCenterOffset: 3
+                                    spacing: 6
+                                    StyledText {
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        text: ncard.group ? ncard.group.app : ""
+                                        color: Theme.accent
+                                        font.pixelSize: 11
+                                        font.weight: Font.DemiBold
+                                    }
+                                    StyledRect {
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        width: countText.implicitWidth + 10
+                                        height: 16
+                                        radius: 8
+                                        color: Theme.base02
+                                        StyledText {
+                                            id: countText
+                                            anchors.centerIn: parent
+                                            text: ncard.group ? ncard.group.count : ""
+                                            color: Theme.inkDim
+                                            font.pixelSize: 10
+                                            font.weight: Font.DemiBold
+                                        }
+                                    }
+                                }
+                                Row {
+                                    anchors.right: parent.right
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.verticalCenterOffset: 3
+                                    spacing: 2
+                                    Repeater {
+                                        model: ["clear", "fold"]
+                                        delegate: StyledRect {
+                                            id: gbtn
+                                            required property string modelData
+                                            width: 24
+                                            height: 22
+                                            radius: 8
+                                            StyledIcon {
+                                                anchors.centerIn: parent
+                                                text: gbtn.modelData === "clear" ? "󰎟" : "󰅀"
+                                                rotation: gbtn.modelData === "fold" && ncard.group && !ncard.group.folded ? 180 : 0
+                                                color: gbState.containsMouse ? (gbtn.modelData === "clear" ? Theme.base08 : Theme.ink) : Theme.inkDim
+                                                font.pixelSize: 13
+                                                Behavior on rotation {
+                                                    Anim {
+                                                        type: Anim.DefaultSpatial
+                                                    }
+                                                }
+                                            }
+                                            StateLayer {
+                                                id: gbState
+                                                onClicked: {
+                                                    if (!ncard.group)
+                                                        return;
+                                                    if (gbtn.modelData === "clear")
+                                                        win.clearGroup(ncard.group.app);
+                                                    else
+                                                        win.toggleGroup(ncard.group.app, ncard.group.count);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
                             Row {
                                 id: ncontent
                                 anchors.left: parent.left
                                 anchors.right: parent.right
-                                anchors.top: parent.top
+                                anchors.top: groupHeader.visible ? groupHeader.bottom : parent.top
                                 anchors.margins: 9
                                 anchors.leftMargin: 12
                                 anchors.rightMargin: 12
