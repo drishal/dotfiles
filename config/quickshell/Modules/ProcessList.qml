@@ -141,37 +141,18 @@ Panel {
         onTriggered: Procs.query = search.text
     }
 
-    Elevation {
-        anchors.fill: card
-        radius: card.radius
-        level: 4
-    }
-
-    // The card is the container transform: it grows out of the bar's CPU/RAM
-    // cluster into the full panel. The body is pinned to the panel's final
-    // position (offset back by the card's travel) and clipped, so the content
-    // is revealed rather than scaled — text stays crisp the whole way.
-    StyledRect {
+    // The surface is the container transform (Panel.morphFrom): it grows out
+    // of the bar's CPU/RAM cluster into the full panel while the body, pinned
+    // in place and clipped, is revealed rather than scaled — text stays crisp.
+    Item {
         id: card
 
-        x: win.morphX
-        y: win.morphY
-        width: win.morphW
-        height: win.morphH
-        radius: 22
-        color: Theme.base00
-        border.width: 1
-        border.color: Theme.base02
-        clip: true
+        anchors.fill: parent
 
         Item {
             id: body
 
-            x: -win.morphX
-            y: -win.morphY
-            width: win.width
-            height: win.height
-            opacity: win.contentFade
+            anchors.fill: parent
 
             Column {
                 id: layout

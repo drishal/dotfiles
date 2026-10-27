@@ -62,6 +62,19 @@ Singleton {
     readonly property int radiusSm: 14
     readonly property int gap: 10
 
+    // ── bar geometry ───────────────────────────────────────────────────────
+    // barHeight is the island's bottom edge: attached panels hang from it.
+    readonly property int barHeight: 36
+    readonly property int islandInset: 4
+    readonly property int islandTop: 6
+    readonly property int islandRadius: 16
+    // concave corner joining a panel to the island
+    readonly property int filletRadius: 14
+    // Backdrop opacity. Below 1 wants a Hyprland blur layer_rule on
+    // quickshell-shell, which re-blurs every animation frame: measured 3.3%
+    // dropped frames on nixos-work (1.4% with xray) against 0.2% opaque.
+    readonly property real surfaceAlpha: 1
+
     // ── motion tokens (Material 3 Expressive) ──────────────────────────────
     // Both lists are indexed by Anim.Type, so Anim.qml is a plain lookup. The
     // spatial curves have control points above 1 — that overshoot is what makes

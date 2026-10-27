@@ -30,19 +30,10 @@ Panel {
         }
     }
 
-    Elevation {
-        anchors.fill: card
-        radius: card.radius
-        level: 4
-    }
 
-    StyledRect {
+    Item {
         id: card
         anchors.fill: parent
-        radius: 22
-        color: Theme.base00
-        border.width: 1
-        border.color: Theme.base02
 
         // Drives the staggered row slide-out; the timer waits for the last row
         // to finish before actually wiping the history.

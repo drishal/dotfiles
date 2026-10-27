@@ -53,15 +53,6 @@ PanelWindow {
         screenName: win.screenName
     }
 
-    component PanelRegion: Region {
-        required property Item panel
-
-        x: panel.x
-        y: panel.y
-        width: panel.visible ? panel.width : 0
-        height: panel.visible ? panel.height : 0
-    }
-
     ScreenCorners {}
 
     NotificationPopups {
@@ -69,7 +60,7 @@ PanelWindow {
 
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 42
+        anchors.topMargin: Theme.barHeight + Theme.islandTop
 
         screenName: win.screenName
     }

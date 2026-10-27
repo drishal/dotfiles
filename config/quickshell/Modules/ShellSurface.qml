@@ -26,6 +26,24 @@ PanelWindow {
     readonly property string screenName: win.screen ? win.screen.name : ""
     readonly property bool anyPanel: Popups.current(screenName) !== ""
 
+    // A fullscreen window covers the Top layer anyway; sliding the bar out
+    // means it glides back in on exit instead of popping into place.
+    readonly property HyprlandMonitor monitor: win.screen ? Hyprland.monitorFor(win.screen) : null
+    readonly property bool fullscreen: Hypr.monitorFullscreen(monitor)
+    property real hidden: fullscreen ? 1 : 0
+    readonly property real hideY: -hidden * (Theme.barHeight + 16)
+
+    onFullscreenChanged: if (fullscreen) {
+        Popups.closeAll(screenName);
+        popouts.close();
+    }
+
+    Behavior on hidden {
+        Anim {
+            type: Anim.Emphasized
+        }
+    }
+
     screen: modelData
     color: "transparent"
 
@@ -47,8 +65,8 @@ PanelWindow {
         Region {
             x: bar.islandInset
             y: bar.islandTop
-            width: bar.width - bar.islandInset * 2
-            height: bar.height - bar.islandTop
+            width: win.fullscreen ? 0 : bar.width - bar.islandInset * 2
+            height: win.fullscreen ? 0 : bar.height - bar.islandTop
         }
         Region {
             x: popouts.maskX
@@ -73,17 +91,6 @@ PanelWindow {
         }
     }
 
-    // A hidden panel must contribute nothing, or its reserved rect would
-    // swallow clicks meant for the window underneath.
-    component PanelRegion: Region {
-        required property Item panel
-
-        x: panel.x
-        y: panel.y
-        width: panel.visible ? panel.width : 0
-        height: panel.visible ? panel.height : 0
-    }
-
     // Click anywhere outside to dismiss whatever is open — with everything in
     // one window this is a single grab instead of one per popup. Clicks on the
     // bar itself are inside the window, so switching between bar items does not
@@ -97,6 +104,25 @@ PanelWindow {
         }
     }
 
+    // Dims everything behind the power menu; input still goes through the
+    // focus grab, so it stays out of the mask.
+    Rectangle {
+        anchors.fill: parent
+        color: "black"
+        opacity: 0.45 * Math.min(1, powermenu.reveal)
+        visible: opacity > 0.001
+    }
+
+    Backdrop {
+        anchors.fill: parent
+        islandX: bar.islandInset
+        islandW: bar.width - bar.islandInset * 2
+        surfaces: [popouts, dashboard, notes, clipboard, powermenu, processes]
+        transform: Translate {
+            y: win.hideY
+        }
+    }
+
     Bar {
         id: bar
 
@@ -107,6 +133,9 @@ PanelWindow {
         screenName: win.screenName
         barScreen: win.screen
         popouts: popouts
+        transform: Translate {
+            y: win.hideY
+        }
     }
 
     PopoutHost {
@@ -121,8 +150,8 @@ PanelWindow {
 
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.topMargin: 42
-        anchors.rightMargin: 8
+        anchors.topMargin: Theme.barHeight
+        anchors.rightMargin: Theme.islandInset
 
         screenName: win.screenName
     }
@@ -132,7 +161,7 @@ PanelWindow {
 
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 42
+        anchors.topMargin: Theme.barHeight
 
         screenName: win.screenName
     }
@@ -142,8 +171,8 @@ PanelWindow {
 
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.topMargin: 42
-        anchors.rightMargin: 8
+        anchors.topMargin: Theme.barHeight
+        anchors.rightMargin: Theme.islandInset
 
         screenName: win.screenName
     }
@@ -153,7 +182,7 @@ PanelWindow {
 
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 42
+        anchors.topMargin: Theme.barHeight
 
         screenName: win.screenName
     }
@@ -165,8 +194,8 @@ PanelWindow {
 
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.topMargin: 42
-        anchors.rightMargin: 8
+        anchors.topMargin: Theme.barHeight
+        anchors.rightMargin: Theme.islandInset
 
         screenName: win.screenName
         morphFrom: Qt.rect(bar.statsRect.x - processes.x, bar.statsRect.y - processes.y, bar.statsRect.width, bar.statsRect.height)

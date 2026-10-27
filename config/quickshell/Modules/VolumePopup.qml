@@ -14,6 +14,7 @@ Panel {
     property bool showing: false
 
     shown: showing
+    attached: false
     slideFrom: Qt.BottomEdge
 
     width: card.width

@@ -10,7 +10,8 @@ import qs.Services
 
 // The floating island. Lives inside ShellSurface as a plain Item — the window
 // behind it spans the whole screen and never resizes, so nothing here has to
-// fight the compositor. Hovering a status item opens the shared popout.
+// fight the compositor. Its surface is painted by Backdrop, together with the
+// drawers that hang from it; this item only lays out the content.
 
 Item {
     id: bar
@@ -19,8 +20,8 @@ Item {
     required property var barScreen
     property Item popouts: null
 
-    readonly property int islandInset: 4
-    readonly property int islandTop: 6
+    readonly property int islandInset: Theme.islandInset
+    readonly property int islandTop: Theme.islandTop
     readonly property alias island: island
     readonly property string launchCmd: "rofi -show drun -icon-theme Papirus -show-icons"
 
@@ -49,7 +50,7 @@ Item {
             popouts.toggle(name, item.mapToItem(bar, item.width / 2, 0).x);
     }
 
-    implicitHeight: 36
+    implicitHeight: Theme.barHeight
 
     // ── reusable glyph button ──────────────────────────────────────────────
     component IconButton: Item {
@@ -142,13 +143,7 @@ Item {
     }
 
     // ── the floating island ────────────────────────────────────────────────
-    Elevation {
-        anchors.fill: island
-        radius: island.radius
-        level: 2
-    }
-
-    StyledRect {
+    Item {
         id: island
 
         onWidthChanged: Qt.callLater(bar.updateStatsAnchor)
@@ -157,10 +152,6 @@ Item {
         anchors.leftMargin: bar.islandInset
         anchors.rightMargin: bar.islandInset
         anchors.topMargin: bar.islandTop
-        radius: 16
-        color: Theme.island
-        border.width: 1
-        border.color: Theme.base02
 
         // ── LEFT: launcher · workspaces · focused window ──────────────────
         Row {

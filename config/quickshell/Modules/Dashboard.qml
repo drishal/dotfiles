@@ -227,20 +227,11 @@ Panel {
         }
     }
 
-    Elevation {
-        anchors.fill: card
-        radius: card.radius
-        level: 4
-    }
 
-    StyledRect {
+    Item {
         id: card
 
         anchors.fill: parent
-        radius: 20
-        color: Theme.base00
-        border.width: 1
-        border.color: Theme.base02
         implicitHeight: layout.implicitHeight + 24
 
         Column {

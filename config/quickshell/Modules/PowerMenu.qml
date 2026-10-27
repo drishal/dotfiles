@@ -42,20 +42,11 @@ Panel {
     width: rowFlow.implicitWidth + 32
     height: rowFlow.implicitHeight + 32
 
-    Elevation {
-        anchors.fill: menu
-        radius: menu.radius
-        level: 4
-    }
 
-    StyledRect {
+    Item {
         id: menu
 
         anchors.fill: parent
-        radius: 18
-        color: Theme.base00
-        border.width: 1
-        border.color: Theme.base02
 
         Row {
             id: rowFlow

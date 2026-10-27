@@ -9,6 +9,10 @@ import qs.Services
 // closing and reopening: a spring drives x/width/height (so retargeting
 // mid-flight keeps its velocity) while the bodies cross-fade.
 //
+// The popout is a drawer: its surface is painted by Backdrop, joined to the
+// island, and grows down out of the bar. Horizontal speed squashes and
+// stretches it — wider and shallower while it travels, settling as it stops.
+//
 // All bodies stay instantiated. Building one on demand meant the swap paid for
 // constructing it — WifiDetail plus an nmcli spawn — right in the middle of the
 // morph, and the target size was not known until after that, so the resize and
@@ -20,53 +24,77 @@ Item {
 
     required property string screenName
 
-    // Sits flush against the island's bottom edge so there is no dead strip
-    // between bar and popout for the pointer to fall through.
-    readonly property int barBottom: 36
-    readonly property int lift: 4
+    readonly property int barBottom: Theme.barHeight
+
+    // Bodies overlap and cross-fade; the shrinking surface clips the outgoing
+    // one. Each is pinned to the surface's bottom edge until it fits, so it
+    // slides out of the bar instead of being uncovered in place.
+    component BodySlot: Item {
+        required property string bodyKey
+        readonly property bool active: root.shownName === bodyKey
+
+        width: childrenRect.width
+        height: childrenRect.height
+        y: Math.round(Math.min(0, spring.h - height))
+        opacity: active ? 1 : 0
+        visible: opacity > 0.001
+
+        Behavior on opacity {
+            Anim {
+                type: Anim.DefaultEffects
+            }
+        }
+    }
 
     property string current: ""
     property real anchorX: 0
 
-    // A panel owns the screen while it is open, so the hover popout stands
-    // down — otherwise clicking the CPU/RAM cluster leaves its popout sitting
-    // under the process panel that just grew out of the same spot, and the
-    // pointer never leaves the item to dismiss it.
+    // A panel owns the screen while it is open, so the popout stands down —
+    // otherwise clicking the CPU/RAM cluster leaves its popout sitting under
+    // the process panel that just grew out of the same spot.
     readonly property bool blocked: Popups.current(screenName) !== ""
 
     readonly property bool open: current !== "" && !blocked
-    property bool snapNext: true
 
     onBlockedChanged: if (blocked)
         current = ""
 
-    // Held through a close so the frame keeps its size while fading out.
+    // Held through a close so the outgoing body stays put while it retracts.
     property string lastName: ""
     onCurrentChanged: if (current !== "")
         lastName = current
+    readonly property string shownName: open ? current : lastName
 
     readonly property Item activeBody: {
-        const n = root.open ? root.current : root.lastName;
-        if (n === "network")
+        if (shownName === "network")
             return netBody;
-        if (n === "stats")
+        if (shownName === "stats")
             return statsBody;
-        if (n === "battery")
+        if (shownName === "battery")
             return batteryBody;
         return null;
     }
 
     readonly property real wantW: activeBody ? activeBody.implicitWidth : 0
     readonly property real wantH: activeBody ? activeBody.implicitHeight : 0
-    readonly property real wantX: Math.max(8, Math.min(root.width - wantW - 8, anchorX - wantW / 2))
+    readonly property real wantX: Math.max(Theme.islandInset, Math.min(root.width - wantW - Theme.islandInset, anchorX - wantW / 2))
+
+    // ── surface, read by Backdrop ──────────────────────────────────────────
+    readonly property real deform: Math.min(0.06, Math.abs(spring.vx) * 1e-5)
+    // Whole pixels, for the same reason as Panel: native text steps by pixel.
+    readonly property real surfaceX: Math.round(spring.x1 - spring.w * deform / 2)
+    readonly property real surfaceY: barBottom
+    readonly property real surfaceW: Math.round(spring.w * (1 + deform))
+    readonly property real surfaceH: Math.round(Math.max(0, spring.h) * (1 - deform / 2))
+    readonly property real radius: Theme.radius
 
     // The input region follows the *target*, not the animated geometry: it then
     // changes twice per interaction instead of once per frame, and the popout is
-    // hoverable for the whole morph rather than only once it has caught up.
+    // clickable for the whole morph rather than only once it has caught up.
     readonly property real maskX: wantX
     readonly property real maskY: barBottom
-    readonly property real maskW: frame.visible ? wantW : 0
-    readonly property real maskH: frame.visible ? wantH + lift : 0
+    readonly property real maskW: open ? wantW : 0
+    readonly property real maskH: open ? wantH : 0
 
     function toggle(name, cx) {
         if (blocked)
@@ -82,18 +110,20 @@ Item {
         current = "";
     }
     function sync() {
-        spring.retarget(wantX, wantW, wantH);
-        if (snapNext && wantW > 0) {
-            spring.settle();
-            snapNext = false;
+        // Opening from nothing: appear in place and only grow downwards.
+        if (open && spring.h < 1) {
+            spring.x1 = wantX;
+            spring.w = wantW;
+            spring.vx = spring.vw = 0;
         }
+        spring.retarget(wantX, wantW, open ? wantH : 0);
     }
 
     onWantWChanged: sync()
     onWantHChanged: sync()
     onWantXChanged: sync()
-    onOpenChanged: if (!open)
-        snapNext = true
+    onOpenChanged: sync()
+    Component.onCompleted: sync()
 
     Spring {
         id: spring
@@ -107,79 +137,45 @@ Item {
     Item {
         id: frame
 
-        property real fade: root.open ? 1 : 0
-
-        x: spring.x1
+        x: root.surfaceX
         y: root.barBottom
-        width: spring.w
-        height: spring.h + root.lift
-        visible: fade > 0.001
-        opacity: fade
-        scale: 0.97 + 0.03 * fade
-        transformOrigin: Item.Top
+        width: root.surfaceW
+        height: root.surfaceH
+        visible: height > 0.5
+        clip: true
 
-        Behavior on fade {
-            Anim {
-                type: Anim.Emphasized
-                duration: Theme.animDurations[Anim.DefaultEffects]
+        Item {
+            width: spring.w
+            height: Math.max(0, spring.h)
+            transform: Scale {
+                origin.x: spring.w / 2
+                xScale: 1 + root.deform
+                yScale: 1 - root.deform / 2
             }
-        }
 
-        Elevation {
-            anchors.fill: card
-            radius: card.radius
-            level: 3
-        }
+            BodySlot {
+                bodyKey: "network"
 
-        StyledRect {
-            id: card
+                NetPopout {
+                    id: netBody
 
-            anchors.fill: parent
-            anchors.topMargin: root.lift
-            radius: Theme.radius
-            color: Theme.base00
-            border.width: 1
-            border.color: Theme.base02
-            clip: true
-
-            // Bodies overlap and cross-fade; the shrinking card clips the
-            // outgoing one, which is what sells the morph.
-            NetPopout {
-                id: netBody
-
-                live: root.current === "network"
-                opacity: root.current === "network" ? 1 : 0
-                visible: opacity > 0.001
-
-                Behavior on opacity {
-                    Anim {
-                        type: Anim.DefaultEffects
-                    }
+                    live: root.current === "network"
                 }
             }
-            StatsPopout {
-                id: statsBody
+            BodySlot {
+                bodyKey: "stats"
 
-                live: root.current === "stats"
-                opacity: root.current === "stats" ? 1 : 0
-                visible: opacity > 0.001
+                StatsPopout {
+                    id: statsBody
 
-                Behavior on opacity {
-                    Anim {
-                        type: Anim.DefaultEffects
-                    }
+                    live: root.current === "stats"
                 }
             }
-            BatteryPopout {
-                id: batteryBody
+            BodySlot {
+                bodyKey: "battery"
 
-                opacity: root.current === "battery" ? 1 : 0
-                visible: opacity > 0.001
-
-                Behavior on opacity {
-                    Anim {
-                        type: Anim.DefaultEffects
-                    }
+                BatteryPopout {
+                    id: batteryBody
                 }
             }
         }
