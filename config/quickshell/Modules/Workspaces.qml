@@ -2,18 +2,15 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
-import Quickshell.WindowManager
 import qs.Common
 
 // Per-monitor workspace numbers. A pill sits behind the row, and the accent
 // indicator marks the focused one; its leading and trailing edges animate at
 // different speeds, so it stretches into a trail as it moves and settles back.
-// NOTE: workspaces come from ext-workspace-v1 (Quickshell.WindowManager), not
-// Quickshell.Hyprland — Hyprland 0.56 dropped workspace ids from its IPC
-// (hyprwm/Hyprland#16140) and quickshell still parses them, so every workspace
-// there reads back as id -1. The wheel handler still dispatches, which is a
-// command rather than a query and so is unaffected; this Hyprland runs
-// configType = "lua", hence the Lua expression.
+// Hyprland IPC again since quickshell 0.3.2 parses 0.56's workspace addresses;
+// the ext-workspace-v1 stand-in used until then failed to activate some
+// workspaces ("Windowset cannot be activated"). This Hyprland runs
+// configType = "lua", hence the Lua expression in the wheel dispatch.
 
 Item {
     id: root
@@ -24,25 +21,10 @@ Item {
     readonly property int slotGap: 6
     readonly property int pitch: slotW + slotGap
 
-    readonly property var projection: {
-        for (const p of WindowManager.windowsetProjections)
-            if (p.screens.some(s => s && s.name === root.screenName))
-                return p;
-        return null;
-    }
-
-    function coordOf(ws) {
-        return ws.coordinates.length > 0 ? ws.coordinates[0] : parseInt(ws.name) || 0;
-    }
-
     // Hyprland only keeps a workspace alive while it holds windows or is
-    // focused, so everything ext reports here is worth a slot.
-    readonly property var slots: {
-        const p = root.projection;
-        if (!p)
-            return [];
-        return [...p.windowsets].sort((a, b) => root.coordOf(a) - root.coordOf(b));
-    }
+    // focused, so everything it reports here is worth a slot. Special
+    // workspaces (negative ids) stay off the bar.
+    readonly property var slots: Hyprland.workspaces.values.filter(w => w.id > 0 && w.monitor?.name === root.screenName).sort((a, b) => a.id - b.id)
 
     readonly property int activeIdx: {
         for (let i = 0; i < root.slots.length; i++)

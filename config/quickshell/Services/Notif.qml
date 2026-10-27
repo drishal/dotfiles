@@ -16,7 +16,6 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Notifications
-import Quickshell.Hyprland
 
 Singleton {
     id: root
@@ -34,28 +33,9 @@ Singleton {
 
     readonly property int count: list.length
 
-    // Both lists are created on first use, and hasFullscreen() reads them from a
-    // function rather than a binding, so hold them live here or they stay empty.
-    readonly property int hyprWatch: (Hyprland.monitors?.values.length ?? 0) + (Hyprland.toplevels?.values.length ?? 0)
-
-    // Any monitor showing a real fullscreen window (2 = fullscreen in Hyprland's
-    // client JSON). Read straight off lastIpcObject and matched by workspace
-    // address: quickshell still parses the workspace ids Hyprland 0.56 dropped
-    // (hyprwm/Hyprland#16140), so monitor.activeWorkspace resolves to one shared
-    // phantom workspace and its toplevels are not this monitor's.
+    // Any monitor showing a real fullscreen window (maximized does not count).
     function hasFullscreen() {
-        const active = {};
-        for (const m of (Hyprland.monitors ? Hyprland.monitors.values : [])) {
-            const o = m.lastIpcObject;
-            if (o && o.activeWorkspace)
-                active[o.activeWorkspace.address] = true;
-        }
-        for (const t of (Hyprland.toplevels ? Hyprland.toplevels.values : [])) {
-            const o = t.lastIpcObject;
-            if (o && o.fullscreen > 1 && o.workspace && active[o.workspace.address])
-                return true;
-        }
-        return false;
+        return Hypr.anyFullscreen();
     }
 
     function visibleActions(n) {
