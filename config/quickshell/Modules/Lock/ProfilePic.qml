@@ -1,13 +1,14 @@
 pragma ComponentBehavior: Bound
 import QtQuick
+import QtQuick.Effects
 import Quickshell
 import qs.Common
 import qs.Services
 
-// Avatar ringed by PAM state: accent idle, amber while authenticating, red on
-// failure. Progress is an orbiting dot rather than a gap in the ring — a gap
-// would have to be painted in the background colour, and the background here is
-// a blurred wallpaper.
+// Avatar in an M3 cookie, ringed by PAM state: accent idle, amber while
+// authenticating, red on failure. While PAM works the ring spins and swells
+// into a burst; the photo is masked to the same cookie so the two stay
+// concentric.
 Item {
     id: root
 
@@ -18,42 +19,57 @@ Item {
     implicitWidth: 132
     implicitHeight: 132
 
-    StyledRect {
-        anchors.fill: parent
-        radius: width / 2
-        color: "transparent"
-        border.width: 3
-        border.color: root.busy ? Qt.rgba(root.stateColor.r, root.stateColor.g, root.stateColor.b, 0.35) : root.stateColor
-    }
+    PolarShape {
+        id: ring
 
-    Item {
         anchors.fill: parent
-        visible: root.busy
+        lobes: 12
+        amplitude: 0.035
+        lobes2: 8
+        amplitude2: 0.07
+        morph: root.busy ? 1 : 0
+        fillColor: "transparent"
+        strokeColor: root.stateColor
+        strokeWidth: 3
 
-        StyledRect {
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: -4
-            width: 11
-            height: 11
-            radius: width / 2
-            color: root.stateColor
+        Behavior on morph {
+            Anim {
+                type: Anim.DefaultSpatial
+            }
         }
-
+        Behavior on strokeColor {
+            CAnim {}
+        }
         RotationAnimator on rotation {
             running: root.busy
             loops: Animation.Infinite
             from: 0
             to: 360
-            duration: 1100
+            duration: 1800
         }
     }
 
-    StyledRect {
+    Item {
         anchors.fill: parent
         anchors.margins: 9
-        radius: width / 2
-        color: Theme.base02
-        clip: true
+
+        PolarShape {
+            id: mask
+
+            anchors.fill: parent
+            lobes: 12
+            amplitude: 0.035
+            fillColor: "white"
+            visible: false
+            layer.enabled: true
+        }
+
+        PolarShape {
+            anchors.fill: parent
+            lobes: 12
+            amplitude: 0.035
+            fillColor: Theme.base02
+        }
 
         Image {
             id: face
@@ -64,11 +80,20 @@ Item {
             asynchronous: true
             sourceSize.width: 264
             sourceSize.height: 264
-            visible: status === Image.Ready
+            visible: false
+        }
+        MultiEffect {
+            anchors.fill: parent
+            source: face
+            visible: face.status === Image.Ready
+            maskEnabled: true
+            maskSource: mask
+            maskThresholdMin: 0.5
+            maskSpreadAtMin: 1
         }
         StyledIcon {
             anchors.centerIn: parent
-            visible: !face.visible
+            visible: face.status !== Image.Ready
             text: "󰀄"
             font.pixelSize: 48
             color: Theme.inkDim

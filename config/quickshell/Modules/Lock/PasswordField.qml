@@ -16,6 +16,15 @@ StyledRect {
 
     implicitWidth: 340
     implicitHeight: 50
+
+    // Head shake on a rejected password — damped, so it reads as "no", not
+    // as a glitch.
+    onFailedChanged: if (failed)
+        shake.shake()
+    transform: Shake {
+        id: shake
+    }
+
     radius: height / 2
     color: Qt.rgba(Theme.base00.r, Theme.base00.g, Theme.base00.b, 0.78)
     border.width: 2
@@ -27,9 +36,17 @@ StyledRect {
 
         StyledIcon {
             anchors.verticalCenter: parent.verticalCenter
-            text: root.busy ? "󰔟" : "󰌾"
+            visible: !root.busy
+            text: "󰌾"
             color: root.failed ? Theme.base08 : Theme.inkDim
             font.pixelSize: 17
+        }
+        LoadingIndicator {
+            anchors.verticalCenter: parent.verticalCenter
+            width: 18
+            height: 18
+            running: root.busy
+            color: Theme.base0A
         }
 
         Row {
