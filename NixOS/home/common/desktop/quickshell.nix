@@ -60,5 +60,6 @@ in
     libnotify
     dbus # dbus-monitor — LockState listens for logind's Lock signal
     procps # ps, for the process list
+    cava # media-card spectrum (Services/Cava.qml)
   ];
 }

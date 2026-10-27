@@ -432,17 +432,46 @@ Panel {
 
             // ── media player ──
             StyledRect {
+                id: mediaCard
+
+                readonly property bool playing: win.player !== null && win.player.playbackState === MprisPlaybackState.Playing
+
                 width: parent.width
                 visible: win.player !== null
-                implicitHeight: 58
+                implicitHeight: 58 + (progress.visible ? progress.implicitHeight + 6 : 0)
                 radius: Theme.radiusSm
                 color: Theme.card
                 border.width: 1
                 border.color: Theme.base02
+                clip: true
+
+                Visualizer {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    anchors.margins: 1
+                    height: parent.height * 0.7
+                    active: mediaCard.playing && win.shown
+                    color: Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.12)
+                }
+
+                MediaProgress {
+                    id: progress
+
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    anchors.margins: 10
+                    anchors.bottomMargin: 8
+                    player: win.player
+                }
 
                 Row {
-                    anchors.fill: parent
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: parent.top
                     anchors.margins: 10
+                    height: 38
                     spacing: 10
 
                     ClippingRectangle {

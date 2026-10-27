@@ -13,7 +13,7 @@ Card {
 
     // Sized to its content rather than stretched to fill the column — a media
     // card with one track in it should not be a half-screen slab.
-    implicitHeight: 132
+    implicitHeight: 132 + (progress.visible ? progress.implicitHeight + 8 : 0)
 
     component Ctl: Item {
         id: ctl
@@ -51,6 +51,16 @@ Card {
             onClicked: if (ctl.active)
                 ctl.triggered()
         }
+    }
+
+    // Behind everything, so the card reads as one surface with the music in it.
+    Visualizer {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        height: parent.height * 0.6
+        active: root.playing
+        color: Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.1)
     }
 
     StyledText {
@@ -121,6 +131,13 @@ Card {
                     elide: Text.ElideRight
                 }
             }
+        }
+
+        MediaProgress {
+            id: progress
+
+            width: parent.width
+            player: root.player
         }
 
         Row {
