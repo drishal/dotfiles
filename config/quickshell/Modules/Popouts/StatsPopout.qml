@@ -167,43 +167,67 @@ Item {
             opacity: 0.25
         }
 
-        Column {
+        // Fixed at four rows: Procs starts empty on every open, and growing when
+        // the first sample lands re-ran the popout's slide out of the bar.
+        Item {
+            readonly property bool ready: Procs.list.length > 0
+
             width: parent.width
-            spacing: 5
+            height: 4 * 16 + 3 * 5
 
-            Repeater {
-                model: Procs.list.slice().sort((a, b) => b.cpu - a.cpu).slice(0, 4)
+            Column {
+                width: parent.width
+                spacing: 5
+                opacity: parent.ready ? 1 : 0
 
-                delegate: Item {
-                    required property var modelData
-
-                    width: parent.width
-                    height: 16
-
-                    StyledText {
-                        anchors.left: parent.left
-                        anchors.right: pct.left
-                        anchors.rightMargin: 8
-                        text: modelData.name
-                        font.pixelSize: 11
-                        elide: Text.ElideRight
+                Behavior on opacity {
+                    Anim {
+                        type: Anim.DefaultEffects
                     }
-                    StyledText {
-                        id: pct
+                }
 
-                        anchors.right: parent.right
-                        text: modelData.cpu.toFixed(1) + "%"
-                        color: Theme.base0C
-                        font.pixelSize: 11
-                        font.weight: Font.DemiBold
+                Repeater {
+                    model: Procs.list.slice().sort((a, b) => b.cpu - a.cpu).slice(0, 4)
+
+                    delegate: Item {
+                        required property var modelData
+
+                        width: parent.width
+                        height: 16
+
+                        StyledText {
+                            anchors.left: parent.left
+                            anchors.right: pct.left
+                            anchors.rightMargin: 8
+                            text: modelData.name
+                            font.pixelSize: 11
+                            elide: Text.ElideRight
+                        }
+                        StyledText {
+                            id: pct
+
+                            anchors.right: parent.right
+                            text: modelData.cpu.toFixed(1) + "%"
+                            color: Theme.base0C
+                            font.pixelSize: 11
+                            font.weight: Font.DemiBold
+                        }
                     }
                 }
             }
             StyledText {
-                visible: Procs.list.length === 0
+                anchors.centerIn: parent
+                opacity: parent.ready ? 0 : 1
+                visible: opacity > 0.001
                 text: Procs.loading ? "Sampling…" : "No data"
                 color: Theme.inkDim
                 font.pixelSize: 11
+
+                Behavior on opacity {
+                    Anim {
+                        type: Anim.DefaultEffects
+                    }
+                }
             }
         }
 
