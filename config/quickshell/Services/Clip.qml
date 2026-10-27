@@ -83,18 +83,20 @@ Singleton {
                 const all = root.parse(this.text);
                 root.total = all.length;
                 root.entries = all.slice(0, root.maxRows);
-                // decode any missing image thumbnails, then re-publish so the
-                // Image sources pick up the freshly written files.
-                Quickshell.execDetached(["bash", "-c", "mkdir -p '" + root.thumbDir + "'; " + root.entries.filter(e => e.isImage).map(e => "[ -f '" + e.thumb + "' ] || cliphist decode " + e.id + " | magick - -thumbnail 160x160 '" + e.thumb + "'").join("; ")]);
-                thumbTimer.restart();
+                const missing = root.entries.filter(e => e.isImage).map(e => "[ -f '" + e.thumb + "' ] || cliphist decode " + e.id + " | magick - -thumbnail 160x160 '" + e.thumb + "'");
+                if (missing.length > 0) {
+                    thumbProc.command = ["bash", "-c", "mkdir -p '" + root.thumbDir + "'; " + missing.join("; ")];
+                    thumbProc.running = true;
+                }
             }
         }
     }
 
-    Timer {
-        id: thumbTimer
-        interval: 700
-        onTriggered: root.entries = root.entries.slice() // new refs → reload thumbs
+    // Re-publish once the decodes have actually finished, so the Image sources
+    // pick up the new files — a fixed delay left slow decodes blank.
+    Process {
+        id: thumbProc
+        onExited: root.entries = root.entries.slice()
     }
 
     function copy(e) {
