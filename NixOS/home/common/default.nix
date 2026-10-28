@@ -12,7 +12,7 @@
     ./core/btop.nix
     ./core/pi-theme.nix
     ./core/omp-theme.nix
-    ./core/agent-web-ui-theme.nix
+    ./core/awui-theme.nix
     ./core/aria2.nix
 
     ./desktop/default-apps.nix

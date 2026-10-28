@@ -1,6 +1,6 @@
 { config, lib, ... }:
 
-# Hands the active stylix scheme to agent-web-ui as a base16/base24 YAML,
+# Hands the active stylix scheme to awui as a base16/base24 YAML,
 # the same way pi-theme.nix does for Pi. The web UI re-reads the file (it
 # follows the home-manager symlink), so a rebuild re-themes open tabs the
 # next time they become visible.
@@ -12,7 +12,7 @@ let
   q = s: "\"${s}\"";
 in
 {
-  xdg.configFile."agentwebui/theme.yml".text =
+  xdg.configFile."awui/theme.yml".text =
     lib.concatStringsSep "\n" (
       [
         "name: ${q c.scheme}"
