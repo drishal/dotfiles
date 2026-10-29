@@ -92,7 +92,7 @@
   # ACCENTUM Plus USB: ACP's iec958 route has no hw-volume, so the device keeps its -9 dB default
   # Matched by USB product name, so a firmware or revision PID change cannot break it
   services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="sound", KERNEL=="card*", ATTRS{product}=="ACCENTUM Plus", RUN+="${pkgs.alsa-utils}/bin/amixer -c %n sset PCM 100%"
+    ACTION=="add", SUBSYSTEM=="sound", KERNEL=="card*", ATTRS{product}=="ACCENTUM Plus", RUN+="${pkgs.alsa-utils}/bin/amixer -c $attr{id} sset PCM 100%%"
   '';
 
   # PipeWire provides the PulseAudio API
