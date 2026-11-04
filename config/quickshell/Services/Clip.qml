@@ -99,6 +99,70 @@ Singleton {
         onExited: root.entries = root.entries.slice()
     }
 
+    // ── expanded view: full content of one entry ──────────────────────────
+    readonly property string fullDir: "/tmp/qs-clip-full-v1"
+    readonly property int textCap: 20000
+
+    property bool expanded: false
+    property var detail: null // entry being previewed
+    property string detailText: ""
+    property bool detailTruncated: false
+    property string detailImage: "" // decoded full-size file, set once ready
+    property bool detailBusy: false
+
+    function select(e) {
+        textProc.running = false;
+        imgProc.running = false;
+        root.detail = e;
+        root.detailText = "";
+        root.detailTruncated = false;
+        root.detailImage = "";
+        root.detailBusy = false;
+        if (!e)
+            return;
+        root.detailBusy = true;
+        if (e.isImage) {
+            const ext = e.imageType === "jpeg" ? "jpg" : e.imageType;
+            imgProc.target = root.fullDir + "/" + e.id + "." + ext;
+            imgProc.command = ["bash", "-c", "mkdir -p \"$2\"; [ -f \"$3\" ] || { cliphist decode \"$1\" > \"$3.tmp\" && mv \"$3.tmp\" \"$3\"; }", "_", e.id, root.fullDir, imgProc.target];
+            imgProc.running = true;
+        } else {
+            // Bytes, not chars: leaves headroom so the char cap is what trips.
+            textProc.command = ["bash", "-c", "cliphist decode \"$1\" | head -c " + root.textCap * 2, "_", e.id];
+            textProc.running = true;
+        }
+    }
+
+    // Drops the preview and the decoded full-size files.
+    function clearDetail() {
+        root.select(null);
+        Quickshell.execDetached(["rm", "-rf", root.fullDir]);
+    }
+
+    Process {
+        id: textProc
+        stdout: StdioCollector {
+            onStreamFinished: {
+                if (!root.detail || root.detail.isImage)
+                    return;
+                root.detailTruncated = this.text.length > root.textCap;
+                root.detailText = this.text.slice(0, root.textCap);
+                root.detailBusy = false;
+            }
+        }
+    }
+
+    Process {
+        id: imgProc
+        property string target: ""
+        onExited: code => {
+            if (code !== 0 || !root.detail || imgProc.target.indexOf("/" + root.detail.id + ".") < 0)
+                return;
+            root.detailImage = imgProc.target;
+            root.detailBusy = false;
+        }
+    }
+
     function copy(e) {
         if (e.isImage) {
             const mime = (e.imageType === "jpg" || e.imageType === "jpeg") ? "image/jpeg" : "image/" + e.imageType;

@@ -6,7 +6,9 @@ import qs.Common
 import qs.Services
 
 // cliphist clipboard history, top-right. Search field, numbered rows with
-// image thumbnails / text preview, per-row delete, wipe-all.
+// image thumbnails / text preview, per-row delete, wipe-all. The expand button
+// (or Tab) grows the panel leftwards into a preview pane that shows the full
+// text / full-size image of the selected row; hover or Up/Down picks the row.
 
 Panel {
     id: win
@@ -15,18 +17,78 @@ Panel {
     keyboard: true
     slideFrom: Qt.TopEdge
 
-    width: 560
-    height: 640
+    readonly property int listWidth: 560
+    readonly property int maxWidth: win.parent ? win.parent.width - Theme.islandInset * 2 : 1200
+    readonly property int maxHeight: win.parent ? win.parent.height - Theme.barHeight - 24 : 800
+
+    width: Clip.expanded ? Math.min(1240, maxWidth) : listWidth
+    height: Clip.expanded ? Math.min(780, maxHeight) : 640
+
+    Behavior on width {
+        Anim {
+            type: Anim.Emphasized
+        }
+    }
+    Behavior on height {
+        Anim {
+            type: Anim.Emphasized
+        }
+    }
+
+    // Selected row, driven by hover and Up/Down.
+    property int sel: 0
+    readonly property var current: sel >= 0 && sel < Clip.filtered.length ? Clip.filtered[sel] : null
+    readonly property string currentId: current ? current.id : ""
+
+    // Debounced so sweeping the mouse over the list does not decode every row.
+    onCurrentIdChanged: selTimer.restart()
+    Timer {
+        id: selTimer
+        interval: 90
+        onTriggered: {
+            if (Clip.expanded && win.shown)
+                Clip.select(win.current);
+        }
+    }
+    Connections {
+        target: Clip
+        function onExpandedChanged() {
+            if (Clip.expanded)
+                selTimer.restart();
+            else
+                Clip.clearDetail();
+        }
+        function onQueryChanged() {
+            win.sel = 0;
+        }
+    }
+
+    function move(d) {
+        const n = Clip.filtered.length;
+        if (n === 0)
+            return;
+        win.sel = Math.max(0, Math.min(n - 1, win.sel + d));
+        clipScroll.positionViewAtIndex(win.sel, ListView.Contain);
+    }
+
+    function copyCurrent() {
+        if (!win.current)
+            return;
+        Clip.copy(win.current);
+        Popups.close("clipboard", win.screenName);
+    }
 
     onShownChanged: {
         if (shown) {
             Clip.query = "";
             search.text = "";
+            win.sel = 0;
             Clip.refresh();
             search.forceActiveFocus();
         } else {
             wipeTimer.stop();
             card.clearing = false;
+            Clip.clearDetail();
         }
     }
 
@@ -45,9 +107,15 @@ Panel {
                 card.clearing = false;
             }
         }
+        // Anchored right so the list stays put while the preview grows in on
+        // its left.
         Column {
-            anchors.fill: parent
+            id: listCol
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
             anchors.margins: 14
+            width: win.listWidth - 28
             spacing: 12
 
             // header
@@ -64,12 +132,33 @@ Panel {
                 }
                 StyledText {
                     anchors.verticalCenter: parent.verticalCenter
-                    width: parent.width - 34 - 40 - 40
+                    width: parent.width - 34 - 40 * 3
                     text: "Clipboard History (" + Clip.count + ")"
                     color: Theme.ink
                     font.family: Theme.fontSans
                     font.pixelSize: 17
                     font.weight: Font.Bold
+                }
+                StyledRect {
+                    width: 34
+                    height: 34
+                    radius: 999
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: (expandMa.containsMouse || Clip.expanded) ? Theme.card : "transparent"
+                    StyledText {
+                        anchors.centerIn: parent
+                        text: Clip.expanded ? "󰊔" : "󰊓"
+                        font.family: Theme.fontMono
+                        font.pixelSize: 17
+                        color: (expandMa.containsMouse || Clip.expanded) ? Theme.accent : Theme.inkDim
+                    }
+                    MouseArea {
+                        id: expandMa
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: Clip.expanded = !Clip.expanded
+                    }
                 }
                 StyledRect {
                     width: 34
@@ -151,6 +240,11 @@ Panel {
                         background: null
                         onTextChanged: Clip.query = text
                         Keys.onEscapePressed: win.close()
+                        Keys.onDownPressed: win.move(1)
+                        Keys.onUpPressed: win.move(-1)
+                        Keys.onReturnPressed: win.copyCurrent()
+                        Keys.onEnterPressed: win.copyCurrent()
+                        Keys.onTabPressed: Clip.expanded = !Clip.expanded
                     }
                 }
             }
@@ -181,8 +275,9 @@ Panel {
                     required property int index
                     width: clipScroll.width - 4
                     radius: 14
-                    color: crma.containsMouse ? Theme.cardHi : Theme.card
-                    border.width: crma.containsMouse ? 1 : 0
+                    readonly property bool selected: crow.index === win.sel
+                    color: (crma.containsMouse || crow.selected) ? Theme.cardHi : Theme.card
+                    border.width: crow.selected ? 1 : 0
                     border.color: Theme.accent
                     implicitHeight: 68
 
@@ -303,6 +398,7 @@ Panel {
                         anchors.bottom: parent.bottom
                         hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
+                        onEntered: win.sel = crow.index
                         onClicked: {
                             Clip.copy(crow.modelData);
                             Popups.close("clipboard", win.screenName);
@@ -355,6 +451,133 @@ Panel {
                         color: Theme.inkDim
                         font.family: Theme.fontSans
                         font.pixelSize: 13
+                    }
+                }
+            }
+        }
+
+        // Preview pane: full text or full-size image of the selected row.
+        StyledRect {
+            id: pane
+
+            readonly property var d: Clip.detail
+            readonly property bool isImage: d ? d.isImage : false
+
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: listCol.left
+            anchors.margins: 14
+            anchors.rightMargin: 14
+
+            radius: 14
+            color: Theme.card
+            clip: true
+            visible: width > 60 && opacity > 0.01
+            opacity: Clip.expanded ? 1 : 0
+
+            Behavior on opacity {
+                Anim {
+                    type: Anim.DefaultEffects
+                }
+            }
+
+            Column {
+                anchors.fill: parent
+                anchors.margins: 14
+                spacing: 12
+
+                Row {
+                    id: paneHead
+                    width: parent.width
+                    height: 32
+
+                    StyledText {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: parent.width - copyBtn.width - 12
+                        elide: Text.ElideRight
+                        color: Theme.accent
+                        font.weight: Font.DemiBold
+                        text: {
+                            if (!pane.d)
+                                return "Preview";
+                            if (pane.isImage)
+                                return "Image • " + pane.d.dimensions + " " + pane.d.imageType.toUpperCase() + " • " + pane.d.sizeText;
+                            if (Clip.detailBusy)
+                                return "Text";
+                            return "Text • " + Clip.detailText.length + (Clip.detailTruncated ? "+" : "") + " chars • " + Clip.detailText.split("\n").length + " lines";
+                        }
+                    }
+                    StyledRect {
+                        id: copyBtn
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: copyLabel.implicitWidth + 28
+                        height: 32
+                        radius: 999
+                        visible: pane.d !== null
+                        color: copyMa.containsMouse ? Theme.accent : Theme.cardHi
+                        StyledText {
+                            id: copyLabel
+                            anchors.centerIn: parent
+                            text: "󰆏  Copy"
+                            font.family: Theme.fontMono
+                            color: copyMa.containsMouse ? Theme.accentInk : Theme.ink
+                        }
+                        MouseArea {
+                            id: copyMa
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                if (!pane.d)
+                                    return;
+                                Clip.copy(pane.d);
+                                Popups.close("clipboard", win.screenName);
+                            }
+                        }
+                    }
+                }
+
+                Item {
+                    width: parent.width
+                    height: parent.height - paneHead.height - 12
+
+                    // text
+                    FadeFlickable {
+                        id: textFlick
+                        anchors.fill: parent
+                        visible: pane.d !== null && !pane.isImage && !Clip.detailBusy
+                        contentWidth: width
+                        contentHeight: fullText.implicitHeight
+                        clip: true
+
+                        StyledText {
+                            id: fullText
+                            width: textFlick.width - 8
+                            text: Clip.detailText + (Clip.detailTruncated ? "\n\n… truncated" : "")
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                            font.family: Theme.fontMono
+                            font.pixelSize: 13
+                            lineHeight: 1.15
+                        }
+                    }
+
+                    // image
+                    Image {
+                        anchors.fill: parent
+                        visible: pane.isImage && Clip.detailImage !== ""
+                        source: Clip.detailImage !== "" ? "file://" + Clip.detailImage : ""
+                        fillMode: Image.PreserveAspectFit
+                        asynchronous: true
+                        cache: false
+                        sourceSize.width: 1600
+                    }
+
+                    StyledText {
+                        anchors.centerIn: parent
+                        visible: pane.d === null || Clip.detailBusy
+                        text: pane.d === null ? "Hover an entry to preview it" : "Loading…"
+                        color: Theme.inkDim
                     }
                 }
             }
