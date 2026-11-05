@@ -13,6 +13,7 @@
     ./core/pi-theme.nix
     ./core/omp-theme.nix
     ./core/awui-theme.nix
+    ./core/dsh.nix
     ./core/aria2.nix
 
     ./desktop/default-apps.nix
