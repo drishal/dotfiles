@@ -114,6 +114,8 @@
     dig
        dmg2img
     docker-compose
+    # CLI only: profiles, models, keys and plugins live hand-managed in ~/.dsh.
+    inputs.deepseek-harness.packages.${pkgs.stdenv.hostPlatform.system}.dsh
     dust
     ed
     element-desktop

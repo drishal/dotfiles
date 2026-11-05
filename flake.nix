@@ -159,9 +159,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Keeps its own nixpkgs pin: the Cachix cache is keyed to it, so following
+    # this repo's nixpkgs turns every dsh derivation into a local build.
     deepseek-harness = {
       url = "github:moraxyc/deepseek-harness.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -269,7 +270,6 @@
                 inputs.emacs-overlay.overlay
                 inputs.herdr.overlays.default
                 inputs.herdr-gpui.overlays.default
-                inputs.deepseek-harness.overlays.default
               ];
             }
             # chaotic.nixosModules.default
