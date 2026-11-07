@@ -26,6 +26,7 @@
     ./desktop/ags.nix
     ./desktop/quickshell.nix
     ./desktop/eww.nix
+    ./desktop/vesktop.nix
 
     ./browsers/betterfox.nix
     ./media/mpv.nix
