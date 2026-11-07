@@ -13,10 +13,10 @@
     # Without this, the GNOME target writes color-scheme='default' (light).
     polarity = "dark";
     # base16Scheme = "${config.scheme}";
-    # base16Scheme = "${inputs.tt-schemes}/base24/catppuccin-mocha.yaml";
+    base16Scheme = "${inputs.tt-schemes}/base24/catppuccin-mocha.yaml";
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/kanagawa.yaml"; # base16 wave (upstream)
     # base16Scheme = ../home/common/colors/kanagawa.yaml; # base24 wave (local, accurate terminal brights)
-    base16Scheme = ../home/common/colors/gruvbox-material.yaml; # base24 gruvbox material (hard dark, local)
+    # base16Scheme = ../home/common/colors/gruvbox-material.yaml; # base24 gruvbox material (hard dark, local)
     # base16Scheme = "${inputs.tt-schemes}/base16/gruvbox-material-dark-hard.yaml";
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/everforest-dark-hard.yaml";
     # base16Scheme =  ./home-config/colors/doomone.yaml;
@@ -25,10 +25,10 @@
       name = "breeze_cursors";
       size = 24;
     };
-    image = ../../wallpapers/gruvbox/image2.jpg;
+    # image = ../../wallpapers/gruvbox/image2.jpg;
     # image = ../wallpapers/anime/tanjiro-kamado-gruv.jpg;
     # image = ../wallpapers/anime/goku.jpg;
-    # image = ../../wallpapers/darkest_hour.jpg;
+    image = ../../wallpapers/darkest_hour.jpg;
     fonts = {
       serif = {
         # package = pkgs.noto-fonts;

@@ -36,10 +36,10 @@
     #     keywordStyle = { italic = false; bold = true; };
     #   };
     # };
-    # colorschemes.catppuccin = {
-    #   enable = true;
-    #   settings.background.dark = "mocha";
-    # };
+    colorschemes.catppuccin = {
+      enable = true;
+      settings.background.dark = "mocha";
+    };
     # colorschemes.everforest = {
     #   enable = true;
     #   settings.background = "hard";
@@ -68,7 +68,7 @@
     #     base0F = "${base0F}";
     #   };
     # };
-    colorscheme = "gruvbox-material";
+    # colorscheme = "gruvbox-material";
     # colorscheme = "palenight";
     opts = {
       hlsearch = false;

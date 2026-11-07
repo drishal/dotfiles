@@ -724,7 +724,7 @@ remove/add tangle no to whatever font you prefer
   (setcdr (assoc 'gnus-group-news-low-empty doom-themes-base-faces)
           '(:inherit 'gnus-group-mail-1-empty :weight 'normal)))
 
-(load-theme 'doom-gruvbox-material t)
+(load-theme 'doom-catppuccin t)
 #+end_src
 *** base-16
 #+begin_src emacs-lisp :tangle no
