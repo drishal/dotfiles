@@ -23,6 +23,9 @@
 
   environment.sessionVariables.AQ_DRM_DEVICES = "/dev/dri/rx6800";
 
+  # firmware boots the UEFI console at 1920x1080; the 4K Acer shows it 1:1 in a corner
+  boot.loader.systemd-boot.consoleMode = "max";
+
   # Override common/jellyfin.nix's renderD128, which lands on the iGPU some boots.
   services.jellyfin.hardwareAcceleration.device = lib.mkForce "/dev/dri/rx6800-render";
 
