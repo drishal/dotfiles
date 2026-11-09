@@ -24,6 +24,17 @@
 
       # Serialize tab state less often to avoid periodic hitches with many tabs.
       "browser.sessionstore.interval" = lib.mkForce 120000;
+
+      # Zen-style vertical tab rail. sidebar.revamp is default-on since FF 136,
+      # so it needs no entry here (Firefox clears it as redundant).
+      # expand-on-hover overlays the rail on the page instead of reflowing it,
+      # and Firefox hides the horizontal tab strip automatically in this mode.
+      "sidebar.verticalTabs" = true;
+      "sidebar.visibility" = "expand-on-hover";
+
+      # 0 = let GTK draw the title bar (system min/max/close) instead of
+      # Firefox's own buttons. Gated on -moz-gtk-csd-available in Firefox.
+      "browser.tabs.inTitlebar" = 0;
     };
 
     betterfox = {
