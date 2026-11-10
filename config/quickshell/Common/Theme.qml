@@ -9,7 +9,7 @@ pragma Singleton
 // it doesn't fight the out-of-store symlink). We read it here and expose the
 // slots as `color` properties so the whole shell re-themes on a Stylix switch
 // without touching QML. Missing file (running straight from the repo) → the
-// baked gruvbox-material fallback below, matching the current live scheme.
+// baked gruvbox-material fallback below.
 
 import QtQuick
 import Quickshell
@@ -18,7 +18,7 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    // ── raw base16 slots (fallback = live gruvbox-material hard-dark) ──────
+    // ── raw base16 slots (fallback = gruvbox-material hard-dark) ───────────
     property color base00: "#1d2021"
     property color base01: "#282828"
     property color base02: "#3c3836"
@@ -119,8 +119,12 @@ Singleton {
     FileView {
         id: stylixFile
         path: Quickshell.env("HOME") + "/.config/quickshell-stylix.json"
+        // Sync first read: async left the first frames on the fallback, which StyledRect then cross-faded away.
+        blockLoading: true
         watchChanges: true
         onFileChanged: reload()
         onLoaded: root.applyJson(stylixFile.text())
     }
+
+    Component.onCompleted: applyJson(stylixFile.text())
 }
