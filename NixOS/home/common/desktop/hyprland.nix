@@ -301,6 +301,7 @@ in
           (bind (combo "x") (exec currentWidgetRestart) "Restart shell")
           (bind (combo "SHIFT + X") (mkLuaInline "hl.dsp.exit()") "Exit Hyprland")
           (bind (combo "A") (exec "emacsclient -c") "Emacs")
+          (bind (combo "SHIFT + A") (exec "awui desktop") "awui desktop")
           (bind (combo "SPACE") (mkLuaInline ''hl.dsp.window.float({ action = "toggle" })'') "Toggle floating")
           (bind (combo "F") (exec "${smartFullscreen}/bin/smart-fullscreen") "Fullscreen")
           (bind (combo "SHIFT + s") (exec "${capture}/bin/capture area") "Screenshot area")
