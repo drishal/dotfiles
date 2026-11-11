@@ -292,7 +292,6 @@ in
           (bind (combo "SHIFT + V") (exec "${config.home.homeDirectory}/dotfiles/scripts/clipboard-wofi.sh") "Clipboard history")
           (bind (combo "T") (exec "GDK_BACKEND=x11 xfce4-taskmanager") "Task manager")
           (bind (combo "Q") (mkLuaInline "hl.dsp.window.close()") "Close window")
-          (bind (combo "SHIFT + Q") (exec "kill -9 $(pidof Hyprland)") "Kill Hyprland")
           (bind (combo "SHIFT + F") (exec config.drishal.defaultApps.browser) "Browser")
           # Goes through logind so every lock path is the same one: the
           # quickshell session lock listens for the signal, and falls back to
