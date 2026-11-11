@@ -238,18 +238,19 @@
             inherit inputs;
             inherit user;
           };
+          genericHome = home-manager.lib.homeManagerConfiguration {
+            inherit pkgs;
+            modules = commonModules;
+            extraSpecialArgs = extraSpecialArgs;
+          };
         in
         {
+          ${user} = genericHome;
+          "${user}@nixos" = genericHome;
           "${user}@nixos-desktop" = home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
             modules = commonModules ++ [
               ./NixOS/home/nixos-desktop
-            ];
-            extraSpecialArgs = extraSpecialArgs;
-          };
-          "${user}@nixos" = home-manager.lib.homeManagerConfiguration {
-            inherit pkgs;
-            modules = commonModules ++ [
             ];
             extraSpecialArgs = extraSpecialArgs;
           };

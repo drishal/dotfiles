@@ -73,8 +73,8 @@ dotfiles/
 Everything is driven from =flake.nix=, which exposes two sets of outputs:
 
 - =nixosConfigurations= — the system-level config for each host.
-- =homeConfigurations= — the standalone Home Manager config for each host
-  (=<user>@<host>=).
+- =homeConfigurations= — host-specific standalone Home Manager configs
+  (=<user>@<host>=) plus =drishal=, the default for unknown hosts.
 
 Notable inputs: =nixpkgs= (unstable) + =nixpkgs-master=, =home-manager=,
 =nixvim=, =stylix=, =chaotic= (nyx), =hyprland=, =emacs-overlay=, =nix-gaming=,
@@ -131,8 +131,13 @@ sudo nixos-rebuild switch --flake ~/dotfiles#nixos -L
 Bootstrap Home Manager the first time:
 #+begin_src bash
 nix run --no-write-lock-file --impure github:nix-community/home-manager -- \
-  switch --flake ~/dotfiles#drishal@nixos
+  switch --flake ~/dotfiles
 #+end_src
+
+On unknown hosts, this selects =homeConfigurations.drishal= and uses the
+common configuration without host-specific additions. Known hosts still use
+their matching =drishal@<hostname>= entry. The local =private-stuff= input
+and =~/dotfiles= checkout path are still required.
 
 ** Day to day
 #+begin_src bash
