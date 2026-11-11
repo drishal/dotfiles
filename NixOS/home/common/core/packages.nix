@@ -8,6 +8,7 @@
   home.packages = with pkgs; [
     bat
     cachix
+    devenv
     cowsay
     emacs-lsp-booster
     fd

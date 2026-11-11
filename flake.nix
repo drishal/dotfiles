@@ -254,6 +254,7 @@
             ];
             extraSpecialArgs = extraSpecialArgs;
           };
+
           "${user}@nixos-work" = home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
             modules = commonModules ++ [

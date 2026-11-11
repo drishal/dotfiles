@@ -108,7 +108,6 @@
     debian-goodies
     # deluge
     dejavu_fonts
-    devenv
     vesktop
     distrobox
     dig
