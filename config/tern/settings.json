@@ -1,0 +1,25 @@
+{
+  "theme": "Dark",
+  "theme_dark": "catppuccin-mocha",
+  "cursor": {
+    "blink": false
+  },
+  "layout": "Rail",
+  "font_size": 17,
+  "font_family": "Maple Mono NF",
+  "padding_y": 0,
+  "ui_font": "Google Sans",
+  "code_font": "Maple Mono NF",
+  "tabs": "Vertical",
+  "tabs_autohide": true,
+  "material": "Solid",
+  "blur": 24,
+  "lenses_disabled": [
+    "files.ls"
+  ],
+  "prefs_width": 749,
+  "agents": {
+    "auto_acp": true
+  },
+  "themeDark": "catppuccin-mocha"
+}

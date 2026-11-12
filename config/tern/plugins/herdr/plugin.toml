@@ -1,0 +1,21 @@
+schema = 1
+id = "herdr"
+name = "Herdr"
+version = "0.4.0"
+description = "Herdr inside Tern: a native spaces/agents sidebar beside the attached agent terminal, plus status, toasts and jump-to-agent."
+icon = "user"
+host = "host.luau"
+window = "window.luau"
+styles = ["sidebar.css"]
+
+[[blocks]]
+id = "sidebar"
+title = "Herdr"
+icon = "user"
+palette = true
+
+[[blocks]]
+id = "tabs"
+title = "Herdr tabs"
+icon = "user"
+palette = false

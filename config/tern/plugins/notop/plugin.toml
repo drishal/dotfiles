@@ -1,0 +1,6 @@
+schema = 1
+id = "notop"
+name = "Minimal pane"
+version = "0.2.0"
+description = "Reclaims the rail bands and gives lone panes a seamless, hover-revealed floating outline."
+window = "window.luau"
