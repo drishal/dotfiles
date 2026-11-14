@@ -48,6 +48,7 @@
         extraPkgs =
           pkgs: with pkgs; [
             webkitgtk_4_1
+            libgpg-error # omher bundles libgcrypt but not its libgpg-error
           ];
       };
     };

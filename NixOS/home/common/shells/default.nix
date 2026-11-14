@@ -79,6 +79,10 @@
     PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true"; # NixOS-specific: skips glibc/os checks
     PLAYWRIGHT_HOST_PLATFORM_OVERRIDE = "ubuntu-24.04"; # helps with version compatibility
 
+    # omher 0.2.4's AppRun exports PYTHONHOME/PYTHONPATH into its AppDir and kills the
+    # bridge (upstream PR #2778, unreleased) — drop both once 0.2.5 ships.
+    OMHER_HERMES_PYTHON = "${config.home.homeDirectory}/.local/bin/omher-hermes-python";
+
     # pi's env switches live in ~/.pi/agent/pi.env (the pi config repo), loaded
     # by pi itself, so non-Nix machines get them too.
   };
