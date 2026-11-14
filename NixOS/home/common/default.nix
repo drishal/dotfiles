@@ -15,6 +15,7 @@
     ./core/awui-theme.nix
     ./core/dsh.nix
     ./core/aria2.nix
+    ./core/herdr.nix
 
     ./desktop/default-apps.nix
     ./desktop/rofi.nix
