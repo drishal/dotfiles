@@ -1,25 +1,51 @@
 {
   "theme": "Dark",
-  "theme_dark": "catppuccin-mocha",
+  "theme_light": "dark-catppuccin",
   "cursor": {
-    "blink": false
+    "blink": false,
+    "glide": 120,
+    "trail": "warp"
   },
+  "link_target": "Browser",
   "layout": "Rail",
-  "font_size": 17,
+  "font_size": 20,
   "font_family": "Maple Mono NF",
+  "padding_x": 0,
   "padding_y": 0,
   "ui_font": "Google Sans",
   "code_font": "Maple Mono NF",
   "tabs": "Vertical",
   "tabs_autohide": true,
+  "system_title_bar": true,
   "material": "Solid",
-  "blur": 24,
+  "opacity": 70,
   "lenses_disabled": [
     "files.ls"
   ],
-  "prefs_width": 749,
+  "composer_text": "Markdown",
+  "prefs_width": 1208,
+  "msaa": "2x",
   "agents": {
-    "auto_acp": true
+    "auto_acp": true,
+    "custom": [
+      {
+        "id": "hermes",
+        "name": "hermes",
+        "command": "hermes",
+        "args": [
+          "acp"
+        ],
+        "env": {}
+      }
+    ],
+    "own_tools": [
+      "claude",
+      "codex",
+      "hermes"
+    ]
   },
-  "themeDark": "catppuccin-mocha"
+  "keybinds": {
+    "ctrl+w": "close_tab"
+  },
+  "keymap": "kitty"
 }
