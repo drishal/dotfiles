@@ -148,6 +148,51 @@ Panel {
                                 values: win.grouping.rows
                             }
 
+                            // Unfolding a group fans its cards out from the
+                            // head; folding tucks them back in while the rows
+                            // below glide into the gap.
+                            add: Transition {
+                                ParallelAnimation {
+                                    Anim {
+                                        property: "opacity"
+                                        from: 0
+                                        to: 1
+                                        type: Anim.DefaultEffects
+                                    }
+                                    Anim {
+                                        property: "scale"
+                                        from: 0.9
+                                        to: 1
+                                        type: Anim.DefaultSpatial
+                                    }
+                                    Anim {
+                                        property: "y"
+                                        from: ViewTransition.destination.y - 28
+                                        type: Anim.DefaultSpatial
+                                    }
+                                }
+                            }
+                            remove: Transition {
+                                ParallelAnimation {
+                                    Anim {
+                                        property: "opacity"
+                                        to: 0
+                                        type: Anim.FastEffects
+                                    }
+                                    Anim {
+                                        property: "scale"
+                                        to: 0.9
+                                        type: Anim.FastEffects
+                                    }
+                                }
+                            }
+                            displaced: Transition {
+                                Anim {
+                                    property: "y"
+                                    type: Anim.DefaultSpatial
+                                }
+                            }
+
                             delegate: StyledRect {
                             id: ncard
                             required property var modelData
@@ -165,6 +210,13 @@ Panel {
                             border.width: n && n.urgency === NotificationUrgency.Critical ? 1 : 0
                             border.color: Theme.base08
                             implicitHeight: ncontent.implicitHeight + 18 + (isHead ? groupHeader.height : 0)
+
+                            // The remove transition leaves a faded, shrunk card;
+                            // a pooled delegate must not come back that way.
+                            ListView.onReused: {
+                                ncard.opacity = 1;
+                                ncard.scale = 1;
+                            }
 
                             // The next card of a folded group, peeking out
                             // from underneath (fits in the list spacing).
