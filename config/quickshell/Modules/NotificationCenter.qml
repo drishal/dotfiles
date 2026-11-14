@@ -176,7 +176,9 @@ Panel {
                                 width: ncard.width - 20
                                 height: 13
                                 radius: 8
-                                color: Theme.base02
+                                color: "transparent"
+                                border.width: 1
+                                border.color: Theme.base02
                             }
 
                             // Staggered slide-out on Clear all: each card glides
