@@ -58,6 +58,11 @@ let
     ${hyprPackage}/bin/hyprctl eval "$acer_lua" >/dev/null
     ${hyprPackage}/bin/hyprctl eval "$lg_lua" >/dev/null
     sleep 0.3
+
+    # hyprpaper loses its surface when the Acer re-modesets; restart to repaint.
+    ${pkgs.procps}/bin/pkill -x hyprpaper || true
+    sleep 0.2
+    setsid -f hyprpaper >/dev/null 2>&1 </dev/null
   '';
 
   # ─── Manual toggle (Super+Shift+M) ──────────────────────────────────────
