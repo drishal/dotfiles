@@ -148,40 +148,40 @@ Panel {
                                 values: win.grouping.rows
                             }
 
-                            // Unfolding a group fans its cards out from the
-                            // head; folding tucks them back in while the rows
-                            // below glide into the gap.
+                            // Android-style stack: unfolding slides each card
+                            // out from underneath the one above it (staggered,
+                            // no overshoot) while the rows below make room;
+                            // folding tucks them back under the head.
                             add: Transition {
-                                ParallelAnimation {
-                                    Anim {
-                                        property: "opacity"
-                                        from: 0
-                                        to: 1
-                                        type: Anim.DefaultEffects
+                                SequentialAnimation {
+                                    PauseAnimation {
+                                        duration: Math.max(0, ViewTransition.index - (ViewTransition.targetIndexes[0] ?? 0)) * 45
                                     }
-                                    Anim {
-                                        property: "scale"
-                                        from: 0.9
-                                        to: 1
-                                        type: Anim.DefaultSpatial
-                                    }
-                                    Anim {
-                                        property: "y"
-                                        from: ViewTransition.destination.y - 28
-                                        type: Anim.DefaultSpatial
+                                    ParallelAnimation {
+                                        Anim {
+                                            property: "y"
+                                            from: ViewTransition.destination.y - 60
+                                            type: Anim.Emphasized
+                                        }
+                                        Anim {
+                                            property: "opacity"
+                                            from: 0
+                                            to: 1
+                                            type: Anim.DefaultEffects
+                                        }
                                     }
                                 }
                             }
                             remove: Transition {
                                 ParallelAnimation {
                                     Anim {
-                                        property: "opacity"
-                                        to: 0
-                                        type: Anim.FastEffects
+                                        property: "y"
+                                        to: ViewTransition.item.y - 60
+                                        type: Anim.EmphasizedSmall
                                     }
                                     Anim {
-                                        property: "scale"
-                                        to: 0.9
+                                        property: "opacity"
+                                        to: 0
                                         type: Anim.FastEffects
                                     }
                                 }
@@ -189,7 +189,7 @@ Panel {
                             displaced: Transition {
                                 Anim {
                                     property: "y"
-                                    type: Anim.DefaultSpatial
+                                    type: Anim.Emphasized
                                 }
                             }
 
@@ -205,17 +205,17 @@ Panel {
                             readonly property var group: modelData ? (win.grouping.heads.get(modelData) ?? null) : null
                             readonly property bool isHead: group !== null && group.count > 1
                             width: nlistScroll.width - 4
+                            z: -index // earlier cards cover later ones sliding out from beneath them
                             radius: 12
                             color: ncma.containsMouse ? Theme.cardHi : Theme.card
                             border.width: n && n.urgency === NotificationUrgency.Critical ? 1 : 0
                             border.color: Theme.base08
                             implicitHeight: ncontent.implicitHeight + 18 + (isHead ? groupHeader.height : 0)
 
-                            // The remove transition leaves a faded, shrunk card;
+                            // The remove transition leaves a faded card;
                             // a pooled delegate must not come back that way.
                             ListView.onReused: {
                                 ncard.opacity = 1;
-                                ncard.scale = 1;
                             }
 
                             // The next card of a folded group, peeking out
