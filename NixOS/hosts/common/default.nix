@@ -14,5 +14,5 @@
     ../../shared/stylix.nix
   ];
 
-  system.stateVersion = "23.05";
+  system.stateVersion = "26.05";
 }
