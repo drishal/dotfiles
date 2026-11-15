@@ -53,7 +53,6 @@
     })
     teams-for-linux
     (discord.override {
-      withVencord = true;
       commandLineArgs = lib.concatStringsSep " " [
         "--ignore-gpu-blocklist"
         "--enable-zero-copy"

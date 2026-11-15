@@ -4,7 +4,6 @@
   environment.systemPackages = with pkgs; [
     go
     (discord.override {
-      withVencord = true;
       commandLineArgs = lib.concatStringsSep " " [
         "--ozone-platform-hint=auto"
         "--enable-wayland-ime"
