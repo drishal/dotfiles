@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   inputs,
   user,
   ...
@@ -51,6 +52,15 @@
       useLto = true;
     })
     teams-for-linux
+    (discord.override {
+      commandLineArgs = lib.concatStringsSep " " [
+        "--ignore-gpu-blocklist"
+        "--enable-zero-copy"
+        "--ozone-platform-hint=auto"
+        "--enable-features=VaapiIgnoreDriverChecks,VaapiVideoDecoder,VaapiVideoEncoder"
+        "--disable-features=UseChromeOSDirectVideoDecoder"
+      ];
+    })
     i2c-tools
   ];
 

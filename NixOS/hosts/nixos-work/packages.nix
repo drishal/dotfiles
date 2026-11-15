@@ -3,6 +3,17 @@
 {
   environment.systemPackages = with pkgs; [
     go
+    (discord.override {
+      commandLineArgs = lib.concatStringsSep " " [
+        "--ozone-platform-hint=auto"
+        "--enable-wayland-ime"
+        # VA-API via nvidia-vaapi-driver (NVDEC), same recipe as brave below
+        "--enable-features=AcceleratedVideoDecodeLinuxGL,VaapiOnNvidiaGPUs,VaapiVideoDecoder,VaapiIgnoreDriverChecks"
+        "--disable-features=UseChromeOSDirectVideoDecoder"
+        "--use-gl=angle"
+        "--use-angle=gl"
+      ];
+    })
     # (brave.overrideAttrs (old: {
     #   # brave is a plain derivation here (no .override); commandLineArgs is a
     #   # callPackage formal of make-brave.nix baked into the wrapper, so use overrideAttrs.
