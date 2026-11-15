@@ -81,6 +81,8 @@
   #postgresql
   services.postgresql = {
     enable = true;
+    # Default follows stateVersion (23.05 -> removed postgresql_14); pin explicitly.
+    package = pkgs.postgresql_17;
     enableTCPIP = true;
     authentication = pkgs.lib.mkOverride 10 ''
       local all all trust
