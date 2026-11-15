@@ -1,11 +1,11 @@
 { config, ... }:
 
-# Catppuccin Mocha for Vesktop and the Vencord-patched discord, generated from
-# the active stylix palette.
+# Catppuccin Mocha for Vesktop and stock discord, generated from the active
+# stylix palette.
 #
 # Only the theme file is written here. Vencord keeps its theme list inside
 # its settings.json, which it rewrites at runtime, so enabling is a one-time
-# toggle under Settings → Themes in either client (a store
+# toggle under Vesktop → Settings → Themes (a store
 # symlink there would be read-only, and programs.vesktop.vencord.settings
 # would take ownership of every plugin setting).
 #
@@ -233,5 +233,6 @@ let
 in
 {
   xdg.configFile."vesktop/themes/catppuccin-mocha.theme.css".text = css;
-  xdg.configFile."Vencord/themes/catppuccin-mocha.theme.css".text = css;
+  # Stock discord: pkgs/discord-css injects this file and reloads on change.
+  xdg.configFile."discord-theme/custom.css".text = css;
 }
