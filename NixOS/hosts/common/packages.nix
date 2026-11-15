@@ -59,7 +59,10 @@
     acpi
     argc
     android-tools
-    inputs.leaf.packages.${pkgs.system}.leaf
+    # Upstream's package.nix lacks alsa-lib (rodio) and sqlite (rusqlite) as of 0.16.1.
+    (inputs.leaf.packages.${pkgs.system}.leaf.overrideAttrs (old: {
+      buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.alsa-lib pkgs.sqlite ];
+    }))
     (ani-cli.overrideAttrs (old: {
       src = inputs.ani-cli;
     }))
