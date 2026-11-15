@@ -3,7 +3,7 @@
 {
   environment.systemPackages = with pkgs; [
     go
-    (callPackage ../../pkgs/discord-css {
+    (discord.override {
       commandLineArgs = lib.concatStringsSep " " [
         "--ozone-platform-hint=auto"
         "--enable-wayland-ime"
