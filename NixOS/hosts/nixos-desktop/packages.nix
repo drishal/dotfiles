@@ -52,7 +52,7 @@
       useLto = true;
     })
     teams-for-linux
-    (discord.override {
+    (callPackage ../../pkgs/discord-css {
       commandLineArgs = lib.concatStringsSep " " [
         "--ignore-gpu-blocklist"
         "--enable-zero-copy"
