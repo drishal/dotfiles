@@ -157,10 +157,31 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     npmDeps = importNpmLock.buildNodeModules {
       npmRoot = src + "/tools/ui";
       inherit nodejs;
+      # codeload URLs end in a bare commit hash, so the store file has no tarball
+      # extension and npm symlinks it instead of unpacking (llama-brand).
+      packageLock =
+        let
+          lock = lib.importJSON (src + "/tools/ui/package-lock.json");
+        in
+        lock
+        // {
+          packages = lib.mapAttrs (
+            name: m:
+            if lib.hasPrefix "https://codeload.github.com/" (m.resolved or "") then
+              m // { resolved = "${m.resolved}?name=${baseNameOf name}.tar.gz"; }
+            else
+              m
+          ) lock.packages;
+        };
     };
 
+    # Each pwa-assets run copies llama-brand's read-only favicons into static/, so the
+    # next run fails on EACCES; chmod between the chained steps of the upstream script.
     installPhase = ''
-      LLAMA_UI_OUT_DIR=$out npm run build --offline
+      chmod -R u+w .
+      pwa=$(node -p "require('./package.json').scripts['build-pwa-assets']")
+      eval "''${pwa//&&/; chmod -R u+w static;}"
+      LLAMA_UI_OUT_DIR=$out vite build
     '';
   };
 
