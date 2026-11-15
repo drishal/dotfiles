@@ -44,6 +44,18 @@
   security.sudo.extraConfig = ''
     Defaults   insults
   '';
+  # Passwordless rebuilds; equivalent to passwordless root for this user.
+  security.sudo.extraRules = [
+    {
+      users = [ user ];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/nixos-rebuild";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
 
   # fprint
   # services.fprintd.enable = true;
