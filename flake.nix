@@ -164,6 +164,16 @@
     deepseek-harness = {
       url = "github:moraxyc/deepseek-harness.nix";
     };
+    # Rex from Superlogical: prebuilt-binary flake, unfree, no stable channel yet
+    # (stable.tar.gz 404s; bump with `nix flake update rex`).
+    rex = {
+      url = "https://pkgs.superlogical.com/rex/nix/preview.tar.gz";
+    };
+    # Rex Linux (shuv1337/rex-rune): unofficial native GUI client, attachment-only.
+    # Keeps its own nixpkgs pin — build needs Rust 1.96 + Zig 0.17.
+    rex-rune = {
+      url = "github:shuv1337/rex-rune";
+    };
   };
 
   outputs =

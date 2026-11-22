@@ -120,6 +120,10 @@
     # CLI only: profiles, models, keys and plugins live hand-managed in ~/.dsh.
     inputs.deepseek-harness.packages.${pkgs.stdenv.hostPlatform.system}.dsh
     dust
+    # Rex from Superlogical: their own prebuilt-binary flake, no stable channel yet.
+    inputs.rex.packages.${pkgs.stdenv.hostPlatform.system}.rex
+    # Rex Linux GUI client, attaches to a running rex server
+    inputs.rex-rune.packages.${pkgs.stdenv.hostPlatform.system}.rex-linux
     ed
     element-desktop
     ethtool
