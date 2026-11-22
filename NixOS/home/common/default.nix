@@ -17,6 +17,7 @@
     ./core/aria2.nix
     ./core/herdr.nix
     ./core/tern.nix
+    ./core/rex.nix
 
     ./desktop/default-apps.nix
     ./desktop/rofi.nix
