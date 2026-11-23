@@ -5,6 +5,7 @@
   ...
 }:
 {
+  imports = [ ./ghostty.nix ];
   programs = {
     foot = {
       enable = true;

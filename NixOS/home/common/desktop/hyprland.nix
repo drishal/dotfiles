@@ -281,8 +281,8 @@ in
 
       bind =
         [
-          (bind (combo "RETURN") (mkLuaInline "hl.dsp.exec_cmd(terminal)") "Terminal")
-          # (bind (combo "RETURN") (exec "${config.drishal.defaultApps.terminal} --single-instance"))
+          # Ghostty reuses its headless owner; other terminals launch directly.
+          (bind (combo "RETURN") (mkLuaInline "hl.dsp.exec_cmd(terminal .. (terminal == 'ghostty' and ' +new-window' or ''))") "Terminal")
           # Raycast-style palette (rofi.nix): apps + commands, with tabs for the other modes.
           (bind (combo "D") (exec "rofi-palette") "App launcher")
           (bind (combo "period") (exec "rofi-palette emoji") "Emoji picker")

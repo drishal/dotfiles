@@ -59,9 +59,17 @@
     acpi
     argc
     android-tools
-    # Upstream's package.nix lacks alsa-lib (rodio) and sqlite (rusqlite) as of 0.16.1.
+    # Upstream's package.nix lacks alsa-lib, sqlite, and fonts for its rendering tests.
     (inputs.leaf.packages.${pkgs.system}.leaf.overrideAttrs (old: {
       buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.alsa-lib pkgs.sqlite ];
+      preCheck = (old.preCheck or "") + ''
+        export FONTCONFIG_FILE=${
+          pkgs.makeFontsConf {
+            fontDirectories = [ pkgs.dejavu_fonts.minimal ];
+            impureFontDirectories = [ ];
+          }
+        }
+      '';
     }))
     (ani-cli.overrideAttrs (old: {
       src = inputs.ani-cli;

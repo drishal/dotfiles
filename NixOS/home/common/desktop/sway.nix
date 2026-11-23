@@ -81,7 +81,7 @@ in
         in
         lib.mkOptionDefault {
           # Launchers
-          "${mod}+Return" = "exec ${config.drishal.defaultApps.terminal}";
+          "${mod}+Return" = "exec ${config.drishal.defaultApps.terminal}${lib.optionalString (config.drishal.defaultApps.terminal == "ghostty") " +new-window"}";
           "${mod}+d" = "exec rofi -show drun -icon-theme Papirus -show-icons";
           "${mod}+v" = "exec pavucontrol";
           "${mod}+t" = "exec GDK_BACKEND=x11 xfce4-taskmanager";

@@ -69,7 +69,8 @@
     };
 
     stylix = {
-      url = "github:nix-community/stylix/";
+      # Wayprompt was removed upstream; unpin after stylix#2559 merges.
+      url = "github:0xda157/stylix/dd97d554f45c52c6cdddc1827851a5cd17784575";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -172,7 +173,8 @@
     # Rex Linux (shuv1337/rex-rune): unofficial native GUI client, attachment-only.
     # Keeps its own nixpkgs pin — build needs Rust 1.96 + Zig 0.17.
     rex-rune = {
-      url = "github:shuv1337/rex-rune";
+      # #148 introduced code that Clippy 1.99 rejects; unpin after its fix.
+      url = "github:shuv1337/rex-rune/36dd5faff9e2fe666e7bf8d1f9b80e6419c74ac7";
     };
   };
 
