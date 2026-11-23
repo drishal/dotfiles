@@ -42,7 +42,7 @@ in
   config = {
     # mkDefault per key so overriding one app doesn't drop the others.
     drishal.defaultApps = lib.mapAttrs (_: lib.mkDefault) {
-      terminal = "kitty";
+      terminal = "ghostty";
       fileManager = "nemo";
       browser = "zen-beta";
       pdf = "okular";
