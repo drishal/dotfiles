@@ -18,10 +18,12 @@ let
   '';
 in
 {
+  # Common default: xanmod. Hosts that want something else override it (nixos-desktop runs
+  # linuxPackages_cachyos-lto-znver4); mkDefault keeps that override free of mkForce.
   # Back to linuxPackages_cachyos-gcc once chaotic's nixpkgs includes NixOS/nixpkgs#571181 (modules.cer).
   # The two module overrides adapt to that PR; drop each once nixpkgs fixes the package.
-  boot.kernelPackages = pkgs.linuxPackages_xanmod_latest.extend (
-    final: prev: {
+  boot.kernelPackages = lib.mkDefault (
+    pkgs.linuxPackages_xanmod_latest.extend (final: prev: {
       # NixOS/nixpkgs#575861 (open): otherwise depmod's index files collide with the kernel's.
       v4l2loopback = prev.v4l2loopback.overrideAttrs {
         preBuild = "sed -i '/depmod/d' Makefile";
@@ -36,7 +38,7 @@ in
           for m in "$out"/lib/modules/*/kernel/drivers/hid/*.ko; do ${lib.getExe pkgs.kmodigest} "$m"; done
         '';
       });
-    }
+    })
   );
   systemd.user.services.orca.wantedBy = lib.mkForce [ ];
   boot.kernelModules = [ "v4l2loopback" ];

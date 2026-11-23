@@ -1,4 +1,4 @@
-{ inputs, lib, ... }:
+{ inputs, lib, pkgs, ... }:
 {
   imports = [
     ../common
@@ -13,6 +13,11 @@
     ./packages.nix
     ../common/jellyfin.nix
   ];
+
+  # Ryzen 9 7900X is Zen 4: Clang ThinLTO + AutoFDO with _processor_opt=ZEN4 (-march=znver4).
+  # Kernel + module tree come from nyx-cache; v4l2loopback/openrazer are not cached there and
+  # build locally in ~1 min. Per-host on purpose: nixos-work is Intel and shares ../common.
+  boot.kernelPackages = pkgs.linuxPackages_cachyos-lto-znver4;
 
   # card/renderD numbering swaps across boots, so name the RX 6800 by PCI slot.
   # No colons in the symlinks: AQ_DRM_DEVICES is a ':'-separated list.
