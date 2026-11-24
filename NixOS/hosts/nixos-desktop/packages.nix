@@ -42,12 +42,11 @@
     # arg some forks carry removed); it holds no hashes. We can't use a fork's
     # own flake packaging (dup-arg parse error) nor the ani-cli src-swap pattern
     # (nixpkgs llama-cpp.overrideAttrs returns a function under the chaotic
-    # overlay here), so callPackage it directly. Web UI / npm build disabled
-    # (unused, and forks' tools/ui lockfile diverges from nixpkgs' npmDepsHash).
+    # overlay here), so callPackage it directly. The webui/npm build is stripped
+    # from the recipe entirely — unused, and upstream keeps moving its paths.
     (pkgs.callPackage ./llama-cpp.nix {
       src = inputs.llama-cpp;
       useVulkan = true;
-      useWebUi = false;
       optimizeZen4 = true;
       useLto = true;
     })

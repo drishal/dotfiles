@@ -1,14 +1,11 @@
-# Local copy of llama.cpp's .devops/nix/package.nix, fixing forks that list
-# `spirv-headers` twice. Parameterized by `src` so it callPackages any pinned fork.
-#
-# importNpmLock is null since useWebUi=false never forces the `webui` attr;
-# flipping it on needs the `import-npm-lock` flake input passed here.
+# Local copy of llama.cpp's .devops/nix/package.nix, dropping the webui (npm)
+# build — we never serve the UI — and fixing forks that list `spirv-headers`
+# twice. Parameterized by `src` so it callPackages any pinned fork.
 {
   lib,
   glibc,
   config,
   stdenv,
-  stdenvNoCC,
   runCommand,
   cmake,
   ninja,
@@ -25,8 +22,6 @@
   spirv-headers,
   openssl,
   shaderc,
-  nodejs,
-  importNpmLock ? null,
   src,
   useBlas ?
     builtins.all (x: !x) [
@@ -51,7 +46,6 @@
   effectiveStdenv ? if useCuda then cudaPackages.backendStdenv else stdenv,
   enableStatic ? effectiveStdenv.hostPlatform.isStatic,
   precompileMetalShaders ? false,
-  useWebUi ? true,
   optimizeZen4 ? false,
   useLto ? false,
 }:
@@ -141,55 +135,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     src = lib.cleanSource src;
   };
 
-  # Builds the webui locally, taking care not to require updating any sha256 hash.
-  # Only evaluated when useWebUi=true (postPatch forces finalAttrs.webui).
-  webui = stdenvNoCC.mkDerivation {
-    pname = "webui";
-    version = llamaVersion;
-    src = lib.cleanSource (src + "/tools/ui");
-
-    nativeBuildInputs = [
-      nodejs
-      importNpmLock.linkNodeModulesHook
-    ];
-
-    # no sha256 required when using buildNodeModules
-    npmDeps = importNpmLock.buildNodeModules {
-      npmRoot = src + "/tools/ui";
-      inherit nodejs;
-      # codeload URLs end in a bare commit hash, so the store file has no tarball
-      # extension and npm symlinks it instead of unpacking (llama-brand).
-      packageLock =
-        let
-          lock = lib.importJSON (src + "/tools/ui/package-lock.json");
-        in
-        lock
-        // {
-          packages = lib.mapAttrs (
-            name: m:
-            if lib.hasPrefix "https://codeload.github.com/" (m.resolved or "") then
-              m // { resolved = "${m.resolved}?name=${baseNameOf name}.tar.gz"; }
-            else
-              m
-          ) lock.packages;
-        };
-    };
-
-    # Each pwa-assets run copies llama-brand's read-only favicons into static/, so the
-    # next run fails on EACCES; chmod between the chained steps of the upstream script.
-    installPhase = ''
-      chmod -R u+w .
-      pwa=$(node -p "require('./package.json').scripts['build-pwa-assets']")
-      eval "''${pwa//&&/; chmod -R u+w static;}"
-      LLAMA_UI_OUT_DIR=$out vite build
-    '';
-  };
-
-  postPatch = lib.optionalString useWebUi ''
-    cp -r ${finalAttrs.webui} tools/ui/dist
-    chmod -R u+w tools/ui/dist
-  '';
-
   # With PR#6015 https://github.com/ggml-org/llama.cpp/pull/6015,
   # `default.metallib` may be compiled with Metal compiler from XCode
   # and we need to escape sandbox on MacOS to access Metal compiler.
@@ -223,7 +168,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (cmakeBool "LLAMA_BUILD_SERVER" true)
-    (cmakeBool "LLAMA_BUILD_WEBUI" useWebUi)
+    (cmakeBool "LLAMA_BUILD_WEBUI" false)
     (cmakeBool "BUILD_SHARED_LIBS" (!enableStatic))
     (cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
     (cmakeBool "GGML_NATIVE" false)
