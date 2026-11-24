@@ -1431,26 +1431,6 @@
         "type": "github"
       }
     },
-    "leaf": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1795344167,
-        "narHash": "sha256-rMX/VV9J8UAXeNjyPumXvV2lKPfJm023BNGuxytyVs0=",
-        "owner": "DeepanshuMishraa",
-        "repo": "leaf",
-        "rev": "b5b3b695cb59240c919a1f611202c1e8b6a5e538",
-        "type": "github"
-      },
-      "original": {
-        "owner": "DeepanshuMishraa",
-        "repo": "leaf",
-        "type": "github"
-      }
-    },
     "llama-cpp": {
       "flake": false,
       "locked": {
@@ -2184,7 +2164,6 @@
         "herdr-gpui": "herdr-gpui",
         "home-manager": "home-manager_3",
         "hyprland": "hyprland",
-        "leaf": "leaf",
         "llama-cpp": "llama-cpp",
         "lobster": "lobster",
         "neovim-nightly-overlay": "neovim-nightly-overlay",

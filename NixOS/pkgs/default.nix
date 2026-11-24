@@ -4,4 +4,5 @@
   galaxy-buds-client = pkgs.callPackage ./galaxy-buds-client { };
   commit-mono-fixed = pkgs.callPackage ./commit-mono-fixed { };
   remmina-dynres = pkgs.callPackage ./remmina-dynres { };
+  leaf-reader = pkgs.callPackage ./leaf-reader { };
 }

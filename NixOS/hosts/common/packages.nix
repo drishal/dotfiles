@@ -59,18 +59,8 @@
     acpi
     argc
     android-tools
-    # Upstream's package.nix lacks alsa-lib, sqlite, and fonts for its rendering tests.
-    (inputs.leaf.packages.${pkgs.system}.leaf.overrideAttrs (old: {
-      buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.alsa-lib pkgs.sqlite ];
-      preCheck = (old.preCheck or "") + ''
-        export FONTCONFIG_FILE=${
-          pkgs.makeFontsConf {
-            fontDirectories = [ pkgs.dejavu_fonts.minimal ];
-            impureFontDirectories = [ ];
-          }
-        }
-      '';
-    }))
+    # Prebuilt release, not the flake's source build; see NixOS/pkgs/leaf-reader.
+    (pkgs.callPackage ../../pkgs/leaf-reader { })
     (ani-cli.overrideAttrs (old: {
       src = inputs.ani-cli;
     }))

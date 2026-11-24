@@ -95,6 +95,7 @@ NixOS/
     thorium-browser/
     galaxy-buds-client/
     remmina-dynres/          ← remmina + sync patch so VNC dynamic resolution works (libvncclient fixes are in nixpkgs) (~/.local/bin/htbvnc)
+    leaf-reader/               ← leaf from upstream's release tarball; the flake's source build fails its own test suite
   shared/
     stylix.nix               ← cross-cutting stylix theming (catppuccin-mocha base24)
 config/                      ← XDG-style app configs (non-HM-managed / legacy)
