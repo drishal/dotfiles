@@ -26,10 +26,11 @@ Panel {
         else {
             // Closing the panel must not cancel a Clear all that is still
             // playing its slide-out — that left every notification in place.
-            if (card.clearing)
-                Notif.clearAll();
             clearTimer.stop();
-            card.clearing = false;
+            if (card.clearing) {
+                Notif.clearAll();
+                clearSettleTimer.restart();
+            }
         }
     }
 
@@ -111,8 +112,19 @@ Panel {
             id: clearTimer
             onTriggered: {
                 Notif.clearAll();
-                card.clearing = false;
+                // Hold the clearing state through the model update. Resetting
+                // it in the same tick snapped the cards back to full opacity
+                // while the empty state was already showing.
+                clearSettleTimer.restart();
             }
+        }
+
+        // The remove transition is what actually takes the delegates away, so
+        // the state must outlive it before new arrivals can be shown again.
+        Timer {
+            id: clearSettleTimer
+            interval: Theme.animDurations[Anim.FastEffects] + 60
+            onTriggered: card.clearing = false
         }
         Row {
             anchors.fill: parent
@@ -172,18 +184,14 @@ Panel {
                                     }
                                 }
                             }
+                            // Fade only: ViewTransition.item is null while a
+                            // remove transition is being built, so a `y`
+                            // target threw and the slide never ran.
                             remove: Transition {
-                                ParallelAnimation {
-                                    Anim {
-                                        property: "y"
-                                        to: ViewTransition.item.y - 60
-                                        type: Anim.EmphasizedSmall
-                                    }
-                                    Anim {
-                                        property: "opacity"
-                                        to: 0
-                                        type: Anim.FastEffects
-                                    }
+                                Anim {
+                                    property: "opacity"
+                                    to: 0
+                                    type: Anim.FastEffects
                                 }
                             }
                             displaced: Transition {
