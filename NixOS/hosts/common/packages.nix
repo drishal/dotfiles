@@ -128,6 +128,8 @@
     easyeffects
     eza
     herdr
+    # Sheprd: GPUI desktop client attaching to the running herdr daemon.
+    sheprd
     lsd
     fastfetch
     fdk_aac

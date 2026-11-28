@@ -994,27 +994,6 @@
         "type": "github"
       }
     },
-    "herdr-gpui": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "rust-overlay": "rust-overlay_3"
-      },
-      "locked": {
-        "lastModified": 1795410028,
-        "narHash": "sha256-CXRiDfGzpYzjG5d3/Vh/bIoA62Nwh+zBwo1SRZRPOkI=",
-        "owner": "penso",
-        "repo": "herdr-gpui",
-        "rev": "40bf925e86d585feec133458f14696b675199294",
-        "type": "github"
-      },
-      "original": {
-        "owner": "penso",
-        "repo": "herdr-gpui",
-        "type": "github"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -2161,7 +2140,6 @@
         "ghostty": "ghostty_2",
         "gruvbox-material": "gruvbox-material",
         "herdr": "herdr",
-        "herdr-gpui": "herdr-gpui",
         "home-manager": "home-manager_3",
         "hyprland": "hyprland",
         "llama-cpp": "llama-cpp",
@@ -2178,6 +2156,7 @@
         "quickemu": "quickemu",
         "rex": "rex",
         "rex-rune": "rex-rune",
+        "sheprd": "sheprd",
         "stylix": "stylix",
         "tmux-agent-status": "tmux-agent-status",
         "tmux-which-key": "tmux-which-key",
@@ -2233,7 +2212,7 @@
     "rust-overlay_3": {
       "inputs": {
         "nixpkgs": [
-          "herdr-gpui",
+          "sheprd",
           "nixpkgs"
         ]
       },
@@ -2248,6 +2227,27 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "sheprd": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": "rust-overlay_3"
+      },
+      "locked": {
+        "lastModified": 1795596206,
+        "narHash": "sha256-6DrCt6tcLpnqnukPFPcY5WXx5jNoQpmBh/9Do3TGnbs=",
+        "owner": "sheprd-labs",
+        "repo": "sheprd",
+        "rev": "cc0d6e12ca91bcf3b6ae7381ef75d8f5e76c8b5a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sheprd-labs",
+        "repo": "sheprd",
         "type": "github"
       }
     },

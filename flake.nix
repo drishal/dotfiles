@@ -148,10 +148,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # GPUI renders through Vulkan: its own pin links glibc 2.42 and cannot
-    # load system mesa's ICD (needs 2.44), so the window never opens.
-    herdr-gpui = {
-      url = "github:penso/herdr-gpui";
+    # Sheprd (penso's herdr-gpui, renamed): GPUI client for the herdr daemon.
+    # Renders through Vulkan, so it must share the system's glibc — hence follows.
+    sheprd = {
+      url = "github:sheprd-labs/sheprd";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -278,7 +278,13 @@
               nixpkgs.overlays = [
                 inputs.emacs-overlay.overlay
                 inputs.herdr.overlays.default
-                inputs.herdr-gpui.overlays.default
+                inputs.sheprd.overlays.default
+                # Upstream's Linux buildInputs miss sqlite, which sheprd-acp links.
+                (final: prev: {
+                  sheprd = prev.sheprd.overrideAttrs (old: {
+                    buildInputs = (old.buildInputs or [ ]) ++ [ final.sqlite ];
+                  });
+                })
               ];
             }
             # chaotic.nixosModules.default
